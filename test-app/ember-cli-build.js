@@ -7,6 +7,9 @@ module.exports = function (defaults) {
     autoImport: {
       watchDependencies: ['ember-rdfa-editor-lblod-plugins'],
     },
+    // sassOptions: {
+    //   sourceMapEmbed: true,
+    // },
   });
 
   const { maybeEmbroider } = require('@embroider/test-setup');
