@@ -2,7 +2,7 @@
   "name": "ember-rdfa-editor-lblod-plugins",
   "version": "0.0.0",
   "private": true,
-  "repository": "",
+  "repository": "https://github.com/lblod/ember-rdfa-editor-lblod-plugins.git",
   "license": "MIT",
   "author": "",
   "workspaces": [
