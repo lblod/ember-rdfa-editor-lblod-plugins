@@ -42,3 +42,6 @@ citaten-plugin:
     error-title: Error while loading results
     error-intro: "An error occured while loading results from the Flemish Codex:"
     error-outro: In case this problem keeps occuring, please contact
+table-of-contents-plugin:
+  title: Table of Contents
+  toggle: Show Table of Contents

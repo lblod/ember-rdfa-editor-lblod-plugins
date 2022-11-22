@@ -80,6 +80,9 @@
       "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
       "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
       "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
+      "./components/table-of-contents-plugin/card.js": "./dist/_app_/components/table-of-contents-plugin/card.js",
+      "./components/table-of-contents-plugin/inline-components/outline.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/outline.js",
+      "./components/table-of-contents-plugin/inline-components/table-of-contents.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/table-of-contents.js",
       "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
       "./models/template.js": "./dist/_app_/models/template.js",
       "./services/standard-template-plugin.js": "./dist/_app_/services/standard-template-plugin.js"
