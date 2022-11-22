@@ -3,6 +3,7 @@ import CitatenPlugin from '../plugins/citaten-plugin';
 import StandardTemplatePlugin from '../plugins/standard-template-plugin';
 import GenerateTemplatePlugin from '../plugins/generate-template-plugin';
 import TableOfContentsPlugin from '../plugins/table-of-contents-plugin';
+import RdfaDatePlugin from '../plugins/rdfa-date-plugin';
 
 function pluginFactory(plugin) {
   return {
@@ -38,6 +39,9 @@ export function initialize(application) {
     pluginFactory(GenerateTemplatePlugin),
     { singleton: false }
   );
+  application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
+    singleton: false,
+  });
 }
 
 export default {

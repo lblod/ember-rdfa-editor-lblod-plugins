@@ -5,6 +5,7 @@ export default class ApplicationController extends Controller {
   plugins = [
     'besluit-type',
     'citaten',
+    'rdfa-date',
     'standard-template',
     'table-of-contents',
   ];

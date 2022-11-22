@@ -6,7 +6,7 @@ export default class StandardTemplatePlugin {
   controller;
 
   get name() {
-    return 'standard-template';
+    return 'standard-template-plugin';
   }
 
   async initialize(controller) {
