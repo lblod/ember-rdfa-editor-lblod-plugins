@@ -80,8 +80,11 @@
       "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
       "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
       "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
+      "./components/standard-template-plugin/template-card.js": "./dist/_app_/components/standard-template-plugin/template-card.js",
+      "./components/standard-template-plugin/template-provider.js": "./dist/_app_/components/standard-template-plugin/template-provider.js",
       "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
       "./models/template.js": "./dist/_app_/models/template.js",
+      "./serializers/application.js": "./dist/_app_/serializers/application.js",
       "./services/standard-template-plugin.js": "./dist/_app_/services/standard-template-plugin.js"
     }
   },

@@ -1,0 +1,16 @@
+<StandardTemplatePlugin::TemplateProvider @controller={{@controller}} as |provider|>
+  {{#if provider.hasApplicableTemplates}}
+    {{#each provider.applicableTemplates as |template|}}
+      <AuList::Item>
+        <AuButton
+          @skin="link"
+          @icon="add"
+          @iconAlignment="left"
+          {{on "click" (fn provider.insert template)}}
+        >
+          {{template.title}}
+        </AuButton>
+      </AuList::Item>
+    {{/each}}
+  {{/if}}
+</StandardTemplatePlugin::TemplateProvider>
