@@ -4,7 +4,7 @@ export default class TableOfContentsPlugin {
   controller;
 
   get name() {
-    return 'table-of-contents';
+    return 'table-of-contents-plugin';
   }
 
   initialize(controller, options) {

@@ -1,4 +1,5 @@
 import CitatenPlugin from '../plugins/citaten-plugin';
+import GenerateTemplatePlugin from '../plugins/generate-template-plugin';
 import TableOfContentsPlugin from '../plugins/table-of-contents-plugin';
 
 function pluginFactory(plugin) {
@@ -12,7 +13,7 @@ function pluginFactory(plugin) {
 }
 
 export function initialize(application) {
-  application.register('plugin:citaten-plugin', pluginFactory(CitatenPlugin), {
+  application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
     singleton: false,
   });
   application.register(
@@ -21,6 +22,11 @@ export function initialize(application) {
     {
       singleton: false,
     }
+  );
+  application.register(
+    'plugin:generate-template',
+    pluginFactory(GenerateTemplatePlugin),
+    { singleton: false }
   );
 }
 
