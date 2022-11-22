@@ -1,5 +1,4 @@
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class StandardTemplatePlugin {
   @service standardTemplatePlugin;
@@ -30,30 +29,5 @@ export default class StandardTemplatePlugin {
       componentName: 'standard-template-plugin/template-card',
       identifier: 'standard-template-plugin/template-card',
     });
-  }
-
-  @action
-  highlight(event) {
-    if (event.owner !== this.name) {
-      const damagedRange = event.payload.damagedRange;
-      this.highlightInRange(damagedRange);
-    }
-  }
-
-  @action
-  highlightInRange(range) {
-    let regexString = '';
-    this.matches.forEach((match) => {
-      regexString += `${match}|`;
-    });
-    regexString = regexString.substring(0, regexString.length - 1);
-    const rangesToHighlight = this.controller.executeCommand(
-      'match-text',
-      range,
-      new RegExp(regexString, 'g')
-    );
-    for (const range of rangesToHighlight) {
-      this.controller.executeCommand('make-highlight', range, false);
-    }
   }
 }
