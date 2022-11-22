@@ -24,8 +24,15 @@
     "test": "echo 'A v2 addon does not have tests, run tests in test-app'",
     "prepack": "rollup --config"
   },
+  "peerDependencies": {
+    "@appuniversum/ember-appuniversum": "^1.5.0",
+    "@lblod/ember-rdfa-editor": ">= 0.63.1",
+    "ember-concurrency": "^2.2.0",
+    "ember-power-select": "^5.0.4"
+  },
   "dependencies": {
-    "@embroider/addon-shim": "^1.0.0"
+    "@embroider/addon-shim": "^1.0.0",
+    "ember-cli-string-helpers": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.0",
@@ -36,6 +43,10 @@
     "@embroider/addon-dev": "^2.0.0",
     "@rollup/plugin-babel": "^5.3.0",
     "concurrently": "^7.2.1",
+    "ember-concurrency": "^2.2.0",
+    "ember-intl": "^5.7.2",
+    "ember-power-select": "^5.0.4",
+    "ember-resources": "^5.6.0",
     "ember-template-lint": "^4.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -56,7 +67,21 @@
     "version": 2,
     "type": "addon",
     "main": "addon-main.js",
-    "app-js": {}
+    "app-js": {
+      "./components/citaten-plugin/citaat-card.js": "./dist/_app_/components/citaten-plugin/citaat-card.js",
+      "./components/citaten-plugin/citaat-insert.js": "./dist/_app_/components/citaten-plugin/citaat-insert.js",
+      "./components/citaten-plugin/citations/article-list.js": "./dist/_app_/components/citaten-plugin/citations/article-list.js",
+      "./components/citaten-plugin/citations/article-preview.js": "./dist/_app_/components/citaten-plugin/citations/article-preview.js",
+      "./components/citaten-plugin/citations/decision-detail.js": "./dist/_app_/components/citaten-plugin/citations/decision-detail.js",
+      "./components/citaten-plugin/citations/decision-list.js": "./dist/_app_/components/citaten-plugin/citations/decision-list.js",
+      "./components/citaten-plugin/citations/decision-preview.js": "./dist/_app_/components/citaten-plugin/citations/decision-preview.js",
+      "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
+      "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
+      "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
+      "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
+      "./plugins/citaten-plugin/index.js": "./dist/_app_/plugins/citaten-plugin/index.js",
+      "./plugins/citaten-plugin/marks/citaten-mark.js": "./dist/_app_/plugins/citaten-plugin/marks/citaten-mark.js"
+    }
   },
   "exports": {
     ".": "./dist/index.js",
