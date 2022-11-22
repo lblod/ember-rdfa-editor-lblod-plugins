@@ -14,6 +14,11 @@ export default {
   output: addon.output(),
 
   plugins: [
+    inject({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser',
+      include: '../**/node_modules/**/*.js',
+    }),
     // These are the modules that users should be able to import from your
     // addon. Anything not listed here may get optimized away.
     addon.publicEntrypoints([
@@ -67,11 +72,6 @@ export default {
         { src: '../README.md', dest: '.' },
         { src: '../LICENSE.md', dest: '.' },
       ],
-    }),
-    inject({
-      Buffer: ['buffer', 'Buffer'],
-      process: 'process/browser',
-      include: '../**/node_modules/**/*.js',
     }),
   ],
 };
