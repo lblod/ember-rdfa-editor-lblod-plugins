@@ -21,7 +21,7 @@
         @iconAlignment="left"
         class="au-u-margin-right"
         {{on "click" (fn @insertDecisionCitation @decision)}}>
-        {{t "references.refer-whole"}}
+        {{t "citaten-plugin.references.refer-whole"}}
       </AuButton>
       <AuLinkExternal
         @skin="primary"
@@ -29,18 +29,18 @@
         @iconAlignment="left"
         href={{@decision.uri}}
         rel="noreferrer noopener">
-        {{t "references.lookup-codex"}}
+        {{t "citaten-plugin.references.lookup-codex"}}
       </AuLinkExternal>
       {{! Search field }}
-      <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}} @required={{false}} @error={{false}} @warning={{false}}>{{t "search.article"}}</AuLabel>
-      <AuInput id="searchCodex" placeholder="{{t "search.article-placeholder"}}" @type="text" @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input" (perform this.updateArticleFilter)}}/>
+      <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}} @required={{false}} @error={{false}} @warning={{false}}>{{t "citaten-plugin.search.article"}}</AuLabel>
+      <AuInput id="searchCodex" placeholder="{{t "citaten-plugin.citaten-plugin.search.article-placeholder"}}" @type="text" @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input" (perform this.updateArticleFilter)}}/>
     </div>
     {{! Search results }}
     <div>
       {{#if this.articleResource.isRunning}}
         <div class="au-o-box">
           <AuLoader @padding="large" />
-          <span class="au-u-hidden-visually">{{t "alert.loading"}}</span>
+          <span class="au-u-hidden-visually">{{t "citaten-plugin.alert.loading"}}</span>
         </div>
       {{else}}
         {{#if this.error}}
@@ -69,17 +69,17 @@
               @icon="hierarchical-back"
               @iconAlignment="left"
               {{on "click" this.close}}>
-              {{t "search.back"}}
+              {{t "citaten-plugin.search.back"}}
             </AuButton>
           </div>
           {{! Pagination of articles }}
           {{#if this.articleResource.value.length}}
             <p>
-              <span class="au-u-hidden-visually">{{t "search.results"}}</span>
+              <span class="au-u-hidden-visually">{{t "citaten-plugin.search.results"}}</span>
               <strong>
                 {{this.rangeStart}} - {{this.rangeEnd}}
               </strong>
-              {{t "pagination.of"}}
+              {{t "citaten-plugin.pagination.of"}}
               {{this.totalCount}}
             </p>
             <div class="au-c-pagination__list-item">
@@ -89,7 +89,7 @@
                   @icon="nav-left"
                   @iconAlignment="left"
                   {{on "click" this.previousPage}}>
-                  {{t "pagination.previous"}}
+                  {{t "citaten-plugin.pagination.previous"}}
                 </AuButton>
               {{/unless}}
               {{#unless this.isLastPage}}
@@ -98,7 +98,7 @@
                   @icon="nav-right"
                   @iconAlignment="right"
                   {{on "click" this.nextPage}}>
-                  {{t "pagination.next"}}
+                  {{t "citaten-plugin.pagination.next"}}
                 </AuButton>
               {{/unless}}
             </div>

@@ -1,14 +1,14 @@
 <AuAlert
-  @alertTitle="{{t "alert.error-title"}}"
+  @alertTitle="{{t "citaten-plugin.citaten-plugin.alert.error-title"}}"
   @alertSkin="error"
   @alertIcon="alert-triangle"
   @alertSize="{{if @fullSize "default" "small"}}"
   @closable={{false}}
   ...attributes>
-  <p>{{t "alert.error-intro"}}</p>
+  <p>{{t "citaten-plugin.alert.error-intro"}}</p>
   <code class="au-u-error citaten--error-code">{{@error}}</code>
   <p>
-    {{t "alert.error-outro"}}
+    {{t "citaten-plugin.alert.error-outro"}}
     <AuLinkExternal
       href="mailto:Gelinkt-Notuleren@vlaanderen.be"
       @icon="mail"

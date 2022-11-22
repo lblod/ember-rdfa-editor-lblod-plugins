@@ -19,14 +19,14 @@
           @icon="plus-text"
           @iconAlignment="left"
           {{on "click" @onCitationInsert}}>
-          {{t "references.insert"}}
+          {{t "citaten-plugin.references.insert"}}
         </AuButton>
         <AuButton
           @skin="secondary"
           @icon="manual"
           @iconAlignment="left"
           {{on "click" @onCitationDetails}}>
-          {{t "references.details"}}
+          {{t "citaten-plugin.references.details"}}
         </AuButton>
       </AuButtonGroup>
     </div>
@@ -38,7 +38,7 @@
         @iconAlignment="left"
         class="au-u-h-functional"
         {{on "click" @onCitationInsert}}>
-        {{t "references.insert"}}
+        {{t "citaten-plugin.references.insert"}}
       </AuButton>
       <AuButton
         @skin="link"
@@ -46,7 +46,7 @@
         @iconAlignment="left"
         class="au-u-h-functional"
         {{on "click" @onCitationDetails}}>
-        {{t "references.details"}}
+        {{t "citaten-plugin.references.details"}}
       </AuButton>
     </div>
   {{/if}}
