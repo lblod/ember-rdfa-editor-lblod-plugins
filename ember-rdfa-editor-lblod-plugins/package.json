@@ -28,16 +28,23 @@
     "@appuniversum/ember-appuniversum": "^2.0.0",
     "@lblod/ember-rdfa-editor": ">= 0.63.1",
     "ember-concurrency": "^2.2.0",
-    "ember-mu-transform-helpers": "^2.1.2",
     "ember-power-select": "^5.0.4",
     "uuid": "^8.3.2"
   },
   "dependencies": {
     "@embroider/addon-shim": "^1.0.0",
-    "ember-cli-string-helpers": "^6.1.0"
+    "buffer": "^6.0.3",
+    "concurrently": "^7.2.1",
+    "ember-cli-string-helpers": "^6.1.0",
+    "ember-mu-transform-helpers": "^2.1.2",
+    "ember-concurrency": "^2.2.0",
+    "ember-intl": "^5.7.2",
+    "ember-power-select": "^5.0.4",
+    "ember-resources": "^5.6.0",
+    "fetch-sparql-endpoint": "^3.0.0",
+    "process": "0.11.10"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "^2.0.0",
     "@babel/core": "^7.17.0",
     "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
@@ -45,11 +52,7 @@
     "@babel/plugin-syntax-decorators": "^7.17.0",
     "@embroider/addon-dev": "^2.0.0",
     "@rollup/plugin-babel": "^5.3.0",
-    "concurrently": "^7.2.1",
-    "ember-concurrency": "^2.2.0",
-    "ember-intl": "^5.7.2",
-    "ember-power-select": "^5.0.4",
-    "ember-resources": "^5.6.0",
+    "@rollup/plugin-inject": "^4.0.3",
     "ember-template-lint": "^4.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -72,6 +75,8 @@
     "type": "addon",
     "main": "addon-main.js",
     "app-js": {
+      "./components/besluit-type-plugin/besluit-type-select.js": "./dist/_app_/components/besluit-type-plugin/besluit-type-select.js",
+      "./components/besluit-type-plugin/toolbar-dropdown.js": "./dist/_app_/components/besluit-type-plugin/toolbar-dropdown.js",
       "./components/citaten-plugin/citaat-card.js": "./dist/_app_/components/citaten-plugin/citaat-card.js",
       "./components/citaten-plugin/citaat-insert.js": "./dist/_app_/components/citaten-plugin/citaat-insert.js",
       "./components/citaten-plugin/citations/article-list.js": "./dist/_app_/components/citaten-plugin/citations/article-list.js",
@@ -88,6 +93,8 @@
       "./components/roadsign-regulation-plugin/roadsigns-modal.js": "./dist/_app_/components/roadsign-regulation-plugin/roadsigns-modal.js",
       "./components/roadsign-regulation-plugin/roadsigns-pagination.js": "./dist/_app_/components/roadsign-regulation-plugin/roadsigns-pagination.js",
       "./components/roadsign-regulation-plugin/roadsigns-table.js": "./dist/_app_/components/roadsign-regulation-plugin/roadsigns-table.js",
+      "./components/standard-template-plugin/template-card.js": "./dist/_app_/components/standard-template-plugin/template-card.js",
+      "./components/standard-template-plugin/template-provider.js": "./dist/_app_/components/standard-template-plugin/template-provider.js",
       "./components/table-of-contents-plugin/card.js": "./dist/_app_/components/table-of-contents-plugin/card.js",
       "./components/table-of-contents-plugin/inline-components/outline.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/outline.js",
       "./components/table-of-contents-plugin/inline-components/table-of-contents.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/table-of-contents.js",
@@ -97,6 +104,7 @@
       "./models/measure.js": "./dist/_app_/models/measure.js",
       "./models/sign.js": "./dist/_app_/models/sign.js",
       "./models/template.js": "./dist/_app_/models/template.js",
+      "./serializers/application.js": "./dist/_app_/serializers/application.js",
       "./services/roadsign-registry.js": "./dist/_app_/services/roadsign-registry.js",
       "./services/standard-template-plugin.js": "./dist/_app_/services/standard-template-plugin.js"
     }

@@ -3,14 +3,14 @@ export default class CitatenPlugin {
   controller;
 
   get name() {
-    return 'citaten-plugin';
+    return 'citaten';
   }
   async initialize(controller) {
     this.controller = controller;
     controller.registerWidget({
       desiredLocation: 'sidebar',
       componentName: 'citaten-plugin/citaat-card',
-      identifier: 'citaten-plugincitaat-card',
+      identifier: 'citaten-plugin/citaat-card',
     });
     controller.registerWidget({
       desiredLocation: 'insertSidebar',
