@@ -78,9 +78,7 @@
       "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
       "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
       "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
-      "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
-      "./plugins/citaten-plugin/index.js": "./dist/_app_/plugins/citaten-plugin/index.js",
-      "./plugins/citaten-plugin/marks/citaten-mark.js": "./dist/_app_/plugins/citaten-plugin/marks/citaten-mark.js"
+      "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js"
     }
   },
   "exports": {
