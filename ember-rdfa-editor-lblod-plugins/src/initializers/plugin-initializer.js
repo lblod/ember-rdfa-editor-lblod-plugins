@@ -21,13 +21,13 @@ export function initialize(application) {
   application.register(
     'plugin:standard-template',
     pluginFactory(StandardTemplatePlugin),
-    {
-      singleton: false,
-    }
+    { singleton: false }
   );
-  application.register('plugin:besluit-type',
+  application.register(
+    'plugin:besluit-type',
     pluginFactory(BesluitTypePlugin),
-    { singleton: false })
+    { singleton: false }
+  );
   application.register(
     'plugin:table-of-contents',
     pluginFactory(TableOfContentsPlugin),
