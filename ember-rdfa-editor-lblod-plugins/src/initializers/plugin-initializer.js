@@ -1,4 +1,4 @@
-import CitatenPlugin from '../plugins/citaten-plugin/index';
+import CitatenPlugin from '../plugins/citaten-plugin';
 
 function pluginFactory(plugin) {
   return {

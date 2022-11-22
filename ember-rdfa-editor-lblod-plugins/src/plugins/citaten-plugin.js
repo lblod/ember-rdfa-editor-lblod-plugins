@@ -1,4 +1,4 @@
-import CitatenMark from './marks/citaten-mark';
+import CitatenMark from '../marks/citaten-mark';
 export default class CitatenPlugin {
   controller;
 

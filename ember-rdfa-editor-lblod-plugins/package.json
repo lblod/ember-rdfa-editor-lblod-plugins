@@ -28,7 +28,9 @@
     "@appuniversum/ember-appuniversum": "^1.5.0",
     "@lblod/ember-rdfa-editor": ">= 0.63.1",
     "ember-concurrency": "^2.2.0",
-    "ember-power-select": "^5.0.4"
+    "ember-mu-transform-helpers": "^2.1.2",
+    "ember-power-select": "^5.0.4",
+    "uuid": "^8.3.2"
   },
   "dependencies": {
     "@embroider/addon-shim": "^1.0.0",
@@ -78,7 +80,9 @@
       "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
       "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
       "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
-      "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js"
+      "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
+      "./models/template.js": "./dist/_app_/models/template.js",
+      "./services/standard-template-plugin.js": "./dist/_app_/services/standard-template-plugin.js"
     }
   },
   "exports": {
