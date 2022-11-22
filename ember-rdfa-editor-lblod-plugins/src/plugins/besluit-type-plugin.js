@@ -2,7 +2,7 @@ export default class BesluitTypePlugin {
   controller;
 
   get name() {
-    return 'besluit-type';
+    return 'besluit-type-plugin';
   }
 
   initialize(controller) {

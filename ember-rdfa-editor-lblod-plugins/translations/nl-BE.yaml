@@ -56,3 +56,16 @@ besluit-type-plugin:
   error-title: "Fout"
   error-first-body: "Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer"
   error-rest-body: ". Voor meer specifieke details, controleer de console in de browser."
+date-plugin:
+  insert:
+    date: "Datum invoegen"
+    datetime: "Datum en tijd invoegen"
+
+  card:
+    title: "Datum"
+    insert-date: "Datum invoegen"
+    insert-datetime: "Datum en tijd invoegen"
+    label: "Selecteer datum"
+    hours: "Uur"
+    minutes: "Minuten"
+    now: "Nu"
