@@ -1,0 +1,92 @@
+<AuModal
+  class="au-c-modal--flush"
+  @size="large"
+  @modalTitle="Mobiliteitsmaatregel toevoegen"
+  @modalOpen={{@modalOpen}}
+  @closeModal={{this.closeModal}} as |Modal| >
+  <Modal.Body>
+    <div class="au-c-body-container">
+      <div class="au-o-box au-u-background-gray-100">
+        <div class="au-o-grid au-o-grid--tiny au-o-grid--bottom">
+          <div class="au-o-grid__item au-u-1-4">
+            <AuLabel>
+              Filter op type
+            </AuLabel>
+            <PowerSelect
+              @renderInPlace={{true}}
+              @options={{this.typeOptions}}
+              @verticalPosition="below"
+              @searchEnabled={{true}}
+              @selected={{or this.typeSelected this.categorySelected}}
+              @allowClear={{true}}
+              @onChange={{this.selectTypeOrCategory}}
+              as |option|>
+              {{option.label}}
+            </PowerSelect>
+          </div>
+          <div class="au-o-grid__item au-u-1-4">
+            <AuLabel>
+              Filter op code
+            </AuLabel>
+            <PowerSelect
+              @renderInPlace={{true}}
+              @verticalPosition="below"
+              @searchEnabled={{true}}
+              @search={{this.searchCodes}}
+              @selected={{this.selectedCode}}
+              @allowClear={{true}}
+              @onChange={{this.changeCode}}
+              as |option|>
+              {{option.label}}
+            </PowerSelect>
+          </div>
+            <div class="au-o-grid__item au-u-1-4">
+            <AuLabel>
+              Combineer met code
+            </AuLabel>
+            <PowerSelectMultiple
+              @renderInPlace={{true}}
+              @verticalPosition="below"
+              @searchEnabled={{true}}
+              @searchField="label"
+              @selected={{this.selectedCodeCombination}}
+              @allowClear={{true}}
+              @onChange={{this.changeCodeCombination}}
+              @options={{this.codeCombinationOptions}}
+              @disabled={{not this.selectedCode}}
+            as |option|>
+              {{option.label}}
+            </PowerSelectMultiple>
+          </div>
+          <div class="au-o-grid__item au-u-1-4">
+            <AuLabel>
+              Filter op zonale geldigheid
+            </AuLabel>
+            <PowerSelect
+              @renderInPlace={{true}}
+              @options={{this.zonalityOptions}}
+              @verticalPosition="below"
+              @searchEnabled={{false}}
+              @selected={{this.zonalitySelected}}
+              @allowClear={{true}}
+              @onChange={{this.selectZonality}}
+              as |option|>
+              {{option.label}}
+            </PowerSelect>
+          </div>
+        </div>
+      </div>
+      <div class="au-c-body-container">
+        <RoadsignRegulationPlugin::RoadsignsTable
+          @content={{this.tableData}}
+          @isLoading={{this.fetchSigns.isRunning}}
+          @insert={{this.insertHtml}}
+          @count={{this.count}}
+          @goToPage={{this.goToPage}}
+          @pageSize={{this.pageSize}}
+          @pageStart={{this.pageStart}}
+        />
+      </div>
+    </div>
+  </Modal.Body>
+</AuModal>

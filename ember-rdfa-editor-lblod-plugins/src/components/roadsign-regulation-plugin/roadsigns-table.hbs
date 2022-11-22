@@ -1,0 +1,72 @@
+<AuDataTable @isLoading={{@isLoading}} @noDataMessage="No data" as |table|>
+  <table.content as |c|>
+    <c.header>
+      <th class="data-table__header-title">Code</th>
+      <th class="data-table__header-title">Afbeelding</th>
+      <th class="data-table__header-title">Template</th>
+      <th class="data-table__header-title">Category</th>
+      <th class="data-table__header-title"></th>
+    </c.header>
+    {{#if c.body}}
+    <tbody>
+      {{#if @isLoading}}
+        <tr>
+          <td colspan="100%" class="is-loading-data">
+            <AuLoader />
+            <AuHelpText>Aan het laden</AuHelpText>
+          </td>
+        </tr>
+      {{else}}
+        {{#each @content as |row|}}
+            <tr role="button" class="au-c-data-table__clickable-row" {{on "click" (fn this.selectRow row.uri)}}>
+              <td>
+                <p>{{row.label}}</p>
+              </td>
+              <td>
+                <div class="au-o-grid au-o-grid--tiny">
+                {{#each row.signs as |sign|}}
+                  <div class="au-o-grid__item au-u-1-3">
+                    <img src={{sign.image}} alt="verkeersteken {{sign.code}}" class="au-c-data-table__image" />
+                  </div>
+                {{/each}}
+                </div>
+              </td>
+              <td>
+                <AuHelpText skin="secondary" class="au-u-margin-none"><RoadsignRegulationPlugin::MeasureTemplate @measure={{row.uri}} @template={{row.template}} @limitText={{true}}/></AuHelpText>
+              </td>
+              <td>
+                {{#each row.classifications as |classification|}}
+                  {{#if classification}}
+                    <AuPill @skin="border">{{classification}}</AuPill>
+                  {{/if}}
+                {{/each}}
+              </td>
+              <td>
+                {{#if (eq this.selected row.uri)}}
+                <AuIcon @icon="nav-up" @ariaHidden={{true}} class="au-c-data-table__clickable-row-icon" />
+                {{else}}
+                <AuIcon @icon="nav-down" @ariaHidden={{true}} class="au-c-data-table__clickable-row-icon" />
+                {{/if}}
+              </td>
+            </tr>
+          {{#if (eq this.selected row.uri)}}
+            <RoadsignRegulationPlugin::ExpandedMeasure @measure={{row}} @insert={{@insert}} @selectRow={{this.selectRow}} />
+          {{/if}}
+        {{else}}
+          <tr>
+            <td colspan="5" class="no-data-message"><p>Er werden geen maatregelen gevonden.</p></td>
+          </tr>
+        {{/each}}
+      {{/if}}
+    </tbody>
+    {{/if}}
+  </table.content>
+</AuDataTable>
+{{#if @count}}
+<RoadsignRegulationPlugin::RoadsignsPagination
+  @goToPage={{@goToPage}}
+  @pageSize={{@pageSize}}
+  @pageStart={{@pageStart}}
+  @count={{@count}}
+/>
+{{/if}}

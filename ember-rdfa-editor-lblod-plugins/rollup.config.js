@@ -21,6 +21,7 @@ export default {
       'initializers/**/*.js',
       'services/**/*.js',
       'models/**/*.js',
+      'helpers/**/*.js',
     ]),
 
     // These are the modules that should get reexported into the traditional
@@ -31,6 +32,7 @@ export default {
       'initializers/**/*.js',
       'services/**/*.js',
       'models/**/*.js',
+      'helpers/**/*.js',
     ]),
 
     // This babel config should *not* apply presets or compile away ES modules.
