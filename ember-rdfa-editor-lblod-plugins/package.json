@@ -1,5 +1,5 @@
 {
-  "name": "ember-rdfa-editor-lblod-plugins",
+  "name": "@lblod/ember-rdfa-editor-lblod-plugins",
   "version": "0.0.0",
   "description": "The default blueprint for Embroider v2 addons.",
   "keywords": [
@@ -25,7 +25,7 @@
     "prepack": "rollup --config"
   },
   "peerDependencies": {
-    "@appuniversum/ember-appuniversum": "^1.5.0",
+    "@appuniversum/ember-appuniversum": "^2.0.0",
     "@lblod/ember-rdfa-editor": ">= 0.63.1",
     "ember-concurrency": "^2.2.0",
     "ember-mu-transform-helpers": "^2.1.2",
@@ -40,6 +40,7 @@
     "process": "0.11.10"
   },
   "devDependencies": {
+    "@appuniversum/ember-appuniversum": "^2.0.0",
     "@babel/core": "^7.17.0",
     "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
@@ -61,7 +62,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1",
     "rollup": "^2.67.0",
-    "rollup-plugin-copy": "^3.4.0"
+    "rollup-plugin-copy": "^3.4.0",
+    "sass": "^1.56.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -86,6 +88,9 @@
       "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
       "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
       "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
+      "./components/table-of-contents-plugin/card.js": "./dist/_app_/components/table-of-contents-plugin/card.js",
+      "./components/table-of-contents-plugin/inline-components/outline.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/outline.js",
+      "./components/table-of-contents-plugin/inline-components/table-of-contents.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/table-of-contents.js",
       "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
       "./models/template.js": "./dist/_app_/models/template.js",
       "./services/standard-template-plugin.js": "./dist/_app_/services/standard-template-plugin.js"
