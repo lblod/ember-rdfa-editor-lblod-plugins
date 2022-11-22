@@ -1,3 +1,4 @@
+import BesluitTypePlugin from '../plugins/besluit-type-plugin';
 import CitatenPlugin from '../plugins/citaten-plugin';
 import GenerateTemplatePlugin from '../plugins/generate-template-plugin';
 import TableOfContentsPlugin from '../plugins/table-of-contents-plugin';
@@ -17,11 +18,14 @@ export function initialize(application) {
     singleton: false,
   });
   application.register(
+    'plugin:besluit-type',
+    pluginFactory(BesluitTypePlugin),
+    { singleton: false }
+  );
+  application.register(
     'plugin:table-of-contents',
     pluginFactory(TableOfContentsPlugin),
-    {
-      singleton: false,
-    }
+    { singleton: false }
   );
   application.register(
     'plugin:generate-template',
