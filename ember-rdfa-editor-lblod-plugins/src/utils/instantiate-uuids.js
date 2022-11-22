@@ -15,11 +15,20 @@ import { v4 as uuidv4 } from 'uuid';
  *
  * @private
  */
+
+function determineFunction(string) {
+  switch (string) {
+    case 'generateUuid()':
+      return uuidv4;
+    case 'generateBoundUuid()':
+      return memoize(uuidv4);
+    default:
+      throw new Error(`Could not convert ${string} to function`);
+  }
+}
 export default function instantiateUuids(templateString) {
-  let generateBoundUuid = memoize(uuidv4); // eslint-disable-line no-unused-vars
-  let generateUuid = uuidv4; // eslint-disable-line no-unused-vars
   return templateString.replace(/\$\{.+?}/g, (match) => {
     //input '${content}' and eval('content')
-    return eval(match.substring(2, match.length - 1));
+    return determineFunction(match.substring(2, match.length - 1))();
   });
 }
