@@ -1,6 +1,7 @@
 import babel from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy';
 import { Addon } from '@embroider/addon-dev/rollup';
+import inject from '@rollup/plugin-inject';
 
 const addon = new Addon({
   srcDir: 'src',
@@ -21,6 +22,7 @@ export default {
       'initializers/**/*.js',
       'services/**/*.js',
       'models/**/*.js',
+      'config/**/*.js',
     ]),
 
     // These are the modules that should get reexported into the traditional
@@ -31,6 +33,7 @@ export default {
       'initializers/**/*.js',
       'services/**/*.js',
       'models/**/*.js',
+      'config/**/*.js',
     ]),
 
     // This babel config should *not* apply presets or compile away ES modules.
@@ -64,6 +67,11 @@ export default {
         { src: '../README.md', dest: '.' },
         { src: '../LICENSE.md', dest: '.' },
       ],
+    }),
+    inject({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser',
+      include: '../**/node_modules/**/*.js',
     }),
   ],
 };

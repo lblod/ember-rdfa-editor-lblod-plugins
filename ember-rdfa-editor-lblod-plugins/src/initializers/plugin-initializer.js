@@ -1,3 +1,4 @@
+import BesluitTypePlugin from '../plugins/besluit-type-plugin';
 import CitatenPlugin from '../plugins/citaten-plugin';
 
 function pluginFactory(plugin) {
@@ -11,9 +12,14 @@ function pluginFactory(plugin) {
 }
 
 export function initialize(application) {
-  application.register('plugin:citaten-plugin', pluginFactory(CitatenPlugin), {
+  application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
     singleton: false,
   });
+  application.register(
+    'plugin:besluit-type',
+    pluginFactory(BesluitTypePlugin),
+    { singleton: false }
+  );
 }
 
 export default {
