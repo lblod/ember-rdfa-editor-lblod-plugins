@@ -28,7 +28,6 @@
     "@appuniversum/ember-appuniversum": "^2.0.0",
     "@lblod/ember-rdfa-editor": ">= 0.63.1",
     "ember-concurrency": "^2.2.0",
-    "ember-mu-transform-helpers": "^2.1.2",
     "ember-power-select": "^5.0.4",
     "uuid": "^8.3.2"
   },
@@ -36,6 +35,7 @@
     "@embroider/addon-shim": "^1.0.0",
     "buffer": "^6.0.3",
     "ember-cli-string-helpers": "^6.1.0",
+    "ember-mu-transform-helpers": "^2.1.2",
     "fetch-sparql-endpoint": "^3.0.0",
     "process": "0.11.10"
   },
@@ -88,11 +88,14 @@
       "./components/citaten-plugin/citations/search-modal.js": "./dist/_app_/components/citaten-plugin/citations/search-modal.js",
       "./components/citaten-plugin/helpers/alert-load-error.js": "./dist/_app_/components/citaten-plugin/helpers/alert-load-error.js",
       "./components/citaten-plugin/helpers/alert-no-items.js": "./dist/_app_/components/citaten-plugin/helpers/alert-no-items.js",
+      "./components/standard-template-plugin/template-card.js": "./dist/_app_/components/standard-template-plugin/template-card.js",
+      "./components/standard-template-plugin/template-provider.js": "./dist/_app_/components/standard-template-plugin/template-provider.js",
       "./components/table-of-contents-plugin/card.js": "./dist/_app_/components/table-of-contents-plugin/card.js",
       "./components/table-of-contents-plugin/inline-components/outline.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/outline.js",
       "./components/table-of-contents-plugin/inline-components/table-of-contents.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/table-of-contents.js",
       "./initializers/plugin-initializer.js": "./dist/_app_/initializers/plugin-initializer.js",
       "./models/template.js": "./dist/_app_/models/template.js",
+      "./serializers/application.js": "./dist/_app_/serializers/application.js",
       "./services/standard-template-plugin.js": "./dist/_app_/services/standard-template-plugin.js"
     }
   },
