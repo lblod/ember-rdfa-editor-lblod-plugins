@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { LEGISLATION_TYPES } from '../../utils/legislation-types';
-
 export default class EditorPluginsCitaatInsertComponent extends Component {
   @tracked disableInsert = false;
   @tracked showModal = false;
