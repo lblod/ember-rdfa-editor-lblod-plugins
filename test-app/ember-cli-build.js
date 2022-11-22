@@ -18,9 +18,7 @@ module.exports = function (defaults) {
       },
     },
     sassOptions: {
-      includePaths: [
-        '../node_modules/@lblod/ember-rdfa-editor-lblod-plugins/dist/styles',
-      ],
+      includePaths: ['../node_modules/'],
     },
   });
 
