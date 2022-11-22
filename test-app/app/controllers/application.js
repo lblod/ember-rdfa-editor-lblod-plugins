@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 
 export default class ApplicationController extends Controller {
-  plugins = ['citaten-plugin'];
+  plugins = ['citaten-plugin', 'table-of-contents'];
 
   @action
   rdfaEditorInit(controller) {
