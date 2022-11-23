@@ -1,4 +1,13 @@
 
+
+## v0.1.1 (2022-11-23)
+
+#### :house: Internal
+* [#11](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/11) Loosen ember-data peerdep requirement to 3.27.0 ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.1.0 (2022-11-23)
 
 #### :rocket: Enhancement
