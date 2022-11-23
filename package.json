@@ -28,6 +28,6 @@
     "release-it": "^15.5.0"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org/"
   }
 }

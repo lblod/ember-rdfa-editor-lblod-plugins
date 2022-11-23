@@ -70,7 +70,7 @@
     "sass": "^1.56.1"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org/"
   },
   "ember": {
     "edition": "octane"
