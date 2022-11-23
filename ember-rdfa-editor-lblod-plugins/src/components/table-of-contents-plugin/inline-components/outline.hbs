@@ -11,7 +11,7 @@
         {{outlineEntry.content}}
       </AuButton>
       {{#if outlineEntry.children}}
-        <InlineComponents::Outline
+        <TableOfContentsPlugin::InlineComponents::Outline
           @entries={{outlineEntry.children}}
           @onEntryClick={{@onEntryClick}}
         />

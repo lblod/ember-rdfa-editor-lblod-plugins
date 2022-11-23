@@ -8,8 +8,12 @@ export default class TableOfContentsSpec extends InlineComponentSpec {
       if (isElement(node)) {
         if (
           (node.classList.contains('inline-component') &&
-            node.classList.contains(this.name)) ||
-          node.dataset.inlineComponent === this.name
+            (node.classList.contains(this.name) ||
+              node.classList.contains(
+                'inline-components/table-of-contents'
+              ))) ||
+          node.dataset.inlineComponent === this.name ||
+          node.dataset.inlineComponent === 'inline-components/table-of-contents'
         ) {
           return {};
         }
