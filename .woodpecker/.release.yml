@@ -1,4 +1,8 @@
 pipeline:
+  install:
+    image: danlynn/ember-cli:4.4.0
+    commands:
+      - npm ci
   release:
     image: plugins/npm
     settings:
