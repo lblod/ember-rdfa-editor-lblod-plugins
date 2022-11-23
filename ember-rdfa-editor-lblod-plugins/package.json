@@ -28,7 +28,7 @@
     "@appuniversum/ember-appuniversum": "^1.10.0",
     "@lblod/ember-rdfa-editor": "^0.64.0",
     "ember-concurrency": "^2.2.0",
-    "ember-data": "~4.4.0",
+    "ember-data": ">=3.27.0",
     "ember-power-select": "^5.0.4",
     "ember-source": ">=3.28.0",
     "uuid": "^8.3.2"
