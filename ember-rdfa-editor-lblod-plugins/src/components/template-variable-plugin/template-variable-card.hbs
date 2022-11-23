@@ -1,0 +1,34 @@
+{{#if this.showCard}}
+  <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
+    <c.header>
+      <AuHeading @level="3" @skin="6">
+        Maatregel parameters
+      </AuHeading>
+    </c.header>
+    <c.content>
+      {{#if this.multiSelect}}
+        <PowerSelectMultiple
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{this.variableOptions}}
+          @selected={{this.selectedVariable}}
+          @onChange={{this.updateVariable}} as |variable|
+        >
+          {{variable.label}}
+        </PowerSelectMultiple>
+      {{else}}
+        <PowerSelect
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{this.variableOptions}}
+          @selected={{this.selectedVariable}}
+          @onChange={{this.updateVariable}} as |variable|
+        >
+          {{variable.label}}
+        </PowerSelect>
+      {{/if}}
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedVariable}}>Voeg in</AuButton>
+    </c.content>
+  </AuCard>
+{{/if}}
+

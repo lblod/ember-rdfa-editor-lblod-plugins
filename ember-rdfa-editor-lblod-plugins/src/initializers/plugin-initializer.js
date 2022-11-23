@@ -5,6 +5,8 @@ import GenerateTemplatePlugin from '../plugins/generate-template-plugin';
 import TableOfContentsPlugin from '../plugins/table-of-contents-plugin';
 import RdfaDatePlugin from '../plugins/rdfa-date-plugin';
 import ImportSnippetPlugin from '../plugins/import-snippet-plugin';
+import TemplateVariablePlugin from '../plugins/template-variable-plugin';
+import InsertVariablePlugin from '../plugins/insert-variable-plugin';
 
 function pluginFactory(plugin) {
   return {
@@ -49,6 +51,16 @@ export function initialize(application) {
     {
       singleton: false,
     }
+  );
+  application.register(
+    'plugin:template-variable',
+    pluginFactory(TemplateVariablePlugin),
+    { singleton: false }
+  );
+  application.register(
+    'plugin:insert-variable',
+    pluginFactory(InsertVariablePlugin),
+    { singleton: false }
   );
 }
 

@@ -68,3 +68,6 @@ date-plugin:
     hours: "Hours"
     minutes: "Minutes"
     now: "Now"
+insert-variable-plugin:
+  variable: Insert variable
+  button: Insert
