@@ -2,6 +2,15 @@
 
 
 
+
+## v0.2.0 (2022-11-23)
+
+#### :rocket: Enhancement
+* [#14](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/14) Add insert and template variable plugins ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.1.3 (2022-11-23)
 
 #### :bug: Bug Fix
