@@ -14,7 +14,7 @@ export default class ApplicationController extends Controller {
   ];
 
   @action
-  async rdfaEditorInit(controller) {
+  async rdfaEditorInit() {
     await this.importRdfaSnippet.downloadSnippet({
       omitCredentials: 'true',
       source:
