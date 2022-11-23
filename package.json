@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "private": true,
   "repository": "https://github.com/lblod/ember-rdfa-editor-lblod-plugins.git",
   "license": "MIT",
@@ -26,8 +26,5 @@
     "concurrently": "^7.2.1",
     "prettier": "^2.5.1",
     "release-it": "^15.5.0"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
   }
 }

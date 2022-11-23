@@ -3,7 +3,7 @@ export default class CitatenPlugin {
   controller;
 
   get name() {
-    return 'citaten';
+    return 'citaten-plugin';
   }
   async initialize(controller) {
     this.controller = controller;

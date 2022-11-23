@@ -1,0 +1,18 @@
+<AuList::Item>
+  <AuButton
+    @icon="add"
+    @iconAlignment="left"
+    @skin="link"
+    {{on 'click' this.insertDate}}>
+    {{t "date-plugin.insert.date"}}
+  </AuButton>
+</AuList::Item>
+<AuList::Item>
+  <AuButton
+    @icon="add"
+    @iconAlignment="left"
+    @skin="link"
+    {{on 'click' this.insertDateTime}}>
+    {{t "date-plugin.insert.datetime"}}
+  </AuButton>
+</AuList::Item>
