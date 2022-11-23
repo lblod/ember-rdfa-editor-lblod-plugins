@@ -69,3 +69,6 @@ date-plugin:
     hours: "Uur"
     minutes: "Minuten"
     now: "Nu"
+insert-variable-plugin:
+  variable: Voeg variabele in
+  button: Voeg in
