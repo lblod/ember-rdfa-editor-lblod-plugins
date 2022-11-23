@@ -10,7 +10,9 @@
   "author": "",
   "files": [
     "addon-main.js",
-    "dist"
+    "dist",
+    "config",
+    "translations"
   ],
   "scripts": {
     "build": "rollup --config",
@@ -113,5 +115,8 @@
     ".": "./dist/index.js",
     "./*": "./dist/*.js",
     "./addon-main.js": "./addon-main.js"
+  },
+  "volta": {
+    "node": "16.16.0"
   }
 }
