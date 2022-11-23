@@ -1,5 +1,14 @@
 
 
+
+## v0.1.2 (2022-11-23)
+
+#### :house: Internal
+* [#12](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/12) Export config and translations ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.1.1 (2022-11-23)
 
 #### :house: Internal

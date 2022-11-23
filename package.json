@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "repository": "https://github.com/lblod/ember-rdfa-editor-lblod-plugins.git",
   "license": "MIT",
