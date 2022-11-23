@@ -1,6 +1,15 @@
 
 
 
+
+## v0.1.3 (2022-11-23)
+
+#### :bug: Bug Fix
+* [#13](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/13) Fix path of table-of-contents outline component ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.1.2 (2022-11-23)
 
 #### :house: Internal
