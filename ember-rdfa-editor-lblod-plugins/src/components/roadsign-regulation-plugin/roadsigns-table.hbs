@@ -18,6 +18,7 @@
         </tr>
       {{else}}
         {{#each @content as |row|}}
+            {{!-- template-lint-disable require-presentational-children --}}
             <tr role="button" class="au-c-data-table__clickable-row" {{on "click" (fn this.selectRow row.uri)}}>
               <td>
                 <p>{{row.label}}</p>
