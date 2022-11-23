@@ -3,6 +3,15 @@
 
 
 
+
+## v0.3.0 (2022-11-23)
+
+#### :rocket: Enhancement
+* [#7](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/7) Add roadsign regulation plugin ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.2.0 (2022-11-23)
 
 #### :rocket: Enhancement
