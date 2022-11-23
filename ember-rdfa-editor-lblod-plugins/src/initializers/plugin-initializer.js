@@ -2,6 +2,7 @@ import BesluitTypePlugin from '../plugins/besluit-type-plugin';
 import CitatenPlugin from '../plugins/citaten-plugin';
 import StandardTemplatePlugin from '../plugins/standard-template-plugin';
 import GenerateTemplatePlugin from '../plugins/generate-template-plugin';
+import RoadSignRegulationPlugin from '../plugins/roadsign-regulation-plugin';
 import TableOfContentsPlugin from '../plugins/table-of-contents-plugin';
 import RdfaDatePlugin from '../plugins/rdfa-date-plugin';
 import ImportSnippetPlugin from '../plugins/import-snippet-plugin';
@@ -40,6 +41,11 @@ export function initialize(application) {
   application.register(
     'plugin:generate-template',
     pluginFactory(GenerateTemplatePlugin),
+    { singleton: false }
+  );
+  application.register(
+    'plugin:roadsign-regulation',
+    pluginFactory(RoadSignRegulationPlugin),
     { singleton: false }
   );
   application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {

@@ -27,6 +27,7 @@ export default {
       'initializers/**/*.js',
       'services/**/*.js',
       'models/**/*.js',
+      'helpers/**/*.js',
       'serializers/**/*.js',
     ]),
 
@@ -38,6 +39,7 @@ export default {
       'initializers/**/*.js',
       'services/**/*.js',
       'models/**/*.js',
+      'helpers/**/*.js',
       'serializers/**/*.js',
     ]),
 

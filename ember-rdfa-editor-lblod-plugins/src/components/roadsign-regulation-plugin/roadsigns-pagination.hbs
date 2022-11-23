@@ -1,0 +1,25 @@
+<AuToolbar @border="top" @size="large" @nowrap={{true}} 
+  {{did-update this.onUpdateCount @count @pageStart}}
+  {{did-insert this.onUpdateCount @count @pageStart}}
+>
+  <div class="au-c-pagination">
+    {{#if this.hasPreviousPage}}
+      <div class="au-c-pagination__list-item">
+        <AuButton @skin="link" {{on 'click' this.goToPreviousPage}} @iconAlignment="left" @icon="nav-left">Vorige pagina</AuButton>
+      </div>
+    {{/if}}
+    <p>
+      <span class="au-u-hidden-visually">Publicaties</span>
+      <strong>
+        {{this.pageStart}} - {{this.pageEnd}}
+      </strong>
+      van
+      {{this.count}}
+    </p>
+    {{#if this.hasNextPage}}
+      <div class="au-c-pagination__list-item">
+        <AuButton @skin="link" {{on 'click' this.goToNextPage}}  @icon="nav-right" @iconAlignment="right">Volgende pagina</AuButton>
+      </div>
+    {{/if}}
+  </div>
+</AuToolbar>
