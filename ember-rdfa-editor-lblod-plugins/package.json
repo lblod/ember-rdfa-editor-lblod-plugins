@@ -3,7 +3,8 @@
   "version": "0.3.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "ember-rdfa-editor"
   ],
   "repository": "",
   "license": "MIT",
