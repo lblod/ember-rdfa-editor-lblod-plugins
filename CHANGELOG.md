@@ -4,6 +4,15 @@
 
 
 
+
+## v0.3.1 (2022-11-24)
+
+#### :memo: Documentation
+* [#15](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/15) Add documentation to readme ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.3.0 (2022-11-23)
 
 #### :rocket: Enhancement
