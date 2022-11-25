@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     autoImport: {
-      watchDependencies: ['ember-rdfa-editor-lblod-plugins'],
+      watchDependencies: ['@lblod/ember-rdfa-editor-lblod-plugins'],
       webpack: {
         plugins: [
           new webpack.ProvidePlugin({
