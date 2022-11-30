@@ -71,3 +71,39 @@ date-plugin:
 insert-variable-plugin:
   variable: Insert variable
   button: Insert
+article-structure-plugin:
+  insert:
+    paragraph: Insert paragraph
+    article: Insert article
+    articleBelow: Insert article below
+    title: Insert title
+    chapter: Insert chapter
+    section: Insert section
+    subsection: Insert subsection
+  moveUp:
+    paragraph: Move paragraph up
+    article: Move article up
+    title: Move title up
+    chapter: Move chapter up
+    section: Move section up
+    subsection: Move subsection up
+  moveDown:
+    paragraph: Move paragraph down
+    article: Move article down
+    title: Move title down
+    chapter: Move chapter down
+    section: Move section down
+    subsection: Move subsection down
+  title:
+    paragraphCard: Paragraph Card
+    articleCard: Article Card
+    structureCard: Structure Card
+  remove:
+    article: Remove Article
+    paragraph: Remove Paragraph
+    structure: Remove Structure
+  placeholder:
+    title: Insert title heading
+    chapter: Insert chapter heading
+    section: Insert section heading
+    subsection: Insert subsection heading

@@ -72,3 +72,32 @@ date-plugin:
 insert-variable-plugin:
   variable: Voeg variabele in
   button: Voeg in
+article-structure-plugin:
+  insert:
+    paragraph: Paragraaf invoegen
+    article: Artikel invoegen
+    articleBelow: Voeg onderstaand artikel in
+    title: Titel invoegen
+    chapter: Hoofdstuk invoegen
+    heading: Afdeling invoegen
+    subsection: Onderafdeling invoegen
+  move:
+    articleUp: Artikel naar boven verplaatsen
+    articleDown: Artikel naar beneden verplaatsen
+    paragraphUp: Paragraaf naar boven verplaatsen
+    paragraphDown: Paragraaf naar beneden verplaatsen
+    structureUp: Structuur naar boven verplaatsen
+    structureDown: Structuur naar beneden verplaatsen
+  title:
+    paragraphCard: Paragraaf card
+    articleCard: Artikel card
+    structureCard: Structuur card
+  remove:
+    article: Artikel verwijderen
+    paragraph: Paragraaf verwijderen
+    structure: Structuur verwijderen
+  placeholder:
+    title: Voeg titel in
+    chapter: Voeg hoofdstuk in
+    heading: Voeg afdeling in
+    subsection: Voeg onderafdeling in

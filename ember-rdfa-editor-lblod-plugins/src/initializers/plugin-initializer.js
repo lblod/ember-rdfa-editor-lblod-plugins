@@ -8,6 +8,7 @@ import RdfaDatePlugin from '../plugins/rdfa-date-plugin';
 import ImportSnippetPlugin from '../plugins/import-snippet-plugin';
 import TemplateVariablePlugin from '../plugins/template-variable-plugin';
 import InsertVariablePlugin from '../plugins/insert-variable-plugin';
+import ArticleStructurePlugin from '../plugins/article-structure-plugin';
 
 function pluginFactory(plugin) {
   return {
@@ -67,6 +68,13 @@ export function initialize(application) {
     'plugin:insert-variable',
     pluginFactory(InsertVariablePlugin),
     { singleton: false }
+  );
+  application.register(
+    'plugin:article-structure',
+    pluginFactory(ArticleStructurePlugin),
+    {
+      singleton: false,
+    }
   );
 }
 

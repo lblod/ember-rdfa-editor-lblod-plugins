@@ -18,7 +18,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "start": "ember serve",
+    "start": "ember serve --proxy=https://dev.gelinkt-notuleren.lblod.info/",
     "test": "npm-run-all lint \"test:!(watch)\"",
     "test:ember": "ember test",
     "test:watch": "ember test --server",

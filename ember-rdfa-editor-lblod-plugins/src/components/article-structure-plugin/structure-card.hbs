@@ -1,0 +1,42 @@
+{{#unless this.isOutsideStructure}}
+  <AuCard @flex={{true}} @divided={{true}} @expandable={{false}} @shadow={{true}} @size="flush" as |c|>
+    <c.header class="au-u-hidden-visually">
+      <AuHeading @level="3" @skin="6">{{t "article-structure-plugin.title.structureCard"}}</AuHeading>
+    </c.header>
+    <c.content class="au-c-content--small">
+      <AuList @divider={{true}} class="au-u-padding-top-tiny au-u-padding-bottom-tiny" as |Item|>
+        <Item>
+          <AuButton
+            @icon="chevron-up"
+            @iconAlignment="left"
+            @skin="link"
+            @disabled={{not this.canMoveUp}}
+            {{on 'click' (fn this.moveStructure true)}}>
+            {{t this.structureTypeSelected.moveUp}}
+          </AuButton>
+        </Item>
+        <Item>
+          <AuButton
+            @icon="chevron-down"
+            @iconAlignment="left"
+            @skin="link"
+            @disabled={{not this.canMoveDown}}
+            {{on 'click' (fn this.moveStructure false)}}>
+            {{t this.structureTypeSelected.moveDown}}
+          </AuButton>
+        </Item>
+        <Item>
+          <AuButton
+            @icon="bin"
+            @iconAlignment="left"
+            @skin="link"
+            @alert={{true}}
+            @disabled={{this.isOutsideStructure}}
+            {{on 'click' this.removeStructure}}>
+            {{t "article-structure-plugin.remove.structure"}}
+          </AuButton>
+        </Item>
+      </AuList>
+    </c.content>
+  </AuCard>
+{{/unless}}

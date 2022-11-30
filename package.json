@@ -29,5 +29,12 @@
   },
   "volta": {
     "node": "16.18.1"
+  },
+  "dependencies": {
+    "@rdfjs/parser-n3": "^2.0.1",
+    "process": "^0.11.10",
+    "rdf-ext": "^2.1.0",
+    "rdf-validate-shacl": "^0.4.5",
+    "stream-browserify": "^3.0.0"
   }
 }
