@@ -107,7 +107,7 @@
       "./components/roadsign-regulation-plugin/roadsigns-modal.js": "./dist/_app_/components/roadsign-regulation-plugin/roadsigns-modal.js",
       "./components/roadsign-regulation-plugin/roadsigns-pagination.js": "./dist/_app_/components/roadsign-regulation-plugin/roadsigns-pagination.js",
       "./components/roadsign-regulation-plugin/roadsigns-table.js": "./dist/_app_/components/roadsign-regulation-plugin/roadsigns-table.js",
-      "./components/standard-template-plugin/template-card.js": "./dist/_app_/components/standard-template-plugin/template-card.js",
+      "./components/standard-template-plugin/card.js": "./dist/_app_/components/standard-template-plugin/card.js",
       "./components/standard-template-plugin/template-provider.js": "./dist/_app_/components/standard-template-plugin/template-provider.js",
       "./components/table-of-contents-plugin/card.js": "./dist/_app_/components/table-of-contents-plugin/card.js",
       "./components/table-of-contents-plugin/inline-components/outline.js": "./dist/_app_/components/table-of-contents-plugin/inline-components/outline.js",

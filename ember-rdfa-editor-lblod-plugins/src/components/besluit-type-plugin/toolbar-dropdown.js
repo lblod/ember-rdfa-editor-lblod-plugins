@@ -85,6 +85,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
       type.includes('https://data.vlaanderen.be/id/concept/BesluitType/')
     );
+    console.log('BESLUIT TYPE RELEVANT: ', besluitTypeRelevant);
     if (besluitTypeRelevant) {
       this.previousBesluitType = besluitTypeRelevant;
       const besluitType = this.findBesluitTypeByURI(besluitTypeRelevant);
@@ -173,6 +174,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
   }
 
   insert() {
+    console.log(this.besluitType.uri);
     this.cardExpanded = false;
     this.controller.checkAndDoCommand(
       removeType(this.besluitPos, this.previousBesluitType)
@@ -180,6 +182,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
     this.controller.checkAndDoCommand(
       addType(this.besluitPos, this.besluitType.uri)
     );
+    console.log(this.controller.state.doc);
   }
 
   @action
