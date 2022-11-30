@@ -25,6 +25,13 @@ export function initialize(application) {
     pluginFactory(BesluitTypePlugin),
     { singleton: false }
   );
+  application.register(
+    'plugin:import-snippet',
+    pluginFactory(ImportSnippetPlugin),
+    {
+      singleton: false,
+    }
+  );
   application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
     singleton: false,
   });
@@ -52,13 +59,7 @@ export function initialize(application) {
   //   pluginFactory(RoadSignRegulationPlugin),
   //   { singleton: false }
   // );
-  // application.register(
-  //   'plugin:import-snippet',
-  //   pluginFactory(ImportSnippetPlugin),
-  //   {
-  //     singleton: false,
-  //   }
-  // );
+
   // application.register(
   //   'plugin:template-variable',
   //   pluginFactory(TemplateVariablePlugin),

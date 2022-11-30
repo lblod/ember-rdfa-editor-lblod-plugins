@@ -1,16 +1,11 @@
-export default class ImportSnippetPlugin {
-  controller;
-
-  get name() {
-    return 'import-snippet-plugin';
-  }
-
-  initialize(controller) {
-    this.controller = controller;
-    controller.registerWidget({
-      componentName: 'import-snippet-plugin/card',
-      identifier: 'import-snippet-plugin/card',
-      desiredLocation: 'sidebar',
-    });
+import { RdfaEditorPlugin } from '@lblod/ember-rdfa-editor';
+export default class ImportSnippetPlugin extends RdfaEditorPlugin {
+  widgets() {
+    return [
+      {
+        componentName: 'import-snippet-plugin/card',
+        desiredLocation: 'sidebar',
+      },
+    ];
   }
 }
