@@ -11,6 +11,7 @@ export const STRUCTURES = {
     translation: 'article-structure-plugin.insert.title',
     moveUp: 'article-structure-plugin.moveUp.title',
     moveDown: 'article-structure-plugin.moveDown.title',
+    insertPredicate: 'http://www.w3.org/ns/prov#value',
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -20,7 +21,7 @@ export const STRUCTURES = {
         sh:targetSubjectsOf <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>;
         sh:property [
           sh:path <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
-          sh:hasValue <http://test/myTestContainer>
+          sh:hasValue <http://data.vlaanderen.be/ns/besluit#Besluit>
         ].
       `,
     template: (uri, intlService) => `

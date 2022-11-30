@@ -1,3 +1,4 @@
+import defaults from '../utils/article-structure-plugin/defaults';
 export default class RecalculateStructureNumbersCommandV2 {
   name = 'recalculate-structure-numbers-v2';
 
@@ -36,10 +37,11 @@ export default class RecalculateStructureNumbersCommandV2 {
     }
   }
   replaceNumberIfNeeded(controller, structure, index, structureType) {
+    const numberPredicate = structureType.numberPredicate || defaults.numberPredicate;
     const structureNumberObjectNode = controller.datastore
       .match(
         `>${structure.getAttribute('resource')}`,
-        `>${structureType.numberPredicate}`,
+        `>${numberPredicate}`,
         null
       )
       .asObjectNodes()
