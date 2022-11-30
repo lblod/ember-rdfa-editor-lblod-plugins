@@ -48,9 +48,9 @@ export function initialize(application) {
   //   pluginFactory(RoadSignRegulationPlugin),
   //   { singleton: false }
   // );
-  // application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
-  //   singleton: false,
-  // });
+  application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
+    singleton: false,
+  });
   // application.register(
   //   'plugin:import-snippet',
   //   pluginFactory(ImportSnippetPlugin),
