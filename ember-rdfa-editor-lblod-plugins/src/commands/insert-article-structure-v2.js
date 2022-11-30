@@ -17,7 +17,6 @@ export default class InsertArticleStructureV2Command {
   }
 
   async execute(controller, structureName, options, intlService) {
-    console.log(structureName);
     const structureToAddIndex = options.structures.findIndex(
       (structure) => structure.title === structureName
     );
@@ -31,9 +30,7 @@ export default class InsertArticleStructureV2Command {
     s.push(null);
     const parser = new ParserN3({ factory });
     const shapes = await factory.dataset().import(parser.import(s));
-    console.log(shapes);
     const data = controller.datastore._dataset;
-    console.log(data);
     const validator = new SHACLValidator(shapes, { factory });
     const report = await validator.validate(data);
     const urisNotAllowedToInsert = report.results.map(
@@ -54,7 +51,6 @@ export default class InsertArticleStructureV2Command {
       },
     });
     let resourceToInsert = treeWalker.nextNode();
-    console.log(resourceToInsert);
     if (!resourceToInsert) {
       const treeWalkerAscend = new controller.treeWalkerFactory({
         root: controller.modelRoot,
@@ -83,8 +79,6 @@ export default class InsertArticleStructureV2Command {
         )
         .asPredicateNodes()
         .next().value;
-      console.log(nodeToInsertPredicateNodes);
-      console.log(controller.datastore._dataset);
       nodeToInsert = [...nodeToInsertPredicateNodes.nodes][0];
     } else {
       nodeToInsert = resourceToInsert;

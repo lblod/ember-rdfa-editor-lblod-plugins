@@ -67,12 +67,9 @@ export default class MoveStructureCommandV2 {
         },
       });
       const nodeToInsert = treeWalker.nextNode();
-      console.log(nodeToInsert);
       if (nodeToInsert) {
-        console.log('true');
         return true;
       } else {
-        console.log('false');
         return false;
       }
     }

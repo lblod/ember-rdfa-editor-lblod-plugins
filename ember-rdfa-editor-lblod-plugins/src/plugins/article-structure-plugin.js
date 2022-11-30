@@ -49,7 +49,7 @@ export default class ArticleStructurePlugin {
     );
     const structuresSelected = [];
     const structuresTypesSelectedByUser =
-      options.structures || Object.keys(STRUCTURES);
+      (options && options.structures) || Object.keys(STRUCTURES);
     for (let type of structuresTypesSelectedByUser) {
       if (typeof type === 'string') {
         const defaultStructure = STRUCTURES[type];
@@ -65,9 +65,6 @@ export default class ArticleStructurePlugin {
       }
     }
     const optionsWithDefaults = {
-      findStructureContainer: options.findStructureContainer,
-      articleType: options.articleType,
-      hasPartPredicate: options.hasPartPredicate,
       structures: structuresSelected,
       structureTypes: structuresSelected.map((structure) => structure.type),
     };

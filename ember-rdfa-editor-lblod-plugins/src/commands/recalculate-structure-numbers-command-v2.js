@@ -37,7 +37,8 @@ export default class RecalculateStructureNumbersCommandV2 {
     }
   }
   replaceNumberIfNeeded(controller, structure, index, structureType) {
-    const numberPredicate = structureType.numberPredicate || defaults.numberPredicate;
+    const numberPredicate =
+      structureType.numberPredicate || defaults.numberPredicate;
     const structureNumberObjectNode = controller.datastore
       .match(
         `>${structure.getAttribute('resource')}`,

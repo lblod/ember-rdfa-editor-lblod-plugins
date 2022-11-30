@@ -122,7 +122,6 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
       .match(null, 'a', 'ext:Mapping')
       .asQuads()
       .next().value;
-    console.log('MAPPING: ', mapping);
     if (mapping) {
       const mappingUri = mapping.subject.value;
       this.mappingUri = mappingUri;
@@ -130,7 +129,6 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         .match(`>${mappingUri}`, 'dct:type', null)
         .asQuads()
         .next().value;
-      console.log('TRIPLE: ', mappingTypeTriple);
       if (mappingTypeTriple) {
         const mappingType = mappingTypeTriple.object.value;
         if (mappingType === 'codelist') {

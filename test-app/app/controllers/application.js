@@ -60,12 +60,7 @@ export default class ApplicationController extends Controller {
     'standard-template',
     'table-of-contents',
     'template-variable',
-    {
-      name: 'article-structure',
-      options: {
-        
-      }
-    },
+    'article-structure',
   ];
 
   @action
