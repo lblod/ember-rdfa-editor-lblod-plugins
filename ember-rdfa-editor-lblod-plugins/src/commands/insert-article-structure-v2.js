@@ -12,8 +12,79 @@ export default class InsertArticleStructureV2Command {
     this.model = model;
   }
 
-  canExecute() {
-    return true;
+  async canExecute(controller, structureName, options) {
+    const structureToAddIndex = options.structures.findIndex(
+      (structure) => structure.title === structureName
+    );
+    const structureToAdd = options.structures[structureToAddIndex];
+    const shaclConstraint = structureToAdd.shaclConstraint;
+    window.process = process;
+    const s = new Readable();
+    s._read = () => {}; // redundant? see update below
+    s.push(shaclConstraint);
+    s.push(null);
+    const parser = new ParserN3({ factory });
+    const shapes = await factory.dataset().import(parser.import(s));
+    const data = controller.datastore._dataset;
+    const validator = new SHACLValidator(shapes, { factory });
+    const report = await validator.validate(data);
+    const urisNotAllowedToInsert = report.results.map(
+      (result) => result.focusNode.value
+    );
+    const treeWalker = new controller.treeWalkerFactory({
+      root: controller.modelRoot,
+      start: controller.selection.lastRange._start.parentElement,
+      end: controller.modelRoot,
+      reverse: false,
+      visitParentUpwards: true,
+      filter: (node) => {
+        const nodeUri = node.getAttribute('resource');
+        if (nodeUri && !urisNotAllowedToInsert.includes(nodeUri)) {
+          return 0;
+        }
+        return 1;
+      },
+    });
+    let resourceToInsert = treeWalker.nextNode();
+    if (!resourceToInsert) {
+      const treeWalkerAscend = new controller.treeWalkerFactory({
+        root: controller.modelRoot,
+        start: controller.selection.lastRange._start.parentElement,
+        end: controller.modelRoot,
+        reverse: true,
+        visitParentUpwards: true,
+        filter: (node) => {
+          const nodeUri = node.getAttribute('resource');
+          if (nodeUri && !urisNotAllowedToInsert.includes(nodeUri)) {
+            return 0;
+          }
+          return 1;
+        },
+      });
+      resourceToInsert = treeWalkerAscend.nextNode();
+    }
+    if (!resourceToInsert) return false;
+    let nodeToInsert;
+    if (structureToAdd.insertPredicate) {
+      const resourceToInsertUri = resourceToInsert.getAttribute('resource');
+      const nodeToInsertPredicateNodes = controller.datastore
+        .match(
+          `>${resourceToInsertUri}`,
+          `>${structureToAdd.insertPredicate}`,
+          null
+        )
+        .asPredicateNodes()
+        .next().value;
+      nodeToInsert =
+        nodeToInsertPredicateNodes && [...nodeToInsertPredicateNodes.nodes][0];
+    } else {
+      nodeToInsert = resourceToInsert;
+    }
+    if (nodeToInsert) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async execute(controller, structureName, options, intlService) {

@@ -17,7 +17,25 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
       'selectionChanged',
       this.selectionChangedHandler
     );
-    this.structures = this.args.widgetArgs.options.structures;
+    this.setupStructures();
+  }
+
+  @action
+  async setupStructures() {
+    this.structures = await Promise.all(
+      this.args.widgetArgs.options.structures.map(async (structure) => {
+        return {
+          ...structure,
+          canExecute: await this.args.controller.canExecuteCommand(
+            'insert-article-structure-v2',
+            this.args.controller,
+            structure.title,
+            this.args.widgetArgs.options,
+            this.intl
+          ),
+        };
+      })
+    );
   }
 
   @action
@@ -33,6 +51,7 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
 
   @action
   selectionChangedHandler() {
+    this.setupStructures();
     const currentSelection = this.args.controller.selection.lastRange;
     if (!currentSelection) {
       return;

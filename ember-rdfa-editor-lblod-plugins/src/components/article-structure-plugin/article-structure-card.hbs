@@ -4,7 +4,7 @@
       @icon="add"
       @iconAlignment="left"
       @skin="link"
-      @disabled={{false}}
+      @disabled={{not structure.canExecute}}
       {{on 'click' (fn this.insertStructure structure.title)}}>
       {{t structure.translation}}
     </AuButton>
