@@ -1,3 +1,4 @@
+<div {{did-update this.onSelectionChanged @controller.state}}>
 {{#if this.showCard}}
   <AuCard @shadow={{true}} @size="flush" as |c|>
     <c.header class="au-u-hidden-visually">
@@ -5,7 +6,7 @@
     </c.header>
     <c.content class="au-o-box au-o-box--small">
       <div class="au-o-flow au-o-flow--small">
-        <RdfaDatePlugin::RdfaDateTimePicker
+        <RdfaDatePlugin::DateTimePicker
           @onChange={{this.changeDate}}
           @value={{this.dateValue}}
           @onlyDate={{this.onlyDate}}/>
@@ -20,3 +21,4 @@
     </c.content>
   </AuCard>
 {{/if}}
+</div>
