@@ -1,16 +1,13 @@
-export default class BesluitTypePlugin {
-  controller;
+import { RdfaEditorPlugin } from '@lblod/ember-rdfa-editor';
 
-  get name() {
-    return 'besluit-type-plugin';
-  }
-
-  initialize(controller) {
-    this.controller = controller;
-    controller.registerWidget({
-      componentName: 'besluit-type-plugin/toolbar-dropdown',
-      identifier: 'besluit-type-plugin/dropdown',
-      desiredLocation: 'toolbar',
-    });
+export default class BesluitTypePlugin extends RdfaEditorPlugin {
+  widgets() {
+    return [
+      {
+        componentName: 'besluit-type-plugin/toolbar-dropdown',
+        identifier: 'besluit-type-plugin/dropdown',
+        desiredLocation: 'toolbarRight',
+      },
+    ];
   }
 }
