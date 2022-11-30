@@ -1,1 +1,1 @@
-export { default } from '@lblod/ember-rdfa-editor-lblod-plugins/components/citaten-plugin/editor-plugins/citations/article-list';
+export { default } from '@lblod/ember-rdfa-editor-lblod-plugins/components/citaten-plugin/citations/article-list';

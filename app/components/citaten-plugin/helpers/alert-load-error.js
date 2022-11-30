@@ -1,1 +1,1 @@
-export { default } from '@lblod/ember-rdfa-editor-lblod-plugins/components/citaten-plugin/editor-plugins/helpers/alert-load-error';
+export { default } from '@lblod/ember-rdfa-editor-lblod-plugins/components/citaten-plugin/helpers/alert-load-error';
