@@ -31,8 +31,7 @@
     "@embroider/test-setup": "^1.7.1",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@lblod/ember-rdfa-editor": "^0.64.0",
-    "@lblod/ember-rdfa-editor-besluit-plugin": "^0.5.7",
+    "@lblod/ember-rdfa-editor": "^1.0.0-alpha.4",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-auto-import": "^2.4.1",
@@ -78,5 +77,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "volta": {
+    "extends": "../../package.json"
   }
 }
