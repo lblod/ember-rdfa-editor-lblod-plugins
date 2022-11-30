@@ -8,6 +8,7 @@ export default class ApplicationController extends Controller {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
     mobiliteit: 'https://data.vlaanderen.be/ns/mobiliteit#',
     dct: 'http://purl.org/dc/terms/',
+    say: 'https://say.data.gift/ns/',
   };
 
   plugins = [
