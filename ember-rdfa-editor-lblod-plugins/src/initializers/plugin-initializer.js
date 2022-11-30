@@ -20,54 +20,54 @@ function pluginFactory(plugin) {
 }
 
 export function initialize(application) {
-  application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
-    singleton: false,
-  });
-  application.register(
-    'plugin:standard-template',
-    pluginFactory(StandardTemplatePlugin),
-    { singleton: false }
-  );
-  application.register(
-    'plugin:besluit-type',
-    pluginFactory(BesluitTypePlugin),
-    { singleton: false }
-  );
-  application.register(
-    'plugin:table-of-contents',
-    pluginFactory(TableOfContentsPlugin),
-    { singleton: false }
-  );
-  application.register(
-    'plugin:generate-template',
-    pluginFactory(GenerateTemplatePlugin),
-    { singleton: false }
-  );
-  application.register(
-    'plugin:roadsign-regulation',
-    pluginFactory(RoadSignRegulationPlugin),
-    { singleton: false }
-  );
-  application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
-    singleton: false,
-  });
-  application.register(
-    'plugin:import-snippet',
-    pluginFactory(ImportSnippetPlugin),
-    {
-      singleton: false,
-    }
-  );
-  application.register(
-    'plugin:template-variable',
-    pluginFactory(TemplateVariablePlugin),
-    { singleton: false }
-  );
-  application.register(
-    'plugin:insert-variable',
-    pluginFactory(InsertVariablePlugin),
-    { singleton: false }
-  );
+  // application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
+  //   singleton: false,
+  // });
+  // application.register(
+  //   'plugin:standard-template',
+  //   pluginFactory(StandardTemplatePlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:besluit-type',
+  //   pluginFactory(BesluitTypePlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:table-of-contents',
+  //   pluginFactory(TableOfContentsPlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:generate-template',
+  //   pluginFactory(GenerateTemplatePlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:roadsign-regulation',
+  //   pluginFactory(RoadSignRegulationPlugin),
+  //   { singleton: false }
+  // );
+  // application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
+  //   singleton: false,
+  // });
+  // application.register(
+  //   'plugin:import-snippet',
+  //   pluginFactory(ImportSnippetPlugin),
+  //   {
+  //     singleton: false,
+  //   }
+  // );
+  // application.register(
+  //   'plugin:template-variable',
+  //   pluginFactory(TemplateVariablePlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:insert-variable',
+  //   pluginFactory(InsertVariablePlugin),
+  //   { singleton: false }
+  // );
 }
 
 export default {
