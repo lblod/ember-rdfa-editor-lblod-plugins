@@ -39,12 +39,6 @@
     "process": "0.11.10",
     "uuid": "^8.3.2"
   },
-  "peerDependencies": {
-    "@appuniversum/ember-appuniversum": "^1.5.0",
-    "@lblod/ember-rdfa-editor": ">=0.64.0",
-    "@rdfjs/data-model": "^2.0.1",
-    "ember-concurrency": "^2.0.0"
-  },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "^1.5.0",
     "@ember/optional-features": "^2.0.0",
@@ -93,11 +87,17 @@
     "tracked-toolbox": "^1.2.3",
     "webpack": "^5.72.1"
   },
-  "volta": {
-    "node": "16.18.1"
+  "peerDependencies": {
+    "@appuniversum/ember-appuniversum": "^1.5.0",
+    "@lblod/ember-rdfa-editor": ">=0.64.0",
+    "@rdfjs/data-model": "^2.0.1",
+    "ember-concurrency": "^2.0.0"
   },
   "engines": {
     "node": "12.* || 14.* || >= 16"
+  },
+  "volta": {
+    "node": "16.18.1"
   },
   "ember": {
     "edition": "octane"
