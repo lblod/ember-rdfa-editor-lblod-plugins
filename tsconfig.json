@@ -3,7 +3,7 @@
     "target": "ES2021",
     "module": "ES2020",
     "moduleResolution": "node",
-    "allowJs": false,
+    "allowJs": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "allowSyntheticDefaultImports": false,
