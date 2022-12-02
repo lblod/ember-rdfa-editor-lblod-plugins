@@ -40,7 +40,14 @@ export default class RdfaDatePluginCardComponent extends Component {
     if (!selectedRange) {
       return;
     }
-    const selectionParent = selectedRange.start.parent;
+    const selectionParent = selectedRange.start.findAncestors(
+      (element) => element.attributeMap && element.attributeMap.get('datatype')
+    )[0];
+    if (!selectionParent) {
+      this.showCard = false;
+      this.dateElement = undefined;
+      return;
+    }
     const datatype = selectionParent.attributeMap.get('datatype');
     if (datatype === 'xsd:dateTime') {
       this.showCard = true;
