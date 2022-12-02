@@ -1,15 +1,12 @@
 import { inject as service } from '@ember/service';
+import { RdfaEditorPlugin } from '@lblod/ember-rdfa-editor';
 
-export default class StandardTemplatePlugin {
+export default class StandardTemplatePlugin extends RdfaEditorPlugin {
   @service standardTemplatePlugin;
   matches = new Set();
-  controller;
 
-  get name() {
-    return 'standard-template-plugin';
-  }
-
-  async initialize(controller) {
+  async initialize() {
+    super.initialize();
     let templates;
     try {
       templates = await this.standardTemplatePlugin.fetchTemplates.perform();
@@ -23,11 +20,15 @@ export default class StandardTemplatePlugin {
         template.matches.forEach((match) => this.matches.add(match));
       });
     }
-    this.controller = controller;
-    controller.registerWidget({
-      desiredLocation: 'insertSidebar',
-      componentName: 'standard-template-plugin/template-card',
-      identifier: 'standard-template-plugin/template-card',
-    });
+  }
+
+  widgets() {
+    return [
+      {
+        desiredLocation: 'insertSidebar',
+        componentName: 'standard-template-plugin/card',
+        identifier: 'standard-template-plugin/card',
+      },
+    ];
   }
 }

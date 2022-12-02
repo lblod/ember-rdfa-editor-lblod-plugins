@@ -1,17 +1,10 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import instantiateUuids from '../../utils/instantiate-uuids';
-
+import { DOMParser as ProseParser } from 'prosemirror-model';
 export default class TemplateProviderComponent extends Component {
   @service standardTemplatePlugin;
-  @tracked applicableTemplates = [];
-
-  constructor() {
-    super(...arguments);
-    this.args.controller.onEvent('selectionChanged', this.trackSelectionChange);
-  }
 
   get busy() {
     return this.standardTemplatePlugin.fetchTemplates.isRunning;
@@ -25,21 +18,27 @@ export default class TemplateProviderComponent extends Component {
     return this.applicableTemplates.length > 0;
   }
 
+  get applicableTemplates() {
+    return (
+      this.standardTemplatePlugin.fetchTemplates.last.value?.filter(
+        (template) => this.templateIsApplicable(template)
+      ) || []
+    );
+  }
+
   templateIsApplicable(template) {
-    const selectedRange = this.controller.selection.lastRange;
-    if (!selectedRange) {
+    const selection = this.controller.state.selection;
+    if (!selection.from) {
       return false;
     }
-    const rangeStore = this.controller.datastore.limitToRange(
-      selectedRange,
-      'rangeIsInside'
-    );
 
-    const containsTypes = rangeStore.match(null, 'a').dataset.some((quad) => {
-      return template.contexts.includes(quad.object.value);
-    });
+    const containsTypes = this.controller.datastore
+      .match(null, 'a')
+      .dataset.some((quad) => {
+        return template.contexts.includes(quad.object.value);
+      });
 
-    const containsDisabledTypes = rangeStore
+    const containsDisabledTypes = this.controller.datastore
       .match(null, 'a')
       .dataset.some((quad) =>
         template.disabledInContexts.includes(quad.object.value)
@@ -49,27 +48,31 @@ export default class TemplateProviderComponent extends Component {
   }
 
   @action
-  trackSelectionChange() {
-    this.applicableTemplates =
-      this.standardTemplatePlugin.fetchTemplates.last.value?.filter(
-        (template) => this.templateIsApplicable(template)
-      ) || [];
-  }
-
-  @action
   async insert(template) {
     await template.reload();
-    let insertRange = this.controller.selection.lastRange;
-    if (insertRange.getMarks().hasMarkName('highlighted')) {
-      insertRange = this.controller.rangeFactory.fromAroundNode(
-        insertRange.getCommonAncestor()
-      );
+    const selection = this.controller.state.selection;
+    let insertRange = selection;
+    const { $from, $to } = selection;
+    console.log('PARENT: ', $from.parent);
+    if (
+      $from.parent.type === this.controller.schema.nodes.placeholder &&
+      $from.sameParent($to)
+    ) {
+      insertRange = {
+        from: $from.start($from.depth - 1),
+        to: $from.end($from.depth - 1),
+      };
+      console.log(insertRange);
     }
-    this.controller.executeCommand(
-      'insert-html',
-      instantiateUuids(template.body),
-      insertRange,
-      'right'
-    );
+
+    const domParser = new DOMParser();
+    const contentFragment = ProseParser.fromSchema(
+      this.controller.schema
+    ).parse(
+      domParser.parseFromString(instantiateUuids(template.body), 'text/html')
+    ).content;
+    this.controller.withTransaction((tr) => {
+      return tr.replaceWith(insertRange.from, insertRange.to, contentFragment);
+    });
   }
 }
