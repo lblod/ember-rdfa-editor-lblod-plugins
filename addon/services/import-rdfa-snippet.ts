@@ -15,7 +15,7 @@ type RequestParams = {
  * @class ImportRdfaSnippet
  * @constructor
  */
-class RdfaSnippet {
+export class RdfaSnippet {
   constructor(
     readonly source: string,
     readonly type: string,

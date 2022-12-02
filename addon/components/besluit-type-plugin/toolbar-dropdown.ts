@@ -3,33 +3,28 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
-import fetchBesluitTypes from '../../utils/fetchBesluitTypes';
-import Service, { inject as service } from '@ember/service';
+import fetchBesluitTypes, { BesluitType } from '../../utils/fetchBesluitTypes';
+import { inject as service } from '@ember/service';
 import {
   addType,
   removeType,
 } from '@lblod/ember-rdfa-editor/commands/type-commands';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import DS from 'ember-data';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { Node } from 'prosemirror-model';
-
+import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/current-session';
 declare module 'ember__owner' {
   export default interface Owner {
     resolveRegistration(name: string): unknown;
   }
 }
 
-
 type Args = {
   controller: ProseController;
 };
 
-type BesluitType = {
-  uri: string;
-};
-
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
-  @service declare currentSession: DS.Model;
+  @service declare currentSession: CurrentSessionService;
 
   /**
    * Actual besluit type selected
@@ -38,13 +33,13 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
    * @private
    */
   @tracked besluitType?: BesluitType;
-  @tracked previousBesluitType?: BesluitType;
+  @tracked previousBesluitType?: string;
   @tracked types: BesluitType[] = [];
 
   //used to update selections since the other vars dont seem to work in octane
-  @tracked besluit;
-  @tracked subBesluit;
-  @tracked subSubBesluit;
+  @tracked besluit?: BesluitType;
+  @tracked subBesluit?: BesluitType;
+  @tracked subSubBesluit?: BesluitType;
 
   @tracked cardExpanded = false;
   @tracked showCard = false;
@@ -74,9 +69,11 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   loadData = task(async () => {
     // eslint-disable-next-line @typescript-eslint/await-thenable
-    const bestuurseenheid: DS.Model = await this.currentSession.get('group');
-    const classificatie: DS.Model = await bestuurseenheid.get('classificatie');
-    const ENV = getOwner(this)?.resolveRegistration('config:environment');
+    const bestuurseenheid = await this.currentSession.get('group');
+    const classificatie = await bestuurseenheid.get('classificatie');
+    const ENV = getOwner(this)?.resolveRegistration('config:environment') as {
+      besluitTypePlugin: { endpoint: string };
+    };
     const types = await fetchBesluitTypes(classificatie.uri, ENV);
     this.types = types;
   });
@@ -110,7 +107,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     this.besluitNode = besluitNode;
     this.showCard = true;
     const besluitTypes = this.controller.datastore
-      .match(`>${besluitUri}`, 'a', null)
+      .match(`>${besluitUri}`, 'a', undefined)
       .asQuads();
     const besluitTypesUris = [...besluitTypes].map((quad) => quad.object.value);
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
@@ -146,49 +143,52 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   @action
-  updateBesluitType(selected) {
+  updateBesluitType(selected: BesluitType) {
     this.besluit = selected;
     this.besluitType = selected;
-    this.subBesluit = null;
-    this.subSubBesluit = null;
+    this.subBesluit = undefined;
+    this.subSubBesluit = undefined;
     if (!selected.subTypes || !selected.subTypes.length) this.insert();
   }
 
   @action
-  updateBesluitSubType(selected) {
+  updateBesluitSubType(selected: BesluitType) {
     this.subBesluit = selected;
     this.besluitType = selected;
-    this.subSubBesluit = null;
+    this.subSubBesluit = undefined;
     if (!selected.subTypes || !selected.subTypes.length) this.insert();
   }
 
   @action
-  updateBesluitSubSubType(selected) {
+  updateBesluitSubSubType(selected: BesluitType) {
     this.subSubBesluit = selected;
     this.besluitType = selected;
     if (!selected.subTypes || !selected.subTypes.length) this.insert();
   }
 
-  findBesluitTypeParent(besluitType, array = this.types, parent = null) {
+  findBesluitTypeParent(
+    besluitType?: BesluitType,
+    array: BesluitType[] = this.types,
+    parent?: BesluitType
+  ): BesluitType | undefined {
     if (!besluitType || !array) {
-      return null;
+      return;
     }
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] == besluitType) {
+    for (const type of array) {
+      if (type == besluitType) {
         return parent;
-      } else if (array[i].subTypes && array[i].subTypes.length) {
-        parent = array[i];
-        return this.findBesluitTypeParent(
-          besluitType,
-          array[i].subTypes,
-          parent
-        );
+      } else if (type.subTypes?.length) {
+        parent = type;
+        return this.findBesluitTypeParent(besluitType, type.subTypes, parent);
       }
     }
-    return null;
+    return;
   }
 
-  findBesluitTypeByURI(uri: string, types = this.types) {
+  findBesluitTypeByURI(
+    uri: string,
+    types = this.types
+  ): BesluitType | undefined {
     if (uri) {
       for (const besluitType of types) {
         if (besluitType.uri === uri) {
@@ -201,19 +201,21 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
         }
       }
     }
-    return null;
+    return;
   }
 
   insert() {
-    console.log(this.besluitType.uri);
-    this.cardExpanded = false;
-    this.controller.checkAndDoCommand(
-      removeType(this.besluitPos, this.previousBesluitType)
-    );
-    this.controller.checkAndDoCommand(
-      addType(this.besluitPos, this.besluitType.uri)
-    );
-    console.log(this.controller.state.doc);
+    if (this.besluitType && this.besluitPos) {
+      this.cardExpanded = false;
+      if (this.previousBesluitType) {
+        this.controller.checkAndDoCommand(
+          removeType(this.besluitPos, this.previousBesluitType)
+        );
+      }
+      this.controller.checkAndDoCommand(
+        addType(this.besluitPos, this.besluitType.uri)
+      );
+    }
   }
 
   @action

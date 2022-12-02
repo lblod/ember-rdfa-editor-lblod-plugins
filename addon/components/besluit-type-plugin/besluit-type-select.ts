@@ -1,9 +1,10 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { BesluitType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/fetchBesluitTypes';
 
 type Args = {
-  besluitTypes: unknown[];
+  besluitTypes: BesluitType[];
 };
 
 export default class BesluitTypePluginBesluitTypeSelectComponent extends Component<Args> {

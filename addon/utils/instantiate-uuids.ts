@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
  * @private
  */
 
-function determineFunction(string) {
+function determineFunction(string: string): () => string {
   switch (string) {
     case 'generateUuid()':
       return uuidv4;
@@ -26,7 +26,7 @@ function determineFunction(string) {
       throw new Error(`Could not convert ${string} to function`);
   }
 }
-export default function instantiateUuids(templateString) {
+export default function instantiateUuids(templateString: string) {
   return templateString.replace(/\$\{.+?}/g, (match) => {
     //input '${content}' and eval('content')
     return determineFunction(match.substring(2, match.length - 1))();

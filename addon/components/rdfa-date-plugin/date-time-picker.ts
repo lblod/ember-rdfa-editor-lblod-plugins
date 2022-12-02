@@ -1,11 +1,19 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { localCopy } from 'tracked-toolbox';
+import Intl from 'ember-intl/services/intl';
+type Args = {
+  value: Date;
+  onChange: (date: Date) => void;
+};
 
-export default class RdfaDatePluginDateTimePicker extends Component {
-  @service intl;
-  @localCopy('args.value') date;
+export default class RdfaDatePluginDateTimePicker extends Component<Args> {
+  @service declare intl: Intl;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  @localCopy('args.value') declare date: Date;
 
   get hours() {
     return this.date.getHours();
@@ -33,8 +41,8 @@ export default class RdfaDatePluginDateTimePicker extends Component {
   }
 
   @action
-  onChangeDate(isoDate, date) {
-    let wasDateInputCleared = !date;
+  onChangeDate(_isoDate: unknown, date: Date) {
+    const wasDateInputCleared = !date;
     if (!wasDateInputCleared) {
       if (!this.date) {
         this.date = new Date();
@@ -47,7 +55,7 @@ export default class RdfaDatePluginDateTimePicker extends Component {
   }
 
   @action
-  onChangeTime(timeObject) {
+  onChangeTime(timeObject: { hours: number; minutes: number }) {
     if (!this.date) this.date = new Date();
     this.date.setHours(timeObject.hours);
     this.date.setMinutes(timeObject.minutes);
@@ -55,18 +63,24 @@ export default class RdfaDatePluginDateTimePicker extends Component {
   }
 }
 
-function getLocalizedMonths(intl, monthFormat = 'long') {
-  let someYear = 2021;
+function getLocalizedMonths(
+  intl: Intl,
+  monthFormat: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' = 'long'
+) {
+  const someYear = 2021;
   return [...Array(12).keys()].map((monthIndex) => {
-    let date = new Date(someYear, monthIndex);
+    const date = new Date(someYear, monthIndex);
     return intl.formatDate(date, { month: monthFormat });
   });
 }
 
-function getLocalizedDays(intl, weekdayFormat = 'long') {
-  let someSunday = new Date('2021-01-03');
+function getLocalizedDays(
+  intl: Intl,
+  weekdayFormat: 'long' | 'short' | 'narrow' = 'long'
+) {
+  const someSunday = new Date('2021-01-03');
   return [...Array(7).keys()].map((index) => {
-    let weekday = new Date(someSunday.getTime());
+    const weekday = new Date(someSunday.getTime());
     weekday.setDate(someSunday.getDate() + index);
     return intl.formatDate(weekday, { weekday: weekdayFormat });
   });

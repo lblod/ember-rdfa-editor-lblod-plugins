@@ -2,14 +2,21 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { DOMParser as ProseParser } from 'prosemirror-model';
-export default class ImportSnippetPluginCard extends Component {
-  @service importRdfaSnippet;
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
+import { RdfaSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
+
+type Args = {
+  controller: ProseController;
+};
+export default class ImportSnippetPluginCard extends Component<Args> {
+  @service declare importRdfaSnippet: ImportRdfaSnippet;
 
   get controller() {
     return this.args.controller;
   }
 
-  get snippets() {
+  get snippets(): RdfaSnippet[] {
     const selection = this.controller.state.selection;
     if (!selection.from) {
       console.info(
@@ -21,11 +28,12 @@ export default class ImportSnippetPluginCard extends Component {
   }
 
   get insertRange() {
-    let range = this.controller.state.selection;
+    let range: { from: number; to: number } = this.controller.state.selection;
     this.controller.state.doc.descendants((node, pos) => {
+      const typeOfAttribute = node.attrs['typeof'] as string | undefined;
       if (
-        node.attrs['typeof']?.includes('besluit:Besluit') ||
-        node.attrs['typeof']?.includes(
+        typeOfAttribute?.includes('besluit:Besluit') ||
+        typeOfAttribute?.includes(
           'http://data.vlaanderen.be/ns/besluit#Besluit'
         )
       ) {
@@ -37,7 +45,7 @@ export default class ImportSnippetPluginCard extends Component {
   }
 
   @action
-  insert(snippet, type) {
+  insert(snippet: RdfaSnippet, type: string) {
     const insertRange = this.insertRange;
     if (insertRange) {
       const node = this.generateSnippetHtml(snippet, type);
@@ -51,7 +59,7 @@ export default class ImportSnippetPluginCard extends Component {
   }
 
   @action
-  generateSnippetHtml(snippet, type) {
+  generateSnippetHtml(snippet: RdfaSnippet, type: string) {
     const domParser = new DOMParser();
     const contentFragment = ProseParser.fromSchema(
       this.controller.schema
@@ -65,7 +73,7 @@ export default class ImportSnippetPluginCard extends Component {
           schema.node(
             'block_rdfa',
             {
-              resource: snippet.resource,
+              resource: snippet.source,
               property: 'http://data.europa.eu/eli/ontology#related_to',
               typeof:
                 'http://xmlns.com/foaf/0.1/Document http://lblod.data.gift/vocabularies/editor/SnippetAttachment',

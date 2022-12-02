@@ -2,12 +2,17 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import modifyDate from '../../commands/modify-date-command';
-export default class RdfaDatePluginCardComponent extends Component {
-  @tracked dateValue;
-  @tracked dateRange;
-  @tracked dateInDocument;
-  @tracked onlyDate;
-  @tracked showCard;
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+
+type Args = {
+  controller: ProseController;
+};
+export default class RdfaDatePluginCardComponent extends Component<Args> {
+  @tracked dateValue?: Date;
+  @tracked dateRange?: { from: number; to: number };
+  @tracked dateInDocument = false;
+  @tracked onlyDate = false;
+  @tracked showCard = false;
 
   get controller() {
     return this.args.controller;
@@ -15,18 +20,20 @@ export default class RdfaDatePluginCardComponent extends Component {
 
   @action
   modifyDate() {
-    this.controller.checkAndDoCommand(
-      modifyDate(
-        this.dateRange.start,
-        this.dateRange.end,
-        this.dateValue,
-        this.onlyDate
-      )
-    );
+    if (this.dateValue && this.dateRange) {
+      this.controller.checkAndDoCommand(
+        modifyDate(
+          this.dateRange.from,
+          this.dateRange.to,
+          this.dateValue,
+          this.onlyDate
+        )
+      );
+    }
   }
 
   @action
-  changeDate(date) {
+  changeDate(date: Date) {
     this.dateValue = date;
     if (this.dateInDocument) this.modifyDate();
   }
@@ -40,24 +47,24 @@ export default class RdfaDatePluginCardComponent extends Component {
     }
     const from = selection.$from;
     const selectionParent = selection.$from.parent;
-    const datatype = selectionParent.attrs['datatype'];
+    const datatype = selectionParent.attrs['datatype'] as string;
     console.log(datatype);
     if (datatype === 'xsd:dateTime') {
       this.dateRange = {
-        start: from.start(from.depth),
-        end: from.end(from.depth),
+        from: from.start(from.depth),
+        to: from.end(from.depth),
       };
-      const dateContent = selectionParent.attrs['content'];
+      const dateContent = selectionParent.attrs['content'] as string;
       this.dateValue = dateContent ? new Date(dateContent) : new Date();
       this.dateInDocument = !!dateContent;
       this.onlyDate = false;
       this.showCard = true;
     } else if (datatype === 'xsd:date') {
       this.dateRange = {
-        start: from.start(from.depth),
-        end: from.end(from.depth),
+        from: from.start(from.depth),
+        to: from.end(from.depth),
       };
-      const dateContent = selectionParent.attrs['content'];
+      const dateContent = selectionParent.attrs['content'] as string;
       this.dateValue = dateContent ? new Date(dateContent) : new Date();
       this.dateInDocument = !!dateContent;
       this.onlyDate = true;

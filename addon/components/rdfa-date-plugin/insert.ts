@@ -1,7 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
-export default class RdfaDatePluginInsertComponent extends Component {
+type Args = {
+  controller: ProseController;
+};
+
+export default class RdfaDatePluginInsertComponent extends Component<Args> {
   get controller() {
     return this.args.controller;
   }

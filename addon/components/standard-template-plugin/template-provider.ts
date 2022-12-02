@@ -3,8 +3,15 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import instantiateUuids from '../../utils/instantiate-uuids';
 import { DOMParser as ProseParser } from 'prosemirror-model';
-export default class TemplateProviderComponent extends Component {
-  @service standardTemplatePlugin;
+import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
+
+type Args = {
+  controller: ProseController;
+};
+export default class TemplateProviderComponent extends Component<Args> {
+  @service declare standardTemplatePlugin: StandardTemplatePluginService;
 
   get busy() {
     return this.standardTemplatePlugin.fetchTemplates.isRunning;
@@ -20,13 +27,13 @@ export default class TemplateProviderComponent extends Component {
 
   get applicableTemplates() {
     return (
-      this.standardTemplatePlugin.fetchTemplates.last.value?.filter(
+      this.standardTemplatePlugin.fetchTemplates.last?.value?.filter(
         (template) => this.templateIsApplicable(template)
       ) || []
     );
   }
 
-  templateIsApplicable(template) {
+  templateIsApplicable(template: TemplateModel) {
     const selection = this.controller.state.selection;
     if (!selection.from) {
       return false;
@@ -48,14 +55,14 @@ export default class TemplateProviderComponent extends Component {
   }
 
   @action
-  async insert(template) {
+  async insert(template: TemplateModel) {
     await template.reload();
     const selection = this.controller.state.selection;
-    let insertRange = selection;
+    let insertRange: { from: number; to: number } = selection;
     const { $from, $to } = selection;
     console.log('PARENT: ', $from.parent);
     if (
-      $from.parent.type === this.controller.schema.nodes.placeholder &&
+      $from.parent.type === this.controller.schema.nodes['placeholder'] &&
       $from.sameParent($to)
     ) {
       insertRange = {

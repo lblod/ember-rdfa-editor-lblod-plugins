@@ -1,4 +1,4 @@
-import { fetchCodeListsByPublisher } from './fetch-data';
+import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 
 export const defaultVariableTypes = {
   text: {
@@ -30,7 +30,7 @@ export const defaultVariableTypes = {
   },
   location: {
     label: 'location',
-    template: (endpoint) => `
+    template: (endpoint: string) => `
       <span property="dct:type" content="location"></span>
       <span property="dct:source" resource="${endpoint}"></span>
       <span property="ext:content">
@@ -40,16 +40,20 @@ export const defaultVariableTypes = {
   },
   codelist: {
     label: 'codelist',
-    fetchSubtypes: async (endpoint, publisher) => {
+    fetchSubtypes: async (endpoint: string, publisher: string) => {
       const codelists = fetchCodeListsByPublisher(endpoint, publisher);
       return codelists;
     },
-    template: (endpoint, selectedCodelist) => `
-      <span property="ext:codelist" resource="${selectedCodelist.uri}"></span>
+    template: (endpoint: string, selectedCodelist: CodeList) => `
+      <span property="ext:codelist" resource="${
+        selectedCodelist.uri ?? ''
+      }"></span>
       <span property="dct:type" content="codelist"></span>
       <span property="dct:source" resource="${endpoint}"></span>
       <span property="ext:content">
-        <span class="mark-highlight-manual">\${${selectedCodelist.label}}</span>
+        <span class="mark-highlight-manual">\${${
+          selectedCodelist.label ?? ''
+        }}</span>
       </span>
     `,
   },

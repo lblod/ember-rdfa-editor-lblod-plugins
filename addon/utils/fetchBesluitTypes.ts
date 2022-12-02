@@ -1,6 +1,21 @@
-import { SparqlEndpointFetcher } from 'fetch-sparql-endpoint';
+import { IBindings, SparqlEndpointFetcher } from 'fetch-sparql-endpoint';
+import * as RDF from '@rdfjs/types';
 
-export default async function fetchBesluitTypes(classificationUri, ENV) {
+export type BesluitType = {
+  uri: string;
+  definition: string;
+  label: string;
+  broader: string;
+  subTypes?: BesluitType[];
+};
+export default async function fetchBesluitTypes(
+  classificationUri: string,
+  ENV: {
+    besluitTypePlugin: {
+      endpoint: string;
+    };
+  }
+) {
   const query = `
     PREFIX                    conceptscheme: <https://data.vlaanderen.be/id/conceptscheme/>
     PREFIX                      BesluitType: <https://data.vlaanderen.be/id/concept/BesluitType/>
@@ -42,11 +57,11 @@ export default async function fetchBesluitTypes(classificationUri, ENV) {
   });
   const endpoint = ENV.besluitTypePlugin.endpoint;
   const bindingStream = await typeFetcher.fetchBindings(endpoint, query);
-  const validBesluitTriples = [];
-  bindingStream.on('data', (triple) => {
+  const validBesluitTriples: IBindings[] = [];
+  bindingStream.on('data', (triple: IBindings) => {
     validBesluitTriples.push(triple);
   });
-  return new Promise((resolve, reject) => {
+  return new Promise<IBindings[]>((resolve, reject) => {
     bindingStream.on('error', reject);
     bindingStream.on('end', () => {
       resolve(validBesluitTriples);
@@ -54,29 +69,34 @@ export default async function fetchBesluitTypes(classificationUri, ENV) {
   }).then(quadsToBesluitTypeObjects);
 }
 
-function quadsToBesluitTypeObjects(triples) {
-  const besluitTypes = new Map();
+function quadsToBesluitTypeObjects(triples: IBindings[]) {
+  const besluitTypes = new Map<string, BesluitType>();
   triples.forEach((triple) => {
-    const existing = besluitTypes.get(triple.s.value) || {
-      uri: triple.s.value,
-    };
-    switch (triple.p.value) {
+    const subject = triple['s'] as RDF.Term;
+    const predicate = triple['p'] as RDF.Term;
+    const object = triple['o'] as RDF.Term;
+    const existing =
+      besluitTypes.get(subject.value) ||
+      ({
+        uri: subject.value,
+      } as BesluitType);
+    switch (predicate.value) {
       case 'http://www.w3.org/2004/02/skos/core#definition':
-        existing.definition = triple.o.value;
+        existing.definition = object.value;
         break;
       case 'http://www.w3.org/2004/02/skos/core#prefLabel':
-        existing.label = triple.o.value;
+        existing.label = object.value;
         break;
       case 'http://www.w3.org/2004/02/skos/core#broader':
-        existing.broader = triple.o.value;
+        existing.broader = object.value;
         break;
     }
-    besluitTypes.set(triple.s.value, existing);
+    besluitTypes.set(subject.value, existing);
   });
   return createBesluitTypeObjectsHierarchy([...besluitTypes.values()]);
 }
 
-function createBesluitTypeObjectsHierarchy(allBesluitTypes) {
+function createBesluitTypeObjectsHierarchy(allBesluitTypes: BesluitType[]) {
   const besluitTypes = allBesluitTypes.filter((bst) => !bst.broader);
   const subTypes = allBesluitTypes.filter((bst) => !!bst.broader);
   subTypes.forEach((subtype) => {
