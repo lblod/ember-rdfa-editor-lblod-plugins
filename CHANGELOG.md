@@ -5,6 +5,16 @@
 
 
 
+
+## 0.4.0 (2022-12-01)
+
+#### :house: Internal
+* [#23](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/23) Add typescript support ([@elpoelma](https://github.com/elpoelma))
+* [#22](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/22) Move to classic ember addon ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## v0.3.1 (2022-11-24)
 
 #### :memo: Documentation
