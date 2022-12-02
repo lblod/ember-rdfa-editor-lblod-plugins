@@ -1,18 +1,23 @@
 import { inject as service } from '@ember/service';
 import { RdfaEditorPlugin } from '@lblod/ember-rdfa-editor';
+import { WidgetSpec } from '@lblod/ember-rdfa-editor/core/prosemirror';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
+import TemplateModel from '../models/template';
+import StandardTemplatePluginService from '../services/standard-template-plugin';
 
 export default class StandardTemplatePlugin extends RdfaEditorPlugin {
-  @service standardTemplatePlugin;
+  @service declare standardTemplatePlugin: StandardTemplatePluginService;
   matches = new Set();
 
   async initialize() {
-    super.initialize();
-    let templates;
+    await super.initialize();
+    let templates: DS.RecordArray<TemplateModel> | undefined;
     try {
       templates = await this.standardTemplatePlugin.fetchTemplates.perform();
     } catch (e) {
       console.warn(
-        `Plugin ${this.name} had trouble initializing: Templates failed to load`
+        `Standard template plugin had trouble initializing: Templates failed to load`
       );
     }
     if (templates) {
@@ -22,12 +27,11 @@ export default class StandardTemplatePlugin extends RdfaEditorPlugin {
     }
   }
 
-  widgets() {
+  widgets(): WidgetSpec[] {
     return [
       {
         desiredLocation: 'insertSidebar',
         componentName: 'standard-template-plugin/card',
-        identifier: 'standard-template-plugin/card',
       },
     ];
   }

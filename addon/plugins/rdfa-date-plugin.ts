@@ -1,7 +1,8 @@
 import { RdfaEditorPlugin } from '@lblod/ember-rdfa-editor';
+import { WidgetSpec } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 export default class RdfaDatePlugin extends RdfaEditorPlugin {
-  widgets() {
+  widgets(): WidgetSpec[] {
     return [
       {
         componentName: 'rdfa-date-plugin/card',

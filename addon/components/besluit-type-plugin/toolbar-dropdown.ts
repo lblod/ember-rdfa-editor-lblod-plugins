@@ -4,14 +4,32 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
 import fetchBesluitTypes from '../../utils/fetchBesluitTypes';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import {
   addType,
   removeType,
 } from '@lblod/ember-rdfa-editor/commands/type-commands';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import DS from 'ember-data';
+import { Node } from 'prosemirror-model';
 
-export default class EditorPluginsToolbarDropdownComponent extends Component {
-  @service currentSession;
+declare module 'ember__owner' {
+  export default interface Owner {
+    resolveRegistration(name: string): unknown;
+  }
+}
+
+
+type Args = {
+  controller: ProseController;
+};
+
+type BesluitType = {
+  uri: string;
+};
+
+export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
+  @service declare currentSession: DS.Model;
 
   /**
    * Actual besluit type selected
@@ -19,9 +37,9 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
    * @type BesluitType
    * @private
    */
-  @tracked besluitType;
-  @tracked previousBesluitType;
-  @tracked types = [];
+  @tracked besluitType?: BesluitType;
+  @tracked previousBesluitType?: BesluitType;
+  @tracked types: BesluitType[] = [];
 
   //used to update selections since the other vars dont seem to work in octane
   @tracked besluit;
@@ -33,11 +51,11 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
 
   @tracked loadDataTaskInstance;
 
-  @tracked besluitPos;
-  @tracked besluitNode;
+  @tracked besluitPos?: number;
+  @tracked besluitNode?: Node;
 
-  constructor(...args) {
-    super(...args);
+  constructor(parent: unknown, args: Args) {
+    super(parent, args);
     this.loadDataTaskInstance = this.loadData.perform();
   }
 
@@ -45,14 +63,23 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
     return this.args.controller;
   }
 
-  @task
-  *loadData() {
-    const bestuurseenheid = yield this.currentSession.get('group');
-    const classificatie = yield bestuurseenheid.get('classificatie');
-    const ENV = getOwner(this).resolveRegistration('config:environment');
-    const types = yield fetchBesluitTypes(classificatie.uri, ENV);
+  // @task
+  // *loadData() {
+  //   const bestuurseenheid: unknown = yield this.currentSession.get('group');
+  //   const classificatie = yield bestuurseenheid.get('classificatie');
+  //   const ENV = getOwner(this).resolveRegistration('config:environment');
+  //   const types = yield fetchBesluitTypes(classificatie.uri, ENV);
+  //   this.types = types;
+  // }
+
+  loadData = task(async () => {
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    const bestuurseenheid: DS.Model = await this.currentSession.get('group');
+    const classificatie: DS.Model = await bestuurseenheid.get('classificatie');
+    const ENV = getOwner(this)?.resolveRegistration('config:environment');
+    const types = await fetchBesluitTypes(classificatie.uri, ENV);
     this.types = types;
-  }
+  });
 
   @action
   getBesluitType() {
@@ -61,17 +88,17 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
     if (!selection.from) {
       return;
     }
-    let besluitUri;
+    let besluitUri: string | undefined;
     let besluitPos;
     let besluitNode;
     this.controller.state.doc.descendants((node, pos) => {
       if (besluitUri) {
         return false;
       }
-      if (node.attrs['typeof']?.includes('besluit:Besluit')) {
+      if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
         besluitPos = pos;
         besluitNode = node;
-        besluitUri = node.attrs['resource'];
+        besluitUri = node.attrs['resource'] as string;
         return false;
       }
     });
@@ -161,7 +188,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
     return null;
   }
 
-  findBesluitTypeByURI(uri, types = this.types) {
+  findBesluitTypeByURI(uri: string, types = this.types) {
     if (uri) {
       for (const besluitType of types) {
         if (besluitType.uri === uri) {

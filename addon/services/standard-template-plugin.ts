@@ -1,21 +1,27 @@
+import Store from '@ember-data/store';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import { DS } from 'ember-data';
 import Service, { inject as service } from '@ember/service';
-import { task, waitForProperty } from 'ember-concurrency';
+import { task, waitForProperty, Task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import TemplateModel from '../models/template';
 
-export default class RdfaEditorStandardTemplatePluginService extends Service {
-  @service store;
-  @tracked templates;
+export default class StandardTemplatePluginService extends Service {
+  @service declare store: Store;
+  @tracked declare templates: DS.RecordArray<TemplateModel>;
 
   constructor() {
+    // eslint-disable-next-line prefer-rest-params
     super(...arguments);
-    this.loadTemplates();
+    void this.loadTemplates();
   }
 
-  @task
-  *fetchTemplates() {
-    yield waitForProperty(this, 'templates');
+  fetchTemplates: Task<DS.RecordArray<TemplateModel>, []> = task(async () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await waitForProperty(this, 'templates');
     return this.templates;
-  }
+  });
 
   async loadTemplates() {
     this.templates = await this.store.query('template', {
@@ -31,8 +37,8 @@ export default class RdfaEditorStandardTemplatePluginService extends Service {
      @return {Array} Array of templates (filtered)
      @private
   */
-  templatesForContext(templates, rdfaTypes) {
-    let isMatchingForContext = (template) => {
+  templatesForContext(templates: TemplateModel[], rdfaTypes: string[]) {
+    const isMatchingForContext = (template: TemplateModel) => {
       return (
         rdfaTypes.filter((e) => template.get('contexts').includes(e)).length >
           0 &&

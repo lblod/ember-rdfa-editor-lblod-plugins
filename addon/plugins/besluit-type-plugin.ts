@@ -1,11 +1,11 @@
 import { RdfaEditorPlugin } from '@lblod/ember-rdfa-editor';
+import { WidgetSpec } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 export default class BesluitTypePlugin extends RdfaEditorPlugin {
-  widgets() {
+  widgets(): WidgetSpec[] {
     return [
       {
         componentName: 'besluit-type-plugin/toolbar-dropdown',
-        identifier: 'besluit-type-plugin/dropdown',
         desiredLocation: 'toolbarRight',
       },
     ];
