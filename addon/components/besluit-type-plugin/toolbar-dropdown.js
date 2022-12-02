@@ -57,26 +57,30 @@ export default class EditorPluginsToolbarDropdownComponent extends Component {
   @action
   getBesluitType() {
     const selection = this.controller.state.selection;
-
+    console.log('DOC: ', this.controller.state.doc);
     if (!selection.from) {
       return;
     }
     let besluitUri;
+    let besluitPos;
+    let besluitNode;
     this.controller.state.doc.descendants((node, pos) => {
-      if (this.besluitPos) {
+      if (besluitUri) {
         return false;
       }
       if (node.attrs['typeof']?.includes('besluit:Besluit')) {
-        this.besluitPos = pos;
-        this.besluitNode = node;
+        besluitPos = pos;
+        besluitNode = node;
         besluitUri = node.attrs['resource'];
         return false;
       }
     });
-    if (this.besluitPos === undefined || this.besluitPos === null) {
+    if (!besluitUri) {
       this.showCard = false;
       return;
     }
+    this.besluitPos = besluitPos;
+    this.besluitNode = besluitNode;
     this.showCard = true;
     const besluitTypes = this.controller.datastore
       .match(`>${besluitUri}`, 'a', null)
