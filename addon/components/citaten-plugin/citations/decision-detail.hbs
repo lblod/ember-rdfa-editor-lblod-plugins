@@ -33,7 +33,7 @@
       </AuLinkExternal>
       {{! Search field }}
       <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}} @required={{false}} @error={{false}} @warning={{false}}>{{t "citaten-plugin.search.article"}}</AuLabel>
-      <AuInput id="searchCodex" placeholder="{{t "citaten-plugin.citaten-plugin.search.article-placeholder"}}" @type="text" @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input" (perform this.updateArticleFilter)}}/>
+      <AuInput id="searchCodex" placeholder="{{t "citaten-plugin.search.article-placeholder"}}" @type="text" @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input" (perform this.updateArticleFilter)}}/>
     </div>
     {{! Search results }}
     <div>
