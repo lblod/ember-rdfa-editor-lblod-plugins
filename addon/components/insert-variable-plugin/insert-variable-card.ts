@@ -79,15 +79,11 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     } else {
       variableContent = this.selectedVariable.template;
     }
-    const htmlToInsert = `
-      <span resource="${uri}" typeof="ext:Mapping">
-        ${variableContent}
-      </span>
-    `;
+    const htmlToInsert = `<span resource="${uri}" typeof="ext:Mapping">${variableContent}</span>`;
     const domParser = new DOMParser();
     const fragmentToInsert = ProseParser.fromSchema(
       this.args.controller.schema
-    ).parse(domParser.parseFromString(htmlToInsert, 'text/html')).content;
+    ).parseSlice(domParser.parseFromString(htmlToInsert, 'text/html')).content;
     const { from, to } = this.args.controller.state.selection;
     this.args.controller.withTransaction((tr) => {
       return tr.replaceWith(from, to, fragmentToInsert);
