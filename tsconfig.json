@@ -9,7 +9,7 @@
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": false,
     "noPropertyAccessFromIndexSignature": true,
-    "noEmitOnError": true,
+    "noEmitOnError": false,
     "noEmit": true,
     "declaration": true,
     "declarationMap": true,
@@ -40,7 +40,7 @@
       "*": [
         "types/*"
       ]
-    }
+    },
   },
   "include": [
     "app/**/*",
