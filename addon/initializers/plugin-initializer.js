@@ -31,6 +31,11 @@ export function initialize(application) {
       singleton: false,
     }
   );
+  application.register(
+    'plugin:insert-variable',
+    pluginFactory(InsertVariablePlugin),
+    { singleton: false }
+  );
   application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
     singleton: false,
   });
@@ -64,11 +69,7 @@ export function initialize(application) {
   //   pluginFactory(TemplateVariablePlugin),
   //   { singleton: false }
   // );
-  // application.register(
-  //   'plugin:insert-variable',
-  //   pluginFactory(InsertVariablePlugin),
-  //   { singleton: false }
-  // );
+
 }
 
 export default {

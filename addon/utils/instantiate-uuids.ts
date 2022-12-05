@@ -27,8 +27,11 @@ function determineFunction(string: string): () => string {
   }
 }
 export default function instantiateUuids(templateString: string) {
-  return templateString.replace(/\$\{.+?}/g, (match) => {
-    //input '${content}' and eval('content')
-    return determineFunction(match.substring(2, match.length - 1))();
-  });
+  return templateString.replace(
+    /\$\{(generateUuid|generateBoundUuid)\(\)\}/g,
+    (match) => {
+      //input '${content}' and eval('content')
+      return determineFunction(match.substring(2, match.length - 1))();
+    }
+  );
 }
