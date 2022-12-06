@@ -121,9 +121,6 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @action
   selectionChanged() {
     const currentSelection = this.args.controller.state.selection;
-    if (!currentSelection.from) {
-      return;
-    }
     this.showCard = false;
     const limitedDatastore = this.args.controller.datastore.limitToRange(
       this.args.controller.state,
@@ -131,11 +128,11 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       currentSelection.to
     );
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const mapping = limitedDatastore
+    const quad = limitedDatastore
       .match(null, 'a', 'ext:Mapping')
-      .asQuads()
-      .next().value;
-    if (mapping) {
+      .asQuadResultSet()
+      .single();
+    if (quad) {
       this.showCard = false;
     } else {
       this.showCard = true;
