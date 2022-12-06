@@ -44,6 +44,11 @@ export function initialize(application) {
     pluginFactory(StandardTemplatePlugin),
     { singleton: false }
   );
+  application.register(
+    'plugin:template-variable',
+    pluginFactory(TemplateVariablePlugin),
+    { singleton: false }
+  );
   // application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
   //   singleton: false,
   // });
@@ -64,11 +69,7 @@ export function initialize(application) {
   //   { singleton: false }
   // );
 
-  // application.register(
-  //   'plugin:template-variable',
-  //   pluginFactory(TemplateVariablePlugin),
-  //   { singleton: false }
-  // );
+
 
 }
 
