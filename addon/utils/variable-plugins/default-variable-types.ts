@@ -3,7 +3,9 @@ import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 export type VariableType = {
   label: string;
   fetchSubtypes?: (endpoint: string, publisher: string) => Promise<CodeList[]>;
-  template: string | ((endpoint: string, selectedCodelist: CodeList) => string);
+  template:
+    | string
+    | ((endpoint: string, selectedCodelist?: CodeList) => string);
 };
 export const defaultVariableTypes: Record<string, VariableType> = {
   text: {

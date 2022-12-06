@@ -66,7 +66,8 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
 
   @action
   insert() {
-    if (!this.selectedVariable || !this.selectedSubtype) {
+    console.log(this.selectedSubtype);
+    if (!this.selectedVariable) {
       return;
     }
     const uri = `http://data.lblod.info/mappings/${uuidv4()}`;
