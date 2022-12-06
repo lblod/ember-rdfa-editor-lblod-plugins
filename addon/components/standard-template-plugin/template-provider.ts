@@ -60,7 +60,6 @@ export default class TemplateProviderComponent extends Component<Args> {
     const selection = this.controller.state.selection;
     let insertRange: { from: number; to: number } = selection;
     const { $from, $to } = selection;
-    console.log('PARENT: ', $from.parent);
     if (
       $from.parent.type === this.controller.schema.nodes['placeholder'] &&
       $from.sameParent($to)
@@ -69,7 +68,6 @@ export default class TemplateProviderComponent extends Component<Args> {
         from: $from.start($from.depth - 1),
         to: $from.end($from.depth - 1),
       };
-      console.log(insertRange);
     }
 
     const domParser = new DOMParser();

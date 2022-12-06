@@ -66,7 +66,6 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
 
   @action
   insert() {
-    console.log(this.selectedSubtype);
     if (!this.selectedVariable) {
       return;
     }

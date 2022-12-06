@@ -36,7 +36,6 @@ export default class TableOfContentsCardComponent extends Component {
       });
     } else {
       // Add table of contents
-      console.log(this.tableOfContentsProps);
       this.args.controller.executeCommand(
         'insert-component',
         'table-of-contents-plugin/inline-components/table-of-contents',
