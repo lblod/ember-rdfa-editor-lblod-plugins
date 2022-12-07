@@ -1,12 +1,14 @@
-<AuList::Item>
-  <AuButton
-    @skin="link"
-    @icon="add"
-    @iconAlignment="left"
-    @disabled={{if this.showCard false true}}
-    {{on "click" this.toggleModal}}
-  >
-    Voeg mobiliteitsmaatregel in
-  </AuButton>
-</AuList::Item>
-<RoadsignRegulationPlugin::RoadsignsModal @modalOpen={{this.modalOpen}} @closeModal={{this.toggleModal}} @controller={{@controller}} @insert={{this.insert}}/>
+<div {{did-update this.onSelectionChanged @controller.state}}>
+  <AuList::Item>
+    <AuButton
+      @skin="link"
+      @icon="add"
+      @iconAlignment="left"
+      @disabled={{if this.showCard false true}}
+      {{on "click" this.toggleModal}}
+    >
+      Voeg mobiliteitsmaatregel in
+    </AuButton>
+  </AuList::Item>
+  <RoadsignRegulationPlugin::RoadsignsModal @modalOpen={{this.modalOpen}} @closeModal={{this.toggleModal}} @controller={{@controller}}/>
+</div>
