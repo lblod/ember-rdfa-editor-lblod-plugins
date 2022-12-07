@@ -19,26 +19,26 @@ function pluginFactory(plugin) {
 }
 
 export function initialize(application) {
-  application.register(
-    'plugin:besluit-type',
-    pluginFactory(BesluitTypePlugin),
-    { singleton: false }
-  );
-  application.register(
-    'plugin:import-snippet',
-    pluginFactory(ImportSnippetPlugin),
-    {
-      singleton: false,
-    }
-  );
-  application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
-    singleton: false,
-  });
-  application.register(
-    'plugin:standard-template',
-    pluginFactory(StandardTemplatePlugin),
-    { singleton: false }
-  );
+  // application.register(
+  //   'plugin:besluit-type',
+  //   pluginFactory(BesluitTypePlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:import-snippet',
+  //   pluginFactory(ImportSnippetPlugin),
+  //   {
+  //     singleton: false,
+  //   }
+  // );
+  // application.register('plugin:rdfa-date', pluginFactory(RdfaDatePlugin), {
+  //   singleton: false,
+  // });
+  // application.register(
+  //   'plugin:standard-template',
+  //   pluginFactory(StandardTemplatePlugin),
+  //   { singleton: false }
+  // );
   // application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
   //   singleton: false,
   // });
