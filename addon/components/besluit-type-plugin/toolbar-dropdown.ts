@@ -88,6 +88,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     let besluitUri: string | undefined;
     let besluitPos;
     let besluitNode;
+    // TODO: implement finding besluit node and position using datastore
     this.controller.state.doc.descendants((node, pos) => {
       if (besluitUri) {
         return false;
