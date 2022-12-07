@@ -29,6 +29,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
 
   get insertRange() {
     let range: { from: number; to: number } = this.controller.state.selection;
+    // TODO: implement finding besluit node and position using datastore
     this.controller.state.doc.descendants((node, pos) => {
       const typeOfAttribute = node.attrs['typeof'] as string | undefined;
       if (

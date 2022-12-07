@@ -17,6 +17,7 @@ export default class StandardTemplatePluginService extends Service {
   }
 
   fetchTemplates: Task<DS.RecordArray<TemplateModel>, []> = task(async () => {
+    console.log('FETCH TEMPLATES');
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await waitForProperty(this, 'templates');

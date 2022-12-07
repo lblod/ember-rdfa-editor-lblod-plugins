@@ -87,11 +87,13 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     let besluitUri: string | undefined;
     let besluitPos;
     let besluitNode;
+    // TODO: implement finding besluit node and position using datastore
     this.controller.state.doc.descendants((node, pos) => {
       if (besluitUri) {
         return false;
       }
       if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
+        console.log(node.attrs);
         besluitPos = pos;
         besluitNode = node;
         besluitUri = node.attrs['resource'] as string;
@@ -109,6 +111,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       .match(`>${besluitUri}`, 'a', undefined)
       .asQuads();
     const besluitTypesUris = [...besluitTypes].map((quad) => quad.object.value);
+    console.log('URIS: ', besluitTypesUris);
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
       type.includes('https://data.vlaanderen.be/id/concept/BesluitType/')
     );
@@ -203,7 +206,11 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   insert() {
-    if (this.besluitType && this.besluitPos) {
+    if (
+      this.besluitType &&
+      this.besluitPos !== undefined &&
+      this.besluitPos !== null
+    ) {
       this.cardExpanded = false;
       if (this.previousBesluitType) {
         this.controller.checkAndDoCommand(
