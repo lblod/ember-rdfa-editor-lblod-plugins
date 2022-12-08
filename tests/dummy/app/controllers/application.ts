@@ -58,7 +58,9 @@ import {
 import { tableOfContentsWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
 
 const nodes = {
-  doc,
+  doc: {
+    content: 'tableOfContents? block+',
+  },
   paragraph,
 
   repaired_block,

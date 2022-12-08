@@ -13,7 +13,7 @@ export const emberNodeConfig: EmberNodeConfig = {
   name: 'table-of-contents',
   componentPath: 'table-of-contents-plugin/ember-nodes/table-of-contents',
   inline: false,
-  group: 'block',
+  group: 'tableOfContents',
   atom: true,
   attrs: {
     config: {
