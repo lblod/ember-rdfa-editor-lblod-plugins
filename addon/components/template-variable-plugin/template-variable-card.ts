@@ -11,7 +11,7 @@ import {
 import { MULTI_SELECT_CODELIST_TYPE, ZONAL_URI } from '../../constants';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
-import htmlToFragment from '@lblod/ember-rdfa-editor-lblod-plugins/utils/html-to-fragment';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 type Args = {
   controller: ProseController;
@@ -69,7 +69,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     const { node: mappingNode, pos: resolvedMappingPos } = [
       ...mapping.nodes,
     ][0]!;
-    let insertRange: { from: number; to: number };
+    let insertRange: { from: number; to: number } | undefined;
     mappingNode.descendants((child, relativePos) => {
       const absolutePos = resolvedMappingPos
         ? resolvedMappingPos.pos + relativePos + 1
@@ -90,10 +90,9 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     } else {
       htmlToInsert = this.selectedVariable.value!;
     }
-    const fragment = htmlToFragment(htmlToInsert, this.controller.schema);
-    this.controller.withTransaction((tr) => {
-      return tr.replaceWith(insertRange.from, insertRange.to, fragment);
-    });
+    if(insertRange){
+      this.controller.doCommand(insertHtml(htmlToInsert, insertRange.from, insertRange.to));
+    }
   }
 
   wrapVariableInHighlight(text: string) {

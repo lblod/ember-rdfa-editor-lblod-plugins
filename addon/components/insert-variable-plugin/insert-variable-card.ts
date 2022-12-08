@@ -9,8 +9,7 @@ import {
 } from '../../utils/variable-plugins/default-variable-types';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
-import htmlToFragment from '@lblod/ember-rdfa-editor-lblod-plugins/utils/html-to-fragment';
-
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 type Args = {
   controller: ProseController;
   widgetArgs: {
@@ -80,14 +79,8 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       variableContent = this.selectedVariable.template;
     }
     const htmlToInsert = `<span resource="${uri}" typeof="ext:Mapping">${variableContent}</span>`;
-    const fragmentToInsert = htmlToFragment(
-      htmlToInsert,
-      this.args.controller.schema
-    );
     const { from, to } = this.args.controller.state.selection;
-    this.args.controller.withTransaction((tr) => {
-      return tr.replaceWith(from, to, fragmentToInsert);
-    });
+    this.args.controller.doCommand(insertHtml(htmlToInsert, from, to))
   }
 
   @action

@@ -5,7 +5,7 @@ import instantiateUuids from '../../utils/instantiate-uuids';
 import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
-import htmlToFragment from '@lblod/ember-rdfa-editor-lblod-plugins/utils/html-to-fragment';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 type Args = {
   controller: ProseController;
@@ -69,12 +69,6 @@ export default class TemplateProviderComponent extends Component<Args> {
         to: $from.end($from.depth - 1),
       };
     }
-    const contentFragment = htmlToFragment(
-      instantiateUuids(template.body),
-      this.controller.schema
-    );
-    this.controller.withTransaction((tr) => {
-      return tr.replaceWith(insertRange.from, insertRange.to, contentFragment);
-    });
+    this.controller.doCommand(insertHtml(instantiateUuids(template.body), insertRange.from, insertRange.to));
   }
 }
