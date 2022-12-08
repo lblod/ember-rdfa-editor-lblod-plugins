@@ -1,19 +1,31 @@
+import {
+  isAllWhitespace,
+  isElement,
+  isTextNode,
+} from '@lblod/ember-rdfa-editor/utils/dom-helpers';
 import { Fragment, Schema } from 'prosemirror-model';
 import { DOMParser as ProseParser } from 'prosemirror-model';
-
+import { normalToPreWrapWhiteSpace } from '@lblod/ember-rdfa-editor/utils/whitespace-collapsing';
 export default function htmlToFragment(
-  html: string | Node,
-  schema: Schema
+  html: string,
+  schema: Schema,
+  preserveWhitespace = false
 ): Fragment {
-  let htmlNode: Node;
-  if (typeof html === 'string') {
-    const domParser = new DOMParser();
-    htmlNode = domParser.parseFromString(html, 'text/html');
-  } else {
-    htmlNode = html;
+  const domParser = new DOMParser();
+  const htmlNode = domParser.parseFromString(html, 'text/html');
+  if (!preserveWhitespace) {
+    cleanUpNode(htmlNode);
   }
-
-  return ProseParser.fromSchema(schema).parseSlice(htmlNode, {
-    preserveWhitespace: false,
+  const fragment = ProseParser.fromSchema(schema).parseSlice(htmlNode, {
+    preserveWhitespace,
   }).content;
+  return fragment;
+}
+
+function cleanUpNode(node: Node) {
+  if (isTextNode(node)) {
+    node.textContent = normalToPreWrapWhiteSpace(node);
+  } else if ('childNodes' in node) {
+    node.childNodes.forEach(cleanUpNode);
+  }
 }

@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import instantiateUuids from '../../utils/instantiate-uuids';
-import { DOMParser as ProseParser } from 'prosemirror-model';
 import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
