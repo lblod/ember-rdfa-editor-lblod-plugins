@@ -6,12 +6,12 @@
         {{! template-lint-disable no-capital-arguments }}
         @block={{true}}
         @skin='link-secondary'
-        onclick={{fn @onEntryClick outlineEntry.node}}
+        onclick={{@onEntryClick}}
       >
         {{outlineEntry.content}}
       </AuButton>
       {{#if outlineEntry.children}}
-        <TableOfContentsPlugin::InlineComponents::Outline
+        <TableOfContentsPlugin::EmberNodes::Outline
           @entries={{outlineEntry.children}}
           @onEntryClick={{@onEntryClick}}
         />

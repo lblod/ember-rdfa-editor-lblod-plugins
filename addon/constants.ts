@@ -1,12 +1,24 @@
-export const TABLE_OF_CONTENTS_DEFAULT_CONFIG = [
+export type TableOfContentsConfig = {
+  sectionPredicate: string[];
+  value:
+    | string
+    | {
+        predicate: string;
+      };
+}[];
+
+export const TABLE_OF_CONTENTS_DEFAULT_CONFIG: TableOfContentsConfig = [
   {
-    sectionPredicate: 'https://say.data.gift/ns/hasPart',
+    sectionPredicate: ['https://say.data.gift/ns/hasPart', 'say:hasPart'],
     value: {
       predicate: 'https://say.data.gift/ns/heading',
     },
   },
   {
-    sectionPredicate: 'https://say.data.gift/ns/hasParagraph',
+    sectionPredicate: [
+      'https://say.data.gift/ns/hasParagraph',
+      'say:hasParagraph',
+    ],
     value: '§',
   },
 ];
