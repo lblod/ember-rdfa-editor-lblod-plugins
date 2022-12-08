@@ -6,6 +6,7 @@ import { DOMParser as ProseParser } from 'prosemirror-model';
 import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
+import htmlToFragment from '@lblod/ember-rdfa-editor-lblod-plugins/utils/html-to-fragment';
 
 type Args = {
   controller: ProseController;
@@ -69,13 +70,10 @@ export default class TemplateProviderComponent extends Component<Args> {
         to: $from.end($from.depth - 1),
       };
     }
-
-    const domParser = new DOMParser();
-    const contentFragment = ProseParser.fromSchema(
+    const contentFragment = htmlToFragment(
+      instantiateUuids(template.body),
       this.controller.schema
-    ).parse(
-      domParser.parseFromString(instantiateUuids(template.body), 'text/html')
-    ).content;
+    );
     this.controller.withTransaction((tr) => {
       return tr.replaceWith(insertRange.from, insertRange.to, contentFragment);
     });
