@@ -10,14 +10,15 @@ import {
 } from '../../utils/variable-plugins/fetch-data';
 import { MULTI_SELECT_CODELIST_TYPE, ZONAL_URI } from '../../constants';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/datastore';
+import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
+import htmlToFragment from '@lblod/ember-rdfa-editor-lblod-plugins/utils/html-to-fragment';
 
 type Args = {
   controller: ProseController;
 };
 export default class EditorPluginsTemplateVariableCardComponent extends Component<Args> {
   @tracked variableOptions: CodeListOption[] = [];
-  @tracked selectedVariable?: CodeListOption;
+  @tracked selectedVariable?: CodeListOption | CodeListOption[];
   @tracked showCard = false;
   @tracked multiSelect = false;
   mappingUri?: string;
@@ -81,15 +82,17 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         return false;
       }
     });
-    // if (this.selectedVariable?.length) {
-    //   textToInsert = this.selectedVariable
-    //     .map((variable) => variable.value)
-    //     .join(', ');
-    // } else {
-    const textToInsert = this.selectedVariable.value!;
-    // }
+    let htmlToInsert: string;
+    if (Array.isArray(this.selectedVariable)) {
+      htmlToInsert = this.selectedVariable
+        .map((variable) => variable.value)
+        .join(', ');
+    } else {
+      htmlToInsert = this.selectedVariable.value!;
+    }
+    const fragment = htmlToFragment(htmlToInsert, this.controller.schema);
     this.controller.withTransaction((tr) => {
-      return tr.insertText(textToInsert, insertRange.from, insertRange.to);
+      return tr.replaceWith(insertRange.from, insertRange.to, fragment);
     });
   }
 
@@ -197,7 +200,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   }
 
   @action
-  updateVariable(variable: CodeListOption) {
+  updateVariable(variable: CodeListOption | CodeListOption[]) {
     this.selectedVariable = variable;
   }
 
