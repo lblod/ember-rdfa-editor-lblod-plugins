@@ -57,6 +57,16 @@ export function initialize() {
   //   pluginFactory(RoadSignRegulationPlugin),
   //   { singleton: false }
   // );
+  // application.register(
+  //   'plugin:template-variable',
+  //   pluginFactory(TemplateVariablePlugin),
+  //   { singleton: false }
+  // );
+  // application.register(
+  //   'plugin:insert-variable',
+  //   pluginFactory(InsertVariablePlugin),
+  //   { singleton: false }
+  // );
 }
 
 export default {
