@@ -53,12 +53,11 @@ export function initialize(application) {
   //   pluginFactory(GenerateTemplatePlugin),
   //   { singleton: false }
   // );
-  application.register(
-    'plugin:roadsign-regulation',
-    pluginFactory(RoadSignRegulationPlugin),
-    { singleton: false }
-  );
-
+  // application.register(
+  //   'plugin:roadsign-regulation',
+  //   pluginFactory(RoadSignRegulationPlugin),
+  //   { singleton: false }
+  // );
   // application.register(
   //   'plugin:template-variable',
   //   pluginFactory(TemplateVariablePlugin),
