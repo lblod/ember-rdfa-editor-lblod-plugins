@@ -58,7 +58,6 @@ export function initialize(application) {
   //   pluginFactory(RoadSignRegulationPlugin),
   //   { singleton: false }
   // );
-
   // application.register(
   //   'plugin:template-variable',
   //   pluginFactory(TemplateVariablePlugin),
