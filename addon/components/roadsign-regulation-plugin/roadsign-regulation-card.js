@@ -25,7 +25,6 @@ export default class RoadsignRegulationCard extends Component {
 
   constructor() {
     super(...arguments);
-    this.args.controller.onEvent('selectionChanged', this.selectionChanged);
   }
 
   @action
@@ -34,44 +33,25 @@ export default class RoadsignRegulationCard extends Component {
   }
 
   @action
-  insert(html) {
-    const selectedRange = this.args.controller.selection.lastRange;
-    if (!selectedRange) {
-      return;
-    }
-    const limitedDatastore = this.args.controller.datastore.limitToRange(
-      selectedRange,
-      'rangeIsInside'
-    );
-    const besluit = limitedDatastore
-      .match(null, 'a')
-      .transformDataset((dataset, termConverter) => {
-        return dataset.filter((quad) =>
-          acceptedTypes
-            .map((type) => termConverter(type).value)
-            .includes(quad.object.value)
-        );
-      })
-      .asSubjectNodes()
-      .next().value;
-    const besluitNode = [...besluit.nodes][0];
-    let articleContainerNode;
-    for (let child of besluitNode.children) {
-      if (child.attributeMap.get('property') === 'prov:value') {
-        articleContainerNode = child;
-        break;
+  onSelectionChanged(state) {
+    //TODO: Find the besluit with the correct datatype once limit to range is working
+    let besluitUri;
+    this.args.controller.state.doc.descendants((node, pos) => {
+      if (besluitUri) {
+        return false;
       }
+      if (node.attrs['typeof']?.includes('besluit:Besluit')) {
+        besluitUri = node.attrs['resource'];
+        return false;
+      }
+    });
+    if (besluitUri) {
+      this.showCard = true;
+      this.besluitUri = besluitUri;
+    } else {
+      this.showCard = false;
     }
-    const range = this.args.controller.rangeFactory.fromInNode(
-      articleContainerNode,
-      articleContainerNode.getMaxOffset(),
-      articleContainerNode.getMaxOffset()
-    );
-    this.args.controller.executeCommand('insert-html', html, range);
-  }
-
-  @action
-  selectionChanged() {
+    return;
     const selectedRange = this.args.controller.selection.lastRange;
     if (!selectedRange) {
       return;

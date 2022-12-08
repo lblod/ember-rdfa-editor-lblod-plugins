@@ -229,28 +229,34 @@ export default class RoadsignRegulationCard extends Component {
       </li>`;
       })
       .join('\n');
-
-    this.args.controller.executeCommand(
-      'insert-article',
-      this.args.controller,
-      `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-        <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-          measure.uri
-        }">&nbsp;</span>
-        <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-        <span style="display:none;" property="ext:temporal" value="${
-          measure.temporal
-        }"></span>
-          <div property="dct:description">
-            ${html}
-            <p>Dit wordt aangeduid door verkeerstekens:</p>
-            <ul style="list-style:none;">
-              ${signsHTML}
-            </ul>
-            ${temporalValue === 'true' ? 'Deze signalisatie is dynamisch.' : ''}
+    //TODO: Import insert structure from article structure command
+    const InsertStructure = () => {};
+    this.controller.checkAndDoCommand(
+      InsertStructure(
+        'Article',
+        `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
+          <span style="display:none;" property="prov:wasDerivedFrom" resource="${
+            measure.uri
+          }">&nbsp;</span>
+          <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
+          <span style="display:none;" property="ext:temporal" value="${
+            measure.temporal
+          }"></span>
+            <div property="dct:description">
+              ${html}
+              <p>Dit wordt aangeduid door verkeerstekens:</p>
+              <ul style="list-style:none;">
+                ${signsHTML}
+              </ul>
+              ${
+                temporalValue === 'true'
+                  ? 'Deze signalisatie is dynamisch.'
+                  : ''
+              }
+            </div>
           </div>
-        </div>
-      `
+        `
+      )
     );
     this.args.closeModal();
   }
