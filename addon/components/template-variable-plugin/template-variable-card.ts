@@ -72,7 +72,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     );
     let insertRange: { from: number; to: number } | undefined;
     mappingNode.descendants((child, relativePos) => {
-      const absolutePos = resolvedMappingPos
+      const absolutePos: number = resolvedMappingPos
         ? resolvedMappingPos.pos + relativePos + 1
         : relativePos;
       if (child.attrs['property'] === 'ext:content') {
@@ -80,8 +80,8 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
           from: absolutePos + 1,
           to: absolutePos + child.nodeSize - 1,
         };
-        return false;
       }
+      return false;
     });
     let htmlToInsert: string;
     if (Array.isArray(this.selectedVariable)) {
