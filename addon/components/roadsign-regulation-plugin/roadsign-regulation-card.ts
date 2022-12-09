@@ -34,50 +34,35 @@ export default class RoadsignRegulationCard extends Component<Args> {
     this.modalOpen = !this.modalOpen;
   }
 
+  get controller() {
+    return this.args.controller;
+  }
+
   @action
   onSelectionChanged() {
-    //TODO: Find the besluit with the correct datatype once limit to range is working
-    let besluitUri: string | undefined;
-    this.args.controller.state.doc.descendants((node) => {
-      if (besluitUri) {
-        return false;
-      }
-      if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
-        besluitUri = node.attrs['resource'] as string;
-        return false;
-      }
-    });
-    if (besluitUri) {
+    const selection = this.controller.state.selection;
+    const limitedDatastore = this.controller.datastore.limitToRange(
+      this.controller.state,
+      selection.from,
+      selection.to
+    );
+    const besluit = [
+      ...limitedDatastore
+        .match(undefined, 'a')
+        .transformDataset((dataset, termConverter) => {
+          return dataset.filter((quad) =>
+            acceptedTypes
+              .map((type) => termConverter(type).value)
+              .includes(quad.object.value)
+          );
+        })
+        .asQuadResultSet(),
+    ][0];
+    if (besluit) {
       this.showCard = true;
-      this.besluitUri = besluitUri;
+      this.besluitUri = besluit.subject.value;
     } else {
       this.showCard = false;
     }
-    return;
-    // const selectedRange = this.args.controller.selection.lastRange;
-    // if (!selectedRange) {
-    //   return;
-    // }
-    // const limitedDatastore = this.args.controller.datastore.limitToRange(
-    //   selectedRange,
-    //   'rangeIsInside'
-    // );
-    // const besluit = limitedDatastore
-    //   .match(null, 'a')
-    //   .transformDataset((dataset, termConverter) => {
-    //     return dataset.filter((quad) =>
-    //       acceptedTypes
-    //         .map((type) => termConverter(type).value)
-    //         .includes(quad.object.value)
-    //     );
-    //   })
-    //   .asQuads()
-    //   .next().value;
-    // if (besluit) {
-    //   this.showCard = true;
-    //   this.besluitUri = besluit.subject.value;
-    // } else {
-    //   this.showCard = false;
-    // }
   }
 }
