@@ -26,10 +26,7 @@ export const emberNodeConfig: EmberNodeConfig = {
   parseDOM: [
     {
       tag: 'div',
-      getAttrs(element: HTMLElement | string) {
-        if (typeof element === 'string') {
-          return false;
-        }
+      getAttrs(element: HTMLElement) {
         if (
           element.dataset['emberNode'] === 'table-of-contents' ||
           // Ensure backwards compatibility
