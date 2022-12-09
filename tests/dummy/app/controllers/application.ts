@@ -51,6 +51,7 @@ import {
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
 import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
@@ -151,6 +152,7 @@ export default class IndexController extends Controller {
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
     standardTemplateWidget,
+    roadSignRegulationWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
   ];
