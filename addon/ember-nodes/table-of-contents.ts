@@ -21,15 +21,34 @@ export const emberNodeConfig: EmberNodeConfig = {
       serialize: (node) => {
         return JSON.stringify(node.attrs['config']);
       },
-      parse: (element) => {
-        return optionMapOr(
-          TABLE_OF_CONTENTS_DEFAULT_CONFIG,
-          JSON.parse,
-          element.getAttribute('config')
-        ) as TableOfContentsConfig;
-      },
     },
   },
+  parseDOM: [
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement | string) {
+        if (typeof element === 'string') {
+          return false;
+        }
+        if (
+          element.dataset['emberNode'] === 'table-of-contents' ||
+          // Ensure backwards compatibility
+          element.dataset['inlineComponent'] === 'table-of-contents' ||
+          (element.classList.contains('inline-component') &&
+            element.classList.contains('table-of-contents'))
+        ) {
+          return {
+            config: optionMapOr(
+              TABLE_OF_CONTENTS_DEFAULT_CONFIG,
+              JSON.parse,
+              element.getAttribute('config')
+            ) as TableOfContentsConfig,
+          };
+        }
+        return false;
+      },
+    },
+  ],
 };
 
 export const tableOfContents = createEmberNodeSpec(emberNodeConfig);
