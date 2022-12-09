@@ -16,7 +16,6 @@ import { assert } from '@ember/debug';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Command } from 'prosemirror-state';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 const PAGE_SIZE = 10;
