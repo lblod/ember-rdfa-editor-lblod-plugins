@@ -13,7 +13,7 @@ import {
 } from '../../constants';
 import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
 import { assert } from '@ember/debug';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { optionMap, unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
@@ -241,6 +241,33 @@ export default class RoadsignRegulationCard extends Component<Args> {
     this.count = count;
   });
 
+  get insertRange() {
+    const selection = this.args.controller.state.selection;
+    const besluit = [
+      ...this.args.controller.datastore
+        .limitToRange(this.args.controller.state, selection.from, selection.to)
+        .match(undefined, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
+        .asSubjectNodeMapping(),
+    ][0];
+    const besluitNode = [...(besluit?.nodes ?? [])][0];
+
+    if (besluitNode) {
+      const { pos: resolvedPos, node } = besluitNode;
+      let insertRange: { from: number; to: number } | undefined;
+      const basePos = resolvedPos ? resolvedPos.pos + 1 : 0;
+      node.descendants((child, childPos) => {
+        if (child.attrs['property'] === 'prov:value') {
+          insertRange = {
+            from: basePos + childPos + child.nodeSize - 1,
+            to: basePos + childPos + child.nodeSize - 1,
+          };
+        }
+        return false;
+      });
+      return insertRange;
+    }
+  }
+
   @action
   async insertHtml(
     measure: Measure,
@@ -279,24 +306,15 @@ export default class RoadsignRegulationCard extends Component<Args> {
       </li>`;
       })
       .join('\n');
-    //TODO: Import insert structure from article structure command
+    // TODO: Import insert structure from article structure command
     // const InsertStructure = (
     //   _structureType: string,
     //   _htmlContent: string
     // ): Command => {
     //   return (_state, _dispatch) => true;
     // };
-    let insertRange: { from: number; to: number } | undefined;
-    this.args.controller.state.doc.descendants((node, pos) => {
-      if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
-        insertRange = {
-          from: pos + node.nodeSize - 1,
-          to: pos + node.nodeSize - 1,
-        };
-        return !insertRange;
-      }
-    });
-    if (insertRange) {
+
+    if (this.insertRange) {
       this.args.controller.doCommand(
         insertHtml(
           `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
@@ -319,8 +337,8 @@ export default class RoadsignRegulationCard extends Component<Args> {
               </div>
             </div>
           `,
-          insertRange.from,
-          insertRange.to
+          this.insertRange.from,
+          this.insertRange.to
         )
       );
     }
