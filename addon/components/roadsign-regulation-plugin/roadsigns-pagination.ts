@@ -2,7 +2,12 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-export default class RoadsignsPagination extends Component {
+type Args = {
+  count: number;
+  pageSize: number;
+  goToPage: (n: number) => void;
+};
+export default class RoadsignsPagination extends Component<Args> {
   @tracked actualPageStart = 0;
   @tracked actualPageEnd = 10;
 
@@ -31,8 +36,7 @@ export default class RoadsignsPagination extends Component {
   }
 
   @action
-  onUpdateCount(_element, params) {
-    const pageStart = params[1];
+  onUpdateCount(_element: HTMLElement, [_, pageStart]: [number, number]) {
     this.actualPageStart = pageStart;
     this.actualPageEnd = pageStart + this.args.pageSize;
   }

@@ -28,21 +28,25 @@ export default class ImportSnippetPluginCard extends Component<Args> {
   }
 
   get insertRange() {
-    let range: { from: number; to: number } = this.controller.state.selection;
-    // TODO: implement finding besluit node and position using datastore
-    this.controller.state.doc.descendants((node, pos) => {
-      const typeOfAttribute = node.attrs['typeof'] as string | undefined;
-      if (
-        typeOfAttribute?.includes('besluit:Besluit') ||
-        typeOfAttribute?.includes(
-          'http://data.vlaanderen.be/ns/besluit#Besluit'
-        )
-      ) {
-        range = { from: pos + node.nodeSize - 1, to: pos + node.nodeSize - 1 };
-        return false;
+    const selection = this.controller.state.selection;
+    const besluitNode = [
+      ...this.controller.datastore
+        .limitToRange(this.controller.state, selection.from, selection.to)
+        .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
+        .asSubjectNodeMapping(),
+    ][0]?.nodes[0];
+    if (besluitNode) {
+      const { node, pos: resolvedPos } = besluitNode;
+      if (!resolvedPos) {
+        throw new Error('Besluit node should have a position');
       }
-    });
-    return range;
+      return {
+        from: resolvedPos.pos + node.nodeSize - 1,
+        to: resolvedPos.pos + node.nodeSize - 1,
+      };
+    } else {
+      return selection;
+    }
   }
 
   @action
