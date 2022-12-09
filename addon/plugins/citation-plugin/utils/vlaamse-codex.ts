@@ -1,21 +1,42 @@
-import { LEGISLATION_TYPE_CONCEPTS } from './legislation-types';
-const SPARQL_ENDPOINT = '/codex/sparql/';
+import { LEGISLATION_TYPE_CONCEPTS } from '../../../utils/legislation-types';
 import { warn } from '@ember/debug';
 import { htmlSafe } from '@ember/template';
+import {
+  Option,
+  optionMapOr,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import Ember from 'ember';
+import SafeString = Ember.Handlebars.SafeString;
+
+const SPARQL_ENDPOINT = '/codex/sparql/';
 
 //const SPARQL_ENDPOINT = 'https://codex.opendata.api.vlaanderen.be:8888/sparql';
 
-class Decision {
+interface DecisionArgs {
+  uri: string;
+  legislationTypeUri: Option<string>;
+  title: string | null;
+  publicationDate: string | null;
+  documentDate: string | null;
+}
+
+export class Decision {
+  uri: string;
+  legislationType: { label: string; value: string } | undefined;
+  title: string | null;
+  publicationDate: string | null;
+  documentDate: string | null;
+
   constructor({
     uri,
     legislationTypeUri,
     title,
     publicationDate,
     documentDate,
-  }) {
+  }: DecisionArgs) {
     this.uri = uri;
     this.legislationType = LEGISLATION_TYPE_CONCEPTS.find(
-      (t) => t.value == legislationTypeUri
+      (t) => t.value === legislationTypeUri
     );
     this.title = title;
     this.publicationDate = publicationDate;
@@ -23,15 +44,35 @@ class Decision {
   }
 
   get fullTitle() {
-    return `${this.legislationType.label} ${this.title}`;
+    return `${this.legislationType?.label ?? ''} ${this.title ?? ''}`;
   }
 }
 
-class Article {
-  constructor({ uri, number, content, dateInForce, dateNoLongerInForce }) {
+interface ArticleArgs {
+  uri: string;
+  number?: number;
+  content: string | null;
+  dateInForce: string | null;
+  dateNoLongerInForce: string | null;
+}
+
+export class Article {
+  uri: string;
+  number?: number;
+  content: SafeString | null;
+  dateInForce: string | null;
+  dateNoLongerInForce: string | null;
+
+  constructor({
+    uri,
+    number,
+    content,
+    dateInForce,
+    dateNoLongerInForce,
+  }: ArticleArgs) {
     this.uri = uri;
     this.number = number;
-    this.content = htmlSafe(content);
+    this.content = optionMapOr(null, htmlSafe, content);
     this.dateInForce = dateInForce;
     this.dateNoLongerInForce = dateNoLongerInForce;
   }
@@ -41,12 +82,12 @@ class Article {
  * flemish codex encodes certain characters as a html character, which breaks our search
  * this is an ugly work around
  */
-function replaceDiacriticsInWord(word) {
+function replaceDiacriticsInWord(word: string): string {
   const characters =
     'Ë À Ì Â Í Ã Î Ä Ï Ç Ò È Ó É Ô Ê Õ Ö ê Ù ë Ú î Û ï Ü ô Ý õ â û ã ÿ ç'.split(
       ' '
     );
-  for (let char of characters) {
+  for (const char of characters) {
     word = word.replace(new RegExp(`${char}`, 'g'), `&#${char.charCodeAt(0)};`);
   }
   return word;
@@ -55,11 +96,19 @@ function replaceDiacriticsInWord(word) {
 //Attempt to memoise on the fetching by stringifying the arguments. This could spare a few fetches.
 //If memoising fails, at least a normal fetch is performed.
 
-const fetchDecisionsMemory = new Map();
+const fetchDecisionsMemory = new Map<string, DecisionCollection>();
+
+export interface QueryFilter {
+  type: string;
+  documentDateFrom?: Option<string>;
+  documentDateTo?: Option<string>;
+  publicationDateFrom?: Option<string>;
+  publicationDateTo?: Option<string>;
+}
 
 async function fetchDecisions(
-  words,
-  filter,
+  words: string[],
+  filter: QueryFilter,
   pageNumber = 0,
   pageSize = 5
   /*abortSignal*/
@@ -83,19 +132,29 @@ async function fetchDecisions(
   if (results) {
     return results;
   } else {
-    const newResults = await fetchDecisionsMemd(...arguments);
+    const newResults = await fetchDecisionsMemo(
+      words,
+      filter,
+      pageNumber,
+      pageSize
+    );
     fetchDecisionsMemory.set(stringArguments, newResults);
     return newResults;
   }
 }
 
-async function fetchDecisionsMemd(
-  words,
-  filter,
+interface DecisionCollection {
+  totalCount: number;
+  decisions: Decision[];
+}
+
+async function fetchDecisionsMemo(
+  words: string[],
+  filter: QueryFilter,
   pageNumber = 0,
   pageSize = 5,
-  abortSignal
-) {
+  abortSignal?: AbortSignal
+): Promise<DecisionCollection> {
   // TBD/NOTE: in the context of a <http://data.europa.eu/eli/ontology#LegalResource>
   // the eli:cites can have either a <http://xmlns.com/foaf/0.1/Document> or <http://data.europa.eu/eli/ontology#LegalResource>
   // as range (see AP https://data.vlaanderen.be/doc/applicatieprofiel/besluit-publicatie/#Rechtsgrond),
@@ -165,7 +224,7 @@ async function fetchDecisionsMemd(
   );
 
   if (totalCount > 0) {
-    const response = await executeQuery(
+    const response = await executeQuery<DecisionBinding>(
       `PREFIX eli: <http://data.europa.eu/eli/ontology#>
 
         SELECT DISTINCT ?expressionUri as ?uri ?title ?publicationDate ?documentDate
@@ -219,15 +278,26 @@ async function fetchDecisionsMemd(
   }
 }
 
-const fetchArticlesMemory = new Map();
+interface Binding<A> {
+  value: A;
+}
+
+interface DecisionBinding {
+  uri: Binding<string>;
+  title: Binding<string>;
+  publicationDate: Binding<string>;
+  documentDate: Binding<string>;
+}
+
+const fetchArticlesMemory = new Map<string, ArticleCollection>();
 
 async function fetchArticles(
-  legalExpression,
-  pageNumber,
-  pageSize,
-  articleFilter
+  legalExpression: string,
+  pageNumber: number,
+  pageSize: number,
+  articleFilter: string
   /*abortSignal*/
-) {
+): Promise<ArticleCollection> {
   //Simpler here, only one way arguments are set up
   const stringArguments = JSON.stringify({
     legalExpression,
@@ -239,19 +309,56 @@ async function fetchArticles(
   if (results) {
     return results;
   } else {
-    const newResults = await fetchArticlesMemd(...arguments);
+    const newResults = await fetchArticlesMemo(
+      legalExpression,
+      pageNumber,
+      pageSize,
+      articleFilter
+    );
     fetchArticlesMemory.set(stringArguments, newResults);
     return newResults;
   }
 }
 
-async function fetchArticlesMemd(
-  legalExpression,
+interface ArticleBinding {
+  count: {
+    value: string;
+  };
+  content?: {
+    value: string;
+  };
+  dateInForce?: {
+    value: string;
+  };
+  dateNoLongerInForce?: {
+    value: string;
+  };
+  article: {
+    value: string;
+  };
+  number?: {
+    value: number;
+  };
+}
+
+interface QueryResponse<B> {
+  results: {
+    bindings: B[];
+  };
+}
+
+interface ArticleCollection {
+  totalCount: number;
+  articles: Article[];
+}
+
+async function fetchArticlesMemo(
+  legalExpression: string,
   pageNumber = 0,
   pageSize = 10,
-  articleFilter,
-  abortSignal
-) {
+  articleFilter: string,
+  abortSignal?: AbortSignal
+): Promise<ArticleCollection> {
   const numberFilter = articleFilter
     ? `FILTER( !BOUND(?number) || CONTAINS(?number, "${articleFilter}"))`
     : '';
@@ -280,7 +387,7 @@ async function fetchArticlesMemd(
   if (totalCount > 0) {
     // ?number has format like "Artikel 12." We parse the number from the string for ordering
     // Second degree ordering on ?numberStr to make sure "Artikel 3/1." comes after "Artikel 3."
-    const response = await executeQuery(
+    const response = await executeQuery<ArticleBinding>(
       `PREFIX eli: <http://data.europa.eu/eli/ontology#>
       PREFIX prov: <http://www.w3.org/ns/prov#>
       PREFIX dct: <http://purl.org/dc/terms/>
@@ -343,7 +450,7 @@ function cleanCaches() {
   fetchArticlesMemory.clear();
 }
 
-function escapeValue(value) {
+function escapeValue(value?: string) {
   if (value) {
     const shadowDomElement = document.createElement('textarea');
     shadowDomElement.innerHTML = value;
@@ -353,14 +460,20 @@ function escapeValue(value) {
   }
 }
 
-function dateValue(value) {
+function dateValue(value?: string): string | null {
   if (value) {
     try {
       return new Intl.DateTimeFormat('nl-BE').format(
         new Date(Date.parse(value))
       );
     } catch (e) {
-      warn(`Error parsing date ${value}: ${e.message}`, {
+      let message: string;
+      if (e instanceof Error) {
+        message = e.message;
+      } else {
+        message = e as string;
+      }
+      warn(`Error parsing date ${value}: ${message}`, {
         id: 'date-parsing-error',
       });
       return null;
@@ -370,12 +483,18 @@ function dateValue(value) {
   }
 }
 
-async function executeCountQuery(query, abortSignal) {
-  const response = await executeQuery(query, abortSignal);
-  return parseInt(response.results.bindings[0].count.value);
+async function executeCountQuery(query: string, abortSignal?: AbortSignal) {
+  const response = await executeQuery<{ count: { value: string } }>(
+    query,
+    abortSignal
+  );
+  return optionMapOr(0, parseInt, response.results.bindings[0]?.count.value);
 }
 
-async function executeQuery(query, abortSignal) {
+async function executeQuery<A>(
+  query: string,
+  abortSignal?: AbortSignal
+): Promise<QueryResponse<A>> {
   const encodedQuery = encodeURIComponent(query.trim());
   const endpoint = `${SPARQL_ENDPOINT}`;
   const response = await fetch(endpoint, {
@@ -389,7 +508,7 @@ async function executeQuery(query, abortSignal) {
   });
 
   if (response.ok) {
-    return response.json();
+    return response.json() as Promise<QueryResponse<A>>;
   } else {
     throw new Error(
       `Request to Vlaamse Codex was unsuccessful: [${response.status}] ${response.statusText}`

@@ -1,17 +1,26 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
-  LEGISLATION_TYPES,
   LEGISLATION_TYPE_CONCEPTS,
+  LEGISLATION_TYPES,
 } from '../../../utils/legislation-types';
-import { fetchDecisions } from '../../../utils/vlaamse-codex';
+import {
+  Article,
+  Decision,
+  fetchDecisions,
+} from '../../../plugins/citation-plugin/utils/vlaamse-codex';
+import IntlService from 'ember-intl/services/intl';
+import {
+  Option,
+  unwrap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
-function getISODate(date) {
+function getISODate(date: Option<Date>): string | null {
   if (date) {
     // Flatpickr captures the date in local time. Hence date.toISOString() may return the day before the selected date
     // E.g. selected date 2020-04-15 00:00:00 GMT+0200 will become 2020-04-14 22:00:00 UTC
@@ -24,26 +33,43 @@ function getISODate(date) {
   }
 }
 
-export default class EditorPluginsCitationsSearchModalComponent extends Component {
-  @service intl;
-  @tracked text;
-  @tracked textAfterTimeout;
+interface Args {
+  selectedDecision: Decision;
+  legislationTypeUri: string;
+  text: string;
+  insertDecisionCitation: (decision: Decision) => void;
+  insertArticleCitation: (decision: Decision, article: Article) => void;
+  closeModal: (legislationTypeUri?: string, text?: string) => void;
+}
+
+export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
+  @service declare intl: IntlService;
+  @tracked text: string;
+  @tracked textAfterTimeout?: string;
   // Vlaamse Codex currently doesn't contain captions and content of decisions
   // @tracked isEnabledSearchCaption = false
   // @tracked isEnabledSearchContent = false
-  @tracked legislationTypeUri;
+  @tracked legislationTypeUri: string;
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
-  @tracked totalCount;
+  @tracked totalCount = 0;
   @tracked decisions = [];
-  @tracked error;
-  @tracked selectedDecision;
-  @tracked documentDateFrom = null;
-  @tracked documentDateTo = null;
-  @tracked publicationDateFrom = null;
-  @tracked publicationDateTo = null;
+  @tracked error: unknown;
+  @tracked selectedDecision: Decision | null;
+  @tracked documentDateFrom: Date | null = null;
+  @tracked documentDateTo: Date | null = null;
+  @tracked publicationDateFrom: Date | null = null;
+  @tracked publicationDateTo: Date | null = null;
   minDate = new Date('1930-01-01T12:00:00');
   maxDate = new Date(`${new Date().getFullYear() + 10}-01-01T12:00:00`);
+
+  constructor(owner: unknown, args: Args) {
+    super(owner, args);
+    this.selectedDecision = this.args.selectedDecision;
+    this.legislationTypeUri =
+      this.args.legislationTypeUri || LEGISLATION_TYPES['decreet'];
+    this.text = this.args.text;
+  }
 
   get datePickerLocalization() {
     return {
@@ -62,14 +88,6 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     };
   }
 
-  constructor() {
-    super(...arguments);
-    this.selectedDecision = this.args.selectedDecision;
-    this.legislationTypeUri =
-      this.args.legislationTypeUri || LEGISLATION_TYPES['decreet'];
-    this.text = this.args.text;
-  }
-
   get legislationTypes() {
     return Object.keys(LEGISLATION_TYPES).map(capitalize);
   }
@@ -78,26 +96,16 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     const found = LEGISLATION_TYPE_CONCEPTS.find(
       (c) => c.value === this.legislationTypeUri
     );
-    return capitalize(found ? found.label : LEGISLATION_TYPE_CONCEPTS[0].label);
+    return capitalize(
+      found ? found.label : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).label
+    );
   }
 
-  decisionResource = trackedTask(this, this.resourceSearch, () => [
-    this.textAfterTimeout,
-    this.legislationTypeUri,
-    this.pageSize,
-    this.pageNumber,
-    this.documentDateFrom,
-    this.documentDateTo,
-    this.publicationDateFrom,
-    this.publicationDateTo,
-  ]);
-
-  @task({ restartable: true })
-  *resourceSearch() {
+  resourceSearch = restartableTask(async () => {
     this.error = null;
-    yield undefined; //To prevent retriggering because of the use of this.text later.
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    await undefined; //To prevent retriggering because of the use of this.text later.
     const abortController = new AbortController();
-    const signal = abortController.signal;
     try {
       // Split search string by grouping on non-whitespace characters
       // This probably needs to be more complex to search on group of words
@@ -110,12 +118,11 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
         publicationDateFrom: getISODate(this.publicationDateFrom),
         publicationDateTo: getISODate(this.publicationDateTo),
       };
-      const results = yield fetchDecisions(
+      const results = await fetchDecisions(
         words,
         filter,
         this.pageNumber,
-        this.pageSize,
-        signal
+        this.pageSize
       );
       this.totalCount = results.totalCount;
       return results.decisions;
@@ -128,61 +135,70 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
       //Abort all requests now that this task has either successfully finished or has been cancelled
       abortController.abort();
     }
-  }
+  });
 
-  @task({ restartable: true })
-  *updateSearch() {
-    yield timeout(500);
+  decisionResource = trackedTask(this, this.resourceSearch, () => [
+    this.textAfterTimeout,
+    this.legislationTypeUri,
+    this.pageSize,
+    this.pageNumber,
+    this.documentDateFrom,
+    this.documentDateTo,
+    this.publicationDateFrom,
+    this.publicationDateTo,
+  ]);
+  updateSearch = restartableTask(async () => {
+    await timeout(500);
     this.textAfterTimeout = this.text;
     this.pageNumber = 0;
-  }
+  });
 
   @action
-  selectLegislationType(type) {
+  selectLegislationType(type: string) {
     type = type.toLowerCase();
     const found = LEGISLATION_TYPE_CONCEPTS.find(
       (c) => c.label.toLowerCase() === type
     );
     this.legislationTypeUri = found
       ? found.value
-      : LEGISLATION_TYPE_CONCEPTS[0].value;
+      : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).value;
   }
 
   @action
-  updateDocumentDateFrom(isoDate, date) {
+  updateDocumentDateFrom(_isoDate: unknown, date: Date) {
     this.documentDateFrom = date;
   }
 
   @action
-  updateDocumentDateTo(isoDate, date) {
+  updateDocumentDateTo(_isoDate: unknown, date: Date) {
     this.documentDateTo = date;
   }
 
   @action
-  updatePublicationDateFrom(isoDate, date) {
+  updatePublicationDateFrom(_isoDate: unknown, date: Date) {
     this.publicationDateFrom = date;
   }
 
   @action
-  updatePublicationDateTo(isoDate, date) {
+  updatePublicationDateTo(_isoDate: unknown, date: Date) {
     this.publicationDateTo = date;
   }
 
   @action
-  insertDecisionCitation(decision) {
+  async insertDecisionCitation(decision: Decision) {
     this.args.insertDecisionCitation(decision);
-    this.closeModal();
+    await this.closeModal();
   }
 
   @action
-  insertArticleCitation(decision, article) {
+  async insertArticleCitation(decision: Decision, article: Article) {
     this.args.insertArticleCitation(decision, article);
-    this.closeModal();
+    await this.closeModal();
   }
 
   @action
-  closeModal(legislationTypeUri, text) {
-    this.decisionResource.cancel();
+  async closeModal(legislationTypeUri?: string, text?: string) {
+    await this.decisionResource.cancel();
     this.args.closeModal(legislationTypeUri, text);
   }
 
@@ -192,7 +208,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   }
 
   @action
-  openDecisionDetail(decision) {
+  openDecisionDetail(decision: Decision) {
     this.selectedDecision = decision;
   }
 
@@ -226,18 +242,24 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   }
 }
 
-function getLocalizedMonths(intl, monthFormat = 'long') {
-  let someYear = 2021;
+function getLocalizedMonths(
+  intl: IntlService,
+  monthFormat: Intl.DateTimeFormatOptions['month'] = 'long'
+) {
+  const someYear = 2021;
   return [...Array(12).keys()].map((monthIndex) => {
-    let date = new Date(someYear, monthIndex);
+    const date = new Date(someYear, monthIndex);
     return intl.formatDate(date, { month: monthFormat });
   });
 }
 
-function getLocalizedDays(intl, weekdayFormat = 'long') {
-  let someSunday = new Date('2021-01-03');
+function getLocalizedDays(
+  intl: IntlService,
+  weekdayFormat: Intl.DateTimeFormatOptions['weekday'] = 'long'
+) {
+  const someSunday = new Date('2021-01-03');
   return [...Array(7).keys()].map((index) => {
-    let weekday = new Date(someSunday.getTime());
+    const weekday = new Date(someSunday.getTime());
     weekday.setDate(someSunday.getDate() + index);
     return intl.formatDate(weekday, { weekday: weekdayFormat });
   });

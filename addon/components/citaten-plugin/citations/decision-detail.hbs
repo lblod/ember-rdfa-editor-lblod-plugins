@@ -14,7 +14,7 @@
           {{@decision.publicationDate}}
         </AuPill>
       {{/if}}
-      <br />
+      <br/>
       <AuButton
         @skin="primary"
         @icon="plus-text"
@@ -32,19 +32,22 @@
         {{t "citaten-plugin.references.lookup-codex"}}
       </AuLinkExternal>
       {{! Search field }}
-      <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}} @required={{false}} @error={{false}} @warning={{false}}>{{t "citaten-plugin.search.article"}}</AuLabel>
-      <AuInput id="searchCodex" placeholder="{{t "citaten-plugin.search.article-placeholder"}}" @type="text" @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input" (perform this.updateArticleFilter)}}/>
+      <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}}
+               @required={{false}} @error={{false}} @warning={{false}}>{{t "citaten-plugin.search.article"}}</AuLabel>
+      <AuInput id="searchCodex" placeholder="{{t "citaten-plugin.search.article-placeholder"}}" @type="text"
+               @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input"
+                                                                                                         (perform this.updateArticleFilter)}}/>
     </div>
     {{! Search results }}
     <div>
       {{#if this.articleResource.isRunning}}
         <div class="au-o-box">
-          <AuLoader @padding="large" />
+          <AuLoader @padding="large"/>
           <span class="au-u-hidden-visually">{{t "citaten-plugin.alert.loading"}}</span>
         </div>
       {{else}}
         {{#if this.error}}
-          <CitatenPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box" />
+          <CitatenPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
         {{else}}
           <CitatenPlugin::Citations::ArticleList
             @insertArticleCitation={{fn @insertArticleCitation @decision}}

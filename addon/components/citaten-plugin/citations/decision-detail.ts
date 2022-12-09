@@ -1,49 +1,42 @@
 import Component from '@glimmer/component';
-import { timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { fetchArticles } from '../../../utils/vlaamse-codex';
-import { task } from 'ember-concurrency';
+import {
+  Decision,
+  fetchArticles,
+} from '../../../plugins/citation-plugin/utils/vlaamse-codex';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
-export default class EditorPluginsCitationsDecisionDetailComponent extends Component {
-  @tracked error;
+interface Args {
+  decision: Decision;
+  close: () => void;
+}
+
+export default class EditorPluginsCitationsDecisionDetailComponent extends Component<Args> {
+  @tracked error: unknown;
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
-  @tracked totalCount;
+  @tracked totalCount = 0;
   @tracked articles = [];
-  @tracked articleFilter;
-  @tracked articleFilterAfterTimeout;
+  @tracked articleFilter = '';
+  @tracked articleFilterAfterTimeout = '';
 
-  constructor() {
-    super(...arguments);
-  }
-
-  @task({ restartable: true })
-  *updateArticleFilter() {
-    yield timeout(500);
+  updateArticleFilter = restartableTask(async () => {
+    await timeout(500);
     this.pageNumber = 0;
     this.articleFilterAfterTimeout = this.articleFilter;
-  }
+  });
 
-  articleResource = trackedTask(this, this.resourceSearch, () => [
-    this.pageNumber,
-    this.pageSize,
-    this.articleFilterAfterTimeout,
-  ]);
-
-  @task({ restartable: true })
-  *resourceSearch() {
+  resourceSearch = restartableTask(async () => {
     this.error = null;
     const abortController = new AbortController();
-    const signal = abortController.signal;
     try {
-      const results = yield fetchArticles(
+      const results = await fetchArticles(
         this.args.decision.uri,
         this.pageNumber,
         this.pageSize,
-        this.articleFilterAfterTimeout,
-        signal
+        this.articleFilterAfterTimeout
       );
       this.totalCount = results.totalCount;
       return results.articles;
@@ -55,11 +48,17 @@ export default class EditorPluginsCitationsDecisionDetailComponent extends Compo
     } finally {
       abortController.abort();
     }
-  }
+  });
+
+  articleResource = trackedTask(this, this.resourceSearch, () => [
+    this.pageNumber,
+    this.pageSize,
+    this.articleFilterAfterTimeout,
+  ]);
 
   @action
-  close() {
-    this.articleResource.cancel();
+  async close() {
+    await this.articleResource.cancel();
     this.args.close();
   }
 
