@@ -51,6 +51,7 @@ import {
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 
 const nodes = {
   doc,
@@ -106,6 +107,7 @@ export default class IndexController extends Controller {
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
     standardTemplateWidget,
+    roadSignRegulationWidget,
   ];
   schema: Schema = dummySchema;
 

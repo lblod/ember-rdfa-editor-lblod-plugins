@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
 import { v4 as uuid } from 'uuid';
 import { inject as service } from '@ember/service';
@@ -11,6 +11,13 @@ import {
   POTENTIALLY_ZONAL_URI,
   ZONAL_URI,
 } from '../../constants';
+import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
+import { assert } from '@ember/debug';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { Command } from 'prosemirror-state';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -20,17 +27,43 @@ const ROAD_MARKING_URI =
 const TRAFFIC_LIGHT_URI =
   'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept';
 const measureTypes = [SIGN_TYPE_URI, ROAD_MARKING_URI, TRAFFIC_LIGHT_URI];
-export default class RoadsignRegulationCard extends Component {
-  endpoint;
+
+type Zonality = {
+  label: string;
+  value: string;
+};
+
+type TypeOption = {
+  label: string;
+  value: string;
+};
+
+type Code = {
+  label: string;
+  value: string;
+};
+
+type Category = {
+  label: string;
+  value: string;
+};
+
+type Args = {
+  closeModal: () => void;
+  controller: ProseController;
+};
+
+export default class RoadsignRegulationCard extends Component<Args> {
+  endpoint: string;
 
   pageSize = PAGE_SIZE;
-  @service roadsignRegistry;
+  @service declare roadsignRegistry: RoadsignRegistryService;
 
-  @tracked typeSelected;
+  @tracked typeSelected?: TypeOption;
 
-  @tracked categorySelected;
+  @tracked categorySelected?: Category;
 
-  @tracked zonalityOptions = [
+  @tracked zonalityOptions: Zonality[] = [
     {
       label: 'Zonaal',
       value: ZONAL_URI,
@@ -40,13 +73,15 @@ export default class RoadsignRegulationCard extends Component {
       value: NON_ZONAL_URI,
     },
   ];
-  @tracked zonalitySelected;
+  @tracked zonalitySelected?: Zonality;
 
-  @tracked selectedCode;
-  @tracked selectedCodeCombination;
-  @tracked codeCombinationOptions;
-  @tracked tableData = [];
-  @tracked count;
+  descriptionFilter?: string;
+
+  @tracked selectedCode?: Code;
+  @tracked selectedCodeCombination?: Code[];
+  @tracked codeCombinationOptions: Code[] = [];
+  @tracked tableData: Measure[] = [];
+  @tracked count?: number;
   @tracked pageStart = 0;
 
   get isNotTypeSign() {
@@ -54,15 +89,21 @@ export default class RoadsignRegulationCard extends Component {
     return this.typeSelected.value !== SIGN_TYPE_URI;
   }
 
-  constructor() {
-    super(...arguments);
-    const config = getOwner(this).resolveRegistration('config:environment');
+  constructor(parent: unknown, args: Args) {
+    super(parent, args);
+    const config = getOwner(this)!.resolveRegistration(
+      'config:environment'
+    ) as {
+      roadsignRegulationPlugin: {
+        endpoint: string;
+      };
+    };
     this.endpoint = config.roadsignRegulationPlugin.endpoint;
     this.search();
   }
 
   @action
-  selectTypeOrCategory(option) {
+  selectTypeOrCategory(option: { label: string; value: string }) {
     if (!option) {
       this.typeSelected = undefined;
       this.categorySelected = undefined;
@@ -81,34 +122,38 @@ export default class RoadsignRegulationCard extends Component {
   }
 
   @action
-  changeCode(value) {
+  changeCode(value: Code) {
     this.selectedCode = value;
     this.selectedCodeCombination = undefined;
-    this.fetchCodeCombinations();
+    void this.fetchCodeCombinations();
     this.search();
   }
 
   @action
-  changeCodeCombination(value) {
+  changeCodeCombination(value: Code[]) {
     this.selectedCodeCombination = value;
-    this.fetchCodeCombinations();
+    void this.fetchCodeCombinations();
     this.search();
   }
 
   @action
-  changeDescription(e) {
-    this.descriptionFilter = e.target.value;
+  changeDescription(event: InputEvent) {
+    assert(
+      'changeDescriptionValue must be bound to an input element',
+      event.target instanceof HTMLInputElement
+    );
+    this.descriptionFilter = event.target.value;
     this.search();
   }
 
   @action
-  selectCategory(value) {
+  selectCategory(value: Category) {
     this.categorySelected = value;
     this.search();
   }
 
   @action
-  selectZonality(value) {
+  selectZonality(value: Zonality) {
     this.zonalitySelected = value;
     this.search();
   }
@@ -118,19 +163,18 @@ export default class RoadsignRegulationCard extends Component {
     this.args.closeModal();
   }
   @action
-  searchCodes(term) {
-    const category = this.categorySelected
-      ? this.categorySelected.value
-      : undefined;
-    const type = this.typeSelected ? this.typeSelected.value : undefined;
+  searchCodes(term: string) {
+    const category = this.categorySelected?.value;
+    const type = this.typeSelected?.value;
     return this.roadsignRegistry.searchCode.perform(term, category, type);
   }
 
   async fetchCodeCombinations() {
-    let signs = [this.selectedCode.value];
+    const selectedCodeValue = unwrap(this.selectedCode?.value);
+    let signs: string[] = [selectedCodeValue];
     if (this.selectedCodeCombination) {
       signs = [
-        this.selectedCode.value,
+        selectedCodeValue,
         ...this.selectedCodeCombination.map((s) => s.value),
       ];
     }
@@ -143,7 +187,10 @@ export default class RoadsignRegulationCard extends Component {
     this.codeCombinationOptions = codes;
   }
 
-  get typeOptions() {
+  get typeOptions(): {
+    groupName: string;
+    options: TypeOption[];
+  }[] {
     return [
       {
         groupName: 'Types',
@@ -171,9 +218,8 @@ export default class RoadsignRegulationCard extends Component {
     ];
   }
 
-  @restartableTask
-  *fetchSigns() {
-    let codes = [];
+  fetchSigns = task({ restartable: true }, async () => {
+    const codes: Code[] = [];
     if (this.selectedCodeCombination) {
       codes.push(...this.selectedCodeCombination);
     }
@@ -181,7 +227,7 @@ export default class RoadsignRegulationCard extends Component {
       codes.push(this.selectedCode);
     }
     const { measures, count } =
-      yield this.roadsignRegistry.fetchMeasures.perform({
+      await this.roadsignRegistry.fetchMeasures.perform({
         zonality: this.zonalitySelected
           ? this.zonalitySelected.value
           : undefined,
@@ -194,10 +240,14 @@ export default class RoadsignRegulationCard extends Component {
       });
     this.tableData = measures;
     this.count = count;
-  }
+  });
 
   @action
-  async insertHtml(measure, zonalityValue, temporalValue) {
+  async insertHtml(
+    measure: Measure,
+    zonalityValue: string,
+    temporalValue: string
+  ) {
     const instructions =
       await this.roadsignRegistry.fetchInstructionsForMeasure.perform(
         measure.uri
@@ -211,7 +261,8 @@ export default class RoadsignRegulationCard extends Component {
     const signsHTML = measure.signs
       .map((sign) => {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();
-        return `<li style="margin-bottom:1rem;"><span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
+        return `<li style="margin-bottom:1rem;">
+        <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
         <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
           sign.uri
         }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
@@ -230,45 +281,61 @@ export default class RoadsignRegulationCard extends Component {
       })
       .join('\n');
     //TODO: Import insert structure from article structure command
-    const InsertStructure = () => {};
-    this.controller.checkAndDoCommand(
-      InsertStructure(
-        'Article',
-        `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-          <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-            measure.uri
-          }">&nbsp;</span>
-          <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-          <span style="display:none;" property="ext:temporal" value="${
-            measure.temporal
-          }"></span>
-            <div property="dct:description">
-              ${html}
-              <p>Dit wordt aangeduid door verkeerstekens:</p>
-              <ul style="list-style:none;">
-                ${signsHTML}
-              </ul>
-              ${
-                temporalValue === 'true'
-                  ? 'Deze signalisatie is dynamisch.'
-                  : ''
-              }
+    // const InsertStructure = (
+    //   _structureType: string,
+    //   _htmlContent: string
+    // ): Command => {
+    //   return (_state, _dispatch) => true;
+    // };
+    let insertRange: { from: number; to: number } | undefined;
+    this.args.controller.state.doc.descendants((node, pos) => {
+      if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
+        insertRange = {
+          from: pos + node.nodeSize - 1,
+          to: pos + node.nodeSize - 1,
+        };
+        return !insertRange;
+      }
+    });
+    if (insertRange) {
+      this.args.controller.doCommand(
+        insertHtml(
+          `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
+            <span style="display:none;" property="prov:wasDerivedFrom" resource="${
+              measure.uri
+            }">&nbsp;</span>
+            <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
+            <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
+              <div property="dct:description">
+                ${html}
+                <p>Dit wordt aangeduid door verkeerstekens:</p>
+                <ul style="list-style:none;">
+                  ${signsHTML}
+                </ul>
+                ${
+                  temporalValue === 'true'
+                    ? 'Deze signalisatie is dynamisch.'
+                    : ''
+                }
+              </div>
             </div>
-          </div>
-        `
-      )
-    );
+          `,
+          insertRange.from,
+          insertRange.to
+        )
+      );
+    }
     this.args.closeModal();
   }
 
   @action
-  goToPage(pageStart) {
+  goToPage(pageStart: number) {
     this.pageStart = pageStart;
-    this.fetchSigns.perform();
+    void this.fetchSigns.perform();
   }
   @action
   search() {
     this.pageStart = 0;
-    this.fetchSigns.perform();
+    void this.fetchSigns.perform();
   }
 }

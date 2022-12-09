@@ -1,6 +1,16 @@
 import { POTENTIALLY_ZONAL_URI } from '../../constants';
 
-function buildFilters({ zonality, type, codes, category }) {
+function buildFilters({
+  zonality,
+  type,
+  codes,
+  category,
+}: {
+  zonality?: string;
+  type?: string;
+  codes?: string[];
+  category?: string;
+}) {
   const filters = [];
   if (zonality) {
     filters.push(
@@ -33,7 +43,14 @@ export function generateMeasuresQuery({
   codes,
   category,
   pageStart = 0,
-  count,
+  count = false,
+}: {
+  zonality?: string;
+  type?: string;
+  codes?: string[];
+  category?: string;
+  pageStart?: number;
+  count?: boolean;
 }) {
   const filters = buildFilters({ zonality, type, codes, category });
   let pagination = '';

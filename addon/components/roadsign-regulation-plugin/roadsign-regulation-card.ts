@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 /**
  * Card displaying a hint of the Date plugin
@@ -19,13 +20,14 @@ const acceptedTypes = [
   '>https://data.vlaanderen.be/id/concept/BesluitType/67378dd0-5413-474b-8996-d992ef81637a',
 ];
 
-export default class RoadsignRegulationCard extends Component {
-  @tracked modalOpen;
-  @tracked showCard = false;
+type Args = {
+  controller: ProseController;
+};
 
-  constructor() {
-    super(...arguments);
-  }
+export default class RoadsignRegulationCard extends Component<Args> {
+  @tracked modalOpen = false;
+  @tracked showCard = false;
+  @tracked besluitUri?: string;
 
   @action
   toggleModal() {
@@ -33,15 +35,15 @@ export default class RoadsignRegulationCard extends Component {
   }
 
   @action
-  onSelectionChanged(state) {
+  onSelectionChanged() {
     //TODO: Find the besluit with the correct datatype once limit to range is working
-    let besluitUri;
-    this.args.controller.state.doc.descendants((node, pos) => {
+    let besluitUri: string | undefined;
+    this.args.controller.state.doc.descendants((node) => {
       if (besluitUri) {
         return false;
       }
-      if (node.attrs['typeof']?.includes('besluit:Besluit')) {
-        besluitUri = node.attrs['resource'];
+      if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
+        besluitUri = node.attrs['resource'] as string;
         return false;
       }
     });
@@ -52,30 +54,30 @@ export default class RoadsignRegulationCard extends Component {
       this.showCard = false;
     }
     return;
-    const selectedRange = this.args.controller.selection.lastRange;
-    if (!selectedRange) {
-      return;
-    }
-    const limitedDatastore = this.args.controller.datastore.limitToRange(
-      selectedRange,
-      'rangeIsInside'
-    );
-    const besluit = limitedDatastore
-      .match(null, 'a')
-      .transformDataset((dataset, termConverter) => {
-        return dataset.filter((quad) =>
-          acceptedTypes
-            .map((type) => termConverter(type).value)
-            .includes(quad.object.value)
-        );
-      })
-      .asQuads()
-      .next().value;
-    if (besluit) {
-      this.showCard = true;
-      this.besluitUri = besluit.subject.value;
-    } else {
-      this.showCard = false;
-    }
+    // const selectedRange = this.args.controller.selection.lastRange;
+    // if (!selectedRange) {
+    //   return;
+    // }
+    // const limitedDatastore = this.args.controller.datastore.limitToRange(
+    //   selectedRange,
+    //   'rangeIsInside'
+    // );
+    // const besluit = limitedDatastore
+    //   .match(null, 'a')
+    //   .transformDataset((dataset, termConverter) => {
+    //     return dataset.filter((quad) =>
+    //       acceptedTypes
+    //         .map((type) => termConverter(type).value)
+    //         .includes(quad.object.value)
+    //     );
+    //   })
+    //   .asQuads()
+    //   .next().value;
+    // if (besluit) {
+    //   this.showCard = true;
+    //   this.besluitUri = besluit.subject.value;
+    // } else {
+    //   this.showCard = false;
+    // }
   }
 }
