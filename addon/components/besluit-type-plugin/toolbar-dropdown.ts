@@ -81,7 +81,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   @action
   getBesluitType() {
     const selection = this.controller.state.selection;
-    console.log('DOC: ', this.controller.state.doc);
     if (!selection.from) {
       return;
     }
@@ -116,7 +115,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
       type.includes('https://data.vlaanderen.be/id/concept/BesluitType/')
     );
-    console.log('BESLUIT TYPE RELEVANT: ', besluitTypeRelevant);
     if (besluitTypeRelevant) {
       this.previousBesluitType = besluitTypeRelevant;
       const besluitType = this.findBesluitTypeByURI(besluitTypeRelevant);
