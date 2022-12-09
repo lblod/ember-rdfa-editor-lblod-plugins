@@ -13,7 +13,7 @@ import {
 } from '../../constants';
 import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
 import { assert } from '@ember/debug';
-import { optionMap, unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
@@ -27,25 +27,15 @@ const TRAFFIC_LIGHT_URI =
   'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept';
 const measureTypes = [SIGN_TYPE_URI, ROAD_MARKING_URI, TRAFFIC_LIGHT_URI];
 
-type Zonality = {
+type Option = {
   label: string;
   value: string;
 };
 
-type TypeOption = {
-  label: string;
-  value: string;
-};
-
-type Code = {
-  label: string;
-  value: string;
-};
-
-type Category = {
-  label: string;
-  value: string;
-};
+type Zonality = Option;
+type TypeOption = Option;
+type Code = Option;
+type Category = Option;
 
 type Args = {
   closeModal: () => void;
@@ -102,7 +92,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
   }
 
   @action
-  selectTypeOrCategory(option: { label: string; value: string }) {
+  selectTypeOrCategory(option: Option) {
     if (!option) {
       this.typeSelected = undefined;
       this.categorySelected = undefined;
