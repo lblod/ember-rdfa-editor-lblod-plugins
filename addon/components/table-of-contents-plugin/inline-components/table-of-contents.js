@@ -92,7 +92,6 @@ export default class TableOfContentsComponent extends Component {
 
   @action
   moveToSection(node) {
-    console.log('moveToSection');
     const range = this.args.editorController.rangeFactory.fromInNode(node, 0);
     this.args.editorController.selection.selectRange(range);
     this.args.editorController.write(true, true);

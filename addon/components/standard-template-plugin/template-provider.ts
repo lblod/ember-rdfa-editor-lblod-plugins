@@ -2,10 +2,10 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import instantiateUuids from '../../utils/instantiate-uuids';
-import { DOMParser as ProseParser } from 'prosemirror-model';
 import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 type Args = {
   controller: ProseController;
@@ -60,7 +60,6 @@ export default class TemplateProviderComponent extends Component<Args> {
     const selection = this.controller.state.selection;
     let insertRange: { from: number; to: number } = selection;
     const { $from, $to } = selection;
-    console.log('PARENT: ', $from.parent);
     if (
       $from.parent.type === this.controller.schema.nodes['placeholder'] &&
       $from.sameParent($to)
@@ -69,17 +68,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         from: $from.start($from.depth - 1),
         to: $from.end($from.depth - 1),
       };
-      console.log(insertRange);
     }
-
-    const domParser = new DOMParser();
-    const contentFragment = ProseParser.fromSchema(
-      this.controller.schema
-    ).parse(
-      domParser.parseFromString(instantiateUuids(template.body), 'text/html')
-    ).content;
-    this.controller.withTransaction((tr) => {
-      return tr.replaceWith(insertRange.from, insertRange.to, contentFragment);
-    });
+    this.controller.doCommand(insertHtml(instantiateUuids(template.body), insertRange.from, insertRange.to));
   }
 }
