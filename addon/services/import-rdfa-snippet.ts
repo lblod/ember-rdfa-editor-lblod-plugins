@@ -6,9 +6,9 @@ import NativeArray from '@ember/array/-private/native-array';
 
 type RequestParams = {
   source: string;
-  uri: string;
-  omitCredentials: boolean;
-  mock: boolean;
+  uri?: string;
+  omitCredentials: boolean | string;
+  mock: boolean | string;
 };
 /*
  * @module editor-import-snippet-plugin
@@ -106,13 +106,13 @@ export default class ImportRdfaSnippet extends Service {
       if (!data) {
         this.errors.pushObject({
           source: params.source,
-          details: `No data found for ${params.uri}`,
+          details: `No data found for ${params.uri ?? ''}`,
         });
       }
     } catch (err) {
       this.errors.pushObject({
         source: params.source,
-        details: `Error fetching data ${params.uri}: ${err as string}`,
+        details: `Error fetching data ${params.uri ?? ''}: ${err as string}`,
       });
     }
     return data;
@@ -160,7 +160,7 @@ export default class ImportRdfaSnippet extends Service {
     } catch (err: unknown) {
       this.errors.pushObject({
         source: params.source,
-        details: `Error fetching data ${params.uri}: ${err as string}`,
+        details: `Error fetching data ${params.uri ?? ''}: ${err as string}`,
       });
     }
   }
