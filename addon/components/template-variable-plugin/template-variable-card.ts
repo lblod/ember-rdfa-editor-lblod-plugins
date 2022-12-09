@@ -90,8 +90,11 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     } else {
       htmlToInsert = this.selectedVariable.value!;
     }
-    if(insertRange){
-      this.controller.doCommand(insertHtml(htmlToInsert, insertRange.from, insertRange.to));
+    htmlToInsert = this.wrapVariableInHighlight(htmlToInsert);
+    if (insertRange) {
+      this.controller.doCommand(
+        insertHtml(htmlToInsert, insertRange.from, insertRange.to)
+      );
     }
   }
 
