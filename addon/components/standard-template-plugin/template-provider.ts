@@ -69,6 +69,12 @@ export default class TemplateProviderComponent extends Component<Args> {
         to: $from.end($from.depth - 1),
       };
     }
-    this.controller.doCommand(insertHtml(instantiateUuids(template.body), insertRange.from, insertRange.to));
+    this.controller.doCommand(
+      insertHtml(
+        instantiateUuids(template.body),
+        insertRange.from,
+        insertRange.to
+      )
+    );
   }
 }

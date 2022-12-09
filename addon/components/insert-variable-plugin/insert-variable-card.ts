@@ -80,7 +80,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     }
     const htmlToInsert = `<span resource="${uri}" typeof="ext:Mapping">${variableContent}</span>`;
     const { from, to } = this.args.controller.state.selection;
-    this.args.controller.doCommand(insertHtml(htmlToInsert, from, to))
+    this.args.controller.doCommand(insertHtml(htmlToInsert, from, to));
   }
 
   @action

@@ -80,7 +80,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
-    const config = getOwner(this)!.resolveRegistration(
+    const config = unwrap(getOwner(this)).resolveRegistration(
       'config:environment'
     ) as {
       roadsignRegulationPlugin: {

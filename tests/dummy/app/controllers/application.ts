@@ -55,6 +55,7 @@ import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
 import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 const nodes = {
   doc,
@@ -166,7 +167,7 @@ export default class IndexController extends Controller {
   prefixToAttrString(prefix: Record<string, string>) {
     let attrString = '';
     Object.keys(prefix).forEach((key) => {
-      const uri = prefix[key]!;
+      const uri = unwrap(prefix[key]);
       attrString += `${key}: ${uri} `;
     });
     return attrString;

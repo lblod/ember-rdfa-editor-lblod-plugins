@@ -62,7 +62,7 @@ export default class RoadsignRegistryService extends Service {
   getInstructionsForMeasure = task(
     async (uri: string): Promise<Instruction[]> => {
       if (this.instructions.has(uri)) {
-        return this.instructions.get(uri)!;
+        return unwrap(this.instructions.get(uri));
       } else {
         const instructions = await this.fetchInstructionsForMeasure.perform(
           uri

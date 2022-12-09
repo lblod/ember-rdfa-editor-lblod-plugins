@@ -12,6 +12,7 @@ import { MULTI_SELECT_CODELIST_TYPE, ZONAL_URI } from '../../constants';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 type Args = {
   controller: ProseController;
@@ -66,9 +67,9 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     if (!mapping) {
       return;
     }
-    const { node: mappingNode, pos: resolvedMappingPos } = [
-      ...mapping.nodes,
-    ][0]!;
+    const { node: mappingNode, pos: resolvedMappingPos } = unwrap(
+      [[...mapping.nodes][0]][0]
+    );
     let insertRange: { from: number; to: number } | undefined;
     mappingNode.descendants((child, relativePos) => {
       const absolutePos = resolvedMappingPos
@@ -88,7 +89,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         .map((variable) => variable.value)
         .join(', ');
     } else {
-      htmlToInsert = this.selectedVariable.value!;
+      htmlToInsert = unwrap(this.selectedVariable.value);
     }
     htmlToInsert = this.wrapVariableInHighlight(htmlToInsert);
     if (insertRange) {
@@ -215,7 +216,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
       if (isLocation) {
         this.variableOptions = options.map((option) => ({
           label: option.label,
-          value: this.wrapInLocation(option.value!),
+          value: this.wrapInLocation(unwrap(option.value)),
         }));
       } else {
         this.variableOptions = options;

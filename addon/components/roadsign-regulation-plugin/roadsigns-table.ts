@@ -2,6 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 type Args = Record<string, never>;
 export default class RoadsignsTable extends Component<Args> {
@@ -10,7 +11,7 @@ export default class RoadsignsTable extends Component<Args> {
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
-    const config = getOwner(this)!.resolveRegistration(
+    const config = unwrap(getOwner(this)).resolveRegistration(
       'config:environment'
     ) as {
       roadsignRegulationPlugin: {
