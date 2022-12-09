@@ -26,8 +26,6 @@ type Args = {
 
 export default class RoadsignRegulationCard extends Component<Args> {
   @tracked modalOpen = false;
-  @tracked showCard = false;
-  @tracked besluitUri?: string;
 
   @action
   toggleModal() {
@@ -38,8 +36,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
     return this.args.controller;
   }
 
-  @action
-  onSelectionChanged() {
+  get showCard() {
     const selection = this.controller.state.selection;
     const limitedDatastore = this.controller.datastore.limitToRange(
       this.controller.state,
@@ -58,11 +55,6 @@ export default class RoadsignRegulationCard extends Component<Args> {
         })
         .asQuadResultSet(),
     ][0];
-    if (besluit) {
-      this.showCard = true;
-      this.besluitUri = besluit.subject.value;
-    } else {
-      this.showCard = false;
-    }
+    return !!besluit;
   }
 }
