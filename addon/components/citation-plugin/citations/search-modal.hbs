@@ -6,7 +6,7 @@
   @padding="none" as |modal|>
   {{#if this.selectedDecision}}
     <modal.Body>
-      <CitatenPlugin::Citations::DecisionDetail
+      <CitationPlugin::Citations::DecisionDetail
         @insertDecisionCitation={{this.insertDecisionCitation}}
         @insertArticleCitation={{this.insertArticleCitation}}
         @close={{this.closeDecisionDetail}}
@@ -113,18 +113,18 @@
             </div>
           {{else}}
             {{#if this.error}}
-              <CitatenPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-u-margin"/>
+              <CitationPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-u-margin"/>
             {{else}}
               {{#if this.decisionResource.value.length}}
                 <div class="citaten--container-content au-u-padding-top-small au-u-padding-bottom-small">
-                  <CitatenPlugin::Citations::DecisionList
+                  <CitationPlugin::Citations::DecisionList
                     @decisions={{this.decisionResource.value}}
                     @onCitationInsert={{this.insertDecisionCitation}}
                     @onCitationDetails={{this.openDecisionDetail}}
                     @fullSize={{true}} />
                 </div>
               {{else}}
-                <CitatenPlugin::Helpers::AlertNoItems @fullSize={{true}} class="au-u-margin" />
+                <CitationPlugin::Helpers::AlertNoItems @fullSize={{true}} class="au-u-margin" />
               {{/if}}
             {{/if}}
           {{/if}}

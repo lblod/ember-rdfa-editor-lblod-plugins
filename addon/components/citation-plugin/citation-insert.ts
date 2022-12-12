@@ -7,7 +7,7 @@ import {
   Article,
   Decision,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
-import { insertHtml } from '@lblod/ember-rdfa-editor/addon/commands/insert-html-command';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 interface Args {
   controller: ProseController;

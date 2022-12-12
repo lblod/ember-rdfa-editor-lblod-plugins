@@ -45,7 +45,7 @@
         <AuLoader /><span class="au-u-hidden-visually">{{t "citaten-plugin.alert.loading"}}</span>
       {{else}}
         {{#if this.error}}
-          <CitatenPlugin::Helpers::AlertLoadError @fullSize={{false}} @error={{this.error}} />
+          <CitationPlugin::Helpers::AlertLoadError @fullSize={{false}} @error={{this.error}} />
         {{else}}
           <AuToolbar
             @border="bottom"
@@ -54,7 +54,7 @@
             <AuHeading @skin="6" @level="4">{{t "citaten-plugin.card.suggestions"}}</AuHeading>
           </AuToolbar>
           <div class="citaten--decision-list au-u-margin-none au-u-padding-top-tiny au-u-padding-bottom-tiny">
-            <CitatenPlugin::Citations::DecisionList
+            <CitationPlugin::Citations::DecisionList
               @decisions={{this.decisionResource.value}}
               @onCitationInsert={{this.insertDecisionCitation}}
               @onCitationDetails={{this.openDecisionDetailModal}} />
@@ -66,7 +66,7 @@
 {{/if}}
 
 {{#if this.showModal}}
-  <CitatenPlugin::Citations::SearchModal
+  <CitationPlugin::Citations::SearchModal
     @closeModal={{this.closeModal}}
     @insertDecisionCitation={{this.insertDecisionCitation}}
     @insertArticleCitation={{this.insertArticleCitation}}

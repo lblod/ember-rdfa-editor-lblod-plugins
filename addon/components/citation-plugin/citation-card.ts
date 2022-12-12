@@ -26,7 +26,7 @@ import {
   CitationSchema,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { insertHtml } from '@lblod/ember-rdfa-editor/addon/commands/insert-html-command';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -210,7 +210,7 @@ export default class CitaatCardComponent extends Component<Args> {
       // this.text = lastSearchTerm;
     }
     if (lastSearchType || lastSearchTerm) {
-      await this.updateSearchImmediate.perform();
+      this.updateSearchImmediate();
     }
   }
 

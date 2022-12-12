@@ -2,7 +2,7 @@
   <AuList @direction="vertical" @divider={{true}}>
     {{#each @decisions as |decision|}}
       <AuList::Item class="au-u-padding-left-small au-u-padding-right-small">
-        <CitatenPlugin::Citations::DecisionPreview
+        <CitationPlugin::Citations::DecisionPreview
           @decision={{decision}}
           @onCitationInsert={{fn @onCitationInsert decision}}
           @onCitationDetails={{fn @onCitationDetails decision}}
@@ -11,5 +11,5 @@
     {{/each}}
   </AuList>
 {{else}}
-  <CitatenPlugin::Helpers::AlertNoItems @fullSize={{@fullSize}} class={{if @fullSize "au-u-margin"}}/>
+  <CitationPlugin::Helpers::AlertNoItems @fullSize={{@fullSize}} class={{if @fullSize "au-u-margin"}}/>
 {{/if}}

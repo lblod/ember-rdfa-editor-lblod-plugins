@@ -91,9 +91,9 @@ export function citationPlugin(): ProsePlugin {
 
 export const citationCard: WidgetSpec = {
   desiredLocation: 'sidebar',
-  componentName: 'editor-plugins/citaat-card',
+  componentName: 'citation-plugin/citation-card',
 };
 export const citationInsert: WidgetSpec = {
   desiredLocation: 'insertSidebar',
-  componentName: 'editor-plugins/citaat-insert',
+  componentName: 'citation-plugin/citation-insert',
 };
