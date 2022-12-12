@@ -36,7 +36,6 @@ import {
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
-import { NodeViewConstructor } from 'prosemirror-view';
 import {
   placeholder,
   placeholderEditing,
@@ -142,8 +141,10 @@ export default class IndexController extends Controller {
   };
 
   @tracked rdfaEditor?: ProseController;
-  @tracked nodeViews: Record<string, NodeViewConstructor> = {
-    placeholder: placeholderView,
+  @tracked nodeViews = () => {
+    return {
+      placeholder: placeholderView,
+    };
   };
   @tracked plugins: Plugin[] = [placeholderEditing(), tablePlugin];
   @tracked widgets: WidgetSpec[] = [
