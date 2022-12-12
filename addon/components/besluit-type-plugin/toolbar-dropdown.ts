@@ -10,8 +10,6 @@ import {
   removeType,
 } from '@lblod/ember-rdfa-editor/commands/type-commands';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import { Node } from 'prosemirror-model';
 import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/current-session';
 declare module 'ember__owner' {
   export default interface Owner {
@@ -42,12 +40,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   @tracked subSubBesluit?: BesluitType;
 
   @tracked cardExpanded = false;
-  @tracked showCard = false;
-
   @tracked loadDataTaskInstance;
-
-  @tracked besluitPos?: number;
-  @tracked besluitNode?: Node;
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
@@ -57,15 +50,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   get controller() {
     return this.args.controller;
   }
-
-  // @task
-  // *loadData() {
-  //   const bestuurseenheid: unknown = yield this.currentSession.get('group');
-  //   const classificatie = yield bestuurseenheid.get('classificatie');
-  //   const ENV = getOwner(this).resolveRegistration('config:environment');
-  //   const types = yield fetchBesluitTypes(classificatie.uri, ENV);
-  //   this.types = types;
-  // }
 
   loadData = task(async () => {
     // eslint-disable-next-line @typescript-eslint/await-thenable
@@ -78,45 +62,44 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     this.types = types;
   });
 
-  @action
-  getBesluitType() {
+  get currentBesluitNode() {
     const selection = this.controller.state.selection;
-    console.log('DOC: ', this.controller.state.doc);
-    if (!selection.from) {
+    const currentBesluitNode = [
+      ...this.controller.datastore
+        .limitToRange(this.controller.state, selection.from, selection.to)
+        .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
+        .asSubjectNodeMapping(),
+    ][0]?.nodes[0];
+    if (!currentBesluitNode) {
       return;
     }
-    let besluitUri: string | undefined;
-    let besluitPos;
-    let besluitNode;
-    // TODO: implement finding besluit node and position using datastore
-    this.controller.state.doc.descendants((node, pos) => {
-      if (besluitUri) {
-        return false;
-      }
-      if ((node.attrs['typeof'] as string)?.includes('besluit:Besluit')) {
-        console.log(node.attrs);
-        besluitPos = pos;
-        besluitNode = node;
-        besluitUri = node.attrs['resource'] as string;
-        return false;
-      }
-    });
-    if (!besluitUri) {
-      this.showCard = false;
+    if (!currentBesluitNode?.pos) {
+      throw new Error('Besluit node should have a position');
+    }
+    return { pos: currentBesluitNode.pos.pos, node: currentBesluitNode.node };
+  }
+
+  get showCard() {
+    return !!this.currentBesluitNode;
+  }
+
+  @action
+  updateBesluitTypes() {
+    const currentBesluitNode = this.currentBesluitNode;
+    if (!currentBesluitNode) {
       return;
     }
-    this.besluitPos = besluitPos;
-    this.besluitNode = besluitNode;
-    this.showCard = true;
     const besluitTypes = this.controller.datastore
-      .match(`>${besluitUri}`, 'a', undefined)
+      .match(
+        `>${currentBesluitNode.node.attrs['resource'] as string}`,
+        'a',
+        undefined
+      )
       .asQuads();
     const besluitTypesUris = [...besluitTypes].map((quad) => quad.object.value);
-    console.log('URIS: ', besluitTypesUris);
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
       type.includes('https://data.vlaanderen.be/id/concept/BesluitType/')
     );
-    console.log('BESLUIT TYPE RELEVANT: ', besluitTypeRelevant);
     if (besluitTypeRelevant) {
       this.previousBesluitType = besluitTypeRelevant;
       const besluitType = this.findBesluitTypeByURI(besluitTypeRelevant);
@@ -208,20 +191,16 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   insert() {
-    if (
-      this.besluitType &&
-      this.besluitPos !== undefined &&
-      this.besluitPos !== null
-    ) {
+    if (this.besluitType && this.currentBesluitNode) {
       this.cardExpanded = false;
+      this.controller.checkAndDoCommand(
+        addType(this.currentBesluitNode.pos, this.besluitType.uri)
+      );
       if (this.previousBesluitType) {
         this.controller.checkAndDoCommand(
-          removeType(this.besluitPos, this.previousBesluitType)
+          removeType(this.currentBesluitNode.pos, this.previousBesluitType)
         );
       }
-      this.controller.checkAndDoCommand(
-        addType(this.besluitPos, this.besluitType.uri)
-      );
     }
   }
 
