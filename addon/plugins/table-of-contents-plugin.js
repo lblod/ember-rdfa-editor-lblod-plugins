@@ -1,4 +1,4 @@
-import TableOfContentsSpec from '../inline-components/table-of-contents';
+// import TableOfContentsSpec from '../inline-components/table-of-contents';
 
 export default class TableOfContentsPlugin {
   controller;
@@ -9,9 +9,9 @@ export default class TableOfContentsPlugin {
 
   initialize(controller, options) {
     this.controller = controller;
-    controller.registerInlineComponent(
-      new TableOfContentsSpec(this.controller)
-    );
+    // controller.registerInlineComponent(
+    //   new TableOfContentsSpec(this.controller)
+    // );
     const widgetArgs = options?.config
       ? {
           config: options.config,
