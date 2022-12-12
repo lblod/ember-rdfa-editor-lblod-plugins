@@ -11,8 +11,13 @@ import {
   InlineDecorationSpec,
   WidgetSpec,
 } from '@lblod/ember-rdfa-editor/addon';
-import { EditorStateConfig } from 'prosemirror-state';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { EditorState, EditorStateConfig } from 'prosemirror-state';
+import {
+  expect,
+  unwrap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { datastoreKey } from '@lblod/ember-rdfa-editor/plugins/datastore';
+import { ProseStore } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 const NNWS = '[^\\S\\n]';
@@ -33,34 +38,48 @@ export interface CitationDecoration extends Decoration {
 
 export { citation } from './marks/citation';
 
-function calculateDecorations(schema: CitationSchema, doc: PNode) {
+function calculateDecorations(
+  schema: CitationSchema,
+  doc: PNode,
+  datastore: ProseStore
+) {
   const decorations: Decoration[] = [];
-  doc.descendants((node, pos) => {
-    if (
-      node.isText &&
-      node.text &&
-      !schema.marks.citation.isInSet(node.marks)
-    ) {
-      for (const match of node.text.matchAll(CITATION_REGEX)) {
-        const { text, legislationTypeUri } = processMatch(match);
-        console.log(legislationTypeUri);
-        const index = unwrap(match.index);
-        decorations.push(
-          Decoration.inline(
-            pos + index,
-            pos + index + match[0].length,
-            {
-              style: 'background: yellow',
-            },
-            {
-              searchText: text,
-              legislationTypeUri,
-            }
-          )
-        );
+  const nodes = datastore
+    .match(null, 'besluit:motivering')
+    .asPredicateNodeMapping()
+    .nodes();
+  for (const motivationNode of nodes) {
+    motivationNode.node.descendants((node, pos) => {
+      if (
+        node.isText &&
+        node.text &&
+        !schema.marks.citation.isInSet(node.marks)
+      ) {
+        for (const match of node.text.matchAll(CITATION_REGEX)) {
+          const { text, legislationTypeUri } = processMatch(match);
+          console.log(legislationTypeUri);
+          const index = unwrap(match.index);
+          decorations.push(
+            Decoration.inline(
+              pos + unwrap(motivationNode.pos?.pos) + 1 + index,
+              pos +
+                unwrap(motivationNode.pos?.pos) +
+                1 +
+                index +
+                match[0].length,
+              {
+                'data-editor-highlight': 'true',
+              },
+              {
+                searchText: text,
+                legislationTypeUri,
+              }
+            )
+          );
+        }
       }
-    }
-  });
+    });
+  }
   return DecorationSet.create(doc, decorations);
 }
 
@@ -70,14 +89,29 @@ export function citationPlugin(): ProsePlugin {
   const citation: ProsePlugin<DecorationSet> = new ProsePlugin({
     key: citationKey,
     state: {
-      init(state: EditorStateConfig) {
+      init(stateConfig: EditorStateConfig, state: EditorState) {
         const { doc, schema } = state;
         // SAFETY: we require that the citationmark is added to the schema
-        return calculateDecorations(schema as CitationSchema, unwrap(doc));
+        return calculateDecorations(
+          schema,
+          doc,
+          expect(
+            'the datastore plugin is required for this plugin',
+            datastoreKey.getState(state)
+          )
+        );
       },
       apply(tr, set, oldState, newState) {
         const { doc, schema } = newState;
-        return calculateDecorations(schema, doc);
+        return calculateDecorations(
+          schema,
+          doc,
+
+          expect(
+            'the datastore plugin is required for this plugin',
+            datastoreKey.getState(newState)
+          )
+        );
       },
     },
     props: {
