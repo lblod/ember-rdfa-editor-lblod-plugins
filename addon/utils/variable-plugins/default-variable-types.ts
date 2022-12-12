@@ -1,6 +1,13 @@
 import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 
-export const defaultVariableTypes = {
+export type VariableType = {
+  label: string;
+  fetchSubtypes?: (endpoint: string, publisher: string) => Promise<CodeList[]>;
+  template:
+    | string
+    | ((endpoint: string, selectedCodelist?: CodeList) => string);
+};
+export const defaultVariableTypes: Record<string, VariableType> = {
   text: {
     label: 'text',
     template: `
@@ -44,15 +51,15 @@ export const defaultVariableTypes = {
       const codelists = fetchCodeListsByPublisher(endpoint, publisher);
       return codelists;
     },
-    template: (endpoint: string, selectedCodelist: CodeList) => `
+    template: (endpoint: string, selectedCodelist?: CodeList) => `
       <span property="ext:codelist" resource="${
-        selectedCodelist.uri ?? ''
+        selectedCodelist?.uri ?? ''
       }"></span>
       <span property="dct:type" content="codelist"></span>
       <span property="dct:source" resource="${endpoint}"></span>
       <span property="ext:content">
         <span class="mark-highlight-manual">\${${
-          selectedCodelist.label ?? ''
+          selectedCodelist?.label ?? ''
         }}</span>
       </span>
     `,

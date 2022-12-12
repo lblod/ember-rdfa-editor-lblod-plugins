@@ -36,7 +36,6 @@ import {
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
-import { NodeViewConstructor } from 'prosemirror-view';
 import {
   placeholder,
   placeholderEditing,
@@ -52,6 +51,11 @@ import {
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
+import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
+import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
+import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 const nodes = {
   doc,
@@ -95,9 +99,53 @@ export default class IndexController extends Controller {
     dct: 'http://purl.org/dc/terms/',
   };
 
+  insertVariableWidgetOptions = {
+    defaultEndpoint: 'https://dev.roadsigns.lblod.info/sparql',
+    variableTypes: [
+      'text',
+      'number',
+      'date',
+      'codelist',
+      {
+        label: 'Dummy Variable',
+        fetchSubtypes: () => {
+          const codelists = [
+            {
+              uri: '1',
+              label: '1',
+            },
+            {
+              uri: '2',
+              label: '2',
+            },
+            {
+              uri: '3',
+              label: '3',
+            },
+          ];
+          return codelists;
+        },
+        template: (endpoint: string, selectedCodelist: CodeList) => `
+          <span property="ext:codelist" resource="${
+            selectedCodelist.uri ?? ''
+          }"></span>
+          <span property="dct:type" content="location"></span>
+          <span property="dct:source" resource="${endpoint}"></span>
+          <span property="ext:content" datatype="xsd:date">
+            <span class="mark-highlight-manual">\${${
+              selectedCodelist.label ?? ''
+            }}</span>
+          </span>
+        `,
+      },
+    ],
+  };
+
   @tracked rdfaEditor?: ProseController;
-  @tracked nodeViews: Record<string, NodeViewConstructor> = {
-    placeholder: placeholderView,
+  @tracked nodeViews = () => {
+    return {
+      placeholder: placeholderView,
+    };
   };
   @tracked plugins: Plugin[] = [placeholderEditing(), tablePlugin];
   @tracked widgets: WidgetSpec[] = [
@@ -108,6 +156,9 @@ export default class IndexController extends Controller {
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
     standardTemplateWidget,
+    roadSignRegulationWidget,
+    insertVariableWidget(this.insertVariableWidgetOptions),
+    templateVariableWidget,
   ];
   schema: Schema = dummySchema;
 
@@ -119,7 +170,7 @@ export default class IndexController extends Controller {
   prefixToAttrString(prefix: Record<string, string>) {
     let attrString = '';
     Object.keys(prefix).forEach((key) => {
-      const uri = prefix[key]!;
+      const uri = unwrap(prefix[key]);
       attrString += `${key}: ${uri} `;
     });
     return attrString;
