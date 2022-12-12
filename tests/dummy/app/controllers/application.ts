@@ -45,7 +45,10 @@ import {
 import { service } from '@ember/service';
 import importRdfaSnippet from 'dummy/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import BesluitPlugin from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
+import {
+  besluitPluginCardWidget,
+  besluitContextCardWidget,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
   rdfaDateCardWidget,
@@ -103,7 +106,8 @@ export default class IndexController extends Controller {
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
-    BesluitPlugin,
+    besluitContextCardWidget(),
+    besluitPluginCardWidget(),
     importSnippetWidget,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,

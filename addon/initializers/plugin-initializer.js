@@ -42,7 +42,6 @@ export function initialize(application) {
   // application.register('plugin:citaten', pluginFactory(CitatenPlugin), {
   //   singleton: false,
   // });
-
   // application.register(
   //   'plugin:table-of-contents',
   //   pluginFactory(TableOfContentsPlugin),
@@ -58,7 +57,6 @@ export function initialize(application) {
   //   pluginFactory(RoadSignRegulationPlugin),
   //   { singleton: false }
   // );
-
   // application.register(
   //   'plugin:template-variable',
   //   pluginFactory(TemplateVariablePlugin),

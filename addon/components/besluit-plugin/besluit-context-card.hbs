@@ -4,7 +4,7 @@
     @size="flush" as |c|>
     <c.header class="au-u-hidden-visually">
       <AuHeading @level="3" @skin="6">
-        {{t "card.title"}}
+        {{t "besluit-plugin.card.title"}}
       </AuHeading>
     </c.header>
     <c.content class="au-c-content--small">
@@ -15,7 +15,7 @@
             @iconAlignment="left"
             @skin="link"
             {{on 'click' this.deleteArticle}}>
-            {{t "action.delete-article"}}
+            {{t "besluit-plugin.action.delete-article"}}
           </AuButton>
         </AuList::Item>
         <AuList::Item>
@@ -24,7 +24,7 @@
             @iconAlignment="left"
             @skin="link"
             {{on 'click' this.moveUpArticle}}>
-            {{t "action.article-up"}}
+            {{t "besluit-plugin.action.article-up"}}
           </AuButton>
         </AuList::Item>
         <AuList::Item>
@@ -33,7 +33,7 @@
             @iconAlignment="left"
             @skin="link"
             {{on 'click' this.moveDownArticle}}>
-            {{t "action.article-down"}}
+            {{t "besluit-plugin.action.article-down"}}
           </AuButton>
         </AuList::Item>
       </AuList>

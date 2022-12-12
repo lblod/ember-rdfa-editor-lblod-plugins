@@ -1,39 +1,42 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { getTitleForDecision } from '../utils/get-title-for-decision';
+import { getTitleForDecision } from '../../utils/besluit-plugin/get-title-for-decision';
+import { InsertArticleCommand } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-article-command';
+import { InsertTitleCommand } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-title-command';
 
 export default class BesluitPluginCardComponent extends Component {
   @tracked hasTitle = true;
   @tracked disableArticleInsert = true;
 
-  constructor() {
-    super(...arguments);
-    this.args.controller.onEvent(
-      'selectionChanged',
-      this.selectionChangedHandler
-    );
+  constructor(parent, args) {
+    super(parent, args);
+  }
+
+  get controller() {
+    return this.args.controller;
   }
 
   @action
   insertArticle() {
-    this.args.controller.executeCommand('insert-article', this.args.controller);
+    InsertArticleCommand(this.controller, '', '');
   }
 
   @action
   insertTitle() {
-    this.args.controller.executeCommand('insert-title', this.args.controller);
+    InsertTitleCommand(this.controller, '');
   }
 
   @action
   selectionChangedHandler() {
-    const selectedRange = this.args.controller.selection.lastRange;
-    if (!selectedRange) {
+    const currentSelection = this.args.controller.state.selection;
+    if (!currentSelection) {
       return;
     }
     const limitedDatastore = this.args.controller.datastore.limitToRange(
-      selectedRange,
-      'rangeIsInside'
+      this.args.controller.state,
+      currentSelection.from,
+      currentSelection.to
     );
     const besluit = limitedDatastore
       .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
@@ -42,10 +45,7 @@ export default class BesluitPluginCardComponent extends Component {
     if (besluit) {
       this.disableArticleInsert = false;
       this.hasTitle = Boolean(
-        getTitleForDecision(
-          besluit.subject.value,
-          this.args.controller.datastore
-        )
+        getTitleForDecision(besluit.subject.value, this.controller.datastore)
       );
       this.besluitUri = besluit.subject.value;
     } else {
