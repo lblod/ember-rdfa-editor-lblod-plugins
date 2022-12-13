@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
 import {
@@ -35,7 +36,6 @@ import {
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
-import { NodeViewConstructor } from 'prosemirror-view';
 import {
   placeholder,
   placeholderEditing,
@@ -60,6 +60,7 @@ import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-
 import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 
 const nodes = {
   doc: {
@@ -189,6 +190,7 @@ export default class IndexController extends Controller {
 
   @action
   async rdfaEditorInit(controller: ProseController) {
+    applyDevTools(controller.view);
     await this.importRdfaSnippet.downloadSnippet({
       omitCredentials: 'true',
       source:
