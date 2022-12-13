@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
 import {
@@ -182,6 +183,7 @@ export default class IndexController extends Controller {
 
   @action
   async rdfaEditorInit(controller: ProseController) {
+    applyDevTools(controller.view);
     await this.importRdfaSnippet.downloadSnippet({
       omitCredentials: 'true',
       source:
