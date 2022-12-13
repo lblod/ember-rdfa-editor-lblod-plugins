@@ -3,8 +3,10 @@ import Component from '@glimmer/component';
 import { TableOfContentsConfig } from '../../../constants';
 import { Node as PNode } from 'prosemirror-model';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { Selection } from 'prosemirror-state';
 type OutlineEntry = {
   content: string;
+  pos: number;
   children?: OutlineEntry[];
 };
 export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
@@ -13,13 +15,16 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   }
 
   get outline() {
-    const entries = this.extractOutline(this.args.controller.state.doc);
+    const entries = this.extractOutline({
+      node: this.args.controller.state.doc,
+      pos: -1,
+    });
     return {
       entries,
     };
   }
 
-  extractOutline(node: PNode): OutlineEntry[] {
+  extractOutline({ node, pos }: { node: PNode; pos: number }): OutlineEntry[] {
     let result: OutlineEntry[] = [];
     let parent: OutlineEntry | undefined;
     const attributes = node.attrs;
@@ -32,7 +37,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
           )
         ) {
           if (typeof tocConfigEntry.value === 'string') {
-            parent = { content: tocConfigEntry.value };
+            parent = { content: tocConfigEntry.value, pos };
             break;
           } else {
             const nodes = [
@@ -48,6 +53,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
             if (resolvedNode) {
               parent = {
                 content: resolvedNode.node.textContent,
+                pos: resolvedNode.pos?.pos ?? -1,
               };
               break;
             }
@@ -56,8 +62,10 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       }
     }
     const subResults: OutlineEntry[] = [];
-    node.content.forEach((child) => {
-      subResults.push(...this.extractOutline(child));
+    node.forEach((child, offset) => {
+      subResults.push(
+        ...this.extractOutline({ node: child, pos: pos + 1 + offset })
+      );
     });
     if (parent) {
       parent.children = subResults;
@@ -69,10 +77,15 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   }
 
   @action
-  moveToSection() {
-    console.warn('Move to section is currently not implemented');
-    // const range = this.args.editorController.rangeFactory.fromInNode(node, 0);
-    // this.args.editorController.selection.selectRange(range);
-    // this.args.editorController.write(true, true);
+  moveToPosition(pos: number) {
+    this.args.controller.withTransaction((tr) => {
+      const resolvedPos = this.args.controller.state.doc.resolve(pos);
+      const selection = Selection.near(resolvedPos, 1);
+      if (selection) {
+        tr.setSelection(selection);
+        tr.scrollIntoView();
+      }
+      return tr;
+    });
   }
 }

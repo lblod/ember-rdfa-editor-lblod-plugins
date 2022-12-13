@@ -6,7 +6,7 @@
         {{! template-lint-disable no-capital-arguments }}
         @block={{true}}
         @skin='link-secondary'
-        onclick={{@onEntryClick}}
+        onclick={{(fn @onEntryClick outlineEntry.pos)}}
       >
         {{outlineEntry.content}}
       </AuButton>
