@@ -9,7 +9,6 @@ type OutlineEntry = {
 };
 export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   get config() {
-    console.log('GET CONFIG');
     return this.args.node.attrs['config'] as TableOfContentsConfig;
   }
 
@@ -21,7 +20,6 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   }
 
   extractOutline(node: PNode): OutlineEntry[] {
-    console.log('EXTRACT OUTLINE');
     let result: OutlineEntry[] = [];
     let parent: OutlineEntry | undefined;
     const attributes = node.attrs;
@@ -33,13 +31,10 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
             properties.includes(pred)
           )
         ) {
-          console.log('MATCH');
           if (typeof tocConfigEntry.value === 'string') {
             parent = { content: tocConfigEntry.value };
             break;
           } else {
-            console.log('RESOURCE: ', attributes['resource']);
-            console.log('PREDICATE: ', tocConfigEntry.value.predicate);
             const nodes = [
               ...this.args.controller.datastore
                 .match(
@@ -50,7 +45,6 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
                 .nodes(),
             ];
             const resolvedNode = nodes[0];
-            console.log('NODES: ', nodes);
             if (resolvedNode) {
               parent = {
                 content: resolvedNode.node.textContent,
