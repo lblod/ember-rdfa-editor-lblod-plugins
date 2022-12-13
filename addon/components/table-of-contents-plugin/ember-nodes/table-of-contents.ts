@@ -1,9 +1,9 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { TableOfContentsConfig } from '../../../constants';
-import { Node as PNode } from 'prosemirror-model';
+import { PNode } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { Selection } from 'prosemirror-state';
+import { Selection } from '@lblod/ember-rdfa-editor';
 type OutlineEntry = {
   content: string;
   pos: number;
@@ -14,9 +14,13 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
     return this.args.node.attrs['config'] as TableOfContentsConfig;
   }
 
+  get controller() {
+    return this.args.controller;
+  }
+
   get outline() {
     const entries = this.extractOutline({
-      node: this.args.controller.state.doc,
+      node: this.controller.state.doc,
       pos: -1,
     });
     return {
@@ -78,8 +82,8 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
 
   @action
   moveToPosition(pos: number) {
-    this.args.controller.withTransaction((tr) => {
-      const resolvedPos = this.args.controller.state.doc.resolve(pos);
+    this.controller.withTransaction((tr) => {
+      const resolvedPos = tr.doc.resolve(pos);
       const selection = Selection.near(resolvedPos, 1);
       if (selection) {
         tr.setSelection(selection);

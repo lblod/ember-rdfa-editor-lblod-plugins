@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { DOMParser as ProseParser } from 'prosemirror-model';
+import { ProseParser } from '@lblod/ember-rdfa-editor';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { RdfaSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';

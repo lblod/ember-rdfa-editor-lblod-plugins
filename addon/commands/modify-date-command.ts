@@ -1,4 +1,4 @@
-import { Command } from 'prosemirror-state';
+import { Command } from '@lblod/ember-rdfa-editor';
 
 function formatDate(date: Date, onlyDate: boolean) {
   const options: Intl.DateTimeFormatOptions = {
