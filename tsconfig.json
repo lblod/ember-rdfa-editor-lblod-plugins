@@ -13,7 +13,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": false,
     "noPropertyAccessFromIndexSignature": true,
     "noEmitOnError": false,

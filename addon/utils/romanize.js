@@ -1,5 +1,5 @@
 function romanize(num) {
-  if (isNaN(num)) return NaN;
+  if (isNaN(num)) throw new Error('Provided number is NaN');
   let digits = String(+num).split('');
   let key = [
     '',

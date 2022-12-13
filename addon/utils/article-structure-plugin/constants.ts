@@ -1,6 +1,23 @@
+import IntlService from 'ember-intl/services/intl';
 import romanize from '../romanize';
 
-export const STRUCTURES = {
+export type Structure = {
+  uriBase: string;
+  title: string;
+  type: string;
+  numberPredicate: string;
+  numbering?: string;
+  numberingFunction?: (num: number) => string;
+  heading?: string;
+  translation: string;
+  moveUp: string;
+  moveDown: string;
+  insertPredicate: string;
+  shaclConstraint: string;
+  template: (uri: string, intlService: IntlService) => string;
+};
+
+export const STRUCTURES: Record<string, Structure> = {
   title: {
     uriBase: 'http://data.lblod.info/titles/',
     title: 'Title',
