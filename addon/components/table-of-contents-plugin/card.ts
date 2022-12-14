@@ -4,7 +4,7 @@ import {
   TableOfContentsConfig,
   TABLE_OF_CONTENTS_DEFAULT_CONFIG,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/constants';
-import { ProseController } from '@lblod/ember-rdfa-editor/addon/core/prosemirror';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 type Args = {
   controller: ProseController;
@@ -16,10 +16,6 @@ type Args = {
 export default class TableOfContentsCardComponent extends Component<Args> {
   get toggled() {
     return !!this.tableOfContentsRange;
-  }
-
-  set toggled(value: boolean) {
-    
   }
 
   get controller() {

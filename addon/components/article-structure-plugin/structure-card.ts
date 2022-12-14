@@ -1,11 +1,12 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { ProseController } from '@lblod/ember-rdfa-editor/addon';
+import { ProseController } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
 import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
 import deleteNodeFromURI from '@lblod/ember-rdfa-editor-lblod-plugins/commands/delete-node-from-uri-command';
+import moveStructureV2 from '@lblod/ember-rdfa-editor-lblod-plugins/commands/move-structure-command-v2';
+import { validateDatastore } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-article-structure-v2';
 
 type Args = {
   controller: ProseController;
@@ -18,30 +19,30 @@ type Args = {
 };
 
 export default class EditorPluginsStructureCardComponent extends Component<Args> {
-  // @tracked canMoveUp = false;
-  // @tracked canMoveDown = false;
-
-  // constructor() {
-  //   super(...arguments);
-  //   this.args.controller.onEvent(
-  //     'selectionChanged',
-  //     this.selectionChangedHandler
-  //   );
-  // }
-
   get controller() {
     return this.args.controller;
   }
 
   @action
-  moveStructure(moveUp: boolean) {
-    this.controller.executeCommand(
-      'move-structure-v2',
-      this.args.controller,
-      this.structureUri,
-      moveUp,
-      this.args.widgetArgs.options
+  async moveStructure(moveUp: boolean) {
+    const structureToMove = this.args.widgetArgs.options.structures.find(
+      (structure) => structure === this.structureTypeSelected
     );
+    if (structureToMove && this.structureUri) {
+      const shaclReport = await validateDatastore(
+        this.controller.datastore,
+        structureToMove.shaclConstraint
+      );
+      this.controller.doCommand(
+        moveStructureV2(
+          this.controller,
+          this.structureUri,
+          moveUp,
+          this.args.widgetArgs.options,
+          shaclReport
+        )
+      );
+    }
   }
 
   @action
@@ -114,23 +115,47 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     return !this.structureUri;
   }
 
-  canMoveDown = trackedFunction(async () => {
-    return this.args.controller.canExecuteCommand(
-      'move-structure-v2',
-      this.args.controller,
-      this.structureUri,
-      false,
-      this.args.widgetArgs.options
+  canMoveDown = trackedFunction(this, async () => {
+    const structureToMove = this.args.widgetArgs.options.structures.find(
+      (structure) => structure === this.structureTypeSelected
     );
+    if (structureToMove && this.structureUri) {
+      const shaclReport = await validateDatastore(
+        this.controller.datastore,
+        structureToMove.shaclConstraint
+      );
+      return this.controller.checkCommand(
+        moveStructureV2(
+          this.controller,
+          this.structureUri,
+          false,
+          this.args.widgetArgs.options,
+          shaclReport
+        )
+      );
+    }
+    return false;
   });
 
-  canMoveUp = trackedFunction(async () => {
-    return await this.args.controller.canExecuteCommand(
-      'move-structure-v2',
-      this.args.controller,
-      this.structureUri,
-      true,
-      this.args.widgetArgs.options
+  canMoveUp = trackedFunction(this, async () => {
+    const structureToMove = this.args.widgetArgs.options.structures.find(
+      (structure) => structure === this.structureTypeSelected
     );
+    if (structureToMove && this.structureUri) {
+      const shaclReport = await validateDatastore(
+        this.controller.datastore,
+        structureToMove.shaclConstraint
+      );
+      return this.controller.checkCommand(
+        moveStructureV2(
+          this.controller,
+          this.structureUri,
+          true,
+          this.args.widgetArgs.options,
+          shaclReport
+        )
+      );
+    }
+    return false;
   });
 }

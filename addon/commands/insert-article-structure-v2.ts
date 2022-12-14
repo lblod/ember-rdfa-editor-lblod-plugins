@@ -7,11 +7,11 @@ import { PNode, ProseController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { Command } from 'prosemirror-state';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { Readable } from 'readable-stream';
-import { ProseStore } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
+import { Readable } from 'stream-browserify';
+import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { nodesBetween } from '@lblod/ember-rdfa-editor/utils/position-utils';
-import { insertHtml } from '@lblod/ember-rdfa-editor/addon/commands/insert-html-command';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import recalculateStructureNumbersV2 from './recalculate-structure-numbers-command-v2';
 import { Structure } from '../utils/article-structure-plugin/constants';
 
@@ -55,7 +55,7 @@ export default function insertArticleStructureV2(
       (result) => result.focusNode?.value
     );
     const { selection } = controller.state;
-    const filterFunction = (node: PNode) => {
+    const filterFunction = ({ node }: { node: PNode }) => {
       const nodeUri = node.attrs['resource'] as string | undefined;
       if (nodeUri && !urisNotAllowedToInsert.includes(nodeUri)) {
         return true;

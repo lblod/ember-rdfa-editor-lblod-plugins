@@ -61,6 +61,10 @@ import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plu
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
+import {
+  articleStructureContextWidget,
+  articleStructureInsertWidget,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 
 const nodes = {
   doc: {
@@ -171,6 +175,8 @@ export default class IndexController extends Controller {
     roadSignRegulationWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
+    articleStructureInsertWidget(),
+    articleStructureContextWidget(),
   ];
   schema: Schema = dummySchema;
 

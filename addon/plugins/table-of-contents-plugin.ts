@@ -1,4 +1,4 @@
-import { WidgetSpec } from '@lblod/ember-rdfa-editor/addon';
+import { WidgetSpec } from '@lblod/ember-rdfa-editor';
 import { TableOfContentsConfig } from '../constants';
 
 export function tableOfContentsWidget(

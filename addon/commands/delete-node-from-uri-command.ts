@@ -1,5 +1,5 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor/addon/utils/option';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { Command } from 'prosemirror-state';
 import { Structure } from '../utils/article-structure-plugin/constants';
 import recalculateStructureNumbersV2 from './recalculate-structure-numbers-command-v2';

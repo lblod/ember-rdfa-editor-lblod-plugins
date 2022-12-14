@@ -57,7 +57,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
             if (resolvedNode) {
               parent = {
                 content: resolvedNode.node.textContent,
-                pos: resolvedNode.pos?.pos ?? -1,
+                pos: resolvedNode.pos,
               };
               break;
             }

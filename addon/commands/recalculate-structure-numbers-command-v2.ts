@@ -1,11 +1,11 @@
-import { ProseController } from '@lblod/ember-rdfa-editor/addon';
+import { ProseController } from '@lblod/ember-rdfa-editor';
 import defaults from '../utils/article-structure-plugin/defaults';
 import { Command } from 'prosemirror-state';
 import {
   ProseStore,
   ResolvedPNode,
-} from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
-import { expect, unwrap } from '@lblod/ember-rdfa-editor/addon/utils/option';
+} from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
+import { expect, unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { Structure } from '../utils/article-structure-plugin/constants';
 
 export default function recalculateStructureNumbersV2(
