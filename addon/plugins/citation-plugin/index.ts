@@ -6,7 +6,9 @@ import {
   ProsePlugin,
   Schema,
 } from '@lblod/ember-rdfa-editor';
-import processMatch from './utils/processMatch';
+import processMatch, {
+  RegexpMatchArrayWithIndices,
+} from './utils/process-match';
 import {
   InlineDecorationSpec,
   WidgetSpec,
@@ -20,10 +22,33 @@ import { datastoreKey } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { ProseStore } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
+
+// Regex nicely structured:
+// (
+//   (
+//     \w*decreet |
+//     omzendbrief |
+//     verdrag |
+//     grondwetswijziging |
+//     samenwerkingsakkoord |
+//     \w*wetboek |
+//     protocol |
+//     besluit[^\S\n]van[^\S\n]de[^\S\n]vlaamse[^\S\n]regering |
+//     geco[öo]rdineerde wetten |
+//     \w*wet |
+//     koninklijk[^\S\n]?besluit |
+//     ministerieel[^\S\n]?besluit |
+//     genummerd[^\S\n]?koninklijk[^\S\n]?besluit
+//   )
+//   [^\S\n]*
+//   (
+//     ([^\S\n] | [\u0021-\uFFFF\d;:'"()&\-_]){3,}
+//   )?
+// )
 const NNWS = '[^\\S\\n]';
-const CITATION_REGEX = new RegExp(
-  `((\\w*decreet|omzendbrief|verdrag|grondwetswijziging|samenwerkingsakkoord|\\w*wetboek|protocol|besluit${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering|geco[öo]rdineerde${NNWS}wetten|\\w*wet|koninklijk${NNWS}?besluit|ministerieel${NNWS}?besluit|genummerd${NNWS}?koninklijk${NNWS}?besluit|\\w*${NNWS}?besluit)${NNWS}*((${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
-  'uig'
+export const CITATION_REGEX = new RegExp(
+  `((?<type>\\w*decreet|omzendbrief|verdrag|grondwetswijziging|samenwerkingsakkoord|\\w*wetboek|protocol|besluit${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering|geco[öo]rdineerde${NNWS}wetten|\\w*wet|koninklijk${NNWS}?besluit|ministerieel${NNWS}?besluit|genummerd${NNWS}?koninklijk${NNWS}?besluit|\\w*${NNWS}?besluit)${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
+  'uidg'
 );
 export type CitationSchema = Schema<string, 'citation'>;
 
@@ -56,26 +81,29 @@ function calculateDecorations(
         !schema.marks.citation.isInSet(node.marks)
       ) {
         for (const match of node.text.matchAll(CITATION_REGEX)) {
-          const { text, legislationTypeUri } = processMatch(match);
-          console.log(legislationTypeUri);
-          const index = unwrap(match.index);
-          decorations.push(
-            Decoration.inline(
-              pos + unwrap(motivationNode.pos?.pos) + 1 + index,
-              pos +
-                unwrap(motivationNode.pos?.pos) +
-                1 +
-                index +
-                match[0].length,
-              {
-                'data-editor-highlight': 'true',
-              },
-              {
-                searchText: text,
-                legislationTypeUri,
-              }
-            )
+          const processedMatch = processMatch(
+            match as RegexpMatchArrayWithIndices
           );
+
+          if (processedMatch) {
+            const { text, legislationTypeUri, searchTextMatch } =
+              processedMatch;
+            const { start, end } = searchTextMatch;
+            decorations.push(
+              Decoration.inline(
+                pos + unwrap(motivationNode.pos?.pos) + 1 + start,
+                pos + unwrap(motivationNode.pos?.pos) + 1 + end,
+
+                {
+                  'data-editor-highlight': 'true',
+                },
+                {
+                  searchText: text,
+                  legislationTypeUri,
+                }
+              )
+            );
+          }
         }
       }
     });

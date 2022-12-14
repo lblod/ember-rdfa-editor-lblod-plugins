@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-// import { task } from 'ember-concurrency-decorators';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
@@ -25,44 +24,14 @@ import {
   citationKey,
   CitationSchema,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-import { ProseController } from '@lblod/ember-rdfa-editor';
-import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
-
-const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
-
-// Regex nicely structured:
-// (
-//   (
-//     \w*decreet |
-//     omzendbrief |
-//     verdrag |
-//     grondwetswijziging |
-//     samenwerkingsakkoord |
-//     \w*wetboek |
-//     protocol |
-//     besluit[^\S\n]van[^\S\n]de[^\S\n]vlaamse[^\S\n]regering |
-//     geco[öo]rdineerde wetten |
-//     \w*wet |
-//     koninklijk[^\S\n]?besluit |
-//     ministerieel[^\S\n]?besluit |
-//     genummerd[^\S\n]?koninklijk[^\S\n]?besluit
-//   )
-//   [^\S\n]*
-//   (
-//     ([^\S\n] | [\u0021-\uFFFF\d;:'"()&\-_]){3,}
-//   )?
-// )
-const NNWS = '[^\\S\\n]';
-const CITATION_REGEX = new RegExp(
-  `((\\w*decreet|omzendbrief|verdrag|grondwetswijziging|samenwerkingsakkoord|\\w*wetboek|protocol|besluit${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering|geco[öo]rdineerde${NNWS}wetten|\\w*wet|koninklijk${NNWS}?besluit|ministerieel${NNWS}?besluit|genummerd${NNWS}?koninklijk${NNWS}?besluit|\\w*${NNWS}?besluit)${NNWS}*((${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
-  'uig'
-);
+import { ProseController, Transaction } from '@lblod/ember-rdfa-editor';
+import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 
 interface Args {
   controller: ProseController;
 }
 
-export default class CitaatCardComponent extends Component<Args> {
+export default class CitationCardComponent extends Component<Args> {
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
   @tracked totalSize = 0;
@@ -71,7 +40,8 @@ export default class CitaatCardComponent extends Component<Args> {
   @tracked error: unknown;
   @tracked showModal = false;
   @tracked decision: Decision | null = null;
-  @tracked textAfterTimeout = '';
+  @tracked cardText: string | null = null;
+  @tracked cardLegislationType: string | null = null;
 
   get controller(): ProseController {
     return this.args.controller;
@@ -106,49 +76,55 @@ export default class CitaatCardComponent extends Component<Args> {
     return decorations.find(from, to)[0];
   }
 
-  get legislationTypeUri(): Option<string> {
+  get documentLegislationType(): Option<string> {
     return this.activeDecoration?.spec.legislationTypeUri;
   }
 
-  get text(): Option<string> {
+  get documentText(): Option<string> {
     return this.activeDecoration?.spec.searchText;
+  }
+
+  get searchText(): string {
+    return (this.cardText ?? this.documentText) || '';
   }
 
   get legislationTypes() {
     return Object.keys(LEGISLATION_TYPES).map(capitalize);
   }
 
-  get legislationSelected() {
-    const found = LEGISLATION_TYPE_CONCEPTS.find(
-      (c) => c.value === this.legislationTypeUri
-    );
-    return capitalize(
-      found ? found.label : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).label
-    );
+  get selectedLegislationType() {
+    const type = this.cardLegislationType || this.documentLegislationType;
+    const found = LEGISLATION_TYPE_CONCEPTS.find((c) => c.value === type);
+    return found || unwrap(LEGISLATION_TYPE_CONCEPTS[0]);
   }
 
-  updateSearch = restartableTask(async () => {
-    await timeout(500);
-    this.textAfterTimeout = this.text ?? '';
-  });
+  get selectedLegislationTypeLabel(): string {
+    return capitalize(this.selectedLegislationType.label);
+  }
 
-  @action
-  updateSearchImmediate() {
-    this.textAfterTimeout = this.text ?? '';
+  get selectedLegislationTypeUri(): string {
+    return this.selectedLegislationType.value;
+  }
+
+  @action resetToDocumentState(): void {
+    this.cardText = null;
+    this.cardLegislationType = null;
+  }
+
+  @action onCardTextChange(event: InputEvent): void {
+    this.cardText = (event.target as HTMLInputElement).value;
   }
 
   resourceSearch = restartableTask(async () => {
+    await timeout(100);
     this.error = null;
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    await undefined; //To prevent other variables used below (this.text and this.legislationTypeUri) to trigger a retrigger.
     const abortController = new AbortController();
     try {
       // Split search string by grouping on non-whitespace characters
       // This probably needs to be more complex to search on group of words
-      const words =
-        (this.textAfterTimeout || this.text || '').match(/\S+/g) || [];
+      const words = this.searchText.match(/\S+/g) || [];
       const filter = {
-        type: unwrapOr('', this.legislationTypeUri),
+        type: unwrapOr('', this.selectedLegislationTypeUri),
       };
       const results = await fetchDecisions(
         words,
@@ -170,7 +146,8 @@ export default class CitaatCardComponent extends Component<Args> {
   });
 
   decisionResource = trackedTask(this, this.resourceSearch, () => [
-    this.textAfterTimeout,
+    this.searchText,
+    this.selectedLegislationType,
     this.pageNumber,
     this.pageSize,
   ]);
@@ -181,67 +158,80 @@ export default class CitaatCardComponent extends Component<Args> {
     const found = LEGISLATION_TYPE_CONCEPTS.find(
       (c) => c.label.toLowerCase() === type
     );
-    // this.legislationTypeUri = found
-    //   ? found.value
-    //   : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).value;
+    this.cardLegislationType = found
+      ? found.value
+      : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).value;
   }
 
   @action
-  openDecisionDetailModal(decision: Decision) {
+  openDecisionDetailModal(decision: Decision): void {
     this.decision = decision;
+    /** why focus? see {@link EditorPluginsCitationInsertComponent.openModal } */
+    this.focus();
     this.showModal = true;
   }
 
   @action
-  async openSearchModal() {
+  async openSearchModal(): Promise<void> {
     await this.decisionResource.cancel();
     this.decision = null;
+    this.focus();
     this.showModal = true;
   }
 
   @action
-  async closeModal(lastSearchType: string, lastSearchTerm: string) {
+  closeModal(lastSearchType: string, lastSearchTerm: string): void {
     this.showModal = false;
     this.decision = null;
     if (lastSearchType) {
-      // this.legislationTypeUri = lastSearchType;
+      this.cardLegislationType = lastSearchType;
     }
     if (lastSearchTerm) {
-      // this.text = lastSearchTerm;
-    }
-    if (lastSearchType || lastSearchTerm) {
-      this.updateSearchImmediate();
+      this.cardText = lastSearchTerm;
     }
   }
 
   @action
-  insertDecisionCitation(decision: Decision) {
-    const type = decision.legislationType?.label;
+  insertDecisionCitation(decision: Decision): void {
     const uri = decision.uri;
     const title = decision.title ?? '';
-    const { from, to } = unwrap(this.selectedMarkRange);
-    const citationHtml = `${
-      type ? type : ''
-    } <a class="annotation" href="${uri}" property="eli:cites" typeof="eli:LegalExpression">${title}</a>&nbsp;`;
-    this.controller.doCommand(insertHtml(citationHtml, from, to));
+    const { from, to } = unwrap(this.activeDecoration);
+    this.controller.withTransaction((tr: Transaction) =>
+      tr
+        .replaceRangeWith(
+          from,
+          to,
+          citedText(this.controller.schema, title, uri)
+        )
+        .scrollIntoView()
+    );
   }
 
   @action
-  insertArticleCitation(decision: Decision, article: Article) {
-    const type = decision.legislationType?.label;
+  insertArticleCitation(decision: Decision, article: Article): void {
     const uri = article.uri;
     let title = '';
     if (decision.title) {
       title = `${decision.title}, ${article.number || ''}`;
     }
-    const { from, to } = unwrap(this.selectedMarkRange);
-    const citationHtml = `${
-      type ? type : ''
-    } <a class="annotation" href="${uri}" property="eli:cites" typeof="eli:LegalExpression">${title}</a>&nbsp;`;
-    this.controller.doCommand(insertHtml(citationHtml, from, to));
+    const { from, to } = unwrap(this.activeDecoration);
+    this.controller.withTransaction((tr: Transaction) =>
+      tr
+        .replaceRangeWith(
+          from,
+          to,
+          citedText(this.controller.schema, title, uri)
+        )
+        .scrollIntoView()
+    );
   }
 
-  willDestroy() {
+  @action
+  focus(): void {
+    this.controller.focus();
+  }
+
+  willDestroy(): void {
     // Not necessary as ember-concurrency does this for us.
     // this.decisionResource.cancel();
     cleanCaches();

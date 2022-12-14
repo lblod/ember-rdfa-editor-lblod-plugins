@@ -47,9 +47,9 @@
         </div>
       {{else}}
         {{#if this.error}}
-          <CitatenPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
+          <CitationPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
         {{else}}
-          <CitatenPlugin::Citations::ArticleList
+          <CitationPlugin::Citations::ArticleList
             @insertArticleCitation={{fn @insertArticleCitation @decision}}
             @articles={{this.articleResource.value}}
             @fullSize={{true}}/>

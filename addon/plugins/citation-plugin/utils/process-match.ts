@@ -3,19 +3,45 @@ import {
   LEGISLATION_TYPES,
   LegislationKey,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/legislation-types';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const STOP_WORDS = ['het', 'de', 'van', 'tot', 'dat'];
 const DATE_REGEX = new RegExp('(\\d{1,2})\\s(\\w+)\\s(\\d{2,4})', 'g');
 const INVISIBLE_SPACE = '\u200B';
 const SPACES_REGEX = new RegExp('[\\s${UNBREAKABLE_SPACE}]+');
+export type RegexpMatchArrayWithIndices = RegExpMatchArray & {
+  indices: Array<[number, number]> & {
+    groups: { [key: string]: [number, number] };
+  };
+};
 
-export default function processMatch(match: RegExpMatchArray): {
+interface ProcessedMatch {
   text: string;
   legislationTypeUri: string;
-} {
-  const matchgroups = match;
-  const type = matchgroups[2];
-  const searchTerms = matchgroups[3];
+  typeMatch: {
+    text: string;
+    start: number;
+    end: number;
+  } | null;
+  searchTextMatch: {
+    text: string;
+    start: number;
+    end: number;
+  };
+}
+
+export default function processMatch(
+  match: RegexpMatchArrayWithIndices
+): ProcessedMatch | null {
+  const matchgroups = match.groups;
+  if (!matchgroups) {
+    return null;
+  }
+  const type = matchgroups['type'];
+  const searchTerms = matchgroups['searchTerms'];
+  if (!type || !searchTerms) {
+    return null;
+  }
   let cleanedSearchTerms = cleanupText(searchTerms)
     .split(SPACES_REGEX)
     .filter(
@@ -52,11 +78,27 @@ export default function processMatch(match: RegExpMatchArray): {
     return {
       text: cleanedSearchTerms,
       legislationTypeUri: typeUri,
+      typeMatch: {
+        text: type,
+        start: unwrap(match.indices.groups['type'])[0],
+        end: unwrap(match.indices.groups['type'])[1],
+      },
+      searchTextMatch: {
+        text: searchTerms,
+        start: unwrap(match.indices.groups['searchTerms'])[0],
+        end: unwrap(match.indices.groups['searchTerms'])[1],
+      },
     };
   } else {
     return {
       text: cleanedSearchTerms,
       legislationTypeUri: LEGISLATION_TYPES['decreet'],
+      typeMatch: null,
+      searchTextMatch: {
+        text: searchTerms,
+        start: unwrap(match.indices.groups['searchTerms'])[0],
+        end: unwrap(match.indices.groups['searchTerms'])[1],
+      },
     };
   }
 }

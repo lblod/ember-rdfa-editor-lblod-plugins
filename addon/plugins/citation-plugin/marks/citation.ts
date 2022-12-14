@@ -22,6 +22,6 @@ export const citation: MarkSpec = {
     },
   ],
   toDOM(node) {
-    return ['a', node.attrs, 0];
+    return ['a', { ...node.attrs, class: 'annotation' }, 0];
   },
 };

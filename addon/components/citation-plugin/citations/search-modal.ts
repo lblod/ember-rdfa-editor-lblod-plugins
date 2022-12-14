@@ -44,8 +44,6 @@ interface Args {
 
 export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
   @service declare intl: IntlService;
-  @tracked text: string;
-  @tracked textAfterTimeout?: string;
   // Vlaamse Codex currently doesn't contain captions and content of decisions
   // @tracked isEnabledSearchCaption = false
   // @tracked isEnabledSearchContent = false
@@ -60,6 +58,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @tracked documentDateTo: Date | null = null;
   @tracked publicationDateFrom: Date | null = null;
   @tracked publicationDateTo: Date | null = null;
+  @tracked inputSearchText: string | null = null;
   minDate = new Date('1930-01-01T12:00:00');
   maxDate = new Date(`${new Date().getFullYear() + 10}-01-01T12:00:00`);
 
@@ -68,7 +67,6 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     this.selectedDecision = this.args.selectedDecision;
     this.legislationTypeUri =
       this.args.legislationTypeUri || LEGISLATION_TYPES['decreet'];
-    this.text = this.args.text;
   }
 
   get datePickerLocalization() {
@@ -101,16 +99,39 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     );
   }
 
+  get text() {
+    return this.args.text;
+  }
+
+  get searchText() {
+    return this.inputSearchText ?? this.text;
+  }
+
+  get rangeStart() {
+    return this.pageNumber * this.pageSize + 1;
+  }
+
+  get rangeEnd() {
+    const end = this.rangeStart + this.pageSize - 1;
+    return end > this.totalCount ? this.totalCount : end;
+  }
+
+  get isFirstPage() {
+    return this.pageNumber == 0;
+  }
+
+  get isLastPage() {
+    return this.rangeEnd == this.totalCount;
+  }
+
   resourceSearch = restartableTask(async () => {
+    await timeout(500);
     this.error = null;
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    await undefined; //To prevent retriggering because of the use of this.text later.
     const abortController = new AbortController();
     try {
       // Split search string by grouping on non-whitespace characters
       // This probably needs to be more complex to search on group of words
-      const words =
-        (this.textAfterTimeout || this.text || '').match(/\S+/g) || [];
+      const words = this.searchText.match(/\S+/g) || [];
       const filter = {
         type: this.legislationTypeUri,
         documentDateFrom: getISODate(this.documentDateFrom),
@@ -138,7 +159,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   });
 
   decisionResource = trackedTask(this, this.resourceSearch, () => [
-    this.textAfterTimeout,
+    this.searchText,
     this.legislationTypeUri,
     this.pageSize,
     this.pageNumber,
@@ -147,11 +168,11 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     this.publicationDateFrom,
     this.publicationDateTo,
   ]);
-  updateSearch = restartableTask(async () => {
-    await timeout(500);
-    this.textAfterTimeout = this.text;
-    this.pageNumber = 0;
-  });
+
+  @action
+  setInputSearchText(event: InputEvent) {
+    this.inputSearchText = (event.target as HTMLInputElement).value;
+  }
 
   @action
   selectLegislationType(type: string) {
@@ -199,17 +220,18 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @action
   async closeModal(legislationTypeUri?: string, text?: string) {
     await this.decisionResource.cancel();
+    this.inputSearchText = null;
     this.args.closeModal(legislationTypeUri, text);
-  }
-
-  @action
-  closeDecisionDetail() {
-    this.selectedDecision = null;
   }
 
   @action
   openDecisionDetail(decision: Decision) {
     this.selectedDecision = decision;
+  }
+
+  @action
+  closeDecisionDetail() {
+    this.selectedDecision = null;
   }
 
   // Pagination
@@ -222,23 +244,6 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @action
   nextPage() {
     ++this.pageNumber;
-  }
-
-  get rangeStart() {
-    return this.pageNumber * this.pageSize + 1;
-  }
-
-  get rangeEnd() {
-    const end = this.rangeStart + this.pageSize - 1;
-    return end > this.totalCount ? this.totalCount : end;
-  }
-
-  get isFirstPage() {
-    return this.pageNumber == 0;
-  }
-
-  get isLastPage() {
-    return this.rangeEnd == this.totalCount;
   }
 }
 
