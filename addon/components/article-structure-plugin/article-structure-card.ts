@@ -4,11 +4,10 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { ProseController } from '@lblod/ember-rdfa-editor';
 import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
-import insertArticleStructureV2, {
-  validateDatastore,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-article-structure-v2';
+import { insertArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/article-structure-plugin';
 import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
+import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
 
 type Args = {
   controller: ProseController;
@@ -31,17 +30,20 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
           this.args.controller.datastore,
           structure.shaclConstraint
         );
+        console.log('STRUCTURE TITLE: ', structure.title);
+        const canExecute = this.args.controller.checkCommand(
+          insertArticleStructure(
+            this.args.controller,
+            structure.title,
+            this.args.widgetArgs.options,
+            shaclReport,
+            this.intl
+          )
+        );
+        console.log('CAN EXECUTE: ', canExecute);
         return {
           ...structure,
-          canExecute: this.args.controller.checkCommand(
-            insertArticleStructureV2(
-              this.args.controller,
-              structure.title,
-              this.args.widgetArgs.options,
-              shaclReport,
-              this.intl
-            )
-          ),
+          canExecute,
         };
       })
     );
@@ -58,7 +60,7 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
         structureToAdd.shaclConstraint
       );
       this.args.controller.doCommand(
-        insertArticleStructureV2(
+        insertArticleStructure(
           this.args.controller,
           structureName,
           this.args.widgetArgs.options,

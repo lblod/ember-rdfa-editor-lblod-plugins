@@ -4,10 +4,11 @@ import { ProseController } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
 import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
-import deleteNodeFromURI from '@lblod/ember-rdfa-editor-lblod-plugins/commands/delete-node-from-uri-command';
-import moveStructureV2 from '@lblod/ember-rdfa-editor-lblod-plugins/commands/move-structure-command-v2';
-import { validateDatastore } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-article-structure-v2';
-
+import {
+  deleteNodeFromUri,
+  moveStructure,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/article-structure-plugin';
+import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
 type Args = {
   controller: ProseController;
   widgetArgs: {
@@ -34,7 +35,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         structureToMove.shaclConstraint
       );
       this.controller.doCommand(
-        moveStructureV2(
+        moveStructure(
           this.controller,
           this.structureUri,
           moveUp,
@@ -49,7 +50,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   removeStructure() {
     if (this.structureUri) {
       this.controller.doCommand(
-        deleteNodeFromURI(
+        deleteNodeFromUri(
           this.controller,
           this.structureUri,
           'structure',
@@ -125,7 +126,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         structureToMove.shaclConstraint
       );
       return this.controller.checkCommand(
-        moveStructureV2(
+        moveStructure(
           this.controller,
           this.structureUri,
           false,
@@ -147,7 +148,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         structureToMove.shaclConstraint
       );
       return this.controller.checkCommand(
-        moveStructureV2(
+        moveStructure(
           this.controller,
           this.structureUri,
           true,

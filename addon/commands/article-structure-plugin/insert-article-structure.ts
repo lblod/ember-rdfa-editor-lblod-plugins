@@ -1,37 +1,14 @@
 import { v4 as uuid } from 'uuid';
-import ParserN3 from '@rdfjs/parser-n3';
-import SHACLValidator from 'rdf-validate-shacl';
-import factory from 'rdf-ext';
 import process from 'process';
 import { PNode, ProseController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { Command } from 'prosemirror-state';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { Readable } from 'stream-browserify';
-import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { nodesBetween } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
-import recalculateStructureNumbersV2 from './recalculate-structure-numbers-command-v2';
-import { Structure } from '../utils/article-structure-plugin/constants';
-
-export async function validateDatastore(
-  datastore: ProseStore,
-  shaclConstraint: unknown
-) {
-  const s = new Readable();
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  s._read = () => {}; // redundant? see update below
-  s.push(shaclConstraint);
-  s.push(null);
-  const parser = new ParserN3({ factory });
-  const shapes = await factory.dataset().import(parser.import(s));
-  const data = datastore.dataset;
-  const validator = new SHACLValidator(shapes, { factory });
-  // eslint-disable-next-line @typescript-eslint/await-thenable
-  const report = await validator.validate(data);
-  return report;
-}
+import recalculateStructureNumbers from './recalculate-structure-numbers';
+import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
 
 export default function insertArticleStructureV2(
   controller: ProseController,
@@ -82,12 +59,15 @@ export default function insertArticleStructureV2(
       const resourceToInsertUri = resourceToInsert.node.attrs[
         'resource'
       ] as string;
-      const nodeToInsertPredicateNodes = controller.datastore
-        .match(`>${resourceToInsertUri}`, `>${structureToAdd.insertPredicate}`)
-        .asPredicateNodeMapping()
-        .single();
-      nodeToInsert =
-        nodeToInsertPredicateNodes && [...nodeToInsertPredicateNodes.nodes][0];
+      nodeToInsert = [
+        ...controller.datastore
+          .match(
+            `>${resourceToInsertUri}`,
+            `>${structureToAdd.insertPredicate}`
+          )
+          .asPredicateNodeMapping()
+          .nodes(),
+      ][0];
     } else {
       nodeToInsert = resourceToInsert;
     }
@@ -112,7 +92,7 @@ export default function insertArticleStructureV2(
         to: nodeToInsert.pos + containerNode.nodeSize,
       };
       controller.doCommand(
-        recalculateStructureNumbersV2(
+        recalculateStructureNumbers(
           controller,
           containerRange,
           structureToAdd,

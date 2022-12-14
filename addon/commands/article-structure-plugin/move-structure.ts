@@ -1,15 +1,15 @@
 import { PNode, ProseController } from '@lblod/ember-rdfa-editor';
 import { Command } from 'prosemirror-state';
-import { Structure } from '../utils/article-structure-plugin/constants';
+import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import {
   children,
   nodesBetween,
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
-import recalculateStructureNumbersV2 from './recalculate-structure-numbers-command-v2';
+import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
-export default function moveStructureV2(
+export default function moveStructure(
   controller: ProseController,
   structureURI: string,
   moveUp: boolean,
@@ -87,7 +87,7 @@ export default function moveStructureV2(
           to: structureContainerPos + structureContainer.nodeSize,
         };
         controller.doCommand(
-          recalculateStructureNumbersV2(
+          recalculateStructureNumbers(
             controller,
             containerRange,
             currentStructure,
@@ -138,7 +138,7 @@ function recalculateContinuousStructures(
   for (const structure of options.structures) {
     if (structure.numbering === 'continuous') {
       controller.doCommand(
-        recalculateStructureNumbersV2(controller, null, structure, options)
+        recalculateStructureNumbers(controller, null, structure, options)
       );
     }
   }

@@ -1,8 +1,8 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { Command } from 'prosemirror-state';
-import { Structure } from '../utils/article-structure-plugin/constants';
-import recalculateStructureNumbersV2 from './recalculate-structure-numbers-command-v2';
+import { Structure } from '../../utils/article-structure-plugin/constants';
+import recalculateStructureNumbers from './recalculate-structure-numbers';
 
 export default function deleteNodeFromURI(
   controller: ProseController,
@@ -53,7 +53,7 @@ export default function deleteNodeFromURI(
         options.structures[currentStructureIndex]
       );
       controller.doCommand(
-        recalculateStructureNumbersV2(
+        recalculateStructureNumbers(
           controller,
           containerRange,
           currentStructure,
@@ -76,7 +76,7 @@ function recalculateContinuousStructures(
   for (const structure of options.structures) {
     if (structure.numbering === 'continuous') {
       controller.doCommand(
-        recalculateStructureNumbersV2(controller, null, structure, options)
+        recalculateStructureNumbers(controller, null, structure, options)
       );
     }
   }
