@@ -18,10 +18,6 @@ export default class TableOfContentsCardComponent extends Component<Args> {
     return !!this.tableOfContentsRange;
   }
 
-  set toggled(value: boolean) {
-    
-  }
-
   get controller() {
     return this.args.controller;
   }

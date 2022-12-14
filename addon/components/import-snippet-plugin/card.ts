@@ -36,13 +36,10 @@ export default class ImportSnippetPluginCard extends Component<Args> {
         .asSubjectNodeMapping(),
     ][0]?.nodes[0];
     if (besluitNode) {
-      const { node, pos: resolvedPos } = besluitNode;
-      if (!resolvedPos) {
-        throw new Error('Besluit node should have a position');
-      }
+      const { node, pos } = besluitNode;
       return {
-        from: resolvedPos.pos + node.nodeSize - 1,
-        to: resolvedPos.pos + node.nodeSize - 1,
+        from: pos + node.nodeSize - 1,
+        to: pos + node.nodeSize - 1,
       };
     } else {
       return selection;

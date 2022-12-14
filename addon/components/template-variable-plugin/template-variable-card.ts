@@ -67,14 +67,10 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     if (!mapping) {
       return;
     }
-    const { node: mappingNode, pos: resolvedMappingPos } = unwrap(
-      [[...mapping.nodes][0]][0]
-    );
+    const { node: mappingNode, pos } = unwrap([[...mapping.nodes][0]][0]);
     let insertRange: { from: number; to: number } | undefined;
     mappingNode.descendants((child, relativePos) => {
-      const absolutePos: number = resolvedMappingPos
-        ? resolvedMappingPos.pos + relativePos + 1
-        : relativePos;
+      const absolutePos: number = pos + relativePos + 1;
       if (child.attrs['property'] === 'ext:content') {
         insertRange = {
           from: absolutePos + 1,
