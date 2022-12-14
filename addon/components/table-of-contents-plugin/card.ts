@@ -4,7 +4,7 @@ import {
   TableOfContentsConfig,
   TABLE_OF_CONTENTS_DEFAULT_CONFIG,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/constants';
-import { ProseController } from '@lblod/ember-rdfa-editor/addon/core/prosemirror';
+import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 type Args = {
   controller: ProseController;
