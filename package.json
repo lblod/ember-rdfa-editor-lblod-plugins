@@ -132,7 +132,7 @@
   },
   "peerDependencies": {
     "@appuniversum/ember-appuniversum": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "^1.0.0-alpha.6",
+    "@lblod/ember-rdfa-editor": "^1.0.0-alpha.7",
     "ember-concurrency": "^2.3.7"
   },
   "engines": {

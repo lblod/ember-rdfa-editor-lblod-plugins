@@ -1,25 +1,23 @@
 import {
   Decoration,
   DecorationSet,
+  EditorState,
+  EditorStateConfig,
+  InlineDecorationSpec,
   MarkSpec,
   PNode,
   ProsePlugin,
   Schema,
+  WidgetSpec,
 } from '@lblod/ember-rdfa-editor';
+import {
+  datastoreKey,
+  ProseStore,
+} from '@lblod/ember-rdfa-editor/plugins/datastore';
 import processMatch, {
   RegexpMatchArrayWithIndices,
 } from './utils/process-match';
-import {
-  InlineDecorationSpec,
-  WidgetSpec,
-} from '@lblod/ember-rdfa-editor/addon';
-import { EditorState, EditorStateConfig } from 'prosemirror-state';
-import {
-  expect,
-  unwrapOr,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { datastoreKey } from '@lblod/ember-rdfa-editor/plugins/datastore';
-import { ProseStore } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
+import { expect } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { citation } from './marks/citation';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
@@ -170,8 +168,7 @@ function defaultActiveIn(
     .match(null, 'besluit:motivering')
     .asPredicateNodeMapping()
     .nodes()) {
-    const startPos = unwrapOr(0, pos?.pos);
-    result.push([startPos, startPos + node.nodeSize]);
+    result.push([pos, pos + node.nodeSize]);
   }
   return result;
 }
