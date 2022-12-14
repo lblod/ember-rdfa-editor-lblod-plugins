@@ -2,7 +2,6 @@ import {
   Decoration,
   DecorationSet,
   MarkSpec,
-  PluginKey,
   PNode,
   ProsePlugin,
   Schema,
@@ -118,13 +117,11 @@ interface CitationPluginState {
 }
 
 export type CitationPlugin = ProsePlugin<CitationPluginState>;
-export const citationKey = new PluginKey<CitationPluginState>('citation');
 
 function citationPlugin({
   activeIn = defaultActiveIn,
 }: CitationPluginConfig): CitationPlugin {
   const citation: CitationPlugin = new ProsePlugin({
-    key: citationKey,
     state: {
       init(stateConfig: EditorStateConfig, state: EditorState) {
         const { doc, schema } = state;
