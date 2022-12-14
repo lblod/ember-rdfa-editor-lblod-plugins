@@ -28,7 +28,10 @@ export const STRUCTURES: Record<string, Structure> = {
     translation: 'article-structure-plugin.insert.title',
     moveUp: 'article-structure-plugin.moveUp.title',
     moveDown: 'article-structure-plugin.moveDown.title',
-    insertPredicate: 'http://www.w3.org/ns/prov#value',
+    insertPredicate: {
+      long: 'http://www.w3.org/ns/prov#value',
+      short: 'prov:value',
+    },
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -69,7 +72,10 @@ export const STRUCTURES: Record<string, Structure> = {
     translation: 'article-structure-plugin.insert.chapter',
     moveUp: 'article-structure-plugin.moveUp.chapter',
     moveDown: 'article-structure-plugin.moveDown.chapter',
-    insertPredicate: 'https://say.data.gift/ns/body',
+    insertPredicate: {
+      long: 'https://say.data.gift/ns/body',
+      short: 'say:body',
+    },
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -111,7 +117,10 @@ export const STRUCTURES: Record<string, Structure> = {
     translation: 'article-structure-plugin.insert.heading',
     moveUp: 'article-structure-plugin.moveUp.section',
     moveDown: 'article-structure-plugin.moveDown.section',
-    insertPredicate: 'https://say.data.gift/ns/body',
+    insertPredicate: {
+      long: 'https://say.data.gift/ns/body',
+      short: 'say:body',
+    },
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -153,7 +162,10 @@ export const STRUCTURES: Record<string, Structure> = {
     translation: 'article-structure-plugin.insert.subsection',
     moveUp: 'article-structure-plugin.moveUp.subsection',
     moveDown: 'article-structure-plugin.moveDown.subsection',
-    insertPredicate: 'https://say.data.gift/ns/body',
+    insertPredicate: {
+      long: 'https://say.data.gift/ns/body',
+      short: 'say:body',
+    },
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -193,7 +205,10 @@ export const STRUCTURES: Record<string, Structure> = {
     moveDown: 'article-structure-plugin.moveDown.article',
     type: 'http://data.vlaanderen.be/ns/besluit#Artikel',
     numberPredicate: 'http://data.europa.eu/eli/ontology#number',
-    insertPredicate: 'https://say.data.gift/ns/body',
+    insertPredicate: {
+      long: 'https://say.data.gift/ns/body',
+      short: 'say:body',
+    },
     numbering: 'continuous',
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
@@ -237,7 +252,10 @@ export const STRUCTURES: Record<string, Structure> = {
     moveDown: 'article-structure-plugin.moveDown.paragrah',
     type: 'https://say.data.gift/ns/Paragraph',
     numberPredicate: 'http://data.europa.eu/eli/ontology#number',
-    insertPredicate: 'https://say.data.gift/ns/body',
+    insertPredicate: {
+      long: 'https://say.data.gift/ns/body',
+      short: 'say:body',
+    },
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .

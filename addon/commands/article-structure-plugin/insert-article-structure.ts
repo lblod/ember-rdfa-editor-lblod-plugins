@@ -63,7 +63,7 @@ export default function insertArticleStructureV2(
         ...controller.datastore
           .match(
             `>${resourceToInsertUri}`,
-            `>${structureToAdd.insertPredicate}`
+            `>${structureToAdd.insertPredicate.long}`
           )
           .asPredicateNodeMapping()
           .nodes(),
@@ -80,7 +80,7 @@ export default function insertArticleStructureV2(
       controller.doCommand(
         insertHtml(
           structureHtml,
-          nodeToInsert.pos + 1,
+          nodeToInsert.pos + nodeToInsert.node.nodeSize - 1,
           nodeToInsert.pos + nodeToInsert.node.nodeSize - 1
         )
       );

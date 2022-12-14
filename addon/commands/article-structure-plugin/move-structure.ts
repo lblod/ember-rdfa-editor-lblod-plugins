@@ -1,4 +1,9 @@
-import { PNode, ProseController } from '@lblod/ember-rdfa-editor';
+/* eslint-disable prettier/prettier */
+import {
+  PNode,
+  ProseController,
+  TextSelection,
+} from '@lblod/ember-rdfa-editor';
 import { Command } from 'prosemirror-state';
 import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
@@ -8,6 +13,7 @@ import {
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
 
 export default function moveStructure(
   controller: ProseController,
@@ -56,29 +62,23 @@ export default function moveStructure(
       structures.length > 1
     ) {
       if (dispatch) {
-        const structureA = unwrap(structures[structureIndex]);
-        const bIndex = moveUp ? structureIndex - 1 : structureIndex + 1;
-        const structureB = unwrap(structures[bIndex]);
-        const structureARange = {
-          from: structureA.pos,
-          to: structureA.pos + structureA.node.nodeSize,
-        };
+        let structureA: ResolvedPNode;
+        let structureB: ResolvedPNode;
+        if (moveUp) {
+          structureA = unwrap(structures[structureIndex - 1]);
+          structureB = unwrap(structures[structureIndex]);
+        } else {
+          structureA = unwrap(structures[structureIndex]);
+          structureB = unwrap(structures[structureIndex + 1]);
+        }
         const structureBRange = {
           from: structureB.pos,
           to: structureB.pos + structureB.node.nodeSize,
         };
-        const tr = state.tr;
-        tr.replaceRangeWith(
-          structureBRange.from,
-          structureBRange.to,
-          structureA.node
-        );
-        tr.replaceRangeWith(
-          structureARange.from,
-          structureARange.to,
-          structureB.node
-        );
-        dispatch(tr);
+        controller.withTransaction((tr) => {
+          tr.delete(structureBRange.from, structureBRange.to);
+          return tr.replaceRangeWith(structureA.pos, structureA.pos, structureB.node);
+        });
         const structureContainer = unwrap(
           controller.state.doc.nodeAt(structureContainerPos)
         );
@@ -95,13 +95,19 @@ export default function moveStructure(
           )
         );
         recalculateContinuousStructures(controller, options);
-        // this.model.change(() => {
-        //   const heading = structureAToInsert.children.find(
-        //     (child) => child.getAttribute('property') === 'say:heading'
-        //   );
-        //   const range = controller.rangeFactory.fromInElement(heading, 0, 0);
-        //   controller.selection.selectRange(range);
-        // });
+        const heading = unwrap([
+          ...controller.datastore
+            .match(`>${structureURI}`, 'ext:title')
+            .asPredicateNodeMapping()
+            .nodes(),
+        ][0]);
+        const newSelection = TextSelection.near(
+          controller.state.doc.resolve(heading.pos + heading.node.nodeSize)
+        );
+        controller.withTransaction((tr) => {
+          return tr.setSelection(newSelection);
+        });
+        controller.focus();
       }
 
       return true;
@@ -110,19 +116,101 @@ export default function moveStructure(
         (result) => result.focusNode?.value
       );
       const filterFunction = ({ node }: { node: PNode }) => {
+        const resolvedContainerPos = controller.state.doc.resolve(structureContainerPos);
+        const parent = resolvedContainerPos.parent;
         const nodeUri = node.attrs['resource'] as string;
+
+        if(parent.attrs['resource'] === nodeUri) {
+          return false;
+        }
         return !!nodeUri && !urisNotAllowedToInsert.includes(nodeUri);
       };
       const nodeToInsert = nodesBetween(
         resolvedStructurePos,
-        false,
+        true,
         moveUp,
         filterFunction
-      ).next();
+      ).next().value;
+      console.log('node to insert', nodeToInsert);
       if (!nodeToInsert) {
         return false;
       }
-
+      //Insert structure last place in that structure
+      let structureContent;
+      if (currentStructure.insertPredicate) {
+        structureContent = children(nodeToInsert, false, false, ({ node: child}) => child.attrs['property'] === currentStructure.insertPredicate.short).next().value;
+      } else {
+        structureContent = nodeToInsert;
+      }
+      console.log('insert predicate', currentStructure.insertPredicate);
+      console.log('structure content', structureContent);
+      if(!structureContent){
+        return false;
+      }
+      if(dispatch){
+        let insertRange: {from: number, to: number};
+        if (
+          structureContent.node.childCount === 1 &&
+          structureContent.node.child(0).type === controller.schema.nodes['placeholder']
+        ) {
+          insertRange = {from: structureContent.pos + 1, to: structureContent.pos + structureContent.node.nodeSize - 1};
+        } else {
+          insertRange = {from: structureContent.pos + structureContent.node.nodeSize - 1, to: structureContent.pos + structureContent.node.nodeSize - 1};
+        }
+        
+        let mappedStructureNodePos: number | undefined;
+        controller.withTransaction((tr) => {
+          tr.replaceRangeWith(insertRange.from, insertRange.to, structureNode.node);
+          mappedStructureNodePos = tr.mapping.map(structureNode.pos);
+          return tr.delete(mappedStructureNodePos, mappedStructureNodePos + structureNode.node.nodeSize);
+        });
+        const resolvedStructureNodePos = controller.state.doc.resolve(unwrap(mappedStructureNodePos));
+        const originalContainer = resolvedStructureNodePos.parent;
+        let originalContainerPos = unwrap(resolvedStructurePos.before());
+        if (originalContainer.childCount === 0) {
+          controller.withTransaction((tr) => {
+            return tr.replaceRangeWith(originalContainerPos + 1, originalContainerPos + 1, controller.schema.node('placeholder', { placeholderContent: 'Voer inhoud in'}));
+          });
+        }
+        originalContainerPos = unwrap(resolvedStructurePos.before());
+        
+        const originalContainerUri = resolvedStructureNodePos.node(resolvedStructureNodePos.depth - 1).attrs['resource'] as string;
+        const newContainerUri = nodeToInsert.node.attrs['resource'] as string;
+  
+        const originalContainerNode = unwrap([...controller.datastore.match(`>${originalContainerUri}`).asSubjectNodeMapping().nodes()][0]);
+        const newContainerNode = unwrap([...controller.datastore.match(`>${newContainerUri}`).asSubjectNodeMapping().nodes()][0]);
+        controller.doCommand(
+          recalculateStructureNumbers(
+            controller, 
+            { from: originalContainerNode.pos, to: originalContainerNode.pos + originalContainerNode.node.nodeSize}, 
+            currentStructure,
+            options
+          )
+        );
+        controller.doCommand(
+          recalculateStructureNumbers(
+            controller, 
+            { from: newContainerNode.pos, to: newContainerNode.pos + newContainerNode.node.nodeSize}, 
+            currentStructure,
+            options
+          )
+        );
+        recalculateContinuousStructures(controller, options);
+        const heading = unwrap([
+          ...controller.datastore
+            .match(`>${structureURI}`, 'ext:title')
+            .asPredicateNodeMapping()
+            .nodes(),
+        ][0]);
+        const newSelection = TextSelection.near(
+          controller.state.doc.resolve(heading.pos + heading.node.nodeSize)
+        );
+        controller.withTransaction((tr) => {
+          return tr.setSelection(newSelection);
+        });
+        controller.focus();
+      }
+      
       return true;
     }
   };

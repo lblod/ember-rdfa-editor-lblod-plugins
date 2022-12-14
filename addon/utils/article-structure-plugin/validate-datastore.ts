@@ -10,7 +10,6 @@ export default async function validateDatastore(
 ) {
   const s = new Readable();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  s._read = () => {}; // redundant? see update below
   s.push(shaclConstraint);
   s.push(null);
   const parser = new ParserN3({ factory });

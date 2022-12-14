@@ -36,11 +36,14 @@ export default function recalculateStructureNumbers(
           });
         })
         .asPredicateNodeMapping()
-        .single();
+        .nodes();
       if (!structures) return true;
-      const structuresArray = [...structures.nodes];
-      for (let i = 0; i < structuresArray.length; i++) {
-        const structure = unwrap(structuresArray[i]);
+      const structuresArray = [...structures];
+      const structuresFiltered = [...structuresArray].filter(
+        (node, index) => index === structuresArray.indexOf(node)
+      );
+      for (let i = 0; i < structuresFiltered.length; i++) {
+        const structure = unwrap(structuresFiltered[i]);
         replaceNumberIfNeeded(controller, structure, i, structureType);
       }
     }
