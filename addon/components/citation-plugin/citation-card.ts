@@ -21,14 +21,16 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import {
   CitationDecoration,
-  citationKey,
-  CitationSchema,
+  CitationPlugin,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { ProseController, Transaction } from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 
 interface Args {
   controller: ProseController;
+  widgetArgs: {
+    plugin: CitationPlugin;
+  };
 }
 
 export default class CitationCardComponent extends Component<Args> {
@@ -47,33 +49,21 @@ export default class CitationCardComponent extends Component<Args> {
     return this.args.controller;
   }
 
-  get selectedMarkRange(): { from: number; to: number } | null {
-    const { from, to } = this.args.controller.state.selection;
-
-    let found = false;
-    let result = null;
-    this.controller.state.doc.nodesBetween(from, to, (node, pos) => {
-      if (
-        (this.controller.schema as CitationSchema).marks.citation.isInSet(
-          node.marks
-        )
-      ) {
-        result = { from: pos, to: pos + node.nodeSize };
-        found = true;
-      }
-      return !found;
-    });
-    return result;
-  }
-
   get showCard() {
     return this.activeDecoration;
   }
 
+  get plugin() {
+    return this.args.widgetArgs.plugin;
+  }
+
+  get decorations() {
+    return this.plugin.getState(this.controller.state)?.highlights;
+  }
+
   get activeDecoration(): Option<CitationDecoration> {
-    const decorations = unwrap(citationKey.getState(this.controller.state));
     const { from, to } = this.controller.state.selection;
-    return decorations.find(from, to)[0];
+    return this.decorations?.find(from, to)[0];
   }
 
   get documentLegislationType(): Option<string> {

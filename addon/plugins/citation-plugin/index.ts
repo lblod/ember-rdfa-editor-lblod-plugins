@@ -1,6 +1,7 @@
 import {
   Decoration,
   DecorationSet,
+  MarkSpec,
   PluginKey,
   PNode,
   ProsePlugin,
@@ -16,10 +17,11 @@ import {
 import { EditorState, EditorStateConfig } from 'prosemirror-state';
 import {
   expect,
-  unwrap,
+  unwrapOr,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { datastoreKey } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { ProseStore } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
+import { citation } from './marks/citation';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -61,20 +63,15 @@ export interface CitationDecoration extends Decoration {
   spec: CitationDecorationSpec;
 }
 
-export { citation } from './marks/citation';
-
 function calculateDecorations(
   schema: CitationSchema,
   doc: PNode,
-  datastore: ProseStore
+  activeRanges: [number, number][]
 ) {
   const decorations: Decoration[] = [];
-  const nodes = datastore
-    .match(null, 'besluit:motivering')
-    .asPredicateNodeMapping()
-    .nodes();
-  for (const motivationNode of nodes) {
-    motivationNode.node.descendants((node, pos) => {
+
+  for (const [start, end] of activeRanges) {
+    doc.nodesBetween(start, end, (node: PNode, pos: number): boolean => {
       if (
         node.isText &&
         node.text &&
@@ -88,11 +85,14 @@ function calculateDecorations(
           if (processedMatch) {
             const { text, legislationTypeUri, searchTextMatch } =
               processedMatch;
-            const { start, end } = searchTextMatch;
+            const { start: matchStart, end: matchEnd } = searchTextMatch;
+            console.log(pos);
+            const decorationStart = pos + matchStart;
+            const decorationEnd = pos + matchEnd;
             decorations.push(
               Decoration.inline(
-                pos + unwrap(motivationNode.pos?.pos) + 1 + start,
-                pos + unwrap(motivationNode.pos?.pos) + 1 + end,
+                decorationStart,
+                decorationEnd,
 
                 {
                   'data-editor-highlight': 'true',
@@ -106,56 +106,118 @@ function calculateDecorations(
           }
         }
       }
+      return true;
     });
   }
   return DecorationSet.create(doc, decorations);
 }
 
-export const citationKey = new PluginKey<DecorationSet>('citation');
+interface CitationPluginState {
+  highlights: DecorationSet;
+  activeRanges: [number, number][];
+}
 
-export function citationPlugin(): ProsePlugin {
-  const citation: ProsePlugin<DecorationSet> = new ProsePlugin({
+export type CitationPlugin = ProsePlugin<CitationPluginState>;
+export const citationKey = new PluginKey<CitationPluginState>('citation');
+
+function citationPlugin({
+  activeIn = defaultActiveIn,
+}: CitationPluginConfig): CitationPlugin {
+  const citation: CitationPlugin = new ProsePlugin({
     key: citationKey,
     state: {
       init(stateConfig: EditorStateConfig, state: EditorState) {
         const { doc, schema } = state;
-        // SAFETY: we require that the citationmark is added to the schema
-        return calculateDecorations(
-          schema,
-          doc,
+        const activeRanges = activeIn(
+          state,
           expect(
             'the datastore plugin is required for this plugin',
             datastoreKey.getState(state)
           )
         );
+        return {
+          highlights: calculateDecorations(schema, doc, activeRanges),
+          activeRanges,
+        };
       },
       apply(tr, set, oldState, newState) {
         const { doc, schema } = newState;
-        return calculateDecorations(
-          schema,
-          doc,
-
+        const activeRanges = activeIn(
+          newState,
           expect(
             'the datastore plugin is required for this plugin',
             datastoreKey.getState(newState)
           )
         );
+        return {
+          highlights: calculateDecorations(schema, doc, activeRanges),
+          activeRanges,
+        };
       },
     },
     props: {
       decorations(state): DecorationSet | undefined {
-        return citation.getState(state);
+        return citation.getState(state)?.highlights;
       },
     },
   });
   return citation;
 }
 
-export const citationCard: WidgetSpec = {
-  desiredLocation: 'sidebar',
-  componentName: 'citation-plugin/citation-card',
-};
-export const citationInsert: WidgetSpec = {
-  desiredLocation: 'insertSidebar',
-  componentName: 'citation-plugin/citation-insert',
-};
+function defaultActiveIn(
+  state: EditorState,
+  datastore: ProseStore
+): [number, number][] {
+  const result: [number, number][] = [];
+  for (const { node, pos } of datastore
+    .match(null, 'besluit:motivering')
+    .asPredicateNodeMapping()
+    .nodes()) {
+    const startPos = unwrapOr(0, pos?.pos);
+    result.push([startPos, startPos + node.nodeSize]);
+  }
+  return result;
+}
+
+export interface CitationPluginBundle {
+  plugin: ProsePlugin<CitationPluginState>;
+  widgets: {
+    citationCard: WidgetSpec;
+    citationInsert: WidgetSpec;
+  };
+  marks: {
+    citation: MarkSpec;
+  };
+}
+
+export interface CitationPluginConfig {
+  activeIn?(state: EditorState, datastore: ProseStore): [number, number][];
+}
+
+export function setupCitationPlugin(
+  config: CitationPluginConfig = {}
+): CitationPluginBundle {
+  const plugin = citationPlugin(config);
+  return {
+    plugin,
+    widgets: {
+      citationCard: {
+        desiredLocation: 'sidebar',
+        componentName: 'citation-plugin/citation-card',
+        widgetArgs: {
+          plugin,
+        },
+      },
+      citationInsert: {
+        desiredLocation: 'insertSidebar',
+        componentName: 'citation-plugin/citation-insert',
+        widgetArgs: {
+          plugin,
+        },
+      },
+    },
+    marks: {
+      citation,
+    },
+  };
+}

@@ -13,29 +13,34 @@ import {
   Decision,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
+import { CitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
 interface Args {
   controller: ProseController;
+  widgetArgs: { plugin: CitationPlugin };
 }
 
 export default class EditorPluginsCitationInsertComponent extends Component<Args> {
-  @tracked disableInsert = false;
   @tracked showModal = false;
   @tracked legislationTypeUri = LEGISLATION_TYPES.decreet;
   @tracked text = '';
 
-  onSelectionChanged() {
-    const { from, to } = this.args.controller.state.selection;
-    const limitedDatastore = this.args.controller.datastore.limitToRange(
-      this.args.controller.state,
-      from,
-      to
+  get disableInsert() {
+    if (!this.activeRanges) {
+      return true;
+    }
+    const { from } = this.controller.state.selection;
+    return !this.activeRanges.some(
+      ([start, end]) => from > start && from < end
     );
-    const motivering = limitedDatastore
-      .match(null, '>http://data.vlaanderen.be/ns/besluit#motivering')
-      .asQuadResultSet()
-      .first();
-    this.disableInsert = !motivering;
+  }
+
+  get plugin() {
+    return this.args.widgetArgs.plugin;
+  }
+
+  get activeRanges() {
+    return this.plugin.getState(this.controller.state)?.activeRanges;
   }
 
   get controller() {

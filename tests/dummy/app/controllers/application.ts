@@ -61,13 +61,9 @@ import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plu
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
-import {
-  citation,
-  citationCard,
-  citationInsert,
-  citationPlugin,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
+const citation = setupCitationPlugin();
 const nodes = {
   doc: {
     content: 'tableOfContents? block+',
@@ -97,7 +93,7 @@ const nodes = {
   tableOfContents,
 };
 const marks = {
-  citation,
+  citation: citation.marks.citation,
   link,
   em,
   strong,
@@ -169,7 +165,7 @@ export default class IndexController extends Controller {
   @tracked plugins: Plugin[] = [
     placeholderEditing(),
     tablePlugin,
-    citationPlugin(),
+    citation.plugin,
   ];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
@@ -178,8 +174,8 @@ export default class IndexController extends Controller {
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
     standardTemplateWidget,
-    citationCard,
-    citationInsert,
+    citation.widgets.citationCard,
+    citation.widgets.citationInsert,
     tableOfContentsWidget(),
     roadSignRegulationWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
