@@ -51,7 +51,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   @action
   insert() {
     const { selection } = this.controller.state;
-    if (!selection.from || !this.mappingUri || !this.selectedVariable) {
+    if (!this.mappingUri || !this.selectedVariable) {
       return;
     }
     this.controller.datastore;

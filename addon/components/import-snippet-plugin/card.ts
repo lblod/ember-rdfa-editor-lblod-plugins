@@ -17,13 +17,6 @@ export default class ImportSnippetPluginCard extends Component<Args> {
   }
 
   get snippets(): RdfaSnippet[] {
-    const selection = this.controller.state.selection;
-    if (!selection.from) {
-      console.info(
-        'Selection did not have a from position, skipping handling of the selectionChanged event'
-      );
-      return [];
-    }
     return this.importRdfaSnippet.snippetsForType('roadsign');
   }
 

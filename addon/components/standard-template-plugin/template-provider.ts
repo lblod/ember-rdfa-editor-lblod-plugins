@@ -34,11 +34,6 @@ export default class TemplateProviderComponent extends Component<Args> {
   }
 
   templateIsApplicable(template: TemplateModel) {
-    const selection = this.controller.state.selection;
-    if (!selection.from) {
-      return false;
-    }
-
     const containsTypes = this.controller.datastore
       .match(null, 'a')
       .dataset.some((quad) => {
