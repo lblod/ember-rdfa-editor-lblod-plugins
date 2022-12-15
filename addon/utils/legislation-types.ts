@@ -25,9 +25,21 @@ const LEGISLATION_TYPES = {
   protocol: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Protocol',
 };
 
+export type Legislations = typeof LEGISLATION_TYPES;
+export type LegislationKey = keyof Legislations;
+// export type MappedLegislations = {
+//   [K in LegislationKey]: {
+//     label: K;
+//     value: Legislations[K];
+//   };
+// };
+// export type MappedLegislation = MappedLegislations[LegislationKey];
 const LEGISLATION_TYPE_CONCEPTS = Object.entries(LEGISLATION_TYPES).map(
-  (pair) => {
-    return { label: pair[0], value: pair[1] };
+  (pair: [string, string]) => {
+    return {
+      label: pair[0],
+      value: pair[1],
+    };
   }
 );
 

@@ -1,0 +1,13 @@
+{{#if @articles.length}}
+  <AuList @direction="vertical" @divider={{true}}>
+    {{#each @articles as |article|}}
+      <AuList::Item>
+        <CitationPlugin::Citations::ArticlePreview
+          @insertArticleCitation={{fn @insertArticleCitation article}}
+          @article={{article}} />
+      </AuList::Item>
+    {{/each}}
+  </AuList>
+{{else}}
+  <CitationPlugin::Helpers::AlertNoItems @fullSize={{@fullSize}} class={{if @fullSize "au-u-margin"}}/>
+{{/if}}
