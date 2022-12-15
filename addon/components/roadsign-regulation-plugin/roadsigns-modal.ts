@@ -242,9 +242,9 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const besluitNode = [...(besluit?.nodes ?? [])][0];
 
     if (besluitNode) {
-      const { pos: resolvedPos, node } = besluitNode;
+      const { pos, node } = besluitNode;
       let insertRange: { from: number; to: number } | undefined;
-      const basePos = resolvedPos ? resolvedPos.pos + 1 : 0;
+      const basePos = pos + 1;
       node.descendants((child, childPos) => {
         if (child.attrs['property'] === 'prov:value') {
           insertRange = {

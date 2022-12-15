@@ -73,10 +73,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     if (!currentBesluitNode) {
       return;
     }
-    if (!currentBesluitNode?.pos) {
-      throw new Error('Besluit node should have a position');
-    }
-    return { pos: currentBesluitNode.pos.pos, node: currentBesluitNode.node };
+    return { pos: currentBesluitNode.pos, node: currentBesluitNode.node };
   }
 
   get showCard() {

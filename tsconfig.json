@@ -4,8 +4,15 @@
     "module": "ES2020",
     "moduleResolution": "node",
     "allowJs": true,
-    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "allowSyntheticDefaultImports": false,
     "esModuleInterop": false,
     "noPropertyAccessFromIndexSignature": true,
@@ -24,6 +31,12 @@
       "dummy/*": [
         "tests/dummy/app/*",
         "app/*"
+      ],
+      "@lblod/ember-rdfa-editor" : [
+        "node_modules/@lblod/ember-rdfa-editor/addon"
+      ],
+      "@lblod/ember-rdfa-editor/*" : [
+        "node_modules/@lblod/ember-rdfa-editor/addon/*"
       ],
       "@lblod/ember-rdfa-editor-lblod-plugins": [
         "addon"

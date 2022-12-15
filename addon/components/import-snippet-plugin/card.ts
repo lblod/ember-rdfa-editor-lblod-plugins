@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { DOMParser as ProseParser } from 'prosemirror-model';
+import { ProseParser } from '@lblod/ember-rdfa-editor';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { RdfaSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
@@ -36,13 +36,10 @@ export default class ImportSnippetPluginCard extends Component<Args> {
         .asSubjectNodeMapping(),
     ][0]?.nodes[0];
     if (besluitNode) {
-      const { node, pos: resolvedPos } = besluitNode;
-      if (!resolvedPos) {
-        throw new Error('Besluit node should have a position');
-      }
+      const { node, pos } = besluitNode;
       return {
-        from: resolvedPos.pos + node.nodeSize - 1,
-        to: resolvedPos.pos + node.nodeSize - 1,
+        from: pos + node.nodeSize - 1,
+        to: pos + node.nodeSize - 1,
       };
     } else {
       return selection;
