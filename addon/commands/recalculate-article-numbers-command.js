@@ -1,59 +1,72 @@
-export default class RecalculateArticleNumbersCommand {
-  name = 'recalculate-article-numbers';
+import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
-  constructor(model) {
-    this.model = model;
-  }
+export function recalculateArticleNumbers(controller, besluitUri) {
+  const { from, to } = controller.state.selection;
 
-  canExecute() {
-    return true;
-  }
+  const limitedDatastore = controller.datastore.limitToRange(
+    controller.state,
+    from,
+    to
+  );
 
-  execute(controller, besluitUri) {
-    const besluitSubjectNodes = controller.datastore
+  const besluitSubjectNodes = [
+    ...limitedDatastore
       .match(`>${besluitUri}`, null, null)
-      .asSubjectNodes()
-      .next().value;
-    const besluit = [...besluitSubjectNodes.nodes][0];
-    const articles = controller.datastore
-      .limitToRange(
-        controller.rangeFactory.fromAroundNode(besluit),
-        'rangeContains'
-      )
-      .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
-      .asPredicateNodes()
-      .next().value;
-    if (articles) {
-      const articlesArray = [...articles.nodes];
-      for (let i = 0; i < articlesArray.length; i++) {
-        const article = articlesArray[i];
-        this.replaceNumberIfNeeded(controller, article, i);
-      }
+      .asObjectNodeMapping()
+      .nodes(),
+  ];
+  console.log('sbx8, besluit', besluitSubjectNodes);
+  console.log('sbx8, besluitUri', besluitUri);
+  // const besluit = [...besluitSubjectNodes.nodes][0];
+  const articles = controller.datastore
+    .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
+    .asPredicateNodes()
+    .next().value;
+  console.log('sbx8 article s *!*@@*!@*!@!*', articles);
+  if (articles) {
+    const articlesArray = [...articles.nodes];
+    for (let i = 0; i < articlesArray.length; i++) {
+      const article = articlesArray[i];
+      console.log('sbx8 !!!!!!! article', article);
+      replaceNumberIfNeeded(controller, article, i);
     }
   }
+}
 
-  replaceNumberIfNeeded(controller, article, index) {
-    const articleNumberObjectNode = controller.datastore
-      .match(
-        `>${article.getAttribute('resource')}`,
-        '>http://data.europa.eu/eli/ontology#number',
-        null
+function replaceNumberIfNeeded(controller, article, index) {
+  const articleNumberObjectNode = controller.datastore
+    .match(
+      `>${article?.node?.attrs['resource']}`,
+      '>http://data.europa.eu/eli/ontology#number',
+      null
+    )
+    .asObjectNodes()
+    .next().value;
+  console.log('sbx8 articleNumberObjectNode', articleNumberObjectNode);
+  const articleNumber = Number(articleNumberObjectNode.object.value);
+  const articleNumberElement = [...articleNumberObjectNode.nodes][0];
+  const articleNumberExpected = index + 1;
+  console.log('articleNumberExpected', articleNumberExpected);
+  console.log('articleNumber', articleNumber);
+  console.log('articleNumberElement', articleNumberElement);
+  if (articleNumber !== articleNumberExpected) {
+    controller.doCommand(
+      insertHtml(
+        articleNumberExpected + '',
+        articleNumberElement.pos.pos + 1,
+        articleNumberElement.pos.pos + articleNumberElement.node.nodeSize
       )
-      .asObjectNodes()
-      .next().value;
-    const articleNumber = Number(articleNumberObjectNode.object.value);
-    const articleNumberElement = [...articleNumberObjectNode.nodes][0];
-    const articleNumberExpected = index + 1;
-    if (articleNumber !== articleNumberExpected) {
-      controller.executeCommand(
-        'insert-text',
-        String(articleNumberExpected),
-        controller.rangeFactory.fromInNode(
-          articleNumberElement,
-          0,
-          articleNumberElement.getMaxOffset()
-        )
-      );
-    }
+    );
   }
+  // if (articleNumber !== articleNumberExpected) {
+  //   controller.executeCommand(
+  //     'insert-text',
+  //     String(articleNumberExpected),
+  //     controller.rangeFactory.fromInNode(
+  //       articleNumberElement,
+  //       0,
+  //       articleNumberElement.getMaxOffset()
+  //     )
+  //   );
+  // }
 }
