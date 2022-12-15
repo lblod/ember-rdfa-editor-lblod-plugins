@@ -47,65 +47,29 @@ export default class BesluitContextCardComponent extends Component<Args> {
     if (!articleNode?.pos) {
       return;
     }
-    this.controller.withTransaction((tr) => {
-      return tr.delete(
-        articleNode?.pos.pos,
-        articleNode.pos.pos + articleNode.node.nodeSize
-      );
-    });
-    recalculateArticleNumbers(this.controller, this.besluitUri);
-
-    // console.log('sbx6 sel', sel);
-    // tr.deleteSelection();
-
-    // const { from, to } = this.controller.state.selection;
-    // this.controller.state.doc.nodesBetween(from, to, (mynode) => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    //   if (mynode.attrs['typeof']?.includes('besluit:Artikel')) {
-    //     console.log('sbx6 DELETE controller mynode', mynode);
-    //   }
-    // });
-    //
-    // this.controller.doCommand(insertHtml('', from, to));
-    // const range = this.args.controller.rangeFactory.fromAroundNode(
-    //   this.articleElement
-    // );
-    // this.args.controller.selection.selectRange(range);
-    // this.args.controller.executeCommand('delete-selection');
-    // this.args.controller.executeCommand(
-    //   'recalculate-article-numbers',
-    //   this.args.controller,
-    //   this.besluitUri
-    // );
   }
-  //
+
   @action
   moveUpArticle() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     moveArticleCommand(
       this.controller,
       this.besluitUri,
       this.articleElement,
       true
     );
-    // this.args.controller.executeCommand(
-    //   'move-article',
-    //   this.args.controller,
-    //   this.besluitUri,
-    //   this.articleElement,
-    //   true
-    // );
   }
-  //
-  // @action
-  // moveDownArticle() {
-  //   this.args.controller.executeCommand(
-  //     'move-article',
-  //     this.args.controller,
-  //     this.besluitUri,
-  //     this.articleElement,
-  //     false
-  //   );
-  // }
+
+  @action
+  moveDownArticle() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    moveArticleCommand(
+      this.controller,
+      this.besluitUri,
+      this.articleElement,
+      false
+    );
+  }
 
   @action
   selectionChangedHandler() {
@@ -123,106 +87,8 @@ export default class BesluitContextCardComponent extends Component<Args> {
         .asSubjectNodeMapping()
         .nodes(),
     ][0];
-
-    // console.log('sbx6 here->', besluit);
-    // const besluit = limitedDatastore
-    //   .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-    //   .asQuads()
-    //   .next().value;
-
-    // if (besluit) {
-    //   const articleSubjectNodes = limitedDatastore
-    //     .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
-    //     .asSubjectNodes()
-    //     .next().value;
-    //   if (articleSubjectNodes) {
-    //     this.articleElement = [...articleSubjectNodes.nodes][0];
-    //   }
-    //   this.besluitUri = besluit.subject.value;
-    // }
     this.articleElement = articleNode;
-    console.log('article node', articleNode);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     this.besluitUri = articleNode?.node.attrs['resource'] || '';
-    console.log('this.beslsslls', this.besluitUri);
-    // const range: unknown = this.controller.state.selection;
-    // if (!range) {
-    //   return;
-    // }
-    //
-    // const { from, to } = this.controller.state.selection;
-    // this.controller.state.doc.nodesBetween(from, to, (mynode) => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    //   if (mynode.attrs['typeof']?.includes('besluit:Artikel')) {
-    //     console.log('sbx6 controller mynode', mynode);
-    //     this.articleElement = mynode;
-    //   }
-    // });
-
-    // this.controller.withTransaction((tr) => {
-    //   console.log('sbx6 tr', tr);
-    //   // const resolvedPos = tr.doc.resolve(pos);
-    //   // const selection = Selection.near(resolvedPos, 1);
-    //   // if (selection) {
-    //   //   tr.setSelection(selection);
-    //   //   tr.scrollIntoView();
-    //   // }
-    //   return tr;
-    // });
-
-    // const besluit = this.controller.state.doc.descendants((node, pos) => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    //   const typeOfAttribute: string = node.attrs['typeof'];
-    //   console.log('sbx6 typeOfAttribute', typeOfAttribute);
-    //   console.log('sbx6 firstNode', node);
-    //   console.log('sbx6 firstNode content --->', node.content);
-    //   if (
-    //     typeOfAttribute?.includes('besluit:Besluit') ||
-    //     typeOfAttribute?.includes(
-    //       'http://data.vlaanderen.be/ns/besluit#Besluit'
-    //     )
-    //   ) {
-    //     console.log('sbx6 inside here');
-    //     node.content.forEach((_node) => {
-    //       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    //       const propertyOfAttribute: string = _node.attrs['property'];
-    //       if (propertyOfAttribute?.includes('prov:value')) {
-    //         _node.content.forEach((articleSubjectNodes) => {
-    //           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    //           const aaa = articleSubjectNodes.attrs['typeof'];
-    //           if (aaa?.includes('besluit:Artikel')) {
-    //             console.log('sbx6 aaaaaa ->', aaa);
-    //             console.log(
-    //               'sbx6 nodes articleSubjectNodes',
-    //               articleSubjectNodes
-    //             );
-    //             this.articleElement =
-    //               articleSubjectNodes && this.checkIfCursorIsAtArticle();
-    //             console.log('sbx6 ---->', this.articleElement);
-    //           }
-    //           // console.log('sbx6 --> node inside', _node);
-    //         });
-    //       }
-    //     });
-    //     return false;
-    //   }
-    // });
-
-    // console.log('sbx6 here->', besluit);
-    // const besluit = limitedDatastore
-    //   .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-    //   .asQuads()
-    //   .next().value;
-
-    // if (besluit) {
-    //   const articleSubjectNodes = limitedDatastore
-    //     .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
-    //     .asSubjectNodes()
-    //     .next().value;
-    //   if (articleSubjectNodes) {
-    //     this.articleElement = [...articleSubjectNodes.nodes][0];
-    //   }
-    //   this.besluitUri = besluit.subject.value;
-    // }
   }
 }

@@ -36,20 +36,6 @@ export function InsertArticleCommand(
       </div>
     `;
   controller.doCommand(insertHtml(articleHtml, range.from, range.to));
-  const newArticleElementSubjectNodes = controller.datastore
-    .match(`>${articleUri}`, null, null)
-    .asSubjectNodes()
-    .next().value;
-  if (newArticleElementSubjectNodes) {
-    const newArticleElement = [...newArticleElementSubjectNodes.nodes][0];
-    const range = controller.rangeFactory.fromInElement(
-      newArticleElement,
-      0,
-      0
-    );
-    this.model.selectRange(range);
-    this.model.writeSelection();
-  }
 }
 
 function generateArticleNumber(controller) {
