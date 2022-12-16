@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
-import { ProseController } from '@lblod/ember-rdfa-editor';
+import { ProseController, TextSelection } from '@lblod/ember-rdfa-editor';
 import { Command } from '@lblod/ember-rdfa-editor';
 
 export default function insertArticle(
@@ -58,6 +58,14 @@ export default function insertArticle(
       </div>
     `;
       controller.doCommand(insertHtml(articleHtml, range.from, range.to));
+
+      controller.withTransaction((tr) => {
+        const selection = TextSelection.near(
+          controller.state.doc.resolve(range.from)
+        );
+        return tr.setSelection(selection);
+      });
+      controller.focus();
     }
     return true;
   };

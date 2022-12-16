@@ -1,4 +1,9 @@
-import { Command, ProseController } from '@lblod/ember-rdfa-editor';
+import {
+  Command,
+  ProseController,
+  Selection,
+  TextSelection,
+} from '@lblod/ember-rdfa-editor';
 import { recalculateArticleNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
@@ -62,6 +67,20 @@ export default function moveArticleCommand(
         return tr.replaceRangeWith(articleA.pos, articleA.pos, articleB.node);
       });
       recalculateArticleNumbers(controller);
+      let selection: Selection;
+      if (moveUp) {
+        selection = TextSelection.near(
+          controller.state.doc.resolve(articleA.pos)
+        );
+      } else {
+        selection = TextSelection.near(
+          controller.state.doc.resolve(articleA.pos + articleB.node.nodeSize)
+        );
+      }
+      controller.withTransaction((tr) => {
+        return tr.setSelection(selection);
+      });
+      controller.focus();
     }
     return true;
   };
