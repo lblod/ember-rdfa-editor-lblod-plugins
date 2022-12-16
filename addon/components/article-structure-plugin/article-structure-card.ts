@@ -91,6 +91,7 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
         return structure.node.attrs['resource'] as string;
       }
     }
+    return;
   }
 
   get isOutsideStructure() {

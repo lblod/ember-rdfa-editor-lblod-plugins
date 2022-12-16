@@ -81,13 +81,20 @@ article-structure-plugin:
     chapter: Hoofdstuk invoegen
     section: Afdeling invoegen
     subsection: Onderafdeling invoegen
-  move:
-    articleUp: Artikel naar boven verplaatsen
-    articleDown: Artikel naar beneden verplaatsen
-    paragraphUp: Paragraaf naar boven verplaatsen
-    paragraphDown: Paragraaf naar beneden verplaatsen
-    structureUp: Structuur naar boven verplaatsen
-    structureDown: Structuur naar beneden verplaatsen
+  moveUp:
+    paragraph: Paragraaf naar boven verplaatsen
+    article: Artikel naar boven verplaatsen
+    title: Titel naar boven verplaatsen
+    chapter: Hoofdstuk naar boven verplaatsen
+    section: Afdeling naar boven verplaatsen
+    subsection: Onderafdeling naar boven verplaatsen
+  moveDown:
+    paragraph: Paragraaf naar beneden verplaatsen
+    article: Artikel naar beneden verplaatsen
+    title: Titel naar beneden verplaatsen
+    chapter: Hoofdstuk naar beneden verplaatsen
+    section: Afdeling naar beneden verplaatsen
+    subsection: Onderafdeling naar boven verplaatsen
   title:
     paragraphCard: Paragraaf card
     articleCard: Artikel card
@@ -99,5 +106,5 @@ article-structure-plugin:
   placeholder:
     title: Voeg titel in
     chapter: Voeg hoofdstuk in
-    heading: Voeg afdeling in
+    section: Voeg afdeling in
     subsection: Voeg onderafdeling in

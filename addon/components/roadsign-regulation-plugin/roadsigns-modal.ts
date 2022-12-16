@@ -256,6 +256,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
       });
       return insertRange;
     }
+    return;
   }
 
   @action

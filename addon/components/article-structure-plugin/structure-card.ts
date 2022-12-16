@@ -110,6 +110,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         structureTypeof.includes(structure.type)
       );
     }
+    return;
   }
 
   get isOutsideStructure() {
