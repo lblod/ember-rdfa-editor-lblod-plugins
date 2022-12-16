@@ -137,7 +137,7 @@ export default function moveStructure(
       //Insert structure last place in that structure
       let structureContent;
       if (currentStructure.insertPredicate) {
-        structureContent = children(nodeToInsert, false, false, ({ node: child}) => child.attrs['property'] === currentStructure.insertPredicate.short).next().value;
+        structureContent = children(nodeToInsert, false, false, ({ node: child}) => child.attrs['property'] === currentStructure.insertPredicate?.short).next().value;
       } else {
         structureContent = nodeToInsert;
       }

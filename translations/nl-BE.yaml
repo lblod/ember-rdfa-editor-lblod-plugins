@@ -79,7 +79,7 @@ article-structure-plugin:
     articleBelow: Voeg onderstaand artikel in
     title: Titel invoegen
     chapter: Hoofdstuk invoegen
-    heading: Afdeling invoegen
+    section: Afdeling invoegen
     subsection: Onderafdeling invoegen
   move:
     articleUp: Artikel naar boven verplaatsen

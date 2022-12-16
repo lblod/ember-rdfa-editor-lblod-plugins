@@ -12,7 +12,7 @@ export type Structure = {
   translation: string;
   moveUp: string;
   moveDown: string;
-  insertPredicate: {
+  insertPredicate?: {
     long: string;
     short: string;
   };
@@ -31,10 +31,6 @@ export const STRUCTURES: Record<string, Structure> = {
     translation: 'article-structure-plugin.insert.title',
     moveUp: 'article-structure-plugin.moveUp.title',
     moveDown: 'article-structure-plugin.moveDown.title',
-    insertPredicate: {
-      long: 'http://www.w3.org/ns/prov#value',
-      short: 'prov:value',
-    },
     shaclConstraint: `
       @prefix sh: <http://www.w3.org/ns/shacl#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -44,7 +40,7 @@ export const STRUCTURES: Record<string, Structure> = {
         sh:targetSubjectsOf <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>;
         sh:property [
           sh:path <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
-          sh:hasValue <http://data.vlaanderen.be/ns/besluit#Besluit>
+          sh:hasValue <https://say.data.gift/ns/DocumentContent>
         ].
       `,
     template: (uri, intlService) => `
@@ -117,7 +113,7 @@ export const STRUCTURES: Record<string, Structure> = {
     type: 'https://say.data.gift/ns/Section',
     numberPredicate: 'http://data.europa.eu/eli/ontology#number',
     numberingFunction: romanize,
-    translation: 'article-structure-plugin.insert.heading',
+    translation: 'article-structure-plugin.insert.section',
     moveUp: 'article-structure-plugin.moveUp.section',
     moveDown: 'article-structure-plugin.moveDown.section',
     insertPredicate: {
