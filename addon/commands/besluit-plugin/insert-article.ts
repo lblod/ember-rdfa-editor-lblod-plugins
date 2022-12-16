@@ -1,11 +1,13 @@
 import { v4 as uuid } from 'uuid';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
+import { ProseController } from '@lblod/ember-rdfa-editor';
+import { Command } from '@lblod/ember-rdfa-editor';
 
-export default function InsertArticleCommand(
-  controller,
-  articleContent,
-  articleNumber
-) {
+export default function insertArticle(
+  controller: ProseController,
+  articleContent: string,
+  articleNumber: string
+): Command {
   return function (state, dispatch) {
     const selection = controller.state.selection;
     const limitedDatastore = controller.datastore.limitToRange(
@@ -16,7 +18,11 @@ export default function InsertArticleCommand(
     const besluitSubject = limitedDatastore
       .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
       .asQuadResultSet()
-      .first().subject;
+      .first()?.subject;
+
+    if (!besluitSubject) {
+      return false;
+    }
 
     const containerNode = [
       ...controller.datastore
@@ -29,7 +35,7 @@ export default function InsertArticleCommand(
       return false;
     }
     if (dispatch) {
-      let range = {
+      const range = {
         from: containerNode.pos + containerNode.node.nodeSize - 1,
         to: containerNode.pos + containerNode.node.nodeSize - 1,
       };
@@ -51,25 +57,22 @@ export default function InsertArticleCommand(
         </div>
       </div>
     `;
-      dispatch(
-        controller.doCommand(insertHtml(articleHtml, range.from, range.to))
-      );
+      controller.doCommand(insertHtml(articleHtml, range.from, range.to));
     }
-
     return true;
   };
 }
 
-function generateArticleNumber(controller) {
+function generateArticleNumber(controller: ProseController) {
   const numberQuads = [
     ...controller.datastore
-      .match(null, '>http://data.europa.eu/eli/ontology#number', null)
+      .match(null, '>http://data.europa.eu/eli/ontology#number')
       .asQuads(),
   ];
   let biggerNumber;
-  for (let numberQuad of numberQuads) {
+  for (const numberQuad of numberQuads) {
     const number = Number(removeZeroWidthSpace(numberQuad.object.value));
-    if (!Number.isNaN(number) && (number > biggerNumber || !biggerNumber)) {
+    if (!Number.isNaN(number) && (!biggerNumber || number > biggerNumber)) {
       biggerNumber = number;
     }
   }
@@ -80,6 +83,6 @@ function generateArticleNumber(controller) {
   }
 }
 
-function removeZeroWidthSpace(text) {
+function removeZeroWidthSpace(text: string) {
   return text.replace(/[\u200B-\u200D\uFEFF]/g, '');
 }
