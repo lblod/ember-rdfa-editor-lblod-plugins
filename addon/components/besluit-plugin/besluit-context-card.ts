@@ -1,24 +1,22 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { VariableType } from '../../utils/variable-plugins/default-variable-types';
 import { action } from '@ember/object';
 import {
   moveArticle,
   recalculateArticleNumbers,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
+import { DecisionOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
+import { ProseController } from '@lblod/ember-rdfa-editor';
 
-type Args = {
+interface ContextCardWidgetArgs {
+  options?: DecisionOptions;
+}
+
+interface Args {
   controller: ProseController;
-  widgetArgs: {
-    options: {
-      publisher: string;
-      variableTypes: (VariableType | string)[];
-      defaultEndpoint: string;
-    };
-  };
-};
+  widgetArgs: ContextCardWidgetArgs;
+}
 
 export default class BesluitContextCardComponent extends Component<Args> {
   @tracked articleElement?: ResolvedPNode;
