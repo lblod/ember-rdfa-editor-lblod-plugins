@@ -2,12 +2,8 @@ import ParserN3 from '@rdfjs/parser-n3';
 import SHACLValidator from 'rdf-validate-shacl';
 import factory from 'rdf-ext';
 import { Readable } from 'stream-browserify';
-import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 
-export default async function validateDatastore(
-  datastore: ProseStore,
-  shaclConstraint: unknown
-) {
+export default async function validateDatastore(datastore, shaclConstraint) {
   const s = new Readable();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   s.push(shaclConstraint);
