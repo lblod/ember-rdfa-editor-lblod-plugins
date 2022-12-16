@@ -1,6 +1,6 @@
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
-export function recalculateArticleNumbers(controller) {
+export default function recalculateArticleNumbers(controller) {
   const articles = controller.datastore
     .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
     .asPredicateNodes()

@@ -3,8 +3,8 @@ import { tracked } from '@glimmer/tracking';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { VariableType } from '../../utils/variable-plugins/default-variable-types';
 import { action } from '@ember/object';
-import { recalculateArticleNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/recalculate-article-numbers-command';
-import { moveArticleCommand } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/move-article-command';
+import { moveArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
 
 type Args = {
   controller: ProseController;
@@ -18,8 +18,8 @@ type Args = {
 };
 
 export default class BesluitContextCardComponent extends Component<Args> {
-  @tracked articleElement: any;
-  @tracked besluitUri: string;
+  @tracked articleElement?: ResolvedPNode;
+  @tracked besluitUri?: string;
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
@@ -52,23 +52,13 @@ export default class BesluitContextCardComponent extends Component<Args> {
   @action
   moveUpArticle() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    moveArticleCommand(
-      this.controller,
-      this.besluitUri,
-      this.articleElement,
-      true
-    );
+    moveArticle(this.controller, this.besluitUri, this.articleElement, true);
   }
 
   @action
   moveDownArticle() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    moveArticleCommand(
-      this.controller,
-      this.besluitUri,
-      this.articleElement,
-      false
-    );
+    moveArticle(this.controller, this.besluitUri, this.articleElement, false);
   }
 
   @action

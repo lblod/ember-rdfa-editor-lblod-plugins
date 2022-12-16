@@ -1,6 +1,6 @@
-import { recalculateArticleNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/recalculate-article-numbers-command';
+import recalculateArticleNumbers from '@lblod/ember-rdfa-editor-lblod-plugins/commands/recalculate-article-numbers-command';
 
-export function moveArticleCommand(
+export default function moveArticleCommand(
   controller,
   besluitUri,
   articleElement,

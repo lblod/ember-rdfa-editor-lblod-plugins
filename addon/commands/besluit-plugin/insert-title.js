@@ -1,6 +1,6 @@
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
-export function InsertTitleCommand(controller, title) {
+export default function InsertTitleCommand(controller, title) {
   let range = controller.state.selection;
   controller.state.doc.descendants((node, pos) => {
     const typeOfAttribute = node.attrs['typeof'];

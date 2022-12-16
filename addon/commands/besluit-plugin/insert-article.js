@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
-export function InsertArticleCommand(
+export default function InsertArticleCommand(
   controller,
   articleContent,
   articleNumber

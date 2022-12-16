@@ -2,8 +2,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { getTitleForDecision } from '../../utils/besluit-plugin/get-title-for-decision';
-import { InsertArticleCommand } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-article-command';
-import { InsertTitleCommand } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/insert-title-command';
+import {
+  insertTitle,
+  insertArticle,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 
 export default class BesluitPluginCardComponent extends Component {
   @tracked hasTitle = true;
@@ -19,12 +21,12 @@ export default class BesluitPluginCardComponent extends Component {
 
   @action
   insertArticle() {
-    InsertArticleCommand(this.controller, '', '');
+    insertArticle(this.controller, '', '');
   }
 
   @action
   insertTitle() {
-    InsertTitleCommand(this.controller, '');
+    insertTitle(this.controller, '');
   }
 
   @action
