@@ -1,4 +1,8 @@
-import { Command, ProseController } from '@lblod/ember-rdfa-editor';
+import {
+  Command,
+  ProseController,
+  TextSelection,
+} from '@lblod/ember-rdfa-editor';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
 export default function insertTitle(
@@ -34,6 +38,10 @@ export default function insertTitle(
     }
 
     if (dispatch) {
+      const range = {
+        from: besluitNode.pos + 1,
+        to: besluitNode.pos + 1,
+      };
       const articleHtml = `
       <h4 class="h4" property="eli:title" datatype="xsd:string">${
         title
@@ -41,9 +49,14 @@ export default function insertTitle(
           : '<span class="mark-highlight-manual">Geef titel besluit op</span>'
       }</h4>
     `;
-      controller.doCommand(
-        insertHtml(articleHtml, besluitNode.pos + 1, besluitNode.pos + 1)
-      );
+      controller.doCommand(insertHtml(articleHtml, range.from, range.to));
+      controller.withTransaction((tr) => {
+        const selection = TextSelection.near(
+          controller.state.doc.resolve(range.from)
+        );
+        return tr.setSelection(selection).scrollIntoView();
+      });
+      dispatch(state.tr.scrollIntoView());
     }
 
     return true;

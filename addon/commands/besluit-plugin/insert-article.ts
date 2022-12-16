@@ -63,7 +63,7 @@ export default function insertArticle(
         const selection = TextSelection.near(
           controller.state.doc.resolve(range.from)
         );
-        return tr.setSelection(selection);
+        return tr.setSelection(selection).scrollIntoView();
       });
       controller.focus();
     }

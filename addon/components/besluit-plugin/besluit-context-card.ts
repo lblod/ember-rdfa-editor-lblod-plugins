@@ -28,6 +28,9 @@ export default class BesluitContextCardComponent extends Component<Args> {
   get controller() {
     return this.args.controller;
   }
+  focus() {
+    this.controller.focus();
+  }
 
   @action
   deleteArticle() {
@@ -39,6 +42,7 @@ export default class BesluitContextCardComponent extends Component<Args> {
           articleNode.pos + articleNode.node.nodeSize
         );
       });
+      this.focus();
       recalculateArticleNumbers(
         this.controller,
         this.besluit.node.attrs['resource']

@@ -15,14 +15,19 @@ export default class BesluitPluginCardComponent extends Component<Args> {
     return this.args.controller;
   }
 
+  focus() {
+    this.controller.focus();
+  }
   @action
   insertArticle() {
     this.controller.checkAndDoCommand(insertArticle(this.controller, '', ''));
+    this.focus();
   }
 
   @action
   insertTitle() {
     this.controller.doCommand(insertTitle(this.controller, ''));
+    this.focus();
   }
 
   get hasTitle() {
