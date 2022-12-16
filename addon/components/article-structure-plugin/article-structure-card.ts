@@ -30,7 +30,6 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
           this.args.controller.datastore,
           structure.shaclConstraint
         );
-        console.log('STRUCTURE TITLE: ', structure.title);
         const canExecute = this.args.controller.checkCommand(
           insertArticleStructure(
             this.args.controller,
@@ -40,7 +39,6 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
             this.intl
           )
         );
-        console.log('CAN EXECUTE: ', canExecute);
         return {
           ...structure,
           canExecute,

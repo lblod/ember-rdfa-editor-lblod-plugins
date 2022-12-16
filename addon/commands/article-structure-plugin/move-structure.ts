@@ -141,8 +141,6 @@ export default function moveStructure(
       } else {
         structureContent = nodeToInsert;
       }
-      console.log('insert predicate', currentStructure.insertPredicate);
-      console.log('structure content', structureContent);
       if(!structureContent){
         return false;
       }
@@ -162,9 +160,7 @@ export default function moveStructure(
         let mappedStructureNodePos: number | undefined;
         controller.withTransaction((tr) => {
           tr.replaceRangeWith(insertRange.from, insertRange.to, structureNode.node);
-          console.log('BEFORE: ', structureNode.pos);
           mappedStructureNodePos = tr.mapping.map(structureNode.pos);
-          console.log('AFTER: ', mappedStructureNodePos);
           return tr.delete(mappedStructureNodePos, mappedStructureNodePos + structureNode.node.nodeSize);
         });
         const resolvedStructureNodePos = controller.state.doc.resolve(unwrap(mappedStructureNodePos));

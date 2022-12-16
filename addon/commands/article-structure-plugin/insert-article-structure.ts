@@ -78,7 +78,6 @@ export default function insertArticleStructureV2(
       const structureHtml = structureToAdd.template(structureUri, intlService);
 
       //Detect if nodeToInsert only contains a placeholder, if so replace the full content of the nodeToInsert
-      console.log('CHILD: ', nodeToInsert.node.child(0));
       if (
         nodeToInsert.node.childCount === 1 &&
         nodeToInsert.node.child(0).childCount === 1 &&
