@@ -31,8 +31,8 @@ function replaceNumberIfNeeded(controller, article, index) {
     controller.doCommand(
       insertHtml(
         articleNumberExpected + '',
-        articleNumberElement.pos.pos + 1,
-        articleNumberElement.pos.pos + articleNumberElement.node.nodeSize
+        articleNumberElement.pos + 1,
+        articleNumberElement.pos + articleNumberElement.node.nodeSize
       )
     );
   }

@@ -3,7 +3,10 @@ import { tracked } from '@glimmer/tracking';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { VariableType } from '../../utils/variable-plugins/default-variable-types';
 import { action } from '@ember/object';
-import { moveArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
+import {
+  moveArticle,
+  recalculateArticleNumbers,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
 
 type Args = {
@@ -47,6 +50,13 @@ export default class BesluitContextCardComponent extends Component<Args> {
     if (!articleNode?.pos) {
       return;
     }
+    this.controller.withTransaction((tr) => {
+      return tr.delete(
+        articleNode?.pos,
+        articleNode?.pos + articleNode.node.nodeSize
+      );
+    });
+    recalculateArticleNumbers(this.controller);
   }
 
   @action

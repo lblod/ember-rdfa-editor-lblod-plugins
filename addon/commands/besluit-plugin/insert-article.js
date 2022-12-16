@@ -6,19 +6,35 @@ export default function InsertArticleCommand(
   articleContent,
   articleNumber
 ) {
-  let range = controller.state.selection;
-  controller.state.doc.descendants((node, pos) => {
-    const typeOfAttribute = node.attrs['typeof'];
-    if (
-      typeOfAttribute?.includes('besluit:Besluit') ||
-      typeOfAttribute?.includes('http://data.vlaanderen.be/ns/besluit#Besluit')
-    ) {
-      range = { from: pos + node.nodeSize - 2, to: pos + node.nodeSize - 2 };
+  return function (state, dispatch) {
+    const selection = controller.state.selection;
+    const limitedDatastore = controller.datastore.limitToRange(
+      controller.state,
+      selection.from,
+      selection.to
+    );
+    const besluitSubject = limitedDatastore
+      .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
+      .asQuadResultSet()
+      .first().subject;
+
+    const containerNode = [
+      ...controller.datastore
+        .match(besluitSubject, 'prov:value')
+        .asPredicateNodeMapping()
+        .nodes(),
+    ][0];
+
+    if (!containerNode) {
       return false;
     }
-  });
-  const articleUri = `http://data.lblod.info/artikels/${uuid()}`;
-  const articleHtml = `
+    if (dispatch) {
+      let range = {
+        from: containerNode.pos + containerNode.node.nodeSize - 1,
+        to: containerNode.pos + containerNode.node.nodeSize - 1,
+      };
+      const articleUri = `http://data.lblod.info/artikels/${uuid()}`;
+      const articleHtml = `
       <div property="eli:has_part" prefix="mobiliteit: https://data.vlaanderen.be/ns/mobiliteit#" typeof="besluit:Artikel" resource="${articleUri}">
         <div>
           Artikel
@@ -35,7 +51,13 @@ export default function InsertArticleCommand(
         </div>
       </div>
     `;
-  controller.doCommand(insertHtml(articleHtml, range.from, range.to));
+      dispatch(
+        controller.doCommand(insertHtml(articleHtml, range.from, range.to))
+      );
+    }
+
+    return true;
+  };
 }
 
 function generateArticleNumber(controller) {

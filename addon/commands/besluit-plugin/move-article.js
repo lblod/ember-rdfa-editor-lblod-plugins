@@ -1,4 +1,4 @@
-import recalculateArticleNumbers from '@lblod/ember-rdfa-editor-lblod-plugins/commands/recalculate-article-numbers-command';
+import { recalculateArticleNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 
 export default function moveArticleCommand(
   controller,
@@ -12,6 +12,7 @@ export default function moveArticleCommand(
       .asPredicateNodeMapping()
       .nodes(),
   ];
+
   if (articles.length > 1) {
     const articleIndex = articles.findIndex(
       (article) => article === articleElement
@@ -22,11 +23,12 @@ export default function moveArticleCommand(
     let articleB;
     if (moveUp) {
       articleA = articles[articleIndex];
-      articleB = articles[articleIndex + 1];
+      articleB = articles[articleIndex - 1];
     } else {
-      articleA = articles[articleIndex - 1];
+      articleA = articles[articleIndex + 1];
       articleB = articles[articleIndex];
     }
+    console.log({ articleA, articleB });
     const articleBRange = {
       from: articleB.pos,
       to: articleB.pos + articleB.node.nodeSize,

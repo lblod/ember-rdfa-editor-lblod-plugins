@@ -21,12 +21,12 @@ export default class BesluitPluginCardComponent extends Component {
 
   @action
   insertArticle() {
-    insertArticle(this.controller, '', '');
+    this.controller.checkAndDoCommand(insertArticle(this.controller, '', ''));
   }
 
   @action
   insertTitle() {
-    insertTitle(this.controller, '');
+    this.controller.checkAndDoCommand(insertTitle(this.controller, ''));
   }
 
   @action
