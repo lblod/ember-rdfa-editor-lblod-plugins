@@ -1,7 +1,7 @@
 import { Command, ProseController } from '@lblod/ember-rdfa-editor';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 
-export default function InsertTitleCommand(
+export default function insertTitle(
   controller: ProseController,
   title: string
 ): Command {

@@ -246,7 +246,7 @@ export default class IndexController extends Controller {
     <h5>Beslissing</h5>
 
     <div property="prov:value" datatype="xsd:string">
-      <div property="say:hasPart" resource="http://data.lblod.info/artikels/bbeb89ae-998b-4339-8de4-c8ab3a0679b5" typeof="say:Article">
+      <div property="say:hasPart" resource="http://data.lblod.info/artikels/bbeb89ae-998b-4339-8de4-c8ab3a0679b5" typeof="besluit:Artikel">
         <span property="dct:type" resource="sometype"></span>
         <div property="say:heading">
           Artikel

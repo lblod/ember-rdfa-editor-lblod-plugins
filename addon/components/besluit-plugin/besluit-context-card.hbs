@@ -1,5 +1,4 @@
-<div {{did-update this.selectionChangedHandler @controller.state}}>
-{{#if this.articleElement}}
+{{#if this.activeArticleNode}}
   <AuCard
     @shadow={{true}}
     @size="flush" as |c|>
@@ -24,6 +23,7 @@
             @icon="nav-up"
             @iconAlignment="left"
             @skin="link"
+            @disabled={{this.disableMoveUp}}
             {{on 'click' this.moveUpArticle}}>
             {{t "besluit-plugin.action.article-up"}}
           </AuButton>
@@ -33,6 +33,7 @@
             @icon="nav-down"
             @iconAlignment="left"
             @skin="link"
+            @disabled={{this.disableMoveDown}}
             {{on 'click' this.moveDownArticle}}>
             {{t "besluit-plugin.action.article-down"}}
           </AuButton>
@@ -41,4 +42,3 @@
     </c.content>
   </AuCard>
 {{/if}}
-</div>

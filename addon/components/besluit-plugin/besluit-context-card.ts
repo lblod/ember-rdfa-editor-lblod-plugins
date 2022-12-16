@@ -34,46 +34,75 @@ export default class BesluitContextCardComponent extends Component<Args> {
 
   @action
   deleteArticle() {
-    const { from, to } = this.controller.state.selection;
-
-    const limitedDatastore = this.controller.datastore.limitToRange(
-      this.controller.state,
-      from,
-      to
-    );
-    const articleNode = [
-      ...limitedDatastore
-        .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
-    if (!articleNode?.pos) {
-      return;
+    const articleNode = this.activeArticleNode;
+    if (articleNode) {
+      this.controller.withTransaction((tr) => {
+        return tr.delete(
+          articleNode.pos,
+          articleNode.pos + articleNode.node.nodeSize
+        );
+      });
+      recalculateArticleNumbers(this.controller);
     }
-    this.controller.withTransaction((tr) => {
-      return tr.delete(
-        articleNode?.pos,
-        articleNode?.pos + articleNode.node.nodeSize
-      );
-    });
-    recalculateArticleNumbers(this.controller);
   }
 
   @action
   moveUpArticle() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    moveArticle(this.controller, this.besluitUri, this.articleElement, true);
+    if (this.besluit && this.activeArticleNode) {
+      this.controller.doCommand(
+        moveArticle(
+          this.controller,
+          this.besluit.node.attrs['resource'],
+          this.activeArticleNode.node.attrs['resource'],
+          true
+        )
+      );
+    }
   }
 
   @action
   moveDownArticle() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    moveArticle(this.controller, this.besluitUri, this.articleElement, false);
+    if (this.besluit && this.activeArticleNode) {
+      this.controller.doCommand(
+        moveArticle(
+          this.controller,
+          this.besluit.node.attrs['resource'],
+          this.activeArticleNode.node.attrs['resource'],
+          false
+        )
+      );
+    }
   }
 
-  @action
-  selectionChangedHandler() {
-    this.articleElement = undefined;
+  get disableMoveUp() {
+    if (this.besluit && this.activeArticleNode) {
+      return !this.controller.checkCommand(
+        moveArticle(
+          this.controller,
+          this.besluit.node.attrs['resource'],
+          this.activeArticleNode.node.attrs['resource'],
+          true
+        )
+      );
+    }
+    return true;
+  }
+
+  get disableMoveDown() {
+    if (this.besluit && this.activeArticleNode) {
+      return !this.controller.checkCommand(
+        moveArticle(
+          this.controller,
+          this.besluit.node.attrs['resource'],
+          this.activeArticleNode.node.attrs['resource'],
+          false
+        )
+      );
+    }
+    return true;
+  }
+
+  get besluit() {
     const { from, to } = this.controller.state.selection;
 
     const limitedDatastore = this.controller.datastore.limitToRange(
@@ -81,14 +110,29 @@ export default class BesluitContextCardComponent extends Component<Args> {
       from,
       to
     );
-    const articleNode = [
+    return [
       ...limitedDatastore
-        .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
+        .match(null, 'a', 'besluit:Besluit')
         .asSubjectNodeMapping()
         .nodes(),
     ][0];
-    this.articleElement = articleNode;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-    this.besluitUri = articleNode?.node.attrs['resource'] || '';
+  }
+
+  get activeArticleNode() {
+    if (this.besluit) {
+      const { from, to } = this.controller.state.selection;
+
+      const limitedDatastore = this.controller.datastore.limitToRange(
+        this.controller.state,
+        from,
+        to
+      );
+      return [
+        ...limitedDatastore
+          .match(null, 'a', 'besluit:Artikel')
+          .asSubjectNodeMapping()
+          .nodes(),
+      ][0];
+    }
   }
 }
