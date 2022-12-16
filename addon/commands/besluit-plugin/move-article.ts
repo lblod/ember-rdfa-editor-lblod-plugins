@@ -7,6 +7,7 @@ import {
 import { recalculateArticleNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import getArticleNodesForBesluit from './get-article-nodes-for-besluit';
 
 export default function moveArticleCommand(
   controller: ProseController,
@@ -15,33 +16,16 @@ export default function moveArticleCommand(
   moveUp: boolean
 ): Command {
   return (_state, dispatch) => {
-    const besluitValuePredicateNode = [
-      ...controller.datastore
-        .match(`>${besluitUri}`, 'prov:value')
-        .asPredicateNodeMapping()
-        .nodes(),
-    ][0];
-    if (!besluitValuePredicateNode) {
+    const articles = getArticleNodesForBesluit(controller, besluitUri);
+    if (!articles) {
       return false;
     }
-    const articles: ResolvedPNode[] = [];
-    besluitValuePredicateNode.node.content.forEach((child, offset) => {
-      if (
-        child.attrs['typeof'] ===
-          'http://data.vlaanderen.be/ns/besluit#Artikel' ||
-        child.attrs['typeof'] === 'besluit:Artikel'
-      ) {
-        articles.push({
-          node: child,
-          pos: besluitValuePredicateNode.pos + 1 + offset,
-        });
-      }
-    });
     const articleIndex = articles.findIndex(
       (article) => article.node.attrs['resource'] === articleUri
     );
 
     if (
+      articleIndex === -1 ||
       (moveUp && articleIndex === 0) ||
       (!moveUp && articleIndex === articles.length - 1)
     ) {
@@ -66,7 +50,7 @@ export default function moveArticleCommand(
         tr.delete(articleBRange.from, articleBRange.to);
         return tr.replaceRangeWith(articleA.pos, articleA.pos, articleB.node);
       });
-      recalculateArticleNumbers(controller);
+      recalculateArticleNumbers(controller, besluitUri);
       let selection: Selection;
       if (moveUp) {
         selection = TextSelection.near(

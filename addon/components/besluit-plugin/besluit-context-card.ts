@@ -22,7 +22,6 @@ type Args = {
 
 export default class BesluitContextCardComponent extends Component<Args> {
   @tracked articleElement?: ResolvedPNode;
-  @tracked besluitUri?: string;
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
@@ -35,14 +34,17 @@ export default class BesluitContextCardComponent extends Component<Args> {
   @action
   deleteArticle() {
     const articleNode = this.activeArticleNode;
-    if (articleNode) {
+    if (articleNode && this.besluit) {
       this.controller.withTransaction((tr) => {
         return tr.delete(
           articleNode.pos,
           articleNode.pos + articleNode.node.nodeSize
         );
       });
-      recalculateArticleNumbers(this.controller);
+      recalculateArticleNumbers(
+        this.controller,
+        this.besluit.node.attrs['resource']
+      );
     }
   }
 

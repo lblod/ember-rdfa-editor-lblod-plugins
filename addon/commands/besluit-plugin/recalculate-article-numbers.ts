@@ -1,14 +1,13 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import getArticleNodesForBesluit from './get-article-nodes-for-besluit';
 
-export default function recalculateArticleNumbers(controller: ProseController) {
-  const articles = [
-    ...controller.datastore
-      .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Artikel')
-      .asPredicateNodeMapping()
-      .nodes(),
-  ];
+export default function recalculateArticleNumbers(
+  controller: ProseController,
+  besluitUri: string
+) {
+  const articles = getArticleNodesForBesluit(controller, besluitUri);
   if (articles) {
     for (let i = 0; i < articles.length; i++) {
       const article = unwrap(articles[i]);

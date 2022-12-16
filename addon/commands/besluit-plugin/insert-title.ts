@@ -22,7 +22,6 @@ export default function insertTitle(
     if (!besluitNode) {
       return false;
     }
-    console.log('BESLUIT URI: ', besluitNode?.node.attrs['resource']);
     const titleQuad = controller.datastore
       .match(
         `>${besluitNode.node.attrs['resource'] as string}`,
@@ -30,7 +29,6 @@ export default function insertTitle(
       )
       .asQuadResultSet()
       .first();
-    console.log(titleQuad);
     if (titleQuad) {
       return false;
     }
