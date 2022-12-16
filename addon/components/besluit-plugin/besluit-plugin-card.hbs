@@ -1,0 +1,20 @@
+<AuList::Item>
+  <AuButton
+    @icon="add"
+    @iconAlignment="left"
+    @skin="link"
+    @disabled={{this.hasTitle}}
+    {{on 'click' this.insertTitle}}>
+    {{t "besluit-plugin.insert.decision-title"}}
+  </AuButton>
+</AuList::Item>
+<AuList::Item>
+  <AuButton
+    @icon="add"
+    @iconAlignment="left"
+    @skin="link"
+    @disabled={{this.disableArticleInsert}}
+    {{on "click" this.insertArticle}}>
+    {{t "besluit-plugin.insert.article"}}
+  </AuButton>
+</AuList::Item>

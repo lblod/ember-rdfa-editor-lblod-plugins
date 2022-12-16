@@ -44,6 +44,10 @@ import {
 import { service } from '@ember/service';
 import importRdfaSnippet from 'dummy/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
+import {
+  besluitPluginCardWidget,
+  besluitContextCardWidget,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
   rdfaDateCardWidget,
@@ -170,6 +174,8 @@ export default class IndexController extends Controller {
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
+    besluitContextCardWidget(),
+    besluitPluginCardWidget(),
     importSnippetWidget,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
@@ -240,7 +246,7 @@ export default class IndexController extends Controller {
     <h5>Beslissing</h5>
 
     <div property="prov:value" datatype="xsd:string">
-      <div property="say:hasPart" resource="http://data.lblod.info/artikels/bbeb89ae-998b-4339-8de4-c8ab3a0679b5" typeof="say:Article">
+      <div property="say:hasPart" resource="http://data.lblod.info/artikels/bbeb89ae-998b-4339-8de4-c8ab3a0679b5" typeof="besluit:Artikel">
         <span property="dct:type" resource="sometype"></span>
         <div property="say:heading">
           Artikel
