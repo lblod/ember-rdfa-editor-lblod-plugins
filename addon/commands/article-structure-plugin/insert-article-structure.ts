@@ -20,7 +20,7 @@ export default function insertArticleStructureV2(
   report: ValidationReport,
   intlService: IntlService
 ): Command {
-  return (state, dispatch) => {
+  return (_state, dispatch) => {
     const structureToAddIndex = options.structures.findIndex(
       (structure) => structure.title === structureName
     );
@@ -77,13 +77,30 @@ export default function insertArticleStructureV2(
     if (dispatch) {
       const structureHtml = structureToAdd.template(structureUri, intlService);
 
-      controller.doCommand(
-        insertHtml(
-          structureHtml,
-          nodeToInsert.pos + nodeToInsert.node.nodeSize - 1,
-          nodeToInsert.pos + nodeToInsert.node.nodeSize - 1
-        )
-      );
+      //Detect if nodeToInsert only contains a placeholder, if so replace the full content of the nodeToInsert
+      console.log('CHILD: ', nodeToInsert.node.child(0));
+      if (
+        nodeToInsert.node.childCount === 1 &&
+        nodeToInsert.node.child(0).childCount === 1 &&
+        nodeToInsert.node.child(0).child(0).type ===
+          controller.schema.nodes['placeholder']
+      ) {
+        controller.doCommand(
+          insertHtml(
+            structureHtml,
+            nodeToInsert.pos + 1,
+            nodeToInsert.pos + nodeToInsert.node.nodeSize - 1
+          )
+        );
+      } else {
+        controller.doCommand(
+          insertHtml(
+            structureHtml,
+            nodeToInsert.pos + nodeToInsert.node.nodeSize - 1,
+            nodeToInsert.pos + nodeToInsert.node.nodeSize - 1
+          )
+        );
+      }
       const containerNode = unwrap(
         controller.state.doc.nodeAt(nodeToInsert.pos)
       );

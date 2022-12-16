@@ -12,7 +12,10 @@ export type Structure = {
   translation: string;
   moveUp: string;
   moveDown: string;
-  insertPredicate: string;
+  insertPredicate: {
+    long: string;
+    short: string;
+  };
   shaclConstraint: string;
   template: (uri: string, intlService: IntlService) => string;
 };

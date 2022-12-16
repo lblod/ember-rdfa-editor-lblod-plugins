@@ -131,7 +131,6 @@ export default function moveStructure(
         moveUp,
         filterFunction
       ).next().value;
-      console.log('node to insert', nodeToInsert);
       if (!nodeToInsert) {
         return false;
       }
@@ -151,7 +150,9 @@ export default function moveStructure(
         let insertRange: {from: number, to: number};
         if (
           structureContent.node.childCount === 1 &&
-          structureContent.node.child(0).type === controller.schema.nodes['placeholder']
+          structureContent.node.child(0).childCount === 1 &&
+          structureContent.node.child(0).child(0).type ===
+          controller.schema.nodes['placeholder']
         ) {
           insertRange = {from: structureContent.pos + 1, to: structureContent.pos + structureContent.node.nodeSize - 1};
         } else {
@@ -161,18 +162,20 @@ export default function moveStructure(
         let mappedStructureNodePos: number | undefined;
         controller.withTransaction((tr) => {
           tr.replaceRangeWith(insertRange.from, insertRange.to, structureNode.node);
+          console.log('BEFORE: ', structureNode.pos);
           mappedStructureNodePos = tr.mapping.map(structureNode.pos);
+          console.log('AFTER: ', mappedStructureNodePos);
           return tr.delete(mappedStructureNodePos, mappedStructureNodePos + structureNode.node.nodeSize);
         });
         const resolvedStructureNodePos = controller.state.doc.resolve(unwrap(mappedStructureNodePos));
         const originalContainer = resolvedStructureNodePos.parent;
-        let originalContainerPos = unwrap(resolvedStructurePos.before());
+        let originalContainerPos = unwrap(resolvedStructureNodePos.pos);
         if (originalContainer.childCount === 0) {
           controller.withTransaction((tr) => {
-            return tr.replaceRangeWith(originalContainerPos + 1, originalContainerPos + 1, controller.schema.node('placeholder', { placeholderContent: 'Voer inhoud in'}));
+            return tr.replaceRangeWith(originalContainerPos, originalContainerPos, controller.schema.node('placeholder', { placeholderText: 'Voer inhoud in'}));
           });
         }
-        originalContainerPos = unwrap(resolvedStructurePos.before());
+        originalContainerPos = unwrap(resolvedStructureNodePos.before());
         
         const originalContainerUri = resolvedStructureNodePos.node(resolvedStructureNodePos.depth - 1).attrs['resource'] as string;
         const newContainerUri = nodeToInsert.node.attrs['resource'] as string;
