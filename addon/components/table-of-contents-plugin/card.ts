@@ -24,7 +24,9 @@ export default class TableOfContentsCardComponent extends Component<Args> {
 
   get tableOfContentsRange() {
     let result: { from: number; to: number } | undefined;
+    console.log('DOC: ', this.controller.state.doc);
     this.controller.state.doc.descendants((node, pos) => {
+      console.log(node.type);
       if (node.type === this.controller.schema.nodes['tableOfContents']) {
         result = { from: pos, to: pos + node.nodeSize };
       }

@@ -30,9 +30,10 @@ export const emberNodeConfig: EmberNodeConfig = {
         if (
           element.dataset['emberNode'] === 'table-of-contents' ||
           // Ensure backwards compatibility
-          element.dataset['inlineComponent'] === 'table-of-contents' ||
+          element.dataset['inlineComponent'] ===
+            'inline-components/table-of-contents' ||
           (element.classList.contains('inline-component') &&
-            element.classList.contains('table-of-contents'))
+            element.classList.contains('inline-components/table-of-contents'))
         ) {
           return {
             config: optionMapOr(
