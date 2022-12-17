@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { ProseController } from '@lblod/ember-rdfa-editor';
@@ -16,8 +15,6 @@ type Args = {
   };
 };
 export default class EditorPluginsArticleStructureCardComponent extends Component<Args> {
-  @tracked isOutsideArticle = true;
-  @tracked articleUri = undefined;
   @service declare intl: IntlService;
 
   structures = trackedFunction(this, async () => {
