@@ -8,13 +8,13 @@ import {
 import { expect, unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import {
   ResolvedArticleStructurePluginOptions,
-  Structure,
+  StructureSpec,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 
 export default function recalculateStructureNumbers(
   controller: ProseController,
   containerRange: { from: number; to: number } | undefined | null,
-  structureType: Structure,
+  structureType: StructureSpec,
   options: ResolvedArticleStructurePluginOptions
 ): Command {
   return (_state, dispatch) => {
@@ -58,7 +58,7 @@ function replaceNumberIfNeeded(
   controller: ProseController,
   structure: ResolvedPNode,
   index: number,
-  structureType: Structure
+  structureType: StructureSpec
 ) {
   const numberPredicate =
     structureType.numberPredicate || defaults.numberPredicate;

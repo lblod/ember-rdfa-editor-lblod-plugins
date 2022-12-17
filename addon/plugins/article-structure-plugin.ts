@@ -2,7 +2,7 @@ import { WidgetSpec } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import optionsWithDefaults from '../utils/article-structure-plugin/options-with-defaults';
 
-export type Structure = {
+export type StructureSpec = {
   uriBase: string;
   title: string;
   type: string;
@@ -22,11 +22,11 @@ export type Structure = {
 };
 
 export type ArticleStructurePluginOptions = {
-  structures: Structure[];
+  structures: StructureSpec[];
 };
 
 export type ResolvedArticleStructurePluginOptions = {
-  structures: Structure[];
+  structures: StructureSpec[];
   structureTypes: string[];
 };
 

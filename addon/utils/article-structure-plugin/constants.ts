@@ -1,7 +1,7 @@
-import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import romanize from '../romanize';
 
-export const STRUCTURES: Record<string, Structure> = {
+export const STRUCTURES: Record<string, StructureSpec> = {
   title: {
     uriBase: 'http://data.lblod.info/titles/',
     title: 'Title',
