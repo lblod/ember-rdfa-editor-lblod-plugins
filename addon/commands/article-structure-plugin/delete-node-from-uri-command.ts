@@ -1,17 +1,14 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
+import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { Command } from 'prosemirror-state';
-import { Structure } from '../../utils/article-structure-plugin/constants';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 
 export default function deleteNodeFromURI(
   controller: ProseController,
   uri: string,
   type: string,
-  options: {
-    structures: Structure[];
-    structureTypes: string[];
-  }
+  options: ResolvedArticleStructurePluginOptions
 ): Command {
   return (state, dispatch) => {
     if (dispatch) {
@@ -19,7 +16,7 @@ export default function deleteNodeFromURI(
         .match(`>${uri}`)
         .asSubjectNodeMapping()
         .single()?.nodes[0];
-      if (!subjectNode?.pos) {
+      if (!subjectNode) {
         throw new Error(`No node found for resource ${uri}`);
       }
       const { node, pos } = subjectNode;
@@ -68,10 +65,7 @@ export default function deleteNodeFromURI(
 
 function recalculateContinuousStructures(
   controller: ProseController,
-  options: {
-    structures: Structure[];
-    structureTypes: string[];
-  }
+  options: ResolvedArticleStructurePluginOptions
 ) {
   for (const structure of options.structures) {
     if (structure.numbering === 'continuous') {

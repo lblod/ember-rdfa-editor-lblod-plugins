@@ -5,7 +5,6 @@ import {
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { Command } from 'prosemirror-state';
-import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import {
   children,
@@ -14,15 +13,13 @@ import {
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
+import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 
 export default function moveStructure(
   controller: ProseController,
   structureURI: string,
   moveUp: boolean,
-  options: {
-    structures: Structure[];
-    structureTypes: string[];
-  },
+  options: ResolvedArticleStructurePluginOptions,
   report: ValidationReport
 ): Command {
   return (state, dispatch) => {
@@ -217,10 +214,7 @@ export default function moveStructure(
 
 function recalculateContinuousStructures(
   controller: ProseController,
-  options: {
-    structures: Structure[];
-    structureTypes: string[];
-  }
+  options: ResolvedArticleStructurePluginOptions
 ) {
   for (const structure of options.structures) {
     if (structure.numbering === 'continuous') {

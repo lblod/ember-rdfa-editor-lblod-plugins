@@ -1,24 +1,5 @@
-import IntlService from 'ember-intl/services/intl';
+import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import romanize from '../romanize';
-
-export type Structure = {
-  uriBase: string;
-  title: string;
-  type: string;
-  numberPredicate: string;
-  numbering?: string;
-  numberingFunction?: (num: number) => string;
-  heading?: string;
-  translation: string;
-  moveUp: string;
-  moveDown: string;
-  insertPredicate?: {
-    long: string;
-    short: string;
-  };
-  shaclConstraint: string;
-  template: (uri: string, intlService: IntlService) => string;
-};
 
 export const STRUCTURES: Record<string, Structure> = {
   title: {

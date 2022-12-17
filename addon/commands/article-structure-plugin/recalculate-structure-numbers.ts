@@ -6,15 +6,16 @@ import {
   ResolvedPNode,
 } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import { expect, unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
+import {
+  ResolvedArticleStructurePluginOptions,
+  Structure,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 
 export default function recalculateStructureNumbers(
   controller: ProseController,
   containerRange: { from: number; to: number } | undefined | null,
   structureType: Structure,
-  options: {
-    structureTypes: string[];
-  }
+  options: ResolvedArticleStructurePluginOptions
 ): Command {
   return (state, dispatch) => {
     if (dispatch) {

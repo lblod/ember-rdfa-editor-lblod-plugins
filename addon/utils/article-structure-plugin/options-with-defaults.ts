@@ -1,8 +1,12 @@
-import { Structure, STRUCTURES } from './constants';
+import {
+  ArticleStructurePluginOptions,
+  ResolvedArticleStructurePluginOptions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { STRUCTURES } from './constants';
 
-export default function optionsWithDefaults(options?: {
-  structures: (Structure | string)[];
-}) {
+export default function optionsWithDefaults(
+  options?: ArticleStructurePluginOptions
+): ResolvedArticleStructurePluginOptions {
   const structuresSelected = [];
   const structuresTypesSelectedByUser =
     (options && options.structures) || Object.keys(STRUCTURES);

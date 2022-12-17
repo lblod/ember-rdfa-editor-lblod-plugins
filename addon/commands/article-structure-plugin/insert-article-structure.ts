@@ -8,15 +8,12 @@ import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { nodesBetween } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
-import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
+import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 
 export default function insertArticleStructureV2(
   controller: ProseController,
   structureName: string,
-  options: {
-    structures: Structure[];
-    structureTypes: string[];
-  },
+  options: ResolvedArticleStructurePluginOptions,
   report: ValidationReport,
   intlService: IntlService
 ): Command {

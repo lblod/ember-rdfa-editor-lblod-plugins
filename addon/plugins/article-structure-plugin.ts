@@ -1,10 +1,38 @@
 import { WidgetSpec } from '@lblod/ember-rdfa-editor';
-import { Structure } from '../utils/article-structure-plugin/constants';
+import IntlService from 'ember-intl/services/intl';
 import optionsWithDefaults from '../utils/article-structure-plugin/options-with-defaults';
 
-export const articleStructureInsertWidget: (options?: {
-  structures: (Structure | string)[];
-}) => WidgetSpec = (options) => {
+export type Structure = {
+  uriBase: string;
+  title: string;
+  type: string;
+  numberPredicate: string;
+  numbering?: string;
+  numberingFunction?: (num: number) => string;
+  heading?: string;
+  translation: string;
+  moveUp: string;
+  moveDown: string;
+  insertPredicate?: {
+    long: string;
+    short: string;
+  };
+  shaclConstraint: string;
+  template: (uri: string, intlService: IntlService) => string;
+};
+
+export type ArticleStructurePluginOptions = {
+  structures: Structure[];
+};
+
+export type ResolvedArticleStructurePluginOptions = {
+  structures: Structure[];
+  structureTypes: string[];
+};
+
+export const articleStructureInsertWidget: (
+  options?: ArticleStructurePluginOptions
+) => WidgetSpec = (options) => {
   return {
     componentName: 'article-structure-plugin/article-structure-card',
     desiredLocation: 'insertSidebar',
@@ -14,9 +42,9 @@ export const articleStructureInsertWidget: (options?: {
   };
 };
 
-export const articleStructureContextWidget: (options?: {
-  structures: (Structure | string)[];
-}) => WidgetSpec = (options) => {
+export const articleStructureContextWidget: (
+  options?: ArticleStructurePluginOptions
+) => WidgetSpec = (options) => {
   return {
     componentName: 'article-structure-plugin/structure-card',
     desiredLocation: 'sidebar',

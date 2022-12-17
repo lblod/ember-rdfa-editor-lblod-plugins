@@ -3,19 +3,16 @@ import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
-import { Structure } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/constants';
 import {
   deleteNodeFromUri,
   moveStructure,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/article-structure-plugin';
 import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
+import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 type Args = {
   controller: ProseController;
   widgetArgs: {
-    options: {
-      structures: Structure[];
-      structureTypes: string[];
-    };
+    options: ResolvedArticleStructurePluginOptions;
   };
 };
 
