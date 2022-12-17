@@ -17,7 +17,7 @@ export default function recalculateStructureNumbers(
   structureType: Structure,
   options: ResolvedArticleStructurePluginOptions
 ): Command {
-  return (state, dispatch) => {
+  return (_state, dispatch) => {
     if (dispatch) {
       let datastore: ProseStore;
       if (structureType.numbering !== 'continuous' && containerRange) {
@@ -29,19 +29,21 @@ export default function recalculateStructureNumbers(
       } else {
         datastore = controller.datastore;
       }
-      const structures = datastore
-        .match(null, 'a', `>${structureType.type}`)
-        .transformDataset((dataset) => {
-          return dataset.filter((quad) => {
-            return options.structureTypes.includes(quad.object.value);
-          });
-        })
-        .asPredicateNodeMapping()
-        .nodes();
+      const structures = [
+        ...datastore
+          .match(null, 'a', `>${structureType.type}`)
+          .transformDataset((dataset) => {
+            return dataset.filter((quad) => {
+              return options.structureTypes.includes(quad.object.value);
+            });
+          })
+          .asPredicateNodeMapping()
+          .nodes(),
+      ];
       if (!structures) return true;
-      const structuresArray = [...structures];
-      const structuresFiltered = [...structuresArray].filter(
-        (node, index) => index === structuresArray.indexOf(node)
+      // Temporary workaround: for some reason structures contains each structure twice.
+      const structuresFiltered = structures.filter(
+        (node, index) => index === structures.indexOf(node)
       );
       for (let i = 0; i < structuresFiltered.length; i++) {
         const structure = unwrap(structuresFiltered[i]);
@@ -71,7 +73,7 @@ function replaceNumberIfNeeded(
   );
   const structureNumber = structureNumberObjectNode.term.value;
   const structureNumberElement = [...structureNumberObjectNode.nodes][0];
-  if (!structureNumberElement?.pos) {
+  if (!structureNumberElement) {
     throw new Error('Could not find object node');
   }
   let structureNumberExpected: string;
@@ -82,10 +84,13 @@ function replaceNumberIfNeeded(
   }
   if (structureNumber !== structureNumberExpected) {
     const { pos, node } = structureNumberElement;
-    const from = pos + 1;
-    const to = pos + node.nodeSize - 1;
+    const insertRange = { from: pos + 1, to: pos + node.nodeSize - 1 };
     controller.withTransaction((tr) => {
-      return tr.insertText(String(structureNumberExpected), from, to);
+      return tr.insertText(
+        String(structureNumberExpected),
+        insertRange.from,
+        insertRange.to
+      );
     });
   }
 }
