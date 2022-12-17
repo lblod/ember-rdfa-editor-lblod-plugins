@@ -20,7 +20,7 @@ citaten-plugin:
     from: van
     to: tot
     article: Zoek artikel
-    article-placeholder: Artikel nummer  
+    article-placeholder: Artikel nummer
     back: Terug naar zoekresultaten
     results: Resultaten
 
@@ -41,7 +41,7 @@ citaten-plugin:
     no-results: Geen resultaten gevonden
     error-title: Probleem bij het laden
     error-intro: "Er heeft zich een fout voorgedaan bij het zoeken in de Vlaamse Codex:"
-    error-outro: Moest dit probleem aanhouden, neem contact op met 
+    error-outro: Moest dit probleem aanhouden, neem contact op met
 table-of-contents-plugin:
   title: Inhoudstafel
   toggle: Toon Inhoudstafel
@@ -56,6 +56,16 @@ besluit-type-plugin:
   error-title: "Fout"
   error-first-body: "Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer"
   error-rest-body: ". Voor meer specifieke details, controleer de console in de browser."
+besluit-plugin:
+  card:
+    title: Artikels bewerken
+  insert:
+    article: Voeg artikel in
+    decision-title: Voeg besluittitel in
+  action:
+    delete-article: Artikel verwijderen
+    article-up: Artikel naar boven verplaatsen
+    article-down: Artikel naar beneden verplaatsen
 date-plugin:
   insert:
     date: "Datum invoegen"

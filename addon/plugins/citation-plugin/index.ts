@@ -83,7 +83,6 @@ function calculateDecorations(
             const { text, legislationTypeUri, searchTextMatch } =
               processedMatch;
             const { start: matchStart, end: matchEnd } = searchTextMatch;
-            console.log(pos);
             const decorationStart = pos + matchStart;
             const decorationEnd = pos + matchEnd;
             decorations.push(
