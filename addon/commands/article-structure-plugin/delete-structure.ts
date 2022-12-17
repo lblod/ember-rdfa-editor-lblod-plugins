@@ -4,18 +4,16 @@ import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { Command } from 'prosemirror-state';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 
-export default function deleteNodeFromURI(
+export default function deleteStructure(
   controller: ProseController,
   uri: string,
-  type: string,
   options: ResolvedArticleStructurePluginOptions
 ): Command {
   return (state, dispatch) => {
     if (dispatch) {
-      const subjectNode = controller.datastore
-        .match(`>${uri}`)
-        .asSubjectNodeMapping()
-        .single()?.nodes[0];
+      const subjectNode = [
+        ...controller.datastore.match(`>${uri}`).asSubjectNodeMapping().nodes(),
+      ][0];
       if (!subjectNode) {
         throw new Error(`No node found for resource ${uri}`);
       }
@@ -24,18 +22,17 @@ export default function deleteNodeFromURI(
       const container = resolvedPos.parent;
       let containerRange = {
         from: resolvedPos.before(),
-        to: resolvedPos.before() + node.nodeSize,
+        to: resolvedPos.before() + container.nodeSize,
       };
-      const from = resolvedPos.pos;
-      const to = resolvedPos.pos + subjectNode.node.nodeSize;
+      const removalRange = { from: pos, to: pos + node.nodeSize };
       const tr = state.tr;
       if (container.childCount === 1) {
         const placeholder = controller.schema.node('placeholder', {
           placeholderText: 'Voer inhoud in',
         });
-        tr.replaceRangeWith(from, to, placeholder);
+        tr.replaceRangeWith(removalRange.from, removalRange.to, placeholder);
       } else {
-        tr.delete(from, to);
+        tr.delete(removalRange.from, removalRange.to);
       }
       dispatch(tr);
       containerRange = {
