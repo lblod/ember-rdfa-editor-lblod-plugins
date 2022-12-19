@@ -32,7 +32,7 @@ export const STRUCTURES: Record<string, StructureSpec> = {
     >
       <h4 property="say:heading">
         <span property="eli:number" datatype="xsd:string">
-          <span class="mark-highlight-manual">Voer inhoud in</span>
+          <span class="mark-highlight-manual">nummer</span>
         </span>.
         <span property="ext:title"><span class="mark-highlight-manual">${intlService.t(
           'article-structure-plugin.placeholder.title'
@@ -76,7 +76,7 @@ export const STRUCTURES: Record<string, StructureSpec> = {
     >
       <h4 property="say:heading">
         <span property="eli:number" datatype="xsd:string">
-          <span class="mark-highlight-manual">Voer inhoud in</span>
+          <span class="mark-highlight-manual">nummer</span>
         </span>.
         <span property="ext:title"><span class="mark-highlight-manual">${intlService.t(
           'article-structure-plugin.placeholder.chapter'
@@ -121,7 +121,7 @@ export const STRUCTURES: Record<string, StructureSpec> = {
     >
       <h5 property="say:heading">
         <span property="eli:number" datatype="xsd:string">
-          <span class="mark-highlight-manual">Voer inhoud in</span>
+          <span class="mark-highlight-manual">nummer</span>
         </span>.
         <span property="ext:title"><span class="mark-highlight-manual">${intlService.t(
           'article-structure-plugin.placeholder.section'
@@ -166,7 +166,7 @@ export const STRUCTURES: Record<string, StructureSpec> = {
     >
       <h6 property="say:heading">
         <span property="eli:number" datatype="xsd:string">
-          <span class="mark-highlight-manual">Voer inhoud in</span>
+          <span class="mark-highlight-manual">nummer</span>
         </span>.
         <span property="ext:title"><span class="mark-highlight-manual">${intlService.t(
           'article-structure-plugin.placeholder.subsection'
@@ -210,8 +210,8 @@ export const STRUCTURES: Record<string, StructureSpec> = {
       <div property="say:hasPart" typeof="http://data.vlaanderen.be/ns/besluit#Artikel" resource="${uri}">
         <div property="say:heading">
           Artikel 
-          <span property="eli:number" datatype="xsd:string"> 
-            <span class="mark-highlight-manual">Voer inhoud in</span>
+          <span property="eli:number" datatype="xsd:integer"> 
+            <span class="mark-highlight-manual">nummer</span>
           </span>
           :
           <span property="ext:title"><span class="mark-highlight-manual">Voer inhoud in</span></span>
@@ -250,8 +250,8 @@ export const STRUCTURES: Record<string, StructureSpec> = {
       `,
     template: (uri) => `
       <div property="say:hasParagraph" typeof="say:Paragraph" resource="${uri}">
-        §<span property="eli:number" datatype="xsd:string">
-          <span class="mark-highlight-manual">Voer inhoud in</span>
+        §<span property="eli:number" datatype="xsd:integer">
+          <span class="mark-highlight-manual">nummer</span>
         </span>.
         <span class="mark-highlight-manual">Voer inhoud in</span>
       </div>

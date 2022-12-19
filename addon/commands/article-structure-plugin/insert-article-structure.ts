@@ -8,7 +8,7 @@ import IntlService from 'ember-intl/services/intl';
 import { Command } from 'prosemirror-state';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
-import { nodesBetween } from '@lblod/ember-rdfa-editor/utils/position-utils';
+import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
@@ -42,8 +42,8 @@ export default function insertArticleStructureV2(
     };
 
     let structureContainer =
-      nodesBetween(selection.$from, true, false, filterFunction).next().value ??
-      nodesBetween(selection.$from, true, true, filterFunction).next().value;
+      findNodes(selection.$from, true, false, filterFunction).next().value ??
+      findNodes(selection.$from, true, true, filterFunction).next().value;
 
     if (!structureContainer) return false;
 

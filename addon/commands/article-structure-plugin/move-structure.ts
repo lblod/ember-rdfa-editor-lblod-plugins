@@ -7,8 +7,8 @@ import {
 import { Command } from 'prosemirror-state';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import {
-  children,
-  nodesBetween,
+  findChildren,
+  findNodes,
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
@@ -36,7 +36,7 @@ export default function moveStructure(
     const structureContainer = resolvedStructurePos.parent;
     let structureContainerRange = { from: resolvedStructurePos.before(), to: resolvedStructurePos.before() + structureContainer.nodeSize};
     const structures = [
-      ...children(
+      ...findChildren(
         { node: structureContainer, pos: structureContainerRange.from },
         false,
         false,
@@ -132,7 +132,7 @@ export default function moveStructure(
         return !!nodeUri && !urisNotAllowedToInsert.includes(nodeUri);
       };
       // The new structure container we want to move our structure in to.
-      let newStructureContainer: ResolvedPNode | undefined | void = nodesBetween(
+      let newStructureContainer: ResolvedPNode | undefined | void = findNodes(
         resolvedStructurePos,
         true,
         moveUp,
@@ -146,7 +146,7 @@ export default function moveStructure(
       const newStructureContainerURI = newStructureContainer.node.attrs['resource'] as string;
       // Check if there is a specific predicate container we need to insert inside
       if (currentStructureSpec.insertPredicate) {
-        newStructureContainer = children(newStructureContainer, false, false, ({ node: child}) => child.attrs['property'] === currentStructureSpec.insertPredicate?.short).next().value;
+        newStructureContainer = findChildren(newStructureContainer, false, false, ({ node: child}) => child.attrs['property'] === currentStructureSpec.insertPredicate?.short).next().value;
       }
       if(!newStructureContainer){
         return false;
