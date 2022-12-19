@@ -16,7 +16,7 @@ import { assert } from '@ember/debug';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
+import { insertArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -304,35 +304,54 @@ export default class RoadsignRegulationCard extends Component<Args> {
     // ): Command => {
     //   return (_state, _dispatch) => true;
     // };
+    const regulationHTML = `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
+    <span style="display:none;" property="prov:wasDerivedFrom" resource="${
+      measure.uri
+    }">&nbsp;</span>
+    <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
+    <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
+      <div property="dct:description">
+        ${html}
+        <p>Dit wordt aangeduid door verkeerstekens:</p>
+        <ul style="list-style:none;">
+          ${signsHTML}
+        </ul>
+        ${temporalValue === 'true' ? 'Deze signalisatie is dynamisch.' : ''}
+      </div>
+    </div>
+  `;
+    // if (this.insertRange) {
+    //   this.args.controller.doCommand(
+    //     insertHtml(
+    //       `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
+    //         <span style="display:none;" property="prov:wasDerivedFrom" resource="${
+    //           measure.uri
+    //         }">&nbsp;</span>
+    //         <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
+    //         <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
+    //           <div property="dct:description">
+    //             ${html}
+    //             <p>Dit wordt aangeduid door verkeerstekens:</p>
+    //             <ul style="list-style:none;">
+    //               ${signsHTML}
+    //             </ul>
+    //             ${
+    //               temporalValue === 'true'
+    //                 ? 'Deze signalisatie is dynamisch.'
+    //                 : ''
+    //             }
+    //           </div>
+    //         </div>
+    //       `,
+    //       this.insertRange.from,
+    //       this.insertRange.to
+    //     )
+    //   );
+    // }
 
-    if (this.insertRange) {
-      this.args.controller.doCommand(
-        insertHtml(
-          `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-            <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-              measure.uri
-            }">&nbsp;</span>
-            <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-            <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
-              <div property="dct:description">
-                ${html}
-                <p>Dit wordt aangeduid door verkeerstekens:</p>
-                <ul style="list-style:none;">
-                  ${signsHTML}
-                </ul>
-                ${
-                  temporalValue === 'true'
-                    ? 'Deze signalisatie is dynamisch.'
-                    : ''
-                }
-              </div>
-            </div>
-          `,
-          this.insertRange.from,
-          this.insertRange.to
-        )
-      );
-    }
+    this.args.controller.doCommand(
+      insertArticle(this.args.controller, regulationHTML, '')
+    );
     this.args.closeModal();
   }
 
