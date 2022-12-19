@@ -231,34 +231,6 @@ export default class RoadsignRegulationCard extends Component<Args> {
     this.count = count;
   });
 
-  get insertRange() {
-    const selection = this.args.controller.state.selection;
-    const besluit = [
-      ...this.args.controller.datastore
-        .limitToRange(this.args.controller.state, selection.from, selection.to)
-        .match(undefined, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-        .asSubjectNodeMapping(),
-    ][0];
-    const besluitNode = [...(besluit?.nodes ?? [])][0];
-
-    if (besluitNode) {
-      const { pos, node } = besluitNode;
-      let insertRange: { from: number; to: number } | undefined;
-      const basePos = pos + 1;
-      node.descendants((child, childPos) => {
-        if (child.attrs['property'] === 'prov:value') {
-          insertRange = {
-            from: basePos + childPos + child.nodeSize - 1,
-            to: basePos + childPos + child.nodeSize - 1,
-          };
-        }
-        return false;
-      });
-      return insertRange;
-    }
-    return;
-  }
-
   @action
   async insertHtml(
     measure: Measure,
@@ -297,13 +269,6 @@ export default class RoadsignRegulationCard extends Component<Args> {
       </li>`;
       })
       .join('\n');
-    // TODO: Import insert structure from article structure command
-    // const InsertStructure = (
-    //   _structureType: string,
-    //   _htmlContent: string
-    // ): Command => {
-    //   return (_state, _dispatch) => true;
-    // };
     const regulationHTML = `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
     <span style="display:none;" property="prov:wasDerivedFrom" resource="${
       measure.uri
@@ -320,34 +285,6 @@ export default class RoadsignRegulationCard extends Component<Args> {
       </div>
     </div>
   `;
-    // if (this.insertRange) {
-    //   this.args.controller.doCommand(
-    //     insertHtml(
-    //       `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-    //         <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-    //           measure.uri
-    //         }">&nbsp;</span>
-    //         <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-    //         <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
-    //           <div property="dct:description">
-    //             ${html}
-    //             <p>Dit wordt aangeduid door verkeerstekens:</p>
-    //             <ul style="list-style:none;">
-    //               ${signsHTML}
-    //             </ul>
-    //             ${
-    //               temporalValue === 'true'
-    //                 ? 'Deze signalisatie is dynamisch.'
-    //                 : ''
-    //             }
-    //           </div>
-    //         </div>
-    //       `,
-    //       this.insertRange.from,
-    //       this.insertRange.to
-    //     )
-    //   );
-    // }
 
     this.args.controller.doCommand(
       insertArticle(this.args.controller, regulationHTML, '')
