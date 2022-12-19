@@ -44,7 +44,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
             parent = { content: tocConfigEntry.value, pos };
             break;
           } else {
-            const nodes = [
+            const { from } = [
               ...this.args.controller.datastore
                 .match(
                   `>${attributes['resource'] as string}`,
@@ -52,12 +52,12 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
                 )
                 .asObjectNodeMapping()
                 .nodes(),
-            ];
-            const resolvedNode = nodes[0];
-            if (resolvedNode) {
+            ][0];
+            const node = this.controller.state.doc.nodeAt(from);
+            if (node) {
               parent = {
-                content: resolvedNode.node.textContent,
-                pos: resolvedNode.pos,
+                content: node.textContent,
+                pos: from,
               };
               break;
             }

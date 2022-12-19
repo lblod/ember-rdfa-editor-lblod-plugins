@@ -21,27 +21,32 @@ function replaceNumberIfNeeded(
   article: ResolvedPNode,
   index: number
 ) {
+  const articleURI = controller.state.doc.nodeAt(article.from)?.attrs[
+    'resource'
+  ] as string | undefined;
+  if (!articleURI) {
+    throw new Error(
+      `Article URI not found for range { from: ${article.from}, to: ${article.to} }`
+    );
+  }
   const articleNumberObject = [
     ...controller.datastore
-      .match(
-        `>${article.node.attrs['resource'] as string}`,
-        '>http://data.europa.eu/eli/ontology#number'
-      )
+      .match(`>${articleURI}`, '>http://data.europa.eu/eli/ontology#number')
       .asObjectNodeMapping(),
   ][0];
   if (!articleNumberObject) {
     return;
   }
   const articleNumber = Number(articleNumberObject.term.value);
-  const articleNumberElement = unwrap(articleNumberObject.nodes[0]);
+  const articleNumberRange = unwrap(articleNumberObject.nodes[0]);
   const articleNumberExpected = index + 1;
 
   if (articleNumber !== articleNumberExpected) {
     controller.withTransaction((tr) => {
       return tr.insertText(
         articleNumberExpected.toString(),
-        articleNumberElement.pos + 1,
-        articleNumberElement.pos + articleNumberElement.node.nodeSize
+        articleNumberRange.from + 1,
+        articleNumberRange.to - 1
       );
     });
   }

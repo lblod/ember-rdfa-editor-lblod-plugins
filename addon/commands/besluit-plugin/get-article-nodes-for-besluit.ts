@@ -5,9 +5,9 @@ export default function getArticleNodesForBesluit(
   controller: ProseController,
   besluitUri?: string
 ) {
-  let besluitNode: ResolvedPNode | undefined;
+  let besluitRange: ResolvedPNode | undefined;
   if (besluitUri) {
-    besluitNode = [
+    besluitRange = [
       ...controller.datastore
         .match(`>${besluitUri}`)
         .asSubjectNodeMapping()
@@ -15,7 +15,7 @@ export default function getArticleNodesForBesluit(
     ][0];
   } else {
     const selection = controller.state.selection;
-    besluitNode = [
+    besluitRange = [
       ...controller.datastore
         .limitToRange(controller.state, selection.from, selection.to)
         .match(null, 'a', 'besluit:Besluit')
@@ -23,13 +23,9 @@ export default function getArticleNodesForBesluit(
         .nodes(),
     ][0];
   }
-  if (!besluitNode) {
+  if (!besluitRange) {
     return;
   }
-  const besluitRange = {
-    from: besluitNode.pos,
-    to: besluitNode.pos + besluitNode.node.nodeSize,
-  };
   return [
     ...controller.datastore
       .limitToRange(controller.state, besluitRange.from, besluitRange.to)

@@ -67,18 +67,27 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     if (!mapping) {
       return;
     }
-    const { node: mappingNode, pos } = unwrap([[...mapping.nodes][0]][0]);
+    const { from } = unwrap([[...mapping.nodes][0]][0]);
+    const variableNode = this.controller.state.doc.nodeAt(from);
+
     let insertRange: { from: number; to: number } | undefined;
-    mappingNode.descendants((child, relativePos) => {
-      const absolutePos: number = pos + relativePos + 1;
-      if (child.attrs['property'] === 'ext:content') {
-        insertRange = {
-          from: absolutePos + 1,
-          to: absolutePos + child.nodeSize - 1,
-        };
-      }
-      return false;
-    });
+    variableNode?.nodesBetween(
+      0,
+      variableNode.nodeSize,
+      (child, pos) => {
+        if (child.attrs['property'] === 'ext:content') {
+          insertRange = {
+            from: pos + 1,
+            to: pos + child.nodeSize - 1,
+          };
+        }
+        return false;
+      },
+      from + 1
+    );
+    if (!insertRange) {
+      return;
+    }
     let htmlToInsert: string;
     if (Array.isArray(this.selectedVariable)) {
       htmlToInsert = this.selectedVariable

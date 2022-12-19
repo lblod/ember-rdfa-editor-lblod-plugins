@@ -21,7 +21,8 @@ export default function moveArticleCommand(
       return false;
     }
     const articleIndex = articles.findIndex(
-      (article) => article.node.attrs['resource'] === articleUri
+      ({ from }) =>
+        controller.state.doc.nodeAt(from)?.attrs['resource'] === articleUri
     );
 
     if (
@@ -35,6 +36,7 @@ export default function moveArticleCommand(
     if (dispatch) {
       let articleA: ResolvedPNode;
       let articleB: ResolvedPNode;
+
       if (moveUp) {
         articleA = unwrap(articles[articleIndex - 1]);
         articleB = unwrap(articles[articleIndex]);
@@ -42,23 +44,22 @@ export default function moveArticleCommand(
         articleA = unwrap(articles[articleIndex]);
         articleB = unwrap(articles[articleIndex + 1]);
       }
-      const articleBRange = {
-        from: articleB.pos,
-        to: articleB.pos + articleB.node.nodeSize,
-      };
+      const articleBNode = unwrap(controller.state.doc.nodeAt(articleB.from));
       controller.withTransaction((tr) => {
-        tr.delete(articleBRange.from, articleBRange.to);
-        return tr.replaceRangeWith(articleA.pos, articleA.pos, articleB.node);
+        tr.delete(articleB.from, articleB.to);
+        return tr.replaceRangeWith(articleA.from, articleA.from, articleBNode);
       });
       recalculateArticleNumbers(controller, besluitUri);
       let selection: Selection;
       if (moveUp) {
         selection = TextSelection.near(
-          controller.state.doc.resolve(articleA.pos)
+          controller.state.doc.resolve(articleA.from)
         );
       } else {
         selection = TextSelection.near(
-          controller.state.doc.resolve(articleA.pos + articleB.node.nodeSize)
+          controller.state.doc.resolve(
+            articleA.from + articleB.to - articleB.from
+          )
         );
       }
       controller.withTransaction((tr) => {

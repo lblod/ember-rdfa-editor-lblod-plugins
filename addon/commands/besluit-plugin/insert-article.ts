@@ -8,7 +8,7 @@ export default function insertArticle(
   articleContent: string,
   articleNumber: string
 ): Command {
-  return function (state, dispatch) {
+  return function (_state, dispatch) {
     const selection = controller.state.selection;
     const limitedDatastore = controller.datastore.limitToRange(
       controller.state,
@@ -24,20 +24,20 @@ export default function insertArticle(
       return false;
     }
 
-    const containerNode = [
+    const containerRange = [
       ...controller.datastore
         .match(besluitSubject, 'prov:value')
         .asPredicateNodeMapping()
         .nodes(),
     ][0];
 
-    if (!containerNode) {
+    if (!containerRange) {
       return false;
     }
     if (dispatch) {
       const range = {
-        from: containerNode.pos + containerNode.node.nodeSize - 1,
-        to: containerNode.pos + containerNode.node.nodeSize - 1,
+        from: containerRange.to - 1,
+        to: containerRange.to - 1,
       };
       const articleUri = `http://data.lblod.info/artikels/${uuid()}`;
       const articleHtml = `

@@ -16,19 +16,22 @@ export default function insertTitle(
       selection.from,
       selection.to
     );
-    const besluitNode = [
+
+    const besluit = [
       ...limitedDatastore
         .match(null, 'a', 'besluit:Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
+        .asSubjectNodeMapping(),
     ][0];
 
-    if (!besluitNode) {
+    const besluitRange = besluit.nodes[0];
+
+    if (!besluit || !besluitRange) {
       return false;
     }
+
     const titleQuad = controller.datastore
       .match(
-        `>${besluitNode.node.attrs['resource'] as string}`,
+        `>${besluit.term.value}`,
         '>http://data.europa.eu/eli/ontology#title'
       )
       .asQuadResultSet()
@@ -39,8 +42,8 @@ export default function insertTitle(
 
     if (dispatch) {
       const range = {
-        from: besluitNode.pos + 1,
-        to: besluitNode.pos + 1,
+        from: besluitRange.from + 1,
+        to: besluitRange.from + 1,
       };
       const articleHtml = `
       <h4 class="h4" property="eli:title" datatype="xsd:string">${

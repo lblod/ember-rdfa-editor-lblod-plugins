@@ -34,30 +34,24 @@ export default class BesluitContextCardComponent extends Component<Args> {
 
   @action
   deleteArticle() {
-    const articleNode = this.activeArticleNode;
-    if (articleNode && this.besluit) {
+    if (this.activeArticle && this.besluitURI) {
+      const { from, to } = this.activeArticle;
       this.controller.withTransaction((tr) => {
-        return tr.delete(
-          articleNode.pos,
-          articleNode.pos + articleNode.node.nodeSize
-        );
+        return tr.delete(from, to);
       });
       this.focus();
-      recalculateArticleNumbers(
-        this.controller,
-        this.besluit.node.attrs['resource']
-      );
+      recalculateArticleNumbers(this.controller, this.besluitURI);
     }
   }
 
   @action
   moveUpArticle() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticleURI) {
       this.controller.doCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticleURI,
           true
         )
       );
@@ -66,12 +60,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
 
   @action
   moveDownArticle() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticleURI) {
       this.controller.doCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticleURI,
           false
         )
       );
@@ -79,12 +73,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
   }
 
   get disableMoveUp() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticleURI) {
       return !this.controller.checkCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticleURI,
           true
         )
       );
@@ -93,12 +87,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
   }
 
   get disableMoveDown() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticleURI) {
       return !this.controller.checkCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticleURI,
           false
         )
       );
@@ -106,7 +100,7 @@ export default class BesluitContextCardComponent extends Component<Args> {
     return true;
   }
 
-  get besluit() {
+  get besluitURI() {
     const { from, to } = this.controller.state.selection;
 
     const limitedDatastore = this.controller.datastore.limitToRange(
@@ -114,16 +108,14 @@ export default class BesluitContextCardComponent extends Component<Args> {
       from,
       to
     );
-    return [
-      ...limitedDatastore
-        .match(null, 'a', 'besluit:Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
+    return limitedDatastore
+      .match(null, 'a', 'besluit:Besluit')
+      .asQuadResultSet()
+      .first()?.subject.value;
   }
 
-  get activeArticleNode() {
-    if (this.besluit) {
+  get activeArticle() {
+    if (this.besluitURI) {
       const { from, to } = this.controller.state.selection;
 
       const limitedDatastore = this.controller.datastore.limitToRange(
@@ -138,5 +130,15 @@ export default class BesluitContextCardComponent extends Component<Args> {
           .nodes(),
       ][0];
     }
+    return;
+  }
+
+  get activeArticleURI() {
+    if (this.activeArticle) {
+      return this.controller.state.doc.nodeAt(this.activeArticle.from)?.attrs[
+        'resource'
+      ] as string;
+    }
+    return;
   }
 }

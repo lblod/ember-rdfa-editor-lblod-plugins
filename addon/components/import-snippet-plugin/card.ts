@@ -22,17 +22,18 @@ export default class ImportSnippetPluginCard extends Component<Args> {
 
   get insertRange() {
     const selection = this.controller.state.selection;
-    const besluitNode = [
+    const besluitRange = [
       ...this.controller.datastore
         .limitToRange(this.controller.state, selection.from, selection.to)
         .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-        .asSubjectNodeMapping(),
-    ][0]?.nodes[0];
-    if (besluitNode) {
-      const { node, pos } = besluitNode;
+        .asSubjectNodeMapping()
+        .nodes(),
+    ][0];
+    if (besluitRange) {
+      const { to } = besluitRange;
       return {
-        from: pos + node.nodeSize - 1,
-        to: pos + node.nodeSize - 1,
+        from: to - 1,
+        to: to - 1,
       };
     } else {
       return selection;

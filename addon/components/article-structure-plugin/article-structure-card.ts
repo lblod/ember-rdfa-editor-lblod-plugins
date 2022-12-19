@@ -82,7 +82,9 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
     ) {
       const structure = documentMatches.nodes.pop();
       if (structure) {
-        return structure.node.attrs['resource'] as string;
+        const uri = this.args.controller.state.doc.nodeAt(structure.from)
+          ?.attrs['resource'] as string | undefined;
+        return uri;
       }
     }
     return;
