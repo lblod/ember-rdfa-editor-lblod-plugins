@@ -1,0 +1,14 @@
+<div>
+{{#each this.structures.value as |structure|}}
+  <AuList::Item>
+    <AuButton
+      @icon="add"
+      @iconAlignment="left"
+      @skin="link"
+      @disabled={{not structure.canExecute}}
+      {{on 'click' (fn this.insertStructure structure.title)}}>
+      {{t structure.translation}}
+    </AuButton>
+  </AuList::Item>
+{{/each}}
+</div>
