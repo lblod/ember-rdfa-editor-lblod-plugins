@@ -30,17 +30,13 @@ import {
   paragraph,
   repaired_block,
   text,
+  placeholder,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
   tableMenu,
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
-import {
-  placeholder,
-  placeholderEditing,
-  placeholderView,
-} from '@lblod/ember-rdfa-editor/plugins/placeholder';
 import { service } from '@ember/service';
 import importRdfaSnippet from 'dummy/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
@@ -166,15 +162,10 @@ export default class IndexController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      placeholder: placeholderView,
       tableOfContents: tableOfContentsView(controller),
     };
   };
-  @tracked plugins: Plugin[] = [
-    placeholderEditing(),
-    tablePlugin,
-    citation.plugin,
-  ];
+  @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
