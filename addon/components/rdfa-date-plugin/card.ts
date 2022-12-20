@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import modifyDate from '../../commands/modify-date-command';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 type Args = {
   controller: ProseController;
 };

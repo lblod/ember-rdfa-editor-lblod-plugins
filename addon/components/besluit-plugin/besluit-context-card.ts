@@ -8,8 +8,6 @@ import {
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { DecisionOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 interface ContextCardWidgetArgs {
   options?: DecisionOptions;
@@ -41,7 +39,7 @@ export default class BesluitContextCardComponent extends Component<Args> {
   @action
   deleteArticle() {
     if (this.activeArticle && this.besluitURI) {
-      const { from, to } = this.activeArticle;
+      const { from, to } = this.activeArticle.range;
       this.controller.withTransaction((tr) => {
         return tr.delete(from, to);
       });
@@ -52,12 +50,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
 
   @action
   moveUpArticle() {
-    if (this.besluitURI && this.activeArticleURI) {
+    if (this.besluitURI && this.activeArticle) {
       this.controller.doCommand(
         moveArticle(
           this.controller,
           this.besluitURI,
-          this.activeArticleURI,
+          this.activeArticle.uri,
           true
         )
       );
@@ -66,12 +64,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
 
   @action
   moveDownArticle() {
-    if (this.besluitURI && this.activeArticleURI) {
+    if (this.besluitURI && this.activeArticle) {
       this.controller.doCommand(
         moveArticle(
           this.controller,
           this.besluitURI,
-          this.activeArticleURI,
+          this.activeArticle.uri,
           false
         )
       );
@@ -79,12 +77,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
   }
 
   get disableMoveUp() {
-    if (this.besluitURI && this.activeArticleURI) {
+    if (this.besluitURI && this.activeArticle) {
       return !this.controller.checkCommand(
         moveArticle(
           this.controller,
           this.besluitURI,
-          this.activeArticleURI,
+          this.activeArticle.uri,
           true
         )
       );
@@ -93,12 +91,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
   }
 
   get disableMoveDown() {
-    if (this.besluitURI && this.activeArticleURI) {
+    if (this.besluitURI && this.activeArticle) {
       return !this.controller.checkCommand(
         moveArticle(
           this.controller,
           this.besluitURI,
-          this.activeArticleURI,
+          this.activeArticle.uri,
           false
         )
       );
@@ -129,20 +127,17 @@ export default class BesluitContextCardComponent extends Component<Args> {
         from,
         to
       );
-      return [
+      const dsResult = [
         ...limitedDatastore
           .match(null, 'a', 'besluit:Artikel')
-          .asSubjectNodeMapping()
-          .nodes(),
+          .asSubjectNodeMapping(),
       ][0];
-    }
-    return;
-  }
-
-  get activeArticleURI() {
-    if (this.activeArticle) {
-      return getRdfaAttributes(unwrap(this.doc.nodeAt(this.activeArticle.from)))
-        ?.resource;
+      if (dsResult) {
+        return {
+          uri: dsResult.term.value,
+          range: dsResult.nodes[0],
+        };
+      }
     }
     return;
   }
