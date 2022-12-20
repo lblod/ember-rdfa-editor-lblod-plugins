@@ -57,7 +57,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
-
+import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 const citation = setupCitationPlugin();
 const nodes = {
   doc,
@@ -150,7 +150,7 @@ export default class BesluitSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
+    const presetContent = sampleData.DecisionTemplate;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
