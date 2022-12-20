@@ -23,7 +23,6 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
           property: 'ext:content',
         }),
       ]);
-      console.log('DATE NODE: ', dateNode);
       return tr.replaceSelectionWith(dateNode, false);
     });
   }
