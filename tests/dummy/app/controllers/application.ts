@@ -66,6 +66,7 @@ import {
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 
 const citation = setupCitationPlugin();
 const nodes = {
@@ -94,6 +95,7 @@ const nodes = {
   hard_break,
   block_rdfa,
   tableOfContents,
+  invisible_rdfa,
 };
 const marks = {
   citation: citation.marks.citation,
