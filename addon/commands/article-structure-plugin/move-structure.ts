@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import {
-  PNode,
   ProseController,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
@@ -12,9 +11,8 @@ import {
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/datastore/prose-store';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-
+import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 export default function moveStructure(
   controller: ProseController,
   structureURI: string,
@@ -23,28 +21,29 @@ export default function moveStructure(
   report: ValidationReport
 ): Command {
   return (state, dispatch) => {
-    const structureNode = controller.datastore
+    const structureRange = controller.datastore
       .match(`>${structureURI}`)
       .asSubjectNodeMapping()
       .single()?.nodes[0];
-    if (!structureNode) {
+    if (!structureRange) {
       console.warn(`Structure with URI ${structureURI} not found, cancelling move command`);
       return false;
     }
 
-    const resolvedStructurePos = state.doc.resolve(structureNode.pos);
+    const resolvedStructurePos = state.doc.resolve(structureRange?.from);
     const structureContainer = resolvedStructurePos.parent;
     let structureContainerRange = { from: resolvedStructurePos.before(), to: resolvedStructurePos.before() + structureContainer.nodeSize};
     const structures = [
       ...findChildren(
-        { node: structureContainer, pos: structureContainerRange.from },
+        controller.state.doc,
+        structureContainerRange.from,
         false,
         false,
-        ({ node }) => !node.isText
+        ({ from }) => !controller.state.doc.nodeAt(from)?.isText
       ),
     ];
     const structureIndex = structures.findIndex(
-      (structure) => structure.node === structureNode.node
+      (structure) => structure.from === structureRange.from && structure.to === structureRange.to
     );
 
     // The type of the structure we want to move
@@ -66,22 +65,19 @@ export default function moveStructure(
       structures.length > 1
     ) {
       if (dispatch) {
-        let structureA: ResolvedPNode;
-        let structureB: ResolvedPNode;
+        let structureARange: { from: number, to: number };
+        let structureBRange: { from: number, to: number };
         if (moveUp) {
-          structureA = unwrap(structures[structureIndex - 1]);
-          structureB = unwrap(structures[structureIndex]);
+          structureARange = unwrap(structures[structureIndex - 1]);
+          structureBRange = unwrap(structures[structureIndex]);
         } else {
-          structureA = unwrap(structures[structureIndex]);
-          structureB = unwrap(structures[structureIndex + 1]);
+          structureARange = unwrap(structures[structureIndex]);
+          structureBRange = unwrap(structures[structureIndex + 1]);
         }
-        const structureBRange = {
-          from: structureB.pos,
-          to: structureB.pos + structureB.node.nodeSize,
-        };
+        const structureBNode = unwrap(controller.state.doc.nodeAt(structureBRange.from));
         controller.withTransaction((tr) => {
           tr.delete(structureBRange.from, structureBRange.to);
-          return tr.replaceRangeWith(structureA.pos, structureA.pos, structureB.node);
+          return tr.replaceRangeWith(structureARange.from, structureARange.from, structureBNode);
         });
         const structureContainer = unwrap(
           controller.state.doc.nodeAt(structureContainerRange.from)
@@ -101,14 +97,14 @@ export default function moveStructure(
         recalculateContinuousStructures(controller, options);
 
         // We place our resulting selection in the title of the structure
-        const heading = unwrap([
+        const headingRange = unwrap([
           ...controller.datastore
             .match(`>${structureURI}`, 'ext:title')
             .asPredicateNodeMapping()
             .nodes(),
         ][0]);
         const newSelection = TextSelection.near(
-          controller.state.doc.resolve(heading.pos + heading.node.nodeSize)
+          controller.state.doc.resolve(headingRange.to)
         );
         controller.withTransaction((tr) => {
           return tr.setSelection(newSelection);
@@ -121,34 +117,34 @@ export default function moveStructure(
       const urisNotAllowedToInsert = report.results.map(
         (result) => result.focusNode?.value
       );
-      const filterFunction = ({ node }: { node: PNode }) => {
-        const resolvedContainerPos = controller.state.doc.resolve(structureContainerRange.from);
-        const parent = resolvedContainerPos.parent;
-        const nodeUri = node.attrs['resource'] as string;
-
-        if(parent.attrs['resource'] === nodeUri) {
+      const structureContainerURI = (getRdfaAttributes(structureContainer)?.resource) ?? (getRdfaAttributes(resolvedStructurePos.node(resolvedStructurePos.depth - 1))?.resource);
+      const filterFunction = ({ from }: { from: number }) => {
+        const node = unwrap(controller.state.doc.nodeAt(from));
+        const nodeUri = getRdfaAttributes(node)?.resource;
+        if(structureContainerURI === nodeUri) {
           return false;
         }
         return !!nodeUri && !urisNotAllowedToInsert.includes(nodeUri);
       };
       // The new structure container we want to move our structure in to.
-      let newStructureContainer: ResolvedPNode | undefined | void = findNodes(
-        resolvedStructurePos,
+      let newStructureContainerRange: { from: number, to: number } | void = findNodes(
+        controller.state.doc,
+        structureRange.from,
         true,
         moveUp,
         filterFunction
       ).next().value;
-      if (!newStructureContainer) {
+      if (!newStructureContainerRange) {
         return false;
       }
-          // Determine the URI of the container the structure finds itself in, this is either the URI of the container itself or the URI of its parent (if an insertPredicate is defined)
-      const structureContainerURI = structureContainer.attrs['resource'] as string ?? resolvedStructurePos.node(resolvedStructurePos.depth - 1).attrs['resource'] as string;
-      const newStructureContainerURI = newStructureContainer.node.attrs['resource'] as string;
+      const newStructureContainerNode = unwrap(controller.state.doc.nodeAt(newStructureContainerRange.from));
+
+      const newStructureContainerURI = getRdfaAttributes(newStructureContainerNode)?.resource;
       // Check if there is a specific predicate container we need to insert inside
       if (currentStructureSpec.insertPredicate) {
-        newStructureContainer = findChildren(newStructureContainer, false, false, ({ node: child}) => child.attrs['property'] === currentStructureSpec.insertPredicate?.short).next().value;
+        newStructureContainerRange = findChildren(controller.state.doc, newStructureContainerRange.from, false, false, ({ from }) => getRdfaAttributes(unwrap(controller.state.doc.nodeAt(from)))?.property === currentStructureSpec.insertPredicate?.short).next().value;
       }
-      if(!newStructureContainer){
+      if(!newStructureContainerRange){
         return false;
       }
       if(dispatch){
@@ -156,36 +152,36 @@ export default function moveStructure(
 
         // Check if the newStructureContainer we want to insert to only contains a placeholder
         if (
-          newStructureContainer.node.childCount === 1 &&
-          newStructureContainer.node.child(0).childCount === 1 &&
-          newStructureContainer.node.child(0).child(0).type ===
+          newStructureContainerNode.childCount === 1 &&
+          newStructureContainerNode.child(0).childCount === 1 &&
+          newStructureContainerNode.child(0).child(0).type ===
           controller.schema.nodes['placeholder']
         ) {
-          insertRange = {from: newStructureContainer.pos + 1, to: newStructureContainer.pos + newStructureContainer.node.nodeSize - 1};
+          insertRange = {from: newStructureContainerRange.from + 1, to: newStructureContainerRange.to - 1};
         } else {
-          insertRange = {from: newStructureContainer.pos + newStructureContainer.node.nodeSize - 1, to: newStructureContainer.pos + newStructureContainer.node.nodeSize - 1};
+          insertRange = {from: newStructureContainerRange.to - 1, to: newStructureContainerRange.to - 1};
         }
-        
+        const structureNode = unwrap(controller.state.doc.nodeAt(structureRange.from));
         controller.withTransaction((tr) => {
-          tr.replaceRangeWith(insertRange.from, insertRange.to, structureNode.node);
-          const oldStructurePosition = tr.mapping.map(structureNode.pos);
+          tr.replaceRangeWith(insertRange.from, insertRange.to, structureNode);
+          const oldStructureRange = { from: tr.mapping.map(structureRange.from), to: tr.mapping.map(structureRange.to)};
           const replacementNode = structureContainer.childCount === 0 && controller.schema.node('placeholder', { placeholderText: 'Voer inhoud in'});
           if(replacementNode){
-            tr.replaceRangeWith(oldStructurePosition, oldStructurePosition + structureNode.node.nodeSize, replacementNode);
+            tr.replaceRangeWith(oldStructureRange.from, oldStructureRange.to, replacementNode);
           } else {
-            tr.delete(oldStructurePosition, oldStructurePosition + structureNode.node.nodeSize);
+            tr.delete(oldStructureRange.from, oldStructureRange.to);
           }
           return tr;
         });
         
         console.log('ORIGINAL URI: ', structureContainerURI);
         console.log('NEW URI: ', newStructureContainerURI);
-        const originalContainerNode = unwrap([...controller.datastore.match(`>${structureContainerURI}`).asSubjectNodeMapping().nodes()][0]);
-        const newContainerNode = unwrap([...controller.datastore.match(`>${newStructureContainerURI}`).asSubjectNodeMapping().nodes()][0]);
+        const originalContainerRange = unwrap([...controller.datastore.match(`>${structureContainerURI as string}`).asSubjectNodeMapping().nodes()][0]);
+        const newContainerRange = unwrap([...controller.datastore.match(`>${newStructureContainerURI as string}`).asSubjectNodeMapping().nodes()][0]);
         controller.doCommand(
           recalculateStructureNumbers(
             controller, 
-            { from: originalContainerNode.pos, to: originalContainerNode.pos + originalContainerNode.node.nodeSize}, 
+            originalContainerRange, 
             currentStructureSpec,
             options
           )
@@ -193,20 +189,20 @@ export default function moveStructure(
         controller.doCommand(
           recalculateStructureNumbers(
             controller, 
-            { from: newContainerNode.pos, to: newContainerNode.pos + newContainerNode.node.nodeSize}, 
+            newContainerRange, 
             currentStructureSpec,
             options
           )
         );
         recalculateContinuousStructures(controller, options);
-        const heading = unwrap([
+        const headingRange = unwrap([
           ...controller.datastore
             .match(`>${structureURI}`, 'ext:title')
             .asPredicateNodeMapping()
             .nodes(),
         ][0]);
         const newSelection = TextSelection.near(
-          controller.state.doc.resolve(heading.pos + heading.node.nodeSize)
+          controller.state.doc.resolve(headingRange.to)
         );
         controller.withTransaction((tr) => {
           return tr.setSelection(newSelection);

@@ -7,6 +7,8 @@ import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
 import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 type Args = {
   controller: ProseController;
@@ -82,9 +84,9 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
     ) {
       const structure = documentMatches.nodes.pop();
       if (structure) {
-        const uri = this.args.controller.state.doc.nodeAt(structure.from)
-          ?.attrs['resource'] as string | undefined;
-        return uri;
+        return getRdfaAttributes(
+          unwrap(this.args.controller.state.doc.nodeAt(structure.from))
+        )?.resource;
       }
     }
     return;

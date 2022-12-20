@@ -1,11 +1,11 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 export default function getArticleNodesForBesluit(
   controller: ProseController,
   besluitUri?: string
 ) {
-  let besluitRange: ResolvedPNode | undefined;
+  let besluitRange: { from: number; to: number } | undefined;
   if (besluitUri) {
     besluitRange = [
       ...controller.datastore
@@ -26,11 +26,16 @@ export default function getArticleNodesForBesluit(
   if (!besluitRange) {
     return;
   }
+  const articles = controller.datastore
+    .limitToRange(controller.state, besluitRange.from, besluitRange.to)
+    .match(null, 'a', 'besluit:Artikel')
+    .asSubjectNodeMapping();
   return [
-    ...controller.datastore
-      .limitToRange(controller.state, besluitRange.from, besluitRange.to)
-      .match(null, 'a', 'besluit:Artikel')
-      .asSubjectNodeMapping()
-      .nodes(),
+    ...articles.map((article) => {
+      return {
+        uri: article.term.value,
+        range: unwrap(article.nodes.shift()),
+      };
+    }),
   ];
 }

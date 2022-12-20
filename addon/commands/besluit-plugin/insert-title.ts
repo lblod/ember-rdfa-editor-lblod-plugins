@@ -23,7 +23,7 @@ export default function insertTitle(
         .asSubjectNodeMapping(),
     ][0];
 
-    const besluitRange = besluit.nodes[0];
+    const besluitRange = besluit?.nodes[0];
 
     if (!besluit || !besluitRange) {
       return false;

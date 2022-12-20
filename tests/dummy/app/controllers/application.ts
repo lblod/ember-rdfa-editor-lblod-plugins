@@ -92,12 +92,12 @@ const nodes = {
   image,
 
   hard_break,
-  inline_rdfa,
   block_rdfa,
   tableOfContents,
 };
 const marks = {
   citation: citation.marks.citation,
+  inline_rdfa,
   link,
   em,
   strong,

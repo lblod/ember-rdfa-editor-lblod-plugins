@@ -13,6 +13,7 @@ import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 
 type Args = {
   controller: ProseController;
@@ -75,7 +76,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
       0,
       variableNode.nodeSize,
       (child, pos) => {
-        if (child.attrs['property'] === 'ext:content') {
+        if (getRdfaAttributes(child)?.property === 'ext:content') {
           insertRange = {
             from: pos + 1,
             to: pos + child.nodeSize - 1,

@@ -20,10 +20,7 @@ export default function moveArticleCommand(
     if (!articles) {
       return false;
     }
-    const articleIndex = articles.findIndex(
-      ({ from }) =>
-        controller.state.doc.nodeAt(from)?.attrs['resource'] === articleUri
-    );
+    const articleIndex = articles.findIndex(({ uri }) => uri === articleUri);
 
     if (
       articleIndex === -1 ||
@@ -38,11 +35,11 @@ export default function moveArticleCommand(
       let articleB: ResolvedPNode;
 
       if (moveUp) {
-        articleA = unwrap(articles[articleIndex - 1]);
-        articleB = unwrap(articles[articleIndex]);
+        articleA = unwrap(articles[articleIndex - 1]).range;
+        articleB = unwrap(articles[articleIndex]).range;
       } else {
-        articleA = unwrap(articles[articleIndex]);
-        articleB = unwrap(articles[articleIndex + 1]);
+        articleA = unwrap(articles[articleIndex]).range;
+        articleB = unwrap(articles[articleIndex + 1]).range;
       }
       const articleBNode = unwrap(controller.state.doc.nodeAt(articleB.from));
       controller.withTransaction((tr) => {

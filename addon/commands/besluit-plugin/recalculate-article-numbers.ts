@@ -1,5 +1,4 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import getArticleNodesForBesluit from './get-article-nodes-for-besluit';
 
@@ -18,20 +17,12 @@ export default function recalculateArticleNumbers(
 
 function replaceNumberIfNeeded(
   controller: ProseController,
-  article: ResolvedPNode,
+  article: { uri: string; range: { from: number; to: number } },
   index: number
 ) {
-  const articleURI = controller.state.doc.nodeAt(article.from)?.attrs[
-    'resource'
-  ] as string | undefined;
-  if (!articleURI) {
-    throw new Error(
-      `Article URI not found for range { from: ${article.from}, to: ${article.to} }`
-    );
-  }
   const articleNumberObject = [
     ...controller.datastore
-      .match(`>${articleURI}`, '>http://data.europa.eu/eli/ontology#number')
+      .match(`>${article.uri}`, '>http://data.europa.eu/eli/ontology#number')
       .asObjectNodeMapping(),
   ][0];
   if (!articleNumberObject) {

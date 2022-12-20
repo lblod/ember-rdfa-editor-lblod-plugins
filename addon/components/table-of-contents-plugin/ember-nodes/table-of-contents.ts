@@ -4,6 +4,7 @@ import { TableOfContentsConfig } from '../../../constants';
 import { PNode } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { Selection } from '@lblod/ember-rdfa-editor';
+import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 type OutlineEntry = {
   content: string;
   pos: number;
@@ -31,8 +32,8 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   extractOutline({ node, pos }: { node: PNode; pos: number }): OutlineEntry[] {
     let result: OutlineEntry[] = [];
     let parent: OutlineEntry | undefined;
-    const attributes = node.attrs;
-    const properties = node.attrs['property'] as string | undefined;
+    const attributes = getRdfaAttributes(node);
+    const properties = attributes?.property;
     if (properties) {
       for (const tocConfigEntry of this.config) {
         if (

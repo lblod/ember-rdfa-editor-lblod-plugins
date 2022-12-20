@@ -1,9 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import {
-  PNode,
-  ProseController,
-  TextSelection,
-} from '@lblod/ember-rdfa-editor';
+import { ProseController, TextSelection } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { Command } from 'prosemirror-state';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
@@ -12,6 +8,7 @@ import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 
 export default function insertArticleStructureV2(
   controller: ProseController,
@@ -33,25 +30,43 @@ export default function insertArticleStructureV2(
       (result) => result.focusNode?.value
     );
     const { selection } = controller.state;
-    const filterFunction = ({ node }: { node: PNode }) => {
-      const nodeUri = node.attrs['resource'] as string | undefined;
+    const filterFunction = ({ from }: { from: number }) => {
+      const node = unwrap(controller.state.doc.nodeAt(from));
+      const nodeUri = getRdfaAttributes(node)?.resource;
       if (nodeUri && !urisNotAllowedToInsert.includes(nodeUri)) {
         return true;
       }
       return false;
     };
 
-    let structureContainer =
-      findNodes(selection.$from, true, false, filterFunction).next().value ??
-      findNodes(selection.$from, true, true, filterFunction).next().value;
+    let structureContainerRange =
+      findNodes(
+        controller.state.doc,
+        selection.from,
+        true,
+        false,
+        filterFunction
+      ).next().value ??
+      findNodes(
+        controller.state.doc,
+        selection.from,
+        true,
+        true,
+        filterFunction
+      ).next().value;
 
-    if (!structureContainer) return false;
-
+    if (!structureContainerRange) return false;
+    const structureContainerNode = unwrap(
+      controller.state.doc.nodeAt(structureContainerRange.from)
+    );
     if (structureTypeToAdd.insertPredicate) {
-      const structureContainerUri = structureContainer.node.attrs[
-        'resource'
-      ] as string;
-      structureContainer = [
+      const structureContainerUri = getRdfaAttributes(
+        structureContainerNode
+      )?.resource;
+      if (!structureContainerUri) {
+        return false;
+      }
+      structureContainerRange = [
         ...controller.datastore
           .match(
             `>${structureContainerUri}`,
@@ -61,7 +76,7 @@ export default function insertArticleStructureV2(
           .nodes(),
       ][0];
     }
-    if (!structureContainer) {
+    if (!structureContainerRange) {
       return false;
     }
     if (dispatch) {
@@ -73,30 +88,30 @@ export default function insertArticleStructureV2(
       //Detect if structureContainer only contains a placeholder, if so replace the full content of the structureContainer
       let insertRange: { from: number; to: number };
       if (
-        structureContainer.node.childCount === 1 &&
-        structureContainer.node.child(0).childCount === 1 &&
-        structureContainer.node.child(0).child(0).type ===
+        structureContainerNode.childCount === 1 &&
+        structureContainerNode.child(0).childCount === 1 &&
+        structureContainerNode.child(0).child(0).type ===
           controller.schema.nodes['placeholder']
       ) {
         insertRange = {
-          from: structureContainer.pos + 1,
-          to: structureContainer.pos + structureContainer.node.nodeSize - 1,
+          from: structureContainerRange.from + 1,
+          to: structureContainerRange.to - 1,
         };
       } else {
         insertRange = {
-          from: structureContainer.pos + structureContainer.node.nodeSize - 1,
-          to: structureContainer.pos + structureContainer.node.nodeSize - 1,
+          from: structureContainerRange.to - 1,
+          to: structureContainerRange.to - 1,
         };
       }
       controller.doCommand(
         insertHtml(structureHtml, insertRange.from, insertRange.to)
       );
       const containerNode = unwrap(
-        controller.state.doc.nodeAt(structureContainer.pos)
+        controller.state.doc.nodeAt(structureContainerRange.from)
       );
       const containerRange = {
-        from: structureContainer.pos,
-        to: structureContainer.pos + containerNode.nodeSize,
+        from: structureContainerRange.from,
+        to: structureContainerRange.from + containerNode.nodeSize,
       };
       controller.doCommand(
         recalculateStructureNumbers(
