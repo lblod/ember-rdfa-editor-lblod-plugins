@@ -12,7 +12,7 @@ import {
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 export default function moveStructure(
   controller: ProseController,
   structureURI: string,
@@ -117,10 +117,10 @@ export default function moveStructure(
       const urisNotAllowedToInsert = report.results.map(
         (result) => result.focusNode?.value
       );
-      const structureContainerURI = (getRdfaAttributes(structureContainer)?.resource) ?? (getRdfaAttributes(resolvedStructurePos.node(resolvedStructurePos.depth - 1))?.resource);
+      const structureContainerURI = (getRdfaAttribute(structureContainer, 'resource').pop()) ?? (getRdfaAttribute(resolvedStructurePos.node(resolvedStructurePos.depth - 1), 'resource').pop());
       const filterFunction = ({ from }: { from: number }) => {
         const node = unwrap(controller.state.doc.nodeAt(from));
-        const nodeUri = getRdfaAttributes(node)?.resource;
+        const nodeUri = getRdfaAttribute(node, 'resource').pop();
         if(structureContainerURI === nodeUri) {
           return false;
         }
@@ -139,10 +139,10 @@ export default function moveStructure(
       }
       const newStructureContainerNode = unwrap(controller.state.doc.nodeAt(newStructureContainerRange.from));
 
-      const newStructureContainerURI = getRdfaAttributes(newStructureContainerNode)?.resource;
+      const newStructureContainerURI = getRdfaAttribute(newStructureContainerNode, 'resource').pop();
       // Check if there is a specific predicate container we need to insert inside
       if (currentStructureSpec.insertPredicate) {
-        newStructureContainerRange = findChildren(controller.state.doc, newStructureContainerRange.from, false, false, ({ from }) => getRdfaAttributes(unwrap(controller.state.doc.nodeAt(from)))?.property === currentStructureSpec.insertPredicate?.short).next().value;
+        newStructureContainerRange = findChildren(controller.state.doc, newStructureContainerRange.from, false, false, ({ from }) => getRdfaAttribute(unwrap(controller.state.doc.nodeAt(from)), 'property').pop() === currentStructureSpec.insertPredicate?.short).next().value;
       }
       if(!newStructureContainerRange){
         return false;

@@ -8,7 +8,7 @@ import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 
 export default function insertArticleStructureV2(
   controller: ProseController,
@@ -32,7 +32,7 @@ export default function insertArticleStructureV2(
     const { selection } = controller.state;
     const filterFunction = ({ from }: { from: number }) => {
       const node = unwrap(controller.state.doc.nodeAt(from));
-      const nodeUri = getRdfaAttributes(node)?.resource;
+      const nodeUri = getRdfaAttribute(node, 'resource').pop();
       if (nodeUri && !urisNotAllowedToInsert.includes(nodeUri)) {
         return true;
       }
@@ -60,9 +60,10 @@ export default function insertArticleStructureV2(
       controller.state.doc.nodeAt(structureContainerRange.from)
     );
     if (structureTypeToAdd.insertPredicate) {
-      const structureContainerUri = getRdfaAttributes(
-        structureContainerNode
-      )?.resource;
+      const structureContainerUri = getRdfaAttribute(
+        structureContainerNode,
+        'resource'
+      ).pop();
       if (!structureContainerUri) {
         return false;
       }
@@ -113,6 +114,7 @@ export default function insertArticleStructureV2(
         from: structureContainerRange.from,
         to: structureContainerRange.from + containerNode.nodeSize,
       };
+
       controller.doCommand(
         recalculateStructureNumbers(
           controller,

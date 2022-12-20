@@ -59,10 +59,8 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         from: from.pos - from.textOffset,
         to: from.pos - from.textOffset + currentNode.nodeSize,
       };
-      console.log('DATE RANGE: ', this.dateRange);
       const dateContent = getRdfaAttribute(currentNode, 'content').pop();
       this.dateValue = dateContent ? new Date(dateContent) : new Date();
-      console.log('DATE VALUE: ', this.dateValue);
       this.dateInDocument = !!dateContent;
       this.onlyDate = datatype === 'xsd:date';
       this.showCard = true;

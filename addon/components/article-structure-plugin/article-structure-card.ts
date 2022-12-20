@@ -7,8 +7,6 @@ import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
 import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 type Args = {
   controller: ProseController;
@@ -73,23 +71,10 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
       currentSelection.to
     );
 
-    const documentMatches = limitedDatastore
+    return limitedDatastore
       .match(null, 'a', '>https://say.data.gift/ns/DocumentSubdivision')
-      .asPredicateNodeMapping()
-      .single();
-    if (
-      documentMatches &&
-      documentMatches.nodes &&
-      documentMatches.nodes.length
-    ) {
-      const structure = documentMatches.nodes.pop();
-      if (structure) {
-        return getRdfaAttributes(
-          unwrap(this.args.controller.state.doc.nodeAt(structure.from))
-        )?.resource;
-      }
-    }
-    return;
+      .asQuadResultSet()
+      .first()?.subject.value;
   }
 
   get isOutsideStructure() {

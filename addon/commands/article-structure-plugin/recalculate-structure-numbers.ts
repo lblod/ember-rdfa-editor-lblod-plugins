@@ -7,7 +7,7 @@ import {
   ResolvedArticleStructurePluginOptions,
   StructureSpec,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 
 export default function recalculateStructureNumbers(
   controller: ProseController,
@@ -61,8 +61,10 @@ function replaceNumberIfNeeded(
   const numberPredicate =
     structureType.numberPredicate || defaults.numberPredicate;
   const resource = unwrap(
-    getRdfaAttributes(unwrap(controller.state.doc.nodeAt(structure.from)))
-      ?.resource
+    getRdfaAttribute(
+      unwrap(controller.state.doc.nodeAt(structure.from)),
+      'resource'
+    ).pop()
   );
   let structureNumberObjectNode = controller.datastore
     .match(`>${resource}`, `>${numberPredicate}`)

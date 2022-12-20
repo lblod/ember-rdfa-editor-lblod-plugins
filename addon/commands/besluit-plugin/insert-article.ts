@@ -19,24 +19,16 @@ export default function insertArticle(
       .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
       .asQuadResultSet()
       .first()?.subject;
-    console.log('BESLUIT SUBJECT: ', besluitSubject);
 
     if (!besluitSubject) {
       return false;
     }
-    const container = [
-      ...controller.datastore
-        .match(besluitSubject, 'prov:value')
-        .asPredicateNodeMapping(),
-    ][0];
-    console.log('CONTAINER: ', container);
     const containerRange = [
       ...controller.datastore
         .match(besluitSubject, 'prov:value')
         .asPredicateNodeMapping(),
     ][0].nodes[0];
 
-    console.log('CONTAINER RANGE: ', containerRange);
 
     if (!containerRange) {
       return false;

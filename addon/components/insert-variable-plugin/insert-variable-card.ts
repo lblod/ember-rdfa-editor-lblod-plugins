@@ -125,7 +125,6 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       .match(null, 'a', 'ext:Mapping')
       .asQuadResultSet()
       .first();
-    console.log('QUAD: ', quad);
     if (quad) {
       this.showCard = false;
     } else {
