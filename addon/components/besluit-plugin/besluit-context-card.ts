@@ -138,5 +138,6 @@ export default class BesluitContextCardComponent extends Component<Args> {
           .nodes(),
       ][0];
     }
+    return;
   }
 }

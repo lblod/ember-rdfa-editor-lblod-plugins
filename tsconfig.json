@@ -28,12 +28,6 @@
         "tests/dummy/app/*",
         "app/*"
       ],
-      "@lblod/ember-rdfa-editor" : [
-        "node_modules/@lblod/ember-rdfa-editor/addon"
-      ],
-      "@lblod/ember-rdfa-editor/*" : [
-        "node_modules/@lblod/ember-rdfa-editor/addon/*"
-      ],
       "@lblod/ember-rdfa-editor-lblod-plugins": [
         "addon"
       ],
