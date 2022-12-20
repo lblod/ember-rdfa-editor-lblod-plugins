@@ -39,9 +39,8 @@ export default function modifyDate(
         : state.schema.mark('inline_rdfa', {
             content: dateValue.toISOString(),
           });
-
-      transaction.insertText(formatDate(dateValue, onlyDate), from, to);
       transaction.addMark(from, to, newMark);
+      transaction.insertText(formatDate(dateValue, onlyDate), from, to);
       dispatch(transaction);
     }
     return true;

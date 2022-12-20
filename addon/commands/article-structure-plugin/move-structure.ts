@@ -174,8 +174,6 @@ export default function moveStructure(
           return tr;
         });
         
-        console.log('ORIGINAL URI: ', structureContainerURI);
-        console.log('NEW URI: ', newStructureContainerURI);
         const originalContainerRange = unwrap([...controller.datastore.match(`>${structureContainerURI as string}`).asSubjectNodeMapping().nodes()][0]);
         const newContainerRange = unwrap([...controller.datastore.match(`>${newStructureContainerURI as string}`).asSubjectNodeMapping().nodes()][0]);
         controller.doCommand(

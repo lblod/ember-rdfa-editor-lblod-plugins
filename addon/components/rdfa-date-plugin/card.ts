@@ -43,9 +43,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   onSelectionChanged() {
     const selection = this.controller.state.selection;
     const from = selection.$from;
-    const { node: currentNode } = unwrap(
-      from.parent.childBefore(from.parentOffset)
-    );
+    const currentNode = unwrap(from.parent.child(from.index()));
     if (!currentNode) {
       return;
     }
@@ -58,13 +56,14 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     // const { node: selectionParent, pos: parentPos } = ancestor;
 
     if (datatype === 'xsd:dateTime' || datatype === 'xsd:date') {
-      console.log('INCLUDES');
       this.dateRange = {
-        from: from.start(),
-        to: from.end(),
+        from: from.pos - from.textOffset,
+        to: from.pos - from.textOffset + currentNode.nodeSize,
       };
+      console.log('DATE RANGE: ', this.dateRange);
       const dateContent = getRdfaAttribute(currentNode, 'content').pop();
       this.dateValue = dateContent ? new Date(dateContent) : new Date();
+      console.log('DATE VALUE: ', this.dateValue);
       this.dateInDocument = !!dateContent;
       this.onlyDate = datatype === 'xsd:date';
       this.showCard = true;
