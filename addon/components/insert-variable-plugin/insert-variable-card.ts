@@ -124,7 +124,8 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     const quad = limitedDatastore
       .match(null, 'a', 'ext:Mapping')
       .asQuadResultSet()
-      .single();
+      .first();
+    console.log('QUAD: ', quad);
     if (quad) {
       this.showCard = false;
     } else {

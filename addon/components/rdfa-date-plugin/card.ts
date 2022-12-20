@@ -43,7 +43,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   onSelectionChanged() {
     const selection = this.controller.state.selection;
     const from = selection.$from;
-    const currentNode = unwrap(from.parent.child(from.index()));
+    const currentNode = from.parent.maybeChild(from.index());
     if (!currentNode) {
       return;
     }

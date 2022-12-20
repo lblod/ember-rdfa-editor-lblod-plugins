@@ -13,7 +13,7 @@ import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/current-session';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 declare module 'ember__owner' {
   export default interface Owner {
     resolveRegistration(name: string): unknown;
@@ -84,7 +84,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   get currentBesluitURI() {
     if (this.currentBesluitRange) {
       const node = unwrap(this.doc.nodeAt(this.currentBesluitRange.from));
-      return getRdfaAttributes(node)?.resource;
+      return getRdfaAttribute(node, 'resource').pop();
     }
     return;
   }
