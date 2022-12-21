@@ -5,7 +5,6 @@ export default function getArticleNodesForBesluit(
   controller: ProseController,
   besluitUri?: string
 ) {
-  let besluitRange: { from: number; to: number } | undefined;
   if (!besluitUri) {
     const selection = controller.state.selection;
     besluitUri = controller.datastore
@@ -17,7 +16,6 @@ export default function getArticleNodesForBesluit(
   if (!besluitUri) {
     return;
   }
-  console.log('RANGE: ', besluitRange);
   const articles = controller.datastore
     .match(`>${besluitUri}`, 'eli:has_part')
     .asObjectNodeMapping();
