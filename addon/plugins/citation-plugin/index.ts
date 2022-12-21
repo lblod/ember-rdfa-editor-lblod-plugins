@@ -163,11 +163,11 @@ function defaultActiveIn(
   datastore: ProseStore
 ): [number, number][] {
   const result: [number, number][] = [];
-  for (const { node, pos } of datastore
+  for (const { from, to } of datastore
     .match(null, 'besluit:motivering')
     .asPredicateNodeMapping()
     .nodes()) {
-    result.push([pos, pos + node.nodeSize]);
+    result.push([from, to]);
   }
   return result;
 }
