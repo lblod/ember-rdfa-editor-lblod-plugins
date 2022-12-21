@@ -4,7 +4,8 @@ import { TableOfContentsConfig } from '../../../constants';
 import { PNode } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { Selection } from '@lblod/ember-rdfa-editor';
-import { getRdfaAttributes } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 type OutlineEntry = {
   content: string;
   pos: number;
@@ -32,9 +33,9 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   extractOutline({ node, pos }: { node: PNode; pos: number }): OutlineEntry[] {
     let result: OutlineEntry[] = [];
     let parent: OutlineEntry | undefined;
-    const attributes = getRdfaAttributes(node);
-    const properties = attributes?.property;
-    if (properties) {
+    const properties = getRdfaAttribute(node, 'property').pop();
+    const resource = getRdfaAttribute(node, 'resource').pop();
+    if (properties && resource) {
       for (const tocConfigEntry of this.config) {
         if (
           tocConfigEntry.sectionPredicate.some((pred) =>
@@ -45,20 +46,17 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
             parent = { content: tocConfigEntry.value, pos };
             break;
           } else {
-            const { from } = [
+            const range = [
               ...this.args.controller.datastore
-                .match(
-                  `>${attributes['resource'] as string}`,
-                  `>${tocConfigEntry.value.predicate}`
-                )
-                .asObjectNodeMapping()
+                .match(`>${resource}`, `>${tocConfigEntry.value.predicate}`)
+                .asPredicateNodeMapping()
                 .nodes(),
             ][0];
-            const node = this.controller.state.doc.nodeAt(from);
-            if (node) {
+            if (range) {
+              const node = unwrap(this.controller.state.doc.nodeAt(range.from));
               parent = {
                 content: node.textContent,
-                pos: from,
+                pos: range.from,
               };
               break;
             }
@@ -92,5 +90,6 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       }
       return tr;
     });
+    this.controller.focus();
   }
 }
