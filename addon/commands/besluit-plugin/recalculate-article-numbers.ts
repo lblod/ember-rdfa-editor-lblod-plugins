@@ -36,8 +36,8 @@ function replaceNumberIfNeeded(
     controller.withTransaction((tr) => {
       return tr.insertText(
         articleNumberExpected.toString(),
-        articleNumberRange.from + 1,
-        articleNumberRange.to - 1
+        articleNumberRange.from,
+        articleNumberRange.to
       );
     });
   }

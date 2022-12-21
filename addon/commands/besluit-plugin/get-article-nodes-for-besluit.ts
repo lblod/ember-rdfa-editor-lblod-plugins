@@ -6,30 +6,21 @@ export default function getArticleNodesForBesluit(
   besluitUri?: string
 ) {
   let besluitRange: { from: number; to: number } | undefined;
-  if (besluitUri) {
-    besluitRange = [
-      ...controller.datastore
-        .match(`>${besluitUri}`)
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
-  } else {
+  if (!besluitUri) {
     const selection = controller.state.selection;
-    besluitRange = [
-      ...controller.datastore
-        .limitToRange(controller.state, selection.from, selection.to)
-        .match(null, 'a', 'besluit:Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
+    besluitUri = controller.datastore
+      .limitToRange(controller.state, selection.from, selection.to)
+      .match(null, 'a', 'besluit:Besluit')
+      .asQuadResultSet()
+      .first()?.subject.value;
   }
-  if (!besluitRange) {
+  if (!besluitUri) {
     return;
   }
+  console.log('RANGE: ', besluitRange);
   const articles = controller.datastore
-    .limitToRange(controller.state, besluitRange.from, besluitRange.to)
-    .match(null, 'a', 'besluit:Artikel')
-    .asSubjectNodeMapping();
+    .match(`>${besluitUri}`, 'eli:has_part')
+    .asObjectNodeMapping();
   return [
     ...articles.map((article) => {
       return {

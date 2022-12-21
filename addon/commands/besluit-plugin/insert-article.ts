@@ -29,7 +29,6 @@ export default function insertArticle(
         .asPredicateNodeMapping(),
     ][0].nodes[0];
 
-
     if (!containerRange) {
       return false;
     }
