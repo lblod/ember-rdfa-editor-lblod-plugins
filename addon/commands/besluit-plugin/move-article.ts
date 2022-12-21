@@ -17,7 +17,6 @@ export default function moveArticleCommand(
 ): Command {
   return (_state, dispatch) => {
     const articles = getArticleNodesForBesluit(controller, besluitUri);
-    console.log('ARTICLES: ', articles);
     if (!articles) {
       return false;
     }
