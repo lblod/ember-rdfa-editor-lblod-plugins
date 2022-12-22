@@ -39,23 +39,15 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { service } from '@ember/service';
 import importRdfaSnippet from 'dummy/services/import-rdfa-snippet';
-import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import {
-  besluitPluginCardWidget,
-  besluitContextCardWidget,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
-import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
   rdfaDateCardWidget,
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
-import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import {
   tableOfContentsView,
   tableOfContents,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/ember-nodes/table-of-contents';
 import { tableOfContentsWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
-import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
 import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
@@ -66,6 +58,7 @@ import {
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 
 const citation = setupCitationPlugin();
 const nodes = {
@@ -92,12 +85,13 @@ const nodes = {
   image,
 
   hard_break,
-  inline_rdfa,
   block_rdfa,
   tableOfContents,
+  invisible_rdfa,
 };
 const marks = {
   citation: citation.marks.citation,
+  inline_rdfa,
   link,
   em,
   strong,
@@ -106,7 +100,7 @@ const marks = {
 };
 const dummySchema = new Schema({ nodes, marks });
 
-export default class IndexController extends Controller {
+export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -168,17 +162,9 @@ export default class IndexController extends Controller {
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
-    besluitTypeWidget,
-    besluitContextCardWidget(),
-    besluitPluginCardWidget(),
-    importSnippetWidget,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
-    standardTemplateWidget,
-    citation.widgets.citationCard,
-    citation.widgets.citationInsert,
     tableOfContentsWidget(),
-    roadSignRegulationWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
     articleStructureInsertWidget(),

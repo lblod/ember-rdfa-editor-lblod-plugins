@@ -5,7 +5,7 @@ import {
   moveArticle,
   recalculateArticleNumbers,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { DecisionOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor';
 
@@ -28,36 +28,34 @@ export default class BesluitContextCardComponent extends Component<Args> {
   get controller() {
     return this.args.controller;
   }
+
+  get doc() {
+    return this.controller.state.doc;
+  }
   focus() {
     this.controller.focus();
   }
 
   @action
   deleteArticle() {
-    const articleNode = this.activeArticleNode;
-    if (articleNode && this.besluit) {
+    if (this.activeArticle && this.besluitURI) {
+      const { from, to } = this.activeArticle.range;
       this.controller.withTransaction((tr) => {
-        return tr.delete(
-          articleNode.pos,
-          articleNode.pos + articleNode.node.nodeSize
-        );
+        return tr.delete(from, to);
       });
       this.focus();
-      recalculateArticleNumbers(
-        this.controller,
-        this.besluit.node.attrs['resource']
-      );
+      recalculateArticleNumbers(this.controller, this.besluitURI);
     }
   }
 
   @action
   moveUpArticle() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticle) {
       this.controller.doCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticle.uri,
           true
         )
       );
@@ -66,12 +64,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
 
   @action
   moveDownArticle() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticle) {
       this.controller.doCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticle.uri,
           false
         )
       );
@@ -79,12 +77,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
   }
 
   get disableMoveUp() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticle) {
       return !this.controller.checkCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticle.uri,
           true
         )
       );
@@ -93,12 +91,12 @@ export default class BesluitContextCardComponent extends Component<Args> {
   }
 
   get disableMoveDown() {
-    if (this.besluit && this.activeArticleNode) {
+    if (this.besluitURI && this.activeArticle) {
       return !this.controller.checkCommand(
         moveArticle(
           this.controller,
-          this.besluit.node.attrs['resource'],
-          this.activeArticleNode.node.attrs['resource'],
+          this.besluitURI,
+          this.activeArticle.uri,
           false
         )
       );
@@ -106,7 +104,7 @@ export default class BesluitContextCardComponent extends Component<Args> {
     return true;
   }
 
-  get besluit() {
+  get besluitURI() {
     const { from, to } = this.controller.state.selection;
 
     const limitedDatastore = this.controller.datastore.limitToRange(
@@ -114,16 +112,14 @@ export default class BesluitContextCardComponent extends Component<Args> {
       from,
       to
     );
-    return [
-      ...limitedDatastore
-        .match(null, 'a', 'besluit:Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
+    return limitedDatastore
+      .match(null, 'a', 'besluit:Besluit')
+      .asQuadResultSet()
+      .first()?.subject.value;
   }
 
-  get activeArticleNode() {
-    if (this.besluit) {
+  get activeArticle() {
+    if (this.besluitURI) {
       const { from, to } = this.controller.state.selection;
 
       const limitedDatastore = this.controller.datastore.limitToRange(
@@ -131,12 +127,17 @@ export default class BesluitContextCardComponent extends Component<Args> {
         from,
         to
       );
-      return [
+      const dsResult = [
         ...limitedDatastore
           .match(null, 'a', 'besluit:Artikel')
-          .asSubjectNodeMapping()
-          .nodes(),
+          .asSubjectNodeMapping(),
       ][0];
+      if (dsResult) {
+        return {
+          uri: dsResult.term.value,
+          range: dsResult.nodes[0],
+        };
+      }
     }
     return;
   }

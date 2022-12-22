@@ -11,37 +11,48 @@ export default function deleteStructure(
 ): Command {
   return (state, dispatch) => {
     if (dispatch) {
-      const subjectNode = [
+      const structureToDeleteRange = [
         ...controller.datastore.match(`>${uri}`).asSubjectNodeMapping().nodes(),
       ][0];
-      if (!subjectNode) {
+      const structureToDeleteTypes = [
+        ...controller.datastore
+          .match(`>${uri}`, 'a')
+          .asQuadResultSet()
+          .map((quad) => quad.object.value),
+      ];
+      if (!structureToDeleteRange) {
         throw new Error(`No node found for resource ${uri}`);
       }
-      const { node, pos } = subjectNode;
-      const resolvedPos = state.doc.resolve(pos);
+      if (!structureToDeleteTypes) {
+        throw new Error(`No type found for resource ${uri}`);
+      }
+
+      const resolvedPos = state.doc.resolve(structureToDeleteRange.from);
       const container = resolvedPos.parent;
       let containerRange = {
         from: resolvedPos.before(),
         to: resolvedPos.before() + container.nodeSize,
       };
-      const removalRange = { from: pos, to: pos + node.nodeSize };
       const tr = state.tr;
       if (container.childCount === 1) {
         const placeholder = controller.schema.node('placeholder', {
           placeholderText: 'Voer inhoud in',
         });
-        tr.replaceRangeWith(removalRange.from, removalRange.to, placeholder);
+        tr.replaceRangeWith(
+          structureToDeleteRange.from,
+          structureToDeleteRange.to,
+          placeholder
+        );
       } else {
-        tr.delete(removalRange.from, removalRange.to);
+        tr.delete(structureToDeleteRange.from, structureToDeleteRange.to);
       }
       dispatch(tr);
       containerRange = {
         from: tr.mapping.map(containerRange.from),
         to: tr.mapping.map(containerRange.to),
       };
-      const currentStructureType = node.attrs['typeof'] as string;
       const currentStructureIndex = options.structures.findIndex((structure) =>
-        currentStructureType.includes(structure.type)
+        structureToDeleteTypes.includes(structure.type)
       );
       const currentStructure = unwrap(
         options.structures[currentStructureIndex]

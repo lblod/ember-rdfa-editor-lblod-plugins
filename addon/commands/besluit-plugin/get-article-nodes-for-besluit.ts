@@ -1,40 +1,30 @@
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
 export default function getArticleNodesForBesluit(
   controller: ProseController,
   besluitUri?: string
 ) {
-  let besluitNode: ResolvedPNode | undefined;
-  if (besluitUri) {
-    besluitNode = [
-      ...controller.datastore
-        .match(`>${besluitUri}`)
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
-  } else {
+  if (!besluitUri) {
     const selection = controller.state.selection;
-    besluitNode = [
-      ...controller.datastore
-        .limitToRange(controller.state, selection.from, selection.to)
-        .match(null, 'a', 'besluit:Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
+    besluitUri = controller.datastore
+      .limitToRange(controller.state, selection.from, selection.to)
+      .match(null, 'a', 'besluit:Besluit')
+      .asQuadResultSet()
+      .first()?.subject.value;
   }
-  if (!besluitNode) {
+  if (!besluitUri) {
     return;
   }
-  const besluitRange = {
-    from: besluitNode.pos,
-    to: besluitNode.pos + besluitNode.node.nodeSize,
-  };
+  const articles = controller.datastore
+    .match(`>${besluitUri}`, 'eli:has_part')
+    .asObjectNodeMapping();
   return [
-    ...controller.datastore
-      .limitToRange(controller.state, besluitRange.from, besluitRange.to)
-      .match(null, 'a', 'besluit:Artikel')
-      .asSubjectNodeMapping()
-      .nodes(),
+    ...articles.map((article) => {
+      return {
+        uri: article.term.value,
+        range: unwrap(article.nodes.shift()),
+      };
+    }),
   ];
 }

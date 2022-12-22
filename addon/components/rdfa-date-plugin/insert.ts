@@ -10,19 +10,20 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
   get controller() {
     return this.args.controller;
   }
+
+  get schema() {
+    return this.controller.schema;
+  }
   @action
   insertDate() {
     this.controller.withTransaction((tr) => {
-      return tr.replaceSelectionWith(
-        this.controller.schema.node(
-          'inline_rdfa',
-          {
-            datatype: 'xsd:date',
-            property: 'ext:content',
-          },
-          [this.controller.schema.text('${date}')]
-        )
-      );
+      const dateNode = this.schema.text('${date}', [
+        this.schema.mark('inline_rdfa', {
+          datatype: 'xsd:date',
+          property: 'ext:content',
+        }),
+      ]);
+      return tr.replaceSelectionWith(dateNode, false);
     });
   }
 
@@ -30,14 +31,13 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
   insertDateTime() {
     this.controller.withTransaction((tr) => {
       return tr.replaceSelectionWith(
-        this.controller.schema.node(
-          'inline_rdfa',
-          {
+        this.schema.text('${date and time}', [
+          this.schema.mark('inline_rdfa', {
             datatype: 'xsd:dateTime',
             property: 'ext:content',
-          },
-          [this.controller.schema.text('${date and time}')]
-        )
+          }),
+        ]),
+        false
       );
     });
   }

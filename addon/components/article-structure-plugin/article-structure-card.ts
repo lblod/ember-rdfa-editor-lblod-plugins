@@ -71,21 +71,10 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
       currentSelection.to
     );
 
-    const documentMatches = limitedDatastore
+    return limitedDatastore
       .match(null, 'a', '>https://say.data.gift/ns/DocumentSubdivision')
-      .asPredicateNodeMapping()
-      .single();
-    if (
-      documentMatches &&
-      documentMatches.nodes &&
-      documentMatches.nodes.length
-    ) {
-      const structure = documentMatches.nodes.pop();
-      if (structure) {
-        return structure.node.attrs['resource'] as string;
-      }
-    }
-    return;
+      .asQuadResultSet()
+      .first()?.subject.value;
   }
 
   get isOutsideStructure() {

@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
 import {
   deleteStructure,
@@ -26,7 +25,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     const structureToMove = this.args.widgetArgs.options.structures.find(
       (structure) => structure === this.structureTypeSelected
     );
-    if (structureToMove && this.structureUri) {
+    if (structureToMove && this.structure) {
       const shaclReport = await validateDatastore(
         this.controller.datastore,
         structureToMove.shaclConstraint
@@ -34,7 +33,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       this.controller.doCommand(
         moveStructure(
           this.controller,
-          this.structureUri,
+          this.structure.uri,
           moveUp,
           this.args.widgetArgs.options,
           shaclReport
@@ -45,18 +44,18 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   @action
   removeStructure() {
-    if (this.structureUri) {
+    if (this.structure) {
       this.controller.doCommand(
         deleteStructure(
           this.controller,
-          this.structureUri,
+          this.structure.uri,
           this.args.widgetArgs.options
         )
       );
     }
   }
 
-  get structure() {
+  get structure(): { uri: string; type: string } | undefined {
     const currentSelection = this.controller.state.selection;
     const limitedDatastore = this.controller.datastore.limitToRange(
       this.controller.state,
@@ -64,7 +63,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       currentSelection.to
     );
 
-    const documentMatches = limitedDatastore
+    const quad = limitedDatastore
       .match(null, 'a')
       .transformDataset((dataset) => {
         return dataset.filter((quad) => {
@@ -73,34 +72,16 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
           );
         });
       })
-      .asPredicateNodeMapping()
-      .single();
-    if (
-      documentMatches &&
-      documentMatches.nodes &&
-      documentMatches.nodes.length
-    ) {
-      const structure = unwrap(documentMatches.nodes.pop()).node;
-      const structureUri = structure.attrs['resource'] as string;
-      const headingMatch = limitedDatastore
-        .match(`>${structureUri}`, '>https://say.data.gift/ns/heading')
-        .asPredicateNodeMapping()
-        .single();
-      if (headingMatch && headingMatch.nodes && headingMatch.nodes.length) {
-        return structure;
-      }
+      .asQuadResultSet()
+      .first();
+    if (quad) {
+      return { uri: quad.subject.value, type: quad.object.value };
     }
     return;
   }
 
-  get structureUri() {
-    return this.structure?.attrs['resource'] as string | undefined;
-  }
-
   get structureTypeSelected() {
-    const structureTypeof = this.structure?.attrs['typeof'] as
-      | string
-      | undefined;
+    const structureTypeof = this.structure?.type;
     if (structureTypeof) {
       return this.args.widgetArgs.options.structures.find((structure) =>
         structureTypeof.includes(structure.type)
@@ -110,14 +91,14 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   get isOutsideStructure() {
-    return !this.structureUri;
+    return !this.structure?.uri;
   }
 
   canMoveDown = trackedFunction(this, async () => {
     const structureToMove = this.args.widgetArgs.options.structures.find(
       (structure) => structure === this.structureTypeSelected
     );
-    if (structureToMove && this.structureUri) {
+    if (structureToMove && this.structure) {
       const shaclReport = await validateDatastore(
         this.controller.datastore,
         structureToMove.shaclConstraint
@@ -125,7 +106,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       return this.controller.checkCommand(
         moveStructure(
           this.controller,
-          this.structureUri,
+          this.structure.uri,
           false,
           this.args.widgetArgs.options,
           shaclReport
@@ -139,7 +120,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     const structureToMove = this.args.widgetArgs.options.structures.find(
       (structure) => structure === this.structureTypeSelected
     );
-    if (structureToMove && this.structureUri) {
+    if (structureToMove && this.structure) {
       const shaclReport = await validateDatastore(
         this.controller.datastore,
         structureToMove.shaclConstraint
@@ -147,7 +128,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       return this.controller.checkCommand(
         moveStructure(
           this.controller,
-          this.structureUri,
+          this.structure.uri,
           true,
           this.args.widgetArgs.options,
           shaclReport

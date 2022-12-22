@@ -11,6 +11,9 @@ import {
 } from '@lblod/ember-rdfa-editor/commands/type-commands';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/current-session';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
+import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 declare module 'ember__owner' {
   export default interface Owner {
     resolveRegistration(name: string): unknown;
@@ -51,6 +54,10 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     return this.args.controller;
   }
 
+  get doc() {
+    return this.controller.state.doc;
+  }
+
   loadData = task(async () => {
     // eslint-disable-next-line @typescript-eslint/await-thenable
     const bestuurseenheid = await this.currentSession.get('group');
@@ -62,36 +69,37 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     this.types = types;
   });
 
-  get currentBesluitNode() {
+  get currentBesluitRange(): ResolvedPNode | undefined {
     const selection = this.controller.state.selection;
-    const currentBesluitNode = [
+    const currentBesluitRange = [
       ...this.controller.datastore
         .limitToRange(this.controller.state, selection.from, selection.to)
         .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-        .asSubjectNodeMapping(),
-    ][0]?.nodes[0];
-    if (!currentBesluitNode) {
-      return;
+        .asSubjectNodeMapping()
+        .nodes(),
+    ][0];
+    return currentBesluitRange;
+  }
+
+  get currentBesluitURI() {
+    if (this.currentBesluitRange) {
+      const node = unwrap(this.doc.nodeAt(this.currentBesluitRange.from));
+      return getRdfaAttribute(node, 'resource').pop();
     }
-    return { pos: currentBesluitNode.pos, node: currentBesluitNode.node };
+    return;
   }
 
   get showCard() {
-    return !!this.currentBesluitNode;
+    return !!this.currentBesluitRange;
   }
 
   @action
   updateBesluitTypes() {
-    const currentBesluitNode = this.currentBesluitNode;
-    if (!currentBesluitNode) {
+    if (!this.currentBesluitURI) {
       return;
     }
     const besluitTypes = this.controller.datastore
-      .match(
-        `>${currentBesluitNode.node.attrs['resource'] as string}`,
-        'a',
-        undefined
-      )
+      .match(`>${this.currentBesluitURI}`, 'a', undefined)
       .asQuads();
     const besluitTypesUris = [...besluitTypes].map((quad) => quad.object.value);
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
@@ -188,14 +196,14 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   insert() {
-    if (this.besluitType && this.currentBesluitNode) {
+    if (this.besluitType && this.currentBesluitRange) {
       this.cardExpanded = false;
       this.controller.checkAndDoCommand(
-        addType(this.currentBesluitNode.pos, this.besluitType.uri)
+        addType(this.currentBesluitRange.from, this.besluitType.uri)
       );
       if (this.previousBesluitType) {
         this.controller.checkAndDoCommand(
-          removeType(this.currentBesluitNode.pos, this.previousBesluitType)
+          removeType(this.currentBesluitRange.from, this.previousBesluitType)
         );
       }
     }

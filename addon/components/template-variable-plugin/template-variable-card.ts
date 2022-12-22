@@ -13,6 +13,7 @@ import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { getAppliedMarks } from '@lblod/ember-rdfa-editor/plugins/datastore';
 
 type Args = {
   controller: ProseController;
@@ -60,25 +61,16 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
       selection.from,
       selection.to
     );
-    const mapping = limitedDatastore
-      .match(`>${this.mappingUri}`, 'ext:content')
-      .asSubjectNodeMapping()
-      .single();
-    if (!mapping) {
+    const insertRange = [
+      ...limitedDatastore
+        .match(`>${this.mappingUri}`, 'ext:content')
+        .asObjectNodeMapping()
+        .nodes(),
+    ][0];
+    if (!insertRange) {
       return;
     }
-    const { node: mappingNode, pos } = unwrap([[...mapping.nodes][0]][0]);
-    let insertRange: { from: number; to: number } | undefined;
-    mappingNode.descendants((child, relativePos) => {
-      const absolutePos: number = pos + relativePos + 1;
-      if (child.attrs['property'] === 'ext:content') {
-        insertRange = {
-          from: absolutePos + 1,
-          to: absolutePos + child.nodeSize - 1,
-        };
-      }
-      return false;
-    });
+    const marks = getAppliedMarks(insertRange);
     let htmlToInsert: string;
     if (Array.isArray(this.selectedVariable)) {
       htmlToInsert = this.selectedVariable
@@ -90,7 +82,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     htmlToInsert = this.wrapVariableInHighlight(htmlToInsert);
     if (insertRange) {
       this.controller.doCommand(
-        insertHtml(htmlToInsert, insertRange.from, insertRange.to)
+        insertHtml(htmlToInsert, insertRange.from, insertRange.to, marks)
       );
     }
   }

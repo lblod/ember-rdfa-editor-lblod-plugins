@@ -1,8 +1,7 @@
 import Service from '@ember/service';
-import { A } from '@ember/array';
 import ContextScanner from '@lblod/marawa/rdfa-context-scanner';
 import RdfaBlock from '@lblod/marawa/rdfa-block';
-import NativeArray from '@ember/array/-private/native-array';
+import { tracked } from 'tracked-built-ins';
 
 type RequestParams = {
   source: string;
@@ -24,6 +23,10 @@ export class RdfaSnippet {
   ) {}
 }
 
+type Error = {
+  source: string;
+  details: string;
+};
 /**
  * Service responsible for fetching and storing a snippet
  *
@@ -37,17 +40,17 @@ export class RdfaSnippet {
  * @extends EmberService
  */
 export default class ImportRdfaSnippet extends Service {
-  errors;
+  @tracked errors: Error[];
 
-  snippets: NativeArray<RdfaSnippet>;
+  @tracked snippets: RdfaSnippet[];
 
   contextScanner: ContextScanner;
 
   constructor() {
     // eslint-disable-next-line prefer-rest-params
     super(...arguments);
-    this.snippets = A();
-    this.errors = A();
+    this.snippets = tracked([]);
+    this.errors = tracked([]);
     this.contextScanner = new ContextScanner();
   }
 
@@ -104,13 +107,13 @@ export default class ImportRdfaSnippet extends Service {
       });
 
       if (!data) {
-        this.errors.pushObject({
+        this.errors.push({
           source: params.source,
           details: `No data found for ${params.uri ?? ''}`,
         });
       }
     } catch (err) {
-      this.errors.pushObject({
+      this.errors.push({
         source: params.source,
         details: `Error fetching data ${params.uri ?? ''}: ${err as string}`,
       });
@@ -158,7 +161,7 @@ export default class ImportRdfaSnippet extends Service {
       const type = this.determineType(rdfaBlocks);
       this.storeSnippet(params.source, type, snippet, rdfaBlocks);
     } catch (err: unknown) {
-      this.errors.pushObject({
+      this.errors.push({
         source: params.source,
         details: `Error fetching data ${params.uri ?? ''}: ${err as string}`,
       });
@@ -192,6 +195,6 @@ export default class ImportRdfaSnippet extends Service {
     content: string,
     blocks: RdfaBlock[]
   ): void {
-    this.snippets.pushObject(new RdfaSnippet(source, type, content, blocks));
+    this.snippets.push(new RdfaSnippet(source, type, content, blocks));
   }
 }
