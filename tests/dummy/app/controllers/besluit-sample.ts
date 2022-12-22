@@ -39,7 +39,7 @@ import {
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { service } from '@ember/service';
-import importRdfaSnippet from 'dummy/services/import-rdfa-snippet';
+import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import {
   besluitPluginCardWidget,

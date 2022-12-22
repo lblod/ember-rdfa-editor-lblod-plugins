@@ -1,7 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 export default function memoize(func) {
-  let cache = {};
+  const cache = {};
   return function () {
-    let args = JSON.stringify(arguments);
+    const args = JSON.stringify(arguments);
     cache[args] = cache[args] || func.apply(this, arguments);
     return cache[args];
   };

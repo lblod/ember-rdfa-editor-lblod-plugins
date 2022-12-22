@@ -3,6 +3,7 @@
     "target": "es2021",
     "module": "es2020",
     "allowJs": true,
+    "checkJs": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
@@ -19,7 +20,11 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "baseUrl": ".",
+    "skipLibCheck": true,
     "experimentalDecorators": true,
+    "typeRoots": [
+      "./node_modules/@types",
+    ],
     "paths": {
       "dummy/tests/*": [
         "tests/*"
@@ -41,7 +46,8 @@
         "addon-test-support/*"
       ],
       "*": [
-        "types/*"
+        "types/*",
+        "node_modules/@lblod/ember-rdfa-editor/types/*"
       ],
       "@lblod/ember-rdfa-editor": [
         "node_modules/@lblod/ember-rdfa-editor/addon"
@@ -56,7 +62,8 @@
     "addon/**/*",
     "tests/**/*",
     "types/**/*",
+    "node_modules/@lblod/ember-rdfa-editor/types/**/*",
     "test-support/**/*",
-    "addon-test-support/**/*"
+    "addon-test-support/**/*",
   ]
 }

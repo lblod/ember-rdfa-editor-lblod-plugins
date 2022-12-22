@@ -1,11 +1,16 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import ParserN3 from '@rdfjs/parser-n3';
 import SHACLValidator from 'rdf-validate-shacl';
 import factory from 'rdf-ext';
 import { Readable } from 'stream-browserify';
+import { ProseStore } from '@lblod/ember-rdfa-editor/addon/plugins/datastore';
 
-export default async function validateDatastore(datastore, shaclConstraint) {
+export default async function validateDatastore(
+  datastore: ProseStore,
+  shaclConstraint: string
+) {
   const s = new Readable();
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   s.push(shaclConstraint);
   s.push(null);
   const parser = new ParserN3({ factory });

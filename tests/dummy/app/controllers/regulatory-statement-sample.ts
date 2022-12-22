@@ -38,7 +38,7 @@ import {
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { service } from '@ember/service';
-import importRdfaSnippet from 'dummy/services/import-rdfa-snippet';
+import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   rdfaDateCardWidget,
   rdfaDateInsertWidget,
@@ -101,7 +101,7 @@ const marks = {
 const dummySchema = new Schema({ nodes, marks });
 
 export default class RegulatoryStatementSampleController extends Controller {
-  @service declare importRdfaSnippet: importRdfaSnippet;
+  @service declare importRdfaSnippet: ImportRdfaSnippet;
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
     mobiliteit: 'https://data.vlaanderen.be/ns/mobiliteit#',
