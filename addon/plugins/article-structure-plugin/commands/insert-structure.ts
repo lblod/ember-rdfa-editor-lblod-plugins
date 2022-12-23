@@ -1,5 +1,5 @@
 import { Command } from '@lblod/ember-rdfa-editor';
-import recalculateStructureNumbers from './recalculate_structure_number';
+import recalculateStructureNumbers from './recalculate-structure-number';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '../utils/find-ancestor-of-type';
 

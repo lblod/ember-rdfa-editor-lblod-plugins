@@ -5,14 +5,14 @@
     </c.header>
     <c.content class="au-c-content--small">
       <AuList @divider={{true}} class="au-u-padding-top-tiny au-u-padding-bottom-tiny" as |Item|>
-        {{!-- <Item>
+        <Item>
           <AuButton
             @icon="chevron-up"
             @iconAlignment="left"
             @skin="link"
             @disabled={{not this.canMoveUp}}
             {{on 'click' (fn this.moveStructure true)}}>
-            {{t this.structureTypeSelected.moveUp}}
+            Move structure up
           </AuButton>
         </Item>
         <Item>
@@ -22,9 +22,9 @@
             @skin="link"
             @disabled={{not this.canMoveDown}}
             {{on 'click' (fn this.moveStructure false)}}>
-            {{t this.structureTypeSelected.moveDown}}
+            Move structure down
           </AuButton>
-        </Item> --}}
+        </Item>
         <Item>
           <AuButton
             @icon="bin"

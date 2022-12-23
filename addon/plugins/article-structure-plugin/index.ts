@@ -8,7 +8,7 @@ import {
 import { Transaction } from 'prosemirror-state';
 import { STRUCTURE_SPECS } from './structures';
 
-type SpecName = string;
+export type SpecName = string;
 
 export type StructureSpec = {
   name: SpecName;

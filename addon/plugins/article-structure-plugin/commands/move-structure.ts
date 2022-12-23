@@ -1,5 +1,10 @@
 import { Command } from '@lblod/ember-rdfa-editor';
+import { ArticleStructurePluginOptions } from '..';
 
-export const moveStructure: Command = (_state, _dispatch) => {
-  return false;
+export const moveSelectedStructure = (
+  options: ArticleStructurePluginOptions
+): Command => {
+  return (state, dispatch) => {
+    return false;
+  };
 };

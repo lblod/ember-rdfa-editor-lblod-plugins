@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/move-structure';
+import { moveSelectedStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/move-structure';
 import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/find-ancestor-of-type';
-import recalculateStructureNumbers from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/recalculate_structure_number';
+import recalculateStructureNumbers from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/recalculate-structure-number';
 
 type Args = {
   controller: ProseController;
@@ -20,7 +20,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   @action
   moveStructure(_moveUp: boolean) {
-    this.controller.doCommand(moveStructure);
+    this.controller.doCommand(moveSelectedStructure(this.structureTypes));
   }
 
   @action
@@ -54,10 +54,14 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   get canMoveDown() {
-    return this.controller.checkCommand(moveStructure);
+    return this.controller.checkCommand(
+      moveSelectedStructure(this.structureTypes)
+    );
   }
 
   get canMoveUp() {
-    return this.controller.checkCommand(moveStructure);
+    return this.controller.checkCommand(
+      moveSelectedStructure(this.structureTypes)
+    );
   }
 }
