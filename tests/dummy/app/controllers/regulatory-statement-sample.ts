@@ -55,11 +55,12 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import {
   articleStructureContextWidget,
+  // articleStructureContextWidget,
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
-
+import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 const citation = setupCitationPlugin();
 const nodes = {
   doc: {
@@ -85,6 +86,7 @@ const nodes = {
   image,
 
   hard_break,
+  ...STRUCTURE_NODES,
   block_rdfa,
   tableOfContents,
   invisible_rdfa,
