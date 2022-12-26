@@ -1,7 +1,7 @@
 import { Command } from '@lblod/ember-rdfa-editor';
 import recalculateStructureNumbers from './recalculate-structure-number';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { findAncestorOfType } from '../utils/find-ancestor-of-type';
+import { findAncestorOfType } from '../utils';
 
 export const insertStructure = (structureSpec: StructureSpec): Command => {
   return (state, dispatch) => {

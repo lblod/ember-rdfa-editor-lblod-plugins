@@ -1,13 +1,13 @@
 import { ArticleStructurePluginOptions } from '..';
-import { chapter_structure } from './chapter';
-import { section_structure } from './section';
-import { structure_header } from './structure_header';
-import { subsection_structure } from './subsection';
+import { chapterSpec, chapter, chapter_body } from './chapter';
+import { sectionSpec, section, section_body } from './section';
+import { structure_header } from './structure-header';
+import { subsectionSpec, subsection, subsection_body } from './subsection';
 
 export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
-  chapter_structure.structureSpec,
-  section_structure.structureSpec,
-  subsection_structure.structureSpec,
+  chapterSpec,
+  sectionSpec,
+  subsectionSpec,
   // {
   //   name: 'article',
   //   context: ['subsection', 'section', 'chapter'],
@@ -26,7 +26,10 @@ export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
 
 export const STRUCTURE_NODES = {
   structure_header,
-  ...chapter_structure.nodeSpecs,
-  ...section_structure.nodeSpecs,
-  ...subsection_structure.nodeSpecs,
+  chapter,
+  chapter_body,
+  section,
+  section_body,
+  subsection,
+  subsection_body,
 };
