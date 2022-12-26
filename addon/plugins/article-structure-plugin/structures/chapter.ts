@@ -51,8 +51,9 @@ export const chapterSpec: StructureSpec = {
 export const chapter = constructStructureNodeSpec({
   type: 'https://say.data.gift/ns/Chapter',
   content: 'structure_header chapter_body',
+  group: 'block',
 });
 
 export const chapter_body = constructStructureBodyNodeSpec({
-  content: '(section|paragraph)+',
+  content: '(section|article|paragraph)+',
 });

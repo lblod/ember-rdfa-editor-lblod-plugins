@@ -4,10 +4,11 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 export function constructStructureNodeSpec(config: {
   type: string;
   content: string;
+  group?: string;
 }): NodeSpec {
-  const { content, type } = config;
+  const { group, content, type } = config;
   return {
-    group: 'block',
+    group,
     content,
     inline: false,
     attrs: {
@@ -82,4 +83,18 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
     };
   }
   return;
+}
+
+export function getStructureHeaderAttrs(element: HTMLElement) {
+  const numberNode = element.children[0];
+  if (
+    element.getAttribute('property') === 'say:heading' &&
+    numberNode &&
+    numberNode.getAttribute('property') === 'eli:number'
+  ) {
+    return {
+      number: numberNode.textContent,
+    };
+  }
+  return false;
 }

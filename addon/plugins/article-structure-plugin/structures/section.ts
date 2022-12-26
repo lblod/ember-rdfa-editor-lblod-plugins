@@ -54,5 +54,5 @@ export const section = constructStructureNodeSpec({
 });
 
 export const section_body = constructStructureBodyNodeSpec({
-  content: '(subsection|paragraph)+',
+  content: '(subsection|article|paragraph)+',
 });
