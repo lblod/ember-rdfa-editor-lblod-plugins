@@ -19,8 +19,11 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   @action
-  moveStructure(_moveUp: boolean) {
-    this.controller.doCommand(moveSelectedStructure(this.structureTypes));
+  moveStructure(direction: 'up' | 'down') {
+    this.controller.doCommand(
+      moveSelectedStructure(this.structureTypes, direction)
+    );
+    this.controller.focus();
   }
 
   @action
@@ -65,13 +68,13 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   get canMoveDown() {
     return this.controller.checkCommand(
-      moveSelectedStructure(this.structureTypes)
+      moveSelectedStructure(this.structureTypes, 'down')
     );
   }
 
   get canMoveUp() {
     return this.controller.checkCommand(
-      moveSelectedStructure(this.structureTypes)
+      moveSelectedStructure(this.structureTypes, 'up')
     );
   }
 }

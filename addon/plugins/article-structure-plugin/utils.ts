@@ -79,6 +79,7 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
     return {
       node: selection.$from.doc,
       pos: -1,
+      start: 0,
       depth: 0,
     };
   }

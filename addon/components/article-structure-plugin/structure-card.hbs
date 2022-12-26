@@ -11,7 +11,7 @@
             @iconAlignment="left"
             @skin="link"
             @disabled={{not this.canMoveUp}}
-            {{on 'click' (fn this.moveStructure true)}}>
+            {{on 'click' (fn this.moveStructure 'up')}}>
             {{t this.currentStructureType.translations.move.up}}
           </AuButton>
         </Item>
@@ -21,7 +21,7 @@
             @iconAlignment="left"
             @skin="link"
             @disabled={{not this.canMoveDown}}
-            {{on 'click' (fn this.moveStructure false)}}>
+            {{on 'click' (fn this.moveStructure 'down')}}>
             {{t this.currentStructureType.translations.move.down}}
           </AuButton>
         </Item>
