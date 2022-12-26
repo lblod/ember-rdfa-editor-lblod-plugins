@@ -12,7 +12,7 @@
             @skin="link"
             @disabled={{not this.canMoveUp}}
             {{on 'click' (fn this.moveStructure true)}}>
-            Move structure up
+            {{t this.currentStructureType.translations.move.up}}
           </AuButton>
         </Item>
         <Item>
@@ -22,7 +22,7 @@
             @skin="link"
             @disabled={{not this.canMoveDown}}
             {{on 'click' (fn this.moveStructure false)}}>
-            Move structure down
+            {{t this.currentStructureType.translations.move.down}}
           </AuButton>
         </Item>
         <Item>
@@ -33,7 +33,7 @@
             @alert={{true}}
             @disabled={{this.isOutsideStructure}}
             {{on 'click' this.removeStructure}}>
-            {{t "article-structure-plugin.remove.structure"}}
+            {{t this.currentStructureType.translations.remove}}
           </AuButton>
         </Item>
       </AuList>

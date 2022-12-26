@@ -3,7 +3,7 @@
   <AuList::Item>
     <AuButton @icon="add" @iconAlignment="left" @skin="link" @disabled={{not (this.canInsertStructure structureType)}}
       {{on 'click' (fn this.insertStructure structureType)}}>
-      Insert {{structureType.name}}
+      {{t structureType.translations.insert}}
     </AuButton>
   </AuList::Item>
   {{/each}}

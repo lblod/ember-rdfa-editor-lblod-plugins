@@ -13,13 +13,21 @@ export type SpecName = string;
 export type StructureSpec = {
   name: SpecName;
   context: SpecName[];
+  translations: {
+    insert: string;
+    move: {
+      up: string;
+      down: string;
+    };
+    remove: string;
+  };
   constructor: (schema: Schema, number: number) => PNode;
   updateNumber: (
     number: number,
     pos: number,
     transaction: Transaction
   ) => Transaction;
-  content: (pos: number, state: EditorState) => Fragment;
+  content?: (pos: number, state: EditorState) => Fragment;
   continuous: boolean;
 };
 

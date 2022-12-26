@@ -1,5 +1,6 @@
 import { ArticleStructurePluginOptions } from '..';
 import { article, articleSpec, article_body, article_header } from './article';
+import { articleParagraphSpec, article_paragraph } from './article-paragraph';
 import { chapterSpec, chapter, chapter_body } from './chapter';
 import { sectionSpec, section, section_body } from './section';
 import { structure_header } from './structure-header';
@@ -10,20 +11,7 @@ export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
   sectionSpec,
   subsectionSpec,
   articleSpec,
-  // {
-  //   name: 'article',
-  //   context: ['subsection', 'section', 'chapter'],
-  //   constructor: () => {
-  //     return new PNode();
-  //   },
-  // },
-  // {
-  //   name: 'paragraph',
-  //   context: ['article'],
-  //   constructor: () => {
-  //     return new PNode();
-  //   },
-  // },
+  articleParagraphSpec,
 ];
 
 export const STRUCTURE_NODES = {
@@ -37,4 +25,5 @@ export const STRUCTURE_NODES = {
   article,
   article_header,
   article_body,
+  article_paragraph,
 };

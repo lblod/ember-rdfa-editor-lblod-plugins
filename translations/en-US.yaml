@@ -111,7 +111,9 @@ article-structure-plugin:
   remove:
     article: Remove Article
     paragraph: Remove Paragraph
-    structure: Remove Structure
+    subsection: Remove subsection
+    section: Remove section
+    chapter: Remove chapter
   placeholder:
     title: Insert title heading
     chapter: Insert chapter heading

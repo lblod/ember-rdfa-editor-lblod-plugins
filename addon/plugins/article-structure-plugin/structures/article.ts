@@ -16,6 +16,14 @@ import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 export const articleSpec: StructureSpec = {
   name: 'article',
   context: ['chapter_body', 'section_body', 'subsection_body'],
+  translations: {
+    insert: 'article-structure-plugin.insert.article',
+    move: {
+      up: 'article-structure-plugin.moveUp.article',
+      down: 'article-structure-plugin.moveDown.article',
+    },
+    remove: 'article-structure-plugin.remove.article',
+  },
   continuous: true,
   constructor: (schema: Schema, number: number) => {
     const numberConverted = number.toString();
@@ -102,5 +110,5 @@ export const article_header: NodeSpec = {
 };
 
 export const article_body = constructStructureBodyNodeSpec({
-  content: 'paragraph+',
+  content: '(paragraph|article_paragraph)+',
 });

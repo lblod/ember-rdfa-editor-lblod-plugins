@@ -12,6 +12,14 @@ export const subsectionSpec: StructureSpec = {
   name: 'subsection',
   context: ['section_body'],
   continuous: false,
+  translations: {
+    insert: 'article-structure-plugin.insert.subsection',
+    move: {
+      up: 'article-structure-plugin.moveUp.subsection',
+      down: 'article-structure-plugin.moveDown.subsection',
+    },
+    remove: '',
+  },
   constructor: (schema: Schema, number: number) => {
     const numberConverted = romanize(number);
     const node = schema.node(

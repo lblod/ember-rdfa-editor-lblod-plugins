@@ -12,6 +12,15 @@ export const chapterSpec: StructureSpec = {
   name: 'chapter',
   context: ['doc'],
   continuous: false,
+  translations: {
+    insert: 'article-structure-plugin.insert.chapter',
+    move: {
+      up: 'article-structure-plugin.moveUp.chapter',
+      down: 'article-structure-plugin.moveDown.chapter',
+    },
+    remove: 'article-structure-plugin.remove.chapter',
+
+  },
   constructor: (schema: Schema, number: number) => {
     const numberConverted = romanize(number);
     const node = schema.node(

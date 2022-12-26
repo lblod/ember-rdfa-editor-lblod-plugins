@@ -49,6 +49,16 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     return findAncestorOfType(currentSelection, ...this.structureNodeSpecs);
   }
 
+  get currentStructureType() {
+    if (this.structure) {
+      const { node: structureNode } = this.structure;
+      return this.structureTypes.find(
+        (spec) => spec.name === structureNode.type.name
+      );
+    }
+    return;
+  }
+
   get isOutsideStructure() {
     return !this.structure;
   }
