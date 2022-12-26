@@ -287,7 +287,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
   `;
 
     this.args.controller.doCommand(
-      insertArticle(this.args.controller, regulationHTML, '')
+      insertArticle(this.args.controller, regulationHTML)
     );
     this.args.closeModal();
   }
