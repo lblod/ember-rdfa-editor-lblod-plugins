@@ -5,9 +5,9 @@ import { trackedFunction } from 'ember-resources/util/function';
 import {
   deleteStructure,
   moveStructure,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/article-structure-plugin';
-import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/validate-datastore';
 type Args = {
   controller: ProseController;
   widgetArgs: {

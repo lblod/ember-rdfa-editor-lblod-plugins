@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
-import fetchBesluitTypes, { BesluitType } from '../../utils/fetchBesluitTypes';
 import { inject as service } from '@ember/service';
 import {
   addType,
@@ -14,6 +13,9 @@ import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/cu
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import fetchBesluitTypes, {
+  BesluitType,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 declare module 'ember__owner' {
   export default interface Owner {
     resolveRegistration(name: string): unknown;
