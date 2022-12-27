@@ -1,4 +1,4 @@
-import { LEGISLATION_TYPE_CONCEPTS } from '../../../utils/legislation-types';
+import { LEGISLATION_TYPE_CONCEPTS } from './legislation-types';
 import { warn } from '@ember/debug';
 import { htmlSafe } from '@ember/template';
 import {

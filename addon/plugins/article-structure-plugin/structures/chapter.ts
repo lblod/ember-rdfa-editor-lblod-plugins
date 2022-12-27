@@ -1,5 +1,5 @@
 import { EditorState, Schema, Transaction } from '@lblod/ember-rdfa-editor';
-import romanize from '@lblod/ember-rdfa-editor-lblod-plugins/utils/romanize';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { StructureSpec } from '..';
 import {
@@ -19,7 +19,6 @@ export const chapterSpec: StructureSpec = {
       down: 'article-structure-plugin.moveDown.chapter',
     },
     remove: 'article-structure-plugin.remove.chapter',
-
   },
   constructor: (schema: Schema, number: number) => {
     const numberConverted = romanize(number);

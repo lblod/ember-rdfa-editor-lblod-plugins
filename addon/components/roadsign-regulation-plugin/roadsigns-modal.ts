@@ -5,18 +5,18 @@ import { task } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
 import { v4 as uuid } from 'uuid';
 import { inject as service } from '@ember/service';
-import includeInstructions from '../../utils/roadsign-regulation-plugin/includeInstructions';
+import includeInstructions from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/includeInstructions';
 import {
   NON_ZONAL_URI,
   POTENTIALLY_ZONAL_URI,
   ZONAL_URI,
-} from '../../constants';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
 import { assert } from '@ember/debug';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { insertArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
+import { insertArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin/commands';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =

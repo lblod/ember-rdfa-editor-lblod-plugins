@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import {
   TableOfContentsConfig,
   TABLE_OF_CONTENTS_DEFAULT_CONFIG,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/constants';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils/constants';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 type Args = {
@@ -25,7 +25,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
   get tableOfContentsRange() {
     let result: { from: number; to: number } | undefined;
     this.controller.state.doc.descendants((node, pos) => {
-      if (node.type === this.controller.schema.nodes['tableOfContents']) {
+      if (node.type === this.controller.schema.nodes['table_of_contents']) {
         result = { from: pos, to: pos + node.nodeSize };
       }
       return !result;
@@ -50,7 +50,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
         return tr.replaceRangeWith(
           0,
           0,
-          schema.node('tableOfContents', {
+          schema.node('table_of_contents', {
             config: this.config,
           })
         );

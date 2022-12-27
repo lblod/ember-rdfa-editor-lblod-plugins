@@ -1,10 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { moveSelectedStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/move-structure';
+import {
+  moveSelectedStructure,
+  recalculateStructureNumbers,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
-import recalculateStructureNumbers from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/recalculate-structure-number';
 
 type Args = {
   controller: ProseController;

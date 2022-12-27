@@ -1,9 +1,9 @@
 import { Command } from '@lblod/ember-rdfa-editor';
-import recalculateStructureNumbers from './recalculate-structure-number';
+import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '../utils';
 
-export const insertStructure = (structureSpec: StructureSpec): Command => {
+const insertStructure = (structureSpec: StructureSpec): Command => {
   return (state, dispatch) => {
     const { schema, selection } = state;
     const contextNodeTypes = structureSpec.context
@@ -25,3 +25,5 @@ export const insertStructure = (structureSpec: StructureSpec): Command => {
     return true;
   };
 };
+
+export default insertStructure;

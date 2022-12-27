@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import {
   insertTitle,
   insertArticle,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin/commands';
 import { ProseController } from '@lblod/ember-rdfa-editor';
 
 type Args = {

@@ -1,5 +1,5 @@
 import { EditorState, Schema, Transaction } from '@lblod/ember-rdfa-editor';
-import romanize from '@lblod/ember-rdfa-editor-lblod-plugins/utils/romanize';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
