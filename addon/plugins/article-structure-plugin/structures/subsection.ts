@@ -1,4 +1,4 @@
-import { EditorState, Schema, Transaction } from '@lblod/ember-rdfa-editor';
+import { EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import { StructureSpec } from '..';
 import {
@@ -20,7 +20,7 @@ export const subsectionSpec: StructureSpec = {
     },
     remove: '',
   },
-  constructor: (schema: Schema, number: number) => {
+  constructor: (schema, number, content) => {
     const numberConverted = romanize(number);
     const node = schema.node(
       `subsection`,
@@ -33,15 +33,18 @@ export const subsectionSpec: StructureSpec = {
             placeholderText: 'Insert subsection title',
           })
         ),
-        schema.node(`subsection_body`, {}, [
-          schema.node(
-            'paragraph',
-            {},
-            schema.node('placeholder', {
-              placeholderText: 'Insert subsection content',
-            })
-          ),
-        ]),
+        schema.node(
+          `subsection_body`,
+          {},
+          content ??
+            schema.node(
+              'paragraph',
+              {},
+              schema.node('placeholder', {
+                placeholderText: 'Insert subsection content',
+              })
+            )
+        ),
       ]
     );
     return node;

@@ -12,14 +12,20 @@ export function constructStructureNodeSpec(config: {
     content,
     inline: false,
     attrs: {
+      property: {
+        default: 'say:hasPart',
+      },
+      typeof: {
+        default: type,
+      },
       resource: {},
     },
     toDOM(node) {
       return [
         'div',
         {
-          property: 'say:hasPart',
-          typeof: `${type} https://say.data.gift/ns/ArticleContainer`,
+          property: node.attrs.property as string,
+          typeof: node.attrs.typeof as string,
           resource: node.attrs.resource as string,
         },
         0,

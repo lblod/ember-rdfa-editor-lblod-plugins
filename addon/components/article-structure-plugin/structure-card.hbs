@@ -26,12 +26,16 @@
           </AuButton>
         </Item>
         <Item>
+          <AuToggleSwitch 
+            @label={{t "article-structure-plugin.remove.content"}} 
+            @checked={{this.removeStructureContent}}
+            @onChange={{this.setRemoveStructureContent}}/>
           <AuButton
             @icon="bin"
             @iconAlignment="left"
             @skin="link"
             @alert={{true}}
-            @disabled={{this.isOutsideStructure}}
+            @disabled={{not this.canRemoveStructure}}
             {{on 'click' this.removeStructure}}>
             {{t this.currentStructureType.translations.remove}}
           </AuButton>

@@ -115,6 +115,7 @@ article-structure-plugin:
     subsection: Onderafdeling verwijderen
     section: Afdeling verwijderen
     chapter: Hoofdstuk verwijderen
+    content: Inhoud verwijderen
   placeholder:
     title: Voeg titel in
     chapter: Voeg hoofdstuk in

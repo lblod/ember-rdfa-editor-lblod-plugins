@@ -15,6 +15,10 @@ export const structure_header: NodeSpec = {
   content: 'text*|placeholder',
   inline: false,
   attrs: {
+    property: {
+      default: 'say:heading',
+    },
+
     number: {
       default: '1',
     },
@@ -25,7 +29,7 @@ export const structure_header: NodeSpec = {
   toDOM(node) {
     return [
       `h${node.attrs.level as number}`,
-      { property: 'say:heading' },
+      { property: node.attrs.property as string },
       [
         'span',
         { property: 'eli:number', datatype: 'xsd:string' },

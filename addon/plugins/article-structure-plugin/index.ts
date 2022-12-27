@@ -21,7 +21,11 @@ export type StructureSpec = {
     };
     remove: string;
   };
-  constructor: (schema: Schema, number: number) => PNode;
+  constructor: (
+    schema: Schema,
+    number: number,
+    content?: PNode | Fragment
+  ) => PNode;
   updateNumber: (
     number: number,
     pos: number,

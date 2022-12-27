@@ -7,6 +7,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
+import unwrapStructure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/unwrap-structure';
+import { tracked } from '@glimmer/tracking';
 
 type Args = {
   controller: ProseController;
@@ -16,6 +18,8 @@ type Args = {
 };
 
 export default class EditorPluginsStructureCardComponent extends Component<Args> {
+  @tracked removeStructureContent = false;
+
   get controller() {
     return this.args.controller;
   }
@@ -30,13 +34,27 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   @action
   removeStructure() {
-    if (this.structure) {
-      const { pos, node } = this.structure;
-      this.controller.withTransaction((tr) => {
-        tr.replace(pos, pos + node.nodeSize);
-        return recalculateStructureNumbers(tr, ...this.structureTypes);
-      });
+    if (this.structure && this.currentStructureType) {
+      if (this.removeStructureContent) {
+        const { pos, node } = this.structure;
+        this.controller.withTransaction((tr) => {
+          tr.replace(pos, pos + node.nodeSize);
+          return recalculateStructureNumbers(tr, ...this.structureTypes);
+        });
+      } else {
+        this.controller.doCommand(
+          unwrapStructure({
+            ...this.structure,
+            type: this.currentStructureType,
+          })
+        );
+      }
     }
+  }
+
+  @action
+  setRemoveStructureContent(value: boolean) {
+    this.removeStructureContent = value;
   }
 
   get structureTypes() {
@@ -78,5 +96,21 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     return this.controller.checkCommand(
       moveSelectedStructure(this.structureTypes, 'up')
     );
+  }
+
+  get canRemoveStructure() {
+    if (this.structure && this.currentStructureType) {
+      if (this.removeStructureContent) {
+        return true;
+      } else {
+        return this.controller.checkCommand(
+          unwrapStructure({
+            ...this.structure,
+            type: this.currentStructureType,
+          })
+        );
+      }
+    }
+    return false;
   }
 }

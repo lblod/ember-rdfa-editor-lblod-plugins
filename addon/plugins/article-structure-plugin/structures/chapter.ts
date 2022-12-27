@@ -1,4 +1,10 @@
-import { EditorState, Schema, Transaction } from '@lblod/ember-rdfa-editor';
+import {
+  EditorState,
+  Fragment,
+  PNode,
+  Schema,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { StructureSpec } from '..';
@@ -20,7 +26,7 @@ export const chapterSpec: StructureSpec = {
     },
     remove: 'article-structure-plugin.remove.chapter',
   },
-  constructor: (schema: Schema, number: number) => {
+  constructor: (schema: Schema, number: number, content: Fragment | PNode) => {
     const numberConverted = romanize(number);
     const node = schema.node(
       `chapter`,
@@ -33,15 +39,18 @@ export const chapterSpec: StructureSpec = {
             placeholderText: 'Insert chapter title',
           })
         ),
-        schema.node(`chapter_body`, {}, [
-          schema.node(
-            'paragraph',
-            {},
-            schema.node('placeholder', {
-              placeholderText: 'Insert chapter content',
-            })
-          ),
-        ]),
+        schema.node(
+          `chapter_body`,
+          {},
+          content ??
+            schema.node(
+              'paragraph',
+              {},
+              schema.node('placeholder', {
+                placeholderText: 'Insert chapter content',
+              })
+            )
+        ),
       ]
     );
     return node;
@@ -63,5 +72,5 @@ export const chapter = constructStructureNodeSpec({
 });
 
 export const chapter_body = constructStructureBodyNodeSpec({
-  content: '(section|article|paragraph)+',
+  content: '(section|paragraph)+|(article|paragraph)+',
 });

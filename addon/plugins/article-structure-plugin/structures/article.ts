@@ -1,9 +1,4 @@
-import {
-  EditorState,
-  NodeSpec,
-  Schema,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { EditorState, NodeSpec, Transaction } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
@@ -25,7 +20,7 @@ export const articleSpec: StructureSpec = {
     remove: 'article-structure-plugin.remove.article',
   },
   continuous: true,
-  constructor: (schema: Schema, number: number) => {
+  constructor: (schema, number, content) => {
     const numberConverted = number.toString();
     const node = schema.node(
       `article`,
@@ -38,15 +33,18 @@ export const articleSpec: StructureSpec = {
             placeholderText: 'Insert article title',
           })
         ),
-        schema.node(`article_body`, {}, [
-          schema.node(
-            'paragraph',
-            {},
-            schema.node('placeholder', {
-              placeholderText: 'Insert article content',
-            })
-          ),
-        ]),
+        schema.node(
+          `article_body`,
+          {},
+          content ??
+            schema.node(
+              'paragraph',
+              {},
+              schema.node('placeholder', {
+                placeholderText: 'Insert article content',
+              })
+            )
+        ),
       ]
     );
     return node;
