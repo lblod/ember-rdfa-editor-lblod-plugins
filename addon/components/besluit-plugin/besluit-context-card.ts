@@ -4,18 +4,12 @@ import { action } from '@ember/object';
 import {
   moveArticle,
   recalculateArticleNumbers,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/commands/besluit-plugin';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin/commands';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
-import { DecisionOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-
-interface ContextCardWidgetArgs {
-  options?: DecisionOptions;
-}
 
 interface Args {
   controller: ProseController;
-  widgetArgs: ContextCardWidgetArgs;
 }
 
 export default class BesluitContextCardComponent extends Component<Args> {

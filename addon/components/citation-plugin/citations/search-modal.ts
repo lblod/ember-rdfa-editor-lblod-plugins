@@ -8,7 +8,7 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
-} from '../../../utils/legislation-types';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
 import {
   Article,
   Decision,

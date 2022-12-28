@@ -3,13 +3,13 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  defaultVariableTypes,
-  VariableType,
-} from '../../utils/variable-plugins/default-variable-types';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
+import {
+  DEFAULT_VARIABLE_TYPES,
+  VariableType,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/constants';
+import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/fetch-data';
 type Args = {
   controller: ProseController;
   widgetArgs: {
@@ -48,7 +48,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     const variablesArray: VariableType[] = [];
     for (const type of variableTypesSelectedByUser) {
       if (typeof type === 'string') {
-        const variableType = defaultVariableTypes[type];
+        const variableType = DEFAULT_VARIABLE_TYPES[type];
         if (variableType) {
           variablesArray.push(variableType);
         } else {

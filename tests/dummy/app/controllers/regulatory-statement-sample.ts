@@ -45,10 +45,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import {
   tableOfContentsView,
-  tableOfContents,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/ember-nodes/table-of-contents';
+  table_of_contents,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
 import { tableOfContentsWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
-import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
+import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/fetch-data';
 import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -63,7 +63,7 @@ import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 const citation = setupCitationPlugin();
 const nodes = {
   doc: {
-    content: 'tableOfContents? block+',
+    content: 'table_of_contents? block+',
   },
   paragraph,
 
@@ -86,7 +86,7 @@ const nodes = {
 
   hard_break,
   block_rdfa,
-  tableOfContents,
+  table_of_contents,
   invisible_rdfa,
 };
 const marks = {
@@ -156,7 +156,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      tableOfContents: tableOfContentsView(controller),
+      table_of_contents: tableOfContentsView(controller),
     };
   };
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];

@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
-import { generateMeasuresQuery } from '../utils/roadsign-regulation-plugin/fetchData';
+import { generateMeasuresQuery } from '../plugins/roadsign-regulation-plugin/utils/fetchData';
 import Instruction from '../models/instruction';
 import Measure from '../models/measure';
 import Sign from '../models/sign';
