@@ -28,8 +28,21 @@ const insertStructure = (structureSpec: StructureSpec): Command => {
     if (dispatch) {
       const newStructureNode = structureSpec.constructor(schema, 1);
       const transaction = state.tr;
-      const insertPosition = selection.$from.after(depth + 1);
-      transaction.insert(insertPosition, newStructureNode);
+
+      if (
+        parent.node.childCount === 1 &&
+        parent.node.firstChild?.type === schema.nodes['paragraph'] &&
+        parent.node.firstChild.firstChild?.type === schema.nodes['placeholder']
+      ) {
+        transaction.replaceWith(
+          parent.pos + 1,
+          parent.pos + parent.node.nodeSize - 1,
+          newStructureNode
+        );
+      } else {
+        const insertPosition = selection.$from.after(depth + 1);
+        transaction.insert(insertPosition, newStructureNode);
+      }
       recalculateStructureNumbers(transaction, structureSpec);
       dispatch(transaction);
     }
