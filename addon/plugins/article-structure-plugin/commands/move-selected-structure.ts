@@ -1,9 +1,10 @@
 import {
   Command,
+  NodeSelection,
   NodeType,
   PNode,
   Schema,
-  Selection,
+  TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { ArticleStructurePluginOptions } from '..';
@@ -33,6 +34,7 @@ const moveSelectedStructure = (
     if (insertionRange === null || insertionRange === undefined) {
       return false;
     }
+    const isNodeSelection = selection instanceof NodeSelection;
     const relativeSelectionOffset = selection.from - currentStructure.pos;
     const currentStructureSpec = unwrap(
       options.find((spec) => spec.name === currentStructure.node.type.name)
@@ -60,9 +62,10 @@ const moveSelectedStructure = (
           ? mappedFrom
           : transaction.mapping.map(insertionRange.to);
       transaction.replaceWith(mappedFrom, mappedTo, currentStructure.node);
-      const newSelection = Selection.near(
-        transaction.doc.resolve(mappedFrom + relativeSelectionOffset)
-      );
+      const newSelectionPos = mappedFrom + relativeSelectionOffset;
+      const newSelection = isNodeSelection
+        ? NodeSelection.create(transaction.doc, newSelectionPos)
+        : TextSelection.create(transaction.doc, newSelectionPos);
       transaction.setSelection(newSelection);
       recalculateStructureNumbers(transaction, currentStructureSpec);
       dispatch(transaction);
