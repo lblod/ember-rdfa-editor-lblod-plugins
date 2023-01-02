@@ -18,7 +18,7 @@ export const sectionSpec: StructureSpec = {
       up: 'article-structure-plugin.moveUp.section',
       down: 'article-structure-plugin.moveDown.section',
     },
-    remove: '',
+    remove: 'article-structure-plugin.remove.section',
   },
   constructor: (schema, number, content) => {
     const numberConverted = romanize(number);
