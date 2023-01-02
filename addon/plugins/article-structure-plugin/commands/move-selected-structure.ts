@@ -21,14 +21,14 @@ const moveSelectedStructure = (
     if (!currentStructure || currentStructure.pos === -1) {
       return false;
     }
-    const insertionPosition = calculateInsertionPosition(
+    const insertionRange = calculateInsertionRange(
       doc,
       currentStructure.pos,
       currentStructure.node.type,
       direction,
       schema
     );
-    if (insertionPosition === null || insertionPosition === undefined) {
+    if (insertionRange === null || insertionRange === undefined) {
       return false;
     }
     const relativeSelectionOffset = selection.from - currentStructure.pos;
@@ -50,21 +50,14 @@ const moveSelectedStructure = (
           })
         );
       }
-      let positionToSelect;
-      if (insertionPosition[0] === insertionPosition[1]) {
-        const mappedInsertionPosition = transaction.mapping.map(
-          insertionPosition[0]
-        );
-        positionToSelect = mappedInsertionPosition;
-        transaction.insert(mappedInsertionPosition, currentStructure.node);
-      } else {
-        const mappedFrom = transaction.mapping.map(insertionPosition[0]);
-        const mappedTo = transaction.mapping.map(insertionPosition[1]);
-        transaction.replaceWith(mappedFrom, mappedTo, currentStructure.node);
-        positionToSelect = mappedFrom;
-      }
+      const mappedFrom = transaction.mapping.map(insertionRange.from);
+      const mappedTo =
+        insertionRange.from === insertionRange.to
+          ? mappedFrom
+          : transaction.mapping.map(insertionRange.to);
+      transaction.replaceWith(mappedFrom, mappedTo, currentStructure.node);
       const newSelection = Selection.near(
-        transaction.doc.resolve(positionToSelect + relativeSelectionOffset)
+        transaction.doc.resolve(mappedFrom + relativeSelectionOffset)
       );
       transaction.setSelection(newSelection);
       recalculateStructureNumbers(transaction, currentStructureSpec);
@@ -74,23 +67,23 @@ const moveSelectedStructure = (
   };
 };
 
-export function calculateInsertionPosition(
+export function calculateInsertionRange(
   doc: PNode,
   pos: number, // position of structure we want to move
   nodeType: NodeType,
   direction: 'up' | 'down',
   schema: Schema
-): [number, number] | null {
+): { from: number; to: number } | null {
   const resolvedPosition = doc.resolve(pos);
   const containerNode = resolvedPosition.parent;
   const index = resolvedPosition.index();
   if (direction === 'up' && index !== 0) {
     const position = resolvedPosition.posAtIndex(index - 1);
-    return [position, position];
+    return { from: position, to: position };
   } else if (direction === 'down' && index !== containerNode.childCount - 1) {
     // We need to insert after the node below so we do index + 2 instead of index + 1
     const position = resolvedPosition.posAtIndex(index + 2);
-    return [position, position];
+    return { from: position, to: position };
   } else {
     const containerRange = findNodes(
       doc,
@@ -110,18 +103,17 @@ export function calculateInsertionPosition(
     ).next().value;
     if (containerRange) {
       const { from, to } = containerRange;
-      const resolvedPosition = doc.resolve(to);
-      const container = resolvedPosition.parent;
-      const content = container.lastChild;
-      if (!content) return null;
+      const containerNode = doc.nodeAt(from);
+      if (!containerNode) return null;
       if (
-        content.firstChild?.type === schema.nodes['paragraph'] &&
-        content.firstChild.firstChild?.type === schema.nodes['placeholder']
+        containerNode.firstChild?.type === schema.nodes['paragraph'] &&
+        containerNode.firstChild.firstChild?.type ===
+          schema.nodes['placeholder']
       ) {
-        return [from + 1, to - 1];
+        return { from: from + 1, to: to - 1 };
       } else {
         const position = direction === 'up' ? to - 1 : from + 1;
-        return [position, position];
+        return { from: position, to: position };
       }
     }
     return null;
