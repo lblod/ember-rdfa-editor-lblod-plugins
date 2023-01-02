@@ -14,11 +14,4 @@ export const TABLE_OF_CONTENTS_DEFAULT_CONFIG: TableOfContentsConfig = [
       predicate: 'https://say.data.gift/ns/heading',
     },
   },
-  {
-    sectionPredicate: [
-      'https://say.data.gift/ns/hasParagraph',
-      'say:hasParagraph',
-    ],
-    value: '§',
-  },
 ];
