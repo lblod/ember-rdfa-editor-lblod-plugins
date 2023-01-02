@@ -50,7 +50,16 @@ export const sectionSpec: StructureSpec = {
         ),
       ]
     );
-    return node;
+    const selectionConfig: {
+      relativePos: number;
+      type: 'text' | 'node';
+    } = content
+      ? { relativePos: 5, type: 'text' }
+      : { relativePos: 6, type: 'node' };
+    return {
+      node,
+      selectionConfig,
+    };
   },
   updateNumber: ({ number, pos, transaction }) => {
     const numberConverted = romanize(number);

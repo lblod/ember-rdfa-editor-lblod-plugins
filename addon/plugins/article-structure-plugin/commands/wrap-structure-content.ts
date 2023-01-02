@@ -1,4 +1,9 @@
-import { Command, PNode } from '@lblod/ember-rdfa-editor';
+import {
+  Command,
+  NodeSelection,
+  PNode,
+  TextSelection,
+} from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import IntlService from 'ember-intl/services/intl';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
@@ -20,10 +25,15 @@ const wrapStructureContent = (
       return false;
     }
     const contentToWrap = node?.content;
-
-    let wrappingNode: PNode;
+    let result: {
+      node: PNode;
+      selectionConfig: {
+        relativePos: number;
+        type: 'node' | 'text';
+      };
+    };
     try {
-      wrappingNode = structureSpec.constructor({
+      result = structureSpec.constructor({
         schema,
         content: contentToWrap,
         intl,
@@ -31,9 +41,21 @@ const wrapStructureContent = (
     } catch (e) {
       return false;
     }
+    const { node: wrappingNode, selectionConfig } = result;
     if (dispatch) {
       const transaction = state.tr;
       transaction.replaceWith(pos + 1, pos + node.nodeSize - 1, wrappingNode);
+      const newSelection =
+        selectionConfig.type === 'node'
+          ? NodeSelection.create(
+              transaction.doc,
+              pos + 1 + selectionConfig.relativePos
+            )
+          : TextSelection.create(
+              transaction.doc,
+              pos + 1 + selectionConfig.relativePos
+            );
+      transaction.setSelection(newSelection);
       recalculateStructureNumbers(transaction, structureSpec);
       dispatch(transaction);
     }

@@ -53,6 +53,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         );
       }
     }
+    this.controller.focus();
   }
 
   @action

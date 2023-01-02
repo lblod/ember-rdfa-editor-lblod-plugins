@@ -25,6 +25,7 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
   @action
   insertStructure(spec: StructureSpec) {
     this.args.controller.doCommand(insertStructure(spec, this.intl));
+    this.args.controller.focus();
   }
 
   canInsertStructure = (spec: StructureSpec) =>

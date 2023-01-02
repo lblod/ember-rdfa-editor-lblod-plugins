@@ -1,4 +1,8 @@
-import { Command } from '@lblod/ember-rdfa-editor';
+import {
+  Command,
+  NodeSelection,
+  TextSelection,
+} from '@lblod/ember-rdfa-editor';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '../utils';
@@ -30,7 +34,8 @@ const insertStructure = (
       return wrapStructureContent(structureSpec, parent, intl)(state, dispatch);
     }
     if (dispatch) {
-      const newStructureNode = structureSpec.constructor({ schema, intl });
+      const { node: newStructureNode, selectionConfig } =
+        structureSpec.constructor({ schema, intl });
       const transaction = state.tr;
       let insertRange: { from: number; to: number };
       if (
@@ -48,11 +53,23 @@ const insertStructure = (
           to: selection.$from.after(depth + 1),
         };
       }
+
       transaction.replaceWith(
         insertRange.from,
         insertRange.to,
         newStructureNode
       );
+      const newSelection =
+        selectionConfig.type === 'node'
+          ? NodeSelection.create(
+              transaction.doc,
+              insertRange.from + selectionConfig.relativePos
+            )
+          : TextSelection.create(
+              transaction.doc,
+              insertRange.from + selectionConfig.relativePos
+            );
+      transaction.setSelection(newSelection);
       recalculateStructureNumbers(transaction, structureSpec);
       dispatch(transaction);
     }

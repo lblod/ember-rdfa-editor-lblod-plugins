@@ -30,7 +30,7 @@ export const articleParagraphSpec: StructureSpec = {
         placeholderText: intl?.t(PLACEHOLDERS.body),
       })
     );
-    return node;
+    return { node, selectionConfig: { relativePos: 1, type: 'node' } };
   },
   updateNumber: ({ number, pos, transaction }) => {
     const numberConverted = number.toString();

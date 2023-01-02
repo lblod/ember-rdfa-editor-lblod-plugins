@@ -27,7 +27,13 @@ export type StructureSpec = {
     number?: number;
     intl?: IntlService;
     content?: PNode | Fragment;
-  }) => PNode;
+  }) => {
+    node: PNode;
+    selectionConfig: {
+      relativePos: number;
+      type: 'node' | 'text';
+    };
+  };
   updateNumber: (args: {
     number: number;
     pos: number;
