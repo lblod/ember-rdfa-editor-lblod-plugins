@@ -1,10 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-export default function memoize(func) {
-  const cache = {};
-  return function () {
-    const args = JSON.stringify(arguments);
-    cache[args] = cache[args] || func.apply(this, arguments);
-    return cache[args];
+export default function memoize(func: (...a: unknown[]) => unknown) {
+  const cache: Record<string, unknown> = {};
+  return (...args: unknown[]) => {
+    const serializedArgs = JSON.stringify(args);
+    cache[serializedArgs] = cache[serializedArgs] || func(args);
+    return cache[serializedArgs];
   };
 }

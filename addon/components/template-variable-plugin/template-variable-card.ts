@@ -3,17 +3,17 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
 import { task } from 'ember-concurrency';
-
-import {
-  CodeListOption,
-  fetchCodeListOptions,
-} from '../../utils/variable-plugins/fetch-data';
-import { MULTI_SELECT_CODELIST_TYPE, ZONAL_URI } from '../../constants';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { ProseStore } from '@lblod/ember-rdfa-editor/utils/datastore/prose-store';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { getAppliedMarks } from '@lblod/ember-rdfa-editor/plugins/datastore';
+import {
+  CodeListOption,
+  fetchCodeListOptions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin/utils/fetch-data';
+import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
+import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin/utils/constants';
 
 type Args = {
   controller: ProseController;

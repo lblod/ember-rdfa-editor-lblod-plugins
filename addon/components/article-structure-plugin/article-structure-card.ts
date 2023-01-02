@@ -2,11 +2,11 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { ProseController } from '@lblod/ember-rdfa-editor';
-import { insertArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/commands/article-structure-plugin';
+import { insertArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
-import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/utils/article-structure-plugin/validate-datastore';
 import { ResolvedArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import validateDatastore from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/validate-datastore';
 
 type Args = {
   controller: ProseController;

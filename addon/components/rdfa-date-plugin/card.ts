@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import modifyDate from '../../commands/modify-date-command';
+import { modifyDate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/commands';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 type Args = {

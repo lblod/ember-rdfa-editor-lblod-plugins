@@ -114,8 +114,8 @@ export default class BesluitSampleController extends Controller {
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
-    besluitContextCardWidget(),
-    besluitPluginCardWidget(),
+    besluitContextCardWidget,
+    besluitPluginCardWidget,
     importSnippetWidget,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,

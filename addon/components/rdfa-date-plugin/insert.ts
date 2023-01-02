@@ -14,6 +14,7 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
   get schema() {
     return this.controller.schema;
   }
+
   @action
   insertDate() {
     this.controller.withTransaction((tr) => {
