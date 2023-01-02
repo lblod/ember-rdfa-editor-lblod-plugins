@@ -1,4 +1,3 @@
-import { EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import {
   constructStructureBodyNodeSpec,
@@ -8,6 +7,10 @@ import { v4 as uuid } from 'uuid';
 import { StructureSpec } from '..';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
+const PLACEHOLDERS = {
+  title: 'article-structure-plugin.placeholder.section.heading',
+  body: 'article-structure-plugin.placeholder.section.body',
+};
 export const sectionSpec: StructureSpec = {
   name: 'section',
   context: ['chapter_body'],
@@ -20,8 +23,8 @@ export const sectionSpec: StructureSpec = {
     },
     remove: 'article-structure-plugin.remove.section',
   },
-  constructor: (schema, number, content) => {
-    const numberConverted = romanize(number);
+  constructor: ({ schema, number, content, intl }) => {
+    const numberConverted = romanize(number || 1);
     const node = schema.node(
       `section`,
       { resource: `http://data.lblod.info/sections/${uuid()}` },
@@ -30,7 +33,7 @@ export const sectionSpec: StructureSpec = {
           'structure_header',
           { level: 4, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: 'Insert section title',
+            placeholderText: intl?.t(PLACEHOLDERS.title),
           })
         ),
         schema.node(
@@ -41,7 +44,7 @@ export const sectionSpec: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: 'Insert section content',
+                placeholderText: intl?.t(PLACEHOLDERS.body),
               })
             )
         ),
@@ -49,11 +52,11 @@ export const sectionSpec: StructureSpec = {
     );
     return node;
   },
-  updateNumber: (number: number, pos: number, transaction: Transaction) => {
+  updateNumber: ({ number, pos, transaction }) => {
     const numberConverted = romanize(number);
     return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
   },
-  content: (pos: number, state: EditorState) => {
+  content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
   },

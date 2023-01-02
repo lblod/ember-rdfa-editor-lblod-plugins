@@ -5,6 +5,7 @@ import {
   WidgetSpec,
   EditorState,
 } from '@lblod/ember-rdfa-editor';
+import IntlService from 'ember-intl/services/intl';
 import { Transaction } from 'prosemirror-state';
 import { STRUCTURE_SPECS } from './structures';
 
@@ -21,17 +22,18 @@ export type StructureSpec = {
     };
     remove: string;
   };
-  constructor: (
-    schema: Schema,
-    number: number,
-    content?: PNode | Fragment
-  ) => PNode;
-  updateNumber: (
-    number: number,
-    pos: number,
-    transaction: Transaction
-  ) => Transaction;
-  content?: (pos: number, state: EditorState) => Fragment;
+  constructor: (args: {
+    schema: Schema;
+    number?: number;
+    intl?: IntlService;
+    content?: PNode | Fragment;
+  }) => PNode;
+  updateNumber: (args: {
+    number: number;
+    pos: number;
+    transaction: Transaction;
+  }) => Transaction;
+  content?: (args: { pos: number; state: EditorState }) => Fragment;
   continuous: boolean;
 };
 

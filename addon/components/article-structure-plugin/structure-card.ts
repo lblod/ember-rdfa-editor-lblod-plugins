@@ -9,6 +9,8 @@ import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-pl
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import unwrapStructure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/unwrap-structure';
 import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 
 type Args = {
   controller: ProseController;
@@ -18,6 +20,7 @@ type Args = {
 };
 
 export default class EditorPluginsStructureCardComponent extends Component<Args> {
+  @service declare intl: IntlService;
   @tracked removeStructureContent = false;
 
   get controller() {
@@ -27,7 +30,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   @action
   moveStructure(direction: 'up' | 'down') {
     this.controller.doCommand(
-      moveSelectedStructure(this.structureTypes, direction)
+      moveSelectedStructure(this.structureTypes, direction, this.intl)
     );
     this.controller.focus();
   }
@@ -88,13 +91,13 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   get canMoveDown() {
     return this.controller.checkCommand(
-      moveSelectedStructure(this.structureTypes, 'down')
+      moveSelectedStructure(this.structureTypes, 'down', this.intl)
     );
   }
 
   get canMoveUp() {
     return this.controller.checkCommand(
-      moveSelectedStructure(this.structureTypes, 'up')
+      moveSelectedStructure(this.structureTypes, 'up', this.intl)
     );
   }
 

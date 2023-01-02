@@ -12,7 +12,7 @@ const unwrapStructure = (structure: {
     if (!type.content) {
       return false;
     }
-    const contentToUnwrap = type.content(pos, state);
+    const contentToUnwrap = type.content({ pos, state });
 
     const resolvedPos = doc.resolve(pos);
     const parent = resolvedPos.parent;

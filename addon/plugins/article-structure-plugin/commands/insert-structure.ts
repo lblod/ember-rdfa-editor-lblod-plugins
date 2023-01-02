@@ -3,8 +3,12 @@ import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '../utils';
 import wrapStructureContent from './wrap-structure-content';
+import IntlService from 'ember-intl/services/intl';
 
-const insertStructure = (structureSpec: StructureSpec): Command => {
+const insertStructure = (
+  structureSpec: StructureSpec,
+  intl: IntlService
+): Command => {
   return (state, dispatch) => {
     const { schema, selection } = state;
     const contextNodeTypes = structureSpec.context
@@ -23,10 +27,10 @@ const insertStructure = (structureSpec: StructureSpec): Command => {
         schema.nodes[structureSpec.name]
       )
     ) {
-      return wrapStructureContent(structureSpec, parent)(state, dispatch);
+      return wrapStructureContent(structureSpec, parent, intl)(state, dispatch);
     }
     if (dispatch) {
-      const newStructureNode = structureSpec.constructor(schema, 1);
+      const newStructureNode = structureSpec.constructor({ schema, intl });
       const transaction = state.tr;
       let insertRange: { from: number; to: number };
       if (

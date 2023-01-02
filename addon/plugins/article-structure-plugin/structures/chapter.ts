@@ -1,10 +1,3 @@
-import {
-  EditorState,
-  Fragment,
-  PNode,
-  Schema,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
 import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { StructureSpec } from '..';
@@ -14,6 +7,10 @@ import {
 } from '../utils';
 import { v4 as uuid } from 'uuid';
 
+const PLACEHOLDERS = {
+  title: 'article-structure-plugin.placeholder.chapter.heading',
+  body: 'article-structure-plugin.placeholder.chapter.body',
+};
 export const chapterSpec: StructureSpec = {
   name: 'chapter',
   context: ['doc'],
@@ -26,8 +23,8 @@ export const chapterSpec: StructureSpec = {
     },
     remove: 'article-structure-plugin.remove.chapter',
   },
-  constructor: (schema: Schema, number: number, content: Fragment | PNode) => {
-    const numberConverted = romanize(number);
+  constructor: ({ schema, number, content, intl }) => {
+    const numberConverted = romanize(number ?? 1);
     const node = schema.node(
       `chapter`,
       { resource: `http://data.lblod.info/chapters/${uuid()}` },
@@ -36,7 +33,7 @@ export const chapterSpec: StructureSpec = {
           'structure_header',
           { level: 4, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: 'Insert chapter title',
+            placeholderText: intl?.t(PLACEHOLDERS.title),
           })
         ),
         schema.node(
@@ -47,7 +44,7 @@ export const chapterSpec: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: 'Insert chapter content',
+                placeholderText: intl?.t(PLACEHOLDERS.body),
               })
             )
         ),
@@ -55,11 +52,11 @@ export const chapterSpec: StructureSpec = {
     );
     return node;
   },
-  updateNumber: (number: number, pos: number, transaction: Transaction) => {
+  updateNumber: ({ number, pos, transaction }) => {
     const numberConverted = romanize(number);
     return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
   },
-  content: (pos: number, state: EditorState) => {
+  content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
   },

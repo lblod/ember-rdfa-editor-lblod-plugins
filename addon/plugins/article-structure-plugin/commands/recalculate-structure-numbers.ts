@@ -17,7 +17,7 @@ export default function recalculateStructureNumbers(
           indices[i] = 1;
           contexts[i] = parent;
         }
-        spec.updateNumber(indices[i], pos, transaction);
+        spec.updateNumber({ number: indices[i], pos, transaction });
         indices[i] += 1;
       }
     });

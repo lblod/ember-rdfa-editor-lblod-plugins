@@ -10,9 +10,11 @@ import { ArticleStructurePluginOptions } from '..';
 import { findAncestorOfType } from '../utils';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
+import IntlService from 'ember-intl/services/intl';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
-  direction: 'up' | 'down'
+  direction: 'up' | 'down',
+  intl: IntlService
 ): Command => {
   return (state, dispatch) => {
     const { doc, selection, schema } = state;
@@ -46,7 +48,9 @@ const moveSelectedStructure = (
         transaction.insert(
           currentStructure.pos,
           schema.node(schema.nodes['placeholder'], {
-            placeholderText: `Insert ${parent.type.name} content`,
+            placeholderText: intl.t(
+              'article-structure-plugin.placeholder.generic.body'
+            ),
           })
         );
       }

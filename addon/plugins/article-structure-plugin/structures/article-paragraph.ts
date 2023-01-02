@@ -1,6 +1,10 @@
-import { NodeSpec, Schema, Transaction } from '@lblod/ember-rdfa-editor';
+import { NodeSpec } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
+
+const PLACEHOLDERS = {
+  body: 'article-structure-plugin.placeholder.paragraph.body',
+};
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
@@ -14,8 +18,8 @@ export const articleParagraphSpec: StructureSpec = {
     remove: 'article-structure-plugin.remove.paragraph',
   },
   continuous: true,
-  constructor: (schema: Schema, number: number) => {
-    const numberConverted = number.toString();
+  constructor: ({ schema, number, intl }) => {
+    const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
       `article_paragraph`,
       {
@@ -23,12 +27,12 @@ export const articleParagraphSpec: StructureSpec = {
         number: numberConverted,
       },
       schema.node('placeholder', {
-        placeholderText: 'Insert paragraph content',
+        placeholderText: intl?.t(PLACEHOLDERS.body),
       })
     );
     return node;
   },
-  updateNumber: (number: number, pos: number, transaction: Transaction) => {
+  updateNumber: ({ number, pos, transaction }) => {
     const numberConverted = number.toString();
     return transaction.setNodeAttribute(pos, 'number', numberConverted);
   },

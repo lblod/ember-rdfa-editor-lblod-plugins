@@ -116,7 +116,20 @@ article-structure-plugin:
     chapter: Remove chapter
     content: Remove content
   placeholder:
-    title: Insert title heading
-    chapter: Insert chapter heading
-    section: Insert section heading
-    subsection: Insert subsection heading
+    generic:
+      heading: Insert title
+      body: Insert content
+    chapter:
+      heading: Insert chapter heading
+      body: Insert chapter content
+    section:
+      heading: Insert section heading
+      body: Insert section content
+    subsection: 
+      heading: Insert subsection heading
+      body: Insert subsection content
+    article:
+      heading: Insert article heading
+      body: Insert article content
+    paragraph:
+      body: Insert paragraph content

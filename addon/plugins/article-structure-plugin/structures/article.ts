@@ -1,4 +1,4 @@
-import { EditorState, NodeSpec, Transaction } from '@lblod/ember-rdfa-editor';
+import { NodeSpec } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
@@ -8,6 +8,10 @@ import {
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 
+const PLACEHOLDERS = {
+  title: 'article-structure-plugin.placeholder.article.heading',
+  body: 'article-structure-plugin.placeholder.article.body',
+};
 export const articleSpec: StructureSpec = {
   name: 'article',
   context: ['chapter_body', 'section_body', 'subsection_body'],
@@ -20,8 +24,8 @@ export const articleSpec: StructureSpec = {
     remove: 'article-structure-plugin.remove.article',
   },
   continuous: true,
-  constructor: (schema, number, content) => {
-    const numberConverted = number.toString();
+  constructor: ({ schema, number, content, intl }) => {
+    const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
       `article`,
       { resource: `http://data.lblod.info/articles/${uuid()}` },
@@ -30,7 +34,7 @@ export const articleSpec: StructureSpec = {
           'article_header',
           { level: 4, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: 'Insert article title',
+            placeholderText: intl?.t(PLACEHOLDERS.title),
           })
         ),
         schema.node(
@@ -41,7 +45,7 @@ export const articleSpec: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: 'Insert article content',
+                placeholderText: intl?.t(PLACEHOLDERS.body),
               })
             )
         ),
@@ -49,11 +53,11 @@ export const articleSpec: StructureSpec = {
     );
     return node;
   },
-  updateNumber: (number: number, pos: number, transaction: Transaction) => {
+  updateNumber: ({ number, pos, transaction }) => {
     const numberConverted = number.toString();
     return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
   },
-  content: (pos: number, state: EditorState) => {
+  content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
   },

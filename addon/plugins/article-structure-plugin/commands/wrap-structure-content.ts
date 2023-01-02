@@ -1,5 +1,6 @@
 import { Command, PNode } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import IntlService from 'ember-intl/services/intl';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 
 const wrapStructureContent = (
@@ -7,7 +8,8 @@ const wrapStructureContent = (
   parent: {
     node: PNode;
     pos: number;
-  }
+  },
+  intl: IntlService
 ): Command => {
   return (state, dispatch) => {
     const { schema } = state;
@@ -21,7 +23,11 @@ const wrapStructureContent = (
 
     let wrappingNode: PNode;
     try {
-      wrappingNode = structureSpec.constructor(schema, 0, contentToWrap);
+      wrappingNode = structureSpec.constructor({
+        schema,
+        content: contentToWrap,
+        intl,
+      });
     } catch (e) {
       return false;
     }
