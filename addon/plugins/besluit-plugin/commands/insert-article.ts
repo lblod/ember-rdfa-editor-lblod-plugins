@@ -2,11 +2,11 @@ import { v4 as uuid } from 'uuid';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import { ProseController, TextSelection } from '@lblod/ember-rdfa-editor';
 import { Command } from '@lblod/ember-rdfa-editor';
+import recalculateArticleNumbers from './recalculate-article-numbers';
 
 export default function insertArticle(
   controller: ProseController,
-  articleContent: string,
-  articleNumber: string
+  articleContent: string
 ): Command {
   return function (_state, dispatch) {
     const selection = controller.state.selection;
@@ -43,7 +43,7 @@ export default function insertArticle(
         <div>
           Artikel
           <span property="eli:number" datatype="xsd:string">
-            ${articleNumber ? articleNumber : generateArticleNumber(controller)}
+            <span class="mark-highlight-manual">nummer</span>
           </span></div>
         <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
         <div property="prov:value" datatype="xsd:string">
@@ -56,7 +56,7 @@ export default function insertArticle(
       </div>
     `;
       controller.doCommand(insertHtml(articleHtml, range.from, range.to));
-
+      recalculateArticleNumbers(controller, besluitSubject.value);
       controller.withTransaction((tr) => {
         const selection = TextSelection.near(
           controller.state.doc.resolve(range.from)
@@ -67,28 +67,4 @@ export default function insertArticle(
     }
     return true;
   };
-}
-
-function generateArticleNumber(controller: ProseController) {
-  const numberQuads = [
-    ...controller.datastore
-      .match(null, '>http://data.europa.eu/eli/ontology#number')
-      .asQuads(),
-  ];
-  let biggerNumber;
-  for (const numberQuad of numberQuads) {
-    const number = Number(removeZeroWidthSpace(numberQuad.object.value));
-    if (!Number.isNaN(number) && (!biggerNumber || number > biggerNumber)) {
-      biggerNumber = number;
-    }
-  }
-  if (biggerNumber) {
-    return biggerNumber + 1;
-  } else {
-    return '<span class="mark-highlight-manual">nummer</span>';
-  }
-}
-
-function removeZeroWidthSpace(text: string) {
-  return text.replace(/[\u200B-\u200D\uFEFF]/g, '');
 }
