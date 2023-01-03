@@ -59,7 +59,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
-
+import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 const citation = setupCitationPlugin();
 const nodes = {
   doc: {
@@ -74,6 +74,7 @@ const nodes = {
   bullet_list,
   placeholder,
   ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+  ...STRUCTURE_NODES,
   heading,
   blockquote,
 
@@ -195,7 +196,9 @@ export default class RegulatoryStatementSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
+    const presetContent =
+      localStorage.getItem('EDITOR_CONTENT') ??
+      `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);

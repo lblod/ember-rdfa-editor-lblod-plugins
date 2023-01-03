@@ -1,34 +1,49 @@
-import { WidgetSpec } from '@lblod/ember-rdfa-editor';
+import {
+  Fragment,
+  PNode,
+  Schema,
+  WidgetSpec,
+  EditorState,
+} from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import optionsWithDefaults from './utils/options-with-defaults';
+import { Transaction } from 'prosemirror-state';
+import { STRUCTURE_SPECS } from './structures';
+
+export type SpecName = string;
 
 export type StructureSpec = {
-  uriBase: string;
-  title: string;
-  type: string;
-  numberPredicate: string;
-  numbering?: string;
-  numberingFunction?: (num: number) => string;
-  heading?: string;
-  translation: string;
-  moveUp: string;
-  moveDown: string;
-  insertPredicate?: {
-    long: string;
-    short: string;
+  name: SpecName;
+  context: SpecName[];
+  translations: {
+    insert: string;
+    move: {
+      up: string;
+      down: string;
+    };
+    remove: string;
   };
-  shaclConstraint: string;
-  template: (uri: string, intlService: IntlService) => string;
+  constructor: (args: {
+    schema: Schema;
+    number?: number;
+    intl?: IntlService;
+    content?: PNode | Fragment;
+  }) => {
+    node: PNode;
+    selectionConfig: {
+      relativePos: number;
+      type: 'node' | 'text';
+    };
+  };
+  updateNumber: (args: {
+    number: number;
+    pos: number;
+    transaction: Transaction;
+  }) => Transaction;
+  content?: (args: { pos: number; state: EditorState }) => Fragment;
+  continuous: boolean;
 };
 
-export type ArticleStructurePluginOptions = {
-  structures: StructureSpec[];
-};
-
-export type ResolvedArticleStructurePluginOptions = {
-  structures: StructureSpec[];
-  structureTypes: string[];
-};
+export type ArticleStructurePluginOptions = StructureSpec[];
 
 export const articleStructureInsertWidget: (
   options?: ArticleStructurePluginOptions
@@ -37,7 +52,7 @@ export const articleStructureInsertWidget: (
     componentName: 'article-structure-plugin/article-structure-card',
     desiredLocation: 'insertSidebar',
     widgetArgs: {
-      options: optionsWithDefaults(options),
+      options: options ?? STRUCTURE_SPECS,
     },
   };
 };
@@ -49,7 +64,7 @@ export const articleStructureContextWidget: (
     componentName: 'article-structure-plugin/structure-card',
     desiredLocation: 'sidebar',
     widgetArgs: {
-      options: optionsWithDefaults(options),
+      options: options ?? STRUCTURE_SPECS,
     },
   };
 };

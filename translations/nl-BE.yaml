@@ -112,9 +112,26 @@ article-structure-plugin:
   remove:
     article: Artikel verwijderen
     paragraph: Paragraaf verwijderen
-    structure: Structuur verwijderen
+    subsection: Onderafdeling verwijderen
+    section: Afdeling verwijderen
+    chapter: Hoofdstuk verwijderen
+    title: Titel verwijderen
+    content: Inhoud verwijderen
   placeholder:
-    title: Voeg titel in
-    chapter: Voeg hoofdstuk in
-    section: Voeg afdeling in
-    subsection: Voeg onderafdeling in
+    generic:
+      heading: Voeg titel in
+      body: Voeg inhoud in
+    chapter:
+      heading: Voeg hoofdstuk in
+      body: Voeg inhoud hoofdstuk in
+    section:
+      heading: Voeg afdeling in
+      body: Voeg inhoud afdeling in
+    subsection: 
+      heading: Voeg onderafdeling in
+      body: Voeg inhoud onderafdeling in
+    article:
+      heading: Voeg artikel in
+      body: Voeg inhoud artikel in
+    paragraph:
+      body: Voeg inhoud paragraaf in

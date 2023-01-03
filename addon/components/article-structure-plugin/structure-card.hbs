@@ -10,9 +10,9 @@
             @icon="chevron-up"
             @iconAlignment="left"
             @skin="link"
-            @disabled={{not this.canMoveUp.value}}
-            {{on 'click' (fn this.moveStructure true)}}>
-            {{t this.structureTypeSelected.moveUp}}
+            @disabled={{not this.canMoveUp}}
+            {{on 'click' (fn this.moveStructure 'up')}}>
+            {{t this.currentStructureType.translations.move.up}}
           </AuButton>
         </Item>
         <Item>
@@ -20,20 +20,24 @@
             @icon="chevron-down"
             @iconAlignment="left"
             @skin="link"
-            @disabled={{not this.canMoveDown.value}}
-            {{on 'click' (fn this.moveStructure false)}}>
-            {{t this.structureTypeSelected.moveDown}}
+            @disabled={{not this.canMoveDown}}
+            {{on 'click' (fn this.moveStructure 'down')}}>
+            {{t this.currentStructureType.translations.move.down}}
           </AuButton>
         </Item>
         <Item>
+          <AuToggleSwitch 
+            @label={{t "article-structure-plugin.remove.content"}} 
+            @checked={{this.removeStructureContent}}
+            @onChange={{this.setRemoveStructureContent}}/>
           <AuButton
             @icon="bin"
             @iconAlignment="left"
             @skin="link"
             @alert={{true}}
-            @disabled={{this.isOutsideStructure}}
+            @disabled={{not this.canRemoveStructure}}
             {{on 'click' this.removeStructure}}>
-            {{t "article-structure-plugin.remove.structure"}}
+            {{t this.currentStructureType.translations.remove}}
           </AuButton>
         </Item>
       </AuList>

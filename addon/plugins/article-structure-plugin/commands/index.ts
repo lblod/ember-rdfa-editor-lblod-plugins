@@ -1,4 +1,6 @@
-export { default as deleteStructure } from './delete-structure';
-export { default as insertArticleStructure } from './insert-article-structure';
-export { default as moveStructure } from './move-structure';
+export { default as insertStructure } from './insert-structure';
+export { default as moveSelectedStructure } from './move-selected-structure';
 export { default as recalculateStructureNumbers } from './recalculate-structure-numbers';
+export { default as removeStructure } from './remove-structure';
+export { default as unwrapStructure } from './unwrap-structure';
+export { default as wrapStructureContent } from './wrap-structure-content';
