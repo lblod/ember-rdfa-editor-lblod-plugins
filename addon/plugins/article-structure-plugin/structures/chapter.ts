@@ -14,7 +14,7 @@ const PLACEHOLDERS = {
 };
 export const chapterSpec: StructureSpec = {
   name: 'chapter',
-  context: ['title_body'],
+  context: ['doc', 'block', 'title_body'],
   continuous: false,
   translations: {
     insert: 'article-structure-plugin.insert.chapter',
@@ -75,6 +75,7 @@ export const chapterSpec: StructureSpec = {
 export const chapter = constructStructureNodeSpec({
   type: SAY('Chapter'),
   content: 'structure_header chapter_body',
+  group: 'block',
 });
 
 export const chapter_body = constructStructureBodyNodeSpec({

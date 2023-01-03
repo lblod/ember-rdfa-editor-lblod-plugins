@@ -91,7 +91,7 @@ export const article_header: NodeSpec = {
   },
   toDOM(node) {
     return [
-      'h6',
+      'div',
       { property: node.attrs.property as string },
       'Artikel ',
       [
@@ -111,7 +111,7 @@ export const article_header: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'h6,span',
+      tag: 'div',
       getAttrs(element: HTMLElement) {
         const headerAttrs = getStructureHeaderAttrs(element);
         if (headerAttrs) {
@@ -119,8 +119,7 @@ export const article_header: NodeSpec = {
         }
         return false;
       },
-      contentElement: `span[property~='${EXT('title').prefixed}'], 
-                       span[property~='${EXT('title').full}']`,
+      contentElement: `span[property~='${EXT('title').prefixed}']`,
     },
   ],
 };
