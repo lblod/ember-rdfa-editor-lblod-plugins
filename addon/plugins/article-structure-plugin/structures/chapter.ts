@@ -1,11 +1,12 @@
-import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
-} from '../utils';
+  romanize,
+} from '../utils/structure';
 import { v4 as uuid } from 'uuid';
+import { SAY } from '../constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.chapter.heading',
@@ -72,7 +73,7 @@ export const chapterSpec: StructureSpec = {
 };
 
 export const chapter = constructStructureNodeSpec({
-  type: 'https://say.data.gift/ns/Chapter',
+  type: SAY('Chapter'),
   content: 'structure_header chapter_body',
   group: 'block',
 });

@@ -1,6 +1,8 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
+import { ELI, SAY, XSD } from '../constants';
+import { hasRDFaAttribute } from '../utils/namespace';
 
 const PLACEHOLDERS = {
   body: 'article-structure-plugin.placeholder.paragraph.body',
@@ -51,18 +53,18 @@ export const article_paragraph: NodeSpec = {
     return [
       'div',
       {
-        property: 'say:hasParagraph',
-        typeof: `https://say.data.gift/ns/Paragraph`,
+        property: SAY('hasParagraph').prefixed,
+        typeof: SAY('Paragraph').prefixed,
         resource: node.attrs.resource as string,
       },
       '$',
       [
         'span',
-        { property: 'eli:number', datatype: 'xsd:integer' },
+        { property: ELI('number').prefixed, datatype: XSD('integer').prefixed },
         node.attrs.number,
       ],
       '. ',
-      ['span', { property: 'say:body' }, 0],
+      ['span', { property: SAY('body').prefixed }, 0],
     ];
   },
   parseDOM: [
@@ -70,17 +72,16 @@ export const article_paragraph: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'say:hasParagraph' &&
-          element
-            .getAttribute('typeof')
-            ?.includes('https://say.data.gift/ns/Paragraph') &&
+          hasRDFaAttribute(element, 'property', SAY('hasParagraph')) &&
+          hasRDFaAttribute(element, 'typeof', SAY('Paragraph')) &&
           element.getAttribute('resource')
         ) {
           return { resource: element.getAttribute('resource') };
         }
         return false;
       },
-      contentElement: `span[property='say:body']`,
+      contentElement: `span[property~='${SAY('body').prefixed}'],
+                       span[property~='${SAY('body').full}']`,
     },
   ],
 };

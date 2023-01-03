@@ -1,5 +1,6 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
-import { getStructureHeaderAttrs } from '../utils';
+import { ELI, EXT, SAY, XSD } from '../constants';
+import { getStructureHeaderAttrs } from '../utils/structure';
 
 const TAG_TO_LEVEL = new Map([
   ['h1', 1],
@@ -16,7 +17,7 @@ export const structure_header: NodeSpec = {
   inline: false,
   attrs: {
     property: {
-      default: 'say:heading',
+      default: SAY('heading').prefixed,
     },
 
     number: {
@@ -32,14 +33,14 @@ export const structure_header: NodeSpec = {
       { property: node.attrs.property as string },
       [
         'span',
-        { property: 'eli:number', datatype: 'xsd:string' },
+        { property: ELI('number').prefixed, datatype: XSD('string').prefixed },
         node.attrs.number,
       ],
       '. ',
       [
         'span',
         {
-          property: 'ext:title',
+          property: EXT('title').prefixed,
         },
         0,
       ],
@@ -56,7 +57,8 @@ export const structure_header: NodeSpec = {
         }
         return false;
       },
-      contentElement: `span[property='ext:title']`,
+      contentElement: `span[property~='${EXT('title').prefixed}'], 
+                       span[property~='${EXT('title').full}']`,
     },
   ],
 };

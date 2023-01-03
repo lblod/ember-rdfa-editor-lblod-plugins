@@ -1,8 +1,10 @@
 import { NodeSpec, NodeType, Selection } from '@lblod/ember-rdfa-editor';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { ELI, RDF, SAY } from '../constants';
+import { hasRDFaAttribute, Resource } from './namespace';
 
 export function constructStructureNodeSpec(config: {
-  type: string;
+  type: Resource;
   content: string;
   group?: string;
 }): NodeSpec {
@@ -13,10 +15,10 @@ export function constructStructureNodeSpec(config: {
     inline: false,
     attrs: {
       property: {
-        default: 'say:hasPart',
+        default: SAY('hasPart').prefixed,
       },
       typeof: {
-        default: type,
+        default: type.prefixed,
       },
       resource: {},
     },
@@ -36,8 +38,8 @@ export function constructStructureNodeSpec(config: {
         tag: 'div',
         getAttrs(element: HTMLElement) {
           if (
-            element.getAttribute('property') === 'say:hasPart' &&
-            element.getAttribute('typeof')?.includes(type) &&
+            hasRDFaAttribute(element, 'property', SAY('hasPart')) &&
+            hasRDFaAttribute(element, 'typeof', type) &&
             element.getAttribute('resource')
           ) {
             return { resource: element.getAttribute('resource') };
@@ -57,15 +59,22 @@ export function constructStructureBodyNodeSpec(config: {
     content,
     inline: false,
     toDOM() {
-      return ['div', { property: 'say:body', datatype: 'rdf:XMLLiteral' }, 0];
+      return [
+        'div',
+        {
+          property: SAY('body').prefixed,
+          datatype: RDF('XMLLiteral').prefixed,
+        },
+        0,
+      ];
     },
     parseDOM: [
       {
         tag: 'div',
         getAttrs(element: HTMLElement) {
           if (
-            element.getAttribute('property') === 'say:body' &&
-            element.getAttribute('datatype') === 'rdf:XMLLiteral'
+            hasRDFaAttribute(element, 'property', SAY('body')) &&
+            hasRDFaAttribute(element, 'datatype', RDF('XMLLiteral'))
           ) {
             return {};
           }
@@ -95,9 +104,9 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
 export function getStructureHeaderAttrs(element: HTMLElement) {
   const numberNode = element.children[0];
   if (
-    element.getAttribute('property') === 'say:heading' &&
+    hasRDFaAttribute(element, 'property', SAY('heading')) &&
     numberNode &&
-    numberNode.getAttribute('property') === 'eli:number'
+    hasRDFaAttribute(numberNode, 'property', ELI('number'))
   ) {
     return {
       number: numberNode.textContent,

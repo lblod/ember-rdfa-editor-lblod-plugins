@@ -1,11 +1,12 @@
-import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
-} from '../utils';
+  romanize,
+} from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { SAY } from '../constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.subsection.heading',
@@ -73,7 +74,7 @@ export const subsectionSpec: StructureSpec = {
 };
 
 export const subsection = constructStructureNodeSpec({
-  type: 'https://say.data.gift/ns/Subsection',
+  type: SAY('Subsection'),
   content: 'structure_header subsection_body',
 });
 

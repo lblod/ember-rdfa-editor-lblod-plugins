@@ -3,11 +3,11 @@ import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor';
 import {
   moveSelectedStructure,
-  recalculateStructureNumbers,
+  removeStructure,
+  unwrapStructure,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils';
-import unwrapStructure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/unwrap-structure';
+import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
@@ -39,17 +39,18 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   removeStructure() {
     if (this.structure && this.currentStructureType) {
       if (this.removeStructureContent) {
-        const { pos, node } = this.structure;
-        this.controller.withTransaction((tr) => {
-          tr.replace(pos, pos + node.nodeSize);
-          return recalculateStructureNumbers(tr, ...this.structureTypes);
-        });
+        this.controller.doCommand(
+          removeStructure(this.structure, this.structureTypes)
+        );
       } else {
         this.controller.doCommand(
-          unwrapStructure({
-            ...this.structure,
-            type: this.currentStructureType,
-          })
+          unwrapStructure(
+            {
+              ...this.structure,
+              type: this.currentStructureType,
+            },
+            this.structureTypes
+          )
         );
       }
     }
@@ -108,10 +109,13 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         return true;
       } else {
         return this.controller.checkCommand(
-          unwrapStructure({
-            ...this.structure,
-            type: this.currentStructureType,
-          })
+          unwrapStructure(
+            {
+              ...this.structure,
+              type: this.currentStructureType,
+            },
+            this.structureTypes
+          )
         );
       }
     }

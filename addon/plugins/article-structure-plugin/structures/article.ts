@@ -4,9 +4,10 @@ import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
   getStructureHeaderAttrs,
-} from '../utils';
+} from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { ELI, EXT, SAY, XSD } from '../constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.article.heading',
@@ -73,7 +74,7 @@ export const articleSpec: StructureSpec = {
 };
 
 export const article = constructStructureNodeSpec({
-  type: 'https://say.data.gift/ns/Article',
+  type: SAY('Article'),
   content: 'article_header article_body',
 });
 
@@ -84,22 +85,25 @@ export const article_header: NodeSpec = {
     number: {
       default: '1',
     },
+    property: {
+      default: SAY('heading').prefixed,
+    },
   },
   toDOM(node) {
     return [
       'h6',
-      { property: 'say:heading' },
+      { property: node.attrs.property as string },
       'Artikel ',
       [
         'span',
-        { property: 'eli:number', datatype: 'xsd:string' },
+        { property: ELI('number').prefixed, datatype: XSD('string').prefixed },
         node.attrs.number,
       ],
       ': ',
       [
         'span',
         {
-          property: 'ext:title',
+          property: EXT('title').prefixed,
         },
         0,
       ],
@@ -115,7 +119,8 @@ export const article_header: NodeSpec = {
         }
         return false;
       },
-      contentElement: `span[property='ext:title']`,
+      contentElement: `span[property~='${EXT('title').prefixed}'], 
+                       span[property~='${EXT('title').full}']`,
     },
   ],
 };

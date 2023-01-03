@@ -5,7 +5,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import { findAncestorOfType } from '../utils';
+import { findAncestorOfType } from '../utils/structure';
 import wrapStructureContent from './wrap-structure-content';
 import IntlService from 'ember-intl/services/intl';
 
