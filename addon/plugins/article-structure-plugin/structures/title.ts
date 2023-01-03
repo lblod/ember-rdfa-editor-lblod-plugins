@@ -9,36 +9,36 @@ import { v4 as uuid } from 'uuid';
 import { SAY } from '../constants';
 
 const PLACEHOLDERS = {
-  title: 'article-structure-plugin.placeholder.chapter.heading',
-  body: 'article-structure-plugin.placeholder.chapter.body',
+  heading: 'article-structure-plugin.placeholder.generic.heading',
+  body: 'article-structure-plugin.placeholder.generic.body',
 };
-export const chapterSpec: StructureSpec = {
-  name: 'chapter',
-  context: ['title_body'],
+export const titleSpec: StructureSpec = {
+  name: 'title',
+  context: ['doc'],
   continuous: false,
   translations: {
-    insert: 'article-structure-plugin.insert.chapter',
+    insert: 'article-structure-plugin.insert.title',
     move: {
-      up: 'article-structure-plugin.moveUp.chapter',
-      down: 'article-structure-plugin.moveDown.chapter',
+      up: 'article-structure-plugin.moveUp.title',
+      down: 'article-structure-plugin.moveDown.title',
     },
-    remove: 'article-structure-plugin.remove.chapter',
+    remove: 'article-structure-plugin.remove.title',
   },
   constructor: ({ schema, number, content, intl }) => {
     const numberConverted = romanize(number ?? 1);
     const node = schema.node(
-      `chapter`,
-      { resource: `http://data.lblod.info/chapters/${uuid()}` },
+      `title`,
+      { resource: `http://data.lblod.info/titles/${uuid()}` },
       [
         schema.node(
           'structure_header',
-          { level: 4, number: numberConverted },
+          { level: 3, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: intl?.t(PLACEHOLDERS.title),
+            placeholderText: intl?.t(PLACEHOLDERS.heading),
           })
         ),
         schema.node(
-          `chapter_body`,
+          `title_body`,
           {},
           content ??
             schema.node(
@@ -72,11 +72,12 @@ export const chapterSpec: StructureSpec = {
   },
 };
 
-export const chapter = constructStructureNodeSpec({
-  type: SAY('Chapter'),
-  content: 'structure_header chapter_body',
+export const title = constructStructureNodeSpec({
+  type: SAY('Title'),
+  content: 'structure_header title_body',
+  group: 'block',
 });
 
-export const chapter_body = constructStructureBodyNodeSpec({
-  content: '(section|paragraph)+|(article|paragraph)+',
+export const title_body = constructStructureBodyNodeSpec({
+  content: '(chapter|paragraph)+|(article|paragraph)+',
 });

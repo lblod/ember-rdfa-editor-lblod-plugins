@@ -114,6 +114,7 @@ article-structure-plugin:
     subsection: Remove subsection
     section: Remove section
     chapter: Remove chapter
+    title: Remove title
     content: Remove content
   placeholder:
     generic:
