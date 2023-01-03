@@ -45,10 +45,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import {
   tableOfContentsView,
-  tableOfContents,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/ember-nodes/table-of-contents';
+  table_of_contents,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
 import { tableOfContentsWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
-import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-plugins/fetch-data';
+import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/fetch-data';
 import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -59,11 +59,11 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
-
+import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 const citation = setupCitationPlugin();
 const nodes = {
   doc: {
-    content: 'tableOfContents? block+',
+    content: 'table_of_contents? block+',
   },
   paragraph,
 
@@ -74,6 +74,7 @@ const nodes = {
   bullet_list,
   placeholder,
   ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+  ...STRUCTURE_NODES,
   heading,
   blockquote,
 
@@ -86,7 +87,7 @@ const nodes = {
 
   hard_break,
   block_rdfa,
-  tableOfContents,
+  table_of_contents,
   invisible_rdfa,
 };
 const marks = {
@@ -156,7 +157,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      tableOfContents: tableOfContentsView(controller),
+      table_of_contents: tableOfContentsView(controller),
     };
   };
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
@@ -195,7 +196,9 @@ export default class RegulatoryStatementSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
+    const presetContent =
+      localStorage.getItem('EDITOR_CONTENT') ??
+      `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);

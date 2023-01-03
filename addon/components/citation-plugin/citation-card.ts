@@ -9,10 +9,6 @@ import {
   Decision,
   fetchDecisions,
 } from '../../plugins/citation-plugin/utils/vlaamse-codex';
-import {
-  LEGISLATION_TYPE_CONCEPTS,
-  LEGISLATION_TYPES,
-} from '../../utils/legislation-types';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
   Option,
@@ -25,6 +21,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { ProseController, Transaction } from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
+import {
+  LEGISLATION_TYPES,
+  LEGISLATION_TYPE_CONCEPTS,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
 
 interface Args {
   controller: ProseController;

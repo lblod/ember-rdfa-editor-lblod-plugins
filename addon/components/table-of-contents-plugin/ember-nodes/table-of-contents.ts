@@ -1,11 +1,11 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { TableOfContentsConfig } from '../../../constants';
 import { PNode } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { Selection } from '@lblod/ember-rdfa-editor';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { TableOfContentsConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils/constants';
 type OutlineEntry = {
   content: string;
   pos: number;

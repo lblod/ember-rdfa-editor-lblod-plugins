@@ -114,8 +114,8 @@ export default class BesluitSampleController extends Controller {
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
-    besluitContextCardWidget(),
-    besluitPluginCardWidget(),
+    besluitContextCardWidget,
+    besluitPluginCardWidget,
     importSnippetWidget,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
@@ -150,97 +150,7 @@ export default class BesluitSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent =
-      `
-    <div property="prov:generated" resource="http://data.lblod.info/id/besluiten/bb7ca791-7952-44dc-b191-bc87ef55ae2c" typeof="besluit:Besluit ext:BesluitNieuweStijl">
-      <p>Openbare titel besluit:</p>
-      <h4 class="h4" property="eli:title" datatype="xsd:string"><span class="mark-highlight-manual">Geef titel besluit op</span></h4>
-      <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
-      <br>
-      <p>Korte openbare beschrijving:</p>
-      <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
-      <br>
-      <div property="besluit:motivering" lang="nl">
-        <p>
-          <span class="mark-highlight-manual">geef bestuursorgaan op</span>,
-        </p>
-        <br>
-        <h5>Bevoegdheid</h5>
-        <ul class="bullet-list">
-          <li><span class="mark-highlight-manual">Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span></li>
-        </ul>
-        <br>
-        <h5>Juridische context</h5>
-        <ul class="bullet-list">
-          <li><span class="mark-highlight-manual">Voeg juridische context in</span></li>
-        </ul>
-        <br>
-        <h5>Feitelijke context en argumentatie</h5>
-        <ul class="bullet-list">
-          <li><span class="mark-highlight-manual">Voeg context en argumentatie in</span></li>
-        </ul>
-      </div>
-      <br>
-      <br>
-      <h5>Beslissing</h5>
-      <div property="prov:value" datatype="xsd:string">
-        <div property="eli:has_part" resource="http://data.lblod.info/artikels/1234" typeof="besluit:Artikel">
-          <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
-          <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
-          <div property="prov:value" datatype="xsd:string">
-            <span class="mark-highlight-manual">Voer inhoud in</span>
-          </div>
-        </div>
-        <br>
-        <div class="mark-highlight-manual">Voeg nieuw artikel in</div> <!-- Plugin en rdfa nakijken -->
-        <br>
-      </div>
-    </div>` +
-      `
-    <div property="prov:generated" resource="http://data.lblod.info/id/besluiten/bb7ca791-7952-44dc-b191" typeof="besluit:Besluit ext:BesluitNieuweStijl">
-      <p>Openbare titel besluit:</p>
-      <h4 class="h4" property="eli:title" datatype="xsd:string"><span class="mark-highlight-manual">Geef titel besluit op</span></h4>
-      <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
-      <br>
-      <p>Korte openbare beschrijving:</p>
-      <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
-      <br>
-      <div property="besluit:motivering" lang="nl">
-        <p>
-          <span class="mark-highlight-manual">geef bestuursorgaan op</span>,
-        </p>
-        <br>
-        <h5>Bevoegdheid</h5>
-        <ul class="bullet-list">
-          <li><span class="mark-highlight-manual">Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span></li>
-        </ul>
-        <br>
-        <h5>Juridische context</h5>
-        <ul class="bullet-list">
-          <li><span class="mark-highlight-manual">Voeg juridische context in</span></li>
-        </ul>
-        <br>
-        <h5>Feitelijke context en argumentatie</h5>
-        <ul class="bullet-list">
-          <li><span class="mark-highlight-manual">Voeg context en argumentatie in</span></li>
-        </ul>
-      </div>
-      <br>
-      <br>
-      <h5>Beslissing</h5>
-      <div property="prov:value" datatype="xsd:string">
-        <div property="eli:has_part" resource="http://data.lblod.info/artikels/12" typeof="besluit:Artikel">
-          <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
-          <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
-          <div property="prov:value" datatype="xsd:string">
-            <span class="mark-highlight-manual">Voer inhoud in</span>
-          </div>
-        </div>
-        <br>
-        <div class="mark-highlight-manual">Voeg nieuw artikel in</div> <!-- Plugin en rdfa nakijken -->
-        <br>
-      </div>
-    </div>`;
+    const presetContent = sampleData.DecisionTemplate;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
