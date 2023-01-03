@@ -35,8 +35,6 @@ export default class BesluitPluginCardComponent extends Component<Args> {
   }
 
   get disableArticleInsert() {
-    return !this.controller.checkCommand(
-      insertArticle(this.controller, '')
-    );
+    return !this.controller.checkCommand(insertArticle(this.controller, ''));
   }
 }
