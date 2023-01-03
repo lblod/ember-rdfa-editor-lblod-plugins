@@ -50,11 +50,13 @@ export const structure_header: NodeSpec = {
     {
       tag: 'h1,h2,h3,h4,h5,h6,span',
       getAttrs(element: HTMLElement) {
-        const level = TAG_TO_LEVEL.get(element.tagName) ?? 6;
+        const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
+        console.log('LEVEL: ', level);
         const headerAttrs = getStructureHeaderAttrs(element);
         if (headerAttrs) {
           return { level, ...headerAttrs };
         }
+
         return false;
       },
       contentElement: `span[property~='${EXT('title').prefixed}'], 

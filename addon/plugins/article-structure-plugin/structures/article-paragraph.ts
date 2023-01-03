@@ -46,7 +46,7 @@ export const article_paragraph: NodeSpec = {
   attrs: {
     resource: {},
     number: {
-      default: 1,
+      default: '1',
     },
   },
   toDOM(node) {
@@ -71,12 +71,19 @@ export const article_paragraph: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
+        const numberSpan = element.querySelector(`
+        span[property~='${ELI('number').prefixed}'],
+        span[property~='${ELI('number').full}']`);
         if (
           hasRDFaAttribute(element, 'property', SAY('hasParagraph')) &&
           hasRDFaAttribute(element, 'typeof', SAY('Paragraph')) &&
-          element.getAttribute('resource')
+          element.getAttribute('resource') &&
+          numberSpan
         ) {
-          return { resource: element.getAttribute('resource') };
+          return {
+            resource: element.getAttribute('resource'),
+            number: numberSpan.textContent,
+          };
         }
         return false;
       },

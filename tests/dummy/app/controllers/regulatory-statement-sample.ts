@@ -75,6 +75,7 @@ const nodes = {
   bullet_list,
   placeholder,
   ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+  ...STRUCTURE_NODES,
   heading,
   blockquote,
 
@@ -86,7 +87,6 @@ const nodes = {
   image,
 
   hard_break,
-  ...STRUCTURE_NODES,
   block_rdfa,
   table_of_contents,
   invisible_rdfa,
@@ -197,7 +197,9 @@ export default class RegulatoryStatementSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
+    const presetContent =
+      localStorage.getItem('EDITOR_CONTENT') ??
+      `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
