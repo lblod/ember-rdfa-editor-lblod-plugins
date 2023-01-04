@@ -66,6 +66,7 @@ const wrapStructureContent = (
               container.pos + 1 + selectionConfig.relativePos
             );
       transaction.setSelection(newSelection);
+      transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, structureSpec);
       dispatch(transaction);
     }

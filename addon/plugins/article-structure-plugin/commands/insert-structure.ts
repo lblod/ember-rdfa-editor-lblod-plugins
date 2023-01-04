@@ -61,6 +61,7 @@ const insertStructure = (
               insertRange.from + selectionConfig.relativePos
             );
       transaction.setSelection(newSelection);
+      transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, structureSpec);
       dispatch(transaction);
     }
