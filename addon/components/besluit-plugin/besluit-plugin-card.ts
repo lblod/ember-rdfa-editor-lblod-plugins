@@ -20,7 +20,7 @@ export default class BesluitPluginCardComponent extends Component<Args> {
   }
   @action
   insertArticle() {
-    this.controller.checkAndDoCommand(insertArticle(this.controller, '', ''));
+    this.controller.checkAndDoCommand(insertArticle(this.controller, ''));
     this.focus();
   }
 
@@ -35,8 +35,6 @@ export default class BesluitPluginCardComponent extends Component<Args> {
   }
 
   get disableArticleInsert() {
-    return !this.controller.checkCommand(
-      insertArticle(this.controller, '', '')
-    );
+    return !this.controller.checkCommand(insertArticle(this.controller, ''));
   }
 }
