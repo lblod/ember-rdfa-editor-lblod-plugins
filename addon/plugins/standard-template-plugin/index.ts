@@ -1,10 +1,15 @@
-import { NodeSpec, WidgetSpec } from '@lblod/ember-rdfa-editor';
+import { WidgetSpec } from '@lblod/ember-rdfa-editor';
 import {
   besluit,
   title,
   description,
   motivering,
   articleContainer,
+  besluitArticle,
+  besluitArticleContent,
+  besluitArticleHeader,
+  besluitArticleNumber,
+  languageNode,
 } from './utils/nodes';
 
 export const standardTemplateWidget: WidgetSpec = {
@@ -18,4 +23,9 @@ export const besluitNodes = {
   description,
   motivering,
   articleContainer,
+  besluitArticle,
+  besluitArticleContent,
+  besluitArticleHeader,
+  besluitArticleNumber,
+  languageNode,
 };
