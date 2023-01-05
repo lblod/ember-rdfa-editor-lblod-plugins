@@ -16,29 +16,12 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
   }
 
   @action
-  insertDate() {
-    this.controller.withTransaction((tr) => {
-      const dateNode = this.schema.text('${date}', [
-        this.schema.mark('inline_rdfa', {
-          datatype: 'xsd:date',
-          property: 'ext:content',
-        }),
-      ]);
-      return tr.replaceSelectionWith(dateNode, false);
-    });
-  }
-
-  @action
-  insertDateTime() {
+  insertDate(onlyDate: boolean) {
     this.controller.withTransaction((tr) => {
       return tr.replaceSelectionWith(
-        this.schema.text('${date and time}', [
-          this.schema.mark('inline_rdfa', {
-            datatype: 'xsd:dateTime',
-            property: 'ext:content',
-          }),
-        ]),
-        false
+        this.schema.node('date', {
+          onlyDate,
+        })
       );
     });
   }
