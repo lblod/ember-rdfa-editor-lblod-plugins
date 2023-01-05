@@ -72,7 +72,7 @@ export const description: NodeSpec = {
 
 export const motivering: NodeSpec = {
   group: 'block',
-  content: '(paragraph|heading|bullet_list)*', //Content to be determined
+  content: '(paragraph|heading|bullet_list)*',
   inline: false,
   attrs: {
     property: {
