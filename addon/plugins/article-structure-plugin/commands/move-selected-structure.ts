@@ -67,6 +67,7 @@ const moveSelectedStructure = (
         ? NodeSelection.create(transaction.doc, newSelectionPos)
         : TextSelection.create(transaction.doc, newSelectionPos);
       transaction.setSelection(newSelection);
+      transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, currentStructureSpec);
       dispatch(transaction);
     }

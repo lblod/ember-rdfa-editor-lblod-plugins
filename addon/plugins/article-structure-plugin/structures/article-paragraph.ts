@@ -10,7 +10,6 @@ const PLACEHOLDERS = {
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
-  context: ['article_body'],
   translations: {
     insert: 'article-structure-plugin.insert.paragraph',
     move: {

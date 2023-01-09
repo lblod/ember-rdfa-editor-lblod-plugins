@@ -15,7 +15,6 @@ const PLACEHOLDERS = {
 
 export const subsectionSpec: StructureSpec = {
   name: 'subsection',
-  context: ['section_body'],
   continuous: false,
   translations: {
     insert: 'article-structure-plugin.insert.subsection',

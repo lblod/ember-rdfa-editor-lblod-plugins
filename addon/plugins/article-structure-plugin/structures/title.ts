@@ -14,7 +14,6 @@ const PLACEHOLDERS = {
 };
 export const titleSpec: StructureSpec = {
   name: 'title',
-  context: ['doc', 'block'],
   continuous: false,
   translations: {
     insert: 'article-structure-plugin.insert.title',
