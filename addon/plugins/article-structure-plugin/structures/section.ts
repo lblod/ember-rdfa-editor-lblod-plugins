@@ -31,7 +31,7 @@ export const sectionSpec: StructureSpec = {
       [
         schema.node(
           'structure_header',
-          { level: 4, number: numberConverted },
+          { level: 5, number: numberConverted },
           schema.node('placeholder', {
             placeholderText: intl?.t(PLACEHOLDERS.title),
           })
