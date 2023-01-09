@@ -45,10 +45,18 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       selection.node.type === this.args.controller.schema.nodes['date']
     ) {
       this.dateInDocument = !!selection.node.attrs.value;
+      this.onlyDate = selection.node.attrs.onlyDate as boolean;
       this.dateValue = this.dateInDocument
         ? new Date(selection.node.attrs.value)
         : new Date();
-      this.onlyDate = selection.node.attrs.onlyDate as boolean;
+      if (this.dateInDocument) {
+        this.dateValue = new Date(selection.node.attrs.value);
+      } else {
+        this.dateValue = new Date();
+        if (this.onlyDate) {
+          this.dateValue.setHours(0, 0, 0, 0);
+        }
+      }
       this.datePos = selection.from;
     } else {
       this.datePos = undefined;
