@@ -1,4 +1,4 @@
-import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
@@ -87,6 +87,10 @@ export const article_header: NodeSpec = {
     property: {
       default: SAY('heading').prefixed,
     },
+  },
+  outlineText: (node: PNode) => {
+    const { number } = node.attrs;
+    return `Artikel ${number as string}: ${node.textContent}`;
   },
   toDOM(node) {
     return [

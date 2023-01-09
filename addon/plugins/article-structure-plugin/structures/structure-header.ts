@@ -1,4 +1,4 @@
-import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
 import { ELI, EXT, SAY, XSD } from '../constants';
 import { getStructureHeaderAttrs } from '../utils/structure';
 
@@ -19,13 +19,16 @@ export const structure_header: NodeSpec = {
     property: {
       default: SAY('heading').prefixed,
     },
-
     number: {
       default: '1',
     },
     level: {
       default: 1,
     },
+  },
+  outlineText: (node: PNode) => {
+    const { number } = node.attrs;
+    return `${number as string}. ${node.textContent}`;
   },
   toDOM(node) {
     return [

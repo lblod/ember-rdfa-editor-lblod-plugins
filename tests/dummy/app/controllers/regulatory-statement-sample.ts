@@ -87,7 +87,7 @@ const nodes = {
 
   hard_break,
   block_rdfa,
-  table_of_contents,
+  table_of_contents: table_of_contents(),
   invisible_rdfa,
 };
 const marks = {
@@ -157,7 +157,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      table_of_contents: tableOfContentsView(controller),
+      table_of_contents: tableOfContentsView()(controller),
     };
   };
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
@@ -165,7 +165,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     tableMenu,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
-    tableOfContentsWidget(),
+    tableOfContentsWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
     articleStructureInsertWidget(),
