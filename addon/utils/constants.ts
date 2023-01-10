@@ -1,4 +1,4 @@
-import { namespace } from './utils/namespace';
+import { namespace } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export const SAY = namespace('https://say.data.gift/ns/', 'say');
 export const RDF = namespace(

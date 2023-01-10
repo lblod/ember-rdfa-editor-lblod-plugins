@@ -7,7 +7,12 @@ import {
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { ELI, EXT, SAY, XSD } from '../constants';
+import {
+  ELI,
+  EXT,
+  SAY,
+  XSD,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.article.heading',
