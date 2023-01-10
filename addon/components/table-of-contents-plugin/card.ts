@@ -1,16 +1,9 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import {
-  TableOfContentsConfig,
-  TABLE_OF_CONTENTS_DEFAULT_CONFIG,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils/constants';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 
 type Args = {
   controller: ProseController;
-  widgetArgs: {
-    config: TableOfContentsConfig;
-  };
 };
 
 export default class TableOfContentsCardComponent extends Component<Args> {
@@ -33,10 +26,6 @@ export default class TableOfContentsCardComponent extends Component<Args> {
     return result;
   }
 
-  get config() {
-    return this.args.widgetArgs.config ?? TABLE_OF_CONTENTS_DEFAULT_CONFIG;
-  }
-
   @action
   toggle() {
     if (this.tableOfContentsRange) {
@@ -47,13 +36,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
     } else {
       const { schema } = this.controller;
       this.controller.withTransaction((tr) => {
-        return tr.replaceRangeWith(
-          0,
-          0,
-          schema.node('table_of_contents', {
-            config: this.config,
-          })
-        );
+        return tr.replaceRangeWith(0, 0, schema.node('table_of_contents'));
       });
     }
   }
