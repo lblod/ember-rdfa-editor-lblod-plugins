@@ -1,4 +1,11 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import {
+  BESLUIT,
+  ELI,
+  PROV,
+  SKOS,
+} from '../../article-structure-plugin/constants';
+import { hasRDFaAttribute } from '../../article-structure-plugin/utils/namespace';
 
 export const title: NodeSpec = {
   group: 'block',
@@ -26,7 +33,7 @@ export const title: NodeSpec = {
     {
       tag: 'h4',
       getAttrs(element: HTMLElement) {
-        if (element.getAttribute('property') === 'eli:title') {
+        if (hasRDFaAttribute(element, 'property', ELI('title'))) {
           return {};
         }
         return false;
@@ -61,7 +68,7 @@ export const description: NodeSpec = {
     {
       tag: 'p',
       getAttrs(element: HTMLElement) {
-        if (element.getAttribute('property') === 'eli:description') {
+        if (hasRDFaAttribute(element, 'property', ELI('description'))) {
           return {};
         }
         return false;
@@ -96,7 +103,7 @@ export const motivering: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (element.getAttribute('property') === 'besluit:motivering') {
+        if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
           return {};
         }
         return false;
@@ -132,10 +139,8 @@ export const articleContainer: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'prov:value' &&
-          element.parentElement
-            ?.getAttribute('typeof')
-            ?.includes('besluit:Besluit')
+          hasRDFaAttribute(element, 'property', PROV('value')) &&
+          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
         ) {
           return {};
         }
@@ -174,8 +179,8 @@ export const besluitArticle: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'eli:has_part' &&
-          element.getAttribute('typeof') === 'besluit:Artikel'
+          hasRDFaAttribute(element, 'property', ELI('has_part')) &&
+          hasRDFaAttribute(element, 'typeof', BESLUIT('Artikel'))
         ) {
           return { resource: element.getAttribute('resource') };
         }
@@ -198,8 +203,13 @@ export const besluitArticleHeader: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (
-          element.parentElement?.getAttribute('typeof') === 'besluit:Artikel' &&
-          element.getAttribute('property') !== 'prov:value'
+          element.parentElement &&
+          hasRDFaAttribute(
+            element.parentElement,
+            'typeof',
+            BESLUIT('Artikel')
+          ) &&
+          hasRDFaAttribute(element, 'property', PROV('value'))
         ) {
           return {};
         }
@@ -236,8 +246,9 @@ export const besluitArticleNumber: NodeSpec = {
       tag: 'span',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'eli:number' &&
-          element.parentElement?.getAttribute('typeof') === 'besluit:Artikel'
+          hasRDFaAttribute(element, 'property', ELI('number')) &&
+          element.parentElement &&
+          hasRDFaAttribute(element.parentElement, 'typeof', BESLUIT('Artikel'))
         ) {
           return {};
         }
@@ -274,8 +285,9 @@ export const besluitArticleContent: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'prov:value' &&
-          element.parentElement?.getAttribute('typeof') === 'besluit:Artikel'
+          hasRDFaAttribute(element, 'property', PROV('value')) &&
+          element.parentElement &&
+          hasRDFaAttribute(element.parentElement, 'typeof', BESLUIT('Artikel'))
         ) {
           return {};
         }
@@ -315,11 +327,8 @@ export const besluit: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'prov:generated' &&
-          element.getAttribute('typeof') &&
-          element
-            .getAttribute('typeof')
-            ?.includes('besluit:Besluit ext:BesluitNieuweStijl')
+          hasRDFaAttribute(element, 'property', PROV('generated')) &&
+          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
         ) {
           return { resource: element.getAttribute('resource') };
         }
@@ -362,8 +371,8 @@ export const languageNode: NodeSpec = {
       tag: 'span',
       getAttrs(element: HTMLElement) {
         if (
-          element.getAttribute('property') === 'eli:language' &&
-          element.getAttribute('typeof') === 'skos:Concept'
+          hasRDFaAttribute(element, 'property', ELI('language')) &&
+          hasRDFaAttribute(element, 'typeof', SKOS('Concept'))
         ) {
           return { resource: element.getAttribute('resource') };
         }
