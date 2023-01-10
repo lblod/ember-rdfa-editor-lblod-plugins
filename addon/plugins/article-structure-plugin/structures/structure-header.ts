@@ -1,5 +1,10 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
-import { ELI, EXT, SAY, XSD } from '../constants';
+import {
+  ELI,
+  EXT,
+  SAY,
+  XSD,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getStructureHeaderAttrs } from '../utils/structure';
 
 const TAG_TO_LEVEL = new Map([

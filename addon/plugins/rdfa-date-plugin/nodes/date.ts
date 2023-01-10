@@ -1,6 +1,9 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
-import { EXT, XSD } from '../../article-structure-plugin/constants';
-import { hasRDFaAttribute } from '../../article-structure-plugin/utils/namespace';
+import {
+  EXT,
+  XSD,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 const date: NodeSpec = {
   group: 'inline',

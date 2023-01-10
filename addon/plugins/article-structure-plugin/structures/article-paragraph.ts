@@ -1,8 +1,12 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
-import { ELI, SAY, XSD } from '../constants';
-import { hasRDFaAttribute } from '../utils/namespace';
+import {
+  ELI,
+  SAY,
+  XSD,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 const PLACEHOLDERS = {
   body: 'article-structure-plugin.placeholder.paragraph.body',
@@ -10,7 +14,6 @@ const PLACEHOLDERS = {
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
-  context: ['article_body'],
   translations: {
     insert: 'article-structure-plugin.insert.paragraph',
     move: {
