@@ -16,6 +16,7 @@ import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
+import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 declare module 'ember__owner' {
   export default interface Owner {
     resolveRegistration(name: string): unknown;
@@ -73,14 +74,18 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   get currentBesluitRange(): ResolvedPNode | undefined {
     const selection = this.controller.state.selection;
-    const currentBesluitRange = [
-      ...this.controller.datastore
-        .limitToRange(this.controller.state, selection.from, selection.to)
-        .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
-    return currentBesluitRange;
+    const besluit = findAncestorOfType(
+      selection,
+      this.controller.schema.nodes['besluit']
+    );
+    if (!besluit) {
+      return undefined;
+    }
+    return {
+      node: besluit.node,
+      from: besluit?.start - 1,
+      to: besluit?.start + besluit.node.nodeSize - 1,
+    };
   }
 
   get currentBesluitURI() {
@@ -100,10 +105,12 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     if (!this.currentBesluitURI) {
       return;
     }
-    const besluitTypes = this.controller.datastore
-      .match(`>${this.currentBesluitURI}`, 'a', undefined)
-      .asQuads();
-    const besluitTypesUris = [...besluitTypes].map((quad) => quad.object.value);
+    const besluit = findAncestorOfType(
+      this.controller.state.selection,
+      this.controller.schema.nodes['besluit']
+    );
+    const besluitTypeof = besluit?.node.attrs.typeof as string;
+    const besluitTypesUris = besluitTypeof.split(' ');
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
       type.includes('https://data.vlaanderen.be/id/concept/BesluitType/')
     );
