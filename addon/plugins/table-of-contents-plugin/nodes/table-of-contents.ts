@@ -3,11 +3,10 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { TABLE_OF_CONTENTS_DEFAULT_CONFIG } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils/constants';
 import { TableOfContentsConfig } from '..';
 
 export const emberNodeConfig: (
-  config?: TableOfContentsConfig
+  config: TableOfContentsConfig
 ) => EmberNodeConfig = (config) => {
   return {
     name: 'table-of-contents',
@@ -17,7 +16,7 @@ export const emberNodeConfig: (
     atom: true,
     attrs: {
       config: {
-        default: config ?? TABLE_OF_CONTENTS_DEFAULT_CONFIG,
+        default: config,
       },
     },
     parseDOM: [
@@ -41,7 +40,7 @@ export const emberNodeConfig: (
   };
 };
 
-export const table_of_contents = (config?: TableOfContentsConfig) =>
+export const table_of_contents = (config: TableOfContentsConfig) =>
   createEmberNodeSpec(emberNodeConfig(config));
-export const tableOfContentsView = (config?: TableOfContentsConfig) =>
+export const tableOfContentsView = (config: TableOfContentsConfig) =>
   createEmberNodeView(emberNodeConfig(config));
