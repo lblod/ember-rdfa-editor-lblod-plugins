@@ -1,7 +1,14 @@
 import { NodeSpec, NodeType, Selection } from '@lblod/ember-rdfa-editor';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { ELI, RDF, SAY } from '../constants';
-import { hasRDFaAttribute, Resource } from './namespace';
+import {
+  ELI,
+  RDF,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  hasRDFaAttribute,
+  Resource,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export function constructStructureNodeSpec(config: {
   type: Resource;
