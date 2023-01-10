@@ -1,4 +1,10 @@
-import { NodeSpec, NodeType, Selection } from '@lblod/ember-rdfa-editor';
+import {
+  NodeSpec,
+  NodeType,
+  PNode,
+  Schema,
+  Selection,
+} from '@lblod/ember-rdfa-editor';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
   ELI,
@@ -166,4 +172,12 @@ export function romanize(num: number) {
     }
   }
   return Array(+digits.join('') + 1).join('M') + roman;
+}
+
+export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
+  return (
+    node.childCount === 1 &&
+    node.firstChild?.type === schema.nodes['paragraph'] &&
+    node.firstChild.firstChild?.type === schema.nodes['placeholder']
+  );
 }
