@@ -354,7 +354,7 @@ export const besluit_article_header: NodeSpec = {
 // };
 
 export const besluit_article_content: NodeSpec = {
-  content: 'paragraph+',
+  content: 'block+',
   inline: false,
   attrs: {
     property: {
