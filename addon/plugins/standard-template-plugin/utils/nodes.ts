@@ -4,8 +4,8 @@ import {
   ELI,
   PROV,
   SKOS,
-} from '../../article-structure-plugin/constants';
-import { hasRDFaAttribute } from '../../article-structure-plugin/utils/namespace';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export const title: NodeSpec = {
   group: 'block',
