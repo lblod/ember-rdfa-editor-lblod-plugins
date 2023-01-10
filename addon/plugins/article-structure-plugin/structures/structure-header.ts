@@ -14,7 +14,6 @@ const TAG_TO_LEVEL = new Map([
   ['h4', 4],
   ['h5', 5],
   ['h6', 6],
-  ['span', 6],
 ]);
 
 export const structure_header: NodeSpec = {
