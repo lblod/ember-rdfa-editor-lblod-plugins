@@ -5,4 +5,9 @@ module.exports = {
   isDevelopingAddon() {
     return process.env.EMBER_ENV === 'development';
   },
+  options: {
+    babel: {
+      sourceMaps: 'inline',
+    },
+  },
 };

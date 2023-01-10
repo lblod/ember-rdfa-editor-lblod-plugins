@@ -1,13 +1,30 @@
 {
-  "extends": "@tsconfig/ember/tsconfig.json",
   "compilerOptions": {
-
-    // The combination of `baseUrl` with `paths` allows Ember's classic package
-    // layout, which is not resolvable with the Node resolution algorithm, to
-    // work with TypeScript.
+    "target": "es2021",
+    "module": "es2020",
     "allowJs": true,
+    "checkJs": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
     "noEmitOnError": false,
+    "noEmit": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "baseUrl": ".",
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "./node_modules/@types",
+    ],
     "paths": {
       "dummy/tests/*": [
         "tests/*"
@@ -29,16 +46,24 @@
         "addon-test-support/*"
       ],
       "*": [
-        "types/*"
-      ]
-    }
+        "types/*",
+        "node_modules/@lblod/ember-rdfa-editor/types/*"
+      ],
+      "@lblod/ember-rdfa-editor": [
+        "node_modules/@lblod/ember-rdfa-editor/addon"
+      ],
+      "@lblod/ember-rdfa-editor/*": [
+        "node_modules/@lblod/ember-rdfa-editor/addon/*"
+      ],
+    },
   },
   "include": [
     "app/**/*",
     "addon/**/*",
     "tests/**/*",
     "types/**/*",
+    "node_modules/@lblod/ember-rdfa-editor/types/**/*",
     "test-support/**/*",
-    "addon-test-support/**/*"
+    "addon-test-support/**/*",
   ]
 }

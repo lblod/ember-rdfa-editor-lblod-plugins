@@ -10,6 +10,16 @@ module.exports = function (defaults) {
     },
     autoImport: {
       webpack: {
+        node: {
+          global: true,
+          __filename: true,
+          __dirname: true,
+        },
+        resolve: {
+          fallback: {
+            stream: require.resolve('stream-browserify'),
+          },
+        },
         plugins: [
           new webpack.ProvidePlugin({
             process: 'process/browser',

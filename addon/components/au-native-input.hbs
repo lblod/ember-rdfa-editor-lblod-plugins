@@ -1,0 +1,30 @@
+{{#if @icon}}
+  <span class='au-c-input-wrapper {{this.iconAlignment}} {{this.width}}'>
+    <input
+      type={{this.type}}
+      class='au-c-input
+        {{this.error}}
+        {{this.warning}}
+        {{this.width}}
+        {{this.disabled}}'
+      disabled={{@disabled}}
+      ...attributes
+    />
+    {{#if (eq @iconAlignment 'right')}}
+      <AuIcon @icon={{@icon}} @alignment='right' />
+    {{else}}
+      <AuIcon @icon={{@icon}} @alignment='left' />
+    {{/if}}
+  </span>
+{{else}}
+  <input
+    type={{this.type}}
+    class='au-c-input
+      {{this.error}}
+      {{this.warning}}
+      {{this.width}}
+      {{this.disabled}}'
+    disabled={{@disabled}}
+    ...attributes
+  />
+{{/if}}

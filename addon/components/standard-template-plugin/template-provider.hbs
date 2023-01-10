@@ -1,6 +1,8 @@
+<div {{did-insert (perform this.standardTemplatePlugin.fetchTemplates)}}>
 {{yield (hash
           applicableTemplates=this.applicableTemplates
           hasApplicableTemplates=this.hasApplicableTemplates
           busy=this.busy
           insert=this.insert
         )}}
+</div>
