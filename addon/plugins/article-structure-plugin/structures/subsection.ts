@@ -6,7 +6,7 @@ import {
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { SAY } from '../constants';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.subsection.heading',
@@ -15,7 +15,6 @@ const PLACEHOLDERS = {
 
 export const subsectionSpec: StructureSpec = {
   name: 'subsection',
-  context: ['section_body'],
   continuous: false,
   translations: {
     insert: 'article-structure-plugin.insert.subsection',
@@ -33,7 +32,7 @@ export const subsectionSpec: StructureSpec = {
       [
         schema.node(
           'structure_header',
-          { level: 4, number: numberConverted },
+          { level: 6, number: numberConverted },
           schema.node('placeholder', {
             placeholderText: intl?.t(PLACEHOLDERS.title),
           })

@@ -13,7 +13,7 @@ export type SpecName = string;
 
 export type StructureSpec = {
   name: SpecName;
-  context: SpecName[];
+  // context: SpecName[];
   translations: {
     insert: string;
     move: {
