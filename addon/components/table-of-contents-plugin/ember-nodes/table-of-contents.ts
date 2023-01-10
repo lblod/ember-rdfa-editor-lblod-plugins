@@ -33,15 +33,14 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
     let result: OutlineEntry[] = [];
     let parent: OutlineEntry | undefined;
     for (const option of this.config) {
-      const { path } = option;
-      if (RegExp(`^${path[0]}$`).exec(node.type.name)) {
+      const { nodeHierarchy } = option;
+      if (RegExp(`^${nodeHierarchy[0]}$`).exec(node.type.name)) {
         let i = 1;
         let currentNode: NodeWithPos | undefined = { node, pos };
-        while (currentNode && i < path.length) {
+        while (currentNode && i < nodeHierarchy.length) {
           let newCurrentNode: NodeWithPos | undefined;
           currentNode.node.forEach((child, offset) => {
-            if (RegExp(`^${path[i]}$`).exec(child.type.name)) {
-              console.log(child.type.name);
+            if (RegExp(`^${nodeHierarchy[i]}$`).exec(child.type.name)) {
               newCurrentNode = { pos: pos + offset, node: child };
               return;
             }

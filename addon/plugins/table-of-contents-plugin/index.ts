@@ -1,7 +1,7 @@
 import { WidgetSpec } from '@lblod/ember-rdfa-editor';
 
 export type TableOfContentsConfig = {
-  path: string[];
+  nodeHierarchy: string[];
 }[];
 
 export const tableOfContentsWidget: WidgetSpec = {
