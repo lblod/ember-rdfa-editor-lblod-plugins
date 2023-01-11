@@ -1,5 +1,6 @@
 import {
   Command,
+  Fragment,
   NodeSelection,
   NodeType,
   PNode,
@@ -16,7 +17,8 @@ import { containsOnlyPlaceholder } from '../utils/structure';
 
 const insertStructure = (
   structureSpec: StructureSpec,
-  intl: IntlService
+  intl: IntlService,
+  content?: Fragment
 ): Command => {
   return (state, dispatch) => {
     const { schema, selection, doc } = state;
@@ -31,7 +33,7 @@ const insertStructure = (
     }
     if (dispatch) {
       const { node: newStructureNode, selectionConfig } =
-        structureSpec.constructor({ schema, intl });
+        structureSpec.constructor({ schema, intl, content });
       const transaction = state.tr;
 
       transaction.replaceWith(
