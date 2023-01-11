@@ -16,7 +16,10 @@ import { assert } from '@ember/debug';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { insertArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin/commands';
+import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
+import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
+import IntlService from 'ember-intl/services/intl';
+import { ProseParser } from '@lblod/ember-rdfa-editor';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -47,6 +50,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
 
   pageSize = PAGE_SIZE;
   @service declare roadsignRegistry: RoadsignRegistryService;
+  @service declare intl: IntlService;
 
   @tracked typeSelected?: TypeOption;
 
@@ -285,9 +289,16 @@ export default class RoadsignRegulationCard extends Component<Args> {
       </div>
     </div>
   `;
+    const domParser = new DOMParser();
+    const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
+    const contentFragment = ProseParser.fromSchema(
+      this.args.controller.schema
+    ).parseSlice(htmlNode, {
+      preserveWhitespace: false,
+    }).content;
 
     this.args.controller.doCommand(
-      insertArticle(this.args.controller, regulationHTML)
+      insertStructure(besluitArticleStructure, this.intl, contentFragment)
     );
     this.args.closeModal();
   }

@@ -83,8 +83,8 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     }
     return {
       node: besluit.node,
-      from: besluit?.start - 1,
-      to: besluit?.start + besluit.node.nodeSize - 1,
+      from: besluit.start - 1,
+      to: besluit.start + besluit.node.nodeSize - 1,
     };
   }
 

@@ -1,11 +1,15 @@
-import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import { NodeSpec, Transaction } from '@lblod/ember-rdfa-editor';
 import {
   BESLUIT,
   ELI,
   PROV,
   SKOS,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { StructureSpec } from '../../article-structure-plugin';
+import { v4 as uuid } from 'uuid';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const title: NodeSpec = {
   group: 'block',
@@ -112,9 +116,9 @@ export const motivering: NodeSpec = {
   ],
 };
 
-export const articleContainer: NodeSpec = {
+export const article_container: NodeSpec = {
   group: 'block',
-  content: 'besluitArticle*',
+  content: 'besluit_article*',
   inline: false,
   attrs: {
     property: {
@@ -150,9 +154,9 @@ export const articleContainer: NodeSpec = {
   ],
 };
 
-export const besluitArticle: NodeSpec = {
-  group: 'block',
-  content: 'besluitArticleHeader{1}(languageNode*)besluitArticleContent{1}',
+export const besluit_article: NodeSpec = {
+  content:
+    'besluit_article_header{1}(language_node*)besluit_article_content{1}',
   inline: false,
   attrs: {
     property: {
@@ -190,67 +194,92 @@ export const besluitArticle: NodeSpec = {
   ],
 };
 
-export const besluitArticleHeader: NodeSpec = {
-  group: 'block',
-  content: 'text*besluitArticleNumber{1}',
-  inline: false,
-  attrs: {},
-  toDOM() {
-    return ['div', {}, 0];
-  },
-  parseDOM: [
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (
-          element.parentElement &&
-          hasRDFaAttribute(
-            element.parentElement,
-            'typeof',
-            BESLUIT('Artikel')
-          ) &&
-          hasRDFaAttribute(element, 'property', PROV('value'))
-        ) {
-          return {};
-        }
-        return false;
-      },
+export const besluitArticleStructure: StructureSpec = {
+  name: 'besluit_article',
+  translations: {
+    insert: 'article-structure-plugin.insert.article',
+    move: {
+      up: 'article-structure-plugin.moveUp.article',
+      down: 'article-structure-plugin.moveDown.article',
     },
-  ],
+    remove: 'article-structure-plugin.remove.article',
+  },
+  constructor: ({ schema, number, content, intl }) => {
+    const numberConverted = number?.toString() ?? '1';
+    const node = schema.node(
+      `besluit_article`,
+      { resource: `http://data.lblod.info/articles/${uuid()}` },
+      [
+        schema.node('besluit_article_header', { number: numberConverted }),
+        schema.node(
+          `besluit_article_content`,
+          {},
+          content ??
+            schema.node(
+              'paragraph',
+              {},
+              schema.node('placeholder', {
+                placeholderText: intl?.t(
+                  'article-structure-plugin.placeholder.article.body'
+                ),
+              })
+            )
+        ),
+      ]
+    );
+    const selectionConfig: {
+      relativePos: number;
+      type: 'text' | 'node';
+    } = content
+      ? { relativePos: 3, type: 'text' }
+      : { relativePos: 4, type: 'node' };
+    return {
+      node,
+      selectionConfig,
+    };
+  },
+  updateNumber: function ({ number, pos, transaction }): Transaction {
+    transaction.setNodeAttribute(pos + 1, 'number', number.toString());
+    return transaction;
+  },
+  content: ({ pos, state }) => {
+    const node = unwrap(state.doc.nodeAt(pos));
+    return unwrap(node.lastChild).content;
+  },
+  continuous: false,
 };
 
-export const besluitArticleNumber: NodeSpec = {
-  group: 'inline',
-  content: 'text*',
-  inline: true,
+export const besluit_article_header: NodeSpec = {
+  inline: false,
   attrs: {
-    property: {
-      default: 'eli:number',
-    },
-    datatype: {
-      default: 'xsd:string',
+    number: {
+      default: '1',
     },
   },
   toDOM(node) {
     return [
-      'span',
-      {
-        property: node.attrs.property as string,
-        datatype: node.attrs.datatype as string,
-      },
-      0,
+      'p',
+      {},
+      'Artikel ',
+      [
+        'span',
+        { property: ELI('number').prefixed, datatype: XSD('string').prefixed },
+        node.attrs.number,
+      ],
     ];
   },
   parseDOM: [
     {
-      tag: 'span',
+      tag: 'p',
       getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', ELI('number')) &&
-          element.parentElement &&
-          hasRDFaAttribute(element.parentElement, 'typeof', BESLUIT('Artikel'))
-        ) {
-          return {};
+        const numberNode = element.querySelector(
+          `span[property~=${ELI('number').prefixed}],
+           span[property~=${ELI('number').full}]`
+        );
+        if (numberNode) {
+          return {
+            number: numberNode.textContent,
+          };
         }
         return false;
       },
@@ -258,9 +287,8 @@ export const besluitArticleNumber: NodeSpec = {
   ],
 };
 
-export const besluitArticleContent: NodeSpec = {
-  group: 'block',
-  content: 'text*',
+export const besluit_article_content: NodeSpec = {
+  content: 'block+',
   inline: false,
   attrs: {
     property: {
@@ -284,11 +312,7 @@ export const besluitArticleContent: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', PROV('value')) &&
-          element.parentElement &&
-          hasRDFaAttribute(element.parentElement, 'typeof', BESLUIT('Artikel'))
-        ) {
+        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
           return {};
         }
         return false;
@@ -300,7 +324,7 @@ export const besluitArticleContent: NodeSpec = {
 export const besluit: NodeSpec = {
   group: 'block',
   content:
-    '(paragraph|heading|languageNode)*title{1}(paragraph|heading|languageNode)*description{1}(paragraph|heading|languageNode)*motivering{1}(paragraph|heading|languageNode)*articleContainer{1}(paragraph|heading|languageNode)*',
+    '(paragraph|heading|language_node)*title{1}(paragraph|heading|language_node)*description{1}(paragraph|heading|language_node)*motivering{1}(paragraph|heading|language_node)*article_container{1}(paragraph|heading|language_node)*',
   inline: false,
   attrs: {
     property: {
@@ -338,7 +362,7 @@ export const besluit: NodeSpec = {
   ],
 };
 
-export const languageNode: NodeSpec = {
+export const language_node: NodeSpec = {
   group: 'block',
   content: '',
   inline: false,
