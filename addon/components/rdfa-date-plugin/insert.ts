@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { NodeSelection } from 'prosemirror-state';
 
 type Args = {
   controller: ProseController;
@@ -16,30 +17,20 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
   }
 
   @action
-  insertDate() {
+  insertDate(onlyDate: boolean) {
     this.controller.withTransaction((tr) => {
-      const dateNode = this.schema.text('${date}', [
-        this.schema.mark('inline_rdfa', {
-          datatype: 'xsd:date',
-          property: 'ext:content',
-        }),
-      ]);
-      return tr.replaceSelectionWith(dateNode, false);
-    });
-  }
-
-  @action
-  insertDateTime() {
-    this.controller.withTransaction((tr) => {
-      return tr.replaceSelectionWith(
-        this.schema.text('${date and time}', [
-          this.schema.mark('inline_rdfa', {
-            datatype: 'xsd:dateTime',
-            property: 'ext:content',
-          }),
-        ]),
-        false
+      tr.replaceSelectionWith(
+        this.schema.node('date', {
+          onlyDate,
+        })
       );
+      if (tr.selection.$anchor.nodeBefore) {
+        const resolvedPos = tr.doc.resolve(
+          tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize
+        );
+        tr.setSelection(new NodeSelection(resolvedPos));
+      }
+      return tr;
     });
   }
 }

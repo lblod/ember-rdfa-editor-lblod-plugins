@@ -46,6 +46,7 @@ export default class RdfaDatePluginDateTimePicker extends Component<Args> {
     if (!wasDateInputCleared) {
       if (!this.date) {
         this.date = new Date();
+        this.date.setHours(0, 0, 0, 0);
       }
       this.date.setDate(date.getDate());
       this.date.setMonth(date.getMonth());
