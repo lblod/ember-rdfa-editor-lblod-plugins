@@ -41,10 +41,6 @@ import {
 import { service } from '@ember/service';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import {
-  besluitPluginCardWidget,
-  besluitContextCardWidget,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
   rdfaDateCardWidget,
@@ -58,7 +54,14 @@ import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
-import { besluitNodes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import {
+  besluitNodes,
+  structureSpecs,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import {
+  articleStructureContextWidget,
+  articleStructureInsertWidget,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 const citation = setupCitationPlugin();
 const nodes = {
   doc,
@@ -116,8 +119,6 @@ export default class BesluitSampleController extends Controller {
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
-    besluitContextCardWidget,
-    besluitPluginCardWidget,
     importSnippetWidget,
     rdfaDateCardWidget,
     rdfaDateInsertWidget,
@@ -126,6 +127,8 @@ export default class BesluitSampleController extends Controller {
     citation.widgets.citationInsert,
     roadSignRegulationWidget,
     templateVariableWidget,
+    articleStructureInsertWidget(structureSpecs),
+    articleStructureContextWidget(structureSpecs),
   ];
   schema: Schema = dummySchema;
 
