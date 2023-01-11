@@ -1,7 +1,7 @@
 import { PNode, Schema } from '@lblod/ember-rdfa-editor';
 import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 import { v4 as uuidv4 } from 'uuid';
-import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export const MULTI_SELECT_CODELIST_TYPE =
   'http://lblod.data.gift/concepts/57C93E12-A02C-4D4B-8B95-666B6701286C';

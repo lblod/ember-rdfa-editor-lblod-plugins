@@ -4,7 +4,7 @@ import {
   EXT,
   SAY,
   XSD,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getStructureHeaderAttrs } from '../utils/structure';
 
 const TAG_TO_LEVEL = new Map([
@@ -14,7 +14,6 @@ const TAG_TO_LEVEL = new Map([
   ['h4', 4],
   ['h5', 5],
   ['h6', 6],
-  ['span', 6],
 ]);
 
 export const structure_header: NodeSpec = {

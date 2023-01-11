@@ -12,7 +12,7 @@ import {
   EXT,
   SAY,
   XSD,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.article.heading',
@@ -20,7 +20,6 @@ const PLACEHOLDERS = {
 };
 export const articleSpec: StructureSpec = {
   name: 'article',
-  context: ['title_body', 'chapter_body', 'section_body', 'subsection_body'],
   translations: {
     insert: 'article-structure-plugin.insert.article',
     move: {

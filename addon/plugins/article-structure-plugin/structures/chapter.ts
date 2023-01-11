@@ -6,7 +6,7 @@ import {
   romanize,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.chapter.heading',
@@ -14,7 +14,6 @@ const PLACEHOLDERS = {
 };
 export const chapterSpec: StructureSpec = {
   name: 'chapter',
-  context: ['doc', 'block', 'title_body'],
   continuous: false,
   translations: {
     insert: 'article-structure-plugin.insert.chapter',

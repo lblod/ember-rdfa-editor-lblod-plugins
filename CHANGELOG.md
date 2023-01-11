@@ -9,6 +9,15 @@
 
 
 
+
+## 1.0.0-alpha.3 (2023-01-09)
+
+#### :house: Internal
+* [#42](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/42) Remove redundant context from article-structure plugin ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## 1.0.0-alpha.2 (2023-01-03)
 
 #### :boom: Breaking Change

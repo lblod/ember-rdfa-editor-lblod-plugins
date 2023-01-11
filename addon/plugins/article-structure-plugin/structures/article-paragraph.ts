@@ -5,8 +5,8 @@ import {
   ELI,
   SAY,
   XSD,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 const PLACEHOLDERS = {
   body: 'article-structure-plugin.placeholder.paragraph.body',
@@ -14,7 +14,6 @@ const PLACEHOLDERS = {
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
-  context: ['article_body'],
   translations: {
     insert: 'article-structure-plugin.insert.paragraph',
     move: {

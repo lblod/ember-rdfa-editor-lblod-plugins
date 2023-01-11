@@ -1,12 +1,20 @@
-import { NodeSpec, NodeType, Selection } from '@lblod/ember-rdfa-editor';
+import {
+  NodeSpec,
+  NodeType,
+  PNode,
+  Schema,
+  Selection,
+} from '@lblod/ember-rdfa-editor';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
   ELI,
   RDF,
   SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
   hasRDFaAttribute,
   Resource,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export function constructStructureNodeSpec(config: {
   type: Resource;
@@ -164,4 +172,12 @@ export function romanize(num: number) {
     }
   }
   return Array(+digits.join('') + 1).join('M') + roman;
+}
+
+export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
+  return (
+    node.childCount === 1 &&
+    node.firstChild?.type === schema.nodes['paragraph'] &&
+    node.firstChild.firstChild?.type === schema.nodes['placeholder']
+  );
 }

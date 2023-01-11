@@ -1,9 +1,9 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   DCT,
   EXT,
-  hasRDFaAttribute,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespaces';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export const variable: NodeSpec = {
   content: 'inline*',
