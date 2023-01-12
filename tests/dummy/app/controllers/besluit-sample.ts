@@ -29,9 +29,9 @@ import {
   list_item,
   ordered_list,
   paragraph,
+  placeholder,
   repaired_block,
   text,
-  placeholder,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
   tableMenu,
@@ -46,7 +46,11 @@ import {
   rdfaDateCardWidget,
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
-import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import {
+  besluitNodes,
+  standardTemplateWidget,
+  structureSpecs,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -54,62 +58,72 @@ import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
-import {
-  besluitNodes,
-  structureSpecs,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
+import IntlService from 'ember-intl/services/intl';
 import {
   articleStructureContextWidget,
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
+
 const citation = setupCitationPlugin();
-const nodes = {
-  doc,
-  paragraph,
-
-  repaired_block,
-
-  list_item,
-  ordered_list,
-  bullet_list,
-  placeholder,
-  ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
-  ...besluitNodes,
-  roadsign_regulation,
-  heading,
-  blockquote,
-
-  horizontal_rule,
-  code_block,
-
-  text,
-
-  image,
-
-  hard_break,
-  block_rdfa,
-  invisible_rdfa,
-};
-const marks = {
-  citation: citation.marks.citation,
-  inline_rdfa,
-  link,
-  em,
-  strong,
-  underline,
-  strikethrough,
-};
-const dummySchema = new Schema({ nodes, marks });
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
+  @service declare intl: IntlService;
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
     mobiliteit: 'https://data.vlaanderen.be/ns/mobiliteit#',
     dct: 'http://purl.org/dc/terms/',
     say: 'https://say.data.gift/ns/',
   };
+
+  get schema() {
+    return new Schema({
+      nodes: {
+        doc,
+        paragraph,
+
+        repaired_block,
+
+        list_item,
+        ordered_list,
+        bullet_list,
+        placeholder,
+        ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+        date: date({
+          placeholder: {
+            insertDate: this.intl.t('date-plugin.insert.date'),
+            insertDateTime: this.intl.t('date-plugin.insert.datetime'),
+          },
+        }),
+        ...besluitNodes,
+        roadsign_regulation,
+        heading,
+        blockquote,
+
+        horizontal_rule,
+        code_block,
+
+        text,
+
+        image,
+
+        hard_break,
+        block_rdfa,
+        invisible_rdfa,
+      },
+      marks: {
+        citation: citation.marks.citation,
+        inline_rdfa,
+        link,
+        em,
+        strong,
+        underline,
+        strikethrough,
+      },
+    });
+  }
 
   @tracked rdfaEditor?: ProseController;
   @tracked nodeViews: (
@@ -132,7 +146,6 @@ export default class BesluitSampleController extends Controller {
     articleStructureInsertWidget(structureSpecs),
     articleStructureContextWidget(structureSpecs),
   ];
-  schema: Schema = dummySchema;
 
   @action
   setPrefixes(element: HTMLElement) {
