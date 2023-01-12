@@ -62,6 +62,7 @@ import {
   articleStructureContextWidget,
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 const citation = setupCitationPlugin();
 const nodes = {
   doc,
@@ -75,6 +76,7 @@ const nodes = {
   placeholder,
   ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
   ...besluitNodes,
+  roadsign_regulation,
   heading,
   blockquote,
 
