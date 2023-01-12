@@ -29,9 +29,9 @@ import {
   list_item,
   ordered_list,
   paragraph,
+  placeholder,
   repaired_block,
   text,
-  placeholder,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
   tableMenu,
@@ -46,7 +46,11 @@ import {
   rdfaDateCardWidget,
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
-import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import {
+  besluitNodes,
+  standardTemplateWidget,
+  structureSpecs,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -58,13 +62,11 @@ import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-p
 import IntlService from 'ember-intl/services/intl';
 import { variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import {
-  besluitNodes,
-  structureSpecs,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
-import {
   articleStructureContextWidget,
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
+
 const citation = setupCitationPlugin();
 
 export default class BesluitSampleController extends Controller {
@@ -98,6 +100,7 @@ export default class BesluitSampleController extends Controller {
         }),
         variable,
         ...besluitNodes,
+        roadsign_regulation,
         heading,
         blockquote,
 
