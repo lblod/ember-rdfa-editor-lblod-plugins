@@ -1,4 +1,4 @@
-import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import { getRdfaAttrs, NodeSpec, rdfaAttrs } from '@lblod/ember-rdfa-editor';
 import {
   DCT,
   EXT,
@@ -11,6 +11,7 @@ export const roadsign_regulation: NodeSpec = {
   content: 'block+',
   group: 'block',
   attrs: {
+    ...rdfaAttrs,
     resourceUri: {},
     measureUri: {},
     zonality: {},
@@ -78,7 +79,13 @@ export const roadsign_regulation: NodeSpec = {
            span[property~='${EXT('temporal').full}']`
             )
             ?.getAttribute('value');
-          return { resourceUri, measureUri, zonality, temporal };
+          return {
+            resourceUri,
+            measureUri,
+            zonality,
+            temporal,
+            ...getRdfaAttrs(node),
+          };
         }
         return false;
       },
