@@ -255,6 +255,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
       instructions,
       true
     );
+    console.log('DYN HTML: ', html);
     const signsHTML = measure.signs
       .map((sign) => {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();

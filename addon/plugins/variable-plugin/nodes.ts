@@ -18,7 +18,9 @@ export const variable: NodeSpec = {
     source: {
       default: null,
     },
-    type: {},
+    type: {
+      default: 'text',
+    },
     datatype: {
       default: null,
     },

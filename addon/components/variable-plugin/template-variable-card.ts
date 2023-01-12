@@ -12,6 +12,7 @@ import {
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { PNode, ProseParser } from '@lblod/ember-rdfa-editor';
+import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 
 type Args = {
   controller: ProseController;
@@ -97,19 +98,34 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     if (variable) {
       const type = variable.node.attrs.type as string;
       if (type === 'codelist') {
-        const source = variable.node.attrs.source as string;
+        const source =
+          (variable.node.attrs.source as string | undefined) ?? this.endpoint;
         const codelistURI = variable.node.attrs.variableResource as string;
         void this.fetchCodeListOptions.perform(source, codelistURI);
         this.showCard = true;
       } else if (type === 'location') {
-        //TODO: we should extract the zonality URI from the roadsign regulation the location is in.
-        // we can do this with a seperate roadsign regulation nodespec
-        const source = variable.node.attrs.source as string;
-        void this.fetchCodeListOptions.perform(
-          source,
-          this.nonZonalLocationCodelistUri,
-          true
-        );
+        const source =
+          (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+        const roadSignRegulation = findParentNodeOfType(
+          this.controller.schema.nodes.roadsign_regulation
+        )(selection);
+        const zonalityUri = roadSignRegulation?.node.attrs.zonality as
+          | string
+          | undefined;
+        if (zonalityUri === ZONAL_URI) {
+          void this.fetchCodeListOptions.perform(
+            source,
+            this.zonalLocationCodelistUri,
+            true
+          );
+        } else {
+          void this.fetchCodeListOptions.perform(
+            source,
+            this.nonZonalLocationCodelistUri,
+            true
+          );
+        }
+
         this.showCard = true;
       }
     }
