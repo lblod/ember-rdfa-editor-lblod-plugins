@@ -33,7 +33,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       const { value, onlyDate, format } = node.attrs;
       const datatype = onlyDate ? XSD('date') : XSD('dateTime');
       const humanReadableDate = value
-        ? formatDate(new Date(value), onlyDate, format)
+        ? formatDate(new Date(value), format)
         : onlyDate
         ? options.placeholder.insertDate
         : options.placeholder.insertDateTime;
@@ -78,7 +78,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
   };
 };
 
-function formatDate(date: Date, onlyDate: boolean, format: string) {
+function formatDate(date: Date, format: string) {
   return formatWithOptions({ locale: nlBE }, format)(date);
 }
 

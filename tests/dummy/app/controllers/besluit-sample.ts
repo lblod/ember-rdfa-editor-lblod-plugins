@@ -135,7 +135,7 @@ export default class BesluitSampleController extends Controller {
     tableMenu,
     besluitTypeWidget,
     importSnippetWidget,
-    rdfaDateCardWidget,
+    rdfaDateCardWidget(),
     rdfaDateInsertWidget,
     standardTemplateWidget,
     citation.widgets.citationCard,

@@ -10,26 +10,18 @@
           @onChange={{this.changeDate}}
           @value={{this.dateValue}}
           @onlyDate={{this.onlyDate}}/>
+        {{#each @widgetArgs.options.formats as |format|}}
         <AuFormRow>
           <AuControlRadio
-            @label="Short Date"
-            @identifier="short"
+            @label={{format.label}}
+            @identifier={{format.key}}
             @name="dateFormat"
-            @value="short"
-            @checked={{eq this.dateFormat "short"}}
+            @value={{format.key}}
+            @checked={{eq this.dateFormat format.key}}
             @onChange={{this.setDateFormat}}
           />
         </AuFormRow>
-        <AuFormRow>
-          <AuControlRadio
-            @label="Long Date"
-            @identifier="long"
-            @name="dateFormat"
-            @value="long"
-            @checked={{eq this.dateFormat "long"}}
-            @onChange={{this.setDateFormat}}
-          />
-        </AuFormRow>
+        {{/each}}
         <AuFormRow>
           <AuControlRadio
             @label="Custom Date"

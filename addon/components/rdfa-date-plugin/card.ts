@@ -3,19 +3,24 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
+import { DateFormat } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 
 type Args = {
   controller: ProseController;
+  widgetArgs: {
+    options: {
+      formats: [DateFormat];
+      allowCustomFormat: boolean;
+    };
+  };
 };
-const shortFormat = 'dd/mm/yy';
-const longFormat = 'EEEE dd MMMM yyyy';
 export default class RdfaDatePluginCardComponent extends Component<Args> {
   @tracked dateValue?: Date;
   @tracked datePos?: number;
   @tracked dateInDocument = false;
   @tracked onlyDate = false;
   @tracked dateFormat = '';
-  @tracked customDateFormat = 'dd/mm/yyyy';
+  @tracked customDateFormat = 'dd/MM/yyyy';
 
   get controller() {
     return this.args.controller;
@@ -23,7 +28,6 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
 
   @action
   modifyDate() {
-    console.log('changing date');
     if (this.datePos && this.dateValue) {
       const pos = this.datePos;
       const value = this.dateValue;
@@ -43,10 +47,17 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   @action
   setDateFormat(dateFormat: string) {
     this.dateFormat = dateFormat;
-    if (dateFormat === 'short') {
-      this.customDateFormat = shortFormat;
-    } else if (dateFormat === 'long') {
-      this.customDateFormat = longFormat;
+    if (dateFormat !== 'custom') {
+      const format = this.args.widgetArgs.options.formats.find(
+        (format) => format.key === dateFormat
+      );
+      if (format) {
+        if (this.onlyDate) {
+          this.customDateFormat = format.dateFormat;
+        } else {
+          this.customDateFormat = format.dateTimeFormat;
+        }
+      }
     }
     if (this.dateInDocument) this.modifyDate();
   }
