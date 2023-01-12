@@ -273,8 +273,8 @@ export const besluit_article_header: NodeSpec = {
       tag: 'p',
       getAttrs(element: HTMLElement) {
         const numberNode = element.querySelector(
-          `span[property~=${ELI('number').prefixed}],
-           span[property~=${ELI('number').full}]`
+          `span[property~='${ELI('number').prefixed}'],
+           span[property~='${ELI('number').full}']`
         );
         if (numberNode) {
           return {

@@ -1,14 +1,20 @@
-export type Resource = {
-  prefixed: string;
+export class Resource {
   full: string;
-};
+  prefixed: string;
+
+  constructor(full: string, prefixed: string) {
+    this.full = full;
+    this.prefixed = prefixed;
+  }
+
+  toString() {
+    return this.full;
+  }
+}
 
 export function namespace(uri: string, prefix: string) {
   return (s: string): Resource => {
-    return {
-      prefixed: prefix && `${prefix}:${s}`,
-      full: uri + s,
-    };
+    return new Resource(uri + s, `${prefix}:${s}`);
   };
 }
 
