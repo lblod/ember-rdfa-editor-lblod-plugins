@@ -10,6 +10,42 @@
           @onChange={{this.changeDate}}
           @value={{this.dateValue}}
           @onlyDate={{this.onlyDate}}/>
+        <AuFormRow>
+          <AuControlRadio
+            @label="Short Date"
+            @identifier="short"
+            @name="dateFormat"
+            @value="short"
+            @checked={{eq this.dateFormat "short"}}
+            @onChange={{this.setDateFormat}}
+          />
+        </AuFormRow>
+        <AuFormRow>
+          <AuControlRadio
+            @label="Long Date"
+            @identifier="long"
+            @name="dateFormat"
+            @value="long"
+            @checked={{eq this.dateFormat "long"}}
+            @onChange={{this.setDateFormat}}
+          />
+        </AuFormRow>
+        <AuFormRow>
+          <AuControlRadio
+            @label="Custom Date"
+            @identifier="custom"
+            @name="dateFormat"
+            @value="custom"
+            @checked={{eq this.dateFormat "custom"}}
+            @onChange={{this.setDateFormat}}
+          />
+          {{#if (eq this.dateFormat "custom")}}
+            <AuInput
+              @value={{this.customDateFormat}}
+              {{on "input" this.setCustomDateFormat}}
+            />
+          {{/if}}
+        </AuFormRow>
         {{#unless this.dateInDocument}}
           <AuFormRow class="au-u-margin-top">
             <AuButton {{on 'click' this.modifyDate}}>
