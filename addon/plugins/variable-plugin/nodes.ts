@@ -112,37 +112,3 @@ export const variable: NodeSpec = {
     },
   ],
 };
-
-export const date_variable: NodeSpec = {
-  content: 'date',
-  group: 'inline',
-  inline: true,
-  attrs: {
-    mappingResource: {},
-  },
-  toDOM: (node) => {
-    const { mappingResource } = node.attrs;
-    return [
-      'span',
-      {
-        resource: mappingResource as string,
-        typeof: EXT('Mapping').prefixed,
-      },
-      0,
-      ['span', { property: DCT('type').prefixed, content: 'date' }],
-      ['span', { property: EXT('content').prefixed }, 0],
-    ];
-  },
-  parseDOM: [
-    {
-      tag: 'span',
-      getAttrs: (node: HTMLElement) => {
-        if (hasRDFaAttribute(node, 'typeof', EXT('Mapping'))) {
-          const mappingResource = node.getAttribute('resource');
-          return { mappingResource };
-        }
-        return false;
-      },
-    },
-  ],
-};
