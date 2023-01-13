@@ -24,6 +24,15 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       },
     },
     selectable: true,
+    leafText: (node) => {
+      const { value, onlyDate } = node.attrs;
+      const humanReadableDate = value
+        ? formatDate(new Date(value), onlyDate)
+        : onlyDate
+        ? options.placeholder.insertDate
+        : options.placeholder.insertDateTime;
+      return humanReadableDate;
+    },
     toDOM: (node) => {
       const { value, onlyDate } = node.attrs;
       const datatype = onlyDate ? XSD('date') : XSD('dateTime');

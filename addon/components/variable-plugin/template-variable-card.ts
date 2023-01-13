@@ -11,7 +11,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { PNode, ProseParser } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, PNode, ProseParser } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 
 type Args = {
@@ -91,42 +91,48 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     this.showCard = false;
     this.selectedVariableOption = undefined;
     const { selection } = this.controller.state;
-    const variable = findParentNodeOfType(
-      this.controller.schema.nodes.variable
-    )(selection);
-    this.selectedVariable = variable;
-    if (variable) {
-      const type = variable.node.attrs.type as string;
-      if (type === 'codelist') {
-        const source =
-          (variable.node.attrs.source as string | undefined) ?? this.endpoint;
-        const codelistURI = variable.node.attrs.variableResource as string;
-        void this.fetchCodeListOptions.perform(source, codelistURI);
-        this.showCard = true;
-      } else if (type === 'location') {
-        const source =
-          (variable.node.attrs.source as string | undefined) ?? this.endpoint;
-        const roadSignRegulation = findParentNodeOfType(
-          this.controller.schema.nodes.roadsign_regulation
-        )(selection);
-        const zonalityUri = roadSignRegulation?.node.attrs.zonality as
-          | string
-          | undefined;
-        if (zonalityUri === ZONAL_URI) {
-          void this.fetchCodeListOptions.perform(
-            source,
-            this.zonalLocationCodelistUri,
-            true
-          );
-        } else {
-          void this.fetchCodeListOptions.perform(
-            source,
-            this.nonZonalLocationCodelistUri,
-            true
-          );
-        }
+    if (
+      selection instanceof NodeSelection &&
+      selection.node.type === this.controller.schema.nodes.variable
+    ) {
+      const variable = {
+        node: selection.node,
+        pos: selection.from,
+      };
+      this.selectedVariable = variable;
+      if (variable) {
+        const type = variable.node.attrs.type as string;
+        if (type === 'codelist') {
+          const source =
+            (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+          const codelistURI = variable.node.attrs.variableResource as string;
+          void this.fetchCodeListOptions.perform(source, codelistURI);
+          this.showCard = true;
+        } else if (type === 'location') {
+          const source =
+            (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+          const roadSignRegulation = findParentNodeOfType(
+            this.controller.schema.nodes.roadsign_regulation
+          )(selection);
+          const zonalityUri = roadSignRegulation?.node.attrs.zonality as
+            | string
+            | undefined;
+          if (zonalityUri === ZONAL_URI) {
+            void this.fetchCodeListOptions.perform(
+              source,
+              this.zonalLocationCodelistUri,
+              true
+            );
+          } else {
+            void this.fetchCodeListOptions.perform(
+              source,
+              this.nonZonalLocationCodelistUri,
+              true
+            );
+          }
 
-        this.showCard = true;
+          this.showCard = true;
+        }
       }
     }
   }
