@@ -141,7 +141,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
-    rdfaDateCardWidget,
+    rdfaDateCardWidget(),
     rdfaDateInsertWidget,
     tableOfContentsWidget(),
     insertVariableWidget(this.insertVariableWidgetOptions),

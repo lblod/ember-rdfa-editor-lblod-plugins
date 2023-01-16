@@ -10,6 +10,34 @@
           @onChange={{this.changeDate}}
           @value={{this.dateValue}}
           @onlyDate={{this.onlyDate}}/>
+        {{#each @widgetArgs.options.formats as |format|}}
+        <AuFormRow>
+          <AuControlRadio
+            @label={{format.label}}
+            @identifier={{format.key}}
+            @name="dateFormat"
+            @value={{format.key}}
+            checked={{eq this.dateFormat format.key}}
+            @onChange={{this.setDateFormat}}
+          />
+        </AuFormRow>
+        {{/each}}
+        <AuFormRow>
+          <AuControlRadio
+            @label="Custom Date"
+            @identifier="custom"
+            @name="dateFormat"
+            @value="custom"
+            checked={{eq this.dateFormat "custom"}}
+            @onChange={{this.setDateFormat}}
+          />
+          {{#if (eq this.dateFormat "custom")}}
+            <AuInput
+              @value={{this.customDateFormat}}
+              {{on "input" this.setCustomDateFormat}}
+            />
+          {{/if}}
+        </AuFormRow>
         {{#unless this.dateInDocument}}
           <AuFormRow class="au-u-margin-top">
             <AuButton {{on 'click' this.modifyDate}}>
