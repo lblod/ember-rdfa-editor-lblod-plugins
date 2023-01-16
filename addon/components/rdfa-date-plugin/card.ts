@@ -22,6 +22,13 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   @tracked dateFormat = '';
   @tracked customDateFormat = 'dd/MM/yyyy';
 
+  constructor(owner: unknown, args: Args) {
+    super(owner, args);
+    const formats = this.args.widgetArgs.options.formats;
+    const firstKey = [...formats.keys()][0];
+    this.dateFormat = formats[firstKey].key;
+  }
+
   get controller() {
     return this.args.controller;
   }
