@@ -10,11 +10,12 @@
   </AuButton>
 </AuList::Item>
 
+{{#if this.showModal}}
 <CitationPlugin::Citations::SearchModal
-  @open={{this.showModal}}
   @closeModal={{this.closeModal}}
   @insertDecisionCitation={{this.insertDecisionCitation}}
   @insertArticleCitation={{this.insertArticleCitation}}
   @legislationTypeUri={{this.legislationTypeUri}}
   @text={{this.text}}
 />
+{{/if}}
