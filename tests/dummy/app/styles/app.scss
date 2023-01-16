@@ -30,3 +30,12 @@ div.table-of-contents {
      list-style-type: none !important;
    }
  }
+
+ div[property="say:hasPart"] {
+  padding: 10px;
+ }
+
+
+ div[property="say:hasPart"]:hover { 
+  background-color: #CCC5;
+ }

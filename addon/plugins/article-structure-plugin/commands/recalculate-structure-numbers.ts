@@ -5,13 +5,16 @@ export default function recalculateStructureNumbers(
   transaction: Transaction,
   ...structureSpecs: StructureSpec[]
 ) {
+  const structureSpecWithoutDuplicates = [...new Set(structureSpecs)];
   const doc = transaction.doc;
-  const indices = new Array<number>(structureSpecs.length).fill(1);
+  const indices = new Array<number>(structureSpecWithoutDuplicates.length).fill(
+    1
+  );
   const contexts: (PNode | null)[] = new Array<PNode | null>(
     structureSpecs.length
   ).fill(null);
   doc.descendants((node, pos, parent) => {
-    structureSpecs.forEach((spec, i) => {
+    structureSpecWithoutDuplicates.forEach((spec, i) => {
       if (node.type.name === spec.name) {
         if (!spec.continuous && !(parent === contexts[i])) {
           indices[i] = 1;

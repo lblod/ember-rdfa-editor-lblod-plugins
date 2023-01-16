@@ -12,6 +12,7 @@ import { findAncestorOfType } from '../utils/structure';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import IntlService from 'ember-intl/services/intl';
+import { getContinuousStructureSpecs } from '../utils/structure';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',
@@ -68,7 +69,11 @@ const moveSelectedStructure = (
         : TextSelection.create(transaction.doc, newSelectionPos);
       transaction.setSelection(newSelection);
       transaction.scrollIntoView();
-      recalculateStructureNumbers(transaction, currentStructureSpec);
+      recalculateStructureNumbers(
+        transaction,
+        ...getContinuousStructureSpecs(options),
+        currentStructureSpec
+      );
       dispatch(transaction);
     }
     return true;

@@ -15,6 +15,7 @@ import {
   hasRDFaAttribute,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { StructureSpec } from '..';
 
 export function constructStructureNodeSpec(config: {
   type: Resource;
@@ -25,6 +26,8 @@ export function constructStructureNodeSpec(config: {
   return {
     group,
     content,
+    draggable: true,
+    selectable: true,
     inline: false,
     attrs: {
       property: {
@@ -180,4 +183,8 @@ export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
     node.firstChild?.type === schema.nodes['paragraph'] &&
     node.firstChild.firstChild?.type === schema.nodes['placeholder']
   );
+}
+
+export function getContinuousStructureSpecs(structureSpecs: StructureSpec[]) {
+  return structureSpecs.filter((spec) => spec.continuous);
 }

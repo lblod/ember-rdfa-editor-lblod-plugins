@@ -65,6 +65,7 @@ import {
   articleStructureContextWidget,
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import dropHandlerPlugin from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/plugins/dropHandlerPlugin';
 const citation = setupCitationPlugin();
 
 export default class BesluitSampleController extends Controller {
@@ -130,7 +131,11 @@ export default class BesluitSampleController extends Controller {
   ) => Record<string, NodeViewConstructor> = () => {
     return {};
   };
-  @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
+  @tracked plugins: Plugin[] = [
+    tablePlugin,
+    citation.plugin,
+    dropHandlerPlugin(),
+  ];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,

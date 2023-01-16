@@ -64,6 +64,7 @@ import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import IntlService from 'ember-intl/services/intl';
 import { variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
+import dropHandlerPlugin from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/plugins/dropHandlerPlugin';
 const citation = setupCitationPlugin();
 
 export default class RegulatoryStatementSampleController extends Controller {
@@ -139,7 +140,11 @@ export default class RegulatoryStatementSampleController extends Controller {
       table_of_contents: tableOfContentsView(controller),
     };
   };
-  @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
+  @tracked plugins: Plugin[] = [
+    tablePlugin,
+    citation.plugin,
+    dropHandlerPlugin(),
+  ];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     rdfaDateCardWidget(),
