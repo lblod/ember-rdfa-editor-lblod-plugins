@@ -17,7 +17,7 @@
             @identifier={{format.key}}
             @name="dateFormat"
             @value={{format.key}}
-            @checked={{eq this.dateFormat format.key}}
+            checked={{eq this.dateFormat format.key}}
             @onChange={{this.setDateFormat}}
           />
         </AuFormRow>
@@ -28,7 +28,7 @@
             @identifier="custom"
             @name="dateFormat"
             @value="custom"
-            @checked={{eq this.dateFormat "custom"}}
+            checked={{eq this.dateFormat "custom"}}
             @onChange={{this.setDateFormat}}
           />
           {{#if (eq this.dateFormat "custom")}}
