@@ -5,6 +5,6 @@ export type TableOfContentsConfig = {
 }[];
 
 export const tableOfContentsWidget: WidgetSpec = {
-  componentName: 'table-of-contents-plugin/card',
-  desiredLocation: 'sidebar',
+  componentName: 'table-of-contents-plugin/toolbar-button',
+  desiredLocation: 'toolbarRight',
 };
