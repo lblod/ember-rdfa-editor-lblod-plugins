@@ -1,10 +1,10 @@
 citaten-plugin:
   card:
-    title: Voeg verwijzing toe
+    title: Voeg citeeropschrift toe
     suggestions: Suggesties
 
   insert:
-    title: Verwijzing invoegen
+    title: Citeeropschrift invoegen
 
   search:
     term: Zoekterm
@@ -30,7 +30,7 @@ citaten-plugin:
     of: van
 
   references:
-    insert: Verwijzing invoegen
+    insert: Citeeropschrift invoegen
     details: Details
     refer-whole: Verwijs naar volledig document
     refer-article: Verwijs naar artikel
