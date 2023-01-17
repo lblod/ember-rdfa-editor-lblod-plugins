@@ -127,7 +127,8 @@ export const article_header: NodeSpec = {
         }
         return false;
       },
-      contentElement: `span[property~='${EXT('title').prefixed}']`,
+      contentElement: `span[property~='${EXT('title').prefixed}'],
+                       span[property~='${EXT('title').full}']`,
     },
   ],
 };
