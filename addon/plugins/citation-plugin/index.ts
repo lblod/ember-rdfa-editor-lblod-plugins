@@ -127,7 +127,7 @@ function citationPlugin({
           expect(
             'the datastore plugin is required for this plugin',
             datastoreKey.getState(state)
-          )
+          )()
         );
         return {
           highlights: calculateDecorations(schema, doc, activeRanges),
@@ -141,7 +141,7 @@ function citationPlugin({
           expect(
             'the datastore plugin is required for this plugin',
             datastoreKey.getState(newState)
-          )
+          )()
         );
         return {
           highlights: calculateDecorations(schema, doc, activeRanges),
