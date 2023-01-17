@@ -1,10 +1,10 @@
 citaten-plugin:
   card:
-    title: Voeg verwijzing toe
+    title: Voeg citeeropschrift toe
     suggestions: Suggesties
 
   insert:
-    title: Verwijzing invoegen
+    title: Citeeropschrift invoegen
 
   search:
     term: Zoekterm
@@ -20,7 +20,7 @@ citaten-plugin:
     from: van
     to: tot
     article: Zoek artikel
-    article-placeholder: Artikel nummer  
+    article-placeholder: Artikel nummer
     back: Terug naar zoekresultaten
     results: Resultaten
 
@@ -30,7 +30,7 @@ citaten-plugin:
     of: van
 
   references:
-    insert: Verwijzing invoegen
+    insert: Citeeropschrift invoegen
     details: Details
     refer-whole: Verwijs naar volledig document
     refer-article: Verwijs naar artikel
@@ -41,7 +41,7 @@ citaten-plugin:
     no-results: Geen resultaten gevonden
     error-title: Probleem bij het laden
     error-intro: "Er heeft zich een fout voorgedaan bij het zoeken in de Vlaamse Codex:"
-    error-outro: Moest dit probleem aanhouden, neem contact op met 
+    error-outro: Moest dit probleem aanhouden, neem contact op met
 table-of-contents-plugin:
   title: Inhoudstafel
   toggle: Toon Inhoudstafel
@@ -56,6 +56,16 @@ besluit-type-plugin:
   error-title: "Fout"
   error-first-body: "Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer"
   error-rest-body: ". Voor meer specifieke details, controleer de console in de browser."
+besluit-plugin:
+  card:
+    title: Artikels bewerken
+  insert:
+    article: Voeg artikel in
+    decision-title: Voeg besluittitel in
+  action:
+    delete-article: Artikel verwijderen
+    article-up: Artikel naar boven verplaatsen
+    article-down: Artikel naar beneden verplaatsen
 date-plugin:
   insert:
     date: "Datum invoegen"
@@ -72,3 +82,56 @@ date-plugin:
 insert-variable-plugin:
   variable: Voeg variabele in
   button: Voeg in
+article-structure-plugin:
+  insert:
+    paragraph: Paragraaf invoegen
+    article: Artikel invoegen
+    articleBelow: Voeg onderstaand artikel in
+    title: Titel invoegen
+    chapter: Hoofdstuk invoegen
+    section: Afdeling invoegen
+    subsection: Onderafdeling invoegen
+  moveUp:
+    paragraph: Paragraaf naar boven verplaatsen
+    article: Artikel naar boven verplaatsen
+    title: Titel naar boven verplaatsen
+    chapter: Hoofdstuk naar boven verplaatsen
+    section: Afdeling naar boven verplaatsen
+    subsection: Onderafdeling naar boven verplaatsen
+  moveDown:
+    paragraph: Paragraaf naar beneden verplaatsen
+    article: Artikel naar beneden verplaatsen
+    title: Titel naar beneden verplaatsen
+    chapter: Hoofdstuk naar beneden verplaatsen
+    section: Afdeling naar beneden verplaatsen
+    subsection: Onderafdeling naar boven verplaatsen
+  title:
+    paragraphCard: Paragraaf card
+    articleCard: Artikel card
+    structureCard: Structuur card
+  remove:
+    article: Artikel verwijderen
+    paragraph: Paragraaf verwijderen
+    subsection: Onderafdeling verwijderen
+    section: Afdeling verwijderen
+    chapter: Hoofdstuk verwijderen
+    title: Titel verwijderen
+    content: Inhoud verwijderen
+  placeholder:
+    generic:
+      heading: Voeg titel in
+      body: Voeg inhoud in
+    chapter:
+      heading: Voeg hoofdstuk in
+      body: Voeg inhoud hoofdstuk in
+    section:
+      heading: Voeg afdeling in
+      body: Voeg inhoud afdeling in
+    subsection: 
+      heading: Voeg onderafdeling in
+      body: Voeg inhoud onderafdeling in
+    article:
+      heading: Voeg artikel in
+      body: Voeg inhoud artikel in
+    paragraph:
+      body: Voeg inhoud paragraaf in

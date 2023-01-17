@@ -56,6 +56,16 @@ besluit-type-plugin:
   error-title: "Error"
   error-first-body: "An error occured while fetching the decision types. Try again later. If this problem persists, please contact"
   error-rest-body: ". For more specific details about this problem, inspect the browser console."
+besluit-plugin:
+  card:
+    title: Edit decision
+  insert:
+    article: Insert article
+    decision-title: Insert decision title
+  action:
+    delete-article: Delete article
+    article-up: Move article up
+    article-down: Move article down
 date-plugin:
   insert:
     date: "Insert date"
@@ -71,3 +81,56 @@ date-plugin:
 insert-variable-plugin:
   variable: Insert variable
   button: Insert
+article-structure-plugin:
+  insert:
+    paragraph: Insert paragraph
+    article: Insert article
+    articleBelow: Insert article below
+    title: Insert title
+    chapter: Insert chapter
+    section: Insert section
+    subsection: Insert subsection
+  moveUp:
+    paragraph: Move paragraph up
+    article: Move article up
+    title: Move title up
+    chapter: Move chapter up
+    section: Move section up
+    subsection: Move subsection up
+  moveDown:
+    paragraph: Move paragraph down
+    article: Move article down
+    title: Move title down
+    chapter: Move chapter down
+    section: Move section down
+    subsection: Move subsection down
+  title:
+    paragraphCard: Paragraph Card
+    articleCard: Article Card
+    structureCard: Structure Card
+  remove:
+    article: Remove Article
+    paragraph: Remove Paragraph
+    subsection: Remove subsection
+    section: Remove section
+    chapter: Remove chapter
+    title: Remove title
+    content: Remove content
+  placeholder:
+    generic:
+      heading: Insert title
+      body: Insert content
+    chapter:
+      heading: Insert chapter heading
+      body: Insert chapter content
+    section:
+      heading: Insert section heading
+      body: Insert section content
+    subsection: 
+      heading: Insert subsection heading
+      body: Insert subsection content
+    article:
+      heading: Insert article heading
+      body: Insert article content
+    paragraph:
+      body: Insert paragraph content

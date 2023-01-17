@@ -1,0 +1,22 @@
+<AuList::Item>
+  <AuButton
+    @icon='add'
+    @iconAlignment='left'
+    @skin='link'
+    @disabled={{this.disableInsert}}
+    {{on 'click' this.openModal}}
+  >
+    {{t 'citaten-plugin.insert.title'}}
+  </AuButton>
+</AuList::Item>
+
+<CitationPlugin::Citations::SearchModal
+  @open={{this.showModal}}
+  @closeModal={{this.closeModal}}
+  @insertDecisionCitation={{this.insertDecisionCitation}}
+  @insertArticleCitation={{this.insertArticleCitation}}
+  @legislationTypeUri={{this.selectedLegislationTypeUri}}
+
+  @selectLegislationType={{this.selectLegislationType}}
+  @text={{this.text}}
+/>
