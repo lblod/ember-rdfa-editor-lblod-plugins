@@ -264,7 +264,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
           }</span>
           <span style="margin-left:0;margin-top:0;">${
             sign.zonality === POTENTIALLY_ZONAL_URI && zonality === ZONAL_URI
-              ? 'met zonale geldigheid'
+              ? ' met zonale geldigheid'
               : ''
           }
           </span>

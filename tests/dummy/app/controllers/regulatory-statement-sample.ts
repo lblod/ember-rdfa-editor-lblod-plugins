@@ -28,9 +28,9 @@ import {
   list_item,
   ordered_list,
   paragraph,
+  placeholder,
   repaired_block,
   text,
-  placeholder,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
   tableMenu,
@@ -44,8 +44,8 @@ import {
   rdfaDateInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import {
-  tableOfContentsView,
   table_of_contents,
+  tableOfContentsView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
 import { tableOfContentsWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
 import {
@@ -65,6 +65,15 @@ import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-p
 import IntlService from 'ember-intl/services/intl';
 import { variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import dropHandlerPlugin from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/plugins/dropHandlerPlugin';
+
+const TABLE_OF_CONTENTS_CONFIG = [
+  {
+    nodeHierarchy: [
+      'title|chapter|section|subsection|article',
+      'structure_header|article_header',
+    ],
+  },
+];
 const citation = setupCitationPlugin();
 
 export default class RegulatoryStatementSampleController extends Controller {
@@ -113,7 +122,7 @@ export default class RegulatoryStatementSampleController extends Controller {
 
         hard_break,
         block_rdfa,
-        table_of_contents,
+        table_of_contents: table_of_contents(TABLE_OF_CONTENTS_CONFIG),
         invisible_rdfa,
       },
       marks: {
@@ -137,7 +146,9 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      table_of_contents: tableOfContentsView(controller),
+      table_of_contents: tableOfContentsView(TABLE_OF_CONTENTS_CONFIG)(
+        controller
+      ),
     };
   };
   @tracked plugins: Plugin[] = [
@@ -149,7 +160,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     tableMenu,
     rdfaDateCardWidget(),
     rdfaDateInsertWidget,
-    tableOfContentsWidget(),
+    tableOfContentsWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
     articleStructureInsertWidget(),
