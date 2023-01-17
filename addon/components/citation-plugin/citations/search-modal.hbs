@@ -1,5 +1,5 @@
 <AuModal
-  @modalOpen={{true}}
+  @modalOpen={{@open}}
   @closeModal={{fn this.closeModal this.legislationTypeUri this.text}}
   @title={{t 'citaten-plugin.card.title'}}
   @size='large'
@@ -40,7 +40,7 @@
                 @searchMessage={{t 'citaten-plugin.search.placeholder'}}
                 @options={{this.legislationTypes}}
                 @selected={{this.legislationSelected}}
-                @onChange={{this.selectLegislationType}}
+                @onChange={{@selectLegislationType}}
                 as |type|
               >
                 {{type}}

@@ -13,7 +13,11 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 import { CitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-import { LEGISLATION_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
+import {
+  LEGISLATION_TYPE_CONCEPTS,
+  LEGISLATION_TYPES,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 interface Args {
   controller: ProseController;
@@ -24,6 +28,28 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   @tracked showModal = false;
   @tracked legislationTypeUri = LEGISLATION_TYPES.decreet;
   @tracked text = '';
+  @tracked legislationType: string | null = null;
+
+  get selectedLegislationTypeUri(): string {
+    return this.selectedLegislationType.value;
+  }
+
+  get selectedLegislationType() {
+    const type = this.legislationType;
+    const found = LEGISLATION_TYPE_CONCEPTS.find((c) => c.value === type);
+    return found || unwrap(LEGISLATION_TYPE_CONCEPTS[0]);
+  }
+
+  @action
+  selectLegislationType(type: string) {
+    type = type.toLowerCase();
+    const found = LEGISLATION_TYPE_CONCEPTS.find(
+      (c) => c.label.toLowerCase() === type
+    );
+    this.legislationType = found
+      ? found.value
+      : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).value;
+  }
 
   get disableInsert() {
     if (!this.activeRanges) {
