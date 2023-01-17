@@ -115,12 +115,11 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
 }
 
 export function getStructureHeaderAttrs(element: HTMLElement) {
-  const numberNode = element.children[0];
-  if (
-    hasRDFaAttribute(element, 'property', SAY('heading')) &&
-    numberNode &&
-    hasRDFaAttribute(numberNode, 'property', ELI('number'))
-  ) {
+  const numberNode = element.querySelector(
+    `[property~="${ELI('number').prefixed}"],
+     [property~="${ELI('number').full}"]`
+  );
+  if (hasRDFaAttribute(element, 'property', SAY('heading')) && numberNode) {
     return {
       number: numberNode.textContent,
     };
