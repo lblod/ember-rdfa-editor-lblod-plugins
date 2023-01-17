@@ -47,13 +47,12 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   // Vlaamse Codex currently doesn't contain captions and content of decisions
   // @tracked isEnabledSearchCaption = false
   // @tracked isEnabledSearchContent = false
-  @tracked legislationTypeUri: string;
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
   @tracked totalCount = 0;
   @tracked decisions = [];
   @tracked error: unknown;
-  @tracked selectedDecision: Decision | null;
+  @tracked selectedDecision: Decision | null = null;
   @tracked documentDateFrom: Date | null = null;
   @tracked documentDateTo: Date | null = null;
   @tracked publicationDateFrom: Date | null = null;
@@ -62,11 +61,8 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   minDate = new Date('1930-01-01T12:00:00');
   maxDate = new Date(`${new Date().getFullYear() + 10}-01-01T12:00:00`);
 
-  constructor(owner: unknown, args: Args) {
-    super(owner, args);
-    this.selectedDecision = this.args.selectedDecision;
-    this.legislationTypeUri =
-      this.args.legislationTypeUri || LEGISLATION_TYPES['decreet'];
+  get legislationTypeUri() {
+    return this.args.legislationTypeUri || LEGISLATION_TYPES['decreet'];
   }
 
   get datePickerLocalization() {
@@ -172,17 +168,6 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @action
   setInputSearchText(event: InputEvent) {
     this.inputSearchText = (event.target as HTMLInputElement).value;
-  }
-
-  @action
-  selectLegislationType(type: string) {
-    type = type.toLowerCase();
-    const found = LEGISLATION_TYPE_CONCEPTS.find(
-      (c) => c.label.toLowerCase() === type
-    );
-    this.legislationTypeUri = found
-      ? found.value
-      : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).value;
   }
 
   @action
