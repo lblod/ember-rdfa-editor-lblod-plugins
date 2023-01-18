@@ -1,10 +1,10 @@
 <span class="au-c-pill-container">
   <span class="au-c-pill {{if this.editing 'au-c-pill--ongoing'}} {{unless this.editing 'au-c-pill--default' }}">
-    <span contenteditable="{{if this.editing 'true'}}{{unless this.editing 'false'}}" {{did-insert this.didInsertContentWrapper}}>
+    <div {{did-insert this.didInsertContentWrapper}}>
       {{#unless this.editing}}
       {{@node.textContent}}
       {{/unless}}
-    </span>
+    </div>
   </span>
   {{#if this.editing}}
   <button class="au-c-pill-action au-c-pill--ongoing" type="button" {{on "click" this.disableEditing}}>
