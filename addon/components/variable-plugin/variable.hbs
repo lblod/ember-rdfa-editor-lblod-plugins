@@ -1,3 +1,18 @@
-<AuPill @actionIcon="pencil" @onClickAction={{this.onClick}}>
-  {{@node.textContent}}
-</AuPill>
+<span class="au-c-pill-container">
+  <span class="au-c-pill {{if this.editing 'au-c-pill--ongoing'}} {{unless this.editing 'au-c-pill--default' }}">
+    <span contenteditable="{{if this.editing 'true'}}{{unless this.editing 'false'}}" {{did-insert this.didInsertContentWrapper}}>
+      {{#unless this.editing}}
+      {{@node.textContent}}
+      {{/unless}}
+    </span>
+  </span>
+  {{#if this.editing}}
+  <button class="au-c-pill-action au-c-pill--ongoing" type="button" {{on "click" this.disableEditing}}>
+    <AuIcon @icon="check" />
+  </button>
+  {{else}}
+  <button class="au-c-pill-action au-c-pill--default" type="button" {{on "click" this.enableEditing}}>
+    <AuIcon @icon="pencil" />
+  </button>
+  {{/if}}
+</span>

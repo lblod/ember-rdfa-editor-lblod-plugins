@@ -9,7 +9,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { NodeSelection } from 'prosemirror-state';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
 type Args = {
   controller: ProseController;
   widgetArgs: {

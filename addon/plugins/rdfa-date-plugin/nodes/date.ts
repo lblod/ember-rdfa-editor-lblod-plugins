@@ -30,9 +30,9 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
     },
     selectable: true,
     leafText: (node) => {
-      const { value, onlyDate } = node.attrs;
+      const { value, onlyDate, format } = node.attrs;
       const humanReadableDate = value
-        ? formatDate(new Date(value), onlyDate)
+        ? formatDate(new Date(value), format)
         : onlyDate
         ? options.placeholder.insertDate
         : options.placeholder.insertDateTime;

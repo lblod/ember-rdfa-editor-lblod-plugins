@@ -61,7 +61,10 @@ import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
-import { variable, variableView } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
+import {
+  variable,
+  variableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 
 const TABLE_OF_CONTENTS_CONFIG = [
