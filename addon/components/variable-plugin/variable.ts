@@ -1,3 +1,27 @@
+/**
+ *
+ * Based on the footnotes example from https://github.com/ProseMirror/website
+ *
+ * Copyright (C) 2015-2017 by Marijn Haverbeke <marijnh@gmail.com> and others
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -97,10 +121,12 @@ export default class Variable extends Component<EmberNodeArgs> {
           plugins: [
             keymap({
               'Mod-z': () =>
-                // eslint-disable-next-line @typescript-eslint/unbound-method
+                undo(this.outerView.state, this.outerView.dispatch.bind(this)),
+              'Mod-Z': () =>
                 undo(this.outerView.state, this.outerView.dispatch.bind(this)),
               'Mod-y': () =>
-                // eslint-disable-next-line @typescript-eslint/unbound-method
+                redo(this.outerView.state, this.outerView.dispatch.bind(this)),
+              'Mod-Y': () =>
                 redo(this.outerView.state, this.outerView.dispatch.bind(this)),
               'Mod-b': toggleMarkAddFirst(this.schema.marks.strong),
               'Mod-B': toggleMarkAddFirst(this.schema.marks.strong),
