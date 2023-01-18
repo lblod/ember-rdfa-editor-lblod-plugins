@@ -123,7 +123,7 @@ const emberNodeConfig: EmberNodeConfig = {
   inline: true,
   group: 'inline',
   content: 'inline*',
-  atom: false,
+  atom: true,
   attrs: {
     mappingResource: {},
     variableResource: {

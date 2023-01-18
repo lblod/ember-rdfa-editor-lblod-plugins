@@ -9,6 +9,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { NodeSelection } from 'prosemirror-state';
 type Args = {
   controller: ProseController;
   widgetArgs: {
@@ -106,9 +107,16 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
 
   get showCard() {
     const { selection } = this.args.controller.state;
-    const variable = findParentNodeOfType(
-      this.args.controller.schema.nodes.variable
-    )(selection);
-    return !variable;
+    if (
+      selection instanceof NodeSelection &&
+      selection.node.type === this.args.controller.schema.nodes.variable
+    ) {
+      return false;
+    } else {
+      const variable = findParentNodeOfType(
+        this.args.controller.schema.nodes.variable
+      )(selection);
+      return !variable;
+    }
   }
 }
