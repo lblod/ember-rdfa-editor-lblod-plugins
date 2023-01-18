@@ -1,4 +1,4 @@
-import { NodeSpec } from '@lblod/ember-rdfa-editor';
+import { Fragment, NodeSpec } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
 import {
@@ -43,8 +43,11 @@ export const articleParagraphSpec: StructureSpec = {
   },
 };
 
+const contentSelector = `span[property~='${SAY('body').prefixed}'],
+                         span[property~='${SAY('body').full}']`;
+
 export const article_paragraph: NodeSpec = {
-  content: 'text*|placeholder',
+  content: 'inline*',
   inline: false,
   attrs: {
     resource: {},
@@ -81,6 +84,7 @@ export const article_paragraph: NodeSpec = {
           hasRDFaAttribute(element, 'property', SAY('hasParagraph')) &&
           hasRDFaAttribute(element, 'typeof', SAY('Paragraph')) &&
           element.getAttribute('resource') &&
+          element.querySelector(contentSelector) &&
           numberSpan
         ) {
           return {
@@ -90,8 +94,32 @@ export const article_paragraph: NodeSpec = {
         }
         return false;
       },
-      contentElement: `span[property~='${SAY('body').prefixed}'],
-                       span[property~='${SAY('body').full}']`,
+      contentElement: contentSelector,
+    },
+    // Parsing rule for backwards compatibility (when content was not inside seperate say:body div)
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement) {
+        const numberSpan = element.querySelector(`
+        span[property~='${ELI('number').prefixed}'],
+        span[property~='${ELI('number').full}']`);
+        if (
+          hasRDFaAttribute(element, 'property', SAY('hasParagraph')) &&
+          hasRDFaAttribute(element, 'typeof', SAY('Paragraph')) &&
+          element.getAttribute('resource') &&
+          numberSpan
+        ) {
+          return {
+            resource: element.getAttribute('resource'),
+            number: numberSpan.textContent,
+          };
+        }
+        return false;
+      },
+      getContent: (node, schema) => {
+        const content = node.lastChild?.textContent ?? '';
+        return Fragment.from(schema.text(content));
+      },
     },
   ],
 };
