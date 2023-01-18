@@ -29,9 +29,9 @@ import {
   list_item,
   ordered_list,
   paragraph,
+  placeholder,
   repaired_block,
   text,
-  placeholder,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
   tableMenu,
@@ -42,8 +42,8 @@ import { service } from '@ember/service';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import {
-  besluitPluginCardWidget,
   besluitContextCardWidget,
+  besluitPluginCardWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
@@ -54,11 +54,18 @@ import { standardTemplateWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
+import { NodeType, NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
-const citation = setupCitationPlugin();
+import { motivation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/nodes/motivation';
+
+const citation = setupCitationPlugin({
+  type: 'nodes',
+  activeInNodeTypes(schema): Set<NodeType> {
+    return new Set<NodeType>([schema.nodes.motivation]);
+  },
+});
 const nodes = {
   doc,
   paragraph,
@@ -69,6 +76,7 @@ const nodes = {
   ordered_list,
   bullet_list,
   placeholder,
+  motivation,
   ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
   heading,
   blockquote,
