@@ -3,9 +3,8 @@ import Component from '@glimmer/component';
 import { PNode } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { Selection } from '@lblod/ember-rdfa-editor';
-import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { TableOfContentsConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils/constants';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import { TableOfContentsConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
 type OutlineEntry = {
   content: string;
   pos: number;
@@ -33,34 +32,32 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   extractOutline({ node, pos }: { node: PNode; pos: number }): OutlineEntry[] {
     let result: OutlineEntry[] = [];
     let parent: OutlineEntry | undefined;
-    const properties = getRdfaAttribute(node, 'property').pop();
-    const resource = getRdfaAttribute(node, 'resource').pop();
-    if (properties && resource) {
-      for (const tocConfigEntry of this.config) {
-        if (
-          tocConfigEntry.sectionPredicate.some((pred) =>
-            properties.includes(pred)
-          )
-        ) {
-          if (typeof tocConfigEntry.value === 'string') {
-            parent = { content: tocConfigEntry.value, pos };
-            break;
-          } else {
-            const range = [
-              ...this.args.controller.datastore
-                .match(`>${resource}`, `>${tocConfigEntry.value.predicate}`)
-                .asPredicateNodeMapping()
-                .nodes(),
-            ][0];
-            if (range) {
-              const node = unwrap(this.controller.state.doc.nodeAt(range.from));
-              parent = {
-                content: node.textContent,
-                pos: range.from,
-              };
-              break;
+    for (const option of this.config) {
+      const { nodeHierarchy } = option;
+      if (RegExp(`^${nodeHierarchy[0]}$`).exec(node.type.name)) {
+        let i = 1;
+        let currentNode: NodeWithPos | undefined = { node, pos };
+        while (currentNode && i < nodeHierarchy.length) {
+          let newCurrentNode: NodeWithPos | undefined;
+          currentNode.node.forEach((child, offset) => {
+            if (RegExp(`^${nodeHierarchy[i]}$`).exec(child.type.name)) {
+              newCurrentNode = { pos: pos + offset, node: child };
+              return;
             }
-          }
+          });
+          currentNode = newCurrentNode;
+          i++;
+        }
+        if (currentNode) {
+          const outlineText = currentNode.node.type.spec.outlineText as
+            | ((node: PNode) => string)
+            | undefined;
+          const content =
+            outlineText?.(currentNode.node) ?? currentNode.node.textContent;
+          parent = {
+            pos: currentNode.pos,
+            content,
+          };
         }
       }
     }

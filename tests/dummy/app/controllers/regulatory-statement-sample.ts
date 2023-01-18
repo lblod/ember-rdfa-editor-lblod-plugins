@@ -60,9 +60,18 @@ import {
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
-import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import IntlService from 'ember-intl/services/intl';
 import { variable, variableView } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
+import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
+
+const TABLE_OF_CONTENTS_CONFIG = [
+  {
+    nodeHierarchy: [
+      'title|chapter|section|subsection|article',
+      'structure_header|article_header',
+    ],
+  },
+];
 const citation = setupCitationPlugin();
 
 export default class RegulatoryStatementSampleController extends Controller {
@@ -111,7 +120,7 @@ export default class RegulatoryStatementSampleController extends Controller {
 
         hard_break,
         block_rdfa,
-        table_of_contents,
+        table_of_contents: table_of_contents(TABLE_OF_CONTENTS_CONFIG),
         invisible_rdfa,
       },
       marks: {
@@ -135,16 +144,18 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      table_of_contents: tableOfContentsView(controller),
       variable: variableView(controller),
+      table_of_contents: tableOfContentsView(TABLE_OF_CONTENTS_CONFIG)(
+        controller
+      ),
     };
   };
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
-    rdfaDateCardWidget,
+    rdfaDateCardWidget(),
     rdfaDateInsertWidget,
-    tableOfContentsWidget(),
+    tableOfContentsWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
     articleStructureInsertWidget(),

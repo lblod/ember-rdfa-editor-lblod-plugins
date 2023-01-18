@@ -4,6 +4,8 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { formatWithOptions } from 'date-fns/fp';
+import { nlBE } from 'date-fns/locale';
 
 export type DateOptions = {
   placeholder: {
@@ -18,6 +20,9 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
     attrs: {
       value: {
         default: null,
+      },
+      format: {
+        default: 'dd/mm/yyyy',
       },
       onlyDate: {
         default: true,
@@ -34,10 +39,10 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       return humanReadableDate;
     },
     toDOM: (node) => {
-      const { value, onlyDate } = node.attrs;
+      const { value, onlyDate, format } = node.attrs;
       const datatype = onlyDate ? XSD('date') : XSD('dateTime');
       const humanReadableDate = value
-        ? formatDate(new Date(value), onlyDate)
+        ? formatDate(new Date(value), format)
         : onlyDate
         ? options.placeholder.insertDate
         : options.placeholder.insertDateTime;
@@ -82,17 +87,8 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
   };
 };
 
-function formatDate(date: Date, onlyDate: boolean) {
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    ...(!onlyDate && {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  };
-  return date.toLocaleString('nl-BE', options);
+function formatDate(date: Date, format: string) {
+  return formatWithOptions({ locale: nlBE }, format)(date);
 }
 
 export default date;
