@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-beta.1",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -56,13 +56,13 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "^1.5.0",
+    "@appuniversum/ember-appuniversum": "^2.2.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.7.0",
     "@embroider/test-setup": "^1.6.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@lblod/ember-rdfa-editor": "^1.0.0-alpha.13",
+    "@lblod/ember-rdfa-editor": "^1.0.0-beta.2",
     "@rdfjs/types": "^1.1.0",
     "@release-it-plugins/lerna-changelog": "^5.0.0",
     "@tsconfig/ember": "^1.0.1",
@@ -143,8 +143,8 @@
     "webpack": "^5.72.1"
   },
   "peerDependencies": {
-    "@appuniversum/ember-appuniversum": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "^1.0.0-alpha.13",
+    "@appuniversum/ember-appuniversum": "^2.2.0",
+    "@lblod/ember-rdfa-editor": "^1.0.0-beta.2",
     "ember-concurrency": "^2.3.7"
   },
   "engines": {

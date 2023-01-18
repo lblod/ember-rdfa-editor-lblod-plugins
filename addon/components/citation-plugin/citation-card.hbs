@@ -106,13 +106,13 @@
     </c.footer>
   </AuCard>
 {{/if}}
-
 <CitationPlugin::Citations::SearchModal
   @open={{this.showModal}}
   @closeModal={{this.closeModal}}
   @insertDecisionCitation={{this.insertDecisionCitation}}
   @insertArticleCitation={{this.insertArticleCitation}}
   @selectedDecision={{this.decision}}
-  @legislationTypeUri={{this.legislationTypeUri}}
+  @legislationTypeUri={{this.selectedLegislationTypeUri}}
+  @selectLegislationType={{this.selectLegislationType}}
   @text={{this.searchText}}
 />
