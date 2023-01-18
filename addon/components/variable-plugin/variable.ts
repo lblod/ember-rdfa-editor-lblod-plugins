@@ -31,6 +31,7 @@ import {
   keymap,
   redo,
   Schema,
+  Selection,
   StepMap,
   Transaction,
   undo,
@@ -148,8 +149,22 @@ export default class Variable extends Component<EmberNodeArgs> {
           },
         },
       });
+      // Ensure that the outer selection is not a node selection of the variable
+      const outerSelectionTr = this.outerView.state.tr;
+      const outerSelection = Selection.near(
+        this.outerView.state.doc.resolve(this.pos + this.node.nodeSize)
+      );
+      outerSelectionTr.setSelection(outerSelection);
+      this.outerView.dispatch(outerSelectionTr);
+
+      //Set the selection of the inner view at the end of its content
+      const innerSelectionTr = this.innerView.state.tr;
+      const innerSelection = Selection.atEnd(this.innerView.state.doc);
+      innerSelectionTr.setSelection(innerSelection);
+      this.innerView.dispatch(innerSelectionTr);
+      this.innerView.focus();
+      this.editing = true;
     }
-    this.editing = true;
   }
 
   @action
