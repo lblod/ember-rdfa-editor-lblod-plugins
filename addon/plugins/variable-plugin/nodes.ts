@@ -5,6 +5,8 @@ import {
   EXT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
+const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'], 
+                          span[property~='${EXT('content').full}']`;
 export const variable: NodeSpec = {
   content: 'inline*',
   group: 'inline',
@@ -89,7 +91,10 @@ export const variable: NodeSpec = {
     {
       tag: 'span',
       getAttrs: (node: HTMLElement) => {
-        if (hasRDFaAttribute(node, 'typeof', EXT('Mapping'))) {
+        if (
+          hasRDFaAttribute(node, 'typeof', EXT('Mapping')) &&
+          node.querySelector(CONTENT_SELECTOR)
+        ) {
           const mappingResource = node.getAttribute('resource');
           const variableResource = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('codelist')))
@@ -107,8 +112,7 @@ export const variable: NodeSpec = {
         }
         return false;
       },
-      contentElement: `span[property~='${EXT('content').prefixed}'], 
-                       span[property~='${EXT('content').full}']`,
+      contentElement: CONTENT_SELECTOR,
     },
   ],
 };
