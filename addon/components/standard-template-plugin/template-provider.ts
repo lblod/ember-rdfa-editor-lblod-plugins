@@ -107,6 +107,12 @@ export default class TemplateProviderComponent extends Component<Args> {
         to: $from.end($from.depth - 1),
       };
     }
+    if ($from.parent.type === this.controller.schema.nodes.paragraph) {
+      insertRange = {
+        from: $from.start($from.depth - 1),
+        to: $from.end($from.depth - 1),
+      };
+    }
     this.controller.doCommand(
       insertHtml(
         instantiateUuids(template.body),
