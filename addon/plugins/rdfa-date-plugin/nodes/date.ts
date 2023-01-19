@@ -4,8 +4,7 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { formatWithOptions } from 'date-fns/fp';
-import { nlBE } from 'date-fns/locale';
+import { formatDate } from '../utils';
 
 export type DateOptions = {
   placeholder: {
@@ -41,6 +40,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
         class: 'date',
         datatype: datatype.prefixed,
         property: EXT('content').prefixed,
+        'data-format': format as string,
         ...(!!value && { content: value as string }),
       };
       return ['span', attrs, humanReadableDate];
@@ -50,11 +50,10 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
         tag: 'span',
         getAttrs: (node: HTMLElement) => {
           if (hasRDFaAttribute(node, 'datatype', XSD('date'))) {
-            // const contentAttr = node.getAttribute('content');
-            // const parsedDate = contentAttr ? new Date(contentAttr) : null;
             return {
               value: node.getAttribute('content'),
               onlyDate: true,
+              format: node.dataset.format,
             };
           }
           return false;
@@ -64,11 +63,10 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
         tag: 'span',
         getAttrs: (node: HTMLElement) => {
           if (hasRDFaAttribute(node, 'datatype', XSD('dateTime'))) {
-            // const contentAttr = node.getAttribute('content');
-            // const parsedDate = contentAttr ? new Date(contentAttr) : null;
             return {
               value: node.getAttribute('content'),
               onlyDate: false,
+              format: node.dataset.format,
             };
           }
           return false;
@@ -77,9 +75,5 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
     ],
   };
 };
-
-function formatDate(date: Date, format: string) {
-  return formatWithOptions({ locale: nlBE }, format)(date);
-}
 
 export default date;
