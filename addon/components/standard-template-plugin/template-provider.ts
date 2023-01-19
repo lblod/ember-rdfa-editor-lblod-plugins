@@ -6,10 +6,41 @@ import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import instantiateUuids from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/instantiate-uuids';
+import { PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
+import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  pnodeHasRdfaAttribute,
+  Resource,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
   controller: ProseController;
 };
+
+const HACKY_LOOKUP: Record<string, Resource> = {
+  'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt': BESLUIT(
+    'BehandelingVanAgendapunt'
+  ),
+  'http://data.vlaanderen.be/ns/besluit#Besluit': BESLUIT('Besluit'),
+  'http://data.vlaanderen.be/ns/besluit#Artikel': BESLUIT('Artikel'),
+};
+
+export function findAncestors(
+  pos: ResolvedPos,
+  predicate: (node: PNode) => boolean = () => true
+) {
+  const result: { node: PNode; pos: number }[] = [];
+  let depth = pos.depth;
+  while (depth >= 0) {
+    const parent = pos.node(depth);
+    if (predicate(parent)) {
+      result.push({ node: parent, pos: pos.before(depth) });
+    }
+    depth -= 1;
+  }
+  return result;
+}
+
 export default class TemplateProviderComponent extends Component<Args> {
   @service declare standardTemplatePlugin: StandardTemplatePluginService;
 
@@ -34,17 +65,29 @@ export default class TemplateProviderComponent extends Component<Args> {
   }
 
   templateIsApplicable(template: TemplateModel) {
-    const containsTypes = this.controller.datastore
-      .match(null, 'a')
-      .dataset.some((quad) => {
-        return template.contexts.includes(quad.object.value);
-      });
-
-    const containsDisabledTypes = this.controller.datastore
-      .match(null, 'a')
-      .dataset.some((quad) =>
-        template.disabledInContexts.includes(quad.object.value)
-      );
+    const { $from } = this.controller.state.selection;
+    const containsTypes =
+      // this.controller.externalContextStore
+      //   .match(null, 'a')
+      //   .dataset.some((quad) => {
+      //     return template.contexts.includes(quad.object.value);
+      //   }) ||
+      findAncestors($from, (node) => {
+        return template.contexts.some((type) =>
+          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type])
+        );
+      }).length;
+    const containsDisabledTypes =
+      // this.controller.externalContextStore
+      //   .match(null, 'a')
+      //   .dataset.some((quad) => {
+      //     return template.disabledInContexts.includes(quad.object.value);
+      //   }) ||
+      findAncestors($from, (node) => {
+        return template.disabledInContexts.some((type) =>
+          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type])
+        );
+      }).length;
 
     return containsTypes && !containsDisabledTypes;
   }

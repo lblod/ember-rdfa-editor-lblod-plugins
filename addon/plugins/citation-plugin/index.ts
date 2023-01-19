@@ -250,7 +250,6 @@ function collectDecorations(
   regex: RegExp = CITATION_REGEX
 ) {
   return function (node: PNode, pos: number): boolean {
-    console.log('collecting from pos', pos);
     if (
       node.isText &&
       node.text &&
