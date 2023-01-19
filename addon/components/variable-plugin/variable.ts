@@ -38,7 +38,10 @@ import {
   Transaction,
   undo,
 } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  isSome,
+  unwrap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { toggleMarkAddFirst } from '@lblod/ember-rdfa-editor/commands/toggle-mark-add-first';
 import {
   link,
@@ -164,12 +167,12 @@ export default class Variable extends Component<EmberNodeArgs> {
         },
       });
       // Ensure that the outer selection is not a node selection of the variable
-      const outerSelectionTr = this.outerView.state.tr;
-      const outerSelection = Selection.near(
-        this.outerView.state.doc.resolve(this.pos + this.node.nodeSize)
-      );
-      outerSelectionTr.setSelection(outerSelection);
-      this.outerView.dispatch(outerSelectionTr);
+      // const outerSelectionTr = this.outerView.state.tr;
+      // const outerSelection = Selection.near(
+      //   this.outerView.state.doc.resolve(this.pos + this.node.nodeSize)
+      // );
+      // outerSelectionTr.setSelection(outerSelection);
+      // this.outerView.dispatch(outerSelectionTr);
 
       //Set the selection of the inner view at the end of its content
       const innerSelectionTr = this.innerView.state.tr;
@@ -194,7 +197,7 @@ export default class Variable extends Component<EmberNodeArgs> {
       const state = this.innerView.state;
       const start = this.node.content.findDiffStart(state.doc.content);
       const end = this.node.content.findDiffEnd(state.doc.content);
-      if (start && end) {
+      if (isSome(start) && isSome(end)) {
         let { a: endA, b: endB } = end;
         const overlap = start - Math.min(endA, endB);
         if (overlap > 0) {

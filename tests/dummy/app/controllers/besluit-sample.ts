@@ -60,8 +60,8 @@ import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import IntlService from 'ember-intl/services/intl';
 import {
-  date_variable,
   variable,
+  variableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import {
   articleStructureContextWidget,
@@ -100,7 +100,6 @@ export default class BesluitSampleController extends Controller {
             insertDateTime: this.intl.t('date-plugin.insert.datetime'),
           },
         }),
-        date_variable,
         variable,
         ...besluitNodes,
         roadsign_regulation,
@@ -133,8 +132,10 @@ export default class BesluitSampleController extends Controller {
   @tracked rdfaEditor?: ProseController;
   @tracked nodeViews: (
     controller: ProseController
-  ) => Record<string, NodeViewConstructor> = () => {
-    return {};
+  ) => Record<string, NodeViewConstructor> = (controller) => {
+    return {
+      variable: variableView(controller),
+    };
   };
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
@@ -175,7 +176,9 @@ export default class BesluitSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = sampleData.DecisionTemplate;
+    const presetContent =
+      localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
+    console.log('PRESET CONTENT: ', presetContent);
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
