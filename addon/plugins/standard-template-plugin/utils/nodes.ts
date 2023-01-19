@@ -1,4 +1,9 @@
-import { NodeSpec, Transaction } from '@lblod/ember-rdfa-editor';
+import {
+  getRdfaAttrs,
+  NodeSpec,
+  rdfaAttrs,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import {
   BESLUIT,
   ELI,
@@ -12,10 +17,10 @@ import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const title: NodeSpec = {
-  group: 'block',
-  content: 'text*|placeholder',
+  content: 'paragraph+',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'eli:title',
     },
@@ -24,21 +29,14 @@ export const title: NodeSpec = {
     },
   },
   toDOM(node) {
-    return [
-      'h4',
-      {
-        property: node.attrs.property as string,
-        datatype: node.attrs.datatype as string,
-      },
-      0,
-    ];
+    return ['h4', node.attrs, 0];
   },
   parseDOM: [
     {
       tag: 'h4',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('title'))) {
-          return {};
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -48,9 +46,10 @@ export const title: NodeSpec = {
 
 export const description: NodeSpec = {
   group: 'block',
-  content: 'text*|placeholder',
+  content: 'block+',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'eli:description',
     },
@@ -59,21 +58,14 @@ export const description: NodeSpec = {
     },
   },
   toDOM(node) {
-    return [
-      'p',
-      {
-        property: node.attrs.property as string,
-        datatype: node.attrs.datatype as string,
-      },
-      0,
-    ];
+    return ['p', node.attrs, 0];
   },
   parseDOM: [
     {
       tag: 'p',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('description'))) {
-          return {};
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -83,9 +75,10 @@ export const description: NodeSpec = {
 
 export const motivering: NodeSpec = {
   group: 'block',
-  content: '(paragraph|heading|bullet_list)*',
+  content: 'block+',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'besluit:motivering',
     },
@@ -94,21 +87,14 @@ export const motivering: NodeSpec = {
     },
   },
   toDOM(node) {
-    return [
-      'div',
-      {
-        property: node.attrs.property as string,
-        lang: node.attrs.lang as string,
-      },
-      0,
-    ];
+    return ['p', node.attrs, 0];
   },
   parseDOM: [
     {
-      tag: 'div',
+      tag: 'div,p',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
-          return {};
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -118,9 +104,10 @@ export const motivering: NodeSpec = {
 
 export const article_container: NodeSpec = {
   group: 'block',
-  content: 'besluit_article*',
+  content: '(paragraph|besluit_article)+',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'prov:value',
     },
@@ -129,14 +116,7 @@ export const article_container: NodeSpec = {
     },
   },
   toDOM(node) {
-    return [
-      'div',
-      {
-        property: node.attrs.property as string,
-        datatype: node.attrs.datatype as string,
-      },
-      0,
-    ];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
@@ -146,7 +126,7 @@ export const article_container: NodeSpec = {
           hasRDFaAttribute(element, 'property', PROV('value')) &&
           hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
         ) {
-          return {};
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -159,6 +139,7 @@ export const besluit_article: NodeSpec = {
     'besluit_article_header{1}(language_node*)besluit_article_content{1}',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'eli:has_part',
     },
@@ -168,15 +149,7 @@ export const besluit_article: NodeSpec = {
     resource: {},
   },
   toDOM(node) {
-    return [
-      'div',
-      {
-        property: node.attrs.property as string,
-        typeof: node.attrs.typeof as string,
-        resource: node.attrs.resource as string,
-      },
-      0,
-    ];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
@@ -186,7 +159,7 @@ export const besluit_article: NodeSpec = {
           hasRDFaAttribute(element, 'property', ELI('has_part')) &&
           hasRDFaAttribute(element, 'typeof', BESLUIT('Artikel'))
         ) {
-          return { resource: element.getAttribute('resource') };
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -252,14 +225,18 @@ export const besluitArticleStructure: StructureSpec = {
 export const besluit_article_header: NodeSpec = {
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     number: {
       default: '1',
     },
   },
   toDOM(node) {
+    const toplevelAttrs = { ...node.attrs };
+    delete toplevelAttrs.number;
+    delete toplevelAttrs.datatype;
     return [
       'p',
-      {},
+      toplevelAttrs,
       'Artikel ',
       [
         'span',
@@ -278,6 +255,7 @@ export const besluit_article_header: NodeSpec = {
         );
         if (numberNode) {
           return {
+            ...getRdfaAttrs(element),
             number: numberNode.textContent,
           };
         }
@@ -291,6 +269,7 @@ export const besluit_article_content: NodeSpec = {
   content: 'block+',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'prov:value',
     },
@@ -299,21 +278,14 @@ export const besluit_article_content: NodeSpec = {
     },
   },
   toDOM(node) {
-    return [
-      'div',
-      {
-        property: node.attrs.property as string,
-        datatype: node.attrs.datatype as string,
-      },
-      0,
-    ];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return {};
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -323,10 +295,10 @@ export const besluit_article_content: NodeSpec = {
 
 export const besluit: NodeSpec = {
   group: 'block',
-  content:
-    '(paragraph|heading|language_node)*title{1}(paragraph|heading|language_node)*description{1}(paragraph|heading|language_node)*motivering{1}(paragraph|heading|language_node)*article_container{1}(paragraph|heading|language_node)*',
+  content: 'block*title{1}block*description?block*motivering?block*',
   inline: false,
   attrs: {
+    ...rdfaAttrs,
     property: {
       default: 'prov:generated',
     },
@@ -336,15 +308,7 @@ export const besluit: NodeSpec = {
     resource: {},
   },
   toDOM(node) {
-    return [
-      'div',
-      {
-        property: node.attrs.property as string,
-        typeof: node.attrs.typeof as string,
-        resource: node.attrs.resource as string,
-      },
-      0,
-    ];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
@@ -354,7 +318,7 @@ export const besluit: NodeSpec = {
           hasRDFaAttribute(element, 'property', PROV('generated')) &&
           hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
         ) {
-          return { resource: element.getAttribute('resource') };
+          return getRdfaAttrs(element);
         }
         return false;
       },
@@ -366,7 +330,9 @@ export const language_node: NodeSpec = {
   group: 'block',
   content: '',
   inline: false,
+  atom: true,
   attrs: {
+    ...rdfaAttrs,
     style: {
       default: 'style="display:none;"',
     },
@@ -376,19 +342,12 @@ export const language_node: NodeSpec = {
     typeof: {
       default: 'skos:Concept',
     },
-    resource: {},
+    resource: {
+      default: 'http://publications.europa.eu/resource/authority/language/NLD',
+    },
   },
   toDOM(node) {
-    return [
-      'span',
-      {
-        property: node.attrs.property as string,
-        typeof: node.attrs.typeof as string,
-        resource: node.attrs.resource as string,
-        style: node.attrs.style as string,
-      },
-      0,
-    ];
+    return ['span', node.attrs];
   },
   parseDOM: [
     {
@@ -398,7 +357,7 @@ export const language_node: NodeSpec = {
           hasRDFaAttribute(element, 'property', ELI('language')) &&
           hasRDFaAttribute(element, 'typeof', SKOS('Concept'))
         ) {
-          return { resource: element.getAttribute('resource') };
+          return getRdfaAttrs(element);
         }
         return false;
       },
