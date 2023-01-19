@@ -51,17 +51,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     label: 'date',
     constructor: (schema) => {
       return unwrap(
-        schema.nodes.date_variable.createAndFill({
+        schema.nodes.date.createAndFill({
           mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
         })
       );
-      // return schema.node(
-      //   'date_variable',
-      //   {
-      //     mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
-      //   },
-      //   schema.node('date', { onlyDate: true })
-      // );
     },
   },
   location: {

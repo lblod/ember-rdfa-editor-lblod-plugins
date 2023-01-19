@@ -1,5 +1,6 @@
 import { NodeSpec } from '@lblod/ember-rdfa-editor';
 import {
+  DCT,
   EXT,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -18,6 +19,9 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
     group: 'inline',
     inline: true,
     attrs: {
+      mappingResource: {
+        default: null,
+      },
       value: {
         default: null,
       },
@@ -39,31 +43,45 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       return humanReadableDate;
     },
     toDOM: (node) => {
-      const { value, onlyDate, format } = node.attrs;
+      const { value, onlyDate, format, mappingResource } = node.attrs;
       const datatype = onlyDate ? XSD('date') : XSD('dateTime');
       const humanReadableDate = value
         ? formatDate(new Date(value), format)
         : onlyDate
         ? options.placeholder.insertDate
         : options.placeholder.insertDateTime;
-      const attrs = {
-        class: 'date',
+      const dateAttrs = {
         datatype: datatype.prefixed,
         property: EXT('content').prefixed,
         ...(!!value && { content: value as string }),
       };
-      return ['span', attrs, humanReadableDate];
+      if (mappingResource) {
+        return [
+          'span',
+          {
+            resource: mappingResource as string,
+            typeof: EXT('Mapping').prefixed,
+            class: 'date',
+          },
+          ['span', { property: DCT('type').prefixed, content: 'date' }],
+          ['span', dateAttrs, humanReadableDate],
+        ];
+      } else {
+        return ['span', { class: 'date', ...dateAttrs }, humanReadableDate];
+      }
     },
     parseDOM: [
       {
         tag: 'span',
         getAttrs: (node: HTMLElement) => {
-          if (hasRDFaAttribute(node, 'datatype', XSD('date'))) {
-            // const contentAttr = node.getAttribute('content');
-            // const parsedDate = contentAttr ? new Date(contentAttr) : null;
+          if (
+            hasRDFaAttribute(node, 'datatype', XSD('date')) ||
+            hasRDFaAttribute(node, 'datatype', XSD('dateTime'))
+          ) {
+            const onlyDate = hasRDFaAttribute(node, 'datatype', XSD('date'));
             return {
               value: node.getAttribute('content'),
-              onlyDate: true,
+              onlyDate,
             };
           }
           return false;
@@ -72,13 +90,27 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       {
         tag: 'span',
         getAttrs: (node: HTMLElement) => {
-          if (hasRDFaAttribute(node, 'datatype', XSD('dateTime'))) {
-            // const contentAttr = node.getAttribute('content');
-            // const parsedDate = contentAttr ? new Date(contentAttr) : null;
-            return {
-              value: node.getAttribute('content'),
-              onlyDate: false,
-            };
+          if (hasRDFaAttribute(node, 'typeof', EXT('Mapping'))) {
+            const variableType = [...node.children]
+              .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
+              ?.getAttribute('content');
+            const datatype = [...node.children]
+              .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
+              ?.getAttribute('datatype');
+            if (variableType === 'date' && datatype) {
+              const mappingResource = node.getAttribute('resource');
+              const onlyDate = !![...node.children].find((el) =>
+                hasRDFaAttribute(el, 'datatype', XSD('date'))
+              );
+              const dateNode = [...node.children].find((el) =>
+                hasRDFaAttribute(el, 'property', EXT('content'))
+              );
+              return {
+                mappingResource,
+                onlyDate,
+                value: dateNode?.getAttribute('content'),
+              };
+            }
           }
           return false;
         },
