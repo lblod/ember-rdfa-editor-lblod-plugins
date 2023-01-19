@@ -41,6 +41,10 @@ import {
 import { service } from '@ember/service';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
+import {
+  besluitContextCardWidget,
+  besluitPluginCardWidget,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
   rdfaDateCardWidget,
@@ -54,7 +58,7 @@ import {
 import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
+import { NodeType, NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
@@ -66,7 +70,13 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 
-const citation = setupCitationPlugin();
+
+const citation = setupCitationPlugin({
+  type: 'nodes',
+  activeInNodeTypes(schema): Set<NodeType> {
+    return new Set<NodeType>([schema.nodes.motivation]);
+  },
+});
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -90,7 +100,7 @@ export default class BesluitSampleController extends Controller {
         ordered_list,
         bullet_list,
         placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+        motivation,...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
         date: date({
           placeholder: {
             insertDate: this.intl.t('date-plugin.insert.date'),
