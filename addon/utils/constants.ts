@@ -9,3 +9,8 @@ export const RDF = namespace(
 export const ELI = namespace('http://data.europa.eu/eli/ontology#', 'eli');
 export const XSD = namespace('http://www.w3.org/2001/XMLSchema#', 'xsd');
 export const EXT = namespace('http://mu.semte.ch/vocabularies/ext/', 'ext');
+
+export const BESLUIT = namespace(
+  'http://data.vlaanderen.be/ns/besluit#',
+  'besluit'
+);
