@@ -62,6 +62,7 @@ import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
 import {
+  date_variable,
   variable,
   variableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
@@ -109,6 +110,7 @@ export default class RegulatoryStatementSampleController extends Controller {
             insertDateTime: this.intl.t('date-plugin.insert.datetime'),
           },
         }),
+        date_variable,
         variable,
         ...STRUCTURE_NODES,
         heading,

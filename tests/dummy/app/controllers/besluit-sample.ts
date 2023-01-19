@@ -59,7 +59,10 @@ import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import IntlService from 'ember-intl/services/intl';
-import { variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
+import {
+  date_variable,
+  variable,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import {
   articleStructureContextWidget,
   articleStructureInsertWidget,
@@ -97,6 +100,7 @@ export default class BesluitSampleController extends Controller {
             insertDateTime: this.intl.t('date-plugin.insert.datetime'),
           },
         }),
+        date_variable,
         variable,
         ...besluitNodes,
         roadsign_regulation,

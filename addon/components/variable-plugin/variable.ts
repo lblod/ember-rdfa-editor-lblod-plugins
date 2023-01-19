@@ -23,9 +23,11 @@
  */
 
 import { action } from '@ember/object';
+import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import {
+  DOMSerializer,
   EditorState,
   EditorView,
   keymap,
@@ -77,6 +79,18 @@ export default class Variable extends Component<EmberNodeArgs> {
 
   get pos() {
     return this.args.getPos();
+  }
+
+  get htmlContent() {
+    const fragment = DOMSerializer.fromSchema(this.schema).serializeFragment(
+      this.node.content,
+      {
+        document,
+      }
+    );
+    const div = document.createElement('div');
+    div.appendChild(fragment);
+    return htmlSafe(div.innerHTML);
   }
 
   get schema() {

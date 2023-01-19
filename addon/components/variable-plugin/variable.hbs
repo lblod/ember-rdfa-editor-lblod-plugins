@@ -1,8 +1,8 @@
 <span class="au-c-pill-container">
   <span class="au-c-pill {{if this.editing 'au-c-pill--ongoing'}} {{unless this.editing 'au-c-pill--default' }}">
-    <div {{did-insert this.didInsertContentWrapper}}>
+    <div {{did-insert this.didInsertContentWrapper}} {{did-update this.onNodeUpdate @node}}>
       {{#unless this.editing}}
-      {{@node.textContent}}
+      {{this.htmlContent}}
       {{/unless}}
     </div>
   </span>

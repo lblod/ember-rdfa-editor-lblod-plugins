@@ -2,6 +2,7 @@ import { PNode, Schema } from '@lblod/ember-rdfa-editor';
 import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 import { v4 as uuidv4 } from 'uuid';
 import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const MULTI_SELECT_CODELIST_TYPE =
   'http://lblod.data.gift/concepts/57C93E12-A02C-4D4B-8B95-666B6701286C';
@@ -49,14 +50,18 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   date: {
     label: 'date',
     constructor: (schema) => {
-      return schema.node(
-        'variable',
-        {
-          type: 'date',
+      return unwrap(
+        schema.nodes.date_variable.createAndFill({
           mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
-        },
-        schema.node('date', { onlyDate: true })
+        })
       );
+      // return schema.node(
+      //   'date_variable',
+      //   {
+      //     mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
+      //   },
+      //   schema.node('date', { onlyDate: true })
+      // );
     },
   },
   location: {
