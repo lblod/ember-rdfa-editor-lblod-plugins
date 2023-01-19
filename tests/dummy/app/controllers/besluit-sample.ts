@@ -41,10 +41,6 @@ import {
 import { service } from '@ember/service';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import {
-  besluitContextCardWidget,
-  besluitPluginCardWidget,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
 import {
   rdfaDateCardWidget,
@@ -70,11 +66,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 
-
 const citation = setupCitationPlugin({
   type: 'nodes',
   activeInNodeTypes(schema): Set<NodeType> {
-    return new Set<NodeType>([schema.nodes.motivation]);
+    return new Set<NodeType>([schema.nodes.motivering]);
   },
 });
 
@@ -100,7 +95,7 @@ export default class BesluitSampleController extends Controller {
         ordered_list,
         bullet_list,
         placeholder,
-        motivation,...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+        ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
         date: date({
           placeholder: {
             insertDate: this.intl.t('date-plugin.insert.date'),
