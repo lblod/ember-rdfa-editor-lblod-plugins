@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { NodeSelection } from 'prosemirror-state';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
 
 type Args = {
   controller: ProseController;

@@ -6,8 +6,8 @@ import {
   ProseController,
   WidgetSpec,
 } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Plugin } from 'prosemirror-state';
-import { Schema } from 'prosemirror-model';
+import { Plugin } from '@lblod/ember-rdfa-editor';
+import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   em,
   link,
