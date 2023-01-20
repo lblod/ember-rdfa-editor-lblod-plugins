@@ -20,6 +20,8 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline',
   content: 'inline*',
   atom: true,
+  recreateUri: true,
+  uriAttributes: ['mappingResource'],
   draggable: false,
   attrs: {
     mappingResource: {},
