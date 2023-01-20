@@ -41,7 +41,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       this.controller.withTransaction((tr) => {
         tr.setNodeAttribute(pos, 'format', this.customDateFormat);
         return tr.setNodeAttribute(pos, 'value', value.toISOString());
-      });
+      }, true);
     }
   }
 
@@ -80,7 +80,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
 
   @action
   onSelectionChanged() {
-    const selection = this.controller.state.selection;
+    const selection = this.controller.getState(true).selection;
     if (
       selection instanceof NodeSelection &&
       selection.node.type === this.args.controller.schema.nodes['date']

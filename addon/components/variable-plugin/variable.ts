@@ -23,20 +23,22 @@
  */
 
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import {
   DOMSerializer,
   EditorState,
-  EditorView,
   keymap,
   NodeSelection,
+  RdfaEditorView,
   redo,
   Schema,
   StepMap,
   Transaction,
   undo,
 } from '@lblod/ember-rdfa-editor';
+import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import {
   isSome,
   unwrap,
@@ -62,12 +64,11 @@ import {
   invisible_rdfa,
 } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import IntlService from 'ember-intl/services/intl';
 
 export default class Variable extends Component<EmberNodeArgs> {
-  // @tracked
-  // editing = false;
-
-  innerView: EditorView | null = null;
+  @service declare intl: IntlService;
+  innerView: RdfaEditorView | null = null;
 
   contentWrapper: Element | null = null;
 
@@ -102,7 +103,12 @@ export default class Variable extends Component<EmberNodeArgs> {
           content: 'block+',
         },
         paragraph,
-
+        date: date({
+          placeholder: {
+            insertDate: this.intl.t('date-plugin.insert.date'),
+            insertDateTime: this.intl.t('date-plugin.insert.datetime'),
+          },
+        }),
         repaired_block,
         placeholder,
 
@@ -136,7 +142,7 @@ export default class Variable extends Component<EmberNodeArgs> {
   @action
   didInsertContentWrapper(target: Element) {
     this.contentWrapper = target;
-    this.innerView = new EditorView(this.contentWrapper, {
+    this.innerView = new RdfaEditorView(this.contentWrapper, {
       state: EditorState.create({
         doc: this.node,
         plugins: [
@@ -175,6 +181,9 @@ export default class Variable extends Component<EmberNodeArgs> {
           );
           outerSelectionTr.setSelection(outerSelection);
           this.outerView.dispatch(outerSelectionTr);
+          if (this.innerView) {
+            this.args.controller.setEmbeddedView(this.innerView);
+          }
         },
       },
     });

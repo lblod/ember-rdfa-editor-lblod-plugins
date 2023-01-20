@@ -106,6 +106,9 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   }
 
   get showCard() {
+    if (this.args.controller.inEmbeddedView) {
+      return false;
+    }
     const { selection } = this.args.controller.state;
     if (
       selection instanceof NodeSelection &&
