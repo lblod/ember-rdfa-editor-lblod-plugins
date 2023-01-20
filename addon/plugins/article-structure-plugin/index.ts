@@ -6,7 +6,7 @@ import {
   EditorState,
 } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import { Transaction } from 'prosemirror-state';
+import { Transaction } from '@lblod/ember-rdfa-editor';
 import { STRUCTURE_SPECS } from './structures';
 
 export type SpecName = string;

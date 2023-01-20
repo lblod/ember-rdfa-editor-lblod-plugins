@@ -6,8 +6,8 @@ import {
   ProseController,
   WidgetSpec,
 } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Plugin } from 'prosemirror-state';
-import { Schema } from 'prosemirror-model';
+import { Plugin } from '@lblod/ember-rdfa-editor';
+import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   em,
   link,
@@ -88,7 +88,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     return new Schema({
       nodes: {
         doc: {
-          content: 'table_of_contents? block+',
+          content: 'table_of_contents? ((chapter|block)+|(title|block)+)',
         },
         paragraph,
 

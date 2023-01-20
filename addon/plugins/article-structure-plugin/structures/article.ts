@@ -134,5 +134,5 @@ export const article_header: NodeSpec = {
 };
 
 export const article_body = constructStructureBodyNodeSpec({
-  content: '(paragraph|article_paragraph)+',
+  content: '(block|article_paragraph)+',
 });
