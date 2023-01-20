@@ -176,7 +176,8 @@ export default class BesluitSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = sampleData.DecisionTemplate;
+    const presetContent =
+      localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);

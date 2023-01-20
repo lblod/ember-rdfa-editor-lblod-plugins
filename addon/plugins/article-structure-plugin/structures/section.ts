@@ -77,5 +77,5 @@ export const section = constructStructureNodeSpec({
 });
 
 export const section_body = constructStructureBodyNodeSpec({
-  content: '(subsection|paragraph)+|(article|paragraph)+',
+  content: '(subsection|block)+|(article|block)+',
 });
