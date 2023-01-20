@@ -27,13 +27,18 @@ import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import {
+  chainCommands,
+  createParagraphNear,
   DOMSerializer,
   EditorState,
   keymap,
+  liftEmptyBlock,
+  newlineInCode,
   NodeSelection,
   RdfaEditorView,
   redo,
   Schema,
+  splitBlock,
   StepMap,
   Transaction,
   undo,
@@ -43,6 +48,7 @@ import {
   isSome,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { insertHardBreak } from '@lblod/ember-rdfa-editor/commands/insert-hard-break';
 import { toggleMarkAddFirst } from '@lblod/ember-rdfa-editor/commands/toggle-mark-add-first';
 import {
   link,
@@ -161,6 +167,13 @@ export default class Variable extends Component<EmberNodeArgs> {
             'Mod-I': toggleMarkAddFirst(this.schema.marks.em),
             'Mod-u': toggleMarkAddFirst(this.schema.marks.underline),
             'Mod-U': toggleMarkAddFirst(this.schema.marks.underline),
+            Enter: chainCommands(
+              newlineInCode,
+              createParagraphNear,
+              liftEmptyBlock,
+              splitBlock,
+              insertHardBreak
+            ),
           }),
         ],
         schema: this.schema,
