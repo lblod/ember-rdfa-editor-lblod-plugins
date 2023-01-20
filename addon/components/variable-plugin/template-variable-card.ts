@@ -105,7 +105,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         if (type === 'codelist') {
           const source =
             (variable.node.attrs.source as string | undefined) ?? this.endpoint;
-          const codelistURI = variable.node.attrs.variableResource as string;
+          const codelistURI = variable.node.attrs.codelistResource as string;
           void this.fetchCodeListOptions.perform(source, codelistURI);
           this.showCard = true;
         } else if (type === 'location') {
