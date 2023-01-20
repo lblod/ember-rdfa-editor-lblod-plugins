@@ -2,14 +2,14 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { v4 as uuidv4 } from 'uuid';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import {
   DEFAULT_VARIABLE_TYPES,
   VariableType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/constants';
-import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/fetch-data';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
+import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
 type Args = {
   controller: ProseController;
   widgetArgs: {
@@ -24,7 +24,6 @@ type Args = {
 export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {
   @tracked variablesArray: VariableType[];
   @tracked selectedVariable?: VariableType;
-  @tracked showCard = true;
   @tracked hasSubtype = false;
   @tracked selectedSubtype?: CodeList;
   @tracked subtypes?: CodeList[];
@@ -68,19 +67,14 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     if (!this.selectedVariable) {
       return;
     }
-    const uri = `http://data.lblod.info/mappings/${uuidv4()}`;
-    let variableContent;
-    if (typeof this.selectedVariable.template === 'function') {
-      variableContent = this.selectedVariable.template(
-        this.endpoint,
-        this.selectedSubtype
-      );
-    } else {
-      variableContent = this.selectedVariable.template;
-    }
-    const htmlToInsert = `<span resource="${uri}" typeof="ext:Mapping">${variableContent}</span>`;
-    const { from, to } = this.args.controller.state.selection;
-    this.args.controller.doCommand(insertHtml(htmlToInsert, from, to));
+    const node = this.selectedVariable.constructor(
+      this.args.controller.schema,
+      this.endpoint,
+      this.selectedSubtype
+    );
+    this.args.controller.withTransaction((tr) => {
+      return tr.replaceSelectionWith(node);
+    });
   }
 
   @action
@@ -111,24 +105,21 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     this.selectedSubtype = subtype;
   }
 
-  @action
-  selectionChanged() {
-    const currentSelection = this.args.controller.state.selection;
-    this.showCard = false;
-    const limitedDatastore = this.args.controller.datastore.limitToRange(
-      this.args.controller.state,
-      currentSelection.from,
-      currentSelection.to
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const quad = limitedDatastore
-      .match(null, 'a', 'ext:Mapping')
-      .asQuadResultSet()
-      .first();
-    if (quad) {
-      this.showCard = false;
+  get showCard() {
+    if (this.args.controller.inEmbeddedView) {
+      return false;
+    }
+    const { selection } = this.args.controller.state;
+    if (
+      selection instanceof NodeSelection &&
+      selection.node.type === this.args.controller.schema.nodes.variable
+    ) {
+      return false;
     } else {
-      this.showCard = true;
+      const variable = findParentNodeOfType(
+        this.args.controller.schema.nodes.variable
+      )(selection);
+      return !variable;
     }
   }
 }

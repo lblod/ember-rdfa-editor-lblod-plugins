@@ -6,8 +6,7 @@ import {
   ProseController,
   WidgetSpec,
 } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Plugin } from '@lblod/ember-rdfa-editor';
-import { Schema } from '@lblod/ember-rdfa-editor';
+import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
   em,
   link,
@@ -48,9 +47,10 @@ import {
   table_of_contents,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
 import { tableOfContentsWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
-import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin/utils/fetch-data';
-import { insertVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/insert-variable-plugin';
-import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
+import {
+  insertVariableWidget,
+  templateVariableWidget,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import {
@@ -61,6 +61,10 @@ import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
+import {
+  variable,
+  variableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 
 const TABLE_OF_CONTENTS_CONFIG = [
@@ -105,6 +109,7 @@ export default class RegulatoryStatementSampleController extends Controller {
             insertDateTime: this.intl.t('date-plugin.insert.datetime'),
           },
         }),
+        variable,
         ...STRUCTURE_NODES,
         heading,
         blockquote,
@@ -135,44 +140,6 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   insertVariableWidgetOptions = {
     defaultEndpoint: 'https://dev.roadsigns.lblod.info/sparql',
-    variableTypes: [
-      'text',
-      'number',
-      'date',
-      'codelist',
-      {
-        label: 'Dummy Variable',
-        fetchSubtypes: () => {
-          const codelists = [
-            {
-              uri: '1',
-              label: '1',
-            },
-            {
-              uri: '2',
-              label: '2',
-            },
-            {
-              uri: '3',
-              label: '3',
-            },
-          ];
-          return codelists;
-        },
-        template: (endpoint: string, selectedCodelist: CodeList) => `
-          <span property="ext:codelist" resource="${
-            selectedCodelist.uri ?? ''
-          }"></span>
-          <span property="dct:type" content="location"></span>
-          <span property="dct:source" resource="${endpoint}"></span>
-          <span property="ext:content" datatype="xsd:date">
-            <span class="mark-highlight-manual">\${${
-              selectedCodelist.label ?? ''
-            }}</span>
-          </span>
-        `,
-      },
-    ],
   };
 
   @tracked rdfaEditor?: ProseController;
@@ -180,6 +147,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: ProseController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
+      variable: variableView(controller),
       table_of_contents: tableOfContentsView(TABLE_OF_CONTENTS_CONFIG)(
         controller
       ),
@@ -188,7 +156,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
-    rdfaDateCardWidget,
+    rdfaDateCardWidget(),
     rdfaDateInsertWidget,
     tableOfContentsWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),

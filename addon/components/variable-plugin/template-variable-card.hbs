@@ -3,7 +3,7 @@
   <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
     <c.header>
       <AuHeading @level="3" @skin="6">
-        Maatregel parameters
+        {{t "variable-plugin.enterVariableValue"}}
       </AuHeading>
     </c.header>
     <c.content>
@@ -12,8 +12,8 @@
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.variableOptions}}
-          @selected={{this.selectedVariable}}
-          @onChange={{this.updateVariable}} as |variable|
+          @selected={{this.selectedVariableOption}}
+          @onChange={{this.updateVariableOption}} as |variable|
         >
           {{variable.label}}
         </PowerSelectMultiple>
@@ -22,13 +22,13 @@
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.variableOptions}}
-          @selected={{this.selectedVariable}}
-          @onChange={{this.updateVariable}} as |variable|
+          @selected={{this.selectedVariableOption}}
+          @onChange={{this.updateVariableOption}} as |variable|
         >
           {{variable.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedVariable}}>Voeg in</AuButton>
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedVariableOption}}>Voeg in</AuButton>
     </c.content>
   </AuCard>
 {{/if}}

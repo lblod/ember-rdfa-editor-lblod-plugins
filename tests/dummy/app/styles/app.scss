@@ -6,6 +6,7 @@
 @import 'ember-rdfa-editor';
 @import 'citaten-plugin';
 @import 'date-plugin';
+@import 'variable-plugin';
 
 div.table-of-contents {
    padding: $au-unit-small !important;

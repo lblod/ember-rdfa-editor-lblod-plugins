@@ -6,8 +6,7 @@ import {
   ProseController,
   WidgetSpec,
 } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Plugin } from '@lblod/ember-rdfa-editor';
-import { Schema } from '@lblod/ember-rdfa-editor';
+import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
   em,
   link,
@@ -52,7 +51,7 @@ import {
   structureSpecs,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
-import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-variable-plugin';
+import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeType, NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
@@ -60,6 +59,10 @@ import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import IntlService from 'ember-intl/services/intl';
+import {
+  variable,
+  variableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import {
   articleStructureContextWidget,
   articleStructureInsertWidget,
@@ -102,6 +105,7 @@ export default class BesluitSampleController extends Controller {
             insertDateTime: this.intl.t('date-plugin.insert.datetime'),
           },
         }),
+        variable,
         ...besluitNodes,
         roadsign_regulation,
         heading,
@@ -133,15 +137,17 @@ export default class BesluitSampleController extends Controller {
   @tracked rdfaEditor?: ProseController;
   @tracked nodeViews: (
     controller: ProseController
-  ) => Record<string, NodeViewConstructor> = () => {
-    return {};
+  ) => Record<string, NodeViewConstructor> = (controller) => {
+    return {
+      variable: variableView(controller),
+    };
   };
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitTypeWidget,
     importSnippetWidget,
-    rdfaDateCardWidget,
+    rdfaDateCardWidget(),
     rdfaDateInsertWidget,
     standardTemplateWidget,
     citation.widgets.citationCard,

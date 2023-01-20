@@ -50,7 +50,7 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   get showCard() {
-    return this.activeDecoration;
+    return !this.controller.inEmbeddedView && this.activeDecoration;
   }
 
   get plugin() {
