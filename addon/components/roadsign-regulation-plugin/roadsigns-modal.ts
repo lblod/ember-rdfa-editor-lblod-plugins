@@ -95,6 +95,10 @@ export default class RoadsignRegulationCard extends Component<Args> {
     this.search();
   }
 
+  get schema() {
+    return this.args.controller.schema;
+  }
+
   @action
   selectTypeOrCategory(option: Option) {
     if (!option) {
@@ -274,21 +278,25 @@ export default class RoadsignRegulationCard extends Component<Args> {
       })
       .join('\n');
     const regulationHTML = `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-    <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-      measure.uri
-    }">&nbsp;</span>
-    <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-    <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
-      <div property="dct:description">
-        ${html}
-        <p>Dit wordt aangeduid door verkeerstekens:</p>
-        <ul style="list-style:none;">
-          ${signsHTML}
-        </ul>
-        ${temporalValue === 'true' ? 'Deze signalisatie is dynamisch.' : ''}
-      </div>
-    </div>
-  `;
+                            <span style="display:none;" property="prov:wasDerivedFrom" resource="${
+                              measure.uri
+                            }">&nbsp;</span>
+                            <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
+                            <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
+                              <div property="dct:description">
+                                ${html}
+                                <p>Dit wordt aangeduid door verkeerstekens:</p>
+                                <ul style="list-style:none;">
+                                  ${signsHTML}
+                                </ul>
+                                ${
+                                  temporalValue === 'true'
+                                    ? 'Deze signalisatie is dynamisch.'
+                                    : ''
+                                }
+                              </div>
+                            </div>
+                          `;
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
     const contentFragment = ProseParser.fromSchema(

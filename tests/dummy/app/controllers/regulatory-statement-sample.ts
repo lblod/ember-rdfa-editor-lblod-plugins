@@ -61,10 +61,10 @@ import {
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
-import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
-import IntlService from 'ember-intl/services/intl';
 import { variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import dropHandlerPlugin from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/plugins/dropHandlerPlugin';
+import IntlService from 'ember-intl/services/intl';
+import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 
 const TABLE_OF_CONTENTS_CONFIG = [
   {

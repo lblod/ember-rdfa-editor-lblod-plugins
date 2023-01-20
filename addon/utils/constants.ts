@@ -16,3 +16,8 @@ export const BESLUIT = namespace(
 );
 export const PROV = namespace('http://www.w3.org/ns/prov#', 'prov');
 export const SKOS = namespace('http://www.w3.org/2004/02/skos/core#', 'skos');
+export const DCT = namespace('http://purl.org/dc/terms/', 'dct');
+export const MOBILITEIT = namespace(
+  'https://data.vlaanderen.be/ns/mobiliteit#',
+  'mobiliteit'
+);

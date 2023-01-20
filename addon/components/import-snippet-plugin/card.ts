@@ -5,6 +5,7 @@ import { ProseParser } from '@lblod/ember-rdfa-editor';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { RdfaSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 type Args = {
   controller: ProseController;
@@ -21,19 +22,14 @@ export default class ImportSnippetPluginCard extends Component<Args> {
   }
 
   get insertRange() {
-    const selection = this.controller.state.selection;
-    const besluitRange = [
-      ...this.controller.datastore
-        .limitToRange(this.controller.state, selection.from, selection.to)
-        .match(null, 'a', '>http://data.vlaanderen.be/ns/besluit#Besluit')
-        .asSubjectNodeMapping()
-        .nodes(),
-    ][0];
-    if (besluitRange) {
-      const { to } = besluitRange;
+    const { selection } = this.controller.state;
+    const besluit = findParentNodeOfType(this.controller.schema.nodes.besluit)(
+      selection
+    );
+    if (besluit) {
       return {
-        from: to - 1,
-        to: to - 1,
+        from: besluit.pos + besluit.node.nodeSize - 1,
+        to: besluit.pos + besluit.node.nodeSize - 1,
       };
     } else {
       return selection;
