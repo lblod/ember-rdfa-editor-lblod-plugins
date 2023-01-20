@@ -112,6 +112,9 @@ const emberNodeConfig: EmberNodeConfig = {
           const datatype = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
             ?.getAttribute('datatype');
+          if (!mappingResource) {
+            return false;
+          }
           return {
             variableInstance:
               variableInstance ??
