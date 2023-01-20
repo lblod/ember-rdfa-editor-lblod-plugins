@@ -7,6 +7,9 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
+const CONTENT_SELECTOR = `div[property~='${
+  DCT('description').full
+}'],div[property~='${DCT('description').prefixed}']`;
 export const roadsign_regulation: NodeSpec = {
   content: 'block+',
   group: 'block',
@@ -15,7 +18,9 @@ export const roadsign_regulation: NodeSpec = {
     resourceUri: {},
     measureUri: {},
     zonality: {},
-    temporal: {},
+    temporal: {
+      default: false,
+    },
   },
   toDOM(node) {
     const { resourceUri, measureUri, zonality, temporal } = node.attrs;
@@ -45,9 +50,8 @@ export const roadsign_regulation: NodeSpec = {
       [
         'span',
         {
-          style: 'display:none;',
           property: EXT('temporal'),
-          resource: (temporal as string | false).toString(),
+          resource: (temporal as string) ?? false,
         },
       ],
       ['div', { property: DCT('description') }, 0],
@@ -58,7 +62,12 @@ export const roadsign_regulation: NodeSpec = {
       tag: 'div',
       getAttrs(node: HTMLElement) {
         if (
-          hasRDFaAttribute(node, 'typeof', MOBILITEIT('Mobiliteitsmaatregel'))
+          hasRDFaAttribute(
+            node,
+            'typeof',
+            MOBILITEIT('Mobiliteitsmaatregel')
+          ) &&
+          node.querySelector(CONTENT_SELECTOR)
         ) {
           const resourceUri = node.getAttribute('resource');
           const measureUri = node
@@ -73,6 +82,9 @@ export const roadsign_regulation: NodeSpec = {
            span[property~='${EXT('zonality').full}']`
             )
             ?.getAttribute('resource');
+          if (!resourceUri || !measureUri || !zonality) {
+            return false;
+          }
           const temporal = node
             .querySelector(
               `span[property~='${EXT('temporal').prefixed}'],
@@ -89,6 +101,7 @@ export const roadsign_regulation: NodeSpec = {
         }
         return false;
       },
+      contentElement: CONTENT_SELECTOR,
     },
   ],
 };
