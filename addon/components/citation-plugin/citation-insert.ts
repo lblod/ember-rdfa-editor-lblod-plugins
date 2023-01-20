@@ -52,7 +52,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   }
 
   get disableInsert() {
-    if (!this.activeRanges) {
+    if (!this.activeRanges || this.controller.inEmbeddedView) {
       return true;
     }
     const { from } = this.controller.state.selection;

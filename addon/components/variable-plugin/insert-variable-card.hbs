@@ -1,9 +1,8 @@
-<div {{did-update this.selectionChanged @controller.state}}>
 {{#if this.showCard}}
   <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
     <c.header>
       <AuHeading @level="3" @skin="6">
-        {{t "insert-variable-plugin.variable"}}
+        {{t "variable-plugin.insertVariable"}}
       </AuHeading>
     </c.header>
     <c.content>
@@ -27,8 +26,9 @@
           {{subtype.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{or (not this.selectedVariable) (and this.hasSubtype (not this.selectedSubtype))}}>{{t "insert-variable-plugin.button"}}</AuButton>
+      <AuButton {{on 'click' this.insert}} @disabled={{or (not this.selectedVariable)
+                                                          (and this.hasSubtype (not this.selectedSubtype))}}>{{t
+        "variable-plugin.button"}}</AuButton>
     </c.content>
   </AuCard>
 {{/if}}
-</div>

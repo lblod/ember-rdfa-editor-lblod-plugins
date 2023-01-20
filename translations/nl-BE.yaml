@@ -79,9 +79,10 @@ date-plugin:
     hours: "Uur"
     minutes: "Minuten"
     now: "Nu"
-insert-variable-plugin:
-  variable: Voeg variabele in
+variable-plugin:
+  insertVariable: Voeg variabele in
   button: Voeg in
+  enterVariableValue: Selecteer waarde
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
@@ -127,7 +128,7 @@ article-structure-plugin:
     section:
       heading: Voeg afdeling in
       body: Voeg inhoud afdeling in
-    subsection: 
+    subsection:
       heading: Voeg onderafdeling in
       body: Voeg inhoud onderafdeling in
     article:

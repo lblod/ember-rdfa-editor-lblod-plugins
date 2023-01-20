@@ -117,8 +117,12 @@ export const article_paragraph: NodeSpec = {
         return false;
       },
       getContent: (node, schema) => {
-        const content = node.lastChild?.textContent ?? '';
-        return Fragment.from(schema.text(content));
+        const content = node.lastChild?.textContent;
+        if (content) {
+          return Fragment.from(schema.text(content));
+        } else {
+          return Fragment.empty;
+        }
       },
     },
   ],

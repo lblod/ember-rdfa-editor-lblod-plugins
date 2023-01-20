@@ -78,9 +78,10 @@ date-plugin:
     hours: "Hours"
     minutes: "Minutes"
     now: "Now"
-insert-variable-plugin:
-  variable: Insert variable
+variable-plugin:
+  insertVariable: Insert variable
   button: Insert
+  enterVariableValue: Select value
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph
@@ -126,7 +127,7 @@ article-structure-plugin:
     section:
       heading: Insert section heading
       body: Insert section content
-    subsection: 
+    subsection:
       heading: Insert subsection heading
       body: Insert subsection content
     article:

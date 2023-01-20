@@ -31,6 +31,6 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
         tr.setSelection(new NodeSelection(resolvedPos));
       }
       return tr;
-    });
+    }, true);
   }
 }
