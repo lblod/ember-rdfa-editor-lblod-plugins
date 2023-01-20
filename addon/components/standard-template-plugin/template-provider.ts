@@ -67,22 +67,22 @@ export default class TemplateProviderComponent extends Component<Args> {
   templateIsApplicable(template: TemplateModel) {
     const { $from } = this.controller.state.selection;
     const containsTypes =
-      // this.controller.externalContextStore
-      //   .match(null, 'a')
-      //   .dataset.some((quad) => {
-      //     return template.contexts.includes(quad.object.value);
-      //   }) ||
+      this.controller.externalContextStore
+        .match(null, 'a')
+        .dataset.some((quad) => {
+          return template.contexts.includes(quad.object.value);
+        }) ||
       findAncestors($from, (node) => {
         return template.contexts.some((type) =>
           pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type])
         );
       }).length;
     const containsDisabledTypes =
-      // this.controller.externalContextStore
-      //   .match(null, 'a')
-      //   .dataset.some((quad) => {
-      //     return template.disabledInContexts.includes(quad.object.value);
-      //   }) ||
+      this.controller.externalContextStore
+        .match(null, 'a')
+        .dataset.some((quad) => {
+          return template.disabledInContexts.includes(quad.object.value);
+        }) ||
       findAncestors($from, (node) => {
         return template.disabledInContexts.some((type) =>
           pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type])
@@ -102,12 +102,6 @@ export default class TemplateProviderComponent extends Component<Args> {
       $from.parent.type === this.controller.schema.nodes['placeholder'] &&
       $from.sameParent($to)
     ) {
-      insertRange = {
-        from: $from.start($from.depth - 1),
-        to: $from.end($from.depth - 1),
-      };
-    }
-    if ($from.parent.type === this.controller.schema.nodes.paragraph) {
       insertRange = {
         from: $from.start($from.depth - 1),
         to: $from.end($from.depth - 1),
