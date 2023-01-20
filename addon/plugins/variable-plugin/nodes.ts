@@ -8,6 +8,11 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { v4 as uuidv4 } from 'uuid';
+
+const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'], 
+                          span[property~='${EXT('content').full}']`;
+
 const emberNodeConfig: EmberNodeConfig = {
   name: 'variable',
   componentPath: 'variable-plugin/variable',
@@ -15,11 +20,13 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline',
   content: 'inline*',
   atom: true,
+  draggable: false,
   attrs: {
     mappingResource: {},
-    variableResource: {
+    codelistResource: {
       default: null,
     },
+    variableInstance: {},
     source: {
       default: null,
     },
@@ -31,8 +38,14 @@ const emberNodeConfig: EmberNodeConfig = {
     },
   },
   toDOM: (node) => {
-    const { mappingResource, variableResource, type, datatype, source } =
-      node.attrs;
+    const {
+      mappingResource,
+      codelistResource,
+      variableInstance,
+      type,
+      datatype,
+      source,
+    } = node.attrs;
     const sourceSpan = source
       ? [
           [
@@ -41,13 +54,13 @@ const emberNodeConfig: EmberNodeConfig = {
           ],
         ]
       : [];
-    const variableResourceSpan = variableResource
+    const codelistResourceSpan = codelistResource
       ? [
           [
             'span',
             {
-              property: EXT('codelist').prefixed,
-              resource: variableResource as string,
+              property: EXT('codelist').prefixed, //becomes EXT('instance')
+              resource: codelistResource as string,
             },
           ],
         ]
@@ -58,9 +71,13 @@ const emberNodeConfig: EmberNodeConfig = {
         resource: mappingResource as string,
         typeof: EXT('Mapping').prefixed,
       },
+      [
+        'span',
+        { property: EXT('instance'), resource: variableInstance as string },
+      ],
       ['span', { property: DCT('type').prefixed, content: type as string }],
       ...sourceSpan,
-      ...variableResourceSpan,
+      ...codelistResourceSpan,
       [
         'span',
         {
@@ -75,9 +92,15 @@ const emberNodeConfig: EmberNodeConfig = {
     {
       tag: 'span',
       getAttrs: (node: HTMLElement) => {
-        if (hasRDFaAttribute(node, 'typeof', EXT('Mapping'))) {
+        if (
+          hasRDFaAttribute(node, 'typeof', EXT('Mapping')) &&
+          node.querySelector(CONTENT_SELECTOR)
+        ) {
+          const variableInstance = [...node.children]
+            .find((el) => hasRDFaAttribute(el, 'property', EXT('instance')))
+            ?.getAttribute('resource');
           const mappingResource = node.getAttribute('resource');
-          const variableResource = [...node.children]
+          const codelistResource = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('codelist')))
             ?.getAttribute('resource');
           const source = [...node.children]
@@ -89,12 +112,20 @@ const emberNodeConfig: EmberNodeConfig = {
           const datatype = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
             ?.getAttribute('datatype');
-          return { mappingResource, variableResource, source, type, datatype };
+          return {
+            variableInstance:
+              variableInstance ??
+              `http://data.lblod.info/variables/${uuidv4()}`,
+            mappingResource,
+            codelistResource,
+            source,
+            type,
+            datatype,
+          };
         }
         return false;
       },
-      contentElement: `span[property~='${EXT('content').prefixed}'], 
-                       span[property~='${EXT('content').full}']`,
+      contentElement: CONTENT_SELECTOR,
     },
   ],
 };

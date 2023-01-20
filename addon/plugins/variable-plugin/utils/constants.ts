@@ -22,10 +22,12 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     label: 'text',
     constructor: (schema) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
+      const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
         'variable',
         {
           mappingResource: mappingURI,
+          variableInstance,
           type: 'text',
         },
         schema.node('placeholder', { placeholderText: 'text' })
@@ -36,10 +38,12 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     label: 'number',
     constructor: (schema) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
+      const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
         'variable',
         {
           mappingResource: mappingURI,
+          variableInstance,
           type: 'number',
           datatype: XSD('integer').prefixed,
         },
@@ -61,11 +65,13 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     label: 'location',
     constructor: (schema, endpoint) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
+      const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
         'variable',
         {
           type: 'location',
           mappingResource: mappingURI,
+          variableInstance,
           source: endpoint,
         },
         schema.node('placeholder', {
@@ -82,12 +88,14 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     },
     constructor: (schema, endpoint, selectedCodelist?: CodeList) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
+      const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
         'variable',
         {
           type: 'codelist',
           mappingResource: mappingURI,
-          variableResource: selectedCodelist?.uri,
+          codelistResource: selectedCodelist?.uri,
+          variableInstance,
           source: endpoint,
         },
         schema.node('placeholder', {
