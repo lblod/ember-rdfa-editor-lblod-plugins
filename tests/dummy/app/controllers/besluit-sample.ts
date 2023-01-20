@@ -6,8 +6,8 @@ import {
   ProseController,
   WidgetSpec,
 } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Plugin } from 'prosemirror-state';
-import { Schema } from 'prosemirror-model';
+import { Plugin } from '@lblod/ember-rdfa-editor';
+import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   em,
   link,
@@ -182,7 +182,8 @@ export default class BesluitSampleController extends Controller {
         'https://dev.kleinbord.lblod.info/snippets/example-opstellingen.html',
       mock: 'true',
     });
-    const presetContent = sampleData.DecisionTemplate;
+    const presetContent =
+      localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
