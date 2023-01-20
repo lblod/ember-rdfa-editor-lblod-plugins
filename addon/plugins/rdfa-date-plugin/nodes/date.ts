@@ -5,8 +5,7 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { formatWithOptions } from 'date-fns/fp';
-import { nlBE } from 'date-fns/locale';
+import { formatDate } from '../utils';
 
 export type DateOptions = {
   placeholder: {
@@ -53,6 +52,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       const dateAttrs = {
         datatype: datatype.prefixed,
         property: EXT('content').prefixed,
+        'data-format': format as string,
         ...(!!value && { content: value as string }),
       };
       if (mappingResource) {
@@ -82,6 +82,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
             return {
               value: node.getAttribute('content'),
               onlyDate,
+              format: node.dataset.format,
             };
           }
           return false;
@@ -109,6 +110,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
                 mappingResource,
                 onlyDate,
                 value: dateNode?.getAttribute('content'),
+                format: dateNode?.getAttribute('data-format'),
               };
             }
           }
@@ -118,9 +120,5 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
     ],
   };
 };
-
-function formatDate(date: Date, format: string) {
-  return formatWithOptions({ locale: nlBE }, format)(date);
-}
 
 export default date;
