@@ -1,18 +1,4 @@
-<span class="au-c-pill-container">
-  <span class="au-c-pill {{if this.editing 'au-c-pill--ongoing'}} {{unless this.editing 'au-c-pill--default' }}">
-    <div {{did-insert this.didInsertContentWrapper}} {{did-update this.onNodeUpdate @node}}>
-      {{#unless this.editing}}
-      {{this.htmlContent}}
-      {{/unless}}
-    </div>
-  </span>
-  {{#if this.editing}}
-  <button class="au-c-pill-action au-c-pill--ongoing" type="button" {{on "click" this.disableEditing}}>
-    <AuIcon @icon="check" />
-  </button>
-  {{else}}
-  <button class="au-c-pill-action au-c-pill--default" type="button" {{on "click" this.enableEditing}}>
-    <AuIcon @icon="pencil" />
-  </button>
-  {{/if}}
-</span>
+<AuPill @icon="pencil" @iconAlignment="right" class="variable">
+  <div {{did-insert this.didInsertContentWrapper}} {{did-update this.onNodeUpdate @node}}>
+  </div>
+</AuPill>

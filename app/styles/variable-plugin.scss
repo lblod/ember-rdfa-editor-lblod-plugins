@@ -44,16 +44,22 @@
 }
 
 .ember-node {
-  .au-c-pill {
+  .variable {
     [contenteditable] {
+      white-space: pre-wrap;
+      word-wrap: break-word;
       outline: 0px;
     }
   }
 }
 
 .ember-node.ProseMirror-selectednode {
-  .au-c-pill, .au-c-pill-action {
+  .variable {
     background-color: var(--au-blue-200);
     outline: 2px solid var(--au-blue-500);
+
+    ::selection {
+      background-color: var(--au-blue-300);
+    }
   }
 }

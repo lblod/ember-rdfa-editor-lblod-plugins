@@ -25,15 +25,14 @@
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import {
   DOMSerializer,
   EditorState,
   EditorView,
   keymap,
+  NodeSelection,
   redo,
   Schema,
-  Selection,
   StepMap,
   Transaction,
   undo,
@@ -65,8 +64,8 @@ import {
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
 export default class Variable extends Component<EmberNodeArgs> {
-  @tracked
-  editing = false;
+  // @tracked
+  // editing = false;
 
   innerView: EditorView | null = null;
 
@@ -125,70 +124,60 @@ export default class Variable extends Component<EmberNodeArgs> {
   }
 
   @action
+  onFocus() {
+    const outerSelectionTr = this.outerView.state.tr;
+    const outerSelection = new NodeSelection(
+      this.outerView.state.doc.resolve(this.pos)
+    );
+    outerSelectionTr.setSelection(outerSelection);
+    this.outerView.dispatch(outerSelectionTr);
+  }
+
+  @action
   didInsertContentWrapper(target: Element) {
     this.contentWrapper = target;
-  }
+    this.innerView = new EditorView(this.contentWrapper, {
+      state: EditorState.create({
+        doc: this.node,
+        plugins: [
+          keymap({
+            'Mod-z': () =>
+              undo(this.outerView.state, this.outerView.dispatch.bind(this)),
+            'Mod-Z': () =>
+              undo(this.outerView.state, this.outerView.dispatch.bind(this)),
+            'Mod-y': () =>
+              redo(this.outerView.state, this.outerView.dispatch.bind(this)),
+            'Mod-Y': () =>
+              redo(this.outerView.state, this.outerView.dispatch.bind(this)),
+            'Mod-b': toggleMarkAddFirst(this.schema.marks.strong),
+            'Mod-B': toggleMarkAddFirst(this.schema.marks.strong),
+            'Mod-i': toggleMarkAddFirst(this.schema.marks.em),
+            'Mod-I': toggleMarkAddFirst(this.schema.marks.em),
+            'Mod-u': toggleMarkAddFirst(this.schema.marks.underline),
+            'Mod-U': toggleMarkAddFirst(this.schema.marks.underline),
+          }),
+        ],
+        schema: this.schema,
+      }),
+      dispatchTransaction: this.dispatchInner,
+      handleDOMEvents: {
+        mousedown: () => {
+          // Kludge to prevent issues due to the fact that the whole
+          // footnote is node-selected (and thus DOM-selected) when
+          // the parent editor is focused.
 
-  @action
-  enableEditing() {
-    if (this.contentWrapper) {
-      this.editing = true;
-      this.innerView = new EditorView(this.contentWrapper, {
-        state: EditorState.create({
-          doc: this.node,
-          plugins: [
-            keymap({
-              'Mod-z': () =>
-                undo(this.outerView.state, this.outerView.dispatch.bind(this)),
-              'Mod-Z': () =>
-                undo(this.outerView.state, this.outerView.dispatch.bind(this)),
-              'Mod-y': () =>
-                redo(this.outerView.state, this.outerView.dispatch.bind(this)),
-              'Mod-Y': () =>
-                redo(this.outerView.state, this.outerView.dispatch.bind(this)),
-              'Mod-b': toggleMarkAddFirst(this.schema.marks.strong),
-              'Mod-B': toggleMarkAddFirst(this.schema.marks.strong),
-              'Mod-i': toggleMarkAddFirst(this.schema.marks.em),
-              'Mod-I': toggleMarkAddFirst(this.schema.marks.em),
-              'Mod-u': toggleMarkAddFirst(this.schema.marks.underline),
-              'Mod-U': toggleMarkAddFirst(this.schema.marks.underline),
-            }),
-          ],
-          schema: this.schema,
-        }),
-        dispatchTransaction: this.dispatchInner,
-        handleDOMEvents: {
-          mousedown: () => {
-            // Kludge to prevent issues due to the fact that the whole
-            // footnote is node-selected (and thus DOM-selected) when
-            // the parent editor is focused.
-            if (this.outerView.hasFocus()) this.innerView?.focus();
-          },
+          if (this.outerView.hasFocus()) this.innerView?.focus();
         },
-      });
-      // Ensure that the outer selection is not a node selection of the variable
-      // const outerSelectionTr = this.outerView.state.tr;
-      // const outerSelection = Selection.near(
-      //   this.outerView.state.doc.resolve(this.pos + this.node.nodeSize)
-      // );
-      // outerSelectionTr.setSelection(outerSelection);
-      // this.outerView.dispatch(outerSelectionTr);
-
-      //Set the selection of the inner view at the end of its content
-      const innerSelectionTr = this.innerView.state.tr;
-      const innerSelection = Selection.atEnd(this.innerView.state.doc);
-      innerSelectionTr.setSelection(innerSelection);
-      this.innerView.dispatch(innerSelectionTr);
-      this.innerView.focus();
-      this.editing = true;
-    }
-  }
-
-  @action
-  disableEditing() {
-    this.innerView?.destroy();
-    this.innerView = null;
-    this.editing = false;
+        focus: () => {
+          const outerSelectionTr = this.outerView.state.tr;
+          const outerSelection = new NodeSelection(
+            this.outerView.state.doc.resolve(this.pos)
+          );
+          outerSelectionTr.setSelection(outerSelection);
+          this.outerView.dispatch(outerSelectionTr);
+        },
+      },
+    });
   }
 
   @action
