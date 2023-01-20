@@ -74,7 +74,6 @@ export const titleSpec: StructureSpec = {
 export const title = constructStructureNodeSpec({
   type: SAY('Title'),
   content: 'structure_header title_body',
-  group: 'block',
 });
 
 export const title_body = constructStructureBodyNodeSpec({

@@ -88,7 +88,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     return new Schema({
       nodes: {
         doc: {
-          content: 'table_of_contents? block+',
+          content: 'table_of_contents? (chapter|block)+|(title|block)+',
         },
         paragraph,
 
