@@ -78,5 +78,5 @@ export const title = constructStructureNodeSpec({
 });
 
 export const title_body = constructStructureBodyNodeSpec({
-  content: '(chapter|paragraph)+|(article|paragraph)+',
+  content: '(chapter|block)+|(article|block)+',
 });

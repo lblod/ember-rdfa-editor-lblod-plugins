@@ -104,7 +104,7 @@ export const motivering: NodeSpec = {
 
 export const article_container: NodeSpec = {
   group: 'block',
-  content: '(paragraph|besluit_article)+',
+  content: '(block|besluit_article)+',
   inline: false,
   attrs: {
     ...rdfaAttrs,

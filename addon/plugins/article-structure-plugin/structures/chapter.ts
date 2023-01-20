@@ -78,5 +78,5 @@ export const chapter = constructStructureNodeSpec({
 });
 
 export const chapter_body = constructStructureBodyNodeSpec({
-  content: '(section|paragraph)+|(article|paragraph)+',
+  content: '(section|block)+|(article|block)+',
 });
