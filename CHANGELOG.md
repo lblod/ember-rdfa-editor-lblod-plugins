@@ -12,6 +12,11 @@
 
 
 
+## 1.0.0-beta.3 (2023-01-23)
+
+add onclick handler to pencil icon in variable plugin
+
+
 ## 1.0.0-beta.2 (2023-01-23)
 
 #### :boom: Breaking Change
