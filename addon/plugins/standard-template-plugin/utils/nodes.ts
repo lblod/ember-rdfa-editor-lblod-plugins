@@ -58,11 +58,11 @@ export const description: NodeSpec = {
     },
   },
   toDOM(node) {
-    return ['p', node.attrs, 0];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
-      tag: 'p',
+      tag: 'div,p',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('description'))) {
           return getRdfaAttrs(element);
@@ -87,11 +87,11 @@ export const motivering: NodeSpec = {
     },
   },
   toDOM(node) {
-    return ['p', node.attrs, 0];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
-      tag: 'div,p',
+      tag: 'div',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
           return getRdfaAttrs(element);
@@ -235,7 +235,7 @@ export const besluit_article_header: NodeSpec = {
     delete toplevelAttrs.number;
     delete toplevelAttrs.datatype;
     return [
-      'p',
+      'div',
       toplevelAttrs,
       'Artikel ',
       [
@@ -247,7 +247,7 @@ export const besluit_article_header: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'p',
+      tag: 'p,div',
       getAttrs(element: HTMLElement) {
         const numberNode = element.querySelector(
           `span[property~='${ELI('number').prefixed}'],
