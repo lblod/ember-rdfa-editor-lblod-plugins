@@ -1,4 +1,10 @@
-<AuPill @icon="pencil" @iconAlignment="right" class="variable">
+<AuPill @icon="pencil" @iconAlignment="right" class="variable" {{on "click" this.onClick}}>
   <div {{did-insert this.didInsertContentWrapper}} {{did-update this.onNodeUpdate @node}}>
   </div>
 </AuPill>
+
+{{!-- <span class="au-c-pill variable">
+  <div {{did-insert this.didInsertContentWrapper}} {{did-update this.onNodeUpdate @node}}>
+  </div>
+    <AuIcon @icon="pencil" {{on "click" this.onClick}}></AuIcon>
+</span> --}}
