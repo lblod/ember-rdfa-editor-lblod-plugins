@@ -38,6 +38,7 @@ import {
   RdfaEditorView,
   redo,
   Schema,
+  Selection,
   splitBlock,
   StepMap,
   Transaction,
@@ -143,6 +144,17 @@ export default class Variable extends Component<EmberNodeArgs> {
     );
     outerSelectionTr.setSelection(outerSelection);
     this.outerView.dispatch(outerSelectionTr);
+  }
+
+  @action
+  onClick() {
+    if (this.innerView && !this.innerView.hasFocus()) {
+      this.innerView.focus();
+      const tr = this.innerView.state.tr;
+      const selection = Selection.atEnd(tr.doc);
+      tr.setSelection(selection);
+      this.innerView.dispatch(tr);
+    }
   }
 
   @action
