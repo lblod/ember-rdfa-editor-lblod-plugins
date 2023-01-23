@@ -57,15 +57,10 @@ besluit-type-plugin:
   error-first-body: "Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer"
   error-rest-body: ". Voor meer specifieke details, controleer de console in de browser."
 besluit-plugin:
-  card:
-    title: Artikels bewerken
   insert:
-    article: Voeg artikel in
     decision-title: Voeg besluittitel in
-  action:
-    delete-article: Artikel verwijderen
-    article-up: Artikel naar boven verplaatsen
-    article-down: Artikel naar beneden verplaatsen
+  placeholder:
+    decision-title: Geef titel besluit op
 date-plugin:
   insert:
     date: "Datum invoegen"
