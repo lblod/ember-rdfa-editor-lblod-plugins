@@ -13,7 +13,6 @@ export type SpecName = string;
 
 export type StructureSpec = {
   name: SpecName;
-  // context: SpecName[];
   translations: {
     insert: string;
     move: {
@@ -41,6 +40,7 @@ export type StructureSpec = {
   }) => Transaction;
   content?: (args: { pos: number; state: EditorState }) => Fragment;
   continuous: boolean;
+  limitTo?: string;
 };
 
 export type ArticleStructurePluginOptions = StructureSpec[];
