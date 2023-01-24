@@ -12,6 +12,20 @@
 
 
 
+
+## 1.0.0-beta.4 (2023-01-24)
+
+#### :bug: Bug Fix
+* [#72](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/72) Enable word-break as break-all on variable contenteditable ([@elpoelma](https://github.com/elpoelma))
+* [#71](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/71) Avoid writing out p tags for nodes different than paragraph ([@elpoelma](https://github.com/elpoelma))
+
+#### :house: Internal
+* [#73](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/73) Make besluit title optional ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
+
 ## 1.0.0-beta.3 (2023-01-23)
 
 add onclick handler to pencil icon in variable plugin
