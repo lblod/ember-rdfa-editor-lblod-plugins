@@ -295,7 +295,7 @@ export const besluit_article_content: NodeSpec = {
 
 export const besluit: NodeSpec = {
   group: 'block',
-  content: 'block*title{1}block*description?block*motivering?block*',
+  content: 'block*title?block*description?block*motivering?block*',
   inline: false,
   attrs: {
     ...rdfaAttrs,

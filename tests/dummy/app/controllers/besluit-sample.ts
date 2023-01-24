@@ -68,6 +68,7 @@ import {
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
+import { besluitPluginCardWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 
 const citation = setupCitationPlugin({
   type: 'nodes',
@@ -145,6 +146,7 @@ export default class BesluitSampleController extends Controller {
   @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
+    besluitPluginCardWidget,
     besluitTypeWidget,
     importSnippetWidget,
     rdfaDateCardWidget(),
