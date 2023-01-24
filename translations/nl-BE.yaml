@@ -57,6 +57,7 @@ besluit-type-plugin:
   error-first-body: "Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer"
   error-rest-body: ". Voor meer specifieke details, controleer de console in de browser."
 besluit-plugin:
+  missing-title-warning: Dit besluit heeft geen titel
   insert:
     decision-title: Voeg besluittitel in
   placeholder:
