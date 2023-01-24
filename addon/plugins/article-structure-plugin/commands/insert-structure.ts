@@ -31,6 +31,7 @@ const insertStructure = (
       selection,
       nodeType: schema.nodes[structureSpec.name],
       schema,
+      limitTo: structureSpec.limitTo,
     });
     if (!insertionRange) {
       return false;
@@ -86,10 +87,14 @@ function findInsertionRange(args: {
     }
   }
   const limitContainer = limitTo
-    ? findParentNodeOfType(schema.nodes['limitTo'])(selection)
+    ? findParentNodeOfType(schema.nodes[limitTo])(selection)
     : null;
+
   const limitContainerRange = limitContainer
-    ? { from: limitContainer.pos, to: limitContainer.node.nodeSize }
+    ? {
+        from: limitContainer.pos,
+        to: limitContainer.pos + limitContainer.node.nodeSize,
+      }
     : { from: 0, to: doc.nodeSize };
   const filterFunction = ({ from, to }: { from: number; to: number }) => {
     if (from >= limitContainerRange.from && to <= limitContainerRange.to) {
