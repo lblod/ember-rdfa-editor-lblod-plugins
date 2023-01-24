@@ -177,6 +177,7 @@ export const besluitArticleStructure: StructureSpec = {
     },
     remove: 'article-structure-plugin.remove.article',
   },
+  limitTo: 'besluit',
   constructor: ({ schema, number, content, intl }) => {
     const numberConverted = number?.toString() ?? '1';
     const node = schema.node(

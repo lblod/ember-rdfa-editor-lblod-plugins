@@ -14,6 +14,7 @@ import wrapStructureContent from './wrap-structure-content';
 import IntlService from 'ember-intl/services/intl';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { containsOnlyPlaceholder } from '../utils/structure';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 const insertStructure = (
   structureSpec: StructureSpec,
@@ -22,6 +23,9 @@ const insertStructure = (
 ): Command => {
   return (state, dispatch) => {
     const { schema, selection, doc } = state;
+    if (wrapStructureContent(structureSpec, intl)(state, dispatch)) {
+      return true;
+    }
     const insertionRange = findInsertionRange({
       doc,
       selection,
@@ -29,7 +33,7 @@ const insertStructure = (
       schema,
     });
     if (!insertionRange) {
-      return wrapStructureContent(structureSpec, intl)(state, dispatch);
+      return false;
     }
     if (dispatch) {
       const { node: newStructureNode, selectionConfig } =
@@ -65,8 +69,9 @@ function findInsertionRange(args: {
   selection: Selection;
   nodeType: NodeType;
   schema: Schema;
+  limitTo?: string;
 }) {
-  const { doc, selection, nodeType, schema } = args;
+  const { doc, selection, nodeType, schema, limitTo } = args;
   const { $from } = selection;
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
@@ -80,21 +85,26 @@ function findInsertionRange(args: {
       }
     }
   }
-  const nextContainerRange = findNodes(
-    doc,
-    selection.from,
-    true,
-    false,
-    ({ from }) => {
+  const limitContainer = limitTo
+    ? findParentNodeOfType(schema.nodes['limitTo'])(selection)
+    : null;
+  const limitContainerRange = limitContainer
+    ? { from: limitContainer.pos, to: limitContainer.node.nodeSize }
+    : { from: 0, to: doc.nodeSize };
+  const filterFunction = ({ from, to }: { from: number; to: number }) => {
+    if (from >= limitContainerRange.from && to <= limitContainerRange.to) {
       const node = doc.nodeAt(from);
       if (node) {
         if (node.canReplaceWith(node.childCount, node.childCount, nodeType)) {
           return true;
         }
       }
-      return false;
     }
-  ).next().value;
+    return false;
+  };
+  const nextContainerRange =
+    findNodes(doc, selection.from, true, false, filterFunction).next().value ??
+    findNodes(doc, selection.from, true, true, filterFunction).next().value;
   if (nextContainerRange) {
     const { from, to } = nextContainerRange;
     const containerNode = doc.nodeAt(from);
