@@ -19,6 +19,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 export const title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
+  defining: true,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -33,7 +34,7 @@ export const title: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'h4',
+      tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('title'))) {
           return getRdfaAttrs(element);
@@ -298,6 +299,7 @@ export const besluit: NodeSpec = {
   group: 'block',
   content: 'block*title?block*description?block*motivering?block*',
   inline: false,
+  defining: true,
   attrs: {
     ...rdfaAttrs,
     property: {
