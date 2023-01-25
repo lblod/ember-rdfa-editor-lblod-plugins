@@ -33,6 +33,7 @@ import {
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
+  tableKeymap,
   tableMenu,
   tableNodes,
   tablePlugin,
@@ -143,7 +144,7 @@ export default class BesluitSampleController extends Controller {
       variable: variableView(controller),
     };
   };
-  @tracked plugins: Plugin[] = [tablePlugin, citation.plugin];
+  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitPluginCardWidget,
