@@ -50,6 +50,12 @@ export const article_paragraph: NodeSpec = {
   content: 'inline*',
   inline: false,
   attrs: {
+    typeof: {
+      default: SAY('Paragraph').prefixed,
+    },
+    property: {
+      default: SAY('hasParagraph').prefixed,
+    },
     resource: {},
     number: {
       default: '1',
@@ -59,8 +65,8 @@ export const article_paragraph: NodeSpec = {
     return [
       'div',
       {
-        property: SAY('hasParagraph').prefixed,
-        typeof: SAY('Paragraph').prefixed,
+        property: node.attrs.property as string,
+        typeof: node.attrs.typeof as string,
         resource: node.attrs.resource as string,
       },
       '$',
