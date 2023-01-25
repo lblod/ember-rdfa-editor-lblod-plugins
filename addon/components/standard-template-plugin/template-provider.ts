@@ -98,10 +98,17 @@ export default class TemplateProviderComponent extends Component<Args> {
     const selection = this.controller.state.selection;
     let insertRange: { from: number; to: number } = selection;
     const { $from, $to } = selection;
-    if (
+    const isInPlaceholder =
       $from.parent.type === this.controller.schema.nodes['placeholder'] &&
-      $from.sameParent($to)
-    ) {
+      $from.sameParent($to);
+    // if we would be completely replacing the contents of a simple paragraph node,
+    // replace the entire node instead
+    const isInSimpleParagraph =
+      $from.parent.type === this.controller.schema.nodes.paragraph &&
+      $from.sameParent($to) &&
+      $from.pos === $from.start() &&
+      $to.pos === $to.end();
+    if (isInPlaceholder || isInSimpleParagraph) {
       insertRange = {
         from: $from.start($from.depth - 1),
         to: $from.end($from.depth - 1),
