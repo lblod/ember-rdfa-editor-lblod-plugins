@@ -14,6 +14,15 @@
 
 
 
+
+## 1.0.0-beta.7 (2023-01-25)
+
+#### :bug: Bug Fix
+* [#82](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/82) Add typeof and property to article_paragraph attrs ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## 1.0.0-beta.6 (2023-01-25)
 
 #### :bug: Bug Fix
