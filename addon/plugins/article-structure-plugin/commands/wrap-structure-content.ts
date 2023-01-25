@@ -15,6 +15,9 @@ const wrapStructureContent = (
   intl: IntlService
 ): Command => {
   return (state, dispatch) => {
+    if (!structureSpec.content) {
+      return false;
+    }
     const { selection, schema } = state;
     const container = findInsertionContainer(
       selection,
@@ -23,12 +26,6 @@ const wrapStructureContent = (
     if (!container) {
       return false;
     }
-    // const { node, pos } = parent;
-    // if (
-    //   !node.canReplaceWith(0, node.childCount, schema.nodes[structureSpec.name])
-    // ) {
-    //   return false;
-    // }
     const contentToWrap = container.node.content;
 
     let result: {
