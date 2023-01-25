@@ -33,7 +33,7 @@ export const title: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'h4',
+      tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('title'))) {
           return getRdfaAttrs(element);
