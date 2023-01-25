@@ -13,6 +13,18 @@
 
 
 
+## 1.0.0-beta.5 (2023-01-25)
+
+* chore(deps): update editor to beta 7 (ef72b82)
+* Merge pull request #80 (d76dd89)
+* Merge pull request #79 (69a5c62)
+* Merge pull request #78 (fc68bf5)
+* fix(decision-type): remove the old type before adding the new one (701ad87)
+* fix(template): improve insertion behavior of standard templates (96cba5c)
+* fix(nodes): make important nodes defining (5534c00)
+* fix(nodes): make title node also parse on other header levels (9229677)
+
+
 ## 1.0.0-beta.4 (2023-01-24)
 
 #### :bug: Bug Fix
