@@ -14,6 +14,7 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection, PNode, ProseParser } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { A } from '@ember/array';
+import Ember from 'ember';
 
 type Args = {
   controller: ProseController;
@@ -25,7 +26,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   @tracked showCard = false;
   @tracked multiSelect = false;
   @tracked multiModeModalOpen = false;
-  @tracked multiModeSelections: CodeListOption[] = A([]);
+  @tracked multiModeSelections: Ember.MutableArray<CodeListOption> = A([]);
   @tracked selectedMultiOption?: CodeListOption;
   mappingUri?: string;
   zonalLocationCodelistUri: string;
@@ -199,7 +200,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
 
   @action
   insertMultiMode() {
-    this.selectedVariableOption = this.multiModeSelections;
+    this.selectedVariableOption = this.multiModeSelections.toArray();
     this.insert();
     this.toggleMultiModeModal();
   }
@@ -213,17 +214,16 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   moveMultiModeSelection(direction: 'up' | 'down', index: number) {
     if (direction === 'up') {
       const objects = [
-        this.multiModeSelections[index],
-        this.multiModeSelections[index - 1],
-      ];
+        this.multiModeSelections.objectAt(index),
+        this.multiModeSelections.objectAt(index - 1),
+      ] as CodeListOption[];
       this.multiModeSelections.replace(index - 1, 2, objects);
     } else {
       const objects = [
-        this.multiModeSelections[index + 1],
-        this.multiModeSelections[index],
-      ];
+        this.multiModeSelections.objectAt(index + 1),
+        this.multiModeSelections.objectAt(index),
+      ] as CodeListOption[];
       this.multiModeSelections.replace(index, 2, objects);
     }
-    
   }
 }
