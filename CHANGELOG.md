@@ -15,6 +15,15 @@
 
 
 
+
+## 1.0.0-beta.8 (2023-01-26)
+
+#### :house: Internal
+* [#83](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/83) Update editor to 1.0.0 ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## 1.0.0-beta.7 (2023-01-25)
 
 #### :bug: Bug Fix
