@@ -78,6 +78,9 @@ variable-plugin:
   insertVariable: Insert variable
   button: Insert
   enterVariableValue: Select value
+  multi-mode: Enter multi mode
+  add: Add
+  multi-mode-modal-title: Multiple Insertion
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph

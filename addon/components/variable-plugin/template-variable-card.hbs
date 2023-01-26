@@ -28,8 +28,56 @@
           {{variable.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedVariableOption}}>Voeg in</AuButton>
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedVariableOption}}>{{t "variable-plugin.button"}}</AuButton>
+      <AuButton {{on 'click' this.toggleMultiModeModal}}>{{t "variable-plugin.multi-mode"}}</AuButton>
     </c.content>
   </AuCard>
 {{/if}}
 </div>
+<AuModal
+  class="au-c-modal--flush"
+  @size="large"
+  @title={{t "variable-plugin.multi-mode-modal-title"}}
+  @modalOpen={{this.multiModeModalOpen}}
+  @closeModal={{this.toggleMultiModeModal}} as |Modal| >
+  <Modal.Body>
+    <div class="au-u-margin-small">
+      <AuList
+        @direction="vertical"
+        @divider={{true}}
+        as |Item|
+      >
+        {{#each this.multiModeSelections as |selection index|}}
+          <Item>
+            <div class="au-u-padding-small au-u-2-3 au-u-flex">
+              <div class="au-u-4-5">
+                {{selection.label}}
+              </div>
+              <AuButton @icon="arrow-up" @disabled={{eq index 0}} {{on 'click' (fn this.moveMultiModeSelection "up" index)}}></AuButton>
+              <AuButton @icon="arrow-down" @disabled={{eq index (sub this.multiModeSelections.length 1)}} {{on 'click' (fn this.moveMultiModeSelection "down" index)}}></AuButton>
+              <AuButton @icon="bin" @alert={{true}} {{on 'click' (fn this.deleteFromMultiModeSelection index)}}></AuButton>
+            </div>
+          </Item>
+        {{/each}}
+      </AuList>
+      <div class="au-u-2-3 au-u-flex">
+        <div class="au-u-4-5">
+          <PowerSelect
+            @allowClear={{false}}
+            @searchEnabled={{false}}
+            @options={{this.variableOptions}}
+            @selected={{this.selectedMultiOption}}
+            @onChange={{this.updateMultiOptionSelect}} as |variable|
+          >
+            {{variable.label}}
+          </PowerSelect>
+        </div>
+        <AuButton {{on 'click' this.addToMultiModeSelections}} @disabled={{not this.selectedMultiOption}}>{{t "variable-plugin.add"}}</AuButton>
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuButton {{on 'click' this.insertMultiMode}}>{{t "variable-plugin.button"}}</AuButton>
+  </Modal.Footer>
+</AuModal>
+

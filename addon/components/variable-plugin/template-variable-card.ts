@@ -13,6 +13,7 @@ import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection, PNode, ProseParser } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
+import { A } from '@ember/array';
 
 type Args = {
   controller: ProseController;
@@ -23,6 +24,9 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   @tracked selectedVariable: { pos: number; node: PNode } | undefined;
   @tracked showCard = false;
   @tracked multiSelect = false;
+  @tracked multiModeModalOpen = false;
+  @tracked multiModeSelections: CodeListOption[] = A([]);
+  @tracked selectedMultiOption?: CodeListOption;
   mappingUri?: string;
   zonalLocationCodelistUri: string;
   endpoint: string;
@@ -170,5 +174,56 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         ${value}
       </span>
     `;
+  }
+
+  @action
+  toggleMultiModeModal() {
+    this.multiModeModalOpen = !this.multiModeModalOpen;
+    this.multiModeSelections = A([]);
+    this.selectedMultiOption = undefined;
+  }
+
+  @action
+  updateMultiOptionSelect(variableOption: CodeListOption) {
+    this.selectedMultiOption = variableOption;
+  }
+
+  @action
+  addToMultiModeSelections() {
+    console.log(this.selectedMultiOption);
+    if (this.selectedMultiOption) {
+      this.multiModeSelections.pushObject(this.selectedMultiOption);
+    }
+    console.log(this.multiModeSelections);
+  }
+
+  @action
+  insertMultiMode() {
+    this.selectedVariableOption = this.multiModeSelections;
+    this.insert();
+    this.toggleMultiModeModal();
+  }
+
+  @action
+  deleteFromMultiModeSelection(index: number) {
+    this.multiModeSelections.removeAt(index);
+  }
+
+  @action
+  moveMultiModeSelection(direction: 'up' | 'down', index: number) {
+    if (direction === 'up') {
+      const objects = [
+        this.multiModeSelections[index],
+        this.multiModeSelections[index - 1],
+      ];
+      this.multiModeSelections.replace(index - 1, 2, objects);
+    } else {
+      const objects = [
+        this.multiModeSelections[index + 1],
+        this.multiModeSelections[index],
+      ];
+      this.multiModeSelections.replace(index, 2, objects);
+    }
+    
   }
 }
