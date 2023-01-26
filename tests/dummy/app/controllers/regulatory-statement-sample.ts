@@ -67,7 +67,6 @@ import {
   variableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
-import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/recreate-uuids-plugin/plugin/recreateUuidsOnPaste';
 
 const TABLE_OF_CONTENTS_CONFIG = [
   {
@@ -155,12 +154,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       ),
     };
   };
-  @tracked plugins: Plugin[] = [
-    tablePlugin,
-    tableKeymap,
-    citation.plugin,
-    recreateUuidsOnPaste,
-  ];
+  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     rdfaDateCardWidget(),

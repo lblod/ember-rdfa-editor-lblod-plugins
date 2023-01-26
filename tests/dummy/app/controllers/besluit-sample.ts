@@ -69,7 +69,6 @@ import {
   articleStructureInsertWidget,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
-import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/recreate-uuids-plugin/plugin/recreateUuidsOnPaste';
 import { besluitPluginCardWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 
 const citation = setupCitationPlugin({
@@ -145,12 +144,7 @@ export default class BesluitSampleController extends Controller {
       variable: variableView(controller),
     };
   };
-  @tracked plugins: Plugin[] = [
-    tablePlugin,
-    tableKeymap,
-    citation.plugin,
-    recreateUuidsOnPaste,
-  ];
+  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, citation.plugin];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     besluitPluginCardWidget,
