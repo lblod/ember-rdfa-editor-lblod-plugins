@@ -23,24 +23,33 @@
  */
 
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import {
+  chainCommands,
+  createParagraphNear,
   DOMSerializer,
   EditorState,
-  EditorView,
   keymap,
+  liftEmptyBlock,
+  newlineInCode,
   NodeSelection,
+  RdfaEditorView,
   redo,
   Schema,
+  Selection,
+  splitBlock,
   StepMap,
   Transaction,
   undo,
 } from '@lblod/ember-rdfa-editor';
+import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import {
   isSome,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { insertHardBreak } from '@lblod/ember-rdfa-editor/commands/insert-hard-break';
 import { toggleMarkAddFirst } from '@lblod/ember-rdfa-editor/commands/toggle-mark-add-first';
 import {
   link,
@@ -62,12 +71,11 @@ import {
   invisible_rdfa,
 } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import IntlService from 'ember-intl/services/intl';
 
 export default class Variable extends Component<EmberNodeArgs> {
-  // @tracked
-  // editing = false;
-
-  innerView: EditorView | null = null;
+  @service declare intl: IntlService;
+  innerView: RdfaEditorView | null = null;
 
   contentWrapper: Element | null = null;
 
@@ -102,7 +110,12 @@ export default class Variable extends Component<EmberNodeArgs> {
           content: 'block+',
         },
         paragraph,
-
+        date: date({
+          placeholder: {
+            insertDate: this.intl.t('date-plugin.insert.date'),
+            insertDateTime: this.intl.t('date-plugin.insert.datetime'),
+          },
+        }),
         repaired_block,
         placeholder,
 
@@ -134,9 +147,20 @@ export default class Variable extends Component<EmberNodeArgs> {
   }
 
   @action
+  onClick() {
+    if (this.innerView && !this.innerView.hasFocus()) {
+      this.innerView.focus();
+      const tr = this.innerView.state.tr;
+      const selection = Selection.atEnd(tr.doc);
+      tr.setSelection(selection);
+      this.innerView.dispatch(tr);
+    }
+  }
+
+  @action
   didInsertContentWrapper(target: Element) {
     this.contentWrapper = target;
-    this.innerView = new EditorView(this.contentWrapper, {
+    this.innerView = new RdfaEditorView(this.contentWrapper, {
       state: EditorState.create({
         doc: this.node,
         plugins: [
@@ -155,6 +179,13 @@ export default class Variable extends Component<EmberNodeArgs> {
             'Mod-I': toggleMarkAddFirst(this.schema.marks.em),
             'Mod-u': toggleMarkAddFirst(this.schema.marks.underline),
             'Mod-U': toggleMarkAddFirst(this.schema.marks.underline),
+            Enter: chainCommands(
+              newlineInCode,
+              createParagraphNear,
+              liftEmptyBlock,
+              splitBlock,
+              insertHardBreak
+            ),
           }),
         ],
         schema: this.schema,
@@ -175,6 +206,9 @@ export default class Variable extends Component<EmberNodeArgs> {
           );
           outerSelectionTr.setSelection(outerSelection);
           this.outerView.dispatch(outerSelectionTr);
+          if (this.innerView) {
+            this.args.controller.setEmbeddedView(this.innerView);
+          }
         },
       },
     });

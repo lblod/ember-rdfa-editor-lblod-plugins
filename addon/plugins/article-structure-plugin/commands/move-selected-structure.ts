@@ -4,6 +4,7 @@ import {
   NodeType,
   PNode,
   Schema,
+  Selection,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
@@ -12,6 +13,7 @@ import { findAncestorOfType } from '../utils/structure';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import IntlService from 'ember-intl/services/intl';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',
@@ -24,21 +26,24 @@ const moveSelectedStructure = (
     if (!currentStructure || currentStructure.pos === -1) {
       return false;
     }
-    const insertionRange = calculateInsertionRange(
-      doc,
-      currentStructure.pos,
-      currentStructure.node.type,
-      direction,
-      schema
+    const currentStructureSpec = unwrap(
+      options.find((spec) => spec.name === currentStructure.node.type.name)
     );
+    const insertionRange = calculateInsertionRange({
+      doc,
+      pos: currentStructure.pos,
+      nodeType: currentStructure.node.type,
+      selection: state.selection,
+      direction,
+      schema,
+      limitTo: currentStructureSpec.limitTo,
+    });
     if (insertionRange === null || insertionRange === undefined) {
       return false;
     }
     const isNodeSelection = selection instanceof NodeSelection;
     const relativeSelectionOffset = selection.from - currentStructure.pos;
-    const currentStructureSpec = unwrap(
-      options.find((spec) => spec.name === currentStructure.node.type.name)
-    );
+
     if (dispatch) {
       const transaction = state.tr;
       transaction.delete(
@@ -75,13 +80,16 @@ const moveSelectedStructure = (
   };
 };
 
-export function calculateInsertionRange(
-  doc: PNode,
-  pos: number, // position of structure we want to move
-  nodeType: NodeType,
-  direction: 'up' | 'down',
-  schema: Schema
-): { from: number; to: number } | null {
+export function calculateInsertionRange(args: {
+  doc: PNode;
+  pos: number; // position of structure we want to move
+  selection: Selection;
+  nodeType: NodeType;
+  direction: 'up' | 'down';
+  schema: Schema;
+  limitTo?: string;
+}): { from: number; to: number } | null {
+  const { doc, pos, selection, nodeType, direction, schema, limitTo } = args;
   const resolvedPosition = doc.resolve(pos);
   const containerNode = resolvedPosition.parent;
   const index = resolvedPosition.index();
@@ -93,17 +101,29 @@ export function calculateInsertionRange(
     const position = resolvedPosition.posAtIndex(index + 2);
     return { from: position, to: position };
   } else {
+    const limitContainer = limitTo
+      ? findParentNodeOfType(schema.nodes[limitTo])(selection)
+      : null;
+
+    const limitContainerRange = limitContainer
+      ? {
+          from: limitContainer.pos,
+          to: limitContainer.pos + limitContainer.node.nodeSize,
+        }
+      : { from: 0, to: doc.nodeSize };
     const containerRange = findNodes(
       doc,
       pos,
       true,
       direction === 'up',
-      ({ from }) => {
-        const node = doc.nodeAt(from);
-        if (node && node !== containerNode) {
-          const indexToTest = direction === 'up' ? node.childCount : 0;
-          if (node.canReplaceWith(indexToTest, indexToTest, nodeType)) {
-            return true;
+      ({ from, to }) => {
+        if (from >= limitContainerRange.from && to <= limitContainerRange.to) {
+          const node = doc.nodeAt(from);
+          if (node && node !== containerNode) {
+            const indexToTest = direction === 'up' ? node.childCount : 0;
+            if (node.canReplaceWith(indexToTest, indexToTest, nodeType)) {
+              return true;
+            }
           }
         }
         return false;

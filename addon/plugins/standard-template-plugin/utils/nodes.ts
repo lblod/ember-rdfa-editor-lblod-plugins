@@ -19,6 +19,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 export const title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
+  defining: true,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -33,7 +34,7 @@ export const title: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'h4',
+      tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('title'))) {
           return getRdfaAttrs(element);
@@ -58,11 +59,11 @@ export const description: NodeSpec = {
     },
   },
   toDOM(node) {
-    return ['p', node.attrs, 0];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
-      tag: 'p',
+      tag: 'div,p',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('description'))) {
           return getRdfaAttrs(element);
@@ -87,11 +88,11 @@ export const motivering: NodeSpec = {
     },
   },
   toDOM(node) {
-    return ['p', node.attrs, 0];
+    return ['div', node.attrs, 0];
   },
   parseDOM: [
     {
-      tag: 'div,p',
+      tag: 'div',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
           return getRdfaAttrs(element);
@@ -104,7 +105,7 @@ export const motivering: NodeSpec = {
 
 export const article_container: NodeSpec = {
   group: 'block',
-  content: '(paragraph|besluit_article)+',
+  content: '(block|besluit_article)+',
   inline: false,
   attrs: {
     ...rdfaAttrs,
@@ -177,6 +178,7 @@ export const besluitArticleStructure: StructureSpec = {
     },
     remove: 'article-structure-plugin.remove.article',
   },
+  limitTo: 'besluit',
   constructor: ({ schema, number, content, intl }) => {
     const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
@@ -235,7 +237,7 @@ export const besluit_article_header: NodeSpec = {
     delete toplevelAttrs.number;
     delete toplevelAttrs.datatype;
     return [
-      'p',
+      'div',
       toplevelAttrs,
       'Artikel ',
       [
@@ -247,7 +249,7 @@ export const besluit_article_header: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'p',
+      tag: 'p,div',
       getAttrs(element: HTMLElement) {
         const numberNode = element.querySelector(
           `span[property~='${ELI('number').prefixed}'],
@@ -295,8 +297,9 @@ export const besluit_article_content: NodeSpec = {
 
 export const besluit: NodeSpec = {
   group: 'block',
-  content: 'block*title{1}block*description?block*motivering?block*',
+  content: 'block*title?block*description?block*motivering?block*',
   inline: false,
+  defining: true,
   attrs: {
     ...rdfaAttrs,
     property: {

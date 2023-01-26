@@ -32,6 +32,7 @@ import {
   placeholder,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
+  tableKeymap,
   tableMenu,
   tableNodes,
   tablePlugin,
@@ -93,7 +94,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     return new Schema({
       nodes: {
         doc: {
-          content: 'table_of_contents? block+',
+          content: 'table_of_contents? ((chapter|block)+|(title|block)+)',
         },
         paragraph,
 
@@ -103,7 +104,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         ordered_list,
         bullet_list,
         placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date({
           placeholder: {
             insertDate: this.intl.t('date-plugin.insert.date'),
@@ -156,6 +157,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   };
   @tracked plugins: Plugin[] = [
     tablePlugin,
+    tableKeymap,
     citation.plugin,
     recreateUuidsOnPaste,
   ];

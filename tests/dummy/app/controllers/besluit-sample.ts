@@ -33,6 +33,7 @@ import {
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
+  tableKeymap,
   tableMenu,
   tableNodes,
   tablePlugin,
@@ -69,6 +70,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/recreate-uuids-plugin/plugin/recreateUuidsOnPaste';
+import { besluitPluginCardWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
 
 const citation = setupCitationPlugin({
   type: 'nodes',
@@ -99,7 +101,7 @@ export default class BesluitSampleController extends Controller {
         ordered_list,
         bullet_list,
         placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'inline*' }),
+        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date({
           placeholder: {
             insertDate: this.intl.t('date-plugin.insert.date'),
@@ -145,11 +147,13 @@ export default class BesluitSampleController extends Controller {
   };
   @tracked plugins: Plugin[] = [
     tablePlugin,
+    tableKeymap,
     citation.plugin,
     recreateUuidsOnPaste,
   ];
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
+    besluitPluginCardWidget,
     besluitTypeWidget,
     importSnippetWidget,
     rdfaDateCardWidget(),
@@ -188,7 +192,6 @@ export default class BesluitSampleController extends Controller {
     });
     const presetContent =
       localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
-    console.log('PRESET CONTENT: ', presetContent);
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);

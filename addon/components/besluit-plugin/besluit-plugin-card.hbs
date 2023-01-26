@@ -1,20 +1,8 @@
-<AuList::Item>
-  <AuButton
-    @icon="add"
-    @iconAlignment="left"
-    @skin="link"
-    @disabled={{this.hasTitle}}
-    {{on 'click' this.insertTitle}}>
+{{#if this.canInsertTitle}}
+<AuAlert class="title-alert" @skin="warning" @closable={{false}} @icon="alert-triangle" @title={{t "besluit-plugin.missing-title-warning"}}>
+  <AuButton @iconAlignment="left" @skin="link-secondary" @disabled={{not this.canInsertTitle}} {{on 'click'
+    this.insertTitle}}>
     {{t "besluit-plugin.insert.decision-title"}}
   </AuButton>
-</AuList::Item>
-<AuList::Item>
-  <AuButton
-    @icon="add"
-    @iconAlignment="left"
-    @skin="link"
-    @disabled={{this.disableArticleInsert}}
-    {{on "click" this.insertArticle}}>
-    {{t "besluit-plugin.insert.article"}}
-  </AuButton>
-</AuList::Item>
+</AuAlert>
+{{/if}}

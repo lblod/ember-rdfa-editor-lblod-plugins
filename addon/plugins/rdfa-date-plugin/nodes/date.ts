@@ -92,6 +92,10 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
         tag: 'span',
         getAttrs: (node: HTMLElement) => {
           if (hasRDFaAttribute(node, 'typeof', EXT('Mapping'))) {
+            const mappingResource = node.getAttribute('resource');
+            if (!mappingResource) {
+              return false;
+            }
             const variableType = [...node.children]
               .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
               ?.getAttribute('content');
@@ -99,7 +103,6 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
               .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
               ?.getAttribute('datatype');
             if (variableType === 'date' && datatype) {
-              const mappingResource = node.getAttribute('resource');
               const onlyDate = !![...node.children].find((el) =>
                 hasRDFaAttribute(el, 'datatype', XSD('date'))
               );

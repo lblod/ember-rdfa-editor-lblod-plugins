@@ -74,9 +74,8 @@ export const chapterSpec: StructureSpec = {
 export const chapter = constructStructureNodeSpec({
   type: SAY('Chapter'),
   content: 'structure_header chapter_body',
-  group: 'block',
 });
 
 export const chapter_body = constructStructureBodyNodeSpec({
-  content: '(section|paragraph)+|(article|paragraph)+',
+  content: '(section|block)+|(article|block)+',
 });

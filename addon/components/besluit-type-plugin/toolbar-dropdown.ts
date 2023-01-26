@@ -17,6 +17,7 @@ import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+
 declare module 'ember__owner' {
   export default interface Owner {
     resolveRegistration(name: string): unknown;
@@ -207,14 +208,14 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   insert() {
     if (this.besluitType && this.currentBesluitRange) {
       this.cardExpanded = false;
-      this.controller.checkAndDoCommand(
-        addType(this.currentBesluitRange.from, this.besluitType.uri)
-      );
       if (this.previousBesluitType) {
         this.controller.checkAndDoCommand(
           removeType(this.currentBesluitRange.from, this.previousBesluitType)
         );
       }
+      this.controller.checkAndDoCommand(
+        addType(this.currentBesluitRange.from, this.besluitType.uri)
+      );
     }
   }
 
