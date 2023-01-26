@@ -21,7 +21,7 @@ const emberNodeConfig: EmberNodeConfig = {
   content: 'inline*',
   atom: true,
   recreateUri: true,
-  uriAttributes: ['mappingResource'],
+  uriAttributes: ['variableInstance'],
   draggable: false,
   attrs: {
     mappingResource: {},
