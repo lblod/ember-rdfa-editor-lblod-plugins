@@ -191,11 +191,10 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
 
   @action
   addToMultiModeSelections() {
-    console.log(this.selectedMultiOption);
     if (this.selectedMultiOption) {
       this.multiModeSelections.pushObject(this.selectedMultiOption);
     }
-    console.log(this.multiModeSelections);
+    this.selectedMultiOption = undefined;
   }
 
   @action
