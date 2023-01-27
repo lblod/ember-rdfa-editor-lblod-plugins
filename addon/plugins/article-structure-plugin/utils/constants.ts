@@ -1,0 +1,1 @@
+export const UPPER_SEARCH_LIMIT = 10000;

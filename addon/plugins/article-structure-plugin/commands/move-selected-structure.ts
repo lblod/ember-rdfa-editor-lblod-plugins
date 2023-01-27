@@ -14,6 +14,7 @@ import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import IntlService from 'ember-intl/services/intl';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { UPPER_SEARCH_LIMIT } from '../utils/constants';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',
@@ -114,6 +115,9 @@ export function calculateInsertionRange(args: {
     const containerRange = findNodes(
       doc,
       pos,
+      direction === 'up'
+        ? Math.min(limitContainerRange.from, pos - UPPER_SEARCH_LIMIT)
+        : Math.max(limitContainerRange.to, pos + UPPER_SEARCH_LIMIT),
       true,
       direction === 'up',
       ({ from, to }) => {

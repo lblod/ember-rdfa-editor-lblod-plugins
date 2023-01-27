@@ -15,6 +15,7 @@ import IntlService from 'ember-intl/services/intl';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { containsOnlyPlaceholder } from '../utils/structure';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { UPPER_SEARCH_LIMIT } from '../utils/constants';
 
 const insertStructure = (
   structureSpec: StructureSpec,
@@ -108,8 +109,22 @@ function findInsertionRange(args: {
     return false;
   };
   const nextContainerRange =
-    findNodes(doc, selection.from, true, false, filterFunction).next().value ??
-    findNodes(doc, selection.from, true, true, filterFunction).next().value;
+    findNodes(
+      doc,
+      selection.from,
+      Math.min(limitContainerRange.to, selection.from + UPPER_SEARCH_LIMIT),
+      true,
+      false,
+      filterFunction
+    ).next().value ??
+    findNodes(
+      doc,
+      selection.from,
+      Math.max(limitContainerRange.from, selection.from - UPPER_SEARCH_LIMIT),
+      true,
+      true,
+      filterFunction
+    ).next().value;
   if (nextContainerRange) {
     const { from, to } = nextContainerRange;
     const containerNode = doc.nodeAt(from);
