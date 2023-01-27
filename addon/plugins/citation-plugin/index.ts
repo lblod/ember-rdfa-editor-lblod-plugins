@@ -19,31 +19,77 @@ import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
-// Regex nicely structured:
-// (
-//   (
-//     \w*decreet |
-//     omzendbrief |
-//     verdrag |
-//     grondwetswijziging |
-//     samenwerkingsakkoord |
-//     \w*wetboek |
-//     protocol |
-//     besluit[^\S\n]van[^\S\n]de[^\S\n]vlaamse[^\S\n]regering |
-//     geco[öo]rdineerde wetten |
-//     \w*wet |
-//     koninklijk[^\S\n]?besluit |
-//     ministerieel[^\S\n]?besluit |
-//     genummerd[^\S\n]?koninklijk[^\S\n]?besluit
-//   )
-//   [^\S\n]*
-//   (
-//     ([^\S\n] | [\u0021-\uFFFF\d;:'"()&\-_]){3,}
-//   )?
-// )
+/**
+ * regex for non-newline whitespace
+ */
 const NNWS = '[^\\S\\n]';
+
+/**
+ * match for a "decree"
+ */
+const DECREE = `\\w*decreet`;
+
+/**
+ * literally "letter that gets sent around"
+ */
+const MEMO = `omzendbrief`;
+const TREATY = `verdrag`;
+const CONSTITUTION_CHANGE = `grondwetswijziging`;
+/**
+ * literally "agreement to collaborate"
+ */
+const COLLAB = `samenwerkingsakkoord`;
+/**
+ * Literally "book of law", I suppose that's called a codex?
+ */
+const BOOK = `\\w*wetboek`;
+const PROTOCOL = `protocol`;
+/**
+ * match for the literal "of the flemish government"
+ */
+const VVR = `${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering`;
+/**
+ * match for the literal "decision of the flemish government"
+ */
+const FLEMGOV = `besluit${VVR}`;
+/**
+ * match for "coordinated laws"
+ * whatever that may be
+ */
+const COORD = `geco[öo]rdineerde${NNWS}wetten`;
+/**
+ * Matches any kind of law
+ */
+const LAW = `\\w*wet`;
+/**
+ * match for the literal "royal decision"
+ * "royal decree" might be a more meaningful translation to english, but don't read too much into these
+ * translations anyway
+ */
+const ROYAL = `koninklijk${NNWS}?besluit`;
+/**
+ * same thing as above, but for ministers
+ */
+const MINISTERIAL = `ministerieel${NNWS}?besluit`;
+/**
+ * match for "enumerated royal decision"
+ * no, we don't know the difference either
+ */
+const ENUM_ROYAL = `genummerd${NNWS}?${ROYAL}`;
+
+/**
+ * The type of citation that we need to search for
+ */
+const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}`;
+/**
+ * The monster regex that makes the citation plugin trigger.
+ * In restructuring, I've made sure that I didn't abstract away any of the capturing groups,
+ * only their content, so you can still see what's going on
+ *
+ * This regex uses named capturing groups, that's the "?<name>" syntax for easy parsing later
+ */
 export const CITATION_REGEX = new RegExp(
-  `((?<type>\\w*decreet|omzendbrief|verdrag|grondwetswijziging|samenwerkingsakkoord|\\w*wetboek|protocol|besluit${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering|geco[öo]rdineerde${NNWS}wetten|\\w*wet|koninklijk${NNWS}?besluit|ministerieel${NNWS}?besluit|genummerd${NNWS}?koninklijk${NNWS}?besluit|\\w*${NNWS}?besluit)${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
+  `((?<type>${TYPE})${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
   'uidg'
 );
 export type CitationSchema = Schema<string, 'citation'>;
