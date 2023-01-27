@@ -10,7 +10,7 @@
             @icon="chevron-up"
             @iconAlignment="left"
             @skin="link"
-            @disabled={{not this.canMoveUp}}
+            @disabled={{not this.canMoveUp.value}}
             {{on 'click' (fn this.moveStructure 'up')}}>
             {{t this.currentStructureType.translations.move.up}}
           </AuButton>
@@ -20,7 +20,7 @@
             @icon="chevron-down"
             @iconAlignment="left"
             @skin="link"
-            @disabled={{not this.canMoveDown}}
+            @disabled={{not this.canMoveDown.value}}
             {{on 'click' (fn this.moveStructure 'down')}}>
             {{t this.currentStructureType.translations.move.down}}
           </AuButton>

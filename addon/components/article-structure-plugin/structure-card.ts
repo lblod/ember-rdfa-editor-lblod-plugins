@@ -11,6 +11,8 @@ import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { trackedTask } from 'ember-resources/util/ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 type Args = {
   controller: ProseController;
@@ -91,17 +93,27 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     return !this.structure;
   }
 
-  get canMoveDown() {
+  canMoveDownTask = restartableTask(async () => {
+    await timeout(250);
     return this.controller.checkCommand(
       moveSelectedStructure(this.structureTypes, 'down', this.intl)
     );
-  }
+  });
 
-  get canMoveUp() {
+  canMoveDown = trackedTask(this, this.canMoveDownTask, () => [
+    this.controller.state,
+  ]);
+
+  canMoveUpTask = restartableTask(async () => {
+    await timeout(250);
     return this.controller.checkCommand(
       moveSelectedStructure(this.structureTypes, 'up', this.intl)
     );
-  }
+  });
+
+  canMoveUp = trackedTask(this, this.canMoveUpTask, () => [
+    this.controller.state,
+  ]);
 
   get canRemoveStructure() {
     if (this.structure && this.currentStructureType) {

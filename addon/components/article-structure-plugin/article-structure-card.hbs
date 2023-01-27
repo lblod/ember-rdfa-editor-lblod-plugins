@@ -1,9 +1,9 @@
 {{#unless @controller.inEmbeddedView}}
 <div>
-  {{#each this.structureTypes as |structureType|}}
+  {{#each this.structureTypes as |structureType index|}}
   <AuList::Item>
-    <AuButton @icon="add" @iconAlignment="left" @skin="link" @disabled={{not (this.canInsertStructure structureType)}}
-      {{on 'click' (fn this.insertStructure structureType)}}>
+    <AuButton @icon="add" @iconAlignment="left" @skin="link" @disabled={{(not (get this.canInsertStructures.value index))}} {{on 'click'
+      (fn this.insertStructure structureType)}}>
       {{t structureType.translations.insert}}
     </AuButton>
   </AuList::Item>
