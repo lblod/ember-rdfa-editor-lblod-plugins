@@ -109,22 +109,28 @@ function findInsertionRange(args: {
     return false;
   };
   const nextContainerRange =
-    findNodes(
+    findNodes({
       doc,
-      selection.from,
-      Math.min(limitContainerRange.to, selection.from + UPPER_SEARCH_LIMIT),
-      true,
-      false,
-      filterFunction
-    ).next().value ??
-    findNodes(
+      start: selection.from,
+      end: Math.min(
+        limitContainerRange.to,
+        selection.from + UPPER_SEARCH_LIMIT
+      ),
+      visitParentUpwards: true,
+      reverse: false,
+      filter: filterFunction,
+    }).next().value ??
+    findNodes({
       doc,
-      selection.from,
-      Math.max(limitContainerRange.from, selection.from - UPPER_SEARCH_LIMIT),
-      true,
-      true,
-      filterFunction
-    ).next().value;
+      start: selection.from,
+      end: Math.max(
+        limitContainerRange.from,
+        selection.from - UPPER_SEARCH_LIMIT
+      ),
+      visitParentUpwards: true,
+      reverse: true,
+      filter: filterFunction,
+    }).next().value;
   if (nextContainerRange) {
     const { from, to } = nextContainerRange;
     const containerNode = doc.nodeAt(from);

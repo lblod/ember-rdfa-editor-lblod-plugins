@@ -112,15 +112,16 @@ export function calculateInsertionRange(args: {
           to: limitContainer.pos + limitContainer.node.nodeSize,
         }
       : { from: 0, to: doc.nodeSize };
-    const containerRange = findNodes(
+    const containerRange = findNodes({
       doc,
-      pos,
-      direction === 'up'
-        ? Math.min(limitContainerRange.from, pos - UPPER_SEARCH_LIMIT)
-        : Math.max(limitContainerRange.to, pos + UPPER_SEARCH_LIMIT),
-      true,
-      direction === 'up',
-      ({ from, to }) => {
+      start: pos,
+      end:
+        direction === 'up'
+          ? Math.min(limitContainerRange.from, pos - UPPER_SEARCH_LIMIT)
+          : Math.max(limitContainerRange.to, pos + UPPER_SEARCH_LIMIT),
+      visitParentUpwards: true,
+      reverse: direction === 'up',
+      filter: ({ from, to }) => {
         if (from >= limitContainerRange.from && to <= limitContainerRange.to) {
           const node = doc.nodeAt(from);
           if (node && node !== containerNode) {
@@ -131,8 +132,8 @@ export function calculateInsertionRange(args: {
           }
         }
         return false;
-      }
-    ).next().value;
+      },
+    }).next().value;
     if (containerRange) {
       const { from, to } = containerRange;
       const containerNode = doc.nodeAt(from);
