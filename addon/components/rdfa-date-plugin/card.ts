@@ -21,6 +21,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   @tracked onlyDate = false;
   @tracked dateFormat = '';
   @tracked customDateFormat = 'dd/MM/yyyy';
+  @tracked helpModalOpen = false;
 
   constructor(owner: unknown, args: Args) {
     super(owner, args);
@@ -102,5 +103,10 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     } else {
       this.datePos = undefined;
     }
+  }
+
+  @action
+  toggleHelpModal() {
+    this.helpModalOpen = !this.helpModalOpen;
   }
 }

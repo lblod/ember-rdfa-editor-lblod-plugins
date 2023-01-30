@@ -38,6 +38,7 @@
             />
           {{/if}}
         </AuFormRow>
+        <AuButton @icon="info-circle" {{on 'click' this.toggleHelpModal}}></AuButton>
         {{#unless this.dateInDocument}}
           <AuFormRow class="au-u-margin-top">
             <AuButton {{on 'click' this.modifyDate}}>
@@ -50,3 +51,94 @@
   </AuCard>
 {{/if}}
 </div>
+<AuModal
+    @title="Rdfa-Date Help"
+    @closeModal={{this.toggleHelpModal}}
+    @modalOpen={{this.helpModalOpen}}
+    @size='default'
+    class="au-c-modal--overflow"
+    as |Modal|>
+    <Modal.Body>
+      <div style="overflow: auto; max-height: 400px">
+        <p>{{t 'date-plugin.help.first-line'}}</p>
+        {{t 'date-plugin.help.examples'}}
+        <AuTable>
+          <:header>
+            <tr>
+              <th>{{t 'date-plugin.help.name'}}</th>
+              <th>{{t 'date-plugin.help.symbol'}}</th>
+              <th>{{t 'date-plugin.help.result'}}</th>
+            </tr>
+          </:header>
+          <:body>
+            <tr>
+              <td>{{t 'date-plugin.help.short-weekday-title'}}</td>
+              <td>E</td>
+              <td>{{t 'date-plugin.help.short-weekday-content'}}</td>
+            </tr>
+            <tr>
+              <td>{{t 'date-plugin.help.long-weekday-title'}}</td>
+              <td>EEEE</td>
+              <td>{{t 'date-plugin.help.long-weekday-content'}}</td>
+            </tr>
+            <tr>
+              <td>{{t 'date-plugin.help.month-day'}}</td>
+              <td>dd</td>
+              <td>01, 02, ..., 31</td>
+            </tr>
+            <tr>
+              <td>{{t 'date-plugin.help.short-month'}}</td>
+              <td>MM</td>
+              <td>01, 02, ..., 12</td>
+            </tr>
+            <tr>
+              <td>{{t 'date-plugin.help.long-month-title'}}</td>
+              <td>MMMM</td>
+              <td>{{t 'date-plugin.help.long-month-content'}}</td>
+            </tr>
+            <tr>
+              <td>{{t 'date-plugin.help.long-year'}}</td>
+              <td>dd</td>
+              <td>01, 02, ..., 31</td>
+            </tr>
+          </:body>
+        </AuTable>
+        <p>{{t "date-plugin.help.detailed-info"}} <a href="https://date-fns.org/v2.29.3/docs/format">{{t "date-plugin.help.docs-link"}}</a></p>
+        <p>{{t "date-plugin.help.date-examples"}}</p>
+        <AuTable>
+          <:header>
+            <tr>
+              <th>{{t "date-plugin.help.date-format"}}</th>
+              <th>{{t "date-plugin.help.result"}}</th>
+            </tr>
+          </:header>
+          <:body>
+            <tr>
+              <td>EEEE dd MMMM yyyy</td>
+              <td>maandag 30 januari 2023</td>
+            </tr>
+            <tr>
+              <td>dd/MM/yy</td>
+              <td>30/01/23</td>
+            </tr>
+            <tr>
+              <td>dd/MM/yy</td>
+              <td>30/01/23</td>
+            </tr>
+            <tr>
+              <td>dd/MM/yy hh:mm:ss</td>
+              <td>30/01/23 12:00:00</td>
+            </tr>
+            <tr>
+              <td>'Vandaag is' dd/MM/yy BBBB</td>
+              <td>Vandaag is 30/01/23 's nachts</td>
+            </tr>
+            <tr>
+              <td>PPPPpppp</td>
+              <td>maandag 30 januari 2023 om 00:00:00 GMT+01:00</td>
+            </tr>
+          </:body>
+        </AuTable>
+      </div>
+    </Modal.Body>
+  </AuModal>
