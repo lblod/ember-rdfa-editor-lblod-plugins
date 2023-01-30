@@ -1,5 +1,5 @@
 import { isBlank } from '@ember/utils';
-import { LEGISLATION_TYPES, LegislationKey } from './legislation-types';
+import { LEGISLATION_TYPES } from './legislation-types';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const STOP_WORDS = ['het', 'de', 'van', 'tot', 'dat'];
@@ -46,7 +46,7 @@ export default function processMatch(
     )
     .join(' ');
   if (type) {
-    let typeLabel: LegislationKey;
+    let typeLabel: string;
     if (/\w+decreet/i.test(type)) {
       typeLabel = 'decreet';
       cleanedSearchTerms = `${type} ${cleanedSearchTerms}`;
@@ -59,19 +59,23 @@ export default function processMatch(
       typeLabel = 'wetboek';
     } else if (/geco[oö]rdineerde[^\S\n]wetten/i.test(type)) {
       typeLabel = 'gecoördineerde wetten';
-    } else if (/grondwetswijziging/i.test(type)) {
+    } else if (/grondwets?wijziging/i.test(type)) {
       typeLabel = 'grondwetswijziging';
     } else if (/grondwet/i.test(type)) {
       typeLabel = 'grondwet';
+    } else if (/bijzondere wet/i.test(type)) {
+      typeLabel = 'bijzondere wet';
     } else if (/\w+wet/i.test(type)) {
       typeLabel = 'wet';
       cleanedSearchTerms = `${type} ${cleanedSearchTerms}`;
     } else if (/wet/i.test(type)) {
       typeLabel = 'wet';
     } else {
-      typeLabel = 'decreet';
+      typeLabel = type.toLowerCase().trim();
     }
-    const typeUri = LEGISLATION_TYPES[typeLabel];
+    const typeUri =
+      (LEGISLATION_TYPES as Record<string, string>)[typeLabel] ||
+      LEGISLATION_TYPES['decreet'];
     return {
       text: cleanedSearchTerms,
       legislationTypeUri: typeUri,

@@ -16,8 +16,9 @@ const LEGISLATION_TYPES = {
   samenwerkingsakkoord:
     'https://data.vlaanderen.be/id/concept/AardWetgeving/Samenwerkingsakkoord',
   wetboek: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Wetboek',
+  // do not change this url without doublechecking, yes they actually did encode the ö in the url
   'gecoördineerde wetten':
-    'https://data.vlaanderen.be/id/concept/AardWetgeving/GecoordineerdeWetten',
+    'https://data.vlaanderen.be/id/concept/AardWetgeving/Geco%C3%B6rdineerde+Wet',
   'bijzondere wet':
     'https://data.vlaanderen.be/id/concept/AardWetgeving/BijzondereWet',
   'genummerd koninklijk besluit':
