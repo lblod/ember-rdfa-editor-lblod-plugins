@@ -29,8 +29,14 @@ export default class RoadsignRegulationCard extends Component<Args> {
   @tracked modalOpen = false;
 
   @action
-  toggleModal() {
-    this.modalOpen = !this.modalOpen;
+  openModal() {
+    this.controller.focus();
+    this.modalOpen = true;
+  }
+
+  @action
+  closeModal() {
+    this.modalOpen = false;
   }
 
   get controller() {
