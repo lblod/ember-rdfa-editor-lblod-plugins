@@ -1,7 +1,6 @@
 matrix:
   scenario:
     - ember-lts-3.28
-    - ember-lts-4.8
 
 pipeline:
   ${scenario}:
