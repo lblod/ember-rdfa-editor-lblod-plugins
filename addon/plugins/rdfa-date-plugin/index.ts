@@ -11,7 +11,7 @@ export const defaultDateFormats: DateFormat[] = [
     label: 'Long Date',
     key: 'long',
     dateFormat: 'EEEE dd MMMM yyyy',
-    dateTimeFormat: 'EEEE dd MMMM yyyy \'at\' HH:mm',
+    dateTimeFormat: 'PPPPp',
   },
 ];
 
