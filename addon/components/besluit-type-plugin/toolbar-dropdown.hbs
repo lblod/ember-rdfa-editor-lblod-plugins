@@ -1,6 +1,7 @@
-<div {{did-update this.updateBesluitTypes @controller.state}}>
+<div {{did-update this.updateBesluitTypes @controller.state}} 
+     {{did-update this.updateBesluitTypes this.types.value}}>
 {{#if this.showCard}}
-  {{#if this.loadDataTaskInstance.isError}}
+  {{#if this.types.isError}}
     <AuPill
       @skin="error"
       @icon="circle-x"
@@ -36,7 +37,7 @@
     class="au-c-modal--overflow"
     as |Modal|>
     <Modal.Body>
-      {{#if this.loadDataTaskInstance.isError}}
+      {{#if this.types.isError}}
         <AuAlert
           @title={{t "besluit-type-plugin.error-title"}}
           @skin="error"
@@ -56,7 +57,7 @@
         </AuAlert>
       {{else}}
         <BesluitTypePlugin::BesluitTypeSelect
-          @besluitTypes={{this.types}}
+          @besluitTypes={{this.types.value}}
           @onchange={{this.updateBesluitType}}
           @selected={{this.besluit}}
           @showWarningWhenEmpty={{false}}/>

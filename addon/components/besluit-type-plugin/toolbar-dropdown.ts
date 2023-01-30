@@ -1,7 +1,6 @@
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import {
@@ -17,6 +16,7 @@ import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { trackedFunction } from 'ember-resources/util/function';
 
 declare module 'ember__owner' {
   export default interface Owner {
@@ -39,7 +39,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
    */
   @tracked besluitType?: BesluitType;
   @tracked previousBesluitType?: string;
-  @tracked types: BesluitType[] = [];
 
   //used to update selections since the other vars dont seem to work in octane
   @tracked besluit?: BesluitType;
@@ -47,11 +46,9 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   @tracked subSubBesluit?: BesluitType;
 
   @tracked cardExpanded = false;
-  @tracked loadDataTaskInstance;
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
-    this.loadDataTaskInstance = this.loadData.perform();
   }
 
   get controller() {
@@ -62,7 +59,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     return this.controller.state.doc;
   }
 
-  loadData = task(async () => {
+  types = trackedFunction(this, async () => {
     // eslint-disable-next-line @typescript-eslint/await-thenable
     const bestuurseenheid = await this.currentSession.get('group');
     const classificatie = await bestuurseenheid.get('classificatie');
@@ -70,7 +67,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       besluitTypePlugin: { endpoint: string };
     };
     const types = await fetchBesluitTypes(classificatie.uri, ENV);
-    this.types = types;
+    return types;
   });
 
   get currentBesluitRange(): ResolvedPNode | undefined {
@@ -103,7 +100,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   @action
   updateBesluitTypes() {
-    if (!this.currentBesluitURI) {
+    if (!this.currentBesluitURI || !this.types.value) {
       return;
     }
     const besluit = findAncestorOfType(
@@ -169,7 +166,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   findBesluitTypeParent(
     besluitType?: BesluitType,
-    array: BesluitType[] = this.types,
+    array: BesluitType[] | null = this.types.value,
     parent?: BesluitType
   ): BesluitType | undefined {
     if (!besluitType || !array) {
@@ -188,9 +185,9 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   findBesluitTypeByURI(
     uri: string,
-    types = this.types
+    types = this.types.value
   ): BesluitType | undefined {
-    if (uri) {
+    if (uri && types) {
       for (const besluitType of types) {
         if (besluitType.uri === uri) {
           return besluitType;
