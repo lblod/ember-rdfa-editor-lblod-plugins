@@ -63,10 +63,28 @@ besluit-plugin:
   placeholder:
     decision-title: Geef titel besluit op
 date-plugin:
+  help:
+    first-line: "Indien u een eigen datumnotatie wilt gebruiken, kunt u deze korte handleiding volgen. Datumnotaties kunnen bestaan uit zowel speciaal karakters/symbolen die verschillende delen van een datum voorstellen, en platte tekst die tussen aanhalingstekens ('') dient geplaatst te worden."
+    examples: "Voorbeelden:"
+    name: "Naam"
+    symbol: "Symbool/karakters"
+    result: "Resultaat"
+    detailed-info: "Naast deze voorbeelden, bestaan er nog vele andere karakters/symbolen die u kan gebruiken. Meer informatie vindt u op: "
+    docs-link: "documentatie van de date-fns library"
+    date-examples: "Via deze symbolen/karakters kan u verschillende soorten datumnotaties crëeren, hieronder een paar voorbeelden:"
+    date-format: Datumnotatie
+    short-weekday-title: Verkorte versie van een weekdag
+    short-weekday-content: Maa, Din, Woe, ..., Zon
+    long-weekday-title: Weekdag
+    long-weekday-content: Maandag, Dinsdag, ..., Zondag
+    month-day: Dagnummer
+    short-month: Maandnummer
+    long-month-title: Maandnaam
+    long-month-content: Januari, Februari, ..., December
+    long-year: Jaar
   insert:
     date: "Datum invoegen"
     datetime: "Datum en tijd invoegen"
-
   card:
     title: "Datum"
     insert-date: "Datum invoegen"
