@@ -76,26 +76,25 @@ date-plugin:
     minutes: "Minuten"
     now: "Nu"
 variable-plugin:
-  insertVariable: Voeg variabele in
+  insert-variable: Voeg variabele in
   button: Voeg in
-  enterVariableValue: Selecteer waarde
+  enter-variable-value: Selecteer waarde
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
     article: Artikel invoegen
-    articleBelow: Voeg onderstaand artikel in
     title: Titel invoegen
     chapter: Hoofdstuk invoegen
     section: Afdeling invoegen
     subsection: Onderafdeling invoegen
-  moveUp:
+  move-up:
     paragraph: Paragraaf naar boven verplaatsen
     article: Artikel naar boven verplaatsen
     title: Titel naar boven verplaatsen
     chapter: Hoofdstuk naar boven verplaatsen
     section: Afdeling naar boven verplaatsen
     subsection: Onderafdeling naar boven verplaatsen
-  moveDown:
+  move-down:
     paragraph: Paragraaf naar beneden verplaatsen
     article: Artikel naar beneden verplaatsen
     title: Titel naar beneden verplaatsen
@@ -103,9 +102,7 @@ article-structure-plugin:
     section: Afdeling naar beneden verplaatsen
     subsection: Onderafdeling naar boven verplaatsen
   title:
-    paragraphCard: Paragraaf card
-    articleCard: Artikel card
-    structureCard: Structuur card
+    structure-card: Structuur card
   remove:
     article: Artikel verwijderen
     paragraph: Paragraaf verwijderen

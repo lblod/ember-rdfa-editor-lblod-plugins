@@ -18,8 +18,8 @@ export const chapterSpec: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.chapter',
     move: {
-      up: 'article-structure-plugin.moveUp.chapter',
-      down: 'article-structure-plugin.moveDown.chapter',
+      up: 'article-structure-plugin.move-up.chapter',
+      down: 'article-structure-plugin.move-down.chapter',
     },
     remove: 'article-structure-plugin.remove.chapter',
   },
