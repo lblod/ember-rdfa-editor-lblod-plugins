@@ -21,6 +21,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   @tracked onlyDate = false;
   @tracked dateFormat = '';
   @tracked customDateFormat = 'dd/MM/yyyy';
+  @tracked customDateFormatError = false;
 
   constructor(owner: unknown, args: Args) {
     super(owner, args);
@@ -35,6 +36,12 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
 
   @action
   modifyDate() {
+    if (!this.customDateFormat) {
+      this.customDateFormatError = true;
+      return;
+    } else {
+      this.customDateFormatError = false;
+    }
     if (this.datePos && this.dateValue) {
       const pos = this.datePos;
       const value = this.dateValue;

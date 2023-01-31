@@ -33,6 +33,7 @@
           />
           {{#if (eq this.dateFormat "custom")}}
             <AuInput
+              @error={{this.customDateFormatError}}
               @value={{this.customDateFormat}}
               {{on "input" this.setCustomDateFormat}}
             />
