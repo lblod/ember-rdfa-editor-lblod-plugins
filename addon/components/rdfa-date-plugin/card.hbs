@@ -56,10 +56,9 @@
     @closeModal={{this.toggleHelpModal}}
     @modalOpen={{this.helpModalOpen}}
     @size='default'
-    class="au-c-modal--overflow"
     as |Modal|>
     <Modal.Body>
-      <div style="overflow: auto; max-height: 400px">
+      <div>
         <p>{{t 'date-plugin.help.first-line'}}</p>
         {{t 'date-plugin.help.examples'}}
         <AuTable>
@@ -98,8 +97,8 @@
             </tr>
             <tr>
               <td>{{t 'date-plugin.help.long-year'}}</td>
-              <td>dd</td>
-              <td>01, 02, ..., 31</td>
+              <td>yyyy</td>
+              <td>1990, 1991, 1992...</td>
             </tr>
           </:body>
         </AuTable>
