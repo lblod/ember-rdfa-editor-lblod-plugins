@@ -64,7 +64,7 @@ besluit-plugin:
     decision-title: Geef titel besluit op
 date-plugin:
   help:
-    first-line: "Indien u een eigen datumnotatie wilt gebruiken, kunt u deze korte handleiding volgen. Datumnotaties kunnen bestaan uit zowel speciaal karakters/symbolen die verschillende delen van een datum voorstellen, en platte tekst die tussen aanhalingstekens ('') dient geplaatst te worden."
+    first-line: "Indien u een eigen datumnotatie wilt gebruiken, kunt u deze korte handleiding volgen. Datumnotaties kunnen bestaan uit zowel speciale karakters/symbolen die verschillende delen van een datum voorstellen, en platte tekst die tussen aanhalingstekens ('') dient geplaatst te worden."
     examples: "Voorbeelden:"
     name: "Naam"
     symbol: "Symbool/karakters"
