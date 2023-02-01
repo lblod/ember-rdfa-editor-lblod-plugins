@@ -41,7 +41,7 @@
         </AuFormRow>
         {{#unless this.dateInDocument}}
           <AuFormRow class="au-u-margin-top">
-            <AuButton {{on 'click' this.modifyDate}}>
+            <AuButton {{on 'click' this.modifyDate}} @disabled={{this.customDateFormatError}}>
               {{if this.onlyDate (t "date-plugin.card.insert-date") (t "date-plugin.card.insert-datetime")}}
             </AuButton>
           </AuFormRow>

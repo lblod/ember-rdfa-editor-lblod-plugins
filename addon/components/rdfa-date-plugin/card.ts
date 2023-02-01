@@ -73,11 +73,17 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         }
       }
     }
+    if (this.customDateFormat) {
+      this.customDateFormatError = false;
+    }
     if (this.dateInDocument) this.modifyDate();
   }
   @action
   setCustomDateFormat(event: InputEvent) {
     this.customDateFormat = (event.target as HTMLInputElement).value;
+    if (this.customDateFormat) {
+      this.customDateFormatError = false;
+    }
     if (this.dateInDocument) this.modifyDate();
   }
 
