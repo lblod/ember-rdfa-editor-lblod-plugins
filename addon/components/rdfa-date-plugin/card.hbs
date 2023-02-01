@@ -32,13 +32,15 @@
             @onChange={{this.setDateFormat}}
           />
           {{#if (eq this.dateFormat "custom")}}
-            <AuInput
-              @value={{this.customDateFormat}}
-              {{on "input" this.setCustomDateFormat}}
-            />
+            <div class="au-u-flex">
+              <AuInput
+                @value={{this.customDateFormat}}
+                {{on "input" this.setCustomDateFormat}}
+              />
+              <AuButton @icon="info-circle" @skin="secondary" {{on 'click' this.toggleHelpModal}}></AuButton>
+            </div>
           {{/if}}
         </AuFormRow>
-        <AuButton @icon="info-circle" {{on 'click' this.toggleHelpModal}}></AuButton>
         {{#unless this.dateInDocument}}
           <AuFormRow class="au-u-margin-top">
             <AuButton {{on 'click' this.modifyDate}}>
