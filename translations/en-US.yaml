@@ -75,9 +75,9 @@ date-plugin:
     minutes: "Minutes"
     now: "Now"
 variable-plugin:
-  insertVariable: Insert variable
+  insert-variable: Insert variable
   button: Insert
-  enterVariableValue: Select value
+  enter-variable-value: Select value
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph
@@ -87,14 +87,14 @@ article-structure-plugin:
     chapter: Insert chapter
     section: Insert section
     subsection: Insert subsection
-  moveUp:
+  move-up:
     paragraph: Move paragraph up
     article: Move article up
     title: Move title up
     chapter: Move chapter up
     section: Move section up
     subsection: Move subsection up
-  moveDown:
+  move-down:
     paragraph: Move paragraph down
     article: Move article down
     title: Move title down
@@ -104,7 +104,7 @@ article-structure-plugin:
   title:
     paragraphCard: Paragraph Card
     articleCard: Article Card
-    structureCard: Structure Card
+    structure-card: Structure Card
   remove:
     article: Remove Article
     paragraph: Remove Paragraph
