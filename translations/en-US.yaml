@@ -63,6 +63,25 @@ besluit-plugin:
   placeholder:
     decision-title: Insert decision title
 date-plugin:
+  help:
+    first-line: "For custom formats, all the text between single quotes is escaped and written into the document as it's written, all the other characters are interpreted and represent different parts of the date:"
+    examples: "Examples:"
+    name: "Name"
+    symbol: "Symbol"
+    result: "Result"
+    detailed-info: For more detailed symbols visit
+    docs-link: the library documentation
+    date-examples: With this you can create any date format, here are some examples and their corresponding dates
+    date-format: Date format
+    short-weekday-title: Short day of the week
+    short-weekday-content: Mon, Tue, Wed, ..., Sun
+    long-weekday-title: Long day of the week
+    long-weekday-content: Monday, Tuesday, ..., Sunday
+    month-day: Day of the month
+    short-month: Short month
+    long-month-title: Long month
+    long-month-content: January, February, ..., December
+    long-year: Long year
   insert:
     date: "Insert date"
     datetime: "Insert date and time"
@@ -75,9 +94,9 @@ date-plugin:
     minutes: "Minutes"
     now: "Now"
 variable-plugin:
-  insertVariable: Insert variable
+  insert-variable: Insert variable
   button: Insert
-  enterVariableValue: Select value
+  enter-variable-value: Select value
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph
@@ -87,14 +106,14 @@ article-structure-plugin:
     chapter: Insert chapter
     section: Insert section
     subsection: Insert subsection
-  moveUp:
+  move-up:
     paragraph: Move paragraph up
     article: Move article up
     title: Move title up
     chapter: Move chapter up
     section: Move section up
     subsection: Move subsection up
-  moveDown:
+  move-down:
     paragraph: Move paragraph down
     article: Move article down
     title: Move title down
@@ -104,7 +123,7 @@ article-structure-plugin:
   title:
     paragraphCard: Paragraph Card
     articleCard: Article Card
-    structureCard: Structure Card
+    structure-card: Structure Card
   remove:
     article: Remove Article
     paragraph: Remove Paragraph
