@@ -108,8 +108,20 @@ function findInsertionRange(args: {
     return false;
   };
   const nextContainerRange =
-    findNodes(doc, selection.from, true, false, filterFunction).next().value ??
-    findNodes(doc, selection.from, true, true, filterFunction).next().value;
+    findNodes({
+      doc,
+      start: selection.from,
+      visitParentUpwards: true,
+      reverse: false,
+      filter: filterFunction,
+    }).next().value ??
+    findNodes({
+      doc,
+      start: selection.from,
+      visitParentUpwards: true,
+      reverse: true,
+      filter: filterFunction,
+    }).next().value;
   if (nextContainerRange) {
     const { from, to } = nextContainerRange;
     const containerNode = doc.nodeAt(from);
