@@ -1,0 +1,21 @@
+<div {{did-update this.selectionChanged @controller.state}}>
+  {{#if this.showCard}}
+    <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
+      <c.header>
+        <AuHeading @level="3" @skin="6">
+          {{t "variable-plugin.enterVariableValue"}}
+        </AuHeading>
+      </c.header>
+      <c.content>
+        <p>Typeof: </p>
+        <AuInput @value={{this.typeof}} {{on "input" (fn this.changeValue 'typeof')}}/>
+        <p>Resource: </p>
+        <AuInput @value={{this.resource}} {{on "input" (fn this.changeValue 'resource')}} />
+        <p>Property: </p>
+        <AuInput @value={{this.property}} {{on "input" (fn this.changeValue 'property')}} />
+        <br />
+        <AuButton {{on "click" this.insert}}>Change</AuButton>
+      </c.content>
+    </AuCard>
+  {{/if}}
+</div>

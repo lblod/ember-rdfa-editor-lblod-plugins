@@ -70,6 +70,12 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import { besluitPluginCardWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
+import {
+  customRdfaWidget,
+  insertCustomRdfaWidget,
+  custom_rdfa,
+  customRdfaView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/custom-rdfa-plugin';
 
 const citation = setupCitationPlugin({
   type: 'nodes',
@@ -123,6 +129,7 @@ export default class BesluitSampleController extends Controller {
         hard_break,
         block_rdfa,
         invisible_rdfa,
+        custom_rdfa,
       },
       marks: {
         citation: citation.marks.citation,
@@ -142,6 +149,7 @@ export default class BesluitSampleController extends Controller {
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       variable: variableView(controller),
+      custom_rdfa: customRdfaView(controller),
     };
   };
   @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, citation.plugin];
@@ -159,6 +167,8 @@ export default class BesluitSampleController extends Controller {
     templateVariableWidget,
     articleStructureInsertWidget(structureSpecs),
     articleStructureContextWidget(structureSpecs),
+    customRdfaWidget,
+    insertCustomRdfaWidget,
   ];
 
   @action
