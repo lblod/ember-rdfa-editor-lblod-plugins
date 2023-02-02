@@ -18,8 +18,8 @@ export const titleSpec: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.title',
     move: {
-      up: 'article-structure-plugin.moveUp.title',
-      down: 'article-structure-plugin.moveDown.title',
+      up: 'article-structure-plugin.move-up.title',
+      down: 'article-structure-plugin.move-down.title',
     },
     remove: 'article-structure-plugin.remove.title',
   },
