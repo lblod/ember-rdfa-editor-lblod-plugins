@@ -34,7 +34,8 @@
           {{#if (eq this.dateFormat "custom")}}
             <div class="au-u-flex">
               <AuInput
-                @value={{this.customDateFormat}}
+                @error={{this.customDateFormatError}}
+              @value={{this.customDateFormat}}
                 {{on "input" this.setCustomDateFormat}}
               />
               <AuButton @icon="info-circle" @skin="secondary" {{on 'click' this.toggleHelpModal}}></AuButton>
@@ -43,7 +44,7 @@
         </AuFormRow>
         {{#unless this.dateInDocument}}
           <AuFormRow class="au-u-margin-top">
-            <AuButton {{on 'click' this.modifyDate}}>
+            <AuButton {{on 'click' this.modifyDate}} @disabled={{this.customDateFormatError}}>
               {{if this.onlyDate (t "date-plugin.card.insert-date") (t "date-plugin.card.insert-datetime")}}
             </AuButton>
           </AuFormRow>
