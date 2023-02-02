@@ -93,6 +93,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         : new Date();
       if (this.dateInDocument) {
         this.dateValue = new Date(selection.node.attrs.value);
+        this.customDateFormat = selection.node.attrs.format as string;
       } else {
         this.dateValue = new Date();
         if (this.onlyDate) {
