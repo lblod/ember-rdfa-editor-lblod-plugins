@@ -7,7 +7,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { Transaction } from '@lblod/ember-rdfa-editor';
-import { STRUCTURE_SPECS } from './structures';
+import { DEFAULT_OPTIONS } from './structures';
 
 export type SpecName = string;
 
@@ -43,7 +43,11 @@ export type StructureSpec = {
   limitTo?: string;
 };
 
-export type ArticleStructurePluginOptions = StructureSpec[];
+export type ArticleStructurePluginOptions = {
+  specs: StructureSpec[];
+  search_limit?: number;
+  debounce_ms?: number;
+};
 
 export const articleStructureInsertWidget: (
   options?: ArticleStructurePluginOptions
@@ -52,7 +56,7 @@ export const articleStructureInsertWidget: (
     componentName: 'article-structure-plugin/article-structure-card',
     desiredLocation: 'insertSidebar',
     widgetArgs: {
-      options: options ?? STRUCTURE_SPECS,
+      options: options ?? DEFAULT_OPTIONS,
     },
   };
 };
@@ -64,7 +68,7 @@ export const articleStructureContextWidget: (
     componentName: 'article-structure-plugin/structure-card',
     desiredLocation: 'sidebar',
     widgetArgs: {
-      options: options ?? STRUCTURE_SPECS,
+      options: options ?? DEFAULT_OPTIONS,
     },
   };
 };

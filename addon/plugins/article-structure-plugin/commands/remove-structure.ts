@@ -1,17 +1,22 @@
 import { Command, PNode } from '@lblod/ember-rdfa-editor';
-import { ArticleStructurePluginOptions } from '..';
+import { StructureSpec } from '..';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 
-const removeStructure = (
-  structure: { pos: number; node: PNode },
-  options: ArticleStructurePluginOptions
-): Command => {
+type RemoveStructureArgs = {
+  structure: { pos: number; node: PNode };
+  specs: StructureSpec[];
+};
+
+const removeStructure = ({
+  structure,
+  specs,
+}: RemoveStructureArgs): Command => {
   return (state, dispatch) => {
     if (dispatch) {
       const { pos, node } = structure;
       const transaction = state.tr;
       transaction.replace(pos, pos + node.nodeSize);
-      recalculateStructureNumbers(transaction, ...options);
+      recalculateStructureNumbers(transaction, ...specs);
       dispatch(transaction);
     }
     return true;

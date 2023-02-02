@@ -8,27 +8,34 @@ import {
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
-import { ArticleStructurePluginOptions } from '..';
+import { StructureSpec } from '..';
 import { findAncestorOfType } from '../utils/structure';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import IntlService from 'ember-intl/services/intl';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { UPPER_SEARCH_LIMIT } from '../utils/constants';
-const moveSelectedStructure = (
-  options: ArticleStructurePluginOptions,
-  direction: 'up' | 'down',
-  intl: IntlService
-): Command => {
+
+type MoveSelectedStructureArgs = {
+  specs: StructureSpec[];
+  direction: 'up' | 'down';
+  intl: IntlService;
+  upperSearchLimit?: number;
+};
+const moveSelectedStructure = ({
+  specs,
+  direction,
+  intl,
+  upperSearchLimit = Infinity,
+}: MoveSelectedStructureArgs): Command => {
   return (state, dispatch) => {
     const { doc, selection, schema } = state;
-    const structureSpecs = options.map((type) => schema.nodes[type.name]);
+    const structureSpecs = specs.map((type) => schema.nodes[type.name]);
     const currentStructure = findAncestorOfType(selection, ...structureSpecs);
     if (!currentStructure || currentStructure.pos === -1) {
       return false;
     }
     const currentStructureSpec = unwrap(
-      options.find((spec) => spec.name === currentStructure.node.type.name)
+      specs.find((spec) => spec.name === currentStructure.node.type.name)
     );
     const insertionRange = calculateInsertionRange({
       doc,
@@ -38,6 +45,7 @@ const moveSelectedStructure = (
       direction,
       schema,
       limitTo: currentStructureSpec.limitTo,
+      upperSearchLimit,
     });
     if (insertionRange === null || insertionRange === undefined) {
       return false;
@@ -81,7 +89,16 @@ const moveSelectedStructure = (
   };
 };
 
-export function calculateInsertionRange(args: {
+export function calculateInsertionRange({
+  doc,
+  pos,
+  selection,
+  nodeType,
+  direction,
+  schema,
+  limitTo,
+  upperSearchLimit = Infinity,
+}: {
   doc: PNode;
   pos: number; // position of structure we want to move
   selection: Selection;
@@ -89,8 +106,8 @@ export function calculateInsertionRange(args: {
   direction: 'up' | 'down';
   schema: Schema;
   limitTo?: string;
+  upperSearchLimit?: number;
 }): { from: number; to: number } | null {
-  const { doc, pos, selection, nodeType, direction, schema, limitTo } = args;
   const resolvedPosition = doc.resolve(pos);
   const containerNode = resolvedPosition.parent;
   const index = resolvedPosition.index();
@@ -117,8 +134,8 @@ export function calculateInsertionRange(args: {
       start: pos,
       end:
         direction === 'up'
-          ? Math.min(limitContainerRange.from, pos - UPPER_SEARCH_LIMIT)
-          : Math.max(limitContainerRange.to, pos + UPPER_SEARCH_LIMIT),
+          ? Math.min(limitContainerRange.from, pos - upperSearchLimit)
+          : Math.max(limitContainerRange.to, pos + upperSearchLimit),
       visitParentUpwards: true,
       reverse: direction === 'up',
       filter: ({ from, to }) => {

@@ -20,10 +20,13 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
   @service declare intl: IntlService;
 
   canInsertStructuresTask = restartableTask(async () => {
-    await timeout(250);
+    const { debounce_ms } = this.options;
+    if (debounce_ms) {
+      await timeout(debounce_ms);
+    }
     return this.structureTypes.map((type) => {
       return this.args.controller.checkCommand(
-        insertStructure(type, this.intl)
+        insertStructure({ structureSpec: type, intl: this.intl })
       );
     });
   });
@@ -32,19 +35,27 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
     this.args.controller.state,
   ]);
 
-  get structureTypes() {
+  get options() {
     return this.args.widgetArgs.options;
+  }
+
+  get structureTypes() {
+    return this.options.specs;
+  }
+
+  get upperSearchLimit() {
+    return this.options.search_limit;
   }
 
   @action
   insertStructure(spec: StructureSpec) {
-    this.args.controller.doCommand(insertStructure(spec, this.intl));
+    this.args.controller.doCommand(
+      insertStructure({
+        structureSpec: spec,
+        intl: this.intl,
+        upperSearchLimit: this.upperSearchLimit,
+      })
+    );
     this.args.controller.focus();
-  }
-
-  @restartableTask
-  *canInsertStructure(spec: StructureSpec) {
-    yield timeout(500);
-    return this.args.controller.checkCommand(insertStructure(spec, this.intl));
   }
 }

@@ -15,16 +15,22 @@ import IntlService from 'ember-intl/services/intl';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { containsOnlyPlaceholder } from '../utils/structure';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { UPPER_SEARCH_LIMIT } from '../utils/constants';
 
-const insertStructure = (
-  structureSpec: StructureSpec,
-  intl: IntlService,
-  content?: Fragment
-): Command => {
+type InsertStructureArgs = {
+  structureSpec: StructureSpec;
+  intl: IntlService;
+  content?: Fragment;
+  upperSearchLimit?: number;
+};
+const insertStructure = ({
+  structureSpec,
+  intl,
+  content,
+  upperSearchLimit,
+}: InsertStructureArgs): Command => {
   return (state, dispatch) => {
     const { schema, selection, doc } = state;
-    if (wrapStructureContent(structureSpec, intl)(state, dispatch)) {
+    if (wrapStructureContent({ structureSpec, intl })(state, dispatch)) {
       return true;
     }
     const insertionRange = findInsertionRange({
@@ -33,6 +39,7 @@ const insertStructure = (
       nodeType: schema.nodes[structureSpec.name],
       schema,
       limitTo: structureSpec.limitTo,
+      upperSearchLimit,
     });
     if (!insertionRange) {
       return false;
@@ -66,14 +73,21 @@ const insertStructure = (
   };
 };
 
-function findInsertionRange(args: {
+function findInsertionRange({
+  doc,
+  selection,
+  nodeType,
+  schema,
+  limitTo,
+  upperSearchLimit = Infinity,
+}: {
   doc: PNode;
   selection: Selection;
   nodeType: NodeType;
   schema: Schema;
   limitTo?: string;
+  upperSearchLimit?: number;
 }) {
-  const { doc, selection, nodeType, schema, limitTo } = args;
   const { $from } = selection;
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
@@ -112,10 +126,7 @@ function findInsertionRange(args: {
     findNodes({
       doc,
       start: selection.from,
-      end: Math.min(
-        limitContainerRange.to,
-        selection.from + UPPER_SEARCH_LIMIT
-      ),
+      end: Math.min(limitContainerRange.to, selection.from + upperSearchLimit),
       visitParentUpwards: true,
       reverse: false,
       filter: filterFunction,
@@ -125,7 +136,7 @@ function findInsertionRange(args: {
       start: selection.from,
       end: Math.max(
         limitContainerRange.from,
-        selection.from - UPPER_SEARCH_LIMIT
+        selection.from - upperSearchLimit
       ),
       visitParentUpwards: true,
       reverse: true,

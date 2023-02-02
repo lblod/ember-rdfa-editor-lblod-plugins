@@ -157,8 +157,14 @@ export default class BesluitSampleController extends Controller {
     citation.widgets.citationInsert,
     roadSignRegulationWidget,
     templateVariableWidget,
-    articleStructureInsertWidget(structureSpecs),
-    articleStructureContextWidget(structureSpecs),
+    articleStructureInsertWidget({
+      specs: structureSpecs,
+      search_limit: 10000,
+    }),
+    articleStructureContextWidget({
+      specs: structureSpecs,
+      search_limit: 10000,
+    }),
   ];
 
   @action

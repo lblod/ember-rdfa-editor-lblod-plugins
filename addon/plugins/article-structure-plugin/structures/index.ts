@@ -7,14 +7,16 @@ import { sectionSpec, section, section_body } from './section';
 import { structure_header } from './structure-header';
 import { subsectionSpec, subsection, subsection_body } from './subsection';
 
-export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
-  titleSpec,
-  chapterSpec,
-  sectionSpec,
-  subsectionSpec,
-  articleSpec,
-  articleParagraphSpec,
-];
+export const DEFAULT_OPTIONS: ArticleStructurePluginOptions = {
+  specs: [
+    titleSpec,
+    chapterSpec,
+    sectionSpec,
+    subsectionSpec,
+    articleSpec,
+    articleParagraphSpec,
+  ],
+};
 
 export const STRUCTURE_NODES = {
   structure_header,

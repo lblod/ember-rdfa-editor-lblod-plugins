@@ -60,7 +60,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
-import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
+import {
+  DEFAULT_OPTIONS,
+  STRUCTURE_NODES,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
 import {
   variable,
@@ -162,8 +165,8 @@ export default class RegulatoryStatementSampleController extends Controller {
     tableOfContentsWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,
-    articleStructureInsertWidget(),
-    articleStructureContextWidget(),
+    articleStructureInsertWidget({ ...DEFAULT_OPTIONS, search_limit: 10000 }),
+    articleStructureContextWidget({ ...DEFAULT_OPTIONS, search_limit: 10000 }),
   ];
 
   @action

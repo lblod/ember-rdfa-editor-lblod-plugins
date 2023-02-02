@@ -10,10 +10,15 @@ import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/ar
 import IntlService from 'ember-intl/services/intl';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 
-const wrapStructureContent = (
-  structureSpec: StructureSpec,
-  intl: IntlService
-): Command => {
+type WrapStructureContentArgs = {
+  structureSpec: StructureSpec;
+  intl: IntlService;
+};
+
+const wrapStructureContent = ({
+  structureSpec,
+  intl,
+}: WrapStructureContentArgs): Command => {
   return (state, dispatch) => {
     if (!structureSpec.content) {
       return false;

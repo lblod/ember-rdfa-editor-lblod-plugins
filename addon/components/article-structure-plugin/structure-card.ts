@@ -32,7 +32,12 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   @action
   moveStructure(direction: 'up' | 'down') {
     this.controller.doCommand(
-      moveSelectedStructure(this.structureTypes, direction, this.intl)
+      moveSelectedStructure({
+        specs: this.structureTypes,
+        direction,
+        intl: this.intl,
+        upperSearchLimit: this.upperSearchLimit,
+      })
     );
     this.controller.focus();
   }
@@ -42,17 +47,20 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     if (this.structure && this.currentStructureType) {
       if (this.removeStructureContent) {
         this.controller.doCommand(
-          removeStructure(this.structure, this.structureTypes)
+          removeStructure({
+            structure: this.structure,
+            specs: this.structureTypes,
+          })
         );
       } else {
         this.controller.doCommand(
-          unwrapStructure(
-            {
+          unwrapStructure({
+            structure: {
               ...this.structure,
               type: this.currentStructureType,
             },
-            this.structureTypes
-          )
+            specs: this.structureTypes,
+          })
         );
       }
     }
@@ -64,8 +72,16 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     this.removeStructureContent = value;
   }
 
-  get structureTypes() {
+  get options() {
     return this.args.widgetArgs.options;
+  }
+
+  get structureTypes() {
+    return this.options.specs;
+  }
+
+  get upperSearchLimit() {
+    return this.options.search_limit;
   }
 
   get structureNodeSpecs() {
@@ -94,9 +110,17 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   canMoveDownTask = restartableTask(async () => {
-    await timeout(250);
+    const { debounce_ms } = this.options;
+    if (debounce_ms) {
+      await timeout(debounce_ms);
+    }
     return this.controller.checkCommand(
-      moveSelectedStructure(this.structureTypes, 'down', this.intl)
+      moveSelectedStructure({
+        specs: this.structureTypes,
+        direction: 'down',
+        intl: this.intl,
+        upperSearchLimit: this.upperSearchLimit,
+      })
     );
   });
 
@@ -105,9 +129,17 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   ]);
 
   canMoveUpTask = restartableTask(async () => {
-    await timeout(250);
+    const { debounce_ms } = this.options;
+    if (debounce_ms) {
+      await timeout(debounce_ms);
+    }
     return this.controller.checkCommand(
-      moveSelectedStructure(this.structureTypes, 'up', this.intl)
+      moveSelectedStructure({
+        specs: this.structureTypes,
+        direction: 'up',
+        intl: this.intl,
+        upperSearchLimit: this.upperSearchLimit,
+      })
     );
   });
 
@@ -121,13 +153,13 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
         return true;
       } else {
         return this.controller.checkCommand(
-          unwrapStructure(
-            {
+          unwrapStructure({
+            structure: {
               ...this.structure,
               type: this.currentStructureType,
             },
-            this.structureTypes
-          )
+            specs: this.structureTypes,
+          })
         );
       }
     }

@@ -1,18 +1,20 @@
 import { Command, PNode } from '@lblod/ember-rdfa-editor';
-import {
-  ArticleStructurePluginOptions,
-  StructureSpec,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 
-const unwrapStructure = (
+type UnwrapStructureArgs = {
   structure: {
     pos: number;
     node: PNode;
     type: StructureSpec;
-  },
-  options: ArticleStructurePluginOptions
-): Command => {
+  };
+  specs: StructureSpec[];
+};
+
+const unwrapStructure = ({
+  structure,
+  specs,
+}: UnwrapStructureArgs): Command => {
   return (state, dispatch) => {
     const { doc } = state;
     const { pos, node, type } = structure;
@@ -30,7 +32,7 @@ const unwrapStructure = (
     if (dispatch) {
       const transaction = state.tr;
       transaction.replaceWith(pos, pos + node.nodeSize, contentToUnwrap);
-      recalculateStructureNumbers(transaction, ...options);
+      recalculateStructureNumbers(transaction, ...specs);
       dispatch(transaction);
     }
     return true;

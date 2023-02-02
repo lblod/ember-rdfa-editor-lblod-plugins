@@ -306,7 +306,11 @@ export default class RoadsignRegulationCard extends Component<Args> {
     }).content;
 
     this.args.controller.doCommand(
-      insertStructure(besluitArticleStructure, this.intl, contentFragment)
+      insertStructure({
+        structureSpec: besluitArticleStructure,
+        intl: this.intl,
+        content: contentFragment,
+      })
     );
     this.args.closeModal();
   }
