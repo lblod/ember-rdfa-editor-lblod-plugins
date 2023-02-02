@@ -18,8 +18,8 @@ export const sectionSpec: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.section',
     move: {
-      up: 'article-structure-plugin.moveUp.section',
-      down: 'article-structure-plugin.moveDown.section',
+      up: 'article-structure-plugin.move-up.section',
+      down: 'article-structure-plugin.move-down.section',
     },
     remove: 'article-structure-plugin.remove.section',
   },
