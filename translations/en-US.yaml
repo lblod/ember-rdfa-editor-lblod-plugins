@@ -71,7 +71,7 @@ date-plugin:
     result: "Result"
     detailed-info: For more detailed symbols visit
     docs-link: the library documentation
-    date-examples: With this you can create any date format, some examples and it's corresponding date
+    date-examples: With this you can create any date format, here are some examples and their corresponding dates
     date-format: Date format
     short-weekday-title: Short day of the week
     short-weekday-content: Mon, Tue, Wed, ..., Sun
