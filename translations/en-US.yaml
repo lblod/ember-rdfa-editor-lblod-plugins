@@ -93,6 +93,15 @@ date-plugin:
     hours: "Hours"
     minutes: "Minutes"
     now: "Now"
+  validation:
+    character: "Invalid character"
+    character-suggestion: "To insert literal characters, surround them with single quotes, like so"
+    use-yyyy: "Use yyyy instead of YYYY"
+    use-yy: "Use yy instead of YY"
+    use-d: "Use d instead of D"
+    use-dd: "Use dd instead of D"
+    required: "This field cannot be empty"
+    unknown: "Invalid format"
 variable-plugin:
   insert-variable: Insert variable
   button: Insert

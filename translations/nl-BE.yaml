@@ -93,6 +93,16 @@ date-plugin:
     hours: "Uur"
     minutes: "Minuten"
     now: "Nu"
+  validation:
+    character: "Ongeldig teken"
+    character-suggestion: "Om letterlijke tekens in te voeren, omringt u ze met aanhalingstekens. Bijv."
+    use-yyyy: "Gebruik yyyy in de plaats van YYYY"
+    use-yy: "Gebruik yy in de plaats van YY"
+    use-d: "Gebruik d in de plaats van D"
+    use-dd: "Gebruik dd in de plaats van D"
+    required: "Dit veld mag niet leeg zijn"
+    unknown: "Ongeldig formaat"
+
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

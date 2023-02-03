@@ -4,6 +4,12 @@ import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { DateFormat } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
+import {
+  validateDateFormat,
+  ValidationError,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/utils';
+import { inject as service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 
 type Args = {
   controller: ProseController;
@@ -15,13 +21,14 @@ type Args = {
   };
 };
 export default class RdfaDatePluginCardComponent extends Component<Args> {
+  @service
+  declare intl: IntlService;
   @tracked dateValue?: Date;
   @tracked datePos?: number;
   @tracked dateInDocument = false;
   @tracked onlyDate = false;
   @tracked dateFormat = '';
   @tracked customDateFormat = 'dd/MM/yyyy';
-  @tracked customDateFormatError = false;
   @tracked helpModalOpen = false;
 
   constructor(owner: unknown, args: Args) {
@@ -35,13 +42,34 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     return this.args.controller;
   }
 
+  get customDateFormatError(): ValidationError | null {
+    const validation = validateDateFormat(this.customDateFormat);
+    if (validation.type === 'ok') {
+      return null;
+    } else {
+      return validation;
+    }
+  }
+
+  get humanError(): string | null {
+    if (this.customDateFormatError) {
+      const { error, payload } = this.customDateFormatError;
+      if (error === 'character') {
+        const msg = this.intl.lookup(`date-plugin.validation.${error}`) ?? '';
+        const suggestion =
+          this.intl.lookup('date-plugin.validation.character-suggestion') ?? '';
+        const chars = payload?.invalidCharacters ?? '';
+        return `${msg}: ${chars}. ${suggestion}: '${chars}'`;
+      }
+      return this.intl.lookup(`date-plugin.validation.${error}`) ?? null;
+    }
+    return null;
+  }
+
   @action
   modifyDate() {
-    if (!this.customDateFormat) {
-      this.customDateFormatError = true;
+    if (this.customDateFormatError) {
       return;
-    } else {
-      this.customDateFormatError = false;
     }
     if (this.datePos && this.dateValue) {
       const pos = this.datePos;
@@ -74,18 +102,15 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         }
       }
     }
-    if (this.customDateFormat) {
-      this.customDateFormatError = false;
-    }
     if (this.dateInDocument) this.modifyDate();
   }
+
   @action
   setCustomDateFormat(event: InputEvent) {
     this.customDateFormat = (event.target as HTMLInputElement).value;
-    if (this.customDateFormat) {
-      this.customDateFormatError = false;
+    if (this.dateInDocument) {
+      this.modifyDate();
     }
-    if (this.dateInDocument) this.modifyDate();
   }
 
   get showCard() {

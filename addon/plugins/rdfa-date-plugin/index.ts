@@ -2,7 +2,7 @@ import { WidgetSpec } from '@lblod/ember-rdfa-editor';
 
 export const defaultDateFormats: DateFormat[] = [
   {
-    label: 'Short small Date',
+    label: 'Short Date',
     key: 'short',
     dateFormat: 'dd/MM/yy',
     dateTimeFormat: 'dd/MM/yy HH:mm',
