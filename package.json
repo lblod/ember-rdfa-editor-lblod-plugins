@@ -145,7 +145,7 @@
     "ember-concurrency": "^2.3.7"
   },
   "engines": {
-    "node": "14.* || 16.* || >= 18"
+    "node": ">= 18"
   },
   "volta": {
     "node": "18.13.0"
