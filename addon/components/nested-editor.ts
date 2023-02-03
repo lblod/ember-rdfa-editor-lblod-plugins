@@ -73,7 +73,7 @@ import {
 } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import IntlService from 'ember-intl/services/intl';
-import { customRdfaView } from '../plugins/custom-rdfa-plugin';
+import { customRdfaView, custom_rdfa } from '../plugins/custom-rdfa-plugin';
 import { v4 as uuid } from 'uuid';
 
 export default class NestedEditor extends Component<EmberNodeArgs> {
@@ -129,6 +129,7 @@ export default class NestedEditor extends Component<EmberNodeArgs> {
         hard_break,
         block_rdfa,
         invisible_rdfa,
+        custom_rdfa,
       },
       marks: {
         inline_rdfa,
@@ -153,13 +154,13 @@ export default class NestedEditor extends Component<EmberNodeArgs> {
 
   @action
   onClick() {
-    if (this.innerView && !this.innerView.hasFocus()) {
-      this.innerView.focus();
-      const tr = this.innerView.state.tr;
-      const selection = Selection.atEnd(tr.doc);
-      tr.setSelection(selection);
-      this.innerView.dispatch(tr);
-    }
+    // if (this.innerView && !this.innerView.hasFocus()) {
+    //   this.innerView.focus();
+    //   const tr = this.innerView.state.tr;
+    //   const selection = Selection.atEnd(tr.doc);
+    //   tr.setSelection(selection);
+    //   this.innerView.dispatch(tr);
+    // }
   }
 
   @action
@@ -216,6 +217,13 @@ export default class NestedEditor extends Component<EmberNodeArgs> {
           this.outerView.dispatch(outerSelectionTr);
           if (this.innerView) {
             this.args.controller.setEmbeddedView(this.innerView);
+          }
+        },
+        focusout: () => {
+          if (this.innerView) {
+            const tr = this.innerView.state.tr;
+            tr.setSelection(Selection.atEnd(this.innerView.state.doc));
+            this.innerView.dispatch(tr);
           }
         },
       },

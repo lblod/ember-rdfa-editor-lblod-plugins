@@ -12,7 +12,7 @@ export default class InsertCustomRdfaCard extends Component<Args> {
   @action
   insertCustomRdfa() {
     const { selection } = this.controller.getState(true);
-    const transaction = this.controller.state.tr.insert(
+    const transaction = this.controller.getState(true).tr.insert(
       selection.from,
       this.controller.schema.node(
         'custom_rdfa',
@@ -24,6 +24,6 @@ export default class InsertCustomRdfaCard extends Component<Args> {
         this.controller.schema.node('placeholder', { placeholderText: 'text' })
       )
     );
-    this.controller.view.dispatch(transaction);
+    this.controller.getView(true).dispatch(transaction);
   }
 }
