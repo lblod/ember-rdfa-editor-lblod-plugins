@@ -228,6 +228,7 @@ export const besluit_article_header: NodeSpec = {
   inline: false,
   isolating: true,
   defining: true,
+  selectable: false,
   attrs: {
     ...rdfaAttrs,
     number: {
