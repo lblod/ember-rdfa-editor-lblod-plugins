@@ -226,6 +226,8 @@ export const besluitArticleStructure: StructureSpec = {
 
 export const besluit_article_header: NodeSpec = {
   inline: false,
+  isolating: true,
+  defining: true,
   attrs: {
     ...rdfaAttrs,
     number: {
@@ -270,6 +272,8 @@ export const besluit_article_header: NodeSpec = {
 export const besluit_article_content: NodeSpec = {
   content: 'block+',
   inline: false,
+  isolating: true,
+  defining: true,
   attrs: {
     ...rdfaAttrs,
     property: {

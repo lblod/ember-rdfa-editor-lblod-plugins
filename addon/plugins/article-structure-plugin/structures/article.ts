@@ -85,6 +85,8 @@ export const article = constructStructureNodeSpec({
 export const article_header: NodeSpec = {
   content: 'text*|placeholder',
   inline: false,
+  isolating: true,
+  defining: true,
   attrs: {
     number: {
       default: '1',

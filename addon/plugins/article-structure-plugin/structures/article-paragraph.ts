@@ -49,6 +49,8 @@ const contentSelector = `span[property~='${SAY('body').prefixed}'],
 export const article_paragraph: NodeSpec = {
   content: 'inline*',
   inline: false,
+  isolating: true,
+  defining: true,
   attrs: {
     typeof: {
       default: SAY('Paragraph').prefixed,
