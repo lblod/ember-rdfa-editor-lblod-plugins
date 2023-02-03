@@ -226,6 +226,7 @@ export const besluitArticleStructure: StructureSpec = {
 
 export const besluit_article_header: NodeSpec = {
   inline: false,
+  selectable: false,
   attrs: {
     ...rdfaAttrs,
     number: {
