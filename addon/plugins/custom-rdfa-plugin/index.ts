@@ -49,7 +49,7 @@ const emberNodeConfig: EmberNodeConfig = {
   parseDOM: [
     {
       tag: 'span',
-      priority: 10,
+      priority: 40,
       getAttrs: (node: HTMLElement) => {
         return {
           typeof: node.getAttribute('typeof'),
