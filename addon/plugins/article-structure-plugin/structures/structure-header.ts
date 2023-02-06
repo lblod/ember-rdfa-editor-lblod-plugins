@@ -19,6 +19,8 @@ const TAG_TO_LEVEL = new Map([
 export const structure_header: NodeSpec = {
   content: 'text*|placeholder',
   inline: false,
+  defining: true,
+  isolating: true,
   attrs: {
     property: {
       default: SAY('heading').prefixed,

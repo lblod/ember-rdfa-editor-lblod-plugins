@@ -173,8 +173,8 @@ export const besluitArticleStructure: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.article',
     move: {
-      up: 'article-structure-plugin.moveUp.article',
-      down: 'article-structure-plugin.moveDown.article',
+      up: 'article-structure-plugin.move-up.article',
+      down: 'article-structure-plugin.move-down.article',
     },
     remove: 'article-structure-plugin.remove.article',
   },
@@ -226,6 +226,7 @@ export const besluitArticleStructure: StructureSpec = {
 
 export const besluit_article_header: NodeSpec = {
   inline: false,
+  selectable: false,
   attrs: {
     ...rdfaAttrs,
     number: {
@@ -300,6 +301,7 @@ export const besluit: NodeSpec = {
   content: 'block*title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
+  isolating: true,
   attrs: {
     ...rdfaAttrs,
     property: {

@@ -1,52 +1,89 @@
-<div {{did-update this.onSelectionChanged @controller.state}}>
-{{#if this.showCard}}
-  <AuCard @shadow={{true}} @size="flush" as |c|>
-    <c.header class="au-u-hidden-visually">
-      <AuHeading @level="3" @skin="6">{{t "date-plugin.card.title"}}</AuHeading>
-    </c.header>
-    <c.content class="au-o-box au-o-box--small">
-      <div class="au-o-flow au-o-flow--small">
-        <RdfaDatePlugin::DateTimePicker
-          @onChange={{this.changeDate}}
-          @value={{this.dateValue}}
-          @onlyDate={{this.onlyDate}}/>
-        {{#each @widgetArgs.options.formats as |format|}}
-        <AuFormRow>
-          <AuControlRadio
-            @label={{format.label}}
-            @identifier={{format.key}}
-            @name="dateFormat"
-            @value={{format.key}}
-            checked={{eq this.dateFormat format.key}}
-            @onChange={{this.setDateFormat}}
-          />
-        </AuFormRow>
-        {{/each}}
-        <AuFormRow>
-          <AuControlRadio
-            @label="Custom Date"
-            @identifier="custom"
-            @name="dateFormat"
-            @value="custom"
-            checked={{eq this.dateFormat "custom"}}
-            @onChange={{this.setDateFormat}}
-          />
-          {{#if (eq this.dateFormat "custom")}}
-            <AuInput
-              @value={{this.customDateFormat}}
-              {{on "input" this.setCustomDateFormat}}
+<div>
+  {{#if this.showCard}}
+    <AuCard @shadow={{true}} @size="flush" as |c|>
+      <c.header class="au-u-hidden-visually">
+        <AuHeading @level="3" @skin="6">{{t "date-plugin.card.title"}}</AuHeading>
+      </c.header>
+      <c.content class="au-o-box au-o-box--small">
+        <div class="au-o-flow au-o-flow--small">
+          <RdfaDatePlugin::DateTimePicker
+            @onChange={{this.changeDate}}
+            @value={{this.pickerDate}}
+            @onlyDate={{this.onlyDate}}
+            @showSeconds={{this.showSeconds}}
+          >
+
+            <AuFormRow @alignment="inline">
+              <AuControlCheckbox
+                @label={{t 'date-plugin.card.include-time'}}
+                @disabled={{eq this.dateFormatType "custom"}}
+                @checked={{not this.onlyDate}}
+                @onChange={{this.changeIncludeTime}}
+              />
+              {{#if this.isCustom}}
+                <Velcro @placement="top" @offsetOptions={{hash mainAxis=10}} as |velcro|>
+                  <AuBadge
+                    @size="small"
+                    @icon="info-circle"
+                    aria-describedby="date-plugin-time-info-tooltip"
+                    {{velcro.hook}}
+                    {{on "mouseenter" this.showTooltip }}
+                    {{on "mouseleave" this.hideTooltip}}
+                    {{on "focus" this.showTooltip }}
+                    {{on "blur" this.hideTooltip }}
+                  />
+                  {{#if this.tooltipOpen}}
+                    <AuPill
+                      id="date-plugin-time-info-tooltip"
+                      role="tooltip"
+                      {{velcro.loop}}>
+                      {{t 'date-plugin.card.info-custom-time'}}
+                    </AuPill>
+                  {{/if}}
+                </Velcro>
+              {{/if}}
+            </AuFormRow>
+          </RdfaDatePlugin::DateTimePicker>
+          {{#each this.formats as |format|}}
+            <AuFormRow>
+              <AuControlRadio
+                @label={{format.label}}
+                @identifier={{format.key}}
+                @name="dateFormat"
+                @value={{format.key}}
+                checked={{eq this.dateFormatType format.key}}
+                @onChange={{this.setDateFormatFromKey}}
+              />
+            </AuFormRow>
+          {{/each}}
+          <AuFormRow>
+            <AuControlRadio
+              @label={{t "date-plugin.card.custom-date" }}
+              @identifier="custom"
+              @name="dateFormat"
+              @value="custom"
+              checked={{eq this.dateFormatType "custom"}}
+              @onChange={{this.setDateFormatFromKey}}
             />
-          {{/if}}
-        </AuFormRow>
-        {{#unless this.dateInDocument}}
-          <AuFormRow class="au-u-margin-top">
-            <AuButton {{on 'click' this.modifyDate}}>
-              {{if this.onlyDate (t "date-plugin.card.insert-date") (t "date-plugin.card.insert-datetime")}}
-            </AuButton>
           </AuFormRow>
-        {{/unless}}
-      </div>
-    </c.content>
-  </AuCard>
-{{/if}}
+          {{#if (eq this.dateFormatType "custom")}}
+            <AuFormRow @alignment="post">
+              <AuButton @skin="secondary" @icon="info-circle"
+                {{on 'click' this.toggleHelpModal}}>
+              </AuButton>
+              <AuNativeInput
+                @error={{this.customDateFormatError}}
+                value={{this.documentDateFormat}}
+                {{on "input" this.setCustomDateFormat}}
+              />
+            </AuFormRow>
+            {{#if this.humanError}}
+              <AuPill @skin="error" @icon="cross">{{this.humanError}}</AuPill>
+            {{/if}}
+          {{/if}}
+        </div>
+      </c.content>
+    </AuCard>
+  {{/if}}
 </div>
+<RdfaDatePlugin::HelpModal @modalOpen={{this.helpModalOpen}} @closeModal={{this.toggleHelpModal}} />

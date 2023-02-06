@@ -71,6 +71,8 @@ export function constructStructureBodyNodeSpec(config: {
   return {
     content,
     inline: false,
+    defining: true,
+    isolating: true,
     toDOM() {
       return [
         'div',
