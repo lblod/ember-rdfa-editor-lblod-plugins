@@ -28,7 +28,7 @@ type Args = {
     };
   };
 };
-const TIME_CHAR_REGEX = new RegExp('[abBhHkKmsSxXOztTp]');
+const TIME_CHAR_REGEX = new RegExp('[abBhHkKmsStTp]');
 const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
 export default class RdfaDatePluginCardComponent extends Component<Args> {
   @service
