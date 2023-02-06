@@ -17,6 +17,10 @@
 
 
 
+## 2.0.0 (2023-02-06)
+version-only bump to match editor major cycle
+
+
 ## 1.0.0 (2023-02-06)
 
 #### :boom: Breaking Change
