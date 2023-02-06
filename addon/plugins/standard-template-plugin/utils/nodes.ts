@@ -20,6 +20,7 @@ export const title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
   defining: true,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -49,6 +50,7 @@ export const description: NodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -78,6 +80,7 @@ export const motivering: NodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -107,6 +110,7 @@ export const article_container: NodeSpec = {
   group: 'block',
   content: '(block|besluit_article)+',
   inline: false,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -302,6 +306,7 @@ export const besluit: NodeSpec = {
   inline: false,
   defining: true,
   isolating: true,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {

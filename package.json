@@ -152,7 +152,7 @@
     "node": "12.* || 14.* || >= 16"
   },
   "volta": {
-    "node": "16.18.1"
+    "node": "18.14.0"
   },
   "ember": {
     "edition": "octane"
