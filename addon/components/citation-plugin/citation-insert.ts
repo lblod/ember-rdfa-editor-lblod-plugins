@@ -12,16 +12,20 @@ import {
   Decision,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
-import { CitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import {
+  CitationPlugin,
+  CitationPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 interface Args {
   controller: ProseController;
-  widgetArgs: { plugin: CitationPlugin };
+  widgetArgs: { plugin: CitationPlugin; config: CitationPluginConfig };
 }
 
 export default class EditorPluginsCitationInsertComponent extends Component<Args> {
@@ -29,6 +33,10 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   @tracked legislationTypeUri = LEGISLATION_TYPES.decreet;
   @tracked text = '';
   @tracked legislationType: string | null = null;
+
+  get config() {
+    return this.args.widgetArgs.config;
+  }
 
   get selectedLegislationTypeUri(): string {
     return this.selectedLegislationType.value;
@@ -52,13 +60,25 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   }
 
   get disableInsert() {
-    if (!this.activeRanges || this.controller.inEmbeddedView) {
+    if (this.controller.inEmbeddedView) {
       return true;
     }
-    const { from } = this.controller.state.selection;
-    return !this.activeRanges.some(
-      ([start, end]) => from > start && from < end
-    );
+    const { selection } = this.controller.state;
+    if (this.config.type === 'ranges') {
+      const ranges = this.config.activeInRanges(this.controller.state);
+      for (const range of ranges) {
+        if (selection.from >= range[0] && selection.to <= range[1]) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      const nodeTypes = this.config.activeInNodeTypes(
+        this.controller.schema,
+        this.controller.state
+      );
+      return !findParentNodeOfType([...nodeTypes])(selection);
+    }
   }
 
   get plugin() {
