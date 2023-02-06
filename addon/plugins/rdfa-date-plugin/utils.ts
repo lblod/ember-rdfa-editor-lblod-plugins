@@ -19,6 +19,7 @@ type ValidationErrorType =
   | 'use-dd'
   | 'character'
   | 'required'
+  | 'fractions'
   | 'unknown';
 
 interface ValidationOk {
@@ -34,11 +35,15 @@ export interface ValidationError {
 
 type ValidationResult = ValidationOk | ValidationError;
 const INVALID_CHAR_REGEX = new RegExp('Format string.*`(?<char>\\S+)`');
+const FRACTIONS_REGEX = new RegExp('[ST]');
 
 export function validateDateFormat(format?: string): ValidationResult {
   try {
     if (!format || format.length === 0) {
       return { type: 'error', error: 'required' };
+    }
+    if (FRACTIONS_REGEX.test(format)) {
+      return { type: 'error', error: 'fractions' };
     }
     const value = formatWithOptions({ locale: nlBE }, format)(new Date());
     return { type: 'ok', value };
