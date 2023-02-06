@@ -17,6 +17,15 @@
 
 
 
+
+## 2.0.1 (2023-02-06)
+
+#### :bug: Bug Fix
+* [#95](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/95) Move ember-velcro to hard dependencies ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## 2.0.0 (2023-02-06)
 version-only bump to match editor major cycle
 
