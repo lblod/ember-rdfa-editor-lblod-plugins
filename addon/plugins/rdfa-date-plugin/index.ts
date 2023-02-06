@@ -20,9 +20,7 @@ const defaultOptions = {
   allowCustomFormat: true,
 };
 
-export const rdfaDateCardWidget: (options?: DatePluginOptions) => WidgetSpec = (
-  options
-) => {
+export function rdfaDateCardWidget(options?: DatePluginOptions): WidgetSpec {
   return {
     componentName: 'rdfa-date-plugin/card',
     desiredLocation: 'sidebar',
@@ -30,12 +28,17 @@ export const rdfaDateCardWidget: (options?: DatePluginOptions) => WidgetSpec = (
       options: options ? options : defaultOptions,
     },
   };
-};
+}
 
-export const rdfaDateInsertWidget: WidgetSpec = {
-  componentName: 'rdfa-date-plugin/insert',
-  desiredLocation: 'insertSidebar',
-};
+export function rdfaDateInsertWidget(options?: DatePluginOptions): WidgetSpec {
+  return {
+    componentName: 'rdfa-date-plugin/insert',
+    desiredLocation: 'insertSidebar',
+    widgetArgs: {
+      options: options ? options : defaultOptions,
+    },
+  };
+}
 
 export type DateFormat = {
   label: string;
