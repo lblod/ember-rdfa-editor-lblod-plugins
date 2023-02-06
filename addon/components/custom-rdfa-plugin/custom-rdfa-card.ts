@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { NodeSelection, PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 export function findAncestors(
   pos: ResolvedPos,
@@ -38,11 +39,12 @@ export default class CustomRdfaCard extends Component<Args> {
 
   @action
   selectionChanged() {
-    const { selection } = this.controller.state;
-    let rdfaNode;
-    if (selection instanceof NodeSelection && selection.node) {
-      rdfaNode = { node: selection.node, pos: selection.from };
-    }
+    const { selection } = this.controller.getState(true);
+    console.log(selection);
+    const rdfaNode = findParentNodeOfType(
+      this.controller.schema.nodes['custom_rdfa']
+    )(selection);
+    console.log(rdfaNode)
     if (rdfaNode) {
       this.showCard = true;
       this.typeof = rdfaNode.node.attrs.typeof as string;
@@ -79,15 +81,13 @@ export default class CustomRdfaCard extends Component<Args> {
     if (!this.node) {
       return;
     }
-    const transaction = this.controller.state.tr.setNodeMarkup(
-      this.node?.pos,
-      undefined,
-      {
+    const transaction = this.controller
+      .getState(true)
+      .tr.setNodeMarkup(this.node?.pos, undefined, {
         typeof: this.typeof,
         property: this.property,
         resource: this.resource,
-      }
-    );
-    this.controller.view.dispatch(transaction);
+      });
+    this.controller.getView(true).dispatch(transaction);
   }
 }
