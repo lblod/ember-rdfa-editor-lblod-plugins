@@ -158,7 +158,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   @tracked widgets: WidgetSpec[] = [
     tableMenu,
     rdfaDateCardWidget(),
-    rdfaDateInsertWidget,
+    rdfaDateInsertWidget(),
     tableOfContentsWidget,
     insertVariableWidget(this.insertVariableWidgetOptions),
     templateVariableWidget,

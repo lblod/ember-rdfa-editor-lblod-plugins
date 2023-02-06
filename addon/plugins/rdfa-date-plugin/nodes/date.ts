@@ -5,7 +5,7 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { formatDate } from '../utils';
+import { formatDate, validateDateFormat } from '../utils';
 
 export type DateOptions = {
   placeholder: {
@@ -22,13 +22,16 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
         default: null,
       },
       value: {
-        default: null,
+        default: new Date().toISOString(),
       },
       format: {
-        default: 'dd/mm/yyyy',
+        default: 'dd/MM/yyyy',
       },
       onlyDate: {
         default: true,
+      },
+      custom: {
+        default: false,
       },
     },
     selectable: true,
@@ -42,17 +45,25 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       return humanReadableDate;
     },
     toDOM: (node) => {
-      const { value, onlyDate, format, mappingResource } = node.attrs;
+      const { value, onlyDate, format, mappingResource, custom } = node.attrs;
       const datatype = onlyDate ? XSD('date') : XSD('dateTime');
-      const humanReadableDate = value
-        ? formatDate(new Date(value), format)
-        : onlyDate
-        ? options.placeholder.insertDate
-        : options.placeholder.insertDateTime;
+      let humanReadableDate: string;
+      if (value) {
+        if (validateDateFormat(format).type === 'ok') {
+          humanReadableDate = formatDate(new Date(value), format);
+        } else {
+          humanReadableDate = 'Ongeldig formaat';
+        }
+      } else {
+        humanReadableDate = onlyDate
+          ? options.placeholder.insertDate
+          : options.placeholder.insertDateTime;
+      }
       const dateAttrs = {
         datatype: datatype.prefixed,
         property: EXT('content').prefixed,
         'data-format': format as string,
+        'data-custom': custom ? 'true' : 'false',
         ...(!!value && { content: value as string }),
       };
       if (mappingResource) {
@@ -83,6 +94,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
               value: node.getAttribute('content'),
               onlyDate,
               format: node.dataset.format,
+              custom: node.dataset.custom === 'true',
             };
           }
           return false;
@@ -114,6 +126,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
                 onlyDate,
                 value: dateNode?.getAttribute('content'),
                 format: dateNode?.getAttribute('data-format'),
+                custom: dateNode?.getAttribute('data-custom') === 'true',
               };
             }
           }

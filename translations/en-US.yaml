@@ -64,6 +64,7 @@ besluit-plugin:
     decision-title: Insert decision title
 date-plugin:
   help:
+    title: "Custom format help"
     first-line: "For custom formats, all the text between single quotes is escaped and written into the document as it's written, all the other characters are interpreted and represent different parts of the date:"
     examples: "Examples:"
     name: "Name"
@@ -89,10 +90,24 @@ date-plugin:
     title: "Date"
     insert-date: "Insert date"
     insert-datetime: "Insert date and time"
+    include-time: "Include time"
+    info-custom-time: "With a custom format, time controls are shown automatically when the format includes time information"
+    custom-date: "Custom format"
     label: "Select date"
     hours: "Hours"
     minutes: "Minutes"
+    seconds: "Seconds"
     now: "Now"
+  validation:
+    character: "Invalid character"
+    character-suggestion: "To insert literal characters, surround them with single quotes, like so"
+    use-yyyy: "Use yyyy instead of YYYY"
+    use-yy: "Use yy instead of YY"
+    use-d: "Use d instead of D"
+    use-dd: "Use dd instead of D"
+    required: "This field cannot be empty"
+    fractions: "Fractions of a second, such as S or T, are not supported."
+    unknown: "Invalid format"
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
