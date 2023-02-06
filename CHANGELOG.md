@@ -18,6 +18,23 @@
 
 
 
+
+## 2.1.0 (2023-02-06)
+
+#### :rocket: Enhancement
+* [#98](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/98) Improve citation plugin regex and improve citation type matching ([@elpoelma](https://github.com/elpoelma))
+
+#### :bug: Bug Fix
+* [#96](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/96) Fix insert-citation button not being enabled in correct context. ([@elpoelma](https://github.com/elpoelma))
+* [#100](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/100) Prevent splitting of besluit related nodes ([@elpoelma](https://github.com/elpoelma))
+* [#97](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/97) Fix: disallow splitting of besluit node ([@elpoelma](https://github.com/elpoelma))
+
+#### :house: Internal
+* [#99](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/99) Update editor to 2.1.0 ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## 2.0.1 (2023-02-06)
 
 #### :bug: Bug Fix
