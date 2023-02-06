@@ -301,6 +301,7 @@ export const besluit: NodeSpec = {
   content: 'block*title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
+  isolating: true,
   attrs: {
     ...rdfaAttrs,
     property: {
