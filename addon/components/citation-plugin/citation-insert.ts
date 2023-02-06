@@ -67,7 +67,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     if (this.config.type === 'ranges') {
       const ranges = this.config.activeInRanges(this.controller.state);
       for (const range of ranges) {
-        if (selection.from >= range[0] && selection.to <= range[1]) {
+        if (selection.from > range[0] && selection.from < range[1]) {
           return false;
         }
       }
