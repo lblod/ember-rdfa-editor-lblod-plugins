@@ -64,6 +64,7 @@ besluit-plugin:
     decision-title: Geef titel besluit op
 date-plugin:
   help:
+    title: "Datumformaat help"
     first-line: "Indien u een eigen datumnotatie wilt gebruiken, kunt u deze korte handleiding volgen. Datumnotaties kunnen bestaan uit zowel speciale karakters/symbolen die verschillende delen van een datum voorstellen, en platte tekst die tussen aanhalingstekens ('') dient geplaatst te worden."
     examples: "Voorbeelden:"
     name: "Naam"
@@ -89,9 +90,13 @@ date-plugin:
     title: "Datum"
     insert-date: "Datum invoegen"
     insert-datetime: "Datum en tijd invoegen"
+    include-time: "Inclusief tijd"
+    info-custom-time: "Bij zelfgekozen formaten tonen we automatisch de tijdskeuze indien het formaat tijdsgerelateerde elementen bevat"
+    custom-date: "Ander formaat"
     label: "Selecteer datum"
-    hours: "Uur"
+    hours: "Uren"
     minutes: "Minuten"
+    seconds: "Seconden"
     now: "Nu"
   validation:
     character: "Ongeldig teken"
@@ -101,6 +106,7 @@ date-plugin:
     use-d: "Gebruik d in de plaats van D"
     use-dd: "Gebruik dd in de plaats van D"
     required: "Dit veld mag niet leeg zijn"
+    fractions: "Fracties van seconden, zoals S en T, zijn niet ondersteund."
     unknown: "Ongeldig formaat"
 
 variable-plugin:
