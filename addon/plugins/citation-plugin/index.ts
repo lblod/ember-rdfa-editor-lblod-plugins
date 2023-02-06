@@ -162,6 +162,7 @@ export function setupCitationPlugin(
         desiredLocation: 'insertSidebar',
         componentName: 'citation-plugin/citation-insert',
         widgetArgs: {
+          config,
           plugin,
         },
       },
