@@ -187,12 +187,18 @@ export const besluitArticleStructure: StructureSpec = {
     const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
       `besluit_article`,
-      { resource: `http://data.lblod.info/articles/${uuid()}` },
+      {
+        resource: `http://data.lblod.info/articles/${uuid()}`,
+        __rdfaId: uuid(),
+      },
       [
-        schema.node('besluit_article_header', { number: numberConverted }),
+        schema.node('besluit_article_header', {
+          number: numberConverted,
+          __rdfaId: uuid(),
+        }),
         schema.node(
           `besluit_article_content`,
-          {},
+          { __rdfaId: uuid() },
           content ??
             schema.node(
               'paragraph',
