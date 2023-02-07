@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - move to keep-a-changelog for changelog management
+- bump editor to v2.1.2
+
+### Added
+
+- add types for the `debug` lib
 
 ## [2.1.0] - 2023-02-06
 
