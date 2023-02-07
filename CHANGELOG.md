@@ -11,10 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - move to keep-a-changelog for changelog management
 - bump editor to v2.1.2
+- bump editor to v2.1.1
 
 ### Added
 
 - add types for the `debug` lib
+
+### Fixed
+
+- correctly set the date type as xsd:date or xsd:dateTime based on the date content
+- Add the __rdfaId when manually creating decisions titles, decision articles or citations
+- fix citation highlights not triggering correctly in various situations
 
 ## [2.1.0] - 2023-02-06
 
