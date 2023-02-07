@@ -2,12 +2,18 @@ import { formatWithOptions } from 'date-fns/fp';
 import { nlBE } from 'date-fns/locale';
 import { RegexpMatchArrayWithIndices } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/process-match';
 
+const TIME_CHAR_REGEX = new RegExp('[abBhHkKmsStTp]');
+
 export function formatDate(date: Date, format: string) {
   try {
     return formatWithOptions({ locale: nlBE }, format)(date);
   } catch (e) {
     return '';
   }
+}
+
+export function formatContainsTime(format: string){
+  return TIME_CHAR_REGEX.test(format.replace(/'[^']*'|"[^"]*"/g, ''));
 }
 
 type ValidationErrorType =
