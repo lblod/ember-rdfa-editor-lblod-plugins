@@ -5,6 +5,7 @@ import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { DateFormat } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import {
+  formatContainsTime,
   validateDateFormat,
   ValidationError,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/utils';
@@ -28,7 +29,6 @@ type Args = {
     };
   };
 };
-const TIME_CHAR_REGEX = new RegExp('[abBhHkKmsStTp]');
 const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
 export default class RdfaDatePluginCardComponent extends Component<Args> {
   @service
@@ -84,8 +84,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     return optionMapOr(
       false,
       (node) => {
-        const format = node.attrs.format as string;
-        return !TIME_CHAR_REGEX.test(format);
+        return !formatContainsTime(node.attrs.format);
       },
       this.selectedDateNode
     );
@@ -96,7 +95,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       false,
       (node) => {
         const format = node.attrs.format as string;
-        return SECONDS_REGEX.test(format);
+        return SECONDS_REGEX.test(format.replace(/'[^']*'|"[^"]*"/g, ''));
       },
       this.selectedDateNode
     );
@@ -209,7 +208,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       return tr
         .setNodeAttribute(pos, 'format', dateFormat)
         .setNodeAttribute(pos, 'custom', custom)
-        .setNodeAttribute(pos, 'onlyDate', this.onlyDate);
+        .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(dateFormat));
     }, true);
   }
 
@@ -243,7 +242,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       this.controller.withTransaction((tr) => {
         return tr
           .setNodeAttribute(pos, 'format', format)
-          .setNodeAttribute(pos, 'onlyDate', this.onlyDate);
+          .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(format));
       }, true);
     }
   }
