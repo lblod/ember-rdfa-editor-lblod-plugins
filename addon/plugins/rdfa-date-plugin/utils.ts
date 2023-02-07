@@ -12,7 +12,7 @@ export function formatDate(date: Date, format: string) {
   }
 }
 
-export function formatContainsTime(format: string){
+export function formatContainsTime(format: string) {
   return TIME_CHAR_REGEX.test(format.replace(/'[^']*'|"[^"]*"/g, ''));
 }
 
