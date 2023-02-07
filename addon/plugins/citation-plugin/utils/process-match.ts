@@ -57,13 +57,13 @@ export default function processMatch(
       cleanedSearchTerms = `${type} ${cleanedSearchTerms}`;
     } else if (/wetboek/i.test(type)) {
       typeLabel = 'wetboek';
-    } else if (/geco[oö]rdineerde[^\S\n]wetten/i.test(type)) {
+    } else if (/geco[oö]rdineerde[^\S\n]wet(ten)?/i.test(type)) {
       typeLabel = 'gecoördineerde wetten';
     } else if (/grondwets?wijziging/i.test(type)) {
       typeLabel = 'grondwetswijziging';
     } else if (/grondwet/i.test(type)) {
       typeLabel = 'grondwet';
-    } else if (/bijzondere wet/i.test(type)) {
+    } else if (/bijzondere[^\S\n]wet/i.test(type)) {
       typeLabel = 'bijzondere wet';
     } else if (/\w+wet/i.test(type)) {
       typeLabel = 'wet';
