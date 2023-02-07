@@ -26,6 +26,7 @@ const NNWS = '[^\\S\\n]';
 
 /**
  * match for a "decree"
+ * the "t" at the end is not a typo
  */
 const DECREE = `\\w*decreet`;
 
@@ -56,7 +57,11 @@ const FLEMGOV = `besluit${VVR}`;
  * match for "coordinated laws"
  * whatever that may be
  */
-const COORD = `geco[öo]rdineerde${NNWS}wetten`;
+const COORD = `geco[öo]rdineerde${NNWS}wet(ten)?`;
+/**
+ * literally "special law"
+ */
+const SPECIAL = `bijzondere${NNWS}wet`;
 /**
  * Matches any kind of law
  */
@@ -80,13 +85,13 @@ const ENUM_ROYAL = `genummerd${NNWS}?${ROYAL}`;
 /**
  * The type of citation that we need to search for
  */
-const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}`;
+const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${SPECIAL}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}`;
 /**
  * The monster regex that makes the citation plugin trigger.
  * In restructuring, I've made sure that I didn't abstract away any of the capturing groups,
  * only their content, so you can still see what's going on
  *
- * This regex uses named capturing groups, that's the "?<name>" syntax for easy parsing later
+ * This regex uses named capturing groups, that's the "?<name>" syntax, for easy parsing later
  */
 export const CITATION_REGEX = new RegExp(
   `((?<type>${TYPE})${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
@@ -179,8 +184,13 @@ function citationPlugin(config: CitationPluginConfig): CitationPlugin {
       init(stateConfig: EditorStateConfig, state: EditorState) {
         return calculateCitationPluginState(state, config);
       },
-      apply(tr, set, oldState, newState) {
-        return calculateCitationPluginState(newState, config, oldState);
+      apply(tr, oldPluginState, oldState, newState) {
+        return calculateCitationPluginState(
+          newState,
+          config,
+          oldState,
+          oldPluginState.highlights.map(tr.mapping, tr.doc)
+        );
       },
     },
     props: {
@@ -195,7 +205,8 @@ function citationPlugin(config: CitationPluginConfig): CitationPlugin {
 function calculateCitationPluginState(
   state: EditorState,
   config: CitationPluginConfig,
-  oldState?: EditorState
+  oldState?: EditorState,
+  oldDecs?: DecorationSet
 ) {
   const { doc, schema } = state;
   let activeRanges;
@@ -216,7 +227,8 @@ function calculateCitationPluginState(
       schema,
       nodes,
       doc,
-      oldState?.doc
+      oldState?.doc,
+      oldDecs
     );
     activeRanges = calculatedDecs.activeRanges;
     highlights = calculatedDecs.decorations;
@@ -232,11 +244,19 @@ function calculateDecorationsInNodes(
   schema: CitationSchema,
   nodes: Set<NodeType>,
   newDoc: PNode,
-  oldDoc?: PNode
+  oldDoc?: PNode,
+  oldDecorations?: DecorationSet
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const activeRanges: [number, number][] = [];
-  const decorations: Decoration[] = [];
-  const collector = collectDecorations(decorations, schema, config.regex);
+  const decsToAdd: Decoration[] = [];
+  const decsToRemove: Decoration[] = [];
+  const collector = collectDecorations(
+    decsToAdd,
+    schema,
+    config.regex,
+    decsToRemove,
+    oldDecorations
+  );
   if (nodes.has(newDoc.type)) {
     oldDoc
       ? changedDescendants(oldDoc, newDoc, 0, collector)
@@ -268,7 +288,9 @@ function calculateDecorationsInNodes(
         });
   }
   return {
-    decorations: DecorationSet.create(newDoc, decorations),
+    decorations: oldDecorations
+      ? oldDecorations.remove(decsToRemove).add(newDoc, decsToAdd)
+      : DecorationSet.create(newDoc, decsToAdd),
     activeRanges,
   };
 }
@@ -279,22 +301,24 @@ function calculateDecorationsInRanges(
   doc: PNode,
   activeRanges: [number, number][]
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
-  const decorations: Decoration[] = [];
-  const collector = collectDecorations(decorations, schema, config.regex);
+  const decorationsToAdd: Decoration[] = [];
+  const collector = collectDecorations(decorationsToAdd, schema, config.regex);
 
   for (const [start, end] of activeRanges) {
     doc.nodesBetween(start, end, collector);
   }
   return {
-    decorations: DecorationSet.create(doc, decorations),
+    decorations: DecorationSet.create(doc, decorationsToAdd),
     activeRanges: activeRanges,
   };
 }
 
 function collectDecorations(
-  decorations: Decoration[],
+  decsToAdd: Decoration[],
   schema: CitationSchema,
-  regex: RegExp = CITATION_REGEX
+  regex: RegExp = CITATION_REGEX,
+  decsToRemove?: Decoration[],
+  oldDecs?: DecorationSet
 ) {
   return function (node: PNode, pos: number): boolean {
     if (
@@ -302,6 +326,17 @@ function collectDecorations(
       node.text &&
       !schema.marks.citation.isInSet(node.marks)
     ) {
+      if (decsToRemove && oldDecs) {
+        decsToRemove.push(
+          ...oldDecs.find(
+            pos,
+            pos + node.nodeSize,
+            (spec) =>
+              (spec as Record<string, string>).name === 'citationHighlight'
+          )
+        );
+      }
+
       for (const match of node.text.matchAll(regex)) {
         const processedMatch = processMatch(
           match as RegexpMatchArrayWithIndices
@@ -312,7 +347,7 @@ function collectDecorations(
           const { start: matchStart, end: matchEnd } = searchTextMatch;
           const decorationStart = pos + matchStart;
           const decorationEnd = pos + matchEnd;
-          decorations.push(
+          decsToAdd.push(
             Decoration.inline(
               decorationStart,
               decorationEnd,
@@ -321,6 +356,7 @@ function collectDecorations(
                 'data-editor-highlight': 'true',
               },
               {
+                name: 'citationHighlight',
                 searchText: text,
                 legislationTypeUri,
               }
