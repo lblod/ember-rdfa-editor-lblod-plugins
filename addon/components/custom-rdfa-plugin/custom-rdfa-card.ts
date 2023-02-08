@@ -37,14 +37,29 @@ export default class CustomRdfaCard extends Component<Args> {
     return this.args.controller;
   }
 
+  get state() {
+    return this.controller.getState(true);
+  }
+
   @action
   selectionChanged() {
     const { selection } = this.controller.getState(true);
     console.log(selection);
-    const rdfaNode = findParentNodeOfType(
+    let rdfaNode;
+    if (
+      selection.$from.parent.type ===
       this.controller.schema.nodes['custom_rdfa']
-    )(selection);
-    console.log(rdfaNode)
+    ) {
+      rdfaNode = {
+        node: selection.$from.parent,
+        pos: selection.$from.before(),
+      };
+    } else {
+      rdfaNode = findParentNodeOfType(
+        this.controller.schema.nodes['custom_rdfa']
+      )(selection);
+    }
+    console.log(rdfaNode);
     if (rdfaNode) {
       this.showCard = true;
       this.typeof = rdfaNode.node.attrs.typeof as string;
