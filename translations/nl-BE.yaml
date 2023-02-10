@@ -63,39 +63,72 @@ besluit-plugin:
   placeholder:
     decision-title: Geef titel besluit op
 date-plugin:
+  help:
+    title: "Datumformaat help"
+    first-line: "Indien u een eigen datumnotatie wilt gebruiken, kunt u deze korte handleiding volgen. Datumnotaties kunnen bestaan uit zowel speciale karakters/symbolen die verschillende delen van een datum voorstellen, en platte tekst die tussen aanhalingstekens ('') dient geplaatst te worden."
+    examples: "Voorbeelden:"
+    name: "Naam"
+    symbol: "Symbool/karakters"
+    result: "Resultaat"
+    detailed-info: "Naast deze voorbeelden, bestaan er nog vele andere karakters/symbolen die u kan gebruiken. Meer informatie vindt u op: "
+    docs-link: "documentatie van de date-fns library"
+    date-examples: "Via deze symbolen/karakters kan u verschillende soorten datumnotaties crëeren, hieronder een paar voorbeelden:"
+    date-format: Datumnotatie
+    short-weekday-title: Verkorte versie van een weekdag
+    short-weekday-content: Maa, Din, Woe, ..., Zon
+    long-weekday-title: Weekdag
+    long-weekday-content: Maandag, Dinsdag, ..., Zondag
+    month-day: Dagnummer
+    short-month: Maandnummer
+    long-month-title: Maandnaam
+    long-month-content: Januari, Februari, ..., December
+    long-year: Jaar
   insert:
     date: "Datum invoegen"
     datetime: "Datum en tijd invoegen"
-
   card:
     title: "Datum"
     insert-date: "Datum invoegen"
     insert-datetime: "Datum en tijd invoegen"
+    include-time: "Inclusief tijd"
+    info-custom-time: "Bij zelfgekozen formaten tonen we automatisch de tijdskeuze indien het formaat tijdsgerelateerde elementen bevat"
+    custom-date: "Ander formaat"
     label: "Selecteer datum"
-    hours: "Uur"
+    hours: "Uren"
     minutes: "Minuten"
+    seconds: "Seconden"
     now: "Nu"
+  validation:
+    character: "Ongeldig teken"
+    character-suggestion: "Om letterlijke tekens in te voeren, omringt u ze met aanhalingstekens. Bijv."
+    use-yyyy: "Gebruik yyyy in de plaats van YYYY"
+    use-yy: "Gebruik yy in de plaats van YY"
+    use-d: "Gebruik d in de plaats van D"
+    use-dd: "Gebruik dd in de plaats van D"
+    required: "Dit veld mag niet leeg zijn"
+    fractions: "Fracties van seconden, zoals S en T, zijn niet ondersteund."
+    unknown: "Ongeldig formaat"
+
 variable-plugin:
-  insertVariable: Voeg variabele in
+  insert-variable: Voeg variabele in
   button: Voeg in
-  enterVariableValue: Selecteer waarde
+  enter-variable-value: Selecteer waarde
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
     article: Artikel invoegen
-    articleBelow: Voeg onderstaand artikel in
     title: Titel invoegen
     chapter: Hoofdstuk invoegen
     section: Afdeling invoegen
     subsection: Onderafdeling invoegen
-  moveUp:
+  move-up:
     paragraph: Paragraaf naar boven verplaatsen
     article: Artikel naar boven verplaatsen
     title: Titel naar boven verplaatsen
     chapter: Hoofdstuk naar boven verplaatsen
     section: Afdeling naar boven verplaatsen
     subsection: Onderafdeling naar boven verplaatsen
-  moveDown:
+  move-down:
     paragraph: Paragraaf naar beneden verplaatsen
     article: Artikel naar beneden verplaatsen
     title: Titel naar beneden verplaatsen
@@ -103,9 +136,7 @@ article-structure-plugin:
     section: Afdeling naar beneden verplaatsen
     subsection: Onderafdeling naar boven verplaatsen
   title:
-    paragraphCard: Paragraaf card
-    articleCard: Artikel card
-    structureCard: Structuur card
+    structure-card: Structuur card
   remove:
     article: Artikel verwijderen
     paragraph: Paragraaf verwijderen

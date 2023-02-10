@@ -20,6 +20,7 @@ export const title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
   defining: true,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -49,6 +50,7 @@ export const description: NodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -78,6 +80,7 @@ export const motivering: NodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -107,6 +110,7 @@ export const article_container: NodeSpec = {
   group: 'block',
   content: '(block|besluit_article)+',
   inline: false,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {
@@ -173,8 +177,8 @@ export const besluitArticleStructure: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.article',
     move: {
-      up: 'article-structure-plugin.moveUp.article',
-      down: 'article-structure-plugin.moveDown.article',
+      up: 'article-structure-plugin.move-up.article',
+      down: 'article-structure-plugin.move-down.article',
     },
     remove: 'article-structure-plugin.remove.article',
   },
@@ -183,12 +187,18 @@ export const besluitArticleStructure: StructureSpec = {
     const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
       `besluit_article`,
-      { resource: `http://data.lblod.info/articles/${uuid()}` },
+      {
+        resource: `http://data.lblod.info/articles/${uuid()}`,
+        __rdfaId: uuid(),
+      },
       [
-        schema.node('besluit_article_header', { number: numberConverted }),
+        schema.node('besluit_article_header', {
+          number: numberConverted,
+          __rdfaId: uuid(),
+        }),
         schema.node(
           `besluit_article_content`,
-          {},
+          { __rdfaId: uuid() },
           content ??
             schema.node(
               'paragraph',
@@ -226,6 +236,7 @@ export const besluitArticleStructure: StructureSpec = {
 
 export const besluit_article_header: NodeSpec = {
   inline: false,
+  selectable: false,
   attrs: {
     ...rdfaAttrs,
     number: {
@@ -300,6 +311,8 @@ export const besluit: NodeSpec = {
   content: 'block*title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
+  isolating: true,
+  canSplit: false,
   attrs: {
     ...rdfaAttrs,
     property: {

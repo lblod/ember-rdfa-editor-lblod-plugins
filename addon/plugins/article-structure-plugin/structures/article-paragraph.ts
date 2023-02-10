@@ -17,8 +17,8 @@ export const articleParagraphSpec: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.paragraph',
     move: {
-      up: 'article-structure-plugin.moveUp.paragraph',
-      down: 'article-structure-plugin.moveDown.paragraph',
+      up: 'article-structure-plugin.move-up.paragraph',
+      down: 'article-structure-plugin.move-down.paragraph',
     },
     remove: 'article-structure-plugin.remove.paragraph',
   },
@@ -49,6 +49,8 @@ const contentSelector = `span[property~='${SAY('body').prefixed}'],
 export const article_paragraph: NodeSpec = {
   content: 'inline*',
   inline: false,
+  isolating: true,
+  defining: true,
   attrs: {
     typeof: {
       default: SAY('Paragraph').prefixed,

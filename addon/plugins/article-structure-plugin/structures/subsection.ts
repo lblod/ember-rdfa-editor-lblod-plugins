@@ -19,8 +19,8 @@ export const subsectionSpec: StructureSpec = {
   translations: {
     insert: 'article-structure-plugin.insert.subsection',
     move: {
-      up: 'article-structure-plugin.moveUp.subsection',
-      down: 'article-structure-plugin.moveDown.subsection',
+      up: 'article-structure-plugin.move-up.subsection',
+      down: 'article-structure-plugin.move-down.subsection',
     },
     remove: 'article-structure-plugin.remove.subsection',
   },

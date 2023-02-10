@@ -5,13 +5,19 @@ span.date {
   padding: 0 0.2rem !important;
   line-height: 1.2rem !important;
   transition: border 0.1s ease-in-out, background-color 0.1s ease-in-out;
+
   &::selection {
     background-color: var(--au-blue-200);
   }
+
   user-select: none;
 }
 
 span.date.ProseMirror-selectednode {
   background-color: var(--au-blue-200);
   outline: 2px solid var(--au-blue-500);
+}
+
+#date-plugin-time-info-tooltip {
+  z-index: 3;
 }

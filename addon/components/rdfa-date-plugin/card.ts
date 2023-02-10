@@ -2,8 +2,23 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { NodeSelection } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { DateFormat } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
+import {
+  formatContainsTime,
+  validateDateFormat,
+  ValidationError,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/utils';
+import { inject as service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import {
+  isNone,
+  isSome,
+  Option,
+  optionMap,
+  optionMapOr,
+  unwrapOr,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 type Args = {
   controller: ProseController;
@@ -14,106 +29,226 @@ type Args = {
     };
   };
 };
+const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
 export default class RdfaDatePluginCardComponent extends Component<Args> {
-  @tracked dateValue?: Date;
-  @tracked datePos?: number;
-  @tracked dateInDocument = false;
-  @tracked onlyDate = false;
-  @tracked dateFormat = '';
-  @tracked customDateFormat = 'dd/MM/yyyy';
-  @tracked customDateFormatError = false;
+  @service
+  declare intl: IntlService;
 
-  constructor(owner: unknown, args: Args) {
-    super(owner, args);
-    const formats = this.args.widgetArgs.options.formats;
-    const firstKey = [...formats.keys()][0];
-    this.dateFormat = formats[firstKey].key;
+  @tracked helpModalOpen = false;
+  @tracked
+  tooltipOpen = false;
+
+  get formats(): DateFormat[] {
+    return this.args.widgetArgs.options.formats;
   }
 
   get controller() {
     return this.args.controller;
   }
 
-  @action
-  modifyDate() {
-    if (!this.customDateFormat) {
-      this.customDateFormatError = true;
-      return;
+  get selection() {
+    return this.controller.getState(true).selection;
+  }
+
+  get selectedDateNode(): Option<PNode> {
+    if (
+      this.selection instanceof NodeSelection &&
+      this.selection.node.type === this.args.controller.schema.nodes['date']
+    ) {
+      return this.selection.node;
     } else {
-      this.customDateFormatError = false;
+      return null;
     }
-    if (this.datePos && this.dateValue) {
-      const pos = this.datePos;
-      const value = this.dateValue;
+  }
+
+  get documentDate(): Option<Date> {
+    const dateVal = this.selectedDateNode?.attrs.value as Option<string>;
+    if (dateVal) {
+      return new Date(dateVal);
+    }
+    return null;
+  }
+
+  get documentDatePos(): Option<number> {
+    if (this.selectedDateNode) {
+      return this.selection.from;
+    }
+    return null;
+  }
+
+  get showCard() {
+    return isSome(this.documentDatePos);
+  }
+
+  get onlyDate(): boolean {
+    return optionMapOr(
+      false,
+      (node) => {
+        return !formatContainsTime(node.attrs.format);
+      },
+      this.selectedDateNode
+    );
+  }
+
+  get showSeconds(): boolean {
+    return optionMapOr(
+      false,
+      (node) => {
+        const format = node.attrs.format as string;
+        return SECONDS_REGEX.test(format.replace(/'[^']*'|"[^"]*"/g, ''));
+      },
+      this.selectedDateNode
+    );
+  }
+
+  get documentDateFormat(): Option<string> {
+    return optionMap(
+      (node) => node.attrs.format as string,
+      this.selectedDateNode
+    );
+  }
+
+  get documentDateFormatType(): Option<DateFormat> {
+    if (this.documentDateFormat) {
+      if (this.onlyDate) {
+        return this.formats.find(
+          (format) => format.dateFormat === this.documentDateFormat
+        );
+      } else {
+        return this.formats.find(
+          (format) => format.dateTimeFormat === this.documentDateFormat
+        );
+      }
+    }
+    return null;
+  }
+
+  get isCustom(): boolean {
+    return unwrapOr(false, this.selectedDateNode?.attrs.custom as boolean);
+  }
+
+  get dateFormatType(): string {
+    if (this.isCustom) {
+      return 'custom';
+    }
+    return this.documentDateFormatType?.key || 'custom';
+  }
+
+  get customDateFormatError(): ValidationError | null {
+    const format = this.documentDateFormat ?? '';
+    const validation = validateDateFormat(format);
+    if (validation.type === 'ok') {
+      return null;
+    } else {
+      return validation;
+    }
+  }
+
+  get humanError(): string | null {
+    if (this.customDateFormatError) {
+      const { error, payload } = this.customDateFormatError;
+      if (error === 'character') {
+        const msg = this.intl.lookup(`date-plugin.validation.${error}`) ?? '';
+        const suggestion =
+          this.intl.lookup('date-plugin.validation.character-suggestion') ?? '';
+        const chars = payload?.invalidCharacters ?? '';
+        return `${msg}: ${chars}. ${suggestion}: '${chars}'`;
+      }
+      return this.intl.lookup(`date-plugin.validation.${error}`) ?? null;
+    }
+    return null;
+  }
+
+  get pickerDate(): Date {
+    return this.documentDate ?? new Date();
+  }
+
+  @action
+  showTooltip() {
+    this.tooltipOpen = true;
+  }
+
+  @action hideTooltip() {
+    this.tooltipOpen = false;
+  }
+
+  @action
+  changeDate(date: Date) {
+    const pos = this.documentDatePos;
+    if (pos) {
       this.controller.withTransaction((tr) => {
-        tr.setNodeAttribute(pos, 'format', this.customDateFormat);
-        return tr.setNodeAttribute(pos, 'value', value.toISOString());
+        return tr.setNodeAttribute(pos, 'value', date.toISOString());
       }, true);
     }
   }
 
   @action
-  changeDate(date: Date) {
-    this.dateValue = date;
-    if (this.dateInDocument) this.modifyDate();
+  changeIncludeTime(includeTime: boolean) {
+    console.log('Include time', includeTime);
+    if (this.isCustom) {
+      console.log("but it's custom");
+      return;
+    }
+    const dateFormatType = this.documentDateFormatType;
+    if (dateFormatType) {
+      if (includeTime) {
+        this.setDateFormat(dateFormatType.dateTimeFormat, false);
+      } else {
+        this.setDateFormat(dateFormatType.dateFormat, false);
+      }
+    }
+  }
+
+  setDateFormat(dateFormat: string, custom = false) {
+    const pos = this.documentDatePos;
+    if (isNone(pos)) {
+      return;
+    }
+    this.controller.withTransaction((tr) => {
+      return tr
+        .setNodeAttribute(pos, 'format', dateFormat)
+        .setNodeAttribute(pos, 'custom', custom)
+        .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(dateFormat));
+    }, true);
   }
 
   @action
-  setDateFormat(dateFormat: string) {
-    this.dateFormat = dateFormat;
-    if (dateFormat !== 'custom') {
-      const format = this.args.widgetArgs.options.formats.find(
-        (format) => format.key === dateFormat
-      );
+  setDateFormatFromKey(formatKey: string) {
+    const pos = this.documentDatePos;
+    if (isNone(pos)) {
+      return;
+    }
+    if (formatKey === 'custom') {
+      this.controller.withTransaction((tr) => {
+        return tr.setNodeAttribute(pos, 'custom', true);
+      }, true);
+    } else {
+      const format = this.formats.find((format) => format.key === formatKey);
       if (format) {
-        if (this.onlyDate) {
-          this.customDateFormat = format.dateFormat;
-        } else {
-          this.customDateFormat = format.dateTimeFormat;
-        }
+        this.setDateFormat(
+          this.onlyDate ? format.dateFormat : format.dateTimeFormat,
+          false
+        );
       }
     }
-    if (this.customDateFormat) {
-      this.customDateFormatError = false;
-    }
-    if (this.dateInDocument) this.modifyDate();
   }
+
   @action
   setCustomDateFormat(event: InputEvent) {
-    this.customDateFormat = (event.target as HTMLInputElement).value;
-    if (this.customDateFormat) {
-      this.customDateFormatError = false;
-    }
-    if (this.dateInDocument) this.modifyDate();
-  }
+    const format = (event.target as HTMLInputElement).value;
 
-  get showCard() {
-    return this.datePos !== undefined && this.datePos !== null;
+    const pos = this.documentDatePos;
+    if (isSome(pos) && isSome(format)) {
+      this.controller.withTransaction((tr) => {
+        return tr
+          .setNodeAttribute(pos, 'format', format)
+          .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(format));
+      }, true);
+    }
   }
 
   @action
-  onSelectionChanged() {
-    const selection = this.controller.getState(true).selection;
-    if (
-      selection instanceof NodeSelection &&
-      selection.node.type === this.args.controller.schema.nodes['date']
-    ) {
-      this.dateInDocument = !!selection.node.attrs.value;
-      this.onlyDate = selection.node.attrs.onlyDate as boolean;
-      this.dateValue = this.dateInDocument
-        ? new Date(selection.node.attrs.value)
-        : new Date();
-      if (this.dateInDocument) {
-        this.dateValue = new Date(selection.node.attrs.value);
-      } else {
-        this.dateValue = new Date();
-        if (this.onlyDate) {
-          this.dateValue.setHours(0, 0, 0, 0);
-        }
-      }
-      this.datePos = selection.from;
-    } else {
-      this.datePos = undefined;
-    }
+  toggleHelpModal() {
+    this.helpModalOpen = !this.helpModalOpen;
   }
 }

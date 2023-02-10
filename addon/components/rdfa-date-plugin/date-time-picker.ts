@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 // @ts-ignore
 import { localCopy } from 'tracked-toolbox';
 import Intl from 'ember-intl/services/intl';
+
 type Args = {
   value: Date;
   onChange: (date: Date) => void;
@@ -21,6 +22,10 @@ export default class RdfaDatePluginDateTimePicker extends Component<Args> {
 
   get minutes() {
     return this.date.getMinutes();
+  }
+
+  get seconds() {
+    return this.date.getSeconds();
   }
 
   get datePickerLocalization() {
@@ -56,10 +61,15 @@ export default class RdfaDatePluginDateTimePicker extends Component<Args> {
   }
 
   @action
-  onChangeTime(timeObject: { hours: number; minutes: number }) {
+  onChangeTime(timeObject: {
+    hours: number;
+    minutes: number;
+    seconds: number;
+  }) {
     if (!this.date) this.date = new Date();
     this.date.setHours(timeObject.hours);
     this.date.setMinutes(timeObject.minutes);
+    this.date.setSeconds(timeObject.seconds);
     this.args.onChange(this.date);
   }
 }
