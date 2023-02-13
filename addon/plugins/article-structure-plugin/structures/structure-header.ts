@@ -21,6 +21,7 @@ export const structure_header: NodeSpec = {
   inline: false,
   defining: true,
   isolating: true,
+  selectable: false,
   attrs: {
     property: {
       default: SAY('heading').prefixed,
