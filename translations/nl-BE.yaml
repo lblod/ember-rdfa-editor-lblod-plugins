@@ -134,7 +134,7 @@ article-structure-plugin:
     title: Titel naar beneden verplaatsen
     chapter: Hoofdstuk naar beneden verplaatsen
     section: Afdeling naar beneden verplaatsen
-    subsection: Onderafdeling naar boven verplaatsen
+    subsection: Onderafdeling naar beneden verplaatsen
   title:
     structure-card: Structuur card
   remove:
