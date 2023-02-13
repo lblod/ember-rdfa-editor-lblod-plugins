@@ -35,7 +35,6 @@ import {
   liftEmptyBlock,
   newlineInCode,
   NodeSelection,
-  ProseController,
   RdfaEditorView,
   redo,
   Schema,

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { NodeSelection, PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
+import { PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 export function findAncestors(

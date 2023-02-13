@@ -90,7 +90,6 @@ const emberNodeConfig: EmberNodeConfig = {
       ],
     ];
   },
-  
   parseDOM: [
     {
       tag: 'span',
