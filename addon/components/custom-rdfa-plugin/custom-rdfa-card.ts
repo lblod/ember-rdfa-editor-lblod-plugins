@@ -44,7 +44,6 @@ export default class CustomRdfaCard extends Component<Args> {
   @action
   selectionChanged() {
     const { selection } = this.controller.getState(true);
-    console.log(selection);
     let rdfaNode;
     if (
       selection.$from.parent.type ===
@@ -52,14 +51,13 @@ export default class CustomRdfaCard extends Component<Args> {
     ) {
       rdfaNode = {
         node: selection.$from.parent,
-        pos: selection.$from.before(),
+        pos: selection.from,
       };
     } else {
       rdfaNode = findParentNodeOfType(
         this.controller.schema.nodes['custom_rdfa']
       )(selection);
     }
-    console.log(rdfaNode);
     if (rdfaNode) {
       this.showCard = true;
       this.typeof = rdfaNode.node.attrs.typeof as string;
