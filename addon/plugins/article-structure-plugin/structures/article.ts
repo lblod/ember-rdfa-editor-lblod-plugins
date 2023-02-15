@@ -106,10 +106,14 @@ export const article_header: NodeSpec = {
       'Artikel ',
       [
         'span',
-        { property: ELI('number').prefixed, datatype: XSD('string').prefixed },
+        {
+          property: ELI('number').prefixed,
+          datatype: XSD('string').prefixed,
+          contenteditable: false,
+        },
         node.attrs.number,
       ],
-      ': ',
+      ['span', { contenteditable: false }, ': '],
       [
         'span',
         {
