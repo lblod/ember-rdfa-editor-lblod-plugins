@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - fixed subsection 'move down' dutch translation
+- Hotfix: use content attribute as a fallback to extract the codelist URI
 
 ## [2.1.1] - 2023-02-07
 
