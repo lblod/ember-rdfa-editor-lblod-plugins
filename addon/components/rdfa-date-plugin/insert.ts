@@ -32,19 +32,13 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
     return this.formats[0].dateFormat;
   }
 
-  get defaultDateTimeFormat(): Option<string> {
-    return this.formats[0].dateTimeFormat;
-  }
-
   @action
-  insertDate(onlyDate: boolean) {
+  insertDate() {
     this.controller.withTransaction((tr) => {
       tr.replaceSelectionWith(
         this.schema.node('date', {
-          onlyDate,
-          format: onlyDate
-            ? this.defaultDateFormat
-            : this.defaultDateTimeFormat,
+          onlyDate: false,
+          format: this.defaultDateFormat,
         })
       );
       if (tr.selection.$anchor.nodeBefore) {
