@@ -54,10 +54,8 @@ citaten-plugin:
   card:
     title: Add reference
     suggestions: Suggestions
-
   insert:
     title: Insert reference
-
   search:
     term: Search term
     advanced: Advanced search
@@ -75,28 +73,24 @@ citaten-plugin:
     article-placeholder: Article number
     back: Back to search results
     results: Results
-
   pagination:
     next: Next page
     previous: Previous page
     of: of
-
   references:
     insert: Insert reference
     details: Details
     refer-whole: Refer to whole document
     refer-article: Refer to this article
     lookup-codex: Lookup in Flemish Codex
-
   alert:
     loading: Loading…
     no-results: No results found
     error-title: Error while loading results
     error-intro: "An error occured while loading results from the Flemish Codex:"
     error-outro: In case this problem keeps occuring, please contact
-table-of-contents-plugin:
-  title: Table of Contents
-  toggle: Show Table of Contents
+
+
 besluit-type-plugin:
   dt: "Decision type"
   insert-dt: "Select a decision type"
@@ -108,12 +102,16 @@ besluit-type-plugin:
   error-title: "Error"
   error-first-body: "An error occured while fetching the decision types. Try again later. If this problem persists, please contact"
   error-rest-body: ". For more specific details about this problem, inspect the browser console."
+
+
 besluit-plugin:
   missing-title-warning: This decision is missing a title
   insert:
     decision-title: Insert decision title
   placeholder:
     decision-title: Insert decision title
+
+
 date-plugin:
   help:
     title: "Custom format help"
@@ -165,3 +163,7 @@ variable-plugin:
   button: Insert
   enter-variable-value: Select value
 
+
+table-of-contents-plugin:
+  title: Table of Contents
+  toggle: Show Table of Contents
