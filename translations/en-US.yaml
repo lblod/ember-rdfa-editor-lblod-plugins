@@ -116,7 +116,6 @@ article-structure-plugin:
   insert:
     paragraph: Insert paragraph
     article: Insert article
-    articleBelow: Insert article below
     title: Insert title
     chapter: Insert chapter
     section: Insert section
@@ -136,8 +135,6 @@ article-structure-plugin:
     section: Move section down
     subsection: Move subsection down
   title:
-    paragraphCard: Paragraph Card
-    articleCard: Article Card
     structure-card: Structure Card
   remove:
     article: Remove Article
