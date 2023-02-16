@@ -1,3 +1,55 @@
+article-structure-plugin:
+  insert:
+    paragraph: Insert paragraph
+    article: Insert article
+    title: Insert title
+    chapter: Insert chapter
+    section: Insert section
+    subsection: Insert subsection
+  move-up:
+    paragraph: Move paragraph up
+    article: Move article up
+    title: Move title up
+    chapter: Move chapter up
+    section: Move section up
+    subsection: Move subsection up
+  move-down:
+    paragraph: Move paragraph down
+    article: Move article down
+    title: Move title down
+    chapter: Move chapter down
+    section: Move section down
+    subsection: Move subsection down
+  title:
+    structure-card: Structure Card
+  remove:
+    article: Remove Article
+    paragraph: Remove Paragraph
+    subsection: Remove subsection
+    section: Remove section
+    chapter: Remove chapter
+    title: Remove title
+    content: Remove content
+  placeholder:
+    generic:
+      heading: Insert title
+      body: Insert content
+    chapter:
+      heading: Insert chapter heading
+      body: Insert chapter content
+    section:
+      heading: Insert section heading
+      body: Insert section content
+    subsection:
+      heading: Insert subsection heading
+      body: Insert subsection content
+    article:
+      heading: Insert article heading
+      body: Insert article content
+    paragraph:
+      body: Insert paragraph content
+
+
 citaten-plugin:
   card:
     title: Add reference
@@ -112,53 +164,4 @@ variable-plugin:
   insert-variable: Insert variable
   button: Insert
   enter-variable-value: Select value
-article-structure-plugin:
-  insert:
-    paragraph: Insert paragraph
-    article: Insert article
-    title: Insert title
-    chapter: Insert chapter
-    section: Insert section
-    subsection: Insert subsection
-  move-up:
-    paragraph: Move paragraph up
-    article: Move article up
-    title: Move title up
-    chapter: Move chapter up
-    section: Move section up
-    subsection: Move subsection up
-  move-down:
-    paragraph: Move paragraph down
-    article: Move article down
-    title: Move title down
-    chapter: Move chapter down
-    section: Move section down
-    subsection: Move subsection down
-  title:
-    structure-card: Structure Card
-  remove:
-    article: Remove Article
-    paragraph: Remove Paragraph
-    subsection: Remove subsection
-    section: Remove section
-    chapter: Remove chapter
-    title: Remove title
-    content: Remove content
-  placeholder:
-    generic:
-      heading: Insert title
-      body: Insert content
-    chapter:
-      heading: Insert chapter heading
-      body: Insert chapter content
-    section:
-      heading: Insert section heading
-      body: Insert section content
-    subsection:
-      heading: Insert subsection heading
-      body: Insert subsection content
-    article:
-      heading: Insert article heading
-      body: Insert article content
-    paragraph:
-      body: Insert paragraph content
+
