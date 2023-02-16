@@ -37,7 +37,7 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
     this.controller.withTransaction((tr) => {
       tr.replaceSelectionWith(
         this.schema.node('date', {
-          onlyDate: false,
+          onlyDate: true,
           format: this.defaultDateFormat,
         })
       );
