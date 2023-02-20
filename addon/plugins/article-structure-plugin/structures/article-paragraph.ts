@@ -31,9 +31,13 @@ export const articleParagraphSpec: StructureSpec = {
         resource: `http://data.lblod.info/paragraphs/${uuid()}`,
         number: numberConverted,
       },
-      schema.node('placeholder', {
-        placeholderText: intl?.t(PLACEHOLDERS.body),
-      })
+      schema.node(
+        'paragraph',
+        {},
+        schema.node('placeholder', {
+          placeholderText: intl?.t(PLACEHOLDERS.body),
+        })
+      )
     );
     return { node, selectionConfig: { relativePos: 1, type: 'node' } };
   },
@@ -47,7 +51,7 @@ const contentSelector = `span[property~='${SAY('body').prefixed}'],
                          span[property~='${SAY('body').full}']`;
 
 export const article_paragraph: NodeSpec = {
-  content: 'inline*',
+  content: 'paragraph*',
   inline: false,
   isolating: true,
   defining: true,
