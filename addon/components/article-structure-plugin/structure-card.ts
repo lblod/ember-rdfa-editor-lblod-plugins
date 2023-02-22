@@ -38,7 +38,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   @action
   removeStructure() {
     if (this.structure && this.currentStructureType) {
-      if (this.removeStructureContent) {
+      if (this.removeStructureContent || this.currentStructureType.noUnwrap) {
         this.controller.doCommand(
           removeStructure(this.structure, this.structureTypes)
         );
@@ -105,7 +105,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   get canRemoveStructure() {
     if (this.structure && this.currentStructureType) {
-      if (this.removeStructureContent) {
+      if (this.removeStructureContent || this.currentStructureType.noUnwrap) {
         return true;
       } else {
         return this.controller.checkCommand(
