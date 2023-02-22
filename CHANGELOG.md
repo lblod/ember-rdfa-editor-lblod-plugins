@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Feature/allow paragraphs inside article paragraphs
+- Set selectable on false for structure-headers
+ 
+### Added
+- Added a new option to the structures to not support unwrap and made the article paragraphs the first structure to use this option
+
+### Fixed
+- fix translation warnings
+
+### Removed
+- Remove insert date and time as it's no longer needed
+ 
 ## [2.1.2] - 2023-02-15
 
 ### Fixed
