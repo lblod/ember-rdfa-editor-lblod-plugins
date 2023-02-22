@@ -71,13 +71,17 @@ export const article_paragraph: NodeSpec = {
         typeof: node.attrs.typeof as string,
         resource: node.attrs.resource as string,
       },
-      '$',
+      ['span', { contenteditable: false }, '$'],
       [
         'span',
-        { property: ELI('number').prefixed, datatype: XSD('integer').prefixed },
+        {
+          property: ELI('number').prefixed,
+          datatype: XSD('integer').prefixed,
+          contenteditable: false,
+        },
         node.attrs.number,
       ],
-      '. ',
+      ['span', { contenteditable: false }, '. '],
       ['span', { property: SAY('body').prefixed }, 0],
     ];
   },

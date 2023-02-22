@@ -249,7 +249,7 @@ export const besluit_article_header: NodeSpec = {
     delete toplevelAttrs.datatype;
     return [
       'div',
-      toplevelAttrs,
+      { ...toplevelAttrs, contenteditable: false },
       'Artikel ',
       [
         'span',
