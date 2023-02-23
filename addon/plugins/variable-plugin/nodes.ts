@@ -20,6 +20,8 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline',
   content: 'inline*',
   atom: true,
+  recreateUri: true,
+  uriAttributes: ['variableInstance'],
   draggable: false,
   attrs: {
     mappingResource: {},
@@ -100,9 +102,12 @@ const emberNodeConfig: EmberNodeConfig = {
             .find((el) => hasRDFaAttribute(el, 'property', EXT('instance')))
             ?.getAttribute('resource');
           const mappingResource = node.getAttribute('resource');
-          const codelistResource = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', EXT('codelist')))
-            ?.getAttribute('resource');
+          const codelistSpan = [...node.children].find((el) =>
+            hasRDFaAttribute(el, 'property', EXT('codelist'))
+          );
+          const codelistResource =
+            codelistSpan?.getAttribute('resource') ??
+            codelistSpan?.getAttribute('content');
           const source = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', DCT('source')))
             ?.getAttribute('resource');

@@ -1,6 +1,7 @@
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { Command, NodeSelection } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
+import { v4 as uuid } from 'uuid';
 
 export default function insertTitle(intl: IntlService): Command {
   return function (state, dispatch) {
@@ -19,7 +20,7 @@ export default function insertTitle(intl: IntlService): Command {
         besluit.pos + 1,
         schema.node(
           'title',
-          null,
+          { __rdfaId: uuid() },
           schema.node(
             'paragraph',
             null,

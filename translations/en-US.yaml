@@ -1,107 +1,7 @@
-citaten-plugin:
-  card:
-    title: Add reference
-    suggestions: Suggestions
-
-  insert:
-    title: Insert reference
-
-  search:
-    term: Search term
-    advanced: Advanced search
-    type: Type of document
-    placeholder: Type to search
-    date-document: Filter on date document
-    date-document-from: "Filter document on date from:"
-    date-document-to: "Filter document on date until:"
-    date-publication: Filter on date government gazette
-    date-publication-from: "Filter publication on date from:"
-    date-publication-to: "Filter publication on date until:"
-    from: from
-    to: to
-    article: Search for article
-    article-placeholder: Article number
-    back: Back to search results
-    results: Results
-
-  pagination:
-    next: Next page
-    previous: Previous page
-    of: of
-
-  references:
-    insert: Insert reference
-    details: Details
-    refer-whole: Refer to whole document
-    refer-article: Refer to this article
-    lookup-codex: Lookup in Flemish Codex
-
-  alert:
-    loading: Loading…
-    no-results: No results found
-    error-title: Error while loading results
-    error-intro: "An error occured while loading results from the Flemish Codex:"
-    error-outro: In case this problem keeps occuring, please contact
-table-of-contents-plugin:
-  title: Table of Contents
-  toggle: Show Table of Contents
-besluit-type-plugin:
-  dt: "Decision type"
-  insert-dt: "Select a decision type"
-  search-message: "Typ to search"
-  no-matches-message: "No results"
-  alert-title: "Attention"
-  alert-body: "You must select a subtype in order to save the decision type"
-  error-short: "Error fetching decision types"
-  error-title: "Error"
-  error-first-body: "An error occured while fetching the decision types. Try again later. If this problem persists, please contact"
-  error-rest-body: ". For more specific details about this problem, inspect the browser console."
-besluit-plugin:
-  missing-title-warning: This decision is missing a title
-  insert:
-    decision-title: Insert decision title
-  placeholder:
-    decision-title: Insert decision title
-date-plugin:
-  help:
-    first-line: "For custom formats, all the text between single quotes is escaped and written into the document as it's written, all the other characters are interpreted and represent different parts of the date:"
-    examples: "Examples:"
-    name: "Name"
-    symbol: "Symbol"
-    result: "Result"
-    detailed-info: For more detailed symbols visit
-    docs-link: the library documentation
-    date-examples: With this you can create any date format, here are some examples and their corresponding dates
-    date-format: Date format
-    short-weekday-title: Short day of the week
-    short-weekday-content: Mon, Tue, Wed, ..., Sun
-    long-weekday-title: Long day of the week
-    long-weekday-content: Monday, Tuesday, ..., Sunday
-    month-day: Day of the month
-    short-month: Short month
-    long-month-title: Long month
-    long-month-content: January, February, ..., December
-    long-year: Long year
-  insert:
-    date: "Insert date"
-    datetime: "Insert date and time"
-  card:
-    title: "Date"
-    insert-date: "Insert date"
-    insert-datetime: "Insert date and time"
-    label: "Select date"
-    hours: "Hours"
-    minutes: "Minutes"
-    now: "Now"
-variable-plugin:
-  insert-variable: Insert variable
-  button: Insert
-  enter-variable-value: Select value
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph
     article: Insert article
-    articleBelow: Insert article below
     title: Insert title
     chapter: Insert chapter
     section: Insert section
@@ -121,8 +21,6 @@ article-structure-plugin:
     section: Move section down
     subsection: Move subsection down
   title:
-    paragraphCard: Paragraph Card
-    articleCard: Article Card
     structure-card: Structure Card
   remove:
     article: Remove Article
@@ -150,3 +48,122 @@ article-structure-plugin:
       body: Insert article content
     paragraph:
       body: Insert paragraph content
+
+
+citaten-plugin:
+  card:
+    title: Add reference
+    suggestions: Suggestions
+  insert:
+    title: Insert reference
+  search:
+    term: Search term
+    advanced: Advanced search
+    type: Type of document
+    placeholder: Type to search
+    date-document: Filter on date document
+    date-document-from: "Filter document on date from:"
+    date-document-to: "Filter document on date until:"
+    date-publication: Filter on date government gazette
+    date-publication-from: "Filter publication on date from:"
+    date-publication-to: "Filter publication on date until:"
+    from: from
+    to: to
+    article: Search for article
+    article-placeholder: Article number
+    back: Back to search results
+    results: Results
+  pagination:
+    next: Next page
+    previous: Previous page
+    of: of
+  references:
+    insert: Insert reference
+    details: Details
+    refer-whole: Refer to whole document
+    refer-article: Refer to this article
+    lookup-codex: Lookup in Flemish Codex
+  alert:
+    loading: Loading…
+    no-results: No results found
+    error-title: Error while loading results
+    error-intro: "An error occured while loading results from the Flemish Codex:"
+    error-outro: In case this problem keeps occuring, please contact
+
+
+besluit-type-plugin:
+  dt: "Decision type"
+  insert-dt: "Select a decision type"
+  search-message: "Typ to search"
+  no-matches-message: "No results"
+  alert-title: "Attention"
+  alert-body: "You must select a subtype in order to save the decision type"
+  error-short: "Error fetching decision types"
+  error-title: "Error"
+  error-first-body: "An error occured while fetching the decision types. Try again later. If this problem persists, please contact"
+  error-rest-body: ". For more specific details about this problem, inspect the browser console."
+
+
+besluit-plugin:
+  missing-title-warning: This decision is missing a title
+  insert:
+    decision-title: Insert decision title
+  placeholder:
+    decision-title: Insert decision title
+
+
+date-plugin:
+  help:
+    title: "Custom format help"
+    first-line: "For custom formats, all the text between single quotes is escaped and written into the document as it's written, all the other characters are interpreted and represent different parts of the date:"
+    examples: "Examples:"
+    name: "Name"
+    symbol: "Symbol"
+    result: "Result"
+    detailed-info: For more detailed symbols visit
+    docs-link: the library documentation
+    date-examples: With this you can create any date format, here are some examples and their corresponding dates
+    date-format: Date format
+    short-weekday-title: Short day of the week
+    short-weekday-content: Mon, Tue, Wed, ..., Sun
+    long-weekday-title: Long day of the week
+    long-weekday-content: Monday, Tuesday, ..., Sunday
+    month-day: Day of the month
+    short-month: Short month
+    long-month-title: Long month
+    long-month-content: January, February, ..., December
+    long-year: Long year
+  insert:
+    date: "Insert date"
+    datetime: "Insert date and time"
+  card:
+    title: "Date"
+    insert-date: "Insert date"
+    insert-datetime: "Insert date and time"
+    include-time: "Include time"
+    info-custom-time: "With a custom format, time controls are shown automatically when the format includes time information"
+    custom-date: "Custom format"
+    label: "Select date"
+    hours: "Hours"
+    minutes: "Minutes"
+    seconds: "Seconds"
+    now: "Now"
+  validation:
+    character: "Invalid character"
+    character-suggestion: "To insert literal characters, surround them with single quotes, like so"
+    use-yyyy: "Use yyyy instead of YYYY"
+    use-yy: "Use yy instead of YY"
+    use-d: "Use d instead of D"
+    use-dd: "Use dd instead of D"
+    required: "This field cannot be empty"
+    fractions: "Fractions of a second, such as S or T, are not supported."
+    unknown: "Invalid format"
+variable-plugin:
+  insert-variable: Insert variable
+  button: Insert
+  enter-variable-value: Select value
+
+
+table-of-contents-plugin:
+  title: Table of Contents
+  toggle: Show Table of Contents

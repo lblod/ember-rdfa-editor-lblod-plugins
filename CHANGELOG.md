@@ -1,19 +1,100 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Changed
+- Feature/allow paragraphs inside article paragraphs
+- Set selectable on false for structure-headers
+ 
+### Added
+- Added a new option to the structures to not support unwrap and made the article paragraphs the first structure to use this option
+
+### Fixed
+- fix translation warnings
+
+### Removed
+- Remove insert date and time as it's no longer needed
+ 
+## [2.1.2] - 2023-02-15
+
+### Fixed
+
+- fixed subsection 'move down' dutch translation
+- Hotfix: use content attribute as a fallback to extract the codelist URI
+
+## [2.1.1] - 2023-02-07
+
+### Changed
+
+- move to keep-a-changelog for changelog management
+- bump editor to v2.1.2
+- bump editor to v2.1.1
+
+### Added
+
+- add types for the `debug` lib
+
+### Fixed
+
+- correctly set the date type as xsd:date or xsd:dateTime based on the date content
+- Add the __rdfaId when manually creating decisions titles, decision articles or citations
+- fix citation highlights not triggering correctly in various situations
+
+## [2.1.0] - 2023-02-06
+
+#### :rocket: Enhancement
+
+* [#98](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/98) Improve citation plugin regex and improve
+  citation type matching ([@elpoelma](https://github.com/elpoelma))
+
+#### :bug: Bug Fix
+
+* [#96](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/96) Fix insert-citation button not being enabled
+  in correct context. ([@elpoelma](https://github.com/elpoelma))
+* [#100](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/100) Prevent splitting of besluit related nodes ([@elpoelma](https://github.com/elpoelma))
+* [#97](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/97) Fix: disallow splitting of besluit node ([@elpoelma](https://github.com/elpoelma))
+
+#### :house: Internal
+* [#99](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/99) Update editor to 2.1.0 ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
+## 2.0.1 (2023-02-06)
+
+#### :bug: Bug Fix
+* [#95](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/95) Move ember-velcro to hard dependencies ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
+## 2.0.0 (2023-02-06)
+version-only bump to match editor major cycle
 
 
+## 1.0.0 (2023-02-06)
 
+#### :boom: Breaking Change
+* [#94](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/94) feat(dates): add nice error messages to custom format box ([@abeforgit](https://github.com/abeforgit))
 
+#### :rocket: Enhancement
+* [#94](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/94) feat(dates): add nice error messages to custom format box ([@abeforgit](https://github.com/abeforgit))
+* [#93](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/93) Make headers and content nodes of structures isolating and defining ([@elpoelma](https://github.com/elpoelma))
+* [#74](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/74) Feature/recreate uuids on paste ([@lagartoverde](https://github.com/lagartoverde))
+* [#90](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/90) show error when the date format is empty ([@lagartoverde](https://github.com/lagartoverde))
 
+#### :house: Internal
+* [#92](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/92) Update editor to 2.0.1 ([@elpoelma](https://github.com/elpoelma))
 
-
-
-
-
-
-
-
-
-
-
+#### Committers: 3
+- Arne Bertrand ([@abeforgit](https://github.com/abeforgit))
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+- Oscar Rodriguez Villalobos ([@lagartoverde](https://github.com/lagartoverde))
 
 
 ## 1.0.0-beta.8 (2023-01-26)
@@ -254,3 +335,7 @@ add onclick handler to pencil icon in variable plugin
 - Elena Poelman ([@elpoelma](https://github.com/elpoelma))
 
 # Changelog
+
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...HEAD
+[2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
+[2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1

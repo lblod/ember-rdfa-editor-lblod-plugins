@@ -19,31 +19,82 @@ import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
-// Regex nicely structured:
-// (
-//   (
-//     \w*decreet |
-//     omzendbrief |
-//     verdrag |
-//     grondwetswijziging |
-//     samenwerkingsakkoord |
-//     \w*wetboek |
-//     protocol |
-//     besluit[^\S\n]van[^\S\n]de[^\S\n]vlaamse[^\S\n]regering |
-//     geco[öo]rdineerde wetten |
-//     \w*wet |
-//     koninklijk[^\S\n]?besluit |
-//     ministerieel[^\S\n]?besluit |
-//     genummerd[^\S\n]?koninklijk[^\S\n]?besluit
-//   )
-//   [^\S\n]*
-//   (
-//     ([^\S\n] | [\u0021-\uFFFF\d;:'"()&\-_]){3,}
-//   )?
-// )
+/**
+ * regex for non-newline whitespace
+ */
 const NNWS = '[^\\S\\n]';
+
+/**
+ * match for a "decree"
+ * the "t" at the end is not a typo
+ */
+const DECREE = `\\w*decreet`;
+
+/**
+ * literally "letter that gets sent around"
+ */
+const MEMO = `omzendbrief`;
+const TREATY = `verdrag`;
+const CONSTITUTION_CHANGE = `grondwetswijziging`;
+/**
+ * literally "agreement to collaborate"
+ */
+const COLLAB = `samenwerkingsakkoord`;
+/**
+ * Literally "book of law", I suppose that's called a codex?
+ */
+const BOOK = `\\w*wetboek`;
+const PROTOCOL = `protocol`;
+/**
+ * match for the literal "of the flemish government"
+ */
+const VVR = `${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering`;
+/**
+ * match for the literal "decision of the flemish government"
+ */
+const FLEMGOV = `besluit${VVR}`;
+/**
+ * match for "coordinated laws"
+ * whatever that may be
+ */
+const COORD = `geco[öo]rdineerde${NNWS}wet(ten)?`;
+/**
+ * literally "special law"
+ */
+const SPECIAL = `bijzondere${NNWS}wet`;
+/**
+ * Matches any kind of law
+ */
+const LAW = `\\w*wet`;
+/**
+ * match for the literal "royal decision"
+ * "royal decree" might be a more meaningful translation to english, but don't read too much into these
+ * translations anyway
+ */
+const ROYAL = `koninklijk${NNWS}?besluit`;
+/**
+ * same thing as above, but for ministers
+ */
+const MINISTERIAL = `ministerieel${NNWS}?besluit`;
+/**
+ * match for "enumerated royal decision"
+ * no, we don't know the difference either
+ */
+const ENUM_ROYAL = `genummerd${NNWS}?${ROYAL}`;
+
+/**
+ * The type of citation that we need to search for
+ */
+const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${SPECIAL}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}`;
+/**
+ * The monster regex that makes the citation plugin trigger.
+ * In restructuring, I've made sure that I didn't abstract away any of the capturing groups,
+ * only their content, so you can still see what's going on
+ *
+ * This regex uses named capturing groups, that's the "?<name>" syntax, for easy parsing later
+ */
 export const CITATION_REGEX = new RegExp(
-  `((?<type>\\w*decreet|omzendbrief|verdrag|grondwetswijziging|samenwerkingsakkoord|\\w*wetboek|protocol|besluit${NNWS}van${NNWS}de${NNWS}vlaamse${NNWS}regering|geco[öo]rdineerde${NNWS}wetten|\\w*wet|koninklijk${NNWS}?besluit|ministerieel${NNWS}?besluit|genummerd${NNWS}?koninklijk${NNWS}?besluit|\\w*${NNWS}?besluit)${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
+  `((?<type>${TYPE})${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
   'uidg'
 );
 export type CitationSchema = Schema<string, 'citation'>;
@@ -116,6 +167,7 @@ export function setupCitationPlugin(
         desiredLocation: 'insertSidebar',
         componentName: 'citation-plugin/citation-insert',
         widgetArgs: {
+          config,
           plugin,
         },
       },
@@ -132,8 +184,13 @@ function citationPlugin(config: CitationPluginConfig): CitationPlugin {
       init(stateConfig: EditorStateConfig, state: EditorState) {
         return calculateCitationPluginState(state, config);
       },
-      apply(tr, set, oldState, newState) {
-        return calculateCitationPluginState(newState, config, oldState);
+      apply(tr, oldPluginState, oldState, newState) {
+        return calculateCitationPluginState(
+          newState,
+          config,
+          oldState,
+          oldPluginState.highlights.map(tr.mapping, tr.doc)
+        );
       },
     },
     props: {
@@ -148,7 +205,8 @@ function citationPlugin(config: CitationPluginConfig): CitationPlugin {
 function calculateCitationPluginState(
   state: EditorState,
   config: CitationPluginConfig,
-  oldState?: EditorState
+  oldState?: EditorState,
+  oldDecs?: DecorationSet
 ) {
   const { doc, schema } = state;
   let activeRanges;
@@ -169,7 +227,8 @@ function calculateCitationPluginState(
       schema,
       nodes,
       doc,
-      oldState?.doc
+      oldState?.doc,
+      oldDecs
     );
     activeRanges = calculatedDecs.activeRanges;
     highlights = calculatedDecs.decorations;
@@ -185,11 +244,19 @@ function calculateDecorationsInNodes(
   schema: CitationSchema,
   nodes: Set<NodeType>,
   newDoc: PNode,
-  oldDoc?: PNode
+  oldDoc?: PNode,
+  oldDecorations?: DecorationSet
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const activeRanges: [number, number][] = [];
-  const decorations: Decoration[] = [];
-  const collector = collectDecorations(decorations, schema, config.regex);
+  const decsToAdd: Decoration[] = [];
+  const decsToRemove: Decoration[] = [];
+  const collector = collectDecorations(
+    decsToAdd,
+    schema,
+    config.regex,
+    decsToRemove,
+    oldDecorations
+  );
   if (nodes.has(newDoc.type)) {
     oldDoc
       ? changedDescendants(oldDoc, newDoc, 0, collector)
@@ -221,7 +288,9 @@ function calculateDecorationsInNodes(
         });
   }
   return {
-    decorations: DecorationSet.create(newDoc, decorations),
+    decorations: oldDecorations
+      ? oldDecorations.remove(decsToRemove).add(newDoc, decsToAdd)
+      : DecorationSet.create(newDoc, decsToAdd),
     activeRanges,
   };
 }
@@ -232,22 +301,24 @@ function calculateDecorationsInRanges(
   doc: PNode,
   activeRanges: [number, number][]
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
-  const decorations: Decoration[] = [];
-  const collector = collectDecorations(decorations, schema, config.regex);
+  const decorationsToAdd: Decoration[] = [];
+  const collector = collectDecorations(decorationsToAdd, schema, config.regex);
 
   for (const [start, end] of activeRanges) {
     doc.nodesBetween(start, end, collector);
   }
   return {
-    decorations: DecorationSet.create(doc, decorations),
+    decorations: DecorationSet.create(doc, decorationsToAdd),
     activeRanges: activeRanges,
   };
 }
 
 function collectDecorations(
-  decorations: Decoration[],
+  decsToAdd: Decoration[],
   schema: CitationSchema,
-  regex: RegExp = CITATION_REGEX
+  regex: RegExp = CITATION_REGEX,
+  decsToRemove?: Decoration[],
+  oldDecs?: DecorationSet
 ) {
   return function (node: PNode, pos: number): boolean {
     if (
@@ -255,6 +326,17 @@ function collectDecorations(
       node.text &&
       !schema.marks.citation.isInSet(node.marks)
     ) {
+      if (decsToRemove && oldDecs) {
+        decsToRemove.push(
+          ...oldDecs.find(
+            pos,
+            pos + node.nodeSize,
+            (spec) =>
+              (spec as Record<string, string>).name === 'citationHighlight'
+          )
+        );
+      }
+
       for (const match of node.text.matchAll(regex)) {
         const processedMatch = processMatch(
           match as RegexpMatchArrayWithIndices
@@ -265,7 +347,7 @@ function collectDecorations(
           const { start: matchStart, end: matchEnd } = searchTextMatch;
           const decorationStart = pos + matchStart;
           const decorationEnd = pos + matchEnd;
-          decorations.push(
+          decsToAdd.push(
             Decoration.inline(
               decorationStart,
               decorationEnd,
@@ -274,6 +356,7 @@ function collectDecorations(
                 'data-editor-highlight': 'true',
               },
               {
+                name: 'citationHighlight',
                 searchText: text,
                 legislationTypeUri,
               }

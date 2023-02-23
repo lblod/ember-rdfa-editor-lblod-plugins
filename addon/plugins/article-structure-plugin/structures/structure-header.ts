@@ -19,6 +19,9 @@ const TAG_TO_LEVEL = new Map([
 export const structure_header: NodeSpec = {
   content: 'text*|placeholder',
   inline: false,
+  defining: true,
+  isolating: true,
+  selectable: false,
   attrs: {
     property: {
       default: SAY('heading').prefixed,
@@ -40,10 +43,14 @@ export const structure_header: NodeSpec = {
       { property: node.attrs.property as string },
       [
         'span',
-        { property: ELI('number').prefixed, datatype: XSD('string').prefixed },
+        {
+          property: ELI('number').prefixed,
+          datatype: XSD('string').prefixed,
+          contenteditable: false,
+        },
         node.attrs.number,
       ],
-      '. ',
+      ['span', { contenteditable: false }, '. '],
       [
         'span',
         {

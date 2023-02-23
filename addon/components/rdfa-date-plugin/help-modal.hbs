@@ -1,0 +1,91 @@
+<AuModal
+  @title={{t 'date-plugin.help.title'}}
+  @closeModal={{@closeModal}}
+  @modalOpen={{@modalOpen}}
+  @size='default'
+  as |Modal|>
+  <Modal.Body>
+    <div>
+      <p>{{t 'date-plugin.help.first-line'}}</p>
+      {{t 'date-plugin.help.examples'}}
+      <AuTable>
+        <:header>
+          <tr>
+            <th>{{t 'date-plugin.help.name'}}</th>
+            <th>{{t 'date-plugin.help.symbol'}}</th>
+            <th>{{t 'date-plugin.help.result'}}</th>
+          </tr>
+        </:header>
+        <:body>
+          <tr>
+            <td>{{t 'date-plugin.help.short-weekday-title'}}</td>
+            <td>E</td>
+            <td>{{this.formatExample 'E'}}</td>
+          </tr>
+          <tr>
+            <td>{{t 'date-plugin.help.long-weekday-title'}}</td>
+            <td>EEEE</td>
+            <td>{{this.formatExample 'EEEE'}}</td>
+          </tr>
+          <tr>
+            <td>{{t 'date-plugin.help.month-day'}}</td>
+            <td>dd</td>
+            <td>{{this.formatExample 'dd'}}</td>
+          </tr>
+          <tr>
+            <td>{{t 'date-plugin.help.short-month'}}</td>
+            <td>MM</td>
+            <td>{{this.formatExample 'MM'}}</td>
+          </tr>
+          <tr>
+            <td>{{t 'date-plugin.help.long-month-title'}}</td>
+            <td>MMMM</td>
+            <td>{{this.formatExample 'MMMM'}}</td>
+          </tr>
+          <tr>
+            <td>{{t 'date-plugin.help.long-year'}}</td>
+            <td>yyyy</td>
+            <td>{{this.formatExample 'yyyy'}}</td>
+          </tr>
+        </:body>
+      </AuTable>
+      <p>{{t "date-plugin.help.detailed-info"}} <a href="https://date-fns.org/v2.29.3/docs/format">{{t
+        "date-plugin.help.docs-link"}}</a></p>
+      <p>{{t "date-plugin.help.date-examples"}}</p>
+      <AuTable>
+        <:header>
+          <tr>
+            <th>{{t "date-plugin.help.date-format"}}</th>
+            <th>{{t "date-plugin.help.result"}}</th>
+          </tr>
+        </:header>
+        <:body>
+          <tr>
+            <td>EEEE dd MMMM yyyy</td>
+            <td>{{this.formatExample 'EEEE dd MMMM yyyy'}}</td>
+          </tr>
+          <tr>
+            <td>dd/MM/yy</td>
+            <td>{{this.formatExample 'dd/MM/yy'}}</td>
+          </tr>
+          <tr>
+            <td>dd/M/yyyy</td>
+            <td>{{this.formatExample 'dd/M/yyyy'}}</td>
+          </tr>
+          <tr>
+            <td>dd/MM/yy hh:mm:ss</td>
+            <td>{{this.formatExample 'dd/MM/yy hh:mm:ss'}}</td>
+          </tr>
+          <tr>
+            <td>'Vandaag is' dd/MM/yy BBBB</td>
+            <td>{{this.formatExample "'Vandaag is' dd/MM/yy BBBB"}}</td>
+          </tr>
+          <tr>
+            <td>PPPPpppp</td>
+            <td>{{this.formatExample 'PPPPpppp'}}</td>
+          </tr>
+        </:body>
+      </AuTable>
+    </div>
+  </Modal.Body>
+</AuModal>
