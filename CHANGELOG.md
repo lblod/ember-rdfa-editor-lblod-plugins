@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Remove insert date and time as it's no longer needed
+
+### Dependencies
+- Bumps `ember-power-select` to 6.0.1
  
 ## [2.1.2] - 2023-02-15
 
