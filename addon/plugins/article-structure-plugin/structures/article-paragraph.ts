@@ -23,6 +23,7 @@ export const articleParagraphSpec: StructureSpec = {
     remove: 'article-structure-plugin.remove.paragraph',
   },
   continuous: true,
+  noUnwrap: true,
   constructor: ({ schema, number, intl }) => {
     const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
@@ -31,9 +32,13 @@ export const articleParagraphSpec: StructureSpec = {
         resource: `http://data.lblod.info/paragraphs/${uuid()}`,
         number: numberConverted,
       },
-      schema.node('placeholder', {
-        placeholderText: intl?.t(PLACEHOLDERS.body),
-      })
+      schema.node(
+        'paragraph',
+        {},
+        schema.node('placeholder', {
+          placeholderText: intl?.t(PLACEHOLDERS.body),
+        })
+      )
     );
     return { node, selectionConfig: { relativePos: 1, type: 'node' } };
   },
@@ -47,7 +52,7 @@ const contentSelector = `span[property~='${SAY('body').prefixed}'],
                          span[property~='${SAY('body').full}']`;
 
 export const article_paragraph: NodeSpec = {
-  content: 'inline*',
+  content: 'paragraph*',
   inline: false,
   isolating: true,
   defining: true,
@@ -71,13 +76,17 @@ export const article_paragraph: NodeSpec = {
         typeof: node.attrs.typeof as string,
         resource: node.attrs.resource as string,
       },
-      '$',
+      ['span', { contenteditable: false }, '$'],
       [
         'span',
-        { property: ELI('number').prefixed, datatype: XSD('integer').prefixed },
+        {
+          property: ELI('number').prefixed,
+          datatype: XSD('integer').prefixed,
+          contenteditable: false,
+        },
         node.attrs.number,
       ],
-      '. ',
+      ['span', { contenteditable: false }, '. '],
       ['span', { property: SAY('body').prefixed }, 0],
     ];
   },

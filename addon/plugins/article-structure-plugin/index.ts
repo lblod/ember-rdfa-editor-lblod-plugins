@@ -41,6 +41,7 @@ export type StructureSpec = {
   content?: (args: { pos: number; state: EditorState }) => Fragment;
   continuous: boolean;
   limitTo?: string;
+  noUnwrap?: boolean;
 };
 
 export type ArticleStructurePluginOptions = StructureSpec[];

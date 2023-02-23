@@ -1,0 +1,7 @@
+[typeof="say:Paragraph"] {
+  display: flex;
+
+  [property="eli:number"], [contenteditable="false"], [property="say:body"] {
+    margin-top: 0;
+  }
+}
