@@ -9,6 +9,7 @@ Ember v2 addon which bundles a collection of [ember-rdfa-editor](https://github.
 
 * Ember.js v3.28 or above
 * Embroider or ember-auto-import v2
+* Node 18 or above
 
 
 ## Installation
