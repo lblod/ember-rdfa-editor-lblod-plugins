@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Feature/allow paragraphs inside article paragraphs
 - Set selectable on false for structure-headers
+- BREAKING: the argument structure of plugin components has changed. `widgetArgs` is no longer in use, it's properties are now direct properties of the component `args`.
  
 ### Added
 - Added a new option to the structures to not support unwrap and made the article paragraphs the first structure to use this option
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 - Bumps `ember-power-select` to 6.0.1
 - Bumps `ember-source` to 4.8.4
+- Bumps `@lblod/ember-rdfa-editor` to 3.1.0
  
 ## [2.1.2] - 2023-02-15
 
