@@ -1,12 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { insertTitle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin/commands';
-import { ProseController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 type Args = {
-  controller: ProseController;
+  controller: SayController;
 };
 
 export default class BesluitPluginCardComponent extends Component<Args> {
@@ -21,11 +21,15 @@ export default class BesluitPluginCardComponent extends Component<Args> {
 
   @action
   insertTitle() {
-    this.controller.doCommand(insertTitle(this.intl));
+    this.controller.doCommand(insertTitle(this.intl), {
+      view: this.controller.mainEditorView,
+    });
     this.focus();
   }
 
   get canInsertTitle() {
-    return this.controller.checkCommand(insertTitle(this.intl));
+    return this.controller.checkCommand(insertTitle(this.intl), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

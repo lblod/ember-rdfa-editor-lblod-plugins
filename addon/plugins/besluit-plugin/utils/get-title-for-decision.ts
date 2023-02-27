@@ -1,9 +1,6 @@
-import { ProseStore } from '@lblod/ember-rdfa-editor/plugins/datastore';
+import { SayStore } from '@lblod/ember-rdfa-editor/plugins/datastore';
 
-export function getTitleForDecision(
-  decisionUri: string,
-  datastore: ProseStore
-) {
+export function getTitleForDecision(decisionUri: string, datastore: SayStore) {
   const title = datastore
     .match(`>${decisionUri}`, '>http://data.europa.eu/eli/ontology#title')
     .asQuads()
@@ -21,7 +18,7 @@ export function getTitleForDecision(
  */
 export function getTitleNodesForDecision(
   decisionUri: string,
-  datastore: ProseStore
+  datastore: SayStore
 ) {
   const mapping = datastore
     .match(`>${decisionUri}`, '>http://data.europa.eu/eli/ontology#title')

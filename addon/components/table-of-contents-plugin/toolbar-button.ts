@@ -1,9 +1,9 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 
 type Args = {
-  controller: ProseController;
+  controller: SayController;
 };
 
 export default class TableOfContentsCardComponent extends Component<Args> {
@@ -17,7 +17,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
 
   get tableOfContentsRange() {
     let result: { from: number; to: number } | undefined;
-    this.controller.state.doc.descendants((node, pos) => {
+    this.controller.mainEditorState.doc.descendants((node, pos) => {
       if (node.type === this.controller.schema.nodes['table_of_contents']) {
         result = { from: pos, to: pos + node.nodeSize };
       }
@@ -30,14 +30,20 @@ export default class TableOfContentsCardComponent extends Component<Args> {
   toggle() {
     if (this.tableOfContentsRange) {
       const { from, to } = this.tableOfContentsRange;
-      this.controller.withTransaction((tr) => {
-        return tr.deleteRange(from, to);
-      });
+      this.controller.withTransaction(
+        (tr) => {
+          return tr.deleteRange(from, to);
+        },
+        { view: this.controller.mainEditorView }
+      );
     } else {
       const { schema } = this.controller;
-      this.controller.withTransaction((tr) => {
-        return tr.replaceRangeWith(0, 0, schema.node('table_of_contents'));
-      });
+      this.controller.withTransaction(
+        (tr) => {
+          return tr.replaceRangeWith(0, 0, schema.node('table_of_contents'));
+        },
+        { view: this.controller.mainEditorView }
+      );
     }
   }
 }

@@ -1,4 +1,9 @@
-<AuPill @icon="pencil" @iconAlignment="right" class="variable" {{on "click" this.onClick}}>
-  <div {{did-insert this.didInsertContentWrapper}} {{did-update this.onNodeUpdate @node}}>
-  </div>
+<AuPill @icon="pencil" @iconAlignment="right" class="variable">
+  <EmberNode::EmbeddedEditor 
+    @controller={{@controller}} 
+    @node={{@node}} 
+    @view={{@view}} 
+    @getPos={{@getPos}} 
+    @selected={{@selected}}
+  />
 </AuPill>

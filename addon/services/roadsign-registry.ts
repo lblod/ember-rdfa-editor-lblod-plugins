@@ -7,8 +7,8 @@ import Instruction from '../models/instruction';
 import Measure from '../models/measure';
 import Sign from '../models/sign';
 import { IBindings } from 'fetch-sparql-endpoint';
-import { optionMapOr, unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import dataFactory from '@rdfjs/data-model';
+import { optionMapOr, unwrap } from '../utils/option';
 
 const PREFIXES = `
 PREFIX ex: <http://example.org#>

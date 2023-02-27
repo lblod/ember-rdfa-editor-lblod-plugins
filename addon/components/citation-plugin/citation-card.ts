@@ -19,7 +19,7 @@ import {
   CitationDecoration,
   CitationPlugin,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-import { ProseController, Transaction } from '@lblod/ember-rdfa-editor';
+import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 import {
   LEGISLATION_TYPES,
@@ -27,10 +27,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
 
 interface Args {
-  controller: ProseController;
-  widgetArgs: {
-    plugin: CitationPlugin;
-  };
+  controller: SayController;
+  plugin: CitationPlugin;
 }
 
 export default class CitationCardComponent extends Component<Args> {
@@ -45,7 +43,7 @@ export default class CitationCardComponent extends Component<Args> {
   @tracked cardText: string | null = null;
   @tracked cardLegislationType: string | null = null;
 
-  get controller(): ProseController {
+  get controller(): SayController {
     return this.args.controller;
   }
 
@@ -54,15 +52,15 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   get plugin() {
-    return this.args.widgetArgs.plugin;
+    return this.args.plugin;
   }
 
   get decorations() {
-    return this.plugin.getState(this.controller.state)?.highlights;
+    return this.plugin.getState(this.controller.mainEditorState)?.highlights;
   }
 
   get activeDecoration(): Option<CitationDecoration> {
-    const { from, to } = this.controller.state.selection;
+    const { from, to } = this.controller.mainEditorState.selection;
     return this.decorations?.find(from, to)[0];
   }
 
@@ -186,14 +184,16 @@ export default class CitationCardComponent extends Component<Args> {
     const uri = decision.uri;
     const title = decision.title ?? '';
     const { from, to } = unwrap(this.activeDecoration);
-    this.controller.withTransaction((tr: Transaction) =>
-      tr
-        .replaceRangeWith(
-          from,
-          to,
-          citedText(this.controller.schema, title, uri)
-        )
-        .scrollIntoView()
+    this.controller.withTransaction(
+      (tr: Transaction) =>
+        tr
+          .replaceRangeWith(
+            from,
+            to,
+            citedText(this.controller.schema, title, uri)
+          )
+          .scrollIntoView(),
+      { view: this.controller.mainEditorView }
     );
   }
 
@@ -205,14 +205,16 @@ export default class CitationCardComponent extends Component<Args> {
       title = `${decision.title}, ${article.number || ''}`;
     }
     const { from, to } = unwrap(this.activeDecoration);
-    this.controller.withTransaction((tr: Transaction) =>
-      tr
-        .replaceRangeWith(
-          from,
-          to,
-          citedText(this.controller.schema, title, uri)
-        )
-        .scrollIntoView()
+    this.controller.withTransaction(
+      (tr: Transaction) =>
+        tr
+          .replaceRangeWith(
+            from,
+            to,
+            citedText(this.controller.schema, title, uri)
+          )
+          .scrollIntoView(),
+      { view: this.controller.mainEditorView }
     );
   }
 

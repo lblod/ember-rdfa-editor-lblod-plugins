@@ -7,16 +7,16 @@ import {
   addType,
   removeType,
 } from '@lblod/ember-rdfa-editor/commands/type-commands';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/current-session';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 declare module 'ember__owner' {
   export default interface Owner {
@@ -25,7 +25,7 @@ declare module 'ember__owner' {
 }
 
 type Args = {
-  controller: ProseController;
+  controller: SayController;
 };
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
@@ -56,7 +56,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   get doc() {
-    return this.controller.state.doc;
+    return this.controller.mainEditorState.doc;
   }
 
   types = trackedFunction(this, async () => {
@@ -71,7 +71,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   });
 
   get currentBesluitRange(): ResolvedPNode | undefined {
-    const selection = this.controller.state.selection;
+    const selection = this.controller.mainEditorState.selection;
     const besluit = findAncestorOfType(
       selection,
       this.controller.schema.nodes['besluit']
@@ -104,7 +104,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       return;
     }
     const besluit = findAncestorOfType(
-      this.controller.state.selection,
+      this.controller.mainEditorState.selection,
       this.controller.schema.nodes['besluit']
     );
     const besluitTypeof = besluit?.node.attrs.typeof as string;
@@ -206,12 +206,14 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     if (this.besluitType && this.currentBesluitRange) {
       this.cardExpanded = false;
       if (this.previousBesluitType) {
-        this.controller.checkAndDoCommand(
-          removeType(this.currentBesluitRange.from, this.previousBesluitType)
+        this.controller.doCommand(
+          removeType(this.currentBesluitRange.from, this.previousBesluitType),
+          { view: this.controller.mainEditorView }
         );
       }
-      this.controller.checkAndDoCommand(
-        addType(this.currentBesluitRange.from, this.besluitType.uri)
+      this.controller.doCommand(
+        addType(this.currentBesluitRange.from, this.besluitType.uri),
+        { view: this.controller.mainEditorView }
       );
     }
   }

@@ -1,9 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
-import { DateFormat } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
+import {
+  DateFormat,
+  DateOptions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import {
   formatContainsTime,
   validateDateFormat,
@@ -21,13 +24,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 type Args = {
-  controller: ProseController;
-  widgetArgs: {
-    options: {
-      formats: [DateFormat];
-      allowCustomFormat: boolean;
-    };
-  };
+  controller: SayController;
+  options: DateOptions;
 };
 const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
 export default class RdfaDatePluginCardComponent extends Component<Args> {
@@ -39,7 +37,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   tooltipOpen = false;
 
   get formats(): DateFormat[] {
-    return this.args.widgetArgs.options.formats;
+    return this.args.options.formats;
   }
 
   get controller() {
@@ -47,13 +45,13 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
   }
 
   get selection() {
-    return this.controller.getState(true).selection;
+    return this.controller.activeEditorState.selection;
   }
 
   get selectedDateNode(): Option<PNode> {
     if (
       this.selection instanceof NodeSelection &&
-      this.selection.node.type === this.args.controller.schema.nodes['date']
+      this.selection.node.type === this.controller.schema.nodes['date']
     ) {
       return this.selection.node;
     } else {
@@ -178,15 +176,13 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     if (pos) {
       this.controller.withTransaction((tr) => {
         return tr.setNodeAttribute(pos, 'value', date.toISOString());
-      }, true);
+      });
     }
   }
 
   @action
   changeIncludeTime(includeTime: boolean) {
-    console.log('Include time', includeTime);
     if (this.isCustom) {
-      console.log("but it's custom");
       return;
     }
     const dateFormatType = this.documentDateFormatType;
@@ -209,7 +205,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         .setNodeAttribute(pos, 'format', dateFormat)
         .setNodeAttribute(pos, 'custom', custom)
         .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(dateFormat));
-    }, true);
+    });
   }
 
   @action
@@ -221,7 +217,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     if (formatKey === 'custom') {
       this.controller.withTransaction((tr) => {
         return tr.setNodeAttribute(pos, 'custom', true);
-      }, true);
+      });
     } else {
       const format = this.formats.find((format) => format.key === formatKey);
       if (format) {
@@ -243,7 +239,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         return tr
           .setNodeAttribute(pos, 'format', format)
           .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(format));
-      }, true);
+      });
     }
   }
 

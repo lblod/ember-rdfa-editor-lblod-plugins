@@ -1,28 +1,95 @@
 {{!-- template-lint-disable no-bare-strings  --}}
-{{page-title "Dummy"}}
+{{page-title "Dummy - Besluit"}}
 <div {{did-insert this.setPrefixes}}>
-  <RdfaEditorWithDebug
-    {{did-insert this.setPrefixes}}
-    @rdfaEditorInit={{this.rdfaEditorInit}}
-    @editorOptions={{hash
-      showToggleRdfaAnnotations="true"
-      showInsertButton=null
-      showRdfa="true"
-      showRdfaHighlight="true"
-      showRdfaHover="true"
-      showPaper="true"
-      showSidebar="true"
-      showToolbarBottom=null
-    }}
-    @toolbarOptions={{hash
-      showTextStyleButtons="true"
-      showListButtons="true"
-      showIndentButtons="true"
-    }}
-    @plugins={{this.plugins}}
-    @widgets={{this.widgets}}
-    @nodeViews={{this.nodeViews}}
-    @schema={{this.schema}}>
-    <h1>Dummy app - besluit sample</h1>
-  </RdfaEditorWithDebug>
+  <DummyContainer>
+    <:header>
+      <DebugTools @controller={{this.controller}}/>
+    </:header>
+    <:content>
+      <EditorContainer
+        @editorOptions={{hash
+          showRdfa='true'
+          showRdfaHighlight='true'
+          showRdfaHover='true'
+          showPaper='true'
+          showToolbarBottom=null
+        }}
+        @showRdfaBlocks={{this.controller.showRdfaBlocks}}
+      >
+        <:top>
+          {{#if this.controller}}
+            <Toolbar as |Tb|>
+              <Tb.Group>
+                <Toolbar::History @controller={{this.controller}}/>
+              </Tb.Group>
+              <Tb.Group>
+                <Toolbar::Styling @controller={{this.controller}}/>
+              </Tb.Group>
+              <Tb.Group>
+                <Toolbar::List @controller={{this.controller}}/>
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Link::LinkMenu @controller={{this.controller}}/>
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Table::TableMenu @controller={{this.controller}}/>
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Heading::HeadingMenu @controller={{this.controller}}/>
+              </Tb.Group>
+              <Tb.Spacer/>
+              <Tb.Group>
+                <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}}/>
+                <Plugins::RdfaBlockRender::RdfaBlocksToggle @controller={{this.controller}}/>
+              </Tb.Group>
+            </Toolbar>
+          {{/if}}
+        </:top>
+        <:default>
+          <Editor
+            @plugins={{this.plugins}}
+            @schema={{this.schema}}
+            @nodeViews={{this.nodeViews}}
+            @rdfaEditorInit={{this.rdfaEditorInit}}/>
+        </:default>
+        <:aside>
+          {{#if this.controller}}
+            <Sidebar as |Sidebar|>
+              <Sidebar.Collapsible @title='Insert'>
+                <ArticleStructurePlugin::ArticleStructureCard 
+                  @controller={{this.controller}}
+                  @options={{this.config.structures}}
+                />
+                <CitationPlugin::CitationInsert 
+                  @controller={{this.controller}} 
+                  @plugin={{this.citationPlugin}}
+                  @config={{this.config.citation}}
+                />
+                <RdfaDatePlugin::Insert 
+                  @controller={{this.controller}}
+                  @options={{this.config.date}}
+                />
+                <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
+                <StandardTemplatePlugin::Card @controller={{this.controller}}/>
+              </Sidebar.Collapsible>
+              <ArticleStructurePlugin::StructureCard 
+                @controller={{this.controller}} 
+                @options={{this.config.structures}}
+              />
+              <BesluitPlugin::BesluitPluginCard @controller={{this.controller}}/>
+              <CitationPlugin::CitationCard 
+                @controller={{this.controller}} 
+                @plugin={{this.citationPlugin}}
+              />
+              <ImportSnippetPlugin::Card @controller={{this.controller}}/>
+              <RdfaDatePlugin::Card 
+                @controller={{this.controller}}
+                @options={{this.config.date}}/>
+              <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
+            </Sidebar>
+          {{/if}}
+        </:aside>
+      </EditorContainer>
+    </:content>
+  </DummyContainer>
 </div>

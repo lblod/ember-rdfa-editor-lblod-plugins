@@ -7,13 +7,13 @@ import {
   Selection,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { ArticleStructurePluginOptions } from '..';
 import { findAncestorOfType } from '../utils/structure';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import IntlService from 'ember-intl/services/intl';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',

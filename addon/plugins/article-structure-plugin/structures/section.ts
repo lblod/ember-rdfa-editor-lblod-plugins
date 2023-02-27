@@ -5,8 +5,8 @@ import {
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { StructureSpec } from '..';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.section.heading',

@@ -1,5 +1,3 @@
-import { WidgetSpec } from '@lblod/ember-rdfa-editor';
-
 export const defaultDateFormats: DateFormat[] = [
   {
     label: 'Short Date',
@@ -15,31 +13,6 @@ export const defaultDateFormats: DateFormat[] = [
   },
 ];
 
-const defaultOptions = {
-  formats: defaultDateFormats,
-  allowCustomFormat: true,
-};
-
-export function rdfaDateCardWidget(options?: DatePluginOptions): WidgetSpec {
-  return {
-    componentName: 'rdfa-date-plugin/card',
-    desiredLocation: 'sidebar',
-    widgetArgs: {
-      options: options ? options : defaultOptions,
-    },
-  };
-}
-
-export function rdfaDateInsertWidget(options?: DatePluginOptions): WidgetSpec {
-  return {
-    componentName: 'rdfa-date-plugin/insert',
-    desiredLocation: 'insertSidebar',
-    widgetArgs: {
-      options: options ? options : defaultOptions,
-    },
-  };
-}
-
 export type DateFormat = {
   label: string;
   key: string;
@@ -47,7 +20,11 @@ export type DateFormat = {
   dateTimeFormat: string;
 };
 
-type DatePluginOptions = {
+export type DateOptions = {
+  placeholder: {
+    insertDate: string;
+    insertDateTime: string;
+  };
   formats: DateFormat[];
   allowCustomFormat: boolean;
 };

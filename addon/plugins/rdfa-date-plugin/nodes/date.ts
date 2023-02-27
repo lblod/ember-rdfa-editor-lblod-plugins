@@ -5,14 +5,9 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { DateOptions } from '..';
 import { formatDate, validateDateFormat } from '../utils';
 
-export type DateOptions = {
-  placeholder: {
-    insertDate: string;
-    insertDateTime: string;
-  };
-};
 const date: (options: DateOptions) => NodeSpec = (options) => {
   return {
     group: 'inline',

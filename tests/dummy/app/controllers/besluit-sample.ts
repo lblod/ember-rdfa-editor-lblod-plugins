@@ -2,85 +2,72 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import {
-  ProseController,
-  WidgetSpec,
-} from '@lblod/ember-rdfa-editor/core/prosemirror';
-import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
+import { Schema, Plugin, SayController } from '@lblod/ember-rdfa-editor';
 import {
   em,
-  link,
   strikethrough,
   strong,
   underline,
-} from '@lblod/ember-rdfa-editor/marks';
+} from '@lblod/ember-rdfa-editor/plugins/text-style';
+
 import {
   block_rdfa,
-  blockquote,
-  bullet_list,
-  code_block,
   doc,
   hard_break,
-  heading,
   horizontal_rule,
-  image,
-  inline_rdfa,
-  list_item,
-  ordered_list,
   paragraph,
-  placeholder,
   repaired_block,
   text,
+  invisible_rdfa,
 } from '@lblod/ember-rdfa-editor/nodes';
+import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
+import {
+  bullet_list,
+  list_item,
+  ordered_list,
+} from '@lblod/ember-rdfa-editor/plugins/list';
+import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
+import { image } from '@lblod/ember-rdfa-editor/plugins/image';
+
+import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
+import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 import {
   tableKeymap,
-  tableMenu,
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
+import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
 import { service } from '@ember/service';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
-import { besluitTypeWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import { importSnippetWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/import-snippet-plugin';
-import {
-  rdfaDateCardWidget,
-  rdfaDateInsertWidget,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import {
   besluitNodes,
-  standardTemplateWidget,
   structureSpecs,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
-import { roadSignRegulationWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
-import { templateVariableWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeType, NodeViewConstructor } from '@lblod/ember-rdfa-editor';
-import { setupCitationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-import { invisible_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
-import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes';
 import IntlService from 'ember-intl/services/intl';
 import {
   variable,
   variableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
-import {
-  articleStructureContextWidget,
-  articleStructureInsertWidget,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
-import { besluitPluginCardWidget } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-plugin';
-
-const citation = setupCitationPlugin({
-  type: 'nodes',
-  activeInNodeTypes(schema): Set<NodeType> {
-    return new Set<NodeType>([schema.nodes.motivering]);
-  },
-});
+import date from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
+import { citation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/marks/citation';
+import {
+  citationPlugin,
+  CitationPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
+  @tracked controller?: SayController;
+  @tracked citationPlugin = citationPlugin(
+    this.config.citation as CitationPluginConfig
+  );
+
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
     mobiliteit: 'https://data.vlaanderen.be/ns/mobiliteit#',
@@ -101,12 +88,7 @@ export default class BesluitSampleController extends Controller {
         bullet_list,
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-        date: date({
-          placeholder: {
-            insertDate: this.intl.t('date-plugin.insert.date'),
-            insertDateTime: this.intl.t('date-plugin.insert.datetime'),
-          },
-        }),
+        date: date(this.config.date),
         variable,
         ...besluitNodes,
         roadsign_regulation,
@@ -123,11 +105,11 @@ export default class BesluitSampleController extends Controller {
         hard_break,
         block_rdfa,
         invisible_rdfa,
+        link: link(this.config.link),
       },
       marks: {
-        citation: citation.marks.citation,
+        citation,
         inline_rdfa,
-        link,
         em,
         strong,
         underline,
@@ -136,30 +118,52 @@ export default class BesluitSampleController extends Controller {
     });
   }
 
-  @tracked rdfaEditor?: ProseController;
+  get config() {
+    return {
+      date: {
+        placeholder: {
+          insertDate: this.intl.t('date-plugin.insert.date'),
+          insertDateTime: this.intl.t('date-plugin.insert.datetime'),
+        },
+        formats: [
+          {
+            label: 'Short Date',
+            key: 'short',
+            dateFormat: 'dd/MM/yy',
+            dateTimeFormat: 'dd/MM/yy HH:mm',
+          },
+          {
+            label: 'Long Date',
+            key: 'long',
+            dateFormat: 'EEEE dd MMMM yyyy',
+            dateTimeFormat: 'PPPPp',
+          },
+        ],
+        allowCustomFormat: true,
+      },
+      structures: structureSpecs,
+      citation: {
+        type: 'nodes',
+        activeInNodeTypes(schema: Schema): Set<NodeType> {
+          return new Set<NodeType>([schema.nodes.motivering]);
+        },
+      },
+      link: {
+        interactive: true,
+      },
+    };
+  }
+
+  @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
-    controller: ProseController
+    controller: SayController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       variable: variableView(controller),
+      link: linkView(this.config.link)(controller),
     };
   };
-  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, citation.plugin];
-  @tracked widgets: WidgetSpec[] = [
-    tableMenu,
-    besluitPluginCardWidget,
-    besluitTypeWidget,
-    importSnippetWidget,
-    rdfaDateCardWidget(),
-    rdfaDateInsertWidget(),
-    standardTemplateWidget,
-    citation.widgets.citationCard,
-    citation.widgets.citationInsert,
-    roadSignRegulationWidget,
-    templateVariableWidget,
-    articleStructureInsertWidget(structureSpecs),
-    articleStructureContextWidget(structureSpecs),
-  ];
+  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, this.citationPlugin];
 
   @action
   setPrefixes(element: HTMLElement) {
@@ -176,8 +180,9 @@ export default class BesluitSampleController extends Controller {
   }
 
   @action
-  async rdfaEditorInit(controller: ProseController) {
-    applyDevTools(controller.view);
+  async rdfaEditorInit(controller: SayController) {
+    this.controller = controller;
+    applyDevTools(controller.mainEditorView);
     await this.importRdfaSnippet.downloadSnippet({
       omitCredentials: 'true',
       source:
@@ -189,10 +194,5 @@ export default class BesluitSampleController extends Controller {
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
-  }
-
-  @action
-  togglePlugin() {
-    console.warn('Live toggling plugins is currently not supported');
   }
 }

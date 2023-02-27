@@ -2,7 +2,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 type Args = Record<string, never>;
 export default class RoadsignsTable extends Component<Args> {
