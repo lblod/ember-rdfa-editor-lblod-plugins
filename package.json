@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "2.1.2",
+  "version": "3.0.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
