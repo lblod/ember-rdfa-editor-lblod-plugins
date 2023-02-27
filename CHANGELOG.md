@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 - Bumps `ember-power-select` to 6.0.1
 - Bumps `ember-source` to 4.8.4
-- Bumps `@lblod/ember-rdfa-editor` to 3.1.0
+- Bumps `@lblod/ember-rdfa-editor` to 3.2.0
  
 ## [2.1.2] - 2023-02-15
 
