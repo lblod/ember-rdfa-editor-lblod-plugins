@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   DEFAULT_VARIABLE_TYPES,
   VariableType,
@@ -11,13 +11,11 @@ import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variabl
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 type Args = {
-  controller: ProseController;
-  widgetArgs: {
-    options: {
-      publisher: string;
-      variableTypes: (VariableType | string)[];
-      defaultEndpoint: string;
-    };
+  controller: SayController;
+  options: {
+    publisher: string;
+    variableTypes: (VariableType | string)[];
+    defaultEndpoint: string;
   };
 };
 
@@ -33,7 +31,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   constructor(parent: unknown, args: Args) {
     super(parent, args);
     const { publisher, variableTypes, defaultEndpoint } =
-      this.args.widgetArgs.options || {};
+      this.args.options || {};
     this.publisher = publisher;
     this.endpoint = defaultEndpoint;
     const variableTypesSelectedByUser = variableTypes ?? [
@@ -62,19 +60,26 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     this.variablesArray = variablesArray;
   }
 
+  get controller() {
+    return this.args.controller;
+  }
+
   @action
   insert() {
     if (!this.selectedVariable) {
       return;
     }
     const node = this.selectedVariable.constructor(
-      this.args.controller.schema,
+      this.controller.schema,
       this.endpoint,
       this.selectedSubtype
     );
-    this.args.controller.withTransaction((tr) => {
-      return tr.replaceSelectionWith(node);
-    });
+    this.controller.withTransaction(
+      (tr) => {
+        return tr.replaceSelectionWith(node);
+      },
+      { view: this.controller.mainEditorView }
+    );
   }
 
   @action
@@ -109,7 +114,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     if (this.args.controller.inEmbeddedView) {
       return false;
     }
-    const { selection } = this.args.controller.state;
+    const { selection } = this.args.controller.mainEditorState;
     if (
       selection instanceof NodeSelection &&
       selection.node.type === this.args.controller.schema.nodes.variable

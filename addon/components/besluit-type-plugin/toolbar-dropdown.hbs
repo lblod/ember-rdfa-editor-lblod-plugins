@@ -1,4 +1,4 @@
-<div {{did-update this.updateBesluitTypes @controller.state}} 
+<div {{did-update this.updateBesluitTypes @controller.mainEditorState}} 
      {{did-update this.updateBesluitTypes this.types.value}}>
 {{#if this.showCard}}
   {{#if this.types.isError}}
@@ -6,7 +6,7 @@
       @skin="error"
       @icon="circle-x"
       @iconAlignment="left"
-      class="au-c-pill--link"
+      class="au-c-pill--link besluit-toolbar-pill"
       {{on "click" this.toggleCard}}>
       {{t "besluit-type-plugin.error-short"}}
     </AuPill>

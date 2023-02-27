@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { ProseController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import {
   ArticleStructurePluginOptions,
@@ -8,26 +7,33 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { action } from '@ember/object';
 import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
+import { SayController } from '@lblod/ember-rdfa-editor';
 
 type Args = {
-  controller: ProseController;
-  widgetArgs: {
-    options: ArticleStructurePluginOptions;
-  };
+  controller: SayController;
+  options: ArticleStructurePluginOptions;
 };
 export default class EditorPluginsArticleStructureCardComponent extends Component<Args> {
   @service declare intl: IntlService;
 
   get structureTypes() {
-    return this.args.widgetArgs.options;
+    return this.args.options;
+  }
+
+  get controller() {
+    return this.args.controller;
   }
 
   @action
   insertStructure(spec: StructureSpec) {
-    this.args.controller.doCommand(insertStructure(spec, this.intl));
+    this.args.controller.doCommand(insertStructure(spec, this.intl), {
+      view: this.controller.mainEditorView,
+    });
     this.args.controller.focus();
   }
 
   canInsertStructure = (spec: StructureSpec) =>
-    this.args.controller.checkCommand(insertStructure(spec, this.intl));
+    this.args.controller.checkCommand(insertStructure(spec, this.intl), {
+      view: this.controller.mainEditorView,
+    });
 }

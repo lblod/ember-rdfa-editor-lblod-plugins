@@ -2,13 +2,13 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { RdfaSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 type Args = {
-  controller: ProseController;
+  controller: SayController;
 };
 export default class ImportSnippetPluginCard extends Component<Args> {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
@@ -22,7 +22,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
   }
 
   get insertRange() {
-    const { selection } = this.controller.state;
+    const { selection } = this.controller.mainEditorState;
     const besluit = findParentNodeOfType(this.controller.schema.nodes.besluit)(
       selection
     );
@@ -41,9 +41,12 @@ export default class ImportSnippetPluginCard extends Component<Args> {
     const insertRange = this.insertRange;
     if (insertRange) {
       const node = this.generateSnippetHtml(snippet, type);
-      this.controller.withTransaction((tr) => {
-        return tr.replaceRangeWith(insertRange.from, insertRange.to, node);
-      });
+      this.controller.withTransaction(
+        (tr) => {
+          return tr.replaceRangeWith(insertRange.from, insertRange.to, node);
+        },
+        { view: this.controller.mainEditorView }
+      );
       this.importRdfaSnippet.removeSnippet(snippet);
     } else {
       console.warn('Could not find a range to insert, so we skipped inserting');

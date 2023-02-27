@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import instantiateUuids from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/instantiate-uuids';
@@ -14,7 +14,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
-  controller: ProseController;
+  controller: SayController;
 };
 
 const HACKY_LOOKUP: Record<string, Resource> = {
@@ -65,7 +65,7 @@ export default class TemplateProviderComponent extends Component<Args> {
   }
 
   templateIsApplicable(template: TemplateModel) {
-    const { $from } = this.controller.state.selection;
+    const { $from } = this.controller.mainEditorState.selection;
     const containsTypes =
       this.controller.externalContextStore
         .match(null, 'a')
@@ -95,7 +95,7 @@ export default class TemplateProviderComponent extends Component<Args> {
   @action
   async insert(template: TemplateModel) {
     await template.reload();
-    const selection = this.controller.state.selection;
+    const selection = this.controller.mainEditorState.selection;
     let insertRange: { from: number; to: number } = selection;
     const { $from, $to } = selection;
     const isInPlaceholder =
@@ -119,7 +119,8 @@ export default class TemplateProviderComponent extends Component<Args> {
         instantiateUuids(template.body),
         insertRange.from,
         insertRange.to
-      )
+      ),
+      { view: this.controller.mainEditorView }
     );
   }
 }

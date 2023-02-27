@@ -1,18 +1,16 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
-import { DateFormat } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
+import {
+  DateFormat,
+  DateOptions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 type Args = {
-  controller: ProseController;
-  widgetArgs: {
-    options: {
-      formats: [DateFormat];
-      allowCustomFormat: boolean;
-    };
-  };
+  controller: SayController;
+  options: DateOptions;
 };
 
 export default class RdfaDatePluginInsertComponent extends Component<Args> {
@@ -25,7 +23,7 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
   }
 
   get formats(): DateFormat[] {
-    return this.args.widgetArgs.options.formats;
+    return this.args.options.formats;
   }
 
   get defaultDateFormat(): Option<string> {
@@ -48,6 +46,6 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
         tr.setSelection(new NodeSelection(resolvedPos));
       }
       return tr;
-    }, true);
+    });
   }
 }

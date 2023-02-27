@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   Fragment,
-  ProseController,
+  SayController,
   Slice,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
@@ -24,8 +24,9 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 interface Args {
-  controller: ProseController;
-  widgetArgs: { plugin: CitationPlugin; config: CitationPluginConfig };
+  controller: SayController;
+  plugin: CitationPlugin;
+  config: CitationPluginConfig;
 }
 
 export default class EditorPluginsCitationInsertComponent extends Component<Args> {
@@ -35,7 +36,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   @tracked legislationType: string | null = null;
 
   get config() {
-    return this.args.widgetArgs.config;
+    return this.args.config;
   }
 
   get selectedLegislationTypeUri(): string {
@@ -63,9 +64,11 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     if (this.controller.inEmbeddedView) {
       return true;
     }
-    const { selection } = this.controller.state;
+    const { selection } = this.controller.mainEditorState;
     if (this.config.type === 'ranges') {
-      const ranges = this.config.activeInRanges(this.controller.state);
+      const ranges = this.config.activeInRanges(
+        this.controller.mainEditorState
+      );
       for (const range of ranges) {
         if (selection.from > range[0] && selection.from < range[1]) {
           return false;
@@ -75,18 +78,18 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     } else {
       const nodeTypes = this.config.activeInNodeTypes(
         this.controller.schema,
-        this.controller.state
+        this.controller.mainEditorState
       );
       return !findParentNodeOfType([...nodeTypes])(selection);
     }
   }
 
   get plugin() {
-    return this.args.widgetArgs.plugin;
+    return this.args.plugin;
   }
 
   get activeRanges() {
-    return this.plugin.getState(this.controller.state)?.activeRanges;
+    return this.plugin.getState(this.controller.mainEditorState)?.activeRanges;
   }
 
   get controller() {
@@ -113,19 +116,21 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     const type = decision.legislationType?.label || '';
     const uri = decision.uri;
     const title = decision.title ?? '';
-    this.controller.withTransaction((tr: Transaction) =>
-      tr
-        .replaceSelection(
-          new Slice(
-            Fragment.fromArray([
-              this.controller.schema.text(`${type} `),
-              citedText(this.controller.schema, title, uri),
-            ]),
-            0,
-            0
+    this.controller.withTransaction(
+      (tr: Transaction) =>
+        tr
+          .replaceSelection(
+            new Slice(
+              Fragment.fromArray([
+                this.controller.schema.text(`${type} `),
+                citedText(this.controller.schema, title, uri),
+              ]),
+              0,
+              0
+            )
           )
-        )
-        .scrollIntoView()
+          .scrollIntoView(),
+      { view: this.controller.mainEditorView }
     );
   }
 
@@ -137,12 +142,14 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     if (decision.title) {
       title = `${decision.title}, ${article.number ?? ''}`;
     }
-    const { from, to } = this.args.controller.state.selection;
-    this.controller.withTransaction((tr: Transaction) =>
-      tr.replaceWith(from, to, [
-        this.controller.schema.text(`${type} `),
-        citedText(this.controller.schema, title, uri),
-      ])
+    const { from, to } = this.controller.mainEditorState.selection;
+    this.controller.withTransaction(
+      (tr: Transaction) =>
+        tr.replaceWith(from, to, [
+          this.controller.schema.text(`${type} `),
+          citedText(this.controller.schema, title, uri),
+        ]),
+      { view: this.controller.mainEditorView }
     );
   }
 }

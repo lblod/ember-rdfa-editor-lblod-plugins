@@ -1,4 +1,3 @@
-import { WidgetSpec } from '@lblod/ember-rdfa-editor';
 import {
   besluit,
   title,
@@ -11,11 +10,6 @@ import {
   language_node,
   besluitArticleStructure,
 } from './utils/nodes';
-
-export const standardTemplateWidget: WidgetSpec = {
-  desiredLocation: 'insertSidebar',
-  componentName: 'standard-template-plugin/card',
-};
 
 export const besluitNodes = {
   besluit,

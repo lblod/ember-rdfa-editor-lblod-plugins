@@ -1,4 +1,3 @@
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
@@ -7,6 +6,7 @@ import {
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const PLACEHOLDERS = {
   heading: 'article-structure-plugin.placeholder.generic.heading',

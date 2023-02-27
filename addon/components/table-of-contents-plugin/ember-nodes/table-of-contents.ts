@@ -21,7 +21,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
 
   get outline() {
     const entries = this.extractOutline({
-      node: this.controller.state.doc,
+      node: this.controller.mainEditorState.doc,
       pos: -1,
     });
     return {

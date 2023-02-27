@@ -2,7 +2,7 @@ import { findParentNode } from '@curvenote/prosemirror-utils';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 
 /**
  * Card displaying a hint of the Date plugin
@@ -22,7 +22,7 @@ const acceptedTypes = [
 ];
 
 type Args = {
-  controller: ProseController;
+  controller: SayController;
 };
 
 export default class RoadsignRegulationCard extends Component<Args> {
@@ -48,7 +48,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
   }
 
   get showCard() {
-    const selection = this.controller.state.selection;
+    const selection = this.controller.mainEditorState.selection;
     const besluitNode = findParentNode((node) => {
       if (node.type === this.schema.nodes['besluit']) {
         const rdfTypes = (node.attrs['typeof'] as string | undefined)?.split(

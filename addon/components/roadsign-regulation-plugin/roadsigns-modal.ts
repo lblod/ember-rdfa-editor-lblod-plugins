@@ -13,13 +13,13 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
 import { assert } from '@ember/debug';
-import { unwrap } from '@lblod/ember-rdfa-editor/utils/option';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
-import { ProseController } from '@lblod/ember-rdfa-editor/core/prosemirror';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
 import IntlService from 'ember-intl/services/intl';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -42,7 +42,7 @@ type Category = Option;
 
 type Args = {
   closeModal: () => void;
-  controller: ProseController;
+  controller: SayController;
 };
 
 export default class RoadsignRegulationCard extends Component<Args> {
@@ -306,7 +306,8 @@ export default class RoadsignRegulationCard extends Component<Args> {
     }).content;
 
     this.args.controller.doCommand(
-      insertStructure(besluitArticleStructure, this.intl, contentFragment)
+      insertStructure(besluitArticleStructure, this.intl, contentFragment),
+      { view: this.args.controller.mainEditorView }
     );
     this.args.closeModal();
   }

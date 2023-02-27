@@ -4,17 +4,14 @@ import {
   EditorState,
   EditorStateConfig,
   InlineDecorationSpec,
-  MarkSpec,
   NodeType,
   PNode,
   ProsePlugin,
   Schema,
-  WidgetSpec,
 } from '@lblod/ember-rdfa-editor';
 import processMatch, {
   RegexpMatchArrayWithIndices,
 } from './utils/process-match';
-import { citation } from './marks/citation';
 import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/changed-descendants';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
@@ -115,17 +112,6 @@ interface CitationPluginState {
 
 export type CitationPlugin = ProsePlugin<CitationPluginState>;
 
-export interface CitationPluginBundle {
-  plugin: ProsePlugin<CitationPluginState>;
-  widgets: {
-    citationCard: WidgetSpec;
-    citationInsert: WidgetSpec;
-  };
-  marks: {
-    citation: MarkSpec;
-  };
-}
-
 export interface CitationPluginNodeConfig {
   type: 'nodes';
   regex?: RegExp;
@@ -144,41 +130,7 @@ export type CitationPluginConfig =
   | CitationPluginNodeConfig
   | CitationPluginRangeConfig;
 
-export function setupCitationPlugin(
-  config: CitationPluginConfig = {
-    type: 'nodes',
-    activeInNodeTypes(schema): Set<NodeType> {
-      return new Set([schema.nodes.doc]);
-    },
-  }
-): CitationPluginBundle {
-  const plugin = citationPlugin(config);
-  return {
-    plugin,
-    widgets: {
-      citationCard: {
-        desiredLocation: 'sidebar',
-        componentName: 'citation-plugin/citation-card',
-        widgetArgs: {
-          plugin,
-        },
-      },
-      citationInsert: {
-        desiredLocation: 'insertSidebar',
-        componentName: 'citation-plugin/citation-insert',
-        widgetArgs: {
-          config,
-          plugin,
-        },
-      },
-    },
-    marks: {
-      citation,
-    },
-  };
-}
-
-function citationPlugin(config: CitationPluginConfig): CitationPlugin {
+export function citationPlugin(config: CitationPluginConfig): CitationPlugin {
   const citation: CitationPlugin = new ProsePlugin({
     state: {
       init(stateConfig: EditorStateConfig, state: EditorState) {
