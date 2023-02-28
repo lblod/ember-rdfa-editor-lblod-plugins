@@ -22,7 +22,7 @@ export const articleParagraphSpec: StructureSpec = {
     },
     remove: 'article-structure-plugin.remove.paragraph',
   },
-  continuous: true,
+  continuous: false,
   noUnwrap: true,
   constructor: ({ schema, number, intl }) => {
     const numberConverted = number?.toString() ?? '1';
