@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Article should not numbered continuous
+
 ## [3.0.0] - 2023-02-27
 
 ### Changed
