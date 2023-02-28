@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Article paragraph numbering is no longer continuous
+### Changed
+- Use `AuModalContainer` component instead of  #ember-appuniversum-wormhole element in dummy app
 
 ## [3.0.0] - 2023-02-27
 
