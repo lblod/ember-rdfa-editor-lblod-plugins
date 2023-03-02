@@ -46,7 +46,7 @@
 .ember-node {
   .variable {
     [contenteditable] {
-      white-space: pre-wrap;
+      white-space: break-spaces;
       word-break: break-all;
       word-wrap: break-word;
       outline: 0px;
