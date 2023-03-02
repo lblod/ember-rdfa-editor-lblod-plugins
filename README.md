@@ -49,7 +49,7 @@ This is typically done in the following manner:
 ```
 Where `this.plugins` is an array of plugin configurations found in the backing class of the template shown above.
 
-## besluit-type-plugin
+## besluit-type-plugin - TODO
 
 Plugin which allows a user to change the type of a [besluit](https://data.vlaanderen.be/ns/besluit#Besluit).
 
@@ -61,14 +61,33 @@ This plugin can be configured in the following manner:
 ## citaten-plugin
 Plugin which allows a user to insert references to a legal resource or legal expression into the document.
 
-This plugin can be configured in the following manner:
-
+This plugin provides a card that needs to be added to the sidebar of the editor like
+```hbs
+  <CitationPlugin::CitationCard 
+    @controller={{this.controller}} 
+    @plugin={{this.citationPlugin}}
+  />
+```
+Being this.citationPlugin a tracked reference to the plugin created with the function exported from the package and the wished configuration
 ```js
-  this.plugins = ["citaten"];
+  import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+
+  @tracked citationPlugin = citationPlugin({
+    type: 'nodes',
+    activeInNodeTypes(schema) {
+      return new Set([schema.nodes.motivering]);
+    },
+  });
 ```
 
+Configuration:
+  - type: it can be 'nodes' or 'ranges' if nodes is selected you are expected to pass the `activeInNodeTypes` function, otherwise you should pass the `activeInRanges` function
+  - activeInNodeTypes: it's a function that gets the prosemirror schema and the state of the actual instance of the editor and returns a `Set` of nodetypes where the plugin should be active
+  - activeInRanges: it's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`
+  - regex: you can provide your custom regex to detect citations, if not the default one will be used
+
 ### Using the plugin
-This plugin can be triggered by typing one of the following in the correct RDFa context (the [besluit:motivering](http://data.vlaanderen.be/ns/besluit#motivering) of a [besluit:Besluit](https://data.vlaanderen.be/ns/besluit#Besluit)).
+If used with the example configuration provided this plugin can be triggered by typing one of the following in the correct RDFa context (the [besluit:motivering](http://data.vlaanderen.be/ns/besluit#motivering) of a [besluit:Besluit](https://data.vlaanderen.be/ns/besluit#Besluit)).
 
 * [specification]**decreet** [words to search for] *(e.g. "gemeentedecreet wijziging")*
 * **omzendbrief** [words to search for]
@@ -86,7 +105,7 @@ This plugin can be triggered by typing one of the following in the correct RDFa 
 
 You should be able to add a reference manually by clicking on the `Insert` > `Insert reference` item in the Insert menu located on the top right of the editor. This will open the advanced search window. **Note** that this will only be avaliable in the proper context (see above in this section).
 
-## generate-template-plugin
+## generate-template-plugin - TODO
 Plugin which provides an editor command which replaces resource URIs in a document by a generic template URI containing `${generateUuid()}`. This allows for the generation of template documents. Template documents can be used by other applications, these other applications can create an instance of a template by replacing the `${generateUuid()}` keywords by real URIs.
 
 This plugin can be configured in the following manner:
@@ -103,13 +122,12 @@ controller.executeCommand('generateTemplate', controller);
 
 Where `controller` is an editor-controller.
 
-## import-snippet-plugin
+## import-snippet-plugin - TODO
 Plugin allowing importing of external RDFA snippets and inserting it in the document.
 
-This plugin can be configured in the following manner:
-
-```js
-  this.plugins = ["import-snippet"];
+The `plugin has a card that needs to be added to the sidebar like
+```hbs
+  <ImportSnippetPlugin::Card @controller={{this.controller}}/>
 ```
 
 ### Using the plugin
@@ -134,9 +152,17 @@ When opening a new document, users will get the option to either include the sni
 ## insert-variable-plugin
 Plugin which allows users to insert variable placeholders into a document.
 
+The plugin provides a card that needs to be attached to the editor sidebar like
+```hbs
+  <VariablePlugin::InsertVariableCard 
+    @controller={{this.controller}}
+    @options={{this.config.variable}}
+  />
+```
+
 ### Configuring the plugin
 
-The plugin can be configured through the following optional attributes:
+The plugin can be configured through the following optional attributes that can be added as a json to the options attribute of the card:
 - `publisher`: the URI of a specific codelist publisher which you can use if you want to filter the codelists by its publisher.
 - `defaultEndpoint`: The default endpoint where the codelists are fetched, this is also the variable that gets passed to the fetchSubtypes and template function
 - `variableTypes`: a custom list of variable types you want the plugin to use. This list can contain the following default variable types: `text`, `number`,`date`,`location` and `codelist`. Additionally this list can also contain custom variable types, configured by the following three sub-attributes:
@@ -148,54 +174,51 @@ The plugin can be configured through the following optional attributes:
 
 ```js
 {
-  name:'insert-variable',
-  options: {
-    publisher: 'http://data.lblod.info/id/bestuurseenheden/141d9d6b-54af-4d17-b313-8d1c30bc3f5b',
-    defaultEndpoint: 'https://dev.roadsigns.lblod.info/sparql',
-    variableTypes: [
-          'text',
-          'number',
-          'date',
-          'location',
-          'codelist',
+  publisher: 'http://data.lblod.info/id/bestuurseenheden/141d9d6b-54af-4d17-b313-8d1c30bc3f5b',
+  defaultEndpoint: 'https://dev.roadsigns.lblod.info/sparql',
+  variableTypes: [
+    'text',
+    'number',
+    'date',
+    'location',
+    'codelist',
+    {
+      label: 'Simple Variable',
+      template: `
+        <span property="ext:content" datatype="ext:myNewType">
+          <span class="mark-highlight-manual">\${Simple variable}</span>
+        </span>
+      `,
+    },
+    {
+      label: 'Complex Variable',
+      fetchSubtypes: async (endpoint, publisher) => {
+        const codelists = [
           {
-            label: 'Simple Variable',
-            template: `
-              <span property="ext:content" datatype="ext:myNewType">
-                <span class="mark-highlight-manual">\${Simple variable}</span>
-              </span>
-            `,
+            uri: '1',
+            label: '1',
           },
           {
-            label: 'Complex Variable',
-            fetchSubtypes: async (endpoint, publisher) => {
-              const codelists = [
-                {
-                  uri: '1',
-                  label: '1',
-                },
-                {
-                  uri: '2',
-                  label: '2',
-                },
-                {
-                  uri: '3',
-                  label: '3',
-                },
-              ];
-              return codelists;
-            },
-            template: (endpoint, selectedCodelist) => `
-              <span property="ext:codelist" resource="${selectedCodelist.uri}"></span>
-              <span property="dct:type" content="location"></span>
-              <span property="dct:source" resource="${endpoint}"></span>
-              <span property="ext:content" datatype="xsd:date">
-                <span class="mark-highlight-manual">\${${selectedCodelist.label}}</span>
-              </span>
-            `,
+            uri: '2',
+            label: '2',
           },
-        ],
-  }
+          {
+            uri: '3',
+            label: '3',
+          },
+        ];
+        return codelists;
+      },
+      template: (endpoint, selectedCodelist) => `
+        <span property="ext:codelist" resource="${selectedCodelist.uri}"></span>
+        <span property="dct:type" content="location"></span>
+        <span property="dct:source" resource="${endpoint}"></span>
+        <span property="ext:content" datatype="xsd:date">
+          <span class="mark-highlight-manual">\${${selectedCodelist.label}}</span>
+        </span>
+      `,
+    },
+  ],
 }
 ```
 ### Using the plugin
@@ -206,26 +229,36 @@ When the insert-variable-plugin is enabled, users will have the option to insert
 ## rdfa-date-plugin
 Plugin to insert and modify semantic dates and timestamps in an editor document.
 
-This plugin can be configured in the following manner:
+This plugin provides a card that needs to be added to the editor sidebar like
 
-```js
-  this.plugins = ["rdfa-date"];
+```hbs
+  <RdfaDatePlugin::Card 
+    @controller={{this.controller}}
+    @options={{this.config.date}}/>
 ```
 
-
+You will also need to add the date node with the following configuration (being the insertDate and insertDateTime the placeholder strings):
+```js
+  date: date({
+    placeholder: {
+      insertDate: this.intl.t('date-plugin.insert.date'),
+      insertDateTime: this.intl.t('date-plugin.insert.datetime'),
+    },
+  }),
+```
 
 ## roadsign-regulation-plugin
 A plugin that fetches data from the mow regulation and roadsign registry and allows users to insert roadsign regulations inside an editor document.
 
-This plugin can be configured in the following manner:
+This plugin provides a card that needs to be added to the editor sidebar like:
 
-```js
-  this.plugins = ["roadsign-regulation"];
+```hbs
+  <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
 ```
 
 The default endpoint the plugin will query is https://roadsigns.lblod.info/sparql . This can be overwritten by setting `roadsignRegulationPlugin.endpoint` in your `config/environment.js`.
 
-## standard-template-plugin
+## standard-template-plugin - TODO
 Plugin which allows users to insert standard templates in the editor. Depending on the position of the cursor or selected text, a dropdown will appear in the toolbar of the editor that lets you insert a template for the proper context at the location of the cursor.
 
 This plugin can be configured in the following manner:
@@ -253,65 +286,67 @@ The plugin will search for RDFa contexts in the content of the editor and the ed
 
 Plugin implementing an auto-refreshing table of contents using an ember-rdfa-editor inline component.
 
-In order to enable the plugin you need to add `table-of-contents` to the list of plugins passed to the rdfa-editor. You can configure the plugin with a custom table of contents configuration.
+In order to enable the plugin you need to add the table of contents button to the toolbar and the table of contents node view to the list of editor node views. 
+```hbs
+  <TableOfContentsPlugin::ToolbarButton @controller={{this.editor}}/>
+```
+
+```
+  tableOfContentsView(this.config.tableOfContents)(controller),
+```
+
+You will also need to add the table nodes to your prosemirror schema like:
+```js
+  ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+```
+and the `tablePlugin`, both imported from:
+```js
+  import {
+    tableNodes,
+    tablePlugin,
+  } from '@lblod/ember-rdfa-editor/plugins/table';
+
+  
+```
+
+
 ### Configuring the plugin with a custom config
 
-```js
-this.plugins = [
-  { name: 'table-of-contents', 
-    options: { 
-      config: {
-        sectionPredicate: 'https://say.data.gift/ns/hasPart',
-        value: {
-          predicate: 'https://say.data.gift/ns/heading',
-        },
-      },
-      {
-        sectionPredicate: 'https://say.data.gift/ns/hasParagraph',
-        value: '§',
-      }, 
-    } 
-  },
-]
-```
-
-You can insert an instance of a table of contents using the `insert-component` command: 
+You can configure the nodeview with the hiearchy of the nodes
 
 ```js
-controller.executeCommand(
-      'insert-component',
-      'table-of-contents-plugin/inline-components/table-of-contents',
-      {
-        config: [
-          {
-            sectionPredicate: 'https://say.data.gift/ns/hasPart',
-            value: {
-              predicate: 'https://say.data.gift/ns/heading',
-            },
-          },
-          {
-            sectionPredicate: 'https://say.data.gift/ns/hasParagraph',
-            value: '§',
-          },
-        ],
-      },
-      {},
-      false
-    );
+{
+  nodeHierarchy: [
+    'title|chapter|section|subsection|article',
+    'structure_header|article_header',
+  ],
+},
 ```
+
+
 ## template-variable-plugin
 
 Editor plugin which allows you to interact with placeholders created by the insert-variable-plugin.
 
-### Configuring the plugin
-
-You can enable the plugin by adding it to the list of plugins:
-
-```js
-this.plugins = ['template-variable'];
+For enabling it, you need to add the card provided by the plugin to the editor sidebar
+```hbs
+  <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
 ```
 
-Additionally, you can configure the plugin in your `environment.js` file:
+You will also need to add the variable node to the list of nodes of your prosemirror schema and the variable view to the list of nodeviews like `variable: variableView(controller)` imported from:
+
+```js
+import {
+  variable,
+  variableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
+
+```
+
+### Configuring the plugin
+
+
+You can configure the plugin in your `environment.js` file:
 
 ```js
 templateVariablePlugin: {
