@@ -57,33 +57,33 @@
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
-                <ArticleStructurePlugin::ArticleStructureCard 
+                <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
                 />
-                <CitationPlugin::CitationInsert 
-                  @controller={{this.controller}} 
+                <CitationPlugin::CitationInsert
+                  @controller={{this.controller}}
                   @plugin={{this.citationPlugin}}
                   @config={{this.config.citation}}
                 />
-                <RdfaDatePlugin::Insert 
+                <RdfaDatePlugin::Insert
                   @controller={{this.controller}}
                   @options={{this.config.date}}
                 />
                 <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
                 <StandardTemplatePlugin::Card @controller={{this.controller}}/>
               </Sidebar.Collapsible>
-              <ArticleStructurePlugin::StructureCard 
-                @controller={{this.controller}} 
+              <ArticleStructurePlugin::StructureCard
+                @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <BesluitPlugin::BesluitPluginCard @controller={{this.controller}}/>
-              <CitationPlugin::CitationCard 
-                @controller={{this.controller}} 
+              <DecisionPlugin::DecisionPluginCard @controller={{this.controller}}/>
+              <CitationPlugin::CitationCard
+                @controller={{this.controller}}
                 @plugin={{this.citationPlugin}}
               />
               <ImportSnippetPlugin::Card @controller={{this.controller}}/>
-              <RdfaDatePlugin::Card 
+              <RdfaDatePlugin::Card
                 @controller={{this.controller}}
                 @options={{this.config.date}}/>
               <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
