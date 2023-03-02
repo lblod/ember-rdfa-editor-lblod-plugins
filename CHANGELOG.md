@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use `AuModalContainer` component instead of  #ember-appuniversum-wormhole element in dummy app
 
+### Dependencies
+- bump `ember-rdfa-editor` to v3.3.0
+
 ## [3.0.0] - 2023-02-27
 
 ### Changed
