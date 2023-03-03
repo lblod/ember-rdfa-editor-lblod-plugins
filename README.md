@@ -26,7 +26,6 @@ ember install ember-rdfa-editor-lblod-plugins
 This addon contains the following editor plugins:
 * besluit-type-plugin
 * citaten-plugin
-* generate-template-plugin
 * import-snippet-plugin
 * insert-variable-plugin
 * rdfa-date-plugin
@@ -35,29 +34,45 @@ This addon contains the following editor plugins:
 * table-of-contents-plugin
 * template-variable-plugin
 
-An array of plugin configurations can be passed to an instance of the ember-rdfa-editor in order to enable them.
-This is typically done in the following manner:
+You can configure your editor like this:
 ```hbs
-<Rdfa::RdfaEditor
-      class="au-c-rdfa-editor"
-      @profile={{@profile}}
-      @rdfaEditorInit={{this.rdfaEditorInit}}
-      @editorOptions={{this.editorOptions}}
-      @toolbarOptions={{this.toolbarOptions}}
+<EditorContainer
+  @editorOptions={{hash
+    showRdfa='true'
+    showRdfaHighlight='true'
+    showRdfaHover='true'
+    showPaper='true'
+    showToolbarBottom=null
+  }}
+  @showRdfaBlocks={{this.controller.showRdfaBlocks}}
+>
+  <:top>
+    {...}
+  </:top>
+  <:default>
+    <Editor
       @plugins={{this.plugins}}
-    />
+      @schema={{this.schema}}
+      @nodeViews={{this.nodeViews}}
+      @rdfaEditorInit={{this.rdfaEditorInit}}/>
+  </:default>
+  <:aside>
+    {...}
+  </:aside>
+</EditorContainer>
 ```
-Where `this.plugins` is an array of plugin configurations found in the backing class of the template shown above.
+You will have 2 anchor points where to put your plugins: `top` for a toolbar, and `aside` for plugin cards.
 
-## besluit-type-plugin - TODO
+
+## besluit-type-plugin
 
 Plugin which allows a user to change the type of a [besluit](https://data.vlaanderen.be/ns/besluit#Besluit).
 
-This plugin can be configured in the following manner:
-
-```js
-  this.plugins = ["besluit"];
+This plugin needs to be added to the toolbar as a dropdown with the following syntax:
+```hbs
+  <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}}/>
 ```
+
 ## citaten-plugin
 Plugin which allows a user to insert references to a legal resource or legal expression into the document.
 
@@ -105,24 +120,7 @@ If used with the example configuration provided this plugin can be triggered by 
 
 You should be able to add a reference manually by clicking on the `Insert` > `Insert reference` item in the Insert menu located on the top right of the editor. This will open the advanced search window. **Note** that this will only be avaliable in the proper context (see above in this section).
 
-## generate-template-plugin - TODO
-Plugin which provides an editor command which replaces resource URIs in a document by a generic template URI containing `${generateUuid()}`. This allows for the generation of template documents. Template documents can be used by other applications, these other applications can create an instance of a template by replacing the `${generateUuid()}` keywords by real URIs.
-
-This plugin can be configured in the following manner:
-
-```js
-  this.plugins = ["generate-template"];
-```
-
-The command can be used by executing:
-
-```js
-controller.executeCommand('generateTemplate', controller);
-```
-
-Where `controller` is an editor-controller.
-
-## import-snippet-plugin - TODO
+## import-snippet-plugin
 Plugin allowing importing of external RDFA snippets and inserting it in the document.
 
 The `plugin has a card that needs to be added to the sidebar like
@@ -258,13 +256,12 @@ This plugin provides a card that needs to be added to the editor sidebar like:
 
 The default endpoint the plugin will query is https://roadsigns.lblod.info/sparql . This can be overwritten by setting `roadsignRegulationPlugin.endpoint` in your `config/environment.js`.
 
-## standard-template-plugin - TODO
+## standard-template-plugin
 Plugin which allows users to insert standard templates in the editor. Depending on the position of the cursor or selected text, a dropdown will appear in the toolbar of the editor that lets you insert a template for the proper context at the location of the cursor.
 
-This plugin can be configured in the following manner:
-
-```js
-  this.plugins = ["standard-template"];
+In order to use this plugin you will need to add its card:
+```hbs
+  <StandardTemplatePlugin::Card @controller={{this.controller}}/>
 ```
 
 ### Template resource used by the plugin
@@ -278,7 +275,6 @@ When creating a template in your database, the following properties are used by 
 * the contexts in which it should not be active (`disabled-in-contexts`)
 
 ### Using the plugin
-
 
 The plugin will search for RDFa contexts in the content of the editor and the editor itself. Based on the contexts, the plugin will show possible templates to be added at the location of the cursor. E.g. if an element in the editor has the `typeof="besluit:BehandelingVanAgendapunt"` attribute, the plugin will show the templates related to [`besluit:BehandelingVanAgendapunt`](http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt) in the dropdown menu. This attribute can be set on an element in the content of the editor or predefined in the editor itself.
 
