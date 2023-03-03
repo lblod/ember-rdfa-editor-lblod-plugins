@@ -166,7 +166,7 @@ The plugin can be configured through the following optional attributes that can 
 - `variableTypes`: a custom list of variable types you want the plugin to use. This list can contain the following default variable types: `text`, `number`,`date`,`location` and `codelist`. Additionally this list can also contain custom variable types, configured by the following three sub-attributes:
   * `label`: the label of the custom variable type
   * `fetchSubTypes` (optional): a function which returns a list of possible variable values. The function takes two optional arguments: an `endpoint` and a `publisher`.
-  * `template`: function which returns an html template which should be resolved and inserted when inserting a variable of the custom variable type. The function takes two arguments: an `endpoint` and a `selectedVariableValue`.
+  * `constructor`: function which returns a prosemirror node to be inserted, the function takes three arguments, the prosemirror `schema`, the `endpoint` and the `selectedSubtype` if you are using subtypes.
 
 #### Example
 
@@ -182,16 +182,24 @@ The plugin can be configured through the following optional attributes that can 
     'codelist',
     {
       label: 'Simple Variable',
-      template: `
-        <span property="ext:content" datatype="ext:myNewType">
-          <span class="mark-highlight-manual">\${Simple variable}</span>
-        </span>
-      `,
+      constructor: (schema) => {
+        const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
+        const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+        return schema.node(
+          'variable',
+          {
+            mappingResource: mappingURI,
+            variableInstance,
+            type: 'Simple Variable',
+          },
+          schema.node('placeholder', { placeholderText: 'text' })
+        );
+      },
     },
     {
       label: 'Complex Variable',
       fetchSubtypes: async (endpoint, publisher) => {
-        const codelists = [
+        const subtypes = [
           {
             uri: '1',
             label: '1',
@@ -205,16 +213,25 @@ The plugin can be configured through the following optional attributes that can 
             label: '3',
           },
         ];
-        return codelists;
+        return subtypes;
       },
-      template: (endpoint, selectedCodelist) => `
-        <span property="ext:codelist" resource="${selectedCodelist.uri}"></span>
-        <span property="dct:type" content="location"></span>
-        <span property="dct:source" resource="${endpoint}"></span>
-        <span property="ext:content" datatype="xsd:date">
-          <span class="mark-highlight-manual">\${${selectedCodelist.label}}</span>
-        </span>
-      `,
+      constructor: (schema, endpoint, selectedSubtype) => {
+        const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
+        const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+        return schema.node(
+          'variable',
+          {
+            type: 'Complex Variable',
+            mappingResource: mappingURI,
+            subTypeResource: selectedSubtype?.uri,
+            variableInstance,
+            source: endpoint,
+          },
+          schema.node('placeholder', {
+            placeholderText: selectedSubtype?.label ?? '',
+          })
+        );
+      }
     },
   ],
 }
