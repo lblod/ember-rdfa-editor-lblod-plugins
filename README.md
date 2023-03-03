@@ -227,12 +227,20 @@ When the insert-variable-plugin is enabled, users will have the option to insert
 ## rdfa-date-plugin
 Plugin to insert and modify semantic dates and timestamps in an editor document.
 
-This plugin provides a card that needs to be added to the editor sidebar like
+This plugin provides a card to modify dates that needs to be added to the editor sidebar like
 
 ```hbs
   <RdfaDatePlugin::Card 
     @controller={{this.controller}}
     @options={{this.config.date}}/>
+```
+
+And a insert button to insert new dates that needs to be added to the insert part of the sidebar:
+```hbs
+  <RdfaDatePlugin::Insert 
+    @controller={{this.controller}}
+    @options={{this.config.date}}
+  />
 ```
 
 You will also need to add the date node with the following configuration (being the insertDate and insertDateTime the placeholder strings):
