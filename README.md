@@ -123,7 +123,7 @@ You should be able to add a reference manually by clicking on the `Insert` > `In
 ## import-snippet-plugin
 Plugin allowing importing of external RDFA snippets and inserting it in the document.
 
-The `plugin has a card that needs to be added to the sidebar like
+The plugin has a card that needs to be added to the sidebar:
 ```hbs
   <ImportSnippetPlugin::Card @controller={{this.controller}}/>
 ```
@@ -289,20 +289,6 @@ In order to enable the plugin you need to add the table of contents button to th
 
 ```
   tableOfContentsView(this.config.tableOfContents)(controller),
-```
-
-You will also need to add the table nodes to your prosemirror schema like:
-```js
-  ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-```
-and the `tablePlugin`, both imported from:
-```js
-  import {
-    tableNodes,
-    tablePlugin,
-  } from '@lblod/ember-rdfa-editor/plugins/table';
-
-  
 ```
 
 
