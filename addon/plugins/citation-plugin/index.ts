@@ -206,6 +206,7 @@ function calculateDecorationsInNodes(
     decsToAdd,
     schema,
     config.regex,
+    newDoc,
     decsToRemove,
     oldDecorations
   );
@@ -254,7 +255,12 @@ function calculateDecorationsInRanges(
   activeRanges: [number, number][]
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const decorationsToAdd: Decoration[] = [];
-  const collector = collectDecorations(decorationsToAdd, schema, config.regex);
+  const collector = collectDecorations(
+    decorationsToAdd,
+    schema,
+    config.regex,
+    doc
+  );
 
   for (const [start, end] of activeRanges) {
     doc.nodesBetween(start, end, collector);
@@ -269,14 +275,20 @@ function collectDecorations(
   decsToAdd: Decoration[],
   schema: CitationSchema,
   regex: RegExp = CITATION_REGEX,
+  doc: PNode,
   decsToRemove?: Decoration[],
   oldDecs?: DecorationSet
 ) {
   return function (node: PNode, pos: number): boolean {
+    const resolvedNode = doc.resolve(pos);
     if (
       node.isText &&
       node.text &&
-      !schema.marks.citation.isInSet(node.marks)
+      !(
+        resolvedNode &&
+        resolvedNode.parent &&
+        resolvedNode.parent.type === schema.nodes.link
+      )
     ) {
       if (decsToRemove && oldDecs) {
         decsToRemove.push(

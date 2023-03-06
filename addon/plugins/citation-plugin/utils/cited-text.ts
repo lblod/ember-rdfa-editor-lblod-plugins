@@ -8,12 +8,13 @@ export function citedText(
   title: string,
   uri: string
 ): PNode {
-  return schema.text(title, [
-    unwrap(schema.marks.citation).create({
+  return unwrap(schema.nodes.link).create(
+    {
       href: uri,
       property: 'eli:cites',
       typeof: 'eli:LegalExpression',
       __rdfaId: uuid(),
-    }),
-  ]);
+    },
+    [schema.text(title)]
+  );
 }
