@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed white-space issue in variables
 ### Changed
 - Use `AuModalContainer` component instead of  #ember-appuniversum-wormhole element in dummy app
+- Improved documentation of the plugins
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0
