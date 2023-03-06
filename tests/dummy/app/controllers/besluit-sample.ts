@@ -2,7 +2,13 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { Schema, Plugin, SayController } from '@lblod/ember-rdfa-editor';
+import {
+  NodeType,
+  NodeViewConstructor,
+  Plugin,
+  SayController,
+  Schema,
+} from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
@@ -15,10 +21,10 @@ import {
   doc,
   hard_break,
   horizontal_rule,
+  invisible_rdfa,
   paragraph,
   repaired_block,
   text,
-  invisible_rdfa,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import {
@@ -45,7 +51,6 @@ import {
   structureSpecs,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { NodeType, NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -59,6 +64,11 @@ import {
   citationPlugin,
   CitationPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import {
+  validation,
+  ValidationError,
+  ValidationPlugin,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -67,6 +77,31 @@ export default class BesluitSampleController extends Controller {
   @tracked citationPlugin = citationPlugin(
     this.config.citation as CitationPluginConfig
   );
+  validationPlugin: ValidationPlugin = validation({
+    besluit: (node) => {
+      let foundTitle = false;
+      let foundDescription = false;
+      node.forEach((child) => {
+        if (child.type.name === 'title') {
+          foundTitle = true;
+        }
+        if (child.type.name === 'description') {
+          foundDescription = true;
+        }
+      });
+      const errors: ValidationError[] = [];
+      if (!foundTitle) {
+        errors.push({ type: 'missing-title', message: 'Title missing' });
+      }
+      if (!foundDescription) {
+        errors.push({
+          type: 'missing-description',
+          message: 'Description missing',
+        });
+      }
+      return { errors, stopDescending: true };
+    },
+  });
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -163,7 +198,26 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
     };
   };
-  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, this.citationPlugin];
+
+  get validations(): string[] {
+    if (!this.controller) {
+      return [];
+    }
+    const validations = this.validationPlugin.getState(
+      this.controller.mainEditorState
+    );
+    if (!validations) {
+      return [];
+    }
+    return validations.errors.map((error) => JSON.stringify(error));
+  }
+
+  @tracked plugins: Plugin[] = [
+    tablePlugin,
+    tableKeymap,
+    this.citationPlugin,
+    this.validationPlugin,
+  ];
 
   @action
   setPrefixes(element: HTMLElement) {

@@ -8,12 +8,12 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa='true'
-          showRdfaHighlight='true'
-          showRdfaHover='true'
-          showPaper='true'
-          showToolbarBottom=null
-        }}
+        showRdfa='true'
+        showRdfaHighlight='true'
+        showRdfaHover='true'
+        showPaper='true'
+        showToolbarBottom=null
+      }}
         @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
@@ -87,6 +87,7 @@
                 @controller={{this.controller}}
                 @options={{this.config.date}}/>
               <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
+              <ValidationPlugin::ValidationCard @validations={{this.validations}} />
             </Sidebar>
           {{/if}}
         </:aside>
