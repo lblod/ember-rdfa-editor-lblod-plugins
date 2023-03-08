@@ -1,6 +1,8 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import {
+  SayController,
+} from '@lblod/ember-rdfa-editor';
 
 type Args = {
   controller: SayController;
@@ -38,12 +40,45 @@ export default class TableOfContentsCardComponent extends Component<Args> {
       );
     } else {
       const { schema } = this.controller;
-      this.controller.withTransaction(
-        (tr) => {
-          return tr.replaceRangeWith(0, 0, schema.node('table_of_contents'));
-        },
-        { view: this.controller.mainEditorView }
+      const state = this.controller.activeEditorState;
+      let replacePosition: number;
+      state.doc.nodesBetween(
+        0,
+        state.doc.nodeSize - 2,
+        (node, pos, parent, index) => {
+          if (
+            replacePosition === undefined &&
+            state.doc.canReplaceWith(
+              index,
+              index,
+              schema.nodes['table_of_contents']
+            )
+          ) {
+            replacePosition = pos;
+          } else if (
+            replacePosition === undefined &&
+            state.doc.canReplaceWith(
+              index + 1,
+              index + 1,
+              schema.nodes['table_of_contents']
+            )
+          ) {
+            replacePosition = pos + node.nodeSize;
+          }
+        }
       );
+      if (replacePosition !== undefined) {
+        this.controller.withTransaction(
+          (transaction) => {
+            return transaction.replaceWith(
+              replacePosition,
+              replacePosition,
+              schema.node('table_of_contents')
+            );
+          },
+          { view: this.controller.mainEditorView }
+        );
+      }
     }
   }
 }
