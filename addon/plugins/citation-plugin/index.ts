@@ -4,7 +4,6 @@ import {
   EditorState,
   EditorStateConfig,
   InlineDecorationSpec,
-  NodeSelection,
   NodeType,
   PNode,
   ProsePlugin,
