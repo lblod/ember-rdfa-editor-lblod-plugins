@@ -15,7 +15,7 @@ import processMatch, {
   RegexpMatchArrayWithIndices,
 } from './utils/process-match';
 import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/changed-descendants';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -284,8 +284,10 @@ function collectDecorations(
 ) {
   return function (node: PNode, pos: number): boolean {
     const resolvedPos: ResolvedPos = doc.resolve(pos);
-    const selection: NodeSelection = new NodeSelection(resolvedPos);
-    const link = findParentNodeOfType(schema.nodes.link)(selection);
+    const link = findParentNodeOfTypeClosestToPos(
+      resolvedPos,
+      schema.nodes.link
+    );
     if (node.isText && node.text && !link) {
       if (decsToRemove && oldDecs) {
         decsToRemove.push(
