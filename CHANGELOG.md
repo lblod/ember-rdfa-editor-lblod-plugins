@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Feature: make citation use the new link node
+- BREAKING: citation mark has been removed
+
 ## [3.1.0] - 2023-03-02
 
 ### Fixed

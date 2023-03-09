@@ -7,12 +7,14 @@ import {
   NodeType,
   PNode,
   ProsePlugin,
+  ResolvedPos,
   Schema,
 } from '@lblod/ember-rdfa-editor';
 import processMatch, {
   RegexpMatchArrayWithIndices,
 } from './utils/process-match';
 import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/changed-descendants';
+import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -206,6 +208,7 @@ function calculateDecorationsInNodes(
     decsToAdd,
     schema,
     config.regex,
+    newDoc,
     decsToRemove,
     oldDecorations
   );
@@ -254,7 +257,12 @@ function calculateDecorationsInRanges(
   activeRanges: [number, number][]
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const decorationsToAdd: Decoration[] = [];
-  const collector = collectDecorations(decorationsToAdd, schema, config.regex);
+  const collector = collectDecorations(
+    decorationsToAdd,
+    schema,
+    config.regex,
+    doc
+  );
 
   for (const [start, end] of activeRanges) {
     doc.nodesBetween(start, end, collector);
@@ -269,15 +277,17 @@ function collectDecorations(
   decsToAdd: Decoration[],
   schema: CitationSchema,
   regex: RegExp = CITATION_REGEX,
+  doc: PNode,
   decsToRemove?: Decoration[],
   oldDecs?: DecorationSet
 ) {
   return function (node: PNode, pos: number): boolean {
-    if (
-      node.isText &&
-      node.text &&
-      !schema.marks.citation.isInSet(node.marks)
-    ) {
+    const resolvedPos: ResolvedPos = doc.resolve(pos);
+    const link = findParentNodeOfTypeClosestToPos(
+      resolvedPos,
+      schema.nodes.link
+    );
+    if (node.isText && node.text && !link) {
       if (decsToRemove && oldDecs) {
         decsToRemove.push(
           ...oldDecs.find(

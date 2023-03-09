@@ -54,7 +54,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import date from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
-import { citation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/marks/citation';
 import {
   citationPlugin,
   CitationPluginConfig,
@@ -108,7 +107,6 @@ export default class BesluitSampleController extends Controller {
         link: link(this.config.link),
       },
       marks: {
-        citation,
         inline_rdfa,
         em,
         strong,
