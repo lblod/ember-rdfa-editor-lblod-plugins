@@ -4,15 +4,18 @@ import {
   EditorState,
   EditorStateConfig,
   InlineDecorationSpec,
+  NodeSelection,
   NodeType,
   PNode,
   ProsePlugin,
+  ResolvedPos,
   Schema,
 } from '@lblod/ember-rdfa-editor';
 import processMatch, {
   RegexpMatchArrayWithIndices,
 } from './utils/process-match';
 import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/changed-descendants';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -280,16 +283,10 @@ function collectDecorations(
   oldDecs?: DecorationSet
 ) {
   return function (node: PNode, pos: number): boolean {
-    const resolvedNode = doc.resolve(pos);
-    if (
-      node.isText &&
-      node.text &&
-      !(
-        resolvedNode &&
-        resolvedNode.parent &&
-        resolvedNode.parent.type === schema.nodes.link
-      )
-    ) {
+    const resolvedPos: ResolvedPos = doc.resolve(pos);
+    const selection: NodeSelection = new NodeSelection(resolvedPos);
+    const link = findParentNodeOfType(schema.nodes.link)(selection);
+    if (node.isText && node.text && !link) {
       if (decsToRemove && oldDecs) {
         decsToRemove.push(
           ...oldDecs.find(
