@@ -1,8 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import {
-  SayController,
-} from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 
 type Args = {
   controller: SayController;
@@ -56,6 +54,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
           ) {
             replacePosition = pos;
           } else if (
+            index === state.doc.childCount - 1 &&
             replacePosition === undefined &&
             state.doc.canReplaceWith(
               index + 1,
@@ -65,6 +64,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
           ) {
             replacePosition = pos + node.nodeSize;
           }
+          return false;
         }
       );
       if (replacePosition !== undefined) {
