@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use `AuModalContainer` component instead of  #ember-appuniversum-wormhole element in dummy app
 - Improved documentation of the plugins
+- Table of contents now is able to be inserted in the corresponding place instead of always being inserted at position 0
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0
