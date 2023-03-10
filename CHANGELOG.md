@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Feature: make citation use the new link node
+- BREAKING: citation mark has been removed
 - Table of contents now is able to be inserted in the corresponding place instead of always being inserted at position 0
-
 ## [3.1.0] - 2023-03-02
 
 ### Fixed
