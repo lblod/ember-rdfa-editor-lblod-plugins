@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BREAKING: citation mark has been removed
 - Change paragraph symbol to §
 - Update schema on dummy page to make articles insertable in empty document
+- Add padding to structure card
 
 ## [3.1.0] - 2023-03-02
 
