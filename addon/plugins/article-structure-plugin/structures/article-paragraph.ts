@@ -76,7 +76,7 @@ export const article_paragraph: NodeSpec = {
         typeof: node.attrs.typeof as string,
         resource: node.attrs.resource as string,
       },
-      ['span', { contenteditable: false }, '$'],
+      ['span', { contenteditable: false }, '§'],
       [
         'span',
         {
