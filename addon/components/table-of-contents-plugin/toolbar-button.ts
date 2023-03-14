@@ -39,40 +39,36 @@ export default class TableOfContentsCardComponent extends Component<Args> {
     } else {
       const { schema } = this.controller;
       const state = this.controller.activeEditorState;
-      let replacePosition: number;
-      state.doc.nodesBetween(
-        0,
-        state.doc.nodeSize - 2,
-        (node, pos, parent, index) => {
-          if (
-            replacePosition === undefined &&
-            state.doc.canReplaceWith(
-              index,
-              index,
-              schema.nodes['table_of_contents']
-            )
-          ) {
-            replacePosition = pos;
-          } else if (
-            index === state.doc.childCount - 1 &&
-            replacePosition === undefined &&
-            state.doc.canReplaceWith(
-              index + 1,
-              index + 1,
-              schema.nodes['table_of_contents']
-            )
-          ) {
-            replacePosition = pos + node.nodeSize;
-          }
-          return false;
+      let replacePosition: number | undefined = undefined;
+      state.doc.descendants((node, pos, parent, index) => {
+        if (
+          replacePosition === undefined &&
+          state.doc.canReplaceWith(
+            index,
+            index,
+            schema.nodes['table_of_contents']
+          )
+        ) {
+          replacePosition = pos;
+        } else if (
+          index === state.doc.childCount - 1 &&
+          replacePosition === undefined &&
+          state.doc.canReplaceWith(
+            index + 1,
+            index + 1,
+            schema.nodes['table_of_contents']
+          )
+        ) {
+          replacePosition = pos + node.nodeSize;
         }
-      );
+        return false;
+      });
       if (replacePosition !== undefined) {
         this.controller.withTransaction(
           (transaction) => {
             return transaction.replaceWith(
-              replacePosition,
-              replacePosition,
+              replacePosition as number,
+              replacePosition as number,
               schema.node('table_of_contents')
             );
           },
