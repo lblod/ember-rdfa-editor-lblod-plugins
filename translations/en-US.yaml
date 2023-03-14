@@ -162,8 +162,14 @@ variable-plugin:
   insert-variable: Insert variable
   button: Insert
   enter-variable-value: Select value
+validation-plugin:
+  default-fix-message: Resolve
 
 
 table-of-contents-plugin:
   title: Table of Contents
   toggle: Show Table of Contents
+
+dummy:
+  validation-card:
+    title: Document Validation

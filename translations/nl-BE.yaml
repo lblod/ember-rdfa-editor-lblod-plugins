@@ -159,6 +159,8 @@ date-plugin:
     fractions: "Fracties van seconden, zoals S en T, zijn niet ondersteund."
     unknown: "Ongeldig formaat"
 
+validation-plugin:
+  default-fix-message: Oplossen
 
 table-of-contents-plugin:
   title: Inhoudstafel
@@ -169,3 +171,7 @@ variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
   enter-variable-value: Selecteer waarde
+
+dummy:
+  validation-card:
+    title: Documentvalidatie

@@ -66,9 +66,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   validation,
-  ValidationError,
   ValidationPlugin,
+  ValidationReport,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
+import { insertTitle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -77,6 +78,7 @@ export default class BesluitSampleController extends Controller {
   @tracked citationPlugin = citationPlugin(
     this.config.citation as CitationPluginConfig
   );
+
   validationPlugin: ValidationPlugin = validation({
     besluit: (node) => {
       let foundTitle = false;
@@ -89,19 +91,38 @@ export default class BesluitSampleController extends Controller {
           foundDescription = true;
         }
       });
-      const errors: ValidationError[] = [];
+      const reports: ValidationReport[] = [];
       if (!foundTitle) {
-        errors.push({ type: 'missing-title', message: 'Title missing' });
-      }
-      if (!foundDescription) {
-        errors.push({
-          type: 'missing-description',
-          message: 'Description missing',
+        reports.push({
+          type: 'missing-title',
+          message: 'Title missing',
+          severity: 'warning',
+          fixCommand: insertTitle(this.intl),
         });
       }
-      return { errors, stopDescending: true };
+      if (!foundDescription) {
+        reports.push({
+          type: 'missing-description',
+          message: 'Description missing',
+          severity: 'info',
+        });
+      }
+      return { reports, stopDescending: true };
     },
   });
+
+  get reports(): ValidationReport[] {
+    if (!this.controller) {
+      return [];
+    }
+    const validations = this.validationPlugin.getState(
+      this.controller.mainEditorState
+    );
+    if (!validations) {
+      return [];
+    }
+    return validations.reports;
+  }
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -198,19 +219,6 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
     };
   };
-
-  get validations(): string[] {
-    if (!this.controller) {
-      return [];
-    }
-    const validations = this.validationPlugin.getState(
-      this.controller.mainEditorState
-    );
-    if (!validations) {
-      return [];
-    }
-    return validations.errors.map((error) => JSON.stringify(error));
-  }
 
   @tracked plugins: Plugin[] = [
     tablePlugin,

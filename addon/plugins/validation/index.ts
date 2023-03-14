@@ -1,11 +1,11 @@
-import { PNode, ProsePlugin } from '@lblod/ember-rdfa-editor';
+import { Command, PNode, ProsePlugin } from '@lblod/ember-rdfa-editor';
 
 export interface ValidationState {
-  errors: ValidationError[];
+  reports: ValidationReport[];
 }
 
 export interface ValidationResult {
-  errors?: ValidationError[];
+  reports?: ValidationReport[];
   stopDescending?: boolean;
 }
 
@@ -19,9 +19,12 @@ export type ValidationConfig = Record<string, ValidationFunc>;
 
 export type ValidationPlugin = ProsePlugin<ValidationState>;
 
-export interface ValidationError {
+export interface ValidationReport {
   type: string;
   message: string;
+  severity: 'success' | 'info' | 'warning' | 'error';
+  fixCommand?: Command;
+  fixMessage?: string;
 
   [key: string]: unknown;
 }
@@ -30,17 +33,17 @@ export function validation(config: ValidationConfig = {}): ValidationPlugin {
   const validation = new ProsePlugin<ValidationState>({
     state: {
       init() {
-        return { errors: [] };
+        return { reports: [] };
       },
       apply(tr, oldPluginState, oldState, newState): ValidationState {
-        const errors: ValidationError[] = [];
+        const reports: ValidationReport[] = [];
         newState.doc.descendants((node, pos, parent, index) => {
           const nodeValidation = config[node.type.name];
           if (nodeValidation) {
             const result = nodeValidation(node, pos, parent, index);
             if (result) {
-              if (result.errors) {
-                errors.push(...result.errors);
+              if (result.reports) {
+                reports.push(...result.reports);
               }
               if (result.stopDescending) {
                 return false;
@@ -49,7 +52,7 @@ export function validation(config: ValidationConfig = {}): ValidationPlugin {
           }
           return true;
         });
-        return { errors };
+        return { reports };
       },
     },
   });

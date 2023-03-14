@@ -1,0 +1,5 @@
+<AuAlert @size='small' @icon={{this.icon}} @title={{this.message}} @skin={{this.skin}} @closable={{false}}>
+  {{#if this.fixCommand}}
+    <AuButton @skin="link" {{on "click" this.doFix}}>{{this.fixMessage}}</AuButton>
+  {{/if}}
+</AuAlert>

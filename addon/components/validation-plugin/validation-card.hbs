@@ -1,4 +1,12 @@
-<AuCard as |Card|>
-  <Card.header>TEST</Card.header>
-  <Card.content>{{@validations}}</Card.content>
-</AuCard>
+{{#if @reports.length}}
+  <AuCard as |Card|>
+    <Card.header>
+      <AuHeading @level="2" @skin="4">{{@title}}</AuHeading>
+    </Card.header>
+    <Card.content>
+      {{#each @reports as |report|}}
+        <ValidationPlugin::ValidationItem @controller={{@controller}} @report={{report}}/>
+      {{/each}}
+    </Card.content>
+  </AuCard>
+{{/if}}
