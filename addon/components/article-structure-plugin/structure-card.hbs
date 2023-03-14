@@ -27,10 +27,13 @@
         </Item>
         <Item>
           {{#unless this.currentStructureType.noUnwrap}}
-            <AuToggleSwitch
-              @label={{t "article-structure-plugin.remove.content"}}
-              @checked={{this.removeStructureContent}}
-              @onChange={{this.setRemoveStructureContent}}/>
+            <div class="au-u-padding-tiny">
+              <AuToggleSwitch
+                @label={{t "article-structure-plugin.remove.content"}}
+                @checked={{this.removeStructureContent}}
+                @onChange={{this.setRemoveStructureContent}}
+              />
+            </div>
           {{/unless}}
           <AuButton
             @icon="bin"
