@@ -57,6 +57,7 @@
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
+                <AuButton @skin="link" {{on "click" this.insertDescription}}>description</AuButton>
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
@@ -87,7 +88,7 @@
                 @controller={{this.controller}}
                 @options={{this.config.date}}/>
               <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
-              <ValidationPlugin::ValidationCard @title={{t "dummy.validation-card.title"}} @controller={{this.controller}} @reports={{this.reports}}/>
+              <ValidationPlugin::ValidationCard @title={{t "dummy.validation-card.title"}} @controller={{this.controller}} @report={{this.report}}/>
             </Sidebar>
           {{/if}}
         </:aside>

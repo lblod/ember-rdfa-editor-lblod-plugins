@@ -66,10 +66,9 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   validation,
-  ValidationPlugin,
   ValidationReport,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
-import { insertTitle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
+import insertDescription from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-description';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -78,50 +77,31 @@ export default class BesluitSampleController extends Controller {
   @tracked citationPlugin = citationPlugin(
     this.config.citation as CitationPluginConfig
   );
+  @tracked validationPlugin = validation((schema: Schema) => ({
+    shapes: [
+      {
+        focusNodeType: schema.nodes.besluit,
+        path: ['description'],
+        constraints: {
+          minCount: 1,
+          maxCount: 1,
+        },
+      },
+    ],
+  }));
 
-  validationPlugin: ValidationPlugin = validation({
-    besluit: (node) => {
-      let foundTitle = false;
-      let foundDescription = false;
-      node.forEach((child) => {
-        if (child.type.name === 'title') {
-          foundTitle = true;
-        }
-        if (child.type.name === 'description') {
-          foundDescription = true;
-        }
-      });
-      const reports: ValidationReport[] = [];
-      if (!foundTitle) {
-        reports.push({
-          type: 'missing-title',
-          message: 'Title missing',
-          severity: 'warning',
-          fixCommand: insertTitle(this.intl),
-        });
-      }
-      if (!foundDescription) {
-        reports.push({
-          type: 'missing-description',
-          message: 'Description missing',
-          severity: 'info',
-        });
-      }
-      return { reports, stopDescending: true };
-    },
-  });
-
-  get reports(): ValidationReport[] {
+  get report(): ValidationReport {
     if (!this.controller) {
-      return [];
+      return { conforms: true };
     }
-    const validations = this.validationPlugin.getState(
+    const validationState = this.validationPlugin.getState(
       this.controller.mainEditorState
     );
-    if (!validations) {
-      return [];
+    console.log('validationStatel', validationState);
+    if (!validationState) {
+      return { conforms: true };
     }
-    return validations.reports;
+    return validationState.report;
   }
 
   prefixes = {
@@ -256,5 +236,10 @@ export default class BesluitSampleController extends Controller {
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
+  }
+
+  @action
+  insertDescription() {
+    this.controller?.doCommand(insertDescription());
   }
 }

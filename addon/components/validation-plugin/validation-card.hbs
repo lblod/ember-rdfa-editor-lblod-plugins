@@ -1,11 +1,11 @@
-{{#if @reports.length}}
+{{#if this.shouldShow}}
   <AuCard as |Card|>
     <Card.header>
       <AuHeading @level="2" @skin="4">{{@title}}</AuHeading>
     </Card.header>
     <Card.content>
-      {{#each @reports as |report|}}
-        <ValidationPlugin::ValidationItem @controller={{@controller}} @report={{report}}/>
+      {{#each this.results as |result|}}
+        <ValidationPlugin::ValidationItem @controller={{@controller}} @result={{result}}/>
       {{/each}}
     </Card.content>
   </AuCard>

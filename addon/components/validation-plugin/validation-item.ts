@@ -1,13 +1,12 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { ValidationReport } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
+import { ValidationResult } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 interface Args {
   icon?: string;
-  report: ValidationReport;
+  result: ValidationResult;
 
   controller?: SayController;
 }
@@ -16,56 +15,32 @@ export default class ValidationItem extends Component<Args> {
   @service
   declare intl: IntlService;
 
-  get report(): ValidationReport {
-    return this.args.report;
-  }
-
-  get title(): string {
-    return this.report.type;
+  get result(): ValidationResult {
+    return this.args.result;
   }
 
   get message(): string {
-    return this.report.message;
+    return this.result.message;
   }
 
   get skin() {
-    return this.report.severity;
+    return this.result.severity;
   }
 
   get icon() {
-    switch (this.report.severity) {
-      case 'success':
-        return 'check';
+    switch (this.result.severity) {
       case 'info':
         return 'info-circle';
-      case 'error':
-        return 'cross';
       case 'warning':
         return 'alert-triangle';
+      case 'violation':
+        return 'cross';
       default:
         return 'info-circle';
     }
   }
 
-  get fixMessage() {
-    return (
-      this.report.fixMessage ||
-      this.intl.t('validation-plugin.default-fix-message')
-    );
-  }
-
-  get fixCommand() {
-    return this.report.fixCommand;
-  }
-
   get controller() {
     return this.args.controller;
-  }
-
-  @action
-  doFix() {
-    if (this.controller && this.fixCommand) {
-      this.controller.doCommand(this.fixCommand);
-    }
   }
 }
