@@ -6,7 +6,7 @@ import { validateTransaction } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 export default function insertDescription(): Command {
   return function (state, dispatch) {
     const { selection, schema } = state;
-    const { $from, $to } = selection;
+    const { $from } = selection;
     const decision = findParentNodeOfType(schema.nodes.besluit)(selection);
     if (!decision) {
       return false;
@@ -41,9 +41,9 @@ export default function insertDescription(): Command {
       )
     );
     const valid = validateTransaction(state, tr).conforms;
-    // if (!valid) {
-    //   return false;
-    // }
+    if (!valid) {
+      return false;
+    }
     if (dispatch) {
       dispatch(tr);
     }

@@ -24,7 +24,16 @@ export default class ValidationItem extends Component<Args> {
   }
 
   get skin() {
-    return this.result.severity;
+    switch (this.result.severity) {
+      case 'info':
+        return 'info';
+      case 'warning':
+        return 'warning';
+      case 'violation':
+        return 'error';
+      default:
+        return 'info';
+    }
   }
 
   get icon() {

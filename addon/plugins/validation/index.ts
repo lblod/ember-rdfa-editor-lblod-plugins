@@ -93,6 +93,7 @@ export interface ValidationShape {
   focusNodeType: NodeType;
   path: string[] | number[];
 
+  message?: string;
   constraints?: ConstraintMap;
 
   severity?: Severity;
@@ -126,6 +127,7 @@ export function validation(
   configurator: (schema: Schema) => ValidationPluginConfig
 ): ValidationPlugin {
   const validation = new ProsePlugin<ValidationState>({
+    key: VALIDATION_KEY,
     state: {
       init(_stateConfig, state) {
         const spec = compileSpec(configurator, state.schema);
@@ -234,7 +236,6 @@ function doValidation(
       break;
     }
   }
-  console.log('results', results);
   return { conforms, results };
 }
 
@@ -339,7 +340,9 @@ function validateMinCount(
       focusNode,
       sourceConstraint: constraint,
       sourceShape: shape,
-      message: 'not enough slices',
+      message:
+        shape.message ??
+        `minCount violation for node with type ${focusNode.type.name}`,
       resultPath: path,
       severity: shape.severity ?? 'violation',
     };
@@ -358,7 +361,7 @@ function validateMaxCount(
       focusNode,
       sourceConstraint: constraint,
       sourceShape: shape,
-      message: 'too many slices',
+      message: `maxCount violation for node with type ${focusNode.type.name}`,
       resultPath: path,
       severity: shape.severity ?? 'violation',
     };

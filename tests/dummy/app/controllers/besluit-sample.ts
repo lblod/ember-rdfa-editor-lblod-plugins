@@ -81,9 +81,27 @@ export default class BesluitSampleController extends Controller {
     shapes: [
       {
         focusNodeType: schema.nodes.besluit,
-        path: ['description'],
+        path: ['title'],
+        message: 'Document must contain exactly one title block.',
         constraints: {
           minCount: 1,
+          maxCount: 1,
+        },
+      },
+      {
+        focusNodeType: schema.nodes.besluit,
+        path: ['description'],
+        message: 'Document must contain exactly one description block.',
+        constraints: {
+          minCount: 1,
+          maxCount: 1,
+        },
+      },
+      {
+        focusNodeType: schema.nodes.besluit,
+        path: ['motivering'],
+        message: 'Document may not contain more than one motivation block.',
+        constraints: {
           maxCount: 1,
         },
       },
@@ -97,7 +115,6 @@ export default class BesluitSampleController extends Controller {
     const validationState = this.validationPlugin.getState(
       this.controller.mainEditorState
     );
-    console.log('validationStatel', validationState);
     if (!validationState) {
       return { conforms: true };
     }
