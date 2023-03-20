@@ -68,7 +68,12 @@ import {
   validation,
   ValidationReport,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
-import insertDescription from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-description';
+import {
+  insertArticleContainer,
+  insertDescription,
+  insertMotivation,
+  insertTitle,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -257,6 +262,21 @@ export default class BesluitSampleController extends Controller {
 
   @action
   insertDescription() {
-    this.controller?.doCommand(insertDescription());
+    this.controller?.doCommand(insertDescription('Geef korte beschrijving op'));
+  }
+
+  @action
+  insertTitle() {
+    this.controller?.doCommand(insertTitle('Geef titel besluit op'));
+  }
+
+  @action
+  insertMotivation() {
+    this.controller?.doCommand(insertMotivation());
+  }
+
+  @action
+  insertArticleContainer() {
+    this.controller?.doCommand(insertArticleContainer(this.intl));
   }
 }

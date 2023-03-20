@@ -1,24 +1,23 @@
-import { Schema } from '@lblod/ember-rdfa-editor';
-import { v4 as uuid } from 'uuid';
+import { Command, Schema } from '@lblod/ember-rdfa-editor';
 import insertNodeIntoAncestorAtPoint from '../../../utils/insert-block-into-node';
+import { v4 as uuid } from 'uuid';
 
-export default function insertTitle(placeholderText: string) {
+export default function insertMotivation(): Command {
   return insertNodeIntoAncestorAtPoint({
     ancestorType(schema: Schema) {
       return schema.nodes.besluit;
     },
     nodeToInsert(schema: Schema) {
-      return schema.node(
-        'title',
-        { __rdfaId: uuid() },
+      return schema.node('motivering', { __rdfaId: uuid() }, [
+        schema.node('heading', { level: 5 }, schema.text('Bevoegdheid')),
         schema.node(
           'paragraph',
           null,
           schema.node('placeholder', {
-            placeholderText,
+            placeholderText: 'motivation',
           })
-        )
-      );
+        ),
+      ]);
     },
   });
 }

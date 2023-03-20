@@ -1,52 +1,24 @@
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { Command } from '@lblod/ember-rdfa-editor';
+import { Schema } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
-import { validateTransaction } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
+import insertNodeIntoAncestorAtPoint from '@lblod/ember-rdfa-editor-lblod-plugins/utils/insert-block-into-node';
 
-export default function insertDescription(): Command {
-  return function (state, dispatch) {
-    const { selection, schema } = state;
-    const { $from } = selection;
-    const decision = findParentNodeOfType(schema.nodes.besluit)(selection);
-    if (!decision) {
-      return false;
-    }
-    const insertionIndex = $from.indexAfter(decision.depth);
-    const insertionPos = $from.posAtIndex(insertionIndex, decision.depth);
-    if (
-      !decision.node.canReplaceWith(
-        insertionIndex,
-        insertionIndex,
-        schema.nodes.description
-      )
-    ) {
-      console.log('cannot replace');
-      return false;
-    }
-    const tr = state.tr;
-    // tr.insertText("test", insertionPos, insertionPos);
-    tr.replaceRangeWith(
-      insertionPos,
-      insertionPos,
-      schema.node(
+export default function insertDescription(placeholderText: string) {
+  return insertNodeIntoAncestorAtPoint({
+    ancestorType(schema: Schema) {
+      return schema.nodes.besluit;
+    },
+    nodeToInsert(schema: Schema) {
+      return schema.node(
         'description',
         { __rdfaId: uuid() },
         schema.node(
           'paragraph',
           null,
           schema.node('placeholder', {
-            placeholderText: 'Description',
+            placeholderText,
           })
         )
-      )
-    );
-    const valid = validateTransaction(state, tr).conforms;
-    if (!valid) {
-      return false;
-    }
-    if (dispatch) {
-      dispatch(tr);
-    }
-    return true;
-  };
+      );
+    },
+  });
 }

@@ -58,6 +58,9 @@
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
                 <AuButton @skin="link" {{on "click" this.insertDescription}}>description</AuButton>
+                <AuButton @skin="link" {{on "click" this.insertTitle}}>title</AuButton>
+                <AuButton @skin="link" {{on "click" this.insertMotivation}}>motivation</AuButton>
+                <AuButton @skin="link" {{on "click" this.insertArticleContainer}}>articles</AuButton>
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
