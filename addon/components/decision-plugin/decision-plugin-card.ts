@@ -9,6 +9,9 @@ type Args = {
   controller: SayController;
 };
 
+/**
+ * @deprecated
+ */
 export default class DecisionPluginCard extends Component<Args> {
   @service declare intl: IntlService;
   get controller() {
