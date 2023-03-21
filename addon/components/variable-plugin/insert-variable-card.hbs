@@ -1,8 +1,16 @@
 {{#if this.showCard}}
-  <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
+  <AuCard
+    @flex={{true}}
+    @divided={{true}}
+    @isOpenInitially={{true}}
+    @expandable={{true}}
+    @shadow={{true}}
+    @size='small'
+    as |c|
+  >
     <c.header>
-      <AuHeading @level="3" @skin="6">
-        {{t "variable-plugin.insert-variable"}}
+      <AuHeading @level='3' @skin='6'>
+        {{t 'variable-plugin.insert-variable'}}
       </AuHeading>
     </c.header>
     <c.content>
@@ -11,7 +19,8 @@
         @searchEnabled={{false}}
         @options={{this.variablesArray}}
         @selected={{this.selectedVariable}}
-        @onChange={{this.updateSelectedVariable}} as |variable|
+        @onChange={{this.updateSelectedVariable}}
+        as |variable|
       >
         {{variable.label}}
       </PowerSelect>
@@ -21,14 +30,19 @@
           @searchEnabled={{false}}
           @options={{this.subtypes}}
           @selected={{this.selectedSubtype}}
-          @onChange={{this.updateSubtype}} as |subtype|
+          @onChange={{this.updateSubtype}}
+          as |subtype|
         >
           {{subtype.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{or (not this.selectedVariable)
-                                                          (and this.hasSubtype (not this.selectedSubtype))}}>{{t
-        "variable-plugin.button"}}</AuButton>
+      <AuButton
+        {{on 'click' this.insert}}
+        @disabled={{or
+          (not this.selectedVariable)
+          (and this.hasSubtype (not this.selectedSubtype))
+        }}
+      >{{t 'variable-plugin.button'}}</AuButton>
     </c.content>
   </AuCard>
 {{/if}}
