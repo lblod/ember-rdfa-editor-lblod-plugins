@@ -157,8 +157,8 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     return null;
   }
 
-  get pickerDate(): Date {
-    return this.documentDate ?? new Date();
+  get pickerDate(): Option<Date> {
+    return this.documentDate;
   }
 
   @action
