@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
+
 ### Changed
 - Feature: make citation use the new link node
 - BREAKING: citation mark has been removed
