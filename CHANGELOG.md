@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
+
 ### Changed
 - Feature: make citation use the new link node
 - BREAKING: citation mark has been removed
@@ -15,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
 - Placeholder text when inserting date
+
+### Removed:
+- Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
 
 ## [3.1.0] - 2023-03-02
 
