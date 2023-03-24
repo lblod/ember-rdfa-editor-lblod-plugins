@@ -14,6 +14,7 @@ type Args = {
  */
 export default class DecisionPluginCard extends Component<Args> {
   @service declare intl: IntlService;
+
   get controller() {
     return this.args.controller;
   }
@@ -24,15 +25,25 @@ export default class DecisionPluginCard extends Component<Args> {
 
   @action
   insertTitle() {
-    this.controller.doCommand(insertTitle(this.intl), {
-      view: this.controller.mainEditorView,
-    });
+    this.controller.doCommand(
+      insertTitle({
+        placeholderText: this.intl.t('besluit-plugin.insert.decision-title'),
+      }),
+      {
+        view: this.controller.mainEditorView,
+      }
+    );
     this.focus();
   }
 
   get canInsertTitle() {
-    return this.controller.checkCommand(insertTitle(this.intl), {
-      view: this.controller.mainEditorView,
-    });
+    return this.controller.checkCommand(
+      insertTitle({
+        placeholderText: this.intl.t('besluit-plugin.insert.decision-title'),
+      }),
+      {
+        view: this.controller.mainEditorView,
+      }
+    );
   }
 }

@@ -5,13 +5,13 @@ import { validateTransaction } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 interface CommandArgs {
   ancestorType: NodeType | ((schema: Schema) => NodeType);
   nodeToInsert: PNode | ((schema: Schema) => PNode);
-  validate?: boolean;
+  validateShapes?: Set<string>;
 }
 
 export default function insertNodeIntoAncestorAtPoint({
   ancestorType,
   nodeToInsert,
-  validate = true,
+  validateShapes = new Set(),
 }: CommandArgs): Command {
   return function (state, dispatch) {
     const { selection, schema } = state;
@@ -38,9 +38,14 @@ export default function insertNodeIntoAncestorAtPoint({
     }
     const tr = state.tr;
     tr.replaceRangeWith(insertionPos, insertionPos, insertionNode);
-    if (validate) {
-      const valid = validateTransaction(state, tr).conforms;
-      if (!valid) {
+
+    if (validateShapes?.size) {
+      const report = validateTransaction(state, tr);
+      if (
+        report.results?.some((result) =>
+          validateShapes.has(result.sourceShape.name)
+        )
+      ) {
         return false;
       }
     }

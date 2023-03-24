@@ -2,7 +2,15 @@ import { Schema } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import insertNodeIntoAncestorAtPoint from '../../../utils/insert-block-into-node';
 
-export default function insertTitle(placeholderText: string) {
+interface InsertTitleArgs {
+  placeholderText: string;
+  validateShapes?: Set<string>;
+}
+
+export default function insertTitle({
+  placeholderText,
+  validateShapes,
+}: InsertTitleArgs) {
   return insertNodeIntoAncestorAtPoint({
     ancestorType(schema: Schema) {
       return schema.nodes.besluit;
@@ -20,5 +28,6 @@ export default function insertTitle(placeholderText: string) {
         )
       );
     },
+    validateShapes,
   });
 }

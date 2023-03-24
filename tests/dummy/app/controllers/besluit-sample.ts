@@ -85,6 +85,7 @@ export default class BesluitSampleController extends Controller {
   @tracked validationPlugin = validation((schema: Schema) => ({
     shapes: [
       {
+        name: 'exactly-one-title',
         focusNodeType: schema.nodes.besluit,
         path: ['title'],
         message: 'Document must contain exactly one title block.',
@@ -94,6 +95,7 @@ export default class BesluitSampleController extends Controller {
         },
       },
       {
+        name: 'exactly-one-description',
         focusNodeType: schema.nodes.besluit,
         path: ['description'],
         message: 'Document must contain exactly one description block.',
@@ -103,6 +105,7 @@ export default class BesluitSampleController extends Controller {
         },
       },
       {
+        name: 'max-one-motivation',
         focusNodeType: schema.nodes.besluit,
         path: ['motivering'],
         message: 'Document may not contain more than one motivation block.',
@@ -260,14 +263,45 @@ export default class BesluitSampleController extends Controller {
     window.dispatchEvent(editorDone);
   }
 
+  get canInsertDescription() {
+    return this.controller?.checkCommand(
+      insertDescription({
+        placeholderText: 'Geef korte beschrijving op',
+        validateShapes: new Set(['exactly-one-description']),
+      })
+    );
+  }
+
   @action
   insertDescription() {
-    this.controller?.doCommand(insertDescription('Geef korte beschrijving op'));
+    this.controller?.doCommand(
+      insertDescription({ placeholderText: 'Geef korte beschrijving op' })
+    );
+  }
+
+  get canInsertTitle() {
+    return this.controller?.checkCommand(
+      insertTitle({
+        placeholderText: 'Geef titel besluit op',
+        validateShapes: new Set(['exactly-one-title']),
+      })
+    );
   }
 
   @action
   insertTitle() {
-    this.controller?.doCommand(insertTitle('Geef titel besluit op'));
+    this.controller?.doCommand(
+      insertTitle({
+        placeholderText: 'Geef titel besluit op',
+        validateShapes: new Set(['exactly-one-title']),
+      })
+    );
+  }
+
+  get canInsertMotivation() {
+    return this.controller?.checkCommand(
+      insertMotivation({ validateShapes: new Set(['max-one-motivation']) })
+    );
   }
 
   @action
@@ -277,6 +311,6 @@ export default class BesluitSampleController extends Controller {
 
   @action
   insertArticleContainer() {
-    this.controller?.doCommand(insertArticleContainer(this.intl));
+    this.controller?.doCommand(insertArticleContainer({ intl: this.intl }));
   }
 }

@@ -38,7 +38,7 @@
               <Tb.Group>
                 <Plugins::Heading::HeadingMenu @controller={{this.controller}}/>
               </Tb.Group>
-              <Tb.Spacer/>
+              <Tb.Spacer />
               <Tb.Group>
                 <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}}/>
                 <Plugins::RdfaBlockRender::RdfaBlocksToggle @controller={{this.controller}}/>
@@ -57,10 +57,23 @@
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
-                <AuButton @skin="link" {{on "click" this.insertDescription}}>description</AuButton>
-                <AuButton @skin="link" {{on "click" this.insertTitle}}>title</AuButton>
-                <AuButton @skin="link" {{on "click" this.insertMotivation}}>motivation</AuButton>
-                <AuButton @skin="link" {{on "click" this.insertArticleContainer}}>articles</AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertDescription}}
+                  {{on "click"this.insertDescription}}>
+                  description
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertTitle}}
+                  {{on "click" this.insertTitle}}>title
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertMotivation}}
+                  {{on "click" this.insertMotivation}}>motivation
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertContainer}}
+                  {{on "click" this.insertArticleContainer}}>articles
+                </AuButton>
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
@@ -91,7 +104,8 @@
                 @controller={{this.controller}}
                 @options={{this.config.date}}/>
               <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
-              <ValidationPlugin::ValidationCard @title={{t "dummy.validation-card.title"}} @controller={{this.controller}} @report={{this.report}}/>
+              <ValidationPlugin::ValidationCard @title={{t "dummy.validation-card.title"}}
+                                                @controller={{this.controller}} @report={{this.report}}/>
             </Sidebar>
           {{/if}}
         </:aside>

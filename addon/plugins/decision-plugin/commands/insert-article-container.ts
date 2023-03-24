@@ -4,8 +4,17 @@ import { v4 as uuid } from 'uuid';
 import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
 import IntlService from 'ember-intl/services/intl';
 
-export default function insertArticleContainer(intl: IntlService): Command {
+interface InsertArticleContainerArgs {
+  intl: IntlService;
+  validateShapes?: Set<string>;
+}
+
+export default function insertArticleContainer({
+  intl,
+  validateShapes,
+}: InsertArticleContainerArgs): Command {
   return insertNodeIntoAncestorAtPoint({
+    validateShapes,
     ancestorType(schema: Schema) {
       return schema.nodes.besluit;
     },

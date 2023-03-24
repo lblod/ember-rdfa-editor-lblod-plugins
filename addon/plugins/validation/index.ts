@@ -90,6 +90,7 @@ export type ConstraintValidatorMap = {
 };
 
 export interface ValidationShape {
+  name: string;
   focusNodeType: NodeType;
   path: string[] | number[];
 
