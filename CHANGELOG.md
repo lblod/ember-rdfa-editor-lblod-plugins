@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- validation plugin
+- 
 ### Fixed
 - Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
 
@@ -18,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
 - Placeholder text when inserting date
+
+### Deprecated
+- the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
 
 ### Removed:
 - Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
