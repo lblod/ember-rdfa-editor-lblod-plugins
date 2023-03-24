@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
+
+### Changed
+- Feature: make citation use the new link node
+- BREAKING: citation mark has been removed
+- Table of contents now is able to be inserted in the corresponding place instead of always being inserted at position 0
+- Change paragraph symbol to §
+- Update schema on dummy page to make articles insertable in empty document
+- Add padding to structure card
+- Placeholder text when inserting date
+
+### Removed:
+- Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
+
 ## [3.1.0] - 2023-03-02
 
 ### Fixed
@@ -14,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed white-space issue in variables
 ### Changed
 - Use `AuModalContainer` component instead of  #ember-appuniversum-wormhole element in dummy app
+- Improved documentation of the plugins
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0

@@ -40,6 +40,7 @@
               </Tb.Group>
               <Tb.Spacer />
               <Tb.Group>
+                <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
                 <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}}/>
                 <Plugins::RdfaBlockRender::RdfaBlocksToggle @controller={{this.controller}}/>
               </Tb.Group>
@@ -80,7 +81,7 @@
                 />
                 <CitationPlugin::CitationInsert
                   @controller={{this.controller}}
-                  @plugin={{this.citationPlugin}}
+
                   @config={{this.config.citation}}
                 />
                 <RdfaDatePlugin::Insert

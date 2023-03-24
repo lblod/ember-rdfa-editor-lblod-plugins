@@ -59,7 +59,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import date from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
-import { citation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/marks/citation';
 import {
   citationPlugin,
   CitationPluginConfig,
@@ -74,6 +73,14 @@ import {
   insertMotivation,
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
+
+import {
+  createInvisiblesPlugin,
+  hardBreak,
+  heading as headingInvisible,
+  paragraph as paragraphInvisible,
+  space,
+} from '@lblod/ember-rdfa-editor/plugins/invisibles';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -169,7 +176,6 @@ export default class BesluitSampleController extends Controller {
         link: link(this.config.link),
       },
       marks: {
-        citation,
         inline_rdfa,
         em,
         strong,
@@ -224,12 +230,17 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
     };
   };
-
   @tracked plugins: Plugin[] = [
     tablePlugin,
     tableKeymap,
     this.citationPlugin,
     this.validationPlugin,
+    createInvisiblesPlugin(
+      [space, hardBreak, paragraphInvisible, headingInvisible],
+      {
+        shouldShowInvisibles: false,
+      }
+    ),
   ];
 
   @action

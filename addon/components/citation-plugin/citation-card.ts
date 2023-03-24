@@ -42,6 +42,21 @@ export default class CitationCardComponent extends Component<Args> {
   @tracked decision: Decision | null = null;
   @tracked cardText: string | null = null;
   @tracked cardLegislationType: string | null = null;
+  @tracked documentLegislationType: Option<string>;
+  @tracked documentText: Option<string>;
+
+  @action
+  update() {
+    if (this.activeDecoration) {
+      const { legislationTypeUri, searchText } = this.activeDecoration?.spec;
+      if (legislationTypeUri !== this.documentLegislationType) {
+        this.documentLegislationType = legislationTypeUri;
+      }
+      if (searchText !== this.documentText) {
+        this.documentText = searchText;
+      }
+    }
+  }
 
   get controller(): SayController {
     return this.args.controller;
@@ -62,14 +77,6 @@ export default class CitationCardComponent extends Component<Args> {
   get activeDecoration(): Option<CitationDecoration> {
     const { from, to } = this.controller.mainEditorState.selection;
     return this.decorations?.find(from, to)[0];
-  }
-
-  get documentLegislationType(): Option<string> {
-    return this.activeDecoration?.spec.legislationTypeUri;
-  }
-
-  get documentText(): Option<string> {
-    return this.activeDecoration?.spec.searchText;
   }
 
   get searchText(): string {
