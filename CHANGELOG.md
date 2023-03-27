@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Dependencies
+- bump `ember-rdfa-editor` to v3.4.1
+
 ## [4.0.0] - 2023-03-27
 
 ### Fixed
@@ -20,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
 - Placeholder text when inserting date
-- update editor to 3.4.0
 
 ### Removed:
 - Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
@@ -36,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0
+- bump `ember-rdfa-editor` to v3.4.0
 
 ## [3.0.0] - 2023-02-27
 
