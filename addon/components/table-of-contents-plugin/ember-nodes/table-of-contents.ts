@@ -83,7 +83,24 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       const selection = Selection.near(resolvedPos, 1);
       if (selection) {
         tr.setSelection(selection);
-        tr.scrollIntoView();
+        const coords = this.controller.mainEditorView.coordsAtPos(
+          selection.from
+        );
+        const config = this.config[0];
+        if (config.scrollContainer) {
+          const sayContainer = document.getElementsByClassName(
+            config.scrollContainer
+          )[0];
+          const alreadyScrolled = sayContainer.scrollTop;
+          const MAGIC_NUMBER_TOPBAR_HEIGHT: number =
+            config.scrollingPadding ?? 150;
+          sayContainer.scrollTo(
+            0,
+            coords.top + alreadyScrolled - MAGIC_NUMBER_TOPBAR_HEIGHT
+          );
+        } else {
+          tr.scrollIntoView();
+        }
       }
       return tr;
     });

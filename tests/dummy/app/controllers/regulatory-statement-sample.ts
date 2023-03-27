@@ -127,6 +127,7 @@ export default class RegulatoryStatementSampleController extends Controller {
             'title|chapter|section|subsection|article',
             'structure_header|article_header',
           ],
+          scrollContainer: 'say-container__main',
         },
       ],
       date: {
