@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
 - Placeholder text when inserting date
+- update editor to 3.4.0
 
 ### Removed:
 - Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
