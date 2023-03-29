@@ -76,6 +76,12 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
         this.controller.schema,
         this.controller.mainEditorState
       );
+      // if the doc node is included, the button should always be active
+      // the findParentNodeOfType util we import does NOT consider the doc node
+      // in its search.
+      if (nodeTypes.has(this.controller.schema.nodes.doc)) {
+        return false;
+      }
       return !findParentNodeOfType([...nodeTypes])(selection);
     }
   }

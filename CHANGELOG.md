@@ -14,8 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.0] - 2023-03-27
 
+### Added
+- docs: add examples on how to enable the citation plugin for the entire document
+
 ### Fixed
 - Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
+- fix(citation): make plugin trigger correctly when `doc` is passed as an allowed nodeType
 
 ### Changed
 - Feature: make citation use the new link node
