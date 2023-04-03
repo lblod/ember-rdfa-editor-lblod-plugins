@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.1] - 2023-03-27
 
+### Fixed
+- Prevent decision nodes regenerating when (de)serializing
+
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.4.1
 
