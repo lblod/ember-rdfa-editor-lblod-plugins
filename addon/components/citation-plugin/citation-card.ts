@@ -202,6 +202,7 @@ export default class CitationCardComponent extends Component<Args> {
           .scrollIntoView(),
       { view: this.controller.mainEditorView }
     );
+    this.controller.focus();
   }
 
   @action
@@ -223,6 +224,7 @@ export default class CitationCardComponent extends Component<Args> {
           .scrollIntoView(),
       { view: this.controller.mainEditorView }
     );
+    // this.controller.focus();
   }
 
   @action
