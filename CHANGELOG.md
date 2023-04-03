@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
-
+- Ensure editor is focused after inserting a citation
+- 
 ### Changed
 - Feature: make citation use the new link node
 - BREAKING: citation mark has been removed
