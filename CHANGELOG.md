@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.0.1] - 2023-03-27
-
 ### Fixed
 - Prevent decision nodes regenerating when (de)serializing
+- Ensure editor is focused after inserting a citation
+
+## [4.0.1] - 2023-03-27
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.4.1
@@ -19,8 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
-- Ensure editor is focused after inserting a citation
-- 
+ 
 ### Changed
 - Feature: make citation use the new link node
 - BREAKING: citation mark has been removed
@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed:
 - Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
 
+### Dependencies
+- bump `ember-rdfa-editor` to v3.4.0
+
 ## [3.1.0] - 2023-03-02
 
 ### Fixed
@@ -44,7 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0
-- bump `ember-rdfa-editor` to v3.4.0
 
 ## [3.0.0] - 2023-02-27
 
