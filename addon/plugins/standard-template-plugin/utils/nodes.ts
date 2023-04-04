@@ -127,14 +127,12 @@ export const article_container: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', PROV('value')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
-        ) {
+        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
           return getRdfaAttrs(element);
         }
         return false;
       },
+      context: 'besluit/',
     },
   ],
 };
@@ -279,6 +277,7 @@ export const besluit_article_header: NodeSpec = {
 };
 
 export const besluit_article_content: NodeSpec = {
+  group: 'block',
   content: 'block+',
   inline: false,
   attrs: {
@@ -302,6 +301,7 @@ export const besluit_article_content: NodeSpec = {
         }
         return false;
       },
+      context: 'besluit_article//',
     },
   ],
 };
