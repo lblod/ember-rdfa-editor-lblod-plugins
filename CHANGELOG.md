@@ -9,7 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - validation plugin
-- 
+ 
+### Deprecated
+- the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
+
+## [4.0.1] - 2023-03-27
+
+### Dependencies
+- bump `ember-rdfa-editor` to v3.4.1
+
+## [4.0.0] - 2023-03-27
+
 ### Fixed
 - Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
 
@@ -21,9 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
 - Placeholder text when inserting date
-
-### Deprecated
-- the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
 
 ### Removed:
 - Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
@@ -39,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0
+- bump `ember-rdfa-editor` to v3.4.0
 
 ## [3.0.0] - 2023-02-27
 
@@ -377,7 +385,9 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.1.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.1...HEAD
+[4.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
