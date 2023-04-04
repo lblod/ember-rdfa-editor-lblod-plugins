@@ -10,7 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Prevent decision nodes regenerating when (de)serializing
 - Ensure editor is focused after inserting a citation
+- fix(citation): make plugin trigger correctly when `doc` is passed as an allowed nodeType
 
+### Added
+- docs: add examples on how to enable the citation plugin for the entire document
+ 
 ## [4.0.1] - 2023-03-27
 
 ### Dependencies
@@ -20,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
- 
+
 ### Changed
 - Feature: make citation use the new link node
 - BREAKING: citation mark has been removed
