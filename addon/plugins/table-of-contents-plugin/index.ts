@@ -1,5 +1,5 @@
 export type TableOfContentsConfig = {
   nodeHierarchy: string[];
-  scrollContainer?: string;
+  scrollContainer?: HTMLElement;
   scrollingPadding?: number;
 }[];
