@@ -288,6 +288,7 @@ export default class BesluitSampleController extends Controller {
     this.controller?.doCommand(
       insertDescription({ placeholderText: 'Geef korte beschrijving op' })
     );
+    this.controller?.focus();
   }
 
   get canInsertTitle() {
@@ -307,6 +308,7 @@ export default class BesluitSampleController extends Controller {
         validateShapes: new Set(['exactly-one-title']),
       })
     );
+    this.controller?.focus();
   }
 
   get canInsertMotivation() {
@@ -317,11 +319,24 @@ export default class BesluitSampleController extends Controller {
 
   @action
   insertMotivation() {
-    this.controller?.doCommand(insertMotivation());
+    this.controller?.doCommand(
+      insertMotivation({
+        placeholderText:
+          'Geef motivering op. Bv: Bevoegdheid, Juridische Context, Feitelijke Context, etc',
+      })
+    );
+    this.controller?.focus();
+  }
+
+  get canInsertContainer() {
+    return this.controller?.checkCommand(
+      insertArticleContainer({ intl: this.intl })
+    );
   }
 
   @action
   insertArticleContainer() {
     this.controller?.doCommand(insertArticleContainer({ intl: this.intl }));
+    this.controller?.focus();
   }
 }
