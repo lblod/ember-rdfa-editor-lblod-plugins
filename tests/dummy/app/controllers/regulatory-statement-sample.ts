@@ -130,13 +130,11 @@ export default class RegulatoryStatementSampleController extends Controller {
         },
         formats: [
           {
-            label: 'Short Date',
             key: 'short',
             dateFormat: 'dd/MM/yy',
             dateTimeFormat: 'dd/MM/yy HH:mm',
           },
           {
-            label: 'Long Date',
             key: 'long',
             dateFormat: 'EEEE dd MMMM yyyy',
             dateTimeFormat: 'PPPPp',

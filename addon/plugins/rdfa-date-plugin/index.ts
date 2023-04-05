@@ -12,6 +12,7 @@ export const defaultDateFormats: DateFormat[] = [
 ];
 
 export type DateFormat = {
+  label?: string;
   key: string;
   dateFormat: string;
   dateTimeFormat: string;
