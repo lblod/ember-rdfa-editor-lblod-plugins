@@ -35,9 +35,9 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   @action
-  removeStructure() {
+  removeStructure(withContent: boolean) {
     if (this.structure && this.currentStructureType) {
-      if (this.removeStructureContent || this.currentStructureType.noUnwrap) {
+      if (withContent || this.currentStructureType.noUnwrap) {
         this.controller.doCommand(
           removeStructure(this.structure, this.structureTypes),
           { view: this.controller.mainEditorView }
@@ -86,6 +86,27 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       );
     }
     return;
+  }
+
+  get remove() {
+    const translation = this.currentStructureType?.translations?.remove;
+    if (translation) {
+      return this.intl.t(translation);
+    } else {
+      return this.intl.t('article-structure-plugin.remove.default');
+    }
+  }
+
+  get removeWithContent() {
+    const translation =
+      this.currentStructureType?.translations?.removeWithContent;
+    if (translation) {
+      return this.intl.t(translation);
+    } else {
+      return this.intl.t(
+        'article-structure-plugin.remove-with-content.default'
+      );
+    }
   }
 
   get isOutsideStructure() {
