@@ -1,0 +1,8 @@
+<Velcro @placement="top" as |velcro|>
+  {{#let velcro.loop velcro.data as |loop data|}}
+    {{yield (hash velcroHook=velcro.hook handleHover=(modifier this.hover)) to='hover' }}
+    {{#if this.tooltipOpen}}
+      {{yield loop to='tooltip'}}
+    {{/if}}
+  {{/let}}
+</Velcro>
