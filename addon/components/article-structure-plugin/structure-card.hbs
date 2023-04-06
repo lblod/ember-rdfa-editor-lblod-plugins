@@ -35,6 +35,7 @@
                   @skin="link"
                   @alert={{true}}
                   @disabled={{this.currentStructureType.noUnwrap}}
+                  aria-describedby="remove-tooltip"
                   {{hover.velcroHook}}
                   {{hover.handleHover}}
                   {{on 'click' (fn this.removeStructure false)}}>
@@ -43,7 +44,7 @@
               </:hover>
               <:tooltip as |tooltip|>
                 <AuPill
-                  id="remove-content-tooltip"
+                  id="remove-tooltip"
                   role="tooltip"
                   {{tooltip}}
                 >
