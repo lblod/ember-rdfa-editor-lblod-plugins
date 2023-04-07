@@ -21,6 +21,7 @@ export const articleParagraphSpec: StructureSpec = {
       down: 'article-structure-plugin.move-down.paragraph',
     },
     remove: 'article-structure-plugin.remove.paragraph',
+    removeWithContent: 'article-structure-plugin.remove-with-content.paragraph',
   },
   continuous: false,
   noUnwrap: true,
