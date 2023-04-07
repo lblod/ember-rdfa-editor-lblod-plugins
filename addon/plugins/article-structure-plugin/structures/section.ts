@@ -22,6 +22,7 @@ export const sectionSpec: StructureSpec = {
       down: 'article-structure-plugin.move-down.section',
     },
     remove: 'article-structure-plugin.remove.section',
+    removeWithContent: 'article-structure-plugin.remove-with-content.section',
   },
   constructor: ({ schema, number, content, intl }) => {
     const numberConverted = romanize(number || 1);

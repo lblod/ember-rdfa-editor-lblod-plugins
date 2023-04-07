@@ -7,6 +7,7 @@ article-structure-plugin:
     section: Insert section
     subsection: Insert subsection
   move-up:
+    default: Move structure up
     paragraph: Move paragraph up
     article: Move article up
     title: Move title up
@@ -14,6 +15,7 @@ article-structure-plugin:
     section: Move section up
     subsection: Move subsection up
   move-down:
+    default: Move structure down
     paragraph: Move paragraph down
     article: Move article down
     title: Move title down
@@ -23,13 +25,23 @@ article-structure-plugin:
   title:
     structure-card: Structure Card
   remove:
+    default: Remove structure
     article: Remove Article
     paragraph: Remove Paragraph
     subsection: Remove subsection
     section: Remove section
     chapter: Remove chapter
     title: Remove title
-    content: Remove content
+    help-text: Remove the heading, but keep the content
+  remove-with-content:
+    default: Remove structure with content
+    article: Remove Article with content
+    paragraph: Remove Paragraph with content
+    subsection: Remove subsection with content
+    section: Remove section with content
+    chapter: Remove chapter with content
+    title: Remove title with content
+    help-text: Remove the heading, and also remove all content up to the next heading of the same level
   placeholder:
     generic:
       heading: Insert title

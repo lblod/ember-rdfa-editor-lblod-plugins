@@ -7,8 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- add a hover-tooltip utility component
+- docs: add tooltips to the remove structure buttons
+
+### Changed
+- split out structure removal card into two buttons
+
 ### Fixed
 - BREAKING: Solve duplicate node title
+- properly initialize ember-intl
 
 ## [4.0.2] - 2023-04-04
 

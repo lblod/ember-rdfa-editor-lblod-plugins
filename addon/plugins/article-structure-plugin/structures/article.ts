@@ -27,6 +27,7 @@ export const articleSpec: StructureSpec = {
       down: 'article-structure-plugin.move-down.article',
     },
     remove: 'article-structure-plugin.remove.article',
+    removeWithContent: 'article-structure-plugin.remove-with-content.article',
   },
   continuous: true,
   constructor: ({ schema, number, content, intl }) => {
