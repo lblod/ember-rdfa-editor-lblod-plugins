@@ -47,7 +47,7 @@
           {{#each this.formats as |format|}}
             <AuFormRow>
               <AuControlRadio
-                @label={{format.label}}
+                @label={{if format.label format.label (if this.onlyDate format.dateFormat format.dateTimeFormat)}}
                 @identifier={{format.key}}
                 @name="dateFormat"
                 @value={{format.key}}

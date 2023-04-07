@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - docs: add tooltips to the remove structure buttons
 
 ### Changed
+- Change date labels based on designer feedback
 - split out structure removal card into two buttons
 
 ### Fixed
