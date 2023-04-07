@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - split out structure removal card into two buttons
 
 ### Fixed
-- BREAKING: Solve duplicate node title
+- BREAKING: Rename decision title node from title to besluit_title to avoid conflicts
 - properly initialize ember-intl
 
 ## [4.0.2] - 2023-04-04
