@@ -7,18 +7,21 @@ interface Args {
 }
 
 export default class HoverTooltip extends Component<Args> {
-  hover = modifier((element) => {
-    element.addEventListener('mouseenter', this.showTooltip);
-    element.addEventListener('mouseleave', this.hideTooltip);
-    element.addEventListener('focus', this.showTooltip);
-    element.addEventListener('blur', this.hideTooltip);
-    return () => {
-      element.removeEventListener('mouseenter', this.showTooltip);
-      element.removeEventListener('mouseleave', this.hideTooltip);
-      element.removeEventListener('focus', this.showTooltip);
-      element.removeEventListener('blur', this.hideTooltip);
-    };
-  });
+  hover = modifier(
+    (element) => {
+      element.addEventListener('mouseenter', this.showTooltip);
+      element.addEventListener('mouseleave', this.hideTooltip);
+      element.addEventListener('focus', this.showTooltip);
+      element.addEventListener('blur', this.hideTooltip);
+      return () => {
+        element.removeEventListener('mouseenter', this.showTooltip);
+        element.removeEventListener('mouseleave', this.hideTooltip);
+        element.removeEventListener('focus', this.showTooltip);
+        element.removeEventListener('blur', this.hideTooltip);
+      };
+    },
+    { eager: false }
+  );
 
   @tracked tooltipOpen = false;
 
