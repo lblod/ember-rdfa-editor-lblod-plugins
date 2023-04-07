@@ -10,7 +10,7 @@ export default function insertTitle(intl: IntlService): Command {
     if (!besluit) {
       return false;
     }
-    if (!besluit.node.canReplaceWith(0, 0, schema.nodes.title)) {
+    if (!besluit.node.canReplaceWith(0, 0, schema.nodes.besluit_title)) {
       return false;
     }
 
@@ -19,7 +19,7 @@ export default function insertTitle(intl: IntlService): Command {
       tr.insert(
         besluit.pos + 1,
         schema.node(
-          'title',
+          'besluit_title',
           { __rdfaId: uuid() },
           schema.node(
             'paragraph',

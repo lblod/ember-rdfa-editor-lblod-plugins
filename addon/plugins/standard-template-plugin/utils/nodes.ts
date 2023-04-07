@@ -16,7 +16,7 @@ import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
-export const title: NodeSpec = {
+export const besluit_title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
   defining: true,
@@ -308,7 +308,7 @@ export const besluit_article_content: NodeSpec = {
 
 export const besluit: NodeSpec = {
   group: 'block',
-  content: 'block*title?block*description?block*motivering?block*',
+  content: 'block*besluit_title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
   isolating: true,
