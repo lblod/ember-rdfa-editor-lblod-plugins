@@ -58,7 +58,13 @@ import {
   citationPlugin,
   CitationPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-
+import {
+  createInvisiblesPlugin,
+  hardBreak,
+  heading as headingInvisible,
+  paragraph as paragraphInvisible,
+  space,
+} from '@lblod/ember-rdfa-editor/plugins/invisibles';
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
@@ -159,7 +165,17 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
     };
   };
-  @tracked plugins: Plugin[] = [tablePlugin, tableKeymap, this.citationPlugin];
+  @tracked plugins: Plugin[] = [
+    tablePlugin,
+    tableKeymap,
+    this.citationPlugin,
+    createInvisiblesPlugin(
+      [space, hardBreak, paragraphInvisible, headingInvisible],
+      {
+        shouldShowInvisibles: false,
+      }
+    ),
+  ];
 
   @action
   setPrefixes(element: HTMLElement) {

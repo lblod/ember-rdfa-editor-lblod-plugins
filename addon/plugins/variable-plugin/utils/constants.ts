@@ -57,6 +57,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
       return unwrap(
         schema.nodes.date.createAndFill({
           mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
+          value: null,
         })
       );
     },

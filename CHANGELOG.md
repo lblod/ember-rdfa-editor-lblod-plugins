@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- add a hover-tooltip utility component
+- docs: add tooltips to the remove structure buttons
+
+### Changed
+- Change date labels based on designer feedback
+- split out structure removal card into two buttons
+
+### Fixed
+- BREAKING: Solve duplicate node title
+- properly initialize ember-intl
+
+## [4.0.2] - 2023-04-04
+
+### Fixed
+- Prevent decision nodes regenerating when (de)serializing
+- Ensure editor is focused after inserting a citation
+- fix(citation): make plugin trigger correctly when `doc` is passed as an allowed nodeType
+
+### Added
+- docs: add examples on how to enable the citation plugin for the entire document
+ 
+## [4.0.1] - 2023-03-27
+
+### Dependencies
+- bump `ember-rdfa-editor` to v3.4.1
+
+## [4.0.0] - 2023-03-27
+
+### Fixed
+- Ensure citation suggestions are only updated when search-text or document-legislation-type updates.
+
 ### Changed
 - Feature: make citation use the new link node
 - BREAKING: citation mark has been removed
@@ -14,7 +46,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change paragraph symbol to §
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
-- Change date labels based on designer feedback
+- Placeholder text when inserting date
+
+### Removed:
+- Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
+
+### Dependencies
+- bump `ember-rdfa-editor` to v3.4.0
 
 ## [3.1.0] - 2023-03-02
 
@@ -365,7 +403,10 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.1.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.2...HEAD
+[4.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2

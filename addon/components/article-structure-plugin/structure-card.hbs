@@ -26,24 +26,58 @@
           </AuButton>
         </Item>
         <Item>
-          {{#unless this.currentStructureType.noUnwrap}}
-            <div class="au-u-padding-tiny">
-              <AuToggleSwitch
-                @label={{t "article-structure-plugin.remove.content"}}
-                @checked={{this.removeStructureContent}}
-                @onChange={{this.setRemoveStructureContent}}
-              />
-            </div>
-          {{/unless}}
-          <AuButton
-            @icon="bin"
-            @iconAlignment="left"
-            @skin="link"
-            @alert={{true}}
-            @disabled={{not this.canRemoveStructure}}
-            {{on 'click' this.removeStructure}}>
-            {{t this.currentStructureType.translations.remove}}
-          </AuButton>
+          <AuButtonGroup>
+            <HoverTooltip>
+              <:hover as |hover|>
+                <AuButton
+                  @icon="bin"
+                  @iconAlignment="left"
+                  @skin="link"
+                  @alert={{true}}
+                  @disabled={{this.currentStructureType.noUnwrap}}
+                  aria-describedby="remove-tooltip"
+                  {{hover.velcroHook}}
+                  {{hover.handleHover}}
+                  {{on 'click' (fn this.removeStructure false)}}>
+                  {{this.remove}}
+                </AuButton>
+              </:hover>
+              <:tooltip as |tooltip|>
+                <AuPill
+                  id="remove-tooltip"
+                  role="tooltip"
+                  {{tooltip}}
+                >
+                  {{t 'article-structure-plugin.remove.help-text'}}
+                </AuPill>
+              </:tooltip>
+            </HoverTooltip>
+            <HoverTooltip>
+              <:hover as |hover|>
+                <AuButton
+                  @icon="bin"
+                  @iconAlignment="left"
+                  @skin="link"
+                  aria-describedby="remove-content-tooltip"
+                  @alert={{true}}
+                  {{hover.velcroHook}}
+                  {{hover.handleHover}}
+                  {{on 'click' (fn this.removeStructure true)}}>
+                  {{this.removeWithContent}}
+                </AuButton>
+              </:hover>
+              <:tooltip as |tooltip|>
+                <AuPill
+                  id="remove-content-tooltip"
+                  role="tooltip"
+                  {{tooltip}}
+                >
+                  {{t 'article-structure-plugin.remove-with-content.help-text'}}
+                </AuPill>
+              </:tooltip>
+            </HoverTooltip>
+
+          </AuButtonGroup>
         </Item>
       </AuList>
     </c.content>

@@ -23,13 +23,22 @@ article-structure-plugin:
   title:
     structure-card: Structuur card
   remove:
+    default: Structuur verwijderen
     article: Artikel verwijderen
     paragraph: Paragraaf verwijderen
     subsection: Onderafdeling verwijderen
     section: Afdeling verwijderen
     chapter: Hoofdstuk verwijderen
     title: Titel verwijderen
-    content: Inhoud verwijderen
+    help-text: Verwijder de hoofding, maar behoud de inhoud
+  remove-with-content:
+    default: Structuur verwijderen met inhoud
+    article: Artikel en inhoud verwijderen
+    subsection: Onderafdeling en inhoud verwijderen
+    section: Afdeling en inhoud verwijderen
+    chapter: Hoofdstuk en inhoud verwijderen
+    title: Titel en inhoud verwijderen
+    help-text: Verwijder de hoofding, en alle inhoud tot aan de volgende hoofding van hetzelfde niveau
   placeholder:
     generic:
       heading: Voeg titel in

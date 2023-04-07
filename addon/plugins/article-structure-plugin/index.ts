@@ -1,6 +1,11 @@
-import { Fragment, PNode, Schema, EditorState } from '@lblod/ember-rdfa-editor';
+import {
+  EditorState,
+  Fragment,
+  PNode,
+  Schema,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import { Transaction } from '@lblod/ember-rdfa-editor';
 
 export type SpecName = string;
 
@@ -8,11 +13,12 @@ export type StructureSpec = {
   name: SpecName;
   translations: {
     insert: string;
-    move: {
-      up: string;
-      down: string;
+    move?: {
+      up?: string;
+      down?: string;
     };
-    remove: string;
+    remove?: string;
+    removeWithContent?: string;
   };
   constructor: (args: {
     schema: Schema;

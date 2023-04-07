@@ -1,6 +1,6 @@
 import {
   besluit,
-  title,
+  besluit_title,
   description,
   motivering,
   article_container,
@@ -13,7 +13,7 @@ import {
 
 export const besluitNodes = {
   besluit,
-  title,
+  besluit_title,
   description,
   motivering,
   article_container,
