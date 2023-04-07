@@ -7,13 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- BREAKING: Solve duplicate node title
+
 ## [4.0.2] - 2023-04-04
 
 ### Fixed
 - Prevent decision nodes regenerating when (de)serializing
 - Ensure editor is focused after inserting a citation
 - fix(citation): make plugin trigger correctly when `doc` is passed as an allowed nodeType
-- BREAKING: Solve duplicate node title
 
 ### Added
 - docs: add examples on how to enable the citation plugin for the entire document
