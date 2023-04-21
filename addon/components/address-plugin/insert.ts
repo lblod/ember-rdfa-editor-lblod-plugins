@@ -83,7 +83,7 @@ export default class AddressPluginInsertComponent extends Component<Args> {
           this.schema.node(
             'block_rdfa',
             {
-              property: 'http://lblod.data.gift/vocabularies/editor/isLumpNode',
+              typeof: 'https://data.vlaanderen.be/ns/adres#Adres',
               resource: address.uri,
             },
             this.schema.node('paragraph', null, [
