@@ -9,9 +9,6 @@ import { getAddressMatch, getSuggestedLocations } from './utils';
 
 type Args = {
   controller: SayController;
-  options: {
-    endpoint: string;
-  };
 };
 
 export default class AddressPluginInsertComponent extends Component<Args> {
