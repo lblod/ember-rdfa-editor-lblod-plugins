@@ -2,11 +2,10 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { tracked } from 'tracked-built-ins';
-import { inject as service } from '@ember/service';
-import AddressRegister, {
-  AddressSuggestion,
-} from '@lblod/ember-address-search';
 import { restartableTask, task, timeout } from 'ember-concurrency';
+
+import { AddressSuggestion } from './types';
+import { getAddressMatch, getSuggestedLocations } from './utils';
 
 type Args = {
   controller: SayController;
@@ -16,21 +15,11 @@ type Args = {
 };
 
 export default class AddressPluginInsertComponent extends Component<Args> {
-  @service declare addressRegister: AddressRegister;
-
   @tracked modalOpen = false;
   @tracked isSelectingAddress = false;
 
   @tracked addressSuggestions: AddressSuggestion[] = [];
   @tracked selectedAddress: AddressSuggestion | null = null;
-
-  constructor(owner: unknown, args: Args) {
-    super(owner, args);
-
-    this.addressRegister.setup({
-      endpoint: args.options.endpoint,
-    });
-  }
 
   get controller() {
     return this.args.controller;
@@ -72,9 +61,12 @@ export default class AddressPluginInsertComponent extends Component<Args> {
     if (this.selectedAddress) {
       this.isSelectingAddress = true;
 
-      const addresses = await this.addressRegister.findAll(
-        this.selectedAddress
-      );
+      const addresses = await getAddressMatch({
+        housenumber: this.selectedAddress.Housenumber,
+        municipality: this.selectedAddress.Municipality,
+        street: this.selectedAddress.Thoroughfarename,
+        zipcode: this.selectedAddress.Zipcode,
+      });
 
       const address = addresses[0];
 
@@ -84,10 +76,10 @@ export default class AddressPluginInsertComponent extends Component<Args> {
             'block_rdfa',
             {
               typeof: 'https://data.vlaanderen.be/ns/adres#Adres',
-              resource: address.uri,
+              resource: address.identificator.id,
             },
             this.schema.node('paragraph', null, [
-              this.schema.text(address.fullAddress),
+              this.schema.text(address.volledigAdres.geografischeNaam.spelling),
             ])
           )
         );
@@ -104,6 +96,8 @@ export default class AddressPluginInsertComponent extends Component<Args> {
   searchAddress = restartableTask(async (term: string) => {
     await timeout(400);
 
-    return await this.addressRegister.suggest(term);
+    const locations = await getSuggestedLocations(term);
+
+    return locations;
   });
 }
