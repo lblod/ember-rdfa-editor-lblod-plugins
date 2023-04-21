@@ -19,11 +19,38 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
     return this.args.controller;
   }
 
+  get tableOfContentsRange() {
+    let result: { from: number; to: number } | undefined;
+    this.controller.mainEditorState.doc.descendants((node, pos) => {
+      if (node.type === this.controller.schema.nodes['table_of_contents']) {
+        result = { from: pos, to: pos + node.nodeSize };
+      }
+      return !result;
+    });
+    return result;
+  }
+
+  @action
+  onUpdate() {
+    if (this.tableOfContentsRange) {
+      const { from, to } = this.tableOfContentsRange;
+      this.controller.withTransaction((tr) => {
+        const node = this.args.node;
+        const attrs = node.attrs;
+        const newAttrs = { ...attrs, ...this.outline };
+        const newNode = node.type.create(newAttrs, node.content, node.marks);
+        tr.replaceWith(from, to, newNode);
+        return tr;
+      });
+    }
+  }
+
   get outline() {
     const entries = this.extractOutline({
       node: this.controller.mainEditorState.doc,
       pos: -1,
     });
+
     return {
       entries,
     };
