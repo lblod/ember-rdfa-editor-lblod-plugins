@@ -28,7 +28,8 @@ export const emberNodeConfig: (
 
       return [
         'div',
-        { 'data-ember-node': 'table-of-contents' },
+        { 'data-ember-node': 'table-of-contents', class: 'table-of-contents' },
+        ['h3', {}, 'Table Of Contents'],
         createTableOfContents(entries),
       ];
     },

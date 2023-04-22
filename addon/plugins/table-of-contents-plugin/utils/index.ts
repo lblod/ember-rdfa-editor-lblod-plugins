@@ -14,8 +14,7 @@ export function createTableOfContents(entries: OutlineEntry[]) {
   const tableOfContents: LI = [
     'ul',
     {
-      class:
-        'au-c-list au-c-list--vertical au-c-list--divider table-of-contents',
+      class: 'au-u-background-gray-100 au-u-padding-tiny table-of-contents',
     },
   ];
 
