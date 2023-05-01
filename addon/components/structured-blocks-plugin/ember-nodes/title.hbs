@@ -1,0 +1,11 @@
+<StructuredBlocksPlugin::EmberNodes::StructuredBlock
+  @addText='add title'
+  @emberNodeArgs={{this.args}}
+>
+  <:contentDOM>
+    {{yield}}
+  </:contentDOM>
+  <:prefix>
+    title:
+  </:prefix>
+</StructuredBlocksPlugin::EmberNodes::StructuredBlock>
