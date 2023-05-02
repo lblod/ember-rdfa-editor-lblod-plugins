@@ -1,9 +1,17 @@
-import { title, titleView } from './nodes/title';
-import { chapter, chapterView } from './nodes/chapter';
-import { section, sectionView } from './nodes/section';
-import { subsection, subsectionView } from './nodes/subsection';
-import { article, articleView } from './nodes/article';
-import { paragraph, paragraphView } from './nodes/paragraph';
+import {
+  title,
+  titleView,
+  chapter,
+  chapterView,
+  section,
+  sectionView,
+  subsection,
+  subsectionView,
+  article,
+  articleView,
+  paragraph,
+  paragraphView,
+} from './nodes';
 
 export const STRUCTURE_NODES = {
   structure_title: title,

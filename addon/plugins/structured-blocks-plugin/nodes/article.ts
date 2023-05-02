@@ -6,7 +6,7 @@ import {
 import { createStructureConfig } from './config';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
-  const config = createStructureConfig('paragraph');
+  const config = createStructureConfig('article');
   return {
     ...config,
     inline: false,

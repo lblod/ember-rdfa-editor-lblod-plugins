@@ -67,12 +67,12 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   addBlockCommand(): Command {
     const copiedNode = this.node.type.create();
     const pos = this.parentArgs.getPos();
-    console.log(pos);
     return (state, dispatch) => {
       if (pos === undefined) {
         return false;
       }
       const endPos = pos + this.node.nodeSize;
+      console.log(endPos);
 
       if (!this.node.canAppend(copiedNode)) {
         console.log('is false');
@@ -92,7 +92,8 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
         return false;
       }
       const endPos = pos + this.node.nodeSize - 1;
-      const childNode = this.schema.nodes[this.childConfig.structure_name].create();
+      const childNode =
+        this.schema.nodes[this.childConfig.structure_name].create();
 
       // if (!this.node.canAppend(childNode)) {
       //   console.log('is false');
@@ -128,6 +129,38 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     };
   }
 
+  addArticleCommand(): Command {
+    const articleNode = this.schema.nodes.structure_article.create();
+    const pos = this.parentArgs.getPos();
+
+    return (state, dispatch) => {
+      if (pos === undefined) {
+        return false;
+      }
+      let offsetLastParagraph = 0;
+      //find pos after articles
+      this.node.forEach((node, offset, _index) => {
+        if (node.type.name === 'structure_paragraph') {
+          const currentEnd = offset + node.nodeSize;
+          if (currentEnd > offsetLastParagraph) {
+            offsetLastParagraph = currentEnd;
+          }
+        }
+      });
+      const insertPos = pos + offsetLastParagraph + 1;
+
+      console.log(insertPos);
+      // if (!this.node.canAppend(copiedNode)) {
+      //   console.log('is false');
+      //   return false;
+      // }
+      if (dispatch) {
+        dispatch(state.tr.insert(insertPos, articleNode));
+      }
+      return true;
+    };
+  }
+
   @action
   addParagraph() {
     this.controller.doCommand(this.addParagraphCommand());
@@ -141,5 +174,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   @action
   addChild() {
     this.controller.doCommand(this.addChildCommand());
+  }
+
+  @action
+  addArticle() {
+    this.controller.doCommand(this.addArticleCommand());
   }
 }

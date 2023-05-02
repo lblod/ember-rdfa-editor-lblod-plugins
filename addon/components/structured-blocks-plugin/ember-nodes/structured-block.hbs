@@ -19,6 +19,17 @@
           </AuButton>
         </div>
       {{/if}}
+      {{#if (not-eq this.config.type 'article')}}
+        <div>
+          <AuButton
+            @icon='plus-text'
+            @skin='secondary'
+            {{on 'click' this.addArticle}}
+          >
+            Artikel invoegen
+          </AuButton>
+        </div>
+      {{/if}}
       <div>
         <AuButton
           @icon='plus-text'
