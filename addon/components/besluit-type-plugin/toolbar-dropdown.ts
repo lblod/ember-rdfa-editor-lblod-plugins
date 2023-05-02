@@ -64,8 +64,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     // eslint-disable-next-line @typescript-eslint/await-thenable
     const bestuurseenheid = await this.currentSession.get('group');
     const classificatie = await bestuurseenheid.get('classificatie');
-    console.log(this.args)
-    console.log(this.args.options.endpoint);
     const types = await fetchBesluitTypes(
       classificatie.uri,
       this.args.options.endpoint
