@@ -181,3 +181,13 @@ variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
   enter-variable-value: Selecteer waarde
+
+address-plugin:
+  insert:
+    address: Adres invoegen
+  button:
+    insert: Adres invoegen
+    back: Terug
+  search:
+    cta: Zoekterm
+    no-match: Geen resultaten
