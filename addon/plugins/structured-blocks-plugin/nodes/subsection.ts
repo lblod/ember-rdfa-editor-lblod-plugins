@@ -6,7 +6,7 @@ import {
 import { createStructureConfig } from './config';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
-  const config = createStructureConfig('chapter');
+  const config = createStructureConfig('subsection');
   return {
     ...config,
     toDOM: (node) => [
@@ -14,12 +14,12 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       {
         property: config.name,
       },
-      ['h2', node.attrs.text],
+      ['h5', node.attrs.text],
       ['div', 0],
     ],
     parseDOM: [
       {
-        tag: 'div h2',
+        tag: 'div h5',
         getAttrs(element: HTMLElement) {
           if (element.parentElement?.getAttribute('property') === config.name) {
             return { text: element.innerText };
@@ -32,5 +32,5 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
   };
 };
 
-export const chapter = createEmberNodeSpec(emberNodeConfig());
-export const chapterView = createEmberNodeView(emberNodeConfig());
+export const subsection = createEmberNodeSpec(emberNodeConfig());
+export const subsectionView = createEmberNodeView(emberNodeConfig());

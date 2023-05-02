@@ -67,6 +67,10 @@ import {
   chapterView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes';
 import { insertBaseTitle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/commands/insert-title';
+import {
+  STRUCTURE_NODES,
+  STRUCTURE_VIEWS,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin';
 export default class StructuredBlocksSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -85,9 +89,7 @@ export default class StructuredBlocksSampleController extends Controller {
         doc: {
           content: '(structure_title)*',
         },
-        structure_title: title,
-        structure_paragraph: struc_paragraph,
-        structure_chapter: chapter,
+        ...STRUCTURE_NODES,
         paragraph,
         list_item,
         ordered_list,
@@ -154,9 +156,7 @@ export default class StructuredBlocksSampleController extends Controller {
     controller: SayController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      structure_title: titleView(controller),
-      structure_paragraph: paragraphView(controller),
-      structure_chapter: chapterView(controller),
+      ...STRUCTURE_VIEWS(controller),
     };
   };
   @tracked plugins: Plugin[] = [

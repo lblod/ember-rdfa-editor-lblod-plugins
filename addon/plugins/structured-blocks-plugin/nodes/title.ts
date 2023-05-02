@@ -4,22 +4,16 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
+import { createStructureConfig } from './config';
+
 export const emberNodeConfig: () => EmberNodeConfig = () => {
+  const config = createStructureConfig('title');
   return {
-    name: 'structure-title',
-    componentPath: 'structured-blocks-plugin/ember-nodes/title',
-    inline: false,
-    group: 'structure_title',
-    atom: false,
-    content: 'structure_paragraph* structure_chapter*',
-    attrs: {
-      text: { default: '' },
-      childNode: { default: 'structure_chapter' },
-    },
+    ...config,
     toDOM: (node) => [
       'div',
       {
-        property: 'structure-title',
+        property: config.name,
       },
       ['h1', node.attrs.text],
       ['div', 0],
@@ -28,10 +22,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       {
         tag: 'div h1',
         getAttrs(element: HTMLElement) {
-          if (
-            element.parentElement?.getAttribute('property') ===
-            'structure-title'
-          ) {
+          if (element.parentElement?.getAttribute('property') === config.name) {
             return { text: element.innerText };
           } else {
             return false;

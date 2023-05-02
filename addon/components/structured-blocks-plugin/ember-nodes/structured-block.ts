@@ -4,15 +4,15 @@ import { action } from '@ember/object';
 import { assert } from '@ember/debug';
 import { localCopy } from 'tracked-toolbox';
 import { Command } from '@lblod/ember-rdfa-editor';
+import { baseStructureConfigWithChild } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes/config';
 
 declare type blockArgs = {
   emberNodeArgs: EmberNodeArgs;
-  addText: string;
 };
 
 declare type blockAttrs = {
   text: string;
-  childNode?: string;
+  config: baseStructureConfigWithChild;
 };
 
 export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent extends Component<blockArgs> {
@@ -25,6 +25,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
 
   get parentAttrs() {
     return this.node?.attrs as blockAttrs;
+  }
+
+  get config() {
+    return this.parentAttrs.config;
   }
 
   get node() {
@@ -43,8 +47,12 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     return this.controller.schema;
   }
 
-  get childNode() {
-    return this.parentAttrs?.childNode;
+  get childConfig() {
+    return this.parentAttrs.config.child;
+  }
+
+  get hasChild() {
+    return !!this.childConfig;
   }
 
   @action
@@ -80,11 +88,11 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   addChildCommand(): Command {
     const pos = this.parentArgs.getPos();
     return (state, dispatch) => {
-      if (pos === undefined || !this.childNode) {
+      if (pos === undefined || !this.hasChild || !this.childConfig) {
         return false;
       }
       const endPos = pos + this.node.nodeSize - 1;
-      const childNode = this.schema.nodes[this.childNode].create();
+      const childNode = this.schema.nodes[this.childConfig.structure_name].create();
 
       // if (!this.node.canAppend(childNode)) {
       //   console.log('is false');

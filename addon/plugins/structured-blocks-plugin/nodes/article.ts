@@ -11,11 +11,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     ...config,
     inline: false,
     atom: false,
-    content: 'inline*',
-    toDOM: (_node) => ['p', 0],
-    parseDOM: [{ tag: 'p' }],
+    content: 'structure_paragraph*',
+    toDOM: (_node) => ['h6', 0],
+    parseDOM: [{ tag: 'h6' }],
   };
 };
 
-export const paragraph = createEmberNodeSpec(emberNodeConfig());
-export const paragraphView = createEmberNodeView(emberNodeConfig());
+export const article = createEmberNodeSpec(emberNodeConfig());
+export const articleView = createEmberNodeView(emberNodeConfig());

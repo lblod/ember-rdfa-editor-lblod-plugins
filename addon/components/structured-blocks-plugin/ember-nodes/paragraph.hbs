@@ -1,3 +1,20 @@
-<div class='au-u-flex au-u-flex--row au-u-flex--no-wrap au-u-flex--vertical-center' >
-  <div style='width: 50px'>par.: </div> <div>{{yield}}</div>
+<div
+  class='au-u-flex au-u-flex--row au-u-flex--no-wrap au-u-flex--vertical-start'
+>
+  <div class='au-u-1-12 au-u-bold'>
+    par.
+  </div>
+
+  <div class='au-u-11-12'>
+    {{yield}}
+  </div>
+</div>
+<div>
+  <AuButton
+    @icon='plus-text'
+    @skin='secondary'
+    {{on 'click' this.addParagraph}}
+  >
+    Paragraaf toevoegen
+  </AuButton>
 </div>
