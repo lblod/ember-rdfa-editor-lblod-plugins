@@ -20,7 +20,7 @@ export default function insertTitle({
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { selection, schema } = state;
     const nodeToInsert = schema.node(
-      'title',
+      'besluit_title',
       { __rdfaId: uuid() },
       schema.node(
         'paragraph',

@@ -16,7 +16,7 @@ import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
-export const title: NodeSpec = {
+export const besluit_title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
   defining: true,
@@ -126,14 +126,12 @@ export const article_container: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', PROV('value')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
-        ) {
+        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
           return getRdfaAttrs(element);
         }
         return false;
       },
+      context: 'besluit/',
     },
   ],
 };
@@ -278,6 +276,7 @@ export const besluit_article_header: NodeSpec = {
 };
 
 export const besluit_article_content: NodeSpec = {
+  group: 'block',
   content: 'block+',
   inline: false,
   attrs: {
@@ -301,13 +300,14 @@ export const besluit_article_content: NodeSpec = {
         }
         return false;
       },
+      context: 'besluit_article//',
     },
   ],
 };
 
 export const besluit: NodeSpec = {
   group: 'block',
-  content: 'block*title?block*description?block*motivering?block*',
+  content: 'block*besluit_title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
   isolating: true,

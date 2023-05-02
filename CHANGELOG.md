@@ -13,6 +13,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
 
+## [5.0.1] - 2023-04-07
+### Fixed
+- fix deprecated use of modifier without specifying eagerness
+- add missing translations
+- make application route in dummy app a javascript file to avoid [issues](https://github.com/typed-ember/ember-cli-typescript/issues/780)
+
+## [5.0.0] - 2023-04-07
+
+### Added
+- add a hover-tooltip utility component
+- docs: add tooltips to the remove structure buttons
+
+### Changed
+- Change date labels based on designer feedback
+- split out structure removal card into two buttons
+
+### Fixed
+- BREAKING: Rename decision title node from title to besluit_title to avoid conflicts
+- properly initialize ember-intl
+
+## [4.0.2] - 2023-04-04
+
+### Fixed
+- Prevent decision nodes regenerating when (de)serializing
+- Ensure editor is focused after inserting a citation
+- fix(citation): make plugin trigger correctly when `doc` is passed as an allowed nodeType
+
+### Added
+- docs: add examples on how to enable the citation plugin for the entire document
+ 
 ## [4.0.1] - 2023-03-27
 
 ### Dependencies
@@ -31,9 +61,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update schema on dummy page to make articles insertable in empty document
 - Add padding to structure card
 - Placeholder text when inserting date
+- Feature/improve toc scroll
 
 ### Removed:
 - Removal of prosemirror-plugin dependency of `CitationPlugin::CitationInsert` component.
+
+### Dependencies
+- bump `ember-rdfa-editor` to v3.4.0
 
 ## [3.1.0] - 2023-03-02
 
@@ -46,7 +80,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 - bump `ember-rdfa-editor` to v3.3.0
-- bump `ember-rdfa-editor` to v3.4.0
 
 ## [3.0.0] - 2023-02-27
 
@@ -385,7 +418,10 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.1...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.1...HEAD
+[5.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.2...v5.0.0
+[4.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.0...v4.0.1
 [4.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.1.0...v4.0.0
 [3.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v3.0.0...v3.1.0

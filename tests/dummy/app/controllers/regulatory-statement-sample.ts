@@ -127,6 +127,9 @@ export default class RegulatoryStatementSampleController extends Controller {
             'title|chapter|section|subsection|article',
             'structure_header|article_header',
           ],
+          scrollContainer: document.getElementsByClassName(
+            'say-container__main'
+          )[0] as HTMLElement,
         },
       ],
       date: {
@@ -136,13 +139,11 @@ export default class RegulatoryStatementSampleController extends Controller {
         },
         formats: [
           {
-            label: 'Short Date',
             key: 'short',
             dateFormat: 'dd/MM/yy',
             dateTimeFormat: 'dd/MM/yy HH:mm',
           },
           {
-            label: 'Long Date',
             key: 'long',
             dateFormat: 'EEEE dd MMMM yyyy',
             dateTimeFormat: 'PPPPp',

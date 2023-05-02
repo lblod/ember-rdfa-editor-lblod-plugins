@@ -1,12 +1,10 @@
 export const defaultDateFormats: DateFormat[] = [
   {
-    label: 'Short Date',
     key: 'short',
     dateFormat: 'dd/MM/yy',
     dateTimeFormat: 'dd/MM/yy HH:mm',
   },
   {
-    label: 'Long Date',
     key: 'long',
     dateFormat: 'EEEE dd MMMM yyyy',
     dateTimeFormat: 'PPPPp',
@@ -14,7 +12,7 @@ export const defaultDateFormats: DateFormat[] = [
 ];
 
 export type DateFormat = {
-  label: string;
+  label?: string;
   key: string;
   dateFormat: string;
   dateTimeFormat: string;

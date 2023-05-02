@@ -97,6 +97,31 @@ Configuration:
   - activeInRanges: it's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`
   - regex: you can provide your custom regex to detect citations, if not the default one will be used
 
+
+A common usecase is to have the plugin active in the entire document. Here's how to do that using each configuration type:
+
+```js
+import { citationPlugin } from "@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin";
+
+const configA = {
+   type: "nodes",
+   activeInNodeTypes(schema) {
+     // the root node of the document should always have the doc type
+     return new Set([schema.nodes.doc]);
+   }
+ };
+  
+const configB = {
+  type: "ranges",
+  activeInRanges(state) {
+    // a node's nodeSize follows the Prosemirror definition
+    // a non-leaf node's size is the sum of its children's sizes + 2
+    // so to get the last valid position "inside" a node, you need to subtract two from its nodeSize
+    // ref: https://prosemirror.net/docs/ref/#model.Node.nodeSize 
+    return [[0, state.doc.nodeSize - 2]];
+  }
+};
+```
 ### Using the plugin
 
 If used with the example configuration provided this plugin can be triggered by typing one of the following in the correct RDFa context (
