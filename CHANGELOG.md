@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- validation plugin
+ 
+### Deprecated
+- the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
+
 ## [5.0.1] - 2023-04-07
 ### Fixed
 - fix deprecated use of modifier without specifying eagerness
