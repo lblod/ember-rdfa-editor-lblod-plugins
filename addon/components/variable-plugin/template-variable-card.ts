@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { getOwner } from '@ember/application';
 import { task } from 'ember-concurrency';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
@@ -13,9 +12,11 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection, PNode, ProseParser } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { TemplateVariablePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin';
 
 type Args = {
   controller: SayController;
+  options: TemplateVariablePluginOptions;
 };
 export default class EditorPluginsTemplateVariableCardComponent extends Component<Args> {
   @tracked variableOptions: CodeListOption[] = [];
@@ -30,16 +31,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
-    const config = getOwner(this)?.resolveRegistration(
-      'config:environment'
-    ) as {
-      templateVariablePlugin: {
-        zonalLocationCodelistUri: string;
-        endpoint: string;
-        nonZonalLocationCodelistUri: string;
-      };
-    };
-    const pluginConfig = config.templateVariablePlugin;
+    const pluginConfig = args.options;
     this.zonalLocationCodelistUri = pluginConfig.zonalLocationCodelistUri;
     this.endpoint = pluginConfig.endpoint;
     this.nonZonalLocationCodelistUri = pluginConfig.nonZonalLocationCodelistUri;
