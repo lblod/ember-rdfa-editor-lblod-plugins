@@ -153,9 +153,6 @@ export default class BesluitSampleController extends Controller {
       link: {
         interactive: true,
       },
-      address: {
-        endpoint: 'http://localhost:8080',
-      },
     };
   }
 
