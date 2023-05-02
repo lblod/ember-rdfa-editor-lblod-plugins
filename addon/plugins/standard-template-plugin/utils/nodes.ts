@@ -77,7 +77,6 @@ export const description: NodeSpec = {
 };
 
 export const motivering: NodeSpec = {
-  group: 'block',
   content: 'block+',
   inline: false,
   canSplit: false,
