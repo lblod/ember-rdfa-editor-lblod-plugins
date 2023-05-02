@@ -390,6 +390,19 @@ templateVariablePlugin: {
 },
 ```
 
+## address-plugin
+
+Editor plugin which allows you to insert address based on information from
+
+- https://basisregisters.vlaanderen.be/api/v1/adressen
+- https://geo.api.vlaanderen.be/geolocation/v4/Location
+
+For enabling it, you need to add the card provided by the plugin to the editor sidebar
+
+```hbs
+<AddressPlugin::Insert @controller={{this.controller}} />
+```
+
 ## Contributing
 
 
