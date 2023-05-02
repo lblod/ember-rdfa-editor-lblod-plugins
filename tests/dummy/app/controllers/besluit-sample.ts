@@ -94,7 +94,7 @@ export default class BesluitSampleController extends Controller {
       {
         name: 'exactly-one-title',
         focusNodeType: schema.nodes.besluit,
-        path: ['title'],
+        path: ['besluit_title'],
         message: 'Document must contain exactly one title block.',
         constraints: {
           minCount: 1,
