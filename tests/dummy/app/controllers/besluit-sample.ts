@@ -150,6 +150,10 @@ export default class BesluitSampleController extends Controller {
           return new Set<NodeType>([schema.nodes.motivering]);
         },
       },
+      roadsignRegulation: {
+        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
+      },
       link: {
         interactive: true,
       },
