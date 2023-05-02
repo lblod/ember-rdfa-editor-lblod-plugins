@@ -1,22 +1,20 @@
-<div class="au-u-flex">
-    <div class='au-u-1-12 au-u-bold'>{{yield to='prefix'}}</div>
-    <div class='au-u-11-12'>
-      <div class='au-u-flex--row au-u-flex--no-wrap' >
-        <div class='' >
-          <AuInput @value={{this.localText}} {{on "input" this.setText}} class="au-u-flex--no-wrap" />
-        </div>
-      </div>
-      <div class='au-u-flex--row au-u-flex--no-wrap' >
-        <div class='au-o-grid__item ' >
-          <div><AuButton {{on "click" this.addParagraph}}>add Paragraph</AuButton></div>
-          <div>{{yield to='contentDOM'}}</div>
-          {{#if (not-eq this.childNode undefined)}}
-          <div><AuButton {{on "click" this.addChild}}>add subsection</AuButton></div>
-          {{/if}}
-        </div>
-      </div>
-      <AuButton {{on "click" this.addSameBelow}}>{{@addText}}</AuButton>
+<div class="au-u-flex au-u-flex--wrap">
+  <div class='au-u-1-12 au-u-bold'>{{yield to='prefix'}}</div>
+  <div class='au-u-11-12'>
+    <div class='' >
+      <AuInput @value={{this.localText}} {{on "input" this.setText}} class="full-length" />
     </div>
+    <div class='au-u-flex--row au-u-flex--no-wrap' >
     
+      <div><AuButton {{on "click" this.addParagraph}}>add Paragraph</AuButton></div>
+      <div>{{yield to='contentDOM'}}</div>
+      {{#if (not-eq this.childNode undefined)}}
+      <div><AuButton {{on "click" this.addChild}}>add subsection</AuButton></div>
+      {{/if}}
+    </div>
+  </div>
+  <div class='' >
+      <AuButton {{on "click" this.addSameBelow}}>{{@addText}}</AuButton>
+  </div>
 </div>
 
