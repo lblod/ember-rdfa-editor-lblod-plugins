@@ -154,6 +154,9 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
         imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
       },
+      besluitType: {
+        endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
+      },
       link: {
         interactive: true,
       },

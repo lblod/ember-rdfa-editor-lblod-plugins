@@ -41,7 +41,7 @@
               <Tb.Spacer/>
               <Tb.Group>
                 <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
-                <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}}/>
+                <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
                 <Plugins::RdfaBlockRender::RdfaBlocksToggle @controller={{this.controller}}/>
               </Tb.Group>
             </Toolbar>

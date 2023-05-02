@@ -1,7 +1,6 @@
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import {
   addType,
@@ -17,6 +16,7 @@ import fetchBesluitTypes, {
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 
 declare module 'ember__owner' {
   export default interface Owner {
@@ -26,6 +26,7 @@ declare module 'ember__owner' {
 
 type Args = {
   controller: SayController;
+  options: BesluitTypePluginOptions;
 };
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
@@ -63,10 +64,12 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     // eslint-disable-next-line @typescript-eslint/await-thenable
     const bestuurseenheid = await this.currentSession.get('group');
     const classificatie = await bestuurseenheid.get('classificatie');
-    const ENV = getOwner(this)?.resolveRegistration('config:environment') as {
-      besluitTypePlugin: { endpoint: string };
-    };
-    const types = await fetchBesluitTypes(classificatie.uri, ENV);
+    console.log(this.args)
+    console.log(this.args.options.endpoint);
+    const types = await fetchBesluitTypes(
+      classificatie.uri,
+      this.args.options.endpoint
+    );
     return types;
   });
 
