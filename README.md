@@ -28,6 +28,7 @@ This addon contains the following editor plugins:
 * standard-template-plugin
 * table-of-contents-plugin
 * template-variable-plugin
+* validation-plugin
 
 You can configure your editor like this:
 ```hbs

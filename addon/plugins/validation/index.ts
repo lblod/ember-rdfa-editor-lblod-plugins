@@ -183,6 +183,12 @@ export function validation(
   return validation;
 }
 
+/**
+ * Calculate the validation shapes and organize them by the name of the type
+ * of their focusNode
+ * @param configurator
+ * @param schema
+ */
 function compileSpec(
   configurator: (schema: Schema) => ValidationPluginConfig,
   schema: Schema
@@ -215,6 +221,14 @@ interface ValidationContext {
   shapeContext: Map<ValidationShape, ShapeContext>;
 }
 
+/**
+ * Main validation driver. Sets up the recursive validation function.
+ * @param tr
+ * @param oldPluginState
+ * @param oldState
+ * @param newState
+ * @param spec
+ */
 function doValidation(
   tr: Transaction,
   oldPluginState: ValidationState,
@@ -240,13 +254,25 @@ function doValidation(
   return { conforms, results };
 }
 
+/**
+ * The actual validation function. Traverses the document with DFS.
+ * Collects the results in the array given in the results argument.
+ * Uses the context argument to keep track of various needed state.
+ * @param context
+ * @param results
+ * @param node
+ * @param currentDepth
+ */
 function recValidate(
   context: ValidationContext,
   results: ValidationResult[],
   node: PNode,
   currentDepth: number
 ) {
+  // keep track of the global path we're on
   context.path.push(node);
+  // get all shapes that focus on the current node
+  // and start a new context for them
   const nodeShapes =
     context.spec[node.type.name]?.map((shape) => ({
       depth: currentDepth,
@@ -260,6 +286,7 @@ function recValidate(
       count: 0,
     });
   }
+  // get the shapes that are active in this depth
   const activeShapes = context.activeShapes.length
     ? context.activeShapes[context.activeShapes.length - 1]
     : [];
@@ -272,20 +299,40 @@ function recValidate(
       depth,
       shape: { path },
     } = depthShape;
+    // check if we're at the right depth for the shape's path to matter
+    // if we are deeper than the length of the path + the depth
+    // of the shapes focusNode, we can ignore the shape
     if (path.length + depth === currentDepth) {
       if (path.length === 0 || path[path.length - 1] === node.type.name) {
+        // we're at the end of the shapeSpec's path, and our node
+        // has the right type. This means we have fully completed the shape,
+        // and we need to validate it
         nodeIsTargetOfShapes.push(depthShape);
       }
     } else if (path.length + depth > currentDepth) {
+      // we're somewhere along the spec's path.
+      // So either our node has the right type,
+      // meaning we're still "on the path", or it doesn't,
+      // and we can abandon this particular shape
+      // reminder that currentDepth is our "global" depth in the doc tree,
+      // and depth is the depth of the shape's focusNode
+      // so currentDepth - depth gives us the depth relative to the focusNode,
+      // which is how far along its path we are. Subtract 1 for usual array
+      // index shenanigans.
       if (currentDepth - depth - 1 > 0) {
         if (path[currentDepth - 1 - depth] === node.type.name) {
           pathIsValidForShapes.push(depthShape);
         }
       } else {
+        // special case where we're at the same depth as the focusNode
+        // meaning we just activated the shape, so it's definitely still valid
+        // the fact that I need to write this comment probably means this
+        // could be refactored to be a bit cleaner, but here we are
         pathIsValidForShapes.push(depthShape);
       }
     }
   }
+  // count all shapes we just completed with our node
   for (const { shape } of nodeIsTargetOfShapes) {
     const shapeContext = unwrap(context.shapeContext.get(shape));
     context.shapeContext.set(shape, {
@@ -294,19 +341,26 @@ function recValidate(
     });
   }
 
+  // store all shapes where we're still on the path
   context.activeShapes.push(pathIsValidForShapes);
 
+  // it's recursion time
   for (let i = 0; i < node.content.childCount; i++) {
     const child = node.content.child(i);
     recValidate(context, results, child, currentDepth + 1);
   }
 
+  // after the recursion, we've seen the entire subtree under our node
+  // so we're ready to validate any shapes that focus this node
   for (const { shape } of nodeShapes) {
+    // a "this should never be null" nullcheck
     const shapeContext = expect(
       'Shapecontext not initialized',
       context.shapeContext.get(shape)
     );
+    // imagine if after all that it turns out the shape has no constraints...
     if (shape.constraints) {
+      // with the shape's context nicely filled, we can now validate
       for (const constraint of Object.entries(shape.constraints).map(
         ([kind, value]) => ({ kind, value } as ValidationConstraint)
       )) {
@@ -317,6 +371,7 @@ function recValidate(
       }
     }
   }
+  // clean up our context stack before we go back up
   context.path.pop();
   context.activeShapes.pop();
   for (const depthShape of nodeShapes) {
