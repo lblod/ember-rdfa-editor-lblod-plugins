@@ -5,3 +5,19 @@ $au-fractions: 1 2 3 4 5 6 8 12;
   width: 100%;
 }
 
+.show-on-hover {
+  display: none;
+}
+
+.hover-outer {
+  padding: 5px;
+}
+
+.hover-outer:hover {
+  background-color: var(--au-gray-200);
+}
+
+.hover-outer:hover .show-on-hover{ 
+	display:block;
+}
+

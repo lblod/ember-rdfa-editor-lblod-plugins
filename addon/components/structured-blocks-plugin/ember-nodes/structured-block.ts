@@ -85,6 +85,27 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     };
   }
 
+  removeBlockCommand(): Command {
+    const startPos = this.parentArgs.getPos();
+    return (state, dispatch) => {
+      if (startPos === undefined) {
+        return false;
+      }
+      const endPos = startPos + this.node.nodeSize;
+      console.log(startPos, endPos);
+
+      // 'check can remove
+      // if (!this.node.canAppend(copiedNode)) {
+      //   console.log('is false');
+      //   return false;
+      // }
+      if (dispatch) {
+        dispatch(state.tr.delete(startPos, endPos));
+      }
+      return true;
+    };
+  }
+
   addChildCommand(): Command {
     const pos = this.parentArgs.getPos();
     return (state, dispatch) => {
@@ -179,5 +200,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   @action
   addArticle() {
     this.controller.doCommand(this.addArticleCommand());
+  }
+
+  @action
+  removeThis() {
+    this.controller.doCommand(this.removeBlockCommand());
   }
 }
