@@ -2,7 +2,13 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { Schema, Plugin, SayController } from '@lblod/ember-rdfa-editor';
+import {
+  NodeType,
+  NodeViewConstructor,
+  Plugin,
+  SayController,
+  Schema,
+} from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
@@ -15,10 +21,10 @@ import {
   doc,
   hard_break,
   horizontal_rule,
+  invisible_rdfa,
   paragraph,
   repaired_block,
   text,
-  invisible_rdfa,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import {
@@ -45,7 +51,6 @@ import {
   structureSpecs,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { NodeType, NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -59,12 +64,24 @@ import {
   CitationPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
+  validation,
+  ValidationReport,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
+import {
+  insertArticleContainer,
+  insertDescription,
+  insertMotivation,
+  insertTitle,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
+
+import {
   createInvisiblesPlugin,
   hardBreak,
   heading as headingInvisible,
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
+
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
@@ -72,6 +89,52 @@ export default class BesluitSampleController extends Controller {
   @tracked citationPlugin = citationPlugin(
     this.config.citation as CitationPluginConfig
   );
+  @tracked validationPlugin = validation((schema: Schema) => ({
+    shapes: [
+      {
+        name: 'exactly-one-title',
+        focusNodeType: schema.nodes.besluit,
+        path: ['besluit_title'],
+        message: 'Document must contain exactly one title block.',
+        constraints: {
+          minCount: 1,
+          maxCount: 1,
+        },
+      },
+      {
+        name: 'exactly-one-description',
+        focusNodeType: schema.nodes.besluit,
+        path: ['description'],
+        message: 'Document must contain exactly one description block.',
+        constraints: {
+          minCount: 1,
+          maxCount: 1,
+        },
+      },
+      {
+        name: 'max-one-motivation',
+        focusNodeType: schema.nodes.besluit,
+        path: ['motivering'],
+        message: 'Document may not contain more than one motivation block.',
+        constraints: {
+          maxCount: 1,
+        },
+      },
+    ],
+  }));
+
+  get report(): ValidationReport {
+    if (!this.controller) {
+      return { conforms: true };
+    }
+    const validationState = this.validationPlugin.getState(
+      this.controller.mainEditorState
+    );
+    if (!validationState) {
+      return { conforms: true };
+    }
+    return validationState.report;
+  }
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -183,6 +246,7 @@ export default class BesluitSampleController extends Controller {
     tablePlugin,
     tableKeymap,
     this.citationPlugin,
+    this.validationPlugin,
     createInvisiblesPlugin(
       [space, hardBreak, paragraphInvisible, headingInvisible],
       {
@@ -220,5 +284,71 @@ export default class BesluitSampleController extends Controller {
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
+  }
+
+  get canInsertDescription() {
+    return this.controller?.checkCommand(
+      insertDescription({
+        placeholderText: 'Geef korte beschrijving op',
+        validateShapes: new Set(['exactly-one-description']),
+      })
+    );
+  }
+
+  @action
+  insertDescription() {
+    this.controller?.doCommand(
+      insertDescription({ placeholderText: 'Geef korte beschrijving op' })
+    );
+    this.controller?.focus();
+  }
+
+  get canInsertTitle() {
+    return this.controller?.checkCommand(
+      insertTitle({
+        placeholderText: 'Geef titel besluit op',
+        validateShapes: new Set(['exactly-one-title']),
+      })
+    );
+  }
+
+  @action
+  insertTitle() {
+    this.controller?.doCommand(
+      insertTitle({
+        placeholderText: 'Geef titel besluit op',
+        validateShapes: new Set(['exactly-one-title']),
+      })
+    );
+    this.controller?.focus();
+  }
+
+  get canInsertMotivation() {
+    return this.controller?.checkCommand(
+      insertMotivation({ validateShapes: new Set(['max-one-motivation']) })
+    );
+  }
+
+  @action
+  insertMotivation() {
+    this.controller?.doCommand(
+      insertMotivation({
+        placeholderText:
+          'Geef motivering op. Bv: Bevoegdheid, Juridische Context, Feitelijke Context, etc',
+      })
+    );
+    this.controller?.focus();
+  }
+
+  get canInsertContainer() {
+    return this.controller?.checkCommand(
+      insertArticleContainer({ intl: this.intl })
+    );
+  }
+
+  @action
+  insertArticleContainer() {
+    this.controller?.doCommand(insertArticleContainer({ intl: this.intl }));
+    this.controller?.focus();
   }
 }

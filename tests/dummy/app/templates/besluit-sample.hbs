@@ -8,12 +8,12 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa='true'
-          showRdfaHighlight='true'
-          showRdfaHover='true'
-          showPaper='true'
-          showToolbarBottom=null
-        }}
+        showRdfa='true'
+        showRdfaHighlight='true'
+        showRdfaHover='true'
+        showPaper='true'
+        showToolbarBottom=null
+      }}
         @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
@@ -38,7 +38,7 @@
               <Tb.Group>
                 <Plugins::Heading::HeadingMenu @controller={{this.controller}}/>
               </Tb.Group>
-              <Tb.Spacer/>
+              <Tb.Spacer />
               <Tb.Group>
                 <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
                 <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
@@ -58,35 +58,55 @@
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
-                <ArticleStructurePlugin::ArticleStructureCard 
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertDescription}}
+                  {{on "click" this.insertDescription}}>
+                  description
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertTitle}}
+                  {{on "click" this.insertTitle}}>title
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertMotivation}}
+                  {{on "click" this.insertMotivation}}>motivation
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertContainer}}
+                  {{on "click" this.insertArticleContainer}}>articles
+                </AuButton>
+                <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
                 />
-                <CitationPlugin::CitationInsert 
-                  @controller={{this.controller}} 
+                <CitationPlugin::CitationInsert
+                  @controller={{this.controller}}
+
                   @config={{this.config.citation}}
                 />
-                <RdfaDatePlugin::Insert 
+                <RdfaDatePlugin::Insert
                   @controller={{this.controller}}
                   @options={{this.config.date}}
                 />
                 <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}  @options={{this.config.roadsignRegulation}}/>
                 <StandardTemplatePlugin::Card @controller={{this.controller}}/>
               </Sidebar.Collapsible>
-              <ArticleStructurePlugin::StructureCard 
-                @controller={{this.controller}} 
+              <ArticleStructurePlugin::StructureCard
+                @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <BesluitPlugin::BesluitPluginCard @controller={{this.controller}}/>
-              <CitationPlugin::CitationCard 
-                @controller={{this.controller}} 
+              <DecisionPlugin::DecisionPluginCard @controller={{this.controller}}/>
+              <CitationPlugin::CitationCard
+                @controller={{this.controller}}
                 @plugin={{this.citationPlugin}}
               />
               <ImportSnippetPlugin::Card @controller={{this.controller}}/>
-              <RdfaDatePlugin::Card 
+              <RdfaDatePlugin::Card
                 @controller={{this.controller}}
                 @options={{this.config.date}}/>
               <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
+              <ValidationPlugin::ValidationCard @title={{t "dummy.validation-card.title"}}
+                                                @controller={{this.controller}} @report={{this.report}}/>
             </Sidebar>
           {{/if}}
         </:aside>
