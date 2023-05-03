@@ -13,7 +13,9 @@ import { v4 as uuidv4 } from 'uuid';
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'], 
                           span[property~='${EXT('content').full}']`;
 
-const emberNodeConfig: EmberNodeConfig = {
+// Need to update EmberNodeConfig to include the needsFFKludge property there
+// Or allow to augment it somehow else?
+const emberNodeConfig: EmberNodeConfig & { needsFFKludge: boolean } = {
   name: 'variable',
   componentPath: 'variable-plugin/variable',
   inline: true,
@@ -23,6 +25,7 @@ const emberNodeConfig: EmberNodeConfig = {
   recreateUri: true,
   uriAttributes: ['variableInstance'],
   draggable: false,
+  needsFFKludge: true,
   attrs: {
     mappingResource: {},
     codelistResource: {
