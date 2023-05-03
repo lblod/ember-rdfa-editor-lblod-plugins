@@ -26,14 +26,6 @@
   <div class='au-u-1-12 au-u-bold au-u-text-right'></div>
   <div class='au-u-11-12'>
     <div class='au-u-flex--row au-u-flex--no-wrap'>
-      {{#if this.hasChild}}
-        <div>
-          {{! todo: This button would fit better between the paragraphs and other content, but would mean a custom parsing of contentDOM}}
-          <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addChild}}>
-            {{this.childConfig.name}} invoegen
-          </AuButton>
-        </div>
-      {{/if}}
       {{#if (not-eq this.config.type 'article')}}
         <div>
           <AuButton
@@ -55,6 +47,13 @@
         </AuButton>
       </div>
       {{yield to='contentDOM'}}
+      {{#if (and this.hasChild (not this.hasChildNode))}}
+        <div>
+          <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addChild}}>
+            {{this.childConfig.name}} invoegen
+          </AuButton>
+        </div>
+      {{/if}}
     </div>
   </div>
   <div class=''>

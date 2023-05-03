@@ -55,6 +55,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     return !!this.childConfig;
   }
 
+  get hasChildNode() {
+    return this.node.lastChild?.type.name === this.childConfig?.structure_name;
+  }
+
   @action
   setText(event: InputEvent) {
     assert(
