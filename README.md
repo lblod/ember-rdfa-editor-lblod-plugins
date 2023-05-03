@@ -70,7 +70,14 @@ Plugin which allows a user to change the type of a [besluit](https://data.vlaand
 
 This plugin needs to be added to the toolbar as a dropdown with the following syntax:
 ```hbs
-  <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}}/>
+  <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
+```
+
+You can need to specify the endpoint from which the plugin will fetch the types
+```js
+{
+  endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
+}
 ```
 
 ## citaten-plugin
@@ -304,7 +311,14 @@ This plugin provides a card that needs to be added to the editor sidebar like:
   <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
 ```
 
-The default endpoint the plugin will query is https://roadsigns.lblod.info/sparql . This can be overwritten by setting `roadsignRegulationPlugin.endpoint` in your `config/environment.js`.
+You will need to set the following configuration
+```js
+{
+  endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+  imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
+}
+```
+The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed
 
 ## standard-template-plugin
 Plugin which allows users to insert standard templates in the editor. Depending on the position of the cursor or selected text, a dropdown will appear in the toolbar of the editor that lets you insert a template for the proper context at the location of the cursor.
@@ -362,7 +376,7 @@ Editor plugin which allows you to interact with placeholders created by the inse
 
 For enabling it, you need to add the card provided by the plugin to the editor sidebar
 ```hbs
-  <VariablePlugin::TemplateVariableCard @controller={{this.controller}}/>
+  <VariablePlugin::TemplateVariableCard @controller={{this.controller}} @options={{this.config.templateVariable}}/>
 ```
 
 You will also need to add the variable node to the list of nodes of your prosemirror schema and the variable view to the list of nodeviews like `variable: variableView(controller)` imported from:
@@ -378,17 +392,18 @@ import {
 ### Configuring the plugin
 
 
-You can configure the plugin in your `environment.js` file:
+You can configure the card with the following attributes:
 
 ```js
-templateVariablePlugin: {
+{
   endpoint: 'https://dev.roadsigns.lblod.info/sparql', // the fallback endpoint which should be used for codelists which do not have a `dct:source` property.
   zonalLocationCodelistUri:
     'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF',
   nonZonalLocationCodelistUri:
     'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2',
-},
+}
 ```
+The most important attributes are `zonalLocationCodelistUri` and `nonZonalLocationCodelistUri` that are the uri that the location codelists have on your backend.
 
 ## Contributing
 
