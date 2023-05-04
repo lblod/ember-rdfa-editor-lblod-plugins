@@ -4,8 +4,10 @@ $au-fractions: 1 2 3 4 5 6 8 12;
 $prefix-width: 50px;
 $add-button-width: 50px;
 
-.say-editor__inner {
+// overwrite the white-paper style of editor to instead blend in with background
+.say-container--paper .say-editor__paper {
   background-color: var(--au-gray-100);
+  box-shadow: none;
 }
 
 .chapter {
