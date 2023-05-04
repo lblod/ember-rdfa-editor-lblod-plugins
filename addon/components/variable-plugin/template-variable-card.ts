@@ -25,17 +25,6 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   @tracked showCard = false;
   @tracked multiSelect = false;
   mappingUri?: string;
-  zonalLocationCodelistUri: string;
-  endpoint: string;
-  nonZonalLocationCodelistUri: string;
-
-  constructor(parent: unknown, args: Args) {
-    super(parent, args);
-    const pluginConfig = args.options;
-    this.zonalLocationCodelistUri = pluginConfig.zonalLocationCodelistUri;
-    this.endpoint = pluginConfig.endpoint;
-    this.nonZonalLocationCodelistUri = pluginConfig.nonZonalLocationCodelistUri;
-  }
 
   get controller() {
     return this.args.controller;
@@ -99,13 +88,15 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         const type = variable.node.attrs.type as string;
         if (type === 'codelist') {
           const source =
-            (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+            (variable.node.attrs.source as string | undefined) ??
+            this.args.options.endpoint;
           const codelistURI = variable.node.attrs.codelistResource as string;
           void this.fetchCodeListOptions.perform(source, codelistURI);
           this.showCard = true;
         } else if (type === 'location') {
           const source =
-            (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+            (variable.node.attrs.source as string | undefined) ??
+            this.args.options.endpoint;
           const roadSignRegulation = findParentNodeOfType(
             this.controller.schema.nodes.roadsign_regulation
           )(selection);
@@ -115,13 +106,13 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
           if (zonalityUri === ZONAL_URI) {
             void this.fetchCodeListOptions.perform(
               source,
-              this.zonalLocationCodelistUri,
+              this.args.options.zonalLocationCodelistUri,
               true
             );
           } else {
             void this.fetchCodeListOptions.perform(
               source,
-              this.nonZonalLocationCodelistUri,
+              this.args.options.nonZonalLocationCodelistUri,
               true
             );
           }
