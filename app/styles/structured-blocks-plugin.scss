@@ -1,23 +1,56 @@
 $au-fractions: 1 2 3 4 5 6 8 12;
 @import 'ember-appuniversum';
 
+$prefix-width: 50px;
+$add-button-width: 50px;
+
+.say-editor__inner {
+  background-color: var(--au-gray-100);
+}
+
+.chapter {
+  //margin: 0 0 0 (-$prefix-width);
+  //padding: 0 0 0 ($prefix-width);
+  background-color: var(--au-white);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+// give the prefixes a set width they do not wrap and are consistent in children
+  .prefix-text {
+    min-width: $prefix-width;
+  }
+
+.remove-button {
+  min-width: 50px;
+}
+
+.add-button {
+  min-width: $add-button-width;
+}
+
 .full-length {
   width: 100%;
 }
 
-.show-on-hover {
-  display: none;
-}
+// take any available flex space left
+  .fill-flex {
+    flex: 1;
+  }
 
-.hover-outer {
-  padding: 5px;
-}
+// Show `show-on-hover` when hovered over `hover-outer`
+  .show-on-hover {
+    visibility: hidden;
+  }
 
-.hover-outer:hover {
-  background-color: var(--au-gray-200);
-}
+  .hover-outer {
+    padding: 5px;
+  }
 
-.hover-outer:hover .show-on-hover{ 
-	display:block;
-}
+  .hover-outer:hover {
+    background-color: var(--au-gray-200);
+  }
+
+  .hover-outer:hover .show-on-hover{ 
+    visibility: visible;
+  }
 

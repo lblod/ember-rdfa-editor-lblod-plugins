@@ -1,19 +1,20 @@
-<div class='au-u-flex au-u-flex--wrap hover-outer '>
+<div class='au-u-flex au-u-flex--no-wrap hover-outer'>
+  <div class='add-button show-on-hover'>
+    <AuButton @icon='plus' @skin='naked' class='--au-gray-500' {{on 'click' this.addSameBelow}}/>
+  </div>
   <div
-    class='au-u-padding-right-small au-u-padding-top-small au-u-1-12 au-u-bold au-u-text-right'
+    class='au-u-padding-right-small au-u-padding-top-small au-u-bold au-u-text-right prefix-text'
   >
     {{yield to='prefix'}}
   </div>
-  <div class='au-u-10-12'>
-    <div class=''>
-      <AuInput
-        @value={{this.localText}}
-        class='full-length'
-        {{on 'input' this.setText}}
-      />
-    </div>
+  <div class='au-u-flex fill-flex'>
+    <AuInput
+      @value={{this.localText}}
+      class='full-length'
+      {{on 'input' this.setText}}
+    />
   </div>
-  <div class='au-u-1-12 show-on-hover'>
+  <div class='remove-button show-on-hover'>
     <AuButton
       @icon='bin'
       @skin='secondary'
@@ -21,44 +22,40 @@
       {{on 'click' this.removeThis}}
     />
   </div>
-  </div>
-<div class='au-u-flex au-u-flex--wrap'>
-  <div class='au-u-1-12 au-u-bold au-u-text-right'></div>
-  <div class='au-u-11-12'>
-    <div class='au-u-flex--row au-u-flex--no-wrap'>
-      {{#if (not-eq this.config.type 'article')}}
-        <div>
-          <AuButton
-            @icon='plus-text'
-            @skin='secondary'
-            {{on 'click' this.addArticle}}
-          >
-            Artikel invoegen
-          </AuButton>
-        </div>
-      {{/if}}
+</div>
+<div class='au-u-flex au-u-flex--no-wrap'>
+  <div class='prefix-text'></div>
+  <div class='fill-flex'>
+    {{#if (not-eq this.config.type 'article')}}
       <div>
         <AuButton
           @icon='plus-text'
           @skin='secondary'
-          {{on 'click' this.addParagraph}}
+          {{on 'click' this.addArticle}}
         >
-          Paragraaf invoegen
+          Artikel invoegen
         </AuButton>
       </div>
-      {{yield to='contentDOM'}}
-      {{#if (and this.hasChild (not this.hasChildNode))}}
-        <div>
-          <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addChild}}>
-            {{this.childConfig.name}} invoegen
-          </AuButton>
-        </div>
-      {{/if}}
+    {{/if}}
+    <div>
+      <AuButton
+        @icon='plus-text'
+        @skin='secondary'
+        {{on 'click' this.addParagraph}}
+      >
+        Paragraaf invoegen
+      </AuButton>
     </div>
-  </div>
-  <div class=''>
-    <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addSameBelow}}>
-      {{this.config.name}} toevoegen
-    </AuButton>
+    {{yield to='contentDOM'}}
+    {{#if (and this.hasChild (not this.hasChildNode))}}
+      <div>
+        <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addChild}}>
+          {{this.childConfig.name}} invoegen
+        </AuButton>
+      </div>
+    {{/if}}
   </div>
 </div>
+<AuButton @icon='plus' @skin='secondary' {{on 'click' this.addSameBelow}}>
+  {{this.config.name}} toevoegen
+</AuButton>
