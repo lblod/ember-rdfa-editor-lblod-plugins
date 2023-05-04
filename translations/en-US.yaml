@@ -170,6 +170,8 @@ variable-plugin:
   insert-variable: Insert variable
   button: Insert
   enter-variable-value: Select value
+validation-plugin:
+  default-fix-message: Resolve
 
 table-of-contents-plugin:
   title: Table of Contents
@@ -184,3 +186,7 @@ address-plugin:
   search:
     cta: 'Type to search'
     no-match: 'No results'
+
+dummy:
+  validation-card:
+    title: Document Validation

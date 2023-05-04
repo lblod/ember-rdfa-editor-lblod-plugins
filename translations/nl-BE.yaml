@@ -171,6 +171,8 @@ date-plugin:
     fractions: "Fracties van seconden, zoals S en T, zijn niet ondersteund."
     unknown: "Ongeldig formaat"
 
+validation-plugin:
+  default-fix-message: Oplossen
 
 table-of-contents-plugin:
   title: Inhoudstafel
@@ -191,3 +193,6 @@ address-plugin:
   search:
     cta: Zoekterm
     no-match: Geen resultaten
+dummy:
+  validation-card:
+    title: Documentvalidatie

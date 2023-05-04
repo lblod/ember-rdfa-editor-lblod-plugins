@@ -8,12 +8,12 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa='true'
-          showRdfaHighlight='true'
-          showRdfaHover='true'
-          showPaper='true'
-          showToolbarBottom=null
-        }}
+        showRdfa='true'
+        showRdfaHighlight='true'
+        showRdfaHover='true'
+        showPaper='true'
+        showToolbarBottom=null
+      }}
         @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
@@ -69,6 +69,23 @@
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertDescription}}
+                  {{on "click" this.insertDescription}}>
+                  description
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertTitle}}
+                  {{on "click" this.insertTitle}}>title
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertMotivation}}
+                  {{on "click" this.insertMotivation}}>motivation
+                </AuButton>
+                <AuButton @skin="link"
+                          @disabled={{not this.canInsertContainer}}
+                  {{on "click" this.insertArticleContainer}}>articles
+                </AuButton>
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
@@ -91,7 +108,7 @@
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <BesluitPlugin::BesluitPluginCard
+              <DecisionPlugin::DecisionPluginCard
                 @controller={{this.controller}}
               />
               <CitationPlugin::CitationCard
@@ -106,6 +123,8 @@
               <VariablePlugin::TemplateVariableCard
                 @controller={{this.controller}}
               />
+              <ValidationPlugin::ValidationCard @title={{t "dummy.validation-card.title"}}
+                                                @controller={{this.controller}} @report={{this.report}}/>
             </Sidebar>
           {{/if}}
         </:aside>
