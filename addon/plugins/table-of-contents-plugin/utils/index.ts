@@ -1,3 +1,6 @@
+import { PNode } from '@lblod/ember-rdfa-editor';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
+
 type OutlineEntry = {
   content: string;
   pos: number;
@@ -40,4 +43,61 @@ export function createTableOfContents(entries: OutlineEntry[]) {
     tableOfContents.push(li);
   }
   return tableOfContents;
+}
+
+type Config = { nodeHierarchy: string[] }[];
+
+export function extractOutline({
+  node,
+  pos,
+  config,
+}: {
+  node: PNode;
+  pos: number;
+  config: Config;
+}): OutlineEntry[] {
+  let result: OutlineEntry[] = [];
+  let parent: OutlineEntry | undefined;
+  for (const option of config) {
+    const { nodeHierarchy } = option;
+    if (RegExp(`^${nodeHierarchy[0]}$`).exec(node.type.name)) {
+      let i = 1;
+      let currentNode: NodeWithPos | undefined = { node, pos };
+      while (currentNode && i < nodeHierarchy.length) {
+        let newCurrentNode: NodeWithPos | undefined;
+        currentNode.node.forEach((child, offset) => {
+          if (RegExp(`^${nodeHierarchy[i]}$`).exec(child.type.name)) {
+            newCurrentNode = { pos: pos + offset, node: child };
+            return;
+          }
+        });
+        currentNode = newCurrentNode;
+        i++;
+      }
+      if (currentNode) {
+        const outlineText = currentNode.node.type.spec.outlineText as
+          | ((node: PNode) => string)
+          | undefined;
+        const content =
+          outlineText?.(currentNode.node) ?? currentNode.node.textContent;
+        parent = {
+          pos: currentNode.pos,
+          content,
+        };
+      }
+    }
+  }
+  const subResults: OutlineEntry[] = [];
+  node.forEach((child, offset) => {
+    subResults.push(
+      ...extractOutline({ node: child, pos: pos + 1 + offset, config })
+    );
+  });
+  if (parent) {
+    parent.children = subResults;
+    result = [parent];
+  } else {
+    result = subResults;
+  }
+  return result;
 }

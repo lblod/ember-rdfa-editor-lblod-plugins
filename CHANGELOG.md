@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- make static TOC look the same in dynamic content
+
 ## [5.0.1] - 2023-04-07
 ### Fixed
 - fix deprecated use of modifier without specifying eagerness
