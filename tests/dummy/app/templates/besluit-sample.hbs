@@ -49,6 +49,7 @@
                 />
                 <BesluitTypePlugin::ToolbarDropdown
                   @controller={{this.controller}}
+                  @options={{this.config.besluitType}}
                 />
                 <Plugins::RdfaBlockRender::RdfaBlocksToggle
                   @controller={{this.controller}}
@@ -101,6 +102,7 @@
                 <AddressPlugin::Insert @controller={{this.controller}} />
                 <RoadsignRegulationPlugin::RoadsignRegulationCard
                   @controller={{this.controller}}
+                  @options={{this.config.roadsignRegulation}}
                 />
                 <StandardTemplatePlugin::Card @controller={{this.controller}} />
               </Sidebar.Collapsible>

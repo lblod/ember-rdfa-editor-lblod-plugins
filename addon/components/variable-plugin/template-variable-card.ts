@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { getOwner } from '@ember/application';
 import { task } from 'ember-concurrency';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
@@ -13,9 +12,11 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection, PNode, ProseParser } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { TemplateVariablePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin';
 
 type Args = {
   controller: SayController;
+  options: TemplateVariablePluginOptions;
 };
 export default class EditorPluginsTemplateVariableCardComponent extends Component<Args> {
   @tracked variableOptions: CodeListOption[] = [];
@@ -24,26 +25,6 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   @tracked showCard = false;
   @tracked multiSelect = false;
   mappingUri?: string;
-  zonalLocationCodelistUri: string;
-  endpoint: string;
-  nonZonalLocationCodelistUri: string;
-
-  constructor(parent: unknown, args: Args) {
-    super(parent, args);
-    const config = getOwner(this)?.resolveRegistration(
-      'config:environment'
-    ) as {
-      templateVariablePlugin: {
-        zonalLocationCodelistUri: string;
-        endpoint: string;
-        nonZonalLocationCodelistUri: string;
-      };
-    };
-    const pluginConfig = config.templateVariablePlugin;
-    this.zonalLocationCodelistUri = pluginConfig.zonalLocationCodelistUri;
-    this.endpoint = pluginConfig.endpoint;
-    this.nonZonalLocationCodelistUri = pluginConfig.nonZonalLocationCodelistUri;
-  }
 
   get controller() {
     return this.args.controller;
@@ -107,13 +88,15 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
         const type = variable.node.attrs.type as string;
         if (type === 'codelist') {
           const source =
-            (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+            (variable.node.attrs.source as string | undefined) ??
+            this.args.options.endpoint;
           const codelistURI = variable.node.attrs.codelistResource as string;
           void this.fetchCodeListOptions.perform(source, codelistURI);
           this.showCard = true;
         } else if (type === 'location') {
           const source =
-            (variable.node.attrs.source as string | undefined) ?? this.endpoint;
+            (variable.node.attrs.source as string | undefined) ??
+            this.args.options.endpoint;
           const roadSignRegulation = findParentNodeOfType(
             this.controller.schema.nodes.roadsign_regulation
           )(selection);
@@ -123,13 +106,13 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
           if (zonalityUri === ZONAL_URI) {
             void this.fetchCodeListOptions.perform(
               source,
-              this.zonalLocationCodelistUri,
+              this.args.options.zonalLocationCodelistUri,
               true
             );
           } else {
             void this.fetchCodeListOptions.perform(
               source,
-              this.nonZonalLocationCodelistUri,
+              this.args.options.nonZonalLocationCodelistUri,
               true
             );
           }

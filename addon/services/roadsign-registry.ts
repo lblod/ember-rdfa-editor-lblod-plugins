@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { getOwner } from '@ember/application';
 import { generateMeasuresQuery } from '../plugins/roadsign-regulation-plugin/utils/fetchData';
 import Instruction from '../models/instruction';
 import Measure from '../models/measure';
@@ -26,32 +25,24 @@ const DEBOUNCE_MS = 100;
 export default class RoadsignRegistryService extends Service {
   @tracked classifications: { value: string; label: string }[] = [];
   instructions: Map<string, Instruction[]> = new Map();
-  endpoint: string;
-  imageBaseUrl: string;
 
   constructor() {
     // eslint-disable-next-line prefer-rest-params
     super(...arguments);
-    const config = getOwner(this).resolveRegistration('config:environment') as {
-      roadsignRegulationPlugin: {
-        imageBaseUrl: string;
-        endpoint: string;
-      };
-    };
-    this.imageBaseUrl = config.roadsignRegulationPlugin.imageBaseUrl;
-    this.endpoint = config.roadsignRegulationPlugin.endpoint;
-    void this.loadClassifications.perform();
   }
 
-  loadClassifications = task(async () => {
-    const result = await this.executeQuery.perform(`
+  loadClassifications = task(async (endpoint: string) => {
+    const result = await this.executeQuery.perform(
+      `
     SELECT DISTINCT ?classificationUri ?classificationLabel  WHERE {
       ?measure ext:relation/ext:concept ?signUri.
       ?signUri org:classification ?classificationUri.
       ?classificationUri a mobiliteit:Verkeersbordcategorie;
         skos:prefLabel ?classificationLabel.
     }
-`);
+`,
+      endpoint
+    );
     const bindings = result.results.bindings;
     this.classifications = bindings.map((binding) => ({
       value: unwrap(binding['classificationUri']?.value),
@@ -60,12 +51,13 @@ export default class RoadsignRegistryService extends Service {
   });
 
   getInstructionsForMeasure = task(
-    async (uri: string): Promise<Instruction[]> => {
+    async (uri: string, endpoint: string): Promise<Instruction[]> => {
       if (this.instructions.has(uri)) {
         return unwrap(this.instructions.get(uri));
       } else {
         const instructions = await this.fetchInstructionsForMeasure.perform(
-          uri
+          uri,
+          endpoint
         );
         this.instructions.set(uri, instructions);
         return instructions;
@@ -76,6 +68,7 @@ export default class RoadsignRegistryService extends Service {
   searchCode = task(
     { restartable: true },
     async (
+      endpoint: string,
       codeString?: string,
       category?: string,
       type?: string,
@@ -125,7 +118,7 @@ export default class RoadsignRegistryService extends Service {
       }
       ORDER BY ASC(?signCode)
     `;
-      const result = await this.executeQuery.perform(query);
+      const result = await this.executeQuery.perform(query, endpoint);
       const codes = result.results.bindings.map((binding) => ({
         value: unwrap(binding['signUri']?.value),
         label: unwrap(binding['signCode']?.value),
@@ -136,14 +129,15 @@ export default class RoadsignRegistryService extends Service {
 
   executeQuery = task(
     async (
-      query: string
+      query: string,
+      endpoint: string
     ): Promise<{
       results: {
         bindings: IBindings[];
       };
     }> => {
       const encodedQuery = encodeURIComponent(`${PREFIXES}\n${query.trim()}`);
-      const response = await fetch(this.endpoint, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -167,7 +161,7 @@ export default class RoadsignRegistryService extends Service {
   );
 
   fetchInstructionsForMeasure = task(
-    async (uri: string): Promise<Instruction[]> => {
+    async (uri: string, endpoint: string): Promise<Instruction[]> => {
       const query = `SELECT ?name ?template ?annotatedTemplate
            WHERE {
             <${uri}> ext:template/ext:mapping ?mapping.
@@ -178,7 +172,7 @@ export default class RoadsignRegistryService extends Service {
             ext:value ?template.
           }
           `;
-      const result = await this.executeQuery.perform(query);
+      const result = await this.executeQuery.perform(query, endpoint);
       const instructions = result.results.bindings.map((binding) =>
         Instruction.fromBinding(binding)
       );
@@ -188,19 +182,23 @@ export default class RoadsignRegistryService extends Service {
 
   fetchMeasures = task(
     { restartable: true },
-    async ({
-      zonality,
-      type,
-      codes,
-      category,
-      pageStart,
-    }: {
-      zonality?: string;
-      type?: string;
-      codes?: string[];
-      category?: string;
-      pageStart?: number;
-    } = {}) => {
+    async (
+      endpoint: string,
+      imageBaseUrl: string,
+      {
+        zonality,
+        type,
+        codes,
+        category,
+        pageStart,
+      }: {
+        zonality?: string;
+        type?: string;
+        codes?: string[];
+        category?: string;
+        pageStart?: number;
+      } = {}
+    ) => {
       const selectQuery = generateMeasuresQuery({
         zonality,
         type,
@@ -215,7 +213,7 @@ export default class RoadsignRegistryService extends Service {
         category,
         count: true,
       });
-      const countResult = await this.executeQuery.perform(countQuery);
+      const countResult = await this.executeQuery.perform(countQuery, endpoint);
 
       const count = optionMapOr(
         0,
@@ -223,10 +221,14 @@ export default class RoadsignRegistryService extends Service {
         countResult.results.bindings[0]?.['count']?.value
       );
       const measures = [];
-      const result = await this.executeQuery.perform(selectQuery);
+      const result = await this.executeQuery.perform(selectQuery, endpoint);
       for (const binding of result.results.bindings) {
         const measure = Measure.fromBinding(binding);
-        measure.signs = await this.fetchSignsForMeasure.perform(measure.uri);
+        measure.signs = await this.fetchSignsForMeasure.perform(
+          measure.uri,
+          endpoint,
+          imageBaseUrl
+        );
         measure.classifications = makeClassificationSet(measure.signs);
         measures.push(measure);
       }
@@ -234,8 +236,9 @@ export default class RoadsignRegistryService extends Service {
     }
   );
 
-  fetchSignsForMeasure = task(async (uri: string) => {
-    const query = `
+  fetchSignsForMeasure = task(
+    async (uri: string, endpoint: string, imageBaseUrl: string) => {
+      const query = `
 SELECT ?uri ?code ?image ?zonality ?order (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
 WHERE {
   <${uri}> ext:relation ?relation.
@@ -251,17 +254,18 @@ WHERE {
   }
   } ORDER BY ASC(?order)
 `;
-    const result = await this.executeQuery.perform(query);
-    const signs = [];
-    for (const binding of result.results.bindings) {
-      const sign = Sign.fromBinding({
-        ...binding,
-        imageBaseUrl: dataFactory.namedNode(this.imageBaseUrl),
-      });
-      signs.push(sign);
+      const result = await this.executeQuery.perform(query, endpoint);
+      const signs = [];
+      for (const binding of result.results.bindings) {
+        const sign = Sign.fromBinding({
+          ...binding,
+          imageBaseUrl: dataFactory.namedNode(imageBaseUrl),
+        });
+        signs.push(sign);
+      }
+      return signs;
     }
-    return signs;
-  });
+  );
 }
 
 function makeClassificationSet(signs: Iterable<Sign>) {
