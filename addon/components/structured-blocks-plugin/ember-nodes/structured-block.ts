@@ -12,6 +12,7 @@ declare type blockArgs = {
 
 declare type blockAttrs = {
   text: string;
+  showRemoveBorder: boolean;
   config: baseStructureConfigWithChild;
 };
 
@@ -36,7 +37,12 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   }
 
   get text(): string {
+    console.log('text: ', this.parentAttrs?.text);
     return this.parentAttrs?.text || '';
+  }
+
+  get showRemoveBorder() {
+    return this.parentAttrs?.showRemoveBorder;
   }
 
   get controller() {
@@ -66,6 +72,13 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       event.target instanceof HTMLInputElement
     );
     this.parentArgs.updateAttribute('text', event.target.value);
+  }
+
+  @action
+  hoverRemoveButton(isHovered: boolean, _: MouseEvent) {
+    if (this.showRemoveBorder !== isHovered) {
+      this.parentArgs.updateAttribute('showRemoveBorder', isHovered);
+    }
   }
 
   addBlockCommand(): Command {

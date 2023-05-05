@@ -1,0 +1,10 @@
+<div class='au-u-flex au-u-flex--no-wrap'>
+  <div class='add-button'>
+  </div>
+  {{#unless @indentLeft}}
+    <div class='prefix-text'></div>
+  {{/unless}}
+  <div class='fill-flex'>
+    {{yield}}
+  </div>
+</div>

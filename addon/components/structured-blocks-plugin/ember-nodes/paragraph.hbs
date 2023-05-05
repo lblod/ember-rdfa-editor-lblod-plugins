@@ -11,8 +11,10 @@
   <div class='au-u-11-12'>
     {{yield}}
   </div>
+
+  <StructuredBlocksPlugin::EmberNodes::RemoveStructureButton @onClick={{this.removeParagraph}}/>
 </div>
-<div>
+<StructuredBlocksPlugin::EmberNodes::SubRow @indentLeft={{true}}>
   <AuButton
     @icon='plus-text'
     @skin='secondary'
@@ -20,4 +22,4 @@
   >
     Paragraaf toevoegen
   </AuButton>
-</div>
+</StructuredBlocksPlugin::EmberNodes::SubRow>

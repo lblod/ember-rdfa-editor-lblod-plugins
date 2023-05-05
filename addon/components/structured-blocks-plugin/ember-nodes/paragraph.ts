@@ -40,4 +40,30 @@ export default class StructuredBlocksPluginEmberNodesParagraphComponent extends 
       return true;
     };
   }
+
+  removeParagraphCommand(): Command {
+    const startPos = this.args.getPos();
+    return (state, dispatch) => {
+      if (startPos === undefined) {
+        return false;
+      }
+      const endPos = startPos + this.args.node.nodeSize;
+      console.log(startPos, endPos);
+
+      // 'check can remove
+      // if (!this.node.canAppend(copiedNode)) {
+      //   console.log('is false');
+      //   return false;
+      // }
+      if (dispatch) {
+        dispatch(state.tr.delete(startPos, endPos));
+      }
+      return true;
+    };
+  }
+
+  @action
+  removeParagraph() {
+    this.controller.doCommand(this.removeParagraphCommand());
+  }
 }

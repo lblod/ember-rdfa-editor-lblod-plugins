@@ -22,9 +22,6 @@ $add-button-width: 50px;
     min-width: $prefix-width;
   }
 
-.remove-button {
-  min-width: 50px;
-}
 
 .add-button {
   min-width: $add-button-width;
@@ -56,3 +53,12 @@ $add-button-width: 50px;
     visibility: visible;
   }
 
+// Show a border around remove-border when hover over remove-button
+// implemented functionality in JS (not possible in CSS, as long as `has()` is not supported)
+  .remove-button {
+    min-width: 50px;
+  }
+
+  .remove-border {
+    box-shadow: var(--au-red-600) 0px 3px 8px;
+  }

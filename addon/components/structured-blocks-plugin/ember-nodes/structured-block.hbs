@@ -1,32 +1,32 @@
-<div class='au-u-flex au-u-flex--no-wrap hover-outer'>
-  <div class='add-button show-on-hover'>
-    <AuButton @icon='plus' @skin='naked' class='--au-gray-500' {{on 'click' this.addSameBelow}}/>
-  </div>
-  <div
-    class='au-u-padding-right-small au-u-padding-top-small au-u-bold au-u-text-right prefix-text'
-  >
-    {{yield to='prefix'}}
-  </div>
-  <div class='au-u-flex fill-flex'>
-    <AuInput
-      @value={{this.localText}}
-      class='full-length'
-      {{on 'input' this.setText}}
+<div class={{if this.showRemoveBorder 'remove-border' ''}}>
+  <div class='au-u-flex au-u-flex--no-wrap hover-outer'>
+    <div class='add-button show-on-hover'>
+      <AuButton
+        @icon='plus'
+        @skin='naked'
+        class='--au-gray-500'
+        {{on 'click' this.addSameBelow}}
+      />
+    </div>
+    <div
+      class='au-u-padding-right-small au-u-padding-top-small au-u-bold au-u-text-right prefix-text'
+    >
+      {{yield to='prefix'}}
+    </div>
+    <div class='au-u-flex fill-flex'>
+      <AuInput
+        @value={{this.localText}}
+        class='full-length'
+        {{on 'input' this.setText}}
+      />
+    </div>
+    <StructuredBlocksPlugin::EmberNodes::RemoveStructureButton
+      @onClick={{this.removeThis}}
+      @onHover={{this.hoverRemoveButton}}
     />
   </div>
-  <div class='remove-button show-on-hover'>
-    <AuButton
-      @icon='bin'
-      @skin='secondary'
-      @alert='true'
-      {{on 'click' this.removeThis}}
-    />
-  </div>
-</div>
-<div class='au-u-flex au-u-flex--no-wrap'>
-  <div class='prefix-text'></div>
-  <div class='fill-flex'>
-    {{#if (not-eq this.config.type 'article')}}
+  {{#if (not-eq this.config.type 'article')}}
+    <StructuredBlocksPlugin::EmberNodes::SubRow>
       <div>
         <AuButton
           @icon='plus-text'
@@ -36,26 +36,39 @@
           Artikel invoegen
         </AuButton>
       </div>
-    {{/if}}
-    <div>
-      <AuButton
-        @icon='plus-text'
-        @skin='secondary'
-        {{on 'click' this.addParagraph}}
-      >
-        Paragraaf invoegen
-      </AuButton>
-    </div>
+    </StructuredBlocksPlugin::EmberNodes::SubRow>
+  {{/if}}
+  <StructuredBlocksPlugin::EmberNodes::SubRow>
+    <AuButton
+      @icon='plus-text'
+      @skin='secondary'
+      {{on 'click' this.addParagraph}}
+    >
+      Paragraaf invoegen
+    </AuButton>
+  </StructuredBlocksPlugin::EmberNodes::SubRow>
+  <StructuredBlocksPlugin::EmberNodes::SubRow @indentLeft={{true}}>
     {{yield to='contentDOM'}}
-    {{#if (and this.hasChild (not this.hasChildNode))}}
+  </StructuredBlocksPlugin::EmberNodes::SubRow>
+  {{#if (and this.hasChild (not this.hasChildNode))}}
+    <StructuredBlocksPlugin::EmberNodes::SubRow>
       <div>
         <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addChild}}>
           {{this.childConfig.name}} invoegen
         </AuButton>
       </div>
-    {{/if}}
+    </StructuredBlocksPlugin::EmberNodes::SubRow>
+  {{/if}}
+  <div>
+    <StructuredBlocksPlugin::EmberNodes::SubRow @indentLeft={{true}}>
+      <AuButton
+        @icon='plus'
+        @skin='secondary'
+        @class='after-add-button-padding'
+        {{on 'click' this.addSameBelow}}
+      >
+        {{this.config.name}} toevoegen
+      </AuButton>
+    </StructuredBlocksPlugin::EmberNodes::SubRow>
   </div>
 </div>
-<AuButton @icon='plus' @skin='secondary' {{on 'click' this.addSameBelow}}>
-  {{this.config.name}} toevoegen
-</AuButton>

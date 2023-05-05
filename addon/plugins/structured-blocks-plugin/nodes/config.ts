@@ -53,6 +53,7 @@ export function createStructureConfig(type: string) {
     }`,
     attrs: {
       text: { default: '' },
+      showRemoveBorder: { default: false },
       config: { default: c },
     },
   };
