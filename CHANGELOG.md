@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Use plugin configuration instead of ember environment in all the plugins
+- Insert address plugin
 
 ### Added
 - validation plugin

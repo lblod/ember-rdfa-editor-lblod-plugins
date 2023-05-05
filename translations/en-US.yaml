@@ -61,7 +61,6 @@ article-structure-plugin:
     paragraph:
       body: Insert paragraph content
 
-
 citaten-plugin:
   card:
     title: Add reference
@@ -74,11 +73,11 @@ citaten-plugin:
     type: Type of document
     placeholder: Type to search
     date-document: Filter on date document
-    date-document-from: "Filter document on date from:"
-    date-document-to: "Filter document on date until:"
+    date-document-from: 'Filter document on date from:'
+    date-document-to: 'Filter document on date until:'
     date-publication: Filter on date government gazette
-    date-publication-from: "Filter publication on date from:"
-    date-publication-to: "Filter publication on date until:"
+    date-publication-from: 'Filter publication on date from:'
+    date-publication-to: 'Filter publication on date until:'
     from: from
     to: to
     article: Search for article
@@ -99,22 +98,20 @@ citaten-plugin:
     loading: Loading…
     no-results: No results found
     error-title: Error while loading results
-    error-intro: "An error occured while loading results from the Flemish Codex:"
+    error-intro: 'An error occured while loading results from the Flemish Codex:'
     error-outro: In case this problem keeps occuring, please contact
 
-
 besluit-type-plugin:
-  dt: "Decision type"
-  insert-dt: "Select a decision type"
-  search-message: "Typ to search"
-  no-matches-message: "No results"
-  alert-title: "Attention"
-  alert-body: "You must select a subtype in order to save the decision type"
-  error-short: "Error fetching decision types"
-  error-title: "Error"
-  error-first-body: "An error occured while fetching the decision types. Try again later. If this problem persists, please contact"
-  error-rest-body: ". For more specific details about this problem, inspect the browser console."
-
+  dt: 'Decision type'
+  insert-dt: 'Select a decision type'
+  search-message: 'Typ to search'
+  no-matches-message: 'No results'
+  alert-title: 'Attention'
+  alert-body: 'You must select a subtype in order to save the decision type'
+  error-short: 'Error fetching decision types'
+  error-title: 'Error'
+  error-first-body: 'An error occured while fetching the decision types. Try again later. If this problem persists, please contact'
+  error-rest-body: '. For more specific details about this problem, inspect the browser console.'
 
 besluit-plugin:
   missing-title-warning: This decision is missing a title
@@ -123,15 +120,14 @@ besluit-plugin:
   placeholder:
     decision-title: Insert decision title
 
-
 date-plugin:
   help:
-    title: "Custom format help"
+    title: 'Custom format help'
     first-line: "For custom formats, all the text between single quotes is escaped and written into the document as it's written, all the other characters are interpreted and represent different parts of the date:"
-    examples: "Examples:"
-    name: "Name"
-    symbol: "Symbol"
-    result: "Result"
+    examples: 'Examples:'
+    name: 'Name'
+    symbol: 'Symbol'
+    result: 'Result'
     detailed-info: For more detailed symbols visit
     docs-link: the library documentation
     date-examples: With this you can create any date format, here are some examples and their corresponding dates
@@ -146,30 +142,30 @@ date-plugin:
     long-month-content: January, February, ..., December
     long-year: Long year
   insert:
-    date: "Insert date"
-    datetime: "Insert date and time"
+    date: 'Insert date'
+    datetime: 'Insert date and time'
   card:
-    title: "Date"
-    insert-date: "Insert date"
-    insert-datetime: "Insert date and time"
-    include-time: "Include time"
-    info-custom-time: "With a custom format, time controls are shown automatically when the format includes time information"
-    custom-date: "Custom format"
-    label: "Select date"
-    hours: "Hours"
-    minutes: "Minutes"
-    seconds: "Seconds"
-    now: "Now"
+    title: 'Date'
+    insert-date: 'Insert date'
+    insert-datetime: 'Insert date and time'
+    include-time: 'Include time'
+    info-custom-time: 'With a custom format, time controls are shown automatically when the format includes time information'
+    custom-date: 'Custom format'
+    label: 'Select date'
+    hours: 'Hours'
+    minutes: 'Minutes'
+    seconds: 'Seconds'
+    now: 'Now'
   validation:
-    character: "Invalid character"
-    character-suggestion: "To insert literal characters, surround them with single quotes, like so"
-    use-yyyy: "Use yyyy instead of YYYY"
-    use-yy: "Use yy instead of YY"
-    use-d: "Use d instead of D"
-    use-dd: "Use dd instead of D"
-    required: "This field cannot be empty"
-    fractions: "Fractions of a second, such as S or T, are not supported."
-    unknown: "Invalid format"
+    character: 'Invalid character'
+    character-suggestion: 'To insert literal characters, surround them with single quotes, like so'
+    use-yyyy: 'Use yyyy instead of YYYY'
+    use-yy: 'Use yy instead of YY'
+    use-d: 'Use d instead of D'
+    use-dd: 'Use dd instead of D'
+    required: 'This field cannot be empty'
+    fractions: 'Fractions of a second, such as S or T, are not supported.'
+    unknown: 'Invalid format'
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
@@ -177,10 +173,19 @@ variable-plugin:
 validation-plugin:
   default-fix-message: Resolve
 
-
 table-of-contents-plugin:
   title: Table of Contents
   toggle: Show Table of Contents
+
+address-plugin:
+  insert:
+    address: Insert address
+  button:
+    insert: Insert address
+    back: Back
+  search:
+    cta: 'Type to search'
+    no-match: 'No results'
 
 dummy:
   validation-card:
