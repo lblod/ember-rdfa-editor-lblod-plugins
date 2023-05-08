@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/addon/utils/ember-node';
 import { action } from '@ember/object';
-import { assert } from '@ember/debug';
-import { localCopy } from 'tracked-toolbox';
 import { Command } from '@lblod/ember-rdfa-editor';
 import { baseStructureConfigWithChild } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes/config';
 
@@ -17,9 +15,6 @@ declare type blockAttrs = {
 };
 
 export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent extends Component<blockArgs> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  @localCopy('text') declare localText: string | undefined;
-
   get parentArgs() {
     return this.args.emberNodeArgs;
   }
@@ -37,8 +32,11 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   }
 
   get text(): string {
-    console.log('text: ', this.parentAttrs?.text);
     return this.parentAttrs?.text || '';
+  }
+
+  set text(value: string) {
+    this.parentArgs.updateAttribute('text', value);
   }
 
   get showRemoveBorder() {
@@ -63,15 +61,6 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
 
   get hasChildNode() {
     return this.node.lastChild?.type.name === this.childConfig?.structure_name;
-  }
-
-  @action
-  setText(event: InputEvent) {
-    assert(
-      'setText must be bound to an input element',
-      event.target instanceof HTMLInputElement
-    );
-    this.parentArgs.updateAttribute('text', event.target.value);
   }
 
   @action
