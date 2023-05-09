@@ -1,10 +1,11 @@
-<div class={{if this.showRemoveBorder 'remove-border' ''}}>
+<div class={{if this.showRemoveBorder 'remove-border' ''}} >
   <div class='au-u-flex au-u-flex--no-wrap hover-outer'>
-    <div class='add-button show-on-hover'>
+    <div class=''>
       <AuButton
         @icon='plus'
         @skin='naked'
-        class='--au-gray-500'
+        @hideText={{true}}
+        class='add-button show-on-hover au-u-padding-top-small'
         {{on 'click' this.addSameBelow}}
       />
     </div>
@@ -19,10 +20,9 @@
         class='full-length'
       />
     </div>
-    <StructuredBlocksPlugin::EmberNodes::RemoveStructureButton
-      @onClick={{this.removeThis}}
-      @onHover={{this.hoverRemoveButton}}
-    />
+    <div class='remove-button show-on-hover' {{on 'mouseenter' (fn this.hoverRemoveButton true)}} {{on 'mouseleave' (fn this.hoverRemoveButton false)}} >
+      <AuButton @icon='bin' @skin='naked' @alert='true' {{on 'click' this.removeThis}} />
+    </div>
   </div>
   {{#if (not-eq this.config.type 'article')}}
     <StructuredBlocksPlugin::EmberNodes::SubRow>
@@ -30,6 +30,7 @@
         <AuButton
           @icon='plus-text'
           @skin='secondary'
+          class='full-length'
           {{on 'click' this.addArticle}}
         >
           Artikel invoegen
@@ -41,18 +42,20 @@
     <AuButton
       @icon='plus-text'
       @skin='secondary'
+      class='full-length'
       {{on 'click' this.addParagraph}}
     >
       Paragraaf invoegen
     </AuButton>
   </StructuredBlocksPlugin::EmberNodes::SubRow>
-  <StructuredBlocksPlugin::EmberNodes::SubRow @indentLeft={{true}}>
+  <StructuredBlocksPlugin::EmberNodes::SubRow @indentLeft={{true}} @indentRight={{true}}>
+    {{!### CHILDREN ###}}
     {{yield to='contentDOM'}}
   </StructuredBlocksPlugin::EmberNodes::SubRow>
   {{#if (and this.hasChild (not this.hasChildNode))}}
     <StructuredBlocksPlugin::EmberNodes::SubRow>
       <div>
-        <AuButton @icon='plus' @skin='secondary' {{on 'click' this.addChild}}>
+        <AuButton @icon='plus' @skin='secondary' class='full-length' {{on 'click' this.addChild}}>
           {{this.childConfig.name}} invoegen
         </AuButton>
       </div>
@@ -63,7 +66,7 @@
       <AuButton
         @icon='plus'
         @skin='secondary'
-        @class='after-add-button-padding'
+        class='full-length after-add-button-padding'
         {{on 'click' this.addSameBelow}}
       >
         {{this.config.name}} toevoegen

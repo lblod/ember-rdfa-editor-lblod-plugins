@@ -27,6 +27,11 @@ $add-button-width: 50px;
   min-width: $add-button-width;
 }
 
+.add-button .au-c-icon {
+  width: $add-button-width - 15px;
+  height: $add-button-width - 15px;
+}
+
 .full-length {
   width: 100%;
 }
