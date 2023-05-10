@@ -87,7 +87,7 @@ export default class StructuredBlocksSampleController extends Controller {
     return new Schema({
       nodes: {
         doc: {
-          content: '(structure_title)*',
+          content: '(structure_title)+',
         },
         ...STRUCTURE_NODES,
         paragraph,
