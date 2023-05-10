@@ -1,4 +1,4 @@
-import { PNode } from '@lblod/ember-rdfa-editor';
+import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 
 type OutlineEntry = {
@@ -7,14 +7,12 @@ type OutlineEntry = {
   children?: OutlineEntry[];
 };
 
-type LI = (
-  | string
-  | { class: string; type?: string }
-  | (string | { class: string; type?: string } | LI)[]
-)[];
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
 
 export function createTableOfContents(entries: OutlineEntry[]) {
-  const tableOfContents: LI = [
+  const tableOfContents: Mutable<DOMOutputSpec> = [
     'ul',
     {
       class: 'au-u-background-gray-100 au-u-padding-tiny table-of-contents',
@@ -23,7 +21,7 @@ export function createTableOfContents(entries: OutlineEntry[]) {
 
   for (let i = 0; i < entries.length; i++) {
     const item: OutlineEntry = entries[i];
-    const li: LI = [
+    const li: Mutable<DOMOutputSpec> = [
       'li',
       { class: 'au-c-list__item' },
       [
