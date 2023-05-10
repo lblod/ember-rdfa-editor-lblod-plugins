@@ -61,8 +61,8 @@ import {
 import {
   title,
   titleView,
-  paragraph as struc_paragraph,
-  paragraphView,
+  content as struc_content,
+  contentView,
   chapter,
   chapterView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes';

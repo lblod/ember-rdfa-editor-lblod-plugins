@@ -133,31 +133,11 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     };
   }
 
-  addParagraphCommand(): Command {
-    const paragraphNode = this.schema.nodes.structure_paragraph.create();
-    const pos = this.parentArgs.getPos();
-
-    return (state, dispatch) => {
-      if (pos === undefined) {
-        return false;
-      }
-
-      const insertPos = pos + 1;
-
-      console.log(insertPos);
-      // if (!this.node.canAppend(copiedNode)) {
-      //   console.log('is false');
-      //   return false;
-      // }
-      if (dispatch) {
-        dispatch(state.tr.insert(insertPos, paragraphNode));
-      }
-      return true;
-    };
-  }
-
   addArticleCommand(): Command {
-    const articleNode = this.schema.nodes.structure_article.create();
+    const articleNode = this.schema.nodes.structure_article.create(
+      null,
+      this.schema.nodes.structure_content.create()
+    );
     const pos = this.parentArgs.getPos();
 
     return (state, dispatch) => {
@@ -186,11 +166,6 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       }
       return true;
     };
-  }
-
-  @action
-  addParagraph() {
-    this.controller.doCommand(this.addParagraphCommand());
   }
 
   @action

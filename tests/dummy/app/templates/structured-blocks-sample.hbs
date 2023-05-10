@@ -63,24 +63,6 @@
             @rdfaEditorInit={{this.rdfaEditorInit}}
           />
         </:default>
-        <:aside>
-          {{#if this.controller}}
-            <Sidebar as |Sidebar|>
-              <VariablePlugin::InsertVariableCard
-                @controller={{this.controller}}
-                @options={{this.config.variable}}
-              />
-              <RdfaDatePlugin::Card
-                @controller={{this.controller}}
-                @options={{this.config.date}}
-              />
-              <VariablePlugin::TemplateVariableCard
-                @controller={{this.controller}}
-              />
-              <AuButton {{on "click" this.addTitle}}> Add Title </AuButton>
-            </Sidebar>
-          {{/if}}
-        </:aside>
       </EditorContainer>
     </:content>
   </DummyContainer>

@@ -1,7 +1,7 @@
 $au-fractions: 1 2 3 4 5 6 8 12;
 @import 'ember-appuniversum';
 
-$prefix-width: 50px;
+$prefix-width: 100px;
 $add-button-width: 50px;
 
 // overwrite the white-paper style of editor to instead blend in with background
@@ -10,12 +10,16 @@ $add-button-width: 50px;
   box-shadow: none;
 }
 
-.chapter {
-  //margin: 0 0 0 (-$prefix-width);
-  //padding: 0 0 0 ($prefix-width);
+.title-block {
   background-color: var(--au-white);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+// reduce default say-content paddings
+.title-block div + * {
+  margin-top: 0.4rem;
+}
+
 
 // give the prefixes a set width they do not wrap and are consistent in children
   .prefix-text {
@@ -46,10 +50,6 @@ $add-button-width: 50px;
     visibility: hidden;
   }
 
-  .hover-outer {
-    padding: 5px;
-  }
-
   .hover-outer:hover {
     background-color: var(--au-gray-200);
   }
@@ -66,4 +66,15 @@ $add-button-width: 50px;
 
   .remove-border {
     box-shadow: var(--au-red-600) 0px 3px 8px;
+  }
+
+  // content under a title block has some different defaults than AU
+  $soft-border: 1px solid var(--au-gray-400);
+
+  .title-block .au-c-input, .title-block .au-c-button--secondary, .title-block .au-c-textarea {
+    border: $soft-border;
+  } 
+
+  .content-area {
+    min-height: 10rem;
   }

@@ -1,13 +1,10 @@
-<div class='chapter'>
-  <StructuredBlocksPlugin::EmberNodes::StructuredBlock
-    @emberNodeArgs={{this.args}}
-  >
-    <:contentDOM>
-      {{yield}}
-    </:contentDOM>
-    <:prefix>
-      hfdst:
-    </:prefix>
-  </StructuredBlocksPlugin::EmberNodes::StructuredBlock>
-</div>
-<br />
+<StructuredBlocksPlugin::EmberNodes::StructuredBlock
+  @emberNodeArgs={{this.args}}
+>
+  <:contentDOM>
+    {{yield}}
+  </:contentDOM>
+  <:prefix>
+    Hoofdstuk 1.
+  </:prefix>
+</StructuredBlocksPlugin::EmberNodes::StructuredBlock>

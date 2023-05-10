@@ -11,7 +11,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     ...config,
     inline: false,
     atom: false,
-    content: 'structure_paragraph*',
+    content: 'structure_content',
     toDOM: (_node) => ['h6', 0],
     parseDOM: [{ tag: 'h6' }],
   };

@@ -1,10 +1,14 @@
-<StructuredBlocksPlugin::EmberNodes::StructuredBlock
-  @emberNodeArgs={{this.args}}
->
-  <:contentDOM>
-    {{yield}}
-  </:contentDOM>
-  <:prefix>
-    title:
-  </:prefix>
-</StructuredBlocksPlugin::EmberNodes::StructuredBlock>
+<div class='title-block'>
+  <div class='au-u-max-width-medium'>
+  <StructuredBlocksPlugin::EmberNodes::StructuredBlock
+    @emberNodeArgs={{this.args}}
+  >
+    <:contentDOM>
+      {{yield}}
+    </:contentDOM>
+    <:prefix>
+      1. 
+    </:prefix>
+  </StructuredBlocksPlugin::EmberNodes::StructuredBlock>
+  </div>
+</div>
