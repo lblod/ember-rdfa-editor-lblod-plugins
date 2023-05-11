@@ -57,12 +57,21 @@ export function createStructureConfig(type: string) {
     inline: false,
     group: `${c.structure_name} structure`,
     atom: false,
+    stopEvent: (event: Event) => {
+      // let hover events bubble up
+      if (event.type === 'mouseenter' || event.type === 'mouseleave') {
+        return false;
+      }
+      return true;
+    },
     content: `structure_article* ${
       c.child ? c.child.structure_name + '*' : ''
     }`,
     attrs: {
       text: { default: '' },
       showRemoveBorder: { default: false },
+      // should the css class for hovering be added. Hover is still needed to show it.
+      addBlockHover: { default: true },
       config: { default: c },
     },
   };

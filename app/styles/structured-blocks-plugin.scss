@@ -50,7 +50,7 @@ $add-button-width: 50px;
     visibility: hidden;
   }
 
-  .hover-outer:hover {
+  .hover-outer:hover.grey-on-hover, .hover-outer:hover .grey-on-hover {
     background-color: var(--au-gray-200);
   }
 

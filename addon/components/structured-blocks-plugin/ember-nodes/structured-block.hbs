@@ -1,6 +1,5 @@
-<div class={{if this.showRemoveBorder 'remove-border' ''}}>
-  <div class='au-u-flex au-u-flex--no-wrap hover-outer'>
-    <div class=''>
+<div class={{concat (if this.showRemoveBorder 'remove-border ' '') (if this.addBlockHover 'hover-outer grey-on-hover ' '')}}>
+  <div class='au-u-flex au-u-flex--no-wrap'>
       <AuButton
         @icon='plus'
         @skin='naked'
@@ -8,7 +7,6 @@
         class='add-button show-on-hover au-u-padding-top-small'
         {{on 'click' this.addSameBelow}}
       />
-    </div>
     <div
       class='au-u-padding-right-small au-u-padding-top-small au-u-bold au-u-text-right prefix-text'
     >
@@ -35,7 +33,12 @@
     @indentRight={{true}}
   >
     {{!### CHILDREN ###}}
+    <div
+    {{on 'mouseenter' (fn this.hoverChild true)}}
+      {{on 'mouseleave' (fn this.hoverChild false)}}
+    >
     {{yield to='contentDOM'}}
+    </div>
   </StructuredBlocksPlugin::EmberNodes::SubRow>
   {{#if (not-eq this.config.type 'article')}}
     <StructuredBlocksPlugin::EmberNodes::SubRow>

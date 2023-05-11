@@ -11,6 +11,7 @@ declare type blockArgs = {
 declare type blockAttrs = {
   text: string;
   showRemoveBorder: boolean;
+  addBlockHover: boolean;
   config: baseStructureConfigWithChild;
 };
 
@@ -43,6 +44,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     return this.parentAttrs?.showRemoveBorder;
   }
 
+  get addBlockHover() {
+    return this.parentAttrs?.addBlockHover;
+  }
+
   get controller() {
     return this.parentArgs.controller;
   }
@@ -67,6 +72,15 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   hoverRemoveButton(isHovered: boolean, _: MouseEvent) {
     if (this.showRemoveBorder !== isHovered) {
       this.parentArgs.updateAttribute('showRemoveBorder', isHovered);
+    }
+  }
+
+  @action
+  hoverChild(isChildHovered: boolean, _: MouseEvent) {
+    console.log('child hover: ', this.config.name, isChildHovered);
+    const addBlockHover = !isChildHovered;
+    if (this.addBlockHover !== addBlockHover) {
+      this.parentArgs.updateAttribute('addBlockHover', addBlockHover);
     }
   }
 
