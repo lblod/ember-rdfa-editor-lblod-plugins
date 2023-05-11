@@ -1,8 +1,8 @@
 /**
  * An official structure for law documents.
  * - Possible structured blocks are: title (Titel), chapter (hoofdstuk), section (afdeling), subsection (subafdeling)
- * - every structured block can multiple articles (artikels).
- * - Both structured blocks and artikels can have headings (opschriften): an optional text that gives some info about
+ * - every structured block can have multiple articles (artikels).
+ * - Both structured blocks and artikels contain headings (opschriften): an optional text that gives some info about
  *   the specific block
  * - An artikel has content (inhoud): a textblock of any length (can contain alineas and other inline things)
  */

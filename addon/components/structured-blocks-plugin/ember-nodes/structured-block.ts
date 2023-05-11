@@ -15,6 +15,11 @@ declare type blockAttrs = {
   config: baseStructureConfigWithChild;
 };
 
+/**
+ * A structured block will contain a heading and children.
+ * The children can be one or more articles and one or more (non-article) subblocks.
+ * If this component is an article, some extra edge cases are handled.
+ */
 export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent extends Component<blockArgs> {
   get parentArgs() {
     return this.args.emberNodeArgs;
@@ -56,20 +61,22 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     return this.controller.schema;
   }
 
-  get childConfig() {
+  get subStructureConfig() {
     return this.parentAttrs.config.child;
   }
 
-  get hasChild() {
-    return !!this.childConfig;
+  get canHaveSubStructure() {
+    return !!this.subStructureConfig;
   }
 
   get hasChildren() {
     return !!this.node.lastChild;
   }
 
-  get hasChildNode() {
-    return this.node.lastChild?.type.name === this.childConfig?.structure_name;
+  get hasSubStructure() {
+    return (
+      this.node.lastChild?.type.name === this.subStructureConfig?.structure_name
+    );
   }
 
   get isArticle() {
@@ -131,15 +138,19 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     };
   }
 
-  addChildCommand(): Command {
+  addSubStructureCommand(): Command {
     const pos = this.parentArgs.getPos();
     return (state, dispatch) => {
-      if (pos === undefined || !this.hasChild || !this.childConfig) {
+      if (
+        pos === undefined ||
+        !this.canHaveSubStructure ||
+        !this.subStructureConfig
+      ) {
         return false;
       }
       const endPos = pos + this.node.nodeSize - 1;
       const childNode =
-        this.schema.nodes[this.childConfig.structure_name].create();
+        this.schema.nodes[this.subStructureConfig.structure_name].create();
 
       // if (!this.node.canAppend(childNode)) {
       //   return false;
@@ -190,8 +201,8 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   }
 
   @action
-  addChild() {
-    this.controller.doCommand(this.addChildCommand());
+  addSubStructure() {
+    this.controller.doCommand(this.addSubStructureCommand());
   }
 
   @action
