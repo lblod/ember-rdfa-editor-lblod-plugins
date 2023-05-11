@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/addon/utils/ember-node';
 import { action } from '@ember/object';
-import { Command } from '@lblod/ember-rdfa-editor';
+import { Command, PNode } from '@lblod/ember-rdfa-editor';
 import { baseStructureConfigWithChild } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes/config';
 
 declare type blockArgs = {
@@ -101,7 +101,15 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   }
 
   addBlockCommand(): Command {
-    const copiedNode = this.node.type.create();
+    let copiedNode: PNode;
+    if (this.isArticle) {
+      copiedNode = this.node.type.create(
+        null,
+        this.schema.nodes.structure_content.create()
+      );
+    } else {
+      copiedNode = this.node.type.create();
+    }
     const pos = this.parentArgs.getPos();
     return (state, dispatch) => {
       if (pos === undefined) {
@@ -109,9 +117,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       }
       const endPos = pos + this.node.nodeSize;
 
-      if (!this.node.canAppend(copiedNode)) {
-        return false;
-      }
+      // for some reason this is false for an articleNode
+      // if (!this.node.canAppend(copiedNode)) {
+      //   return false;
+      // }
       if (dispatch) {
         dispatch(state.tr.replaceWith(endPos, endPos, copiedNode));
       }
