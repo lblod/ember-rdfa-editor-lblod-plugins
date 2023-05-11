@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- make static TOC look the same in dynamic content
 ## [6.0.0] - 2023-05-05
 ### Changed
 - Use plugin configuration instead of ember environment in all the plugins
