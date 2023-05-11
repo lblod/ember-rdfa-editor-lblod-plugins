@@ -9,11 +9,7 @@ export type BesluitType = {
 };
 export default async function fetchBesluitTypes(
   classificationUri: string,
-  ENV: {
-    besluitTypePlugin: {
-      endpoint: string;
-    };
-  }
+  endpoint: string
 ) {
   const query = `
     PREFIX                    conceptscheme: <https://data.vlaanderen.be/id/conceptscheme/>
@@ -54,7 +50,6 @@ export default async function fetchBesluitTypes(
   const typeFetcher = new SparqlEndpointFetcher({
     method: 'POST',
   });
-  const endpoint = ENV.besluitTypePlugin.endpoint;
   const bindingStream = await typeFetcher.fetchBindings(endpoint, query);
   const validBesluitTriples: IBindings[] = [];
   bindingStream.on('data', (triple: IBindings) => {

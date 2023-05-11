@@ -1,24 +1,21 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { getOwner } from '@ember/application';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { SayController } from '@lblod/ember-rdfa-editor';
+import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 
-type Args = Record<string, never>;
+type Args = {
+  controller: SayController;
+  options: RoadsignRegulationPluginOptions;
+};
+
 export default class RoadsignsTable extends Component<Args> {
   @tracked selected?: string;
   imageBaseUrl: string;
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
-    const config = unwrap(getOwner(this)).resolveRegistration(
-      'config:environment'
-    ) as {
-      roadsignRegulationPlugin: {
-        imageBaseUrl: string;
-      };
-    };
-    this.imageBaseUrl = config.roadsignRegulationPlugin.imageBaseUrl;
+    this.imageBaseUrl = args.options.imageBaseUrl;
   }
 
   @action
