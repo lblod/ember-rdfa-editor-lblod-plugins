@@ -1,3 +1,4 @@
+import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   title,
   titleView,
@@ -22,7 +23,7 @@ export const STRUCTURE_NODES = {
   structure_content: content,
 };
 
-export function STRUCTURE_VIEWS(controller: any) {
+export function STRUCTURE_VIEWS(controller: SayController) {
   return {
     structure_title: titleView(controller),
     structure_chapter: chapterView(controller),
