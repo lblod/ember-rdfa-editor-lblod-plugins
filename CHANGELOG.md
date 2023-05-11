@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix initialization of default date properties
+## [6.1.0] - 2023-05-11
+
+### Added
+- make static TOC look the same in dynamic content
+## [6.0.0] - 2023-05-05
+### Changed
+- Use plugin configuration instead of ember environment in all the plugins
+- Insert address plugin
+
+### Added
+- validation plugin
+ 
+### Deprecated
+- the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
 
 ## [5.0.1] - 2023-04-07
 ### Fixed
@@ -415,7 +429,9 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.1...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.1.0...HEAD
+[6.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.0.0...v6.1.0
+[6.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.1...v6.0.0
 [5.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.2...v5.0.0
 [4.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v4.0.1...v4.0.2
