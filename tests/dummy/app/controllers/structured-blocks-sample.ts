@@ -22,13 +22,16 @@ import {
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
-import { link } from '@lblod/ember-rdfa-editor/nodes/link';
+import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
 
 import { service } from '@ember/service';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import { variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
+import {
+  variable,
+  variableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import {
   bullet_list,
   list_item,
@@ -131,6 +134,8 @@ export default class StructuredBlocksSampleController extends Controller {
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       ...STRUCTURE_VIEWS(controller),
+      variable: variableView(controller),
+      link: linkView(this.config.link)(controller),
     };
   };
   @tracked plugins: Plugin[] = [
