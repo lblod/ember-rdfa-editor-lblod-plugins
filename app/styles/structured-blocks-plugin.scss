@@ -46,16 +46,21 @@ $add-button-width: 50px;
   }
 
 // Show `show-on-hover` when hovered over `hover-outer`
-  .show-on-hover {
-    visibility: hidden;
-  }
-
   .hover-outer:hover.grey-on-hover, .hover-outer:hover .grey-on-hover {
     background-color: var(--au-gray-200);
   }
 
   .hover-outer:hover .show-on-hover{ 
     visibility: visible;
+  }
+
+  .show-on-hover {
+    visibility: hidden;
+  }
+
+  // don't show hover for child of child
+  .hover-outer:hover .hover-outer .show-on-hover {
+    visibility: hidden;
   }
 
 // Show a border around remove-border when hover over remove-button
