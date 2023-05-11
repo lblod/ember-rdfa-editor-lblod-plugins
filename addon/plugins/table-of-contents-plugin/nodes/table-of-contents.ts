@@ -4,6 +4,7 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { TableOfContentsConfig } from '..';
+import { createTableOfContents } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
 
 export const emberNodeConfig: (
   config: TableOfContentsConfig
@@ -18,6 +19,30 @@ export const emberNodeConfig: (
       config: {
         default: config,
       },
+      entries: {
+        default: null,
+      },
+    },
+    toDOM(node) {
+      const { entries } = node.attrs;
+
+      if (!entries) {
+        return [
+          'div',
+          {
+            'data-ember-node': 'table-of-contents',
+            class: 'table-of-contents',
+          },
+          ['h3', {}, 'Table Of Contents'],
+        ];
+      }
+
+      return [
+        'div',
+        { 'data-ember-node': 'table-of-contents', class: 'table-of-contents' },
+        ['h3', {}, 'Table Of Contents'],
+        createTableOfContents(entries),
+      ];
     },
     parseDOM: [
       {

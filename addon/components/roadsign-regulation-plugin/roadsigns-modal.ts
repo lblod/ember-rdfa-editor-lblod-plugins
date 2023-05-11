@@ -2,7 +2,6 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { getOwner } from '@ember/application';
 import { v4 as uuid } from 'uuid';
 import { inject as service } from '@ember/service';
 import includeInstructions from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/includeInstructions';
@@ -20,6 +19,7 @@ import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/
 import IntlService from 'ember-intl/services/intl';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -43,10 +43,12 @@ type Category = Option;
 type Args = {
   closeModal: () => void;
   controller: SayController;
+  options: RoadsignRegulationPluginOptions;
 };
 
 export default class RoadsignRegulationCard extends Component<Args> {
   endpoint: string;
+  imageBaseUrl: string;
 
   pageSize = PAGE_SIZE;
   @service declare roadsignRegistry: RoadsignRegistryService;
@@ -84,15 +86,10 @@ export default class RoadsignRegulationCard extends Component<Args> {
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
-    const config = unwrap(getOwner(this)).resolveRegistration(
-      'config:environment'
-    ) as {
-      roadsignRegulationPlugin: {
-        endpoint: string;
-      };
-    };
-    this.endpoint = config.roadsignRegulationPlugin.endpoint;
+    this.endpoint = args.options.endpoint;
+    this.imageBaseUrl = args.options.imageBaseUrl;
     this.search();
+    void this.roadsignRegistry.loadClassifications.perform(this.endpoint);
   }
 
   get schema() {
@@ -176,6 +173,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
       ];
     }
     const codes = await this.roadsignRegistry.searchCode.perform(
+      this.endpoint,
       undefined,
       undefined,
       undefined,
@@ -224,17 +222,21 @@ export default class RoadsignRegulationCard extends Component<Args> {
       codes.push(this.selectedCode);
     }
     const { measures, count } =
-      await this.roadsignRegistry.fetchMeasures.perform({
-        zonality: this.zonalitySelected
-          ? this.zonalitySelected.value
-          : undefined,
-        type: this.typeSelected ? this.typeSelected.value : undefined,
-        codes: codes.length ? codes.map((code) => code.value) : undefined,
-        category: this.categorySelected
-          ? this.categorySelected.value
-          : undefined,
-        pageStart: this.pageStart,
-      });
+      await this.roadsignRegistry.fetchMeasures.perform(
+        this.endpoint,
+        this.imageBaseUrl,
+        {
+          zonality: this.zonalitySelected
+            ? this.zonalitySelected.value
+            : undefined,
+          type: this.typeSelected ? this.typeSelected.value : undefined,
+          codes: codes.length ? codes.map((code) => code.value) : undefined,
+          category: this.categorySelected
+            ? this.categorySelected.value
+            : undefined,
+          pageStart: this.pageStart,
+        }
+      );
     this.tableData = measures;
     this.count = count;
   });
@@ -247,7 +249,8 @@ export default class RoadsignRegulationCard extends Component<Args> {
   ) {
     const instructions =
       await this.roadsignRegistry.fetchInstructionsForMeasure.perform(
-        measure.uri
+        measure.uri,
+        this.endpoint
       );
     const zonality = zonalityValue ? zonalityValue : measure.zonality;
     const html = includeInstructions(

@@ -24,6 +24,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       node: this.controller.mainEditorState.doc,
       pos: -1,
     });
+
     return {
       entries,
     };
