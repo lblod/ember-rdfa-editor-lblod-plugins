@@ -68,6 +68,11 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     return this.node.lastChild?.type.name === this.childConfig?.structure_name;
   }
 
+  get isArticle() {
+    // an article is the bottom most structure that needs less UI.
+    return this.config.type === 'article';
+  }
+
   @action
   hoverRemoveButton(isHovered: boolean, _: MouseEvent) {
     if (this.showRemoveBorder !== isHovered) {
@@ -77,8 +82,8 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
 
   @action
   hoverChild(isChildHovered: boolean, _: MouseEvent) {
-    console.log('child hover: ', this.config.name, isChildHovered);
-    const addBlockHover = !isChildHovered;
+    // article's child (content) should not disable hover of article
+    const addBlockHover = this.isArticle || !isChildHovered;
     if (this.addBlockHover !== addBlockHover) {
       this.parentArgs.updateAttribute('addBlockHover', addBlockHover);
     }
@@ -92,10 +97,8 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
         return false;
       }
       const endPos = pos + this.node.nodeSize;
-      console.log(endPos);
 
       if (!this.node.canAppend(copiedNode)) {
-        console.log('is false');
         return false;
       }
       if (dispatch) {
@@ -112,11 +115,9 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
         return false;
       }
       const endPos = startPos + this.node.nodeSize;
-      console.log(startPos, endPos);
 
       // 'check can remove
       // if (!this.node.canAppend(copiedNode)) {
-      //   console.log('is false');
       //   return false;
       // }
       if (dispatch) {
@@ -137,7 +138,6 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
         this.schema.nodes[this.childConfig.structure_name].create();
 
       // if (!this.node.canAppend(childNode)) {
-      //   console.log('is false');
       //   return false;
       // }
       if (dispatch) {
@@ -170,9 +170,7 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       });
       const insertPos = pos + offsetLastParagraph + 1;
 
-      console.log(insertPos);
       // if (!this.node.canAppend(copiedNode)) {
-      //   console.log('is false');
       //   return false;
       // }
       if (dispatch) {

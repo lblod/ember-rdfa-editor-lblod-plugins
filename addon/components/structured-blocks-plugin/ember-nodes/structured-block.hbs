@@ -69,7 +69,7 @@
     </StructuredBlocksPlugin::EmberNodes::SubRow>
   {{/if}}
   <div>
-    {{#if (not-eq this.config.type 'article')}}
+    {{#unless this.isArticle}}
       <StructuredBlocksPlugin::EmberNodes::SubRow @indentLeft={{true}}>
         <AuButton
           @icon='plus'
@@ -80,6 +80,6 @@
           {{this.config.name}} toevoegen
         </AuButton>
       </StructuredBlocksPlugin::EmberNodes::SubRow>
-    {{/if}}
+    {{/unless}}
   </div>
 </div>
