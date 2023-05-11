@@ -9,8 +9,8 @@ import {
   subsectionView,
   article,
   articleView,
-  paragraph,
-  paragraphView,
+  content,
+  contentView,
 } from './nodes';
 
 export const STRUCTURE_NODES = {
@@ -19,7 +19,7 @@ export const STRUCTURE_NODES = {
   structure_section: section,
   structure_subsection: subsection,
   structure_article: article,
-  structure_paragraph: paragraph,
+  structure_content: content,
 };
 
 export function STRUCTURE_VIEWS(controller: any) {
@@ -29,6 +29,6 @@ export function STRUCTURE_VIEWS(controller: any) {
     structure_section: sectionView(controller),
     structure_subsection: subsectionView(controller),
     structure_article: articleView(controller),
-    structure_paragraph: paragraphView(controller),
+    structure_content: contentView(controller),
   };
 }

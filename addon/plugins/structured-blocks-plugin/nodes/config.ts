@@ -1,3 +1,12 @@
+/**
+ * An official structure for law documents.
+ * - Possible structured blocks are: title (Titel), chapter (hoofdstuk), section (afdeling), subsection (subafdeling)
+ * - every structured block can multiple articles (artikels).
+ * - Both structured blocks and artikels can have headings (opschriften): an optional text that gives some info about
+ *   the specific block
+ * - An artikel has content (inhoud): a textblock of any length (can contain alineas and other inline things)
+ */
+
 export const config = [
   { type: 'title', structure_name: 'structure_title', name: 'Titel' },
   { type: 'chapter', structure_name: 'structure_chapter', name: 'Hoofdstuk' },
@@ -15,10 +24,10 @@ export const config_article = {
   name: 'Artikel',
 };
 
-export const config_paragraph = {
-  type: 'paragraph',
-  structure_name: 'structure_paragraph',
-  name: 'Paragraaf',
+export const config_content = {
+  type: 'content',
+  structure_name: 'structure_content',
+  name: 'Inhoud',
 };
 
 export type baseStructureConfig = {
@@ -33,7 +42,7 @@ export type baseStructureConfigWithChild = baseStructureConfig & {
 
 export function getConfig(type: string): baseStructureConfigWithChild {
   if (type === 'article') return { ...config_article, child: null };
-  if (type === 'paragraph') return { ...config_paragraph, child: null };
+  if (type === 'content') return { ...config_content, child: null };
   const index = config.findIndex((c) => c.type === type);
   if (index <= config.length) {
     return { ...config[index], child: config[index + 1] };
@@ -48,12 +57,21 @@ export function createStructureConfig(type: string) {
     inline: false,
     group: `${c.structure_name} structure`,
     atom: false,
-    content: `structure_paragraph* structure_article* ${
+    stopEvent: (event: Event) => {
+      // let hover events bubble up
+      if (event.type === 'mouseenter' || event.type === 'mouseleave') {
+        return false;
+      }
+      return true;
+    },
+    content: `structure_article* ${
       c.child ? c.child.structure_name + '*' : ''
     }`,
     attrs: {
       text: { default: '' },
       showRemoveBorder: { default: false },
+      // should the css class for hovering be added. Hover is still needed to show it.
+      addBlockHover: { default: true },
       config: { default: c },
     },
   };

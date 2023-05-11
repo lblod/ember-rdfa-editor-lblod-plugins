@@ -61,8 +61,8 @@ import {
 import {
   title,
   titleView,
-  paragraph as struc_paragraph,
-  paragraphView,
+  content as struc_content,
+  contentView,
   chapter,
   chapterView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes';
@@ -87,7 +87,7 @@ export default class StructuredBlocksSampleController extends Controller {
     return new Schema({
       nodes: {
         doc: {
-          content: '(structure_title)*',
+          content: '(structure_title)+',
         },
         ...STRUCTURE_NODES,
         paragraph,

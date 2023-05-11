@@ -6,7 +6,7 @@ import {
 import { createStructureConfig } from './config';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
-  const config = createStructureConfig('paragraph');
+  const config = createStructureConfig('content');
   return {
     ...config,
     inline: false,
@@ -17,5 +17,5 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
   };
 };
 
-export const paragraph = createEmberNodeSpec(emberNodeConfig());
-export const paragraphView = createEmberNodeView(emberNodeConfig());
+export const content = createEmberNodeSpec(emberNodeConfig());
+export const contentView = createEmberNodeView(emberNodeConfig());

@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/addon/utils/ember-node';
 import { action } from '@ember/object';
-import { assert } from '@ember/debug';
-import { localCopy } from 'tracked-toolbox';
 import { Command } from '@lblod/ember-rdfa-editor';
 import { baseStructureConfigWithChild } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes/config';
 
@@ -13,13 +11,11 @@ declare type blockArgs = {
 declare type blockAttrs = {
   text: string;
   showRemoveBorder: boolean;
+  addBlockHover: boolean;
   config: baseStructureConfigWithChild;
 };
 
 export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent extends Component<blockArgs> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  @localCopy('text') declare localText: string | undefined;
-
   get parentArgs() {
     return this.args.emberNodeArgs;
   }
@@ -37,12 +33,19 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   }
 
   get text(): string {
-    console.log('text: ', this.parentAttrs?.text);
     return this.parentAttrs?.text || '';
+  }
+
+  set text(value: string) {
+    this.parentArgs.updateAttribute('text', value);
   }
 
   get showRemoveBorder() {
     return this.parentAttrs?.showRemoveBorder;
+  }
+
+  get addBlockHover() {
+    return this.parentAttrs?.addBlockHover;
   }
 
   get controller() {
@@ -66,18 +69,18 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   }
 
   @action
-  setText(event: InputEvent) {
-    assert(
-      'setText must be bound to an input element',
-      event.target instanceof HTMLInputElement
-    );
-    this.parentArgs.updateAttribute('text', event.target.value);
-  }
-
-  @action
   hoverRemoveButton(isHovered: boolean, _: MouseEvent) {
     if (this.showRemoveBorder !== isHovered) {
       this.parentArgs.updateAttribute('showRemoveBorder', isHovered);
+    }
+  }
+
+  @action
+  hoverChild(isChildHovered: boolean, _: MouseEvent) {
+    console.log('child hover: ', this.config.name, isChildHovered);
+    const addBlockHover = !isChildHovered;
+    if (this.addBlockHover !== addBlockHover) {
+      this.parentArgs.updateAttribute('addBlockHover', addBlockHover);
     }
   }
 
@@ -144,31 +147,11 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     };
   }
 
-  addParagraphCommand(): Command {
-    const paragraphNode = this.schema.nodes.structure_paragraph.create();
-    const pos = this.parentArgs.getPos();
-
-    return (state, dispatch) => {
-      if (pos === undefined) {
-        return false;
-      }
-
-      const insertPos = pos + 1;
-
-      console.log(insertPos);
-      // if (!this.node.canAppend(copiedNode)) {
-      //   console.log('is false');
-      //   return false;
-      // }
-      if (dispatch) {
-        dispatch(state.tr.insert(insertPos, paragraphNode));
-      }
-      return true;
-    };
-  }
-
   addArticleCommand(): Command {
-    const articleNode = this.schema.nodes.structure_article.create();
+    const articleNode = this.schema.nodes.structure_article.create(
+      null,
+      this.schema.nodes.structure_content.create()
+    );
     const pos = this.parentArgs.getPos();
 
     return (state, dispatch) => {
@@ -197,11 +180,6 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       }
       return true;
     };
-  }
-
-  @action
-  addParagraph() {
-    this.controller.doCommand(this.addParagraphCommand());
   }
 
   @action
