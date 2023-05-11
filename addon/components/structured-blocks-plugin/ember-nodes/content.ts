@@ -1,6 +1,4 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { Command } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/addon/utils/ember-node';
 
 // eslint-disable-next-line ember/no-empty-glimmer-component-classes

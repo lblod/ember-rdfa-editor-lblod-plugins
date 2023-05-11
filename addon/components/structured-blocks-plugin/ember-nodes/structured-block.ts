@@ -64,6 +64,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
     return !!this.childConfig;
   }
 
+  get hasChildren() {
+    return !!this.node.lastChild;
+  }
+
   get hasChildNode() {
     return this.node.lastChild?.type.name === this.childConfig?.structure_name;
   }
