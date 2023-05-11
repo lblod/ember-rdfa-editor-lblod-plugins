@@ -16,11 +16,9 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
       mappingResource: {
         default: null,
       },
-      value: {
-        default: new Date().toISOString(),
-      },
+      value: {},
       format: {
-        default: 'dd/MM/yyyy',
+        default: options.formats[0].dateFormat,
       },
       onlyDate: {
         default: true,
@@ -86,7 +84,7 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
           ) {
             const onlyDate = hasRDFaAttribute(node, 'datatype', XSD('date'));
             return {
-              value: node.getAttribute('content'),
+              value: node.getAttribute('content') ?? new Date().toISOString(),
               onlyDate,
               format: node.dataset.format,
               custom: node.dataset.custom === 'true',
@@ -115,13 +113,14 @@ const date: (options: DateOptions) => NodeSpec = (options) => {
               );
               const dateNode = [...node.children].find((el) =>
                 hasRDFaAttribute(el, 'property', EXT('content'))
-              );
+              ) as HTMLElement | undefined;
               return {
                 mappingResource,
                 onlyDate,
-                value: dateNode?.getAttribute('content'),
-                format: dateNode?.getAttribute('data-format'),
-                custom: dateNode?.getAttribute('data-custom') === 'true',
+                value:
+                  dateNode?.getAttribute('content') ?? new Date().toISOString(),
+                format: dateNode?.dataset.format,
+                custom: dateNode?.dataset.custom === 'true',
               };
             }
           }
