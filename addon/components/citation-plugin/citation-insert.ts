@@ -12,7 +12,7 @@ import {
   Decision,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
-import { CitationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import { CitationPluginEmberComponentConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
@@ -22,7 +22,7 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 interface Args {
   controller: SayController;
-  config: CitationPluginConfig;
+  config: CitationPluginEmberComponentConfig;
 }
 
 export default class EditorPluginsCitationInsertComponent extends Component<Args> {

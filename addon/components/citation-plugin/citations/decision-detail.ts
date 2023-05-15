@@ -11,6 +11,7 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 interface Args {
   decision: Decision;
   close: () => void;
+  config: { endpoint: string };
 }
 
 export default class EditorPluginsCitationsDecisionDetailComponent extends Component<Args> {
@@ -32,12 +33,13 @@ export default class EditorPluginsCitationsDecisionDetailComponent extends Compo
     this.error = null;
     const abortController = new AbortController();
     try {
-      const results = await fetchArticles(
-        this.args.decision.uri,
-        this.pageNumber,
-        this.pageSize,
-        this.articleFilterAfterTimeout
-      );
+      const results = await fetchArticles({
+        legalExpression: this.args.decision.uri,
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        articleFilter: this.articleFilterAfterTimeout,
+        config: this.args.config,
+      });
       this.totalCount = results.totalCount;
       return results.articles;
     } catch (e) {
