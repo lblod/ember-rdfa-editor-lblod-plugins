@@ -7,6 +7,7 @@ import {
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 type Args = {
   controller: SayController;
@@ -49,11 +50,19 @@ export default class DecisionPluginCard extends Component<Args> {
   }
 
   get missingArticleBlock() {
-    return this.controller.checkCommand(
-      insertArticleContainer({ intl: this.intl }),
-      {
-        view: this.controller.mainEditorView,
-      }
+    const state = this.controller.activeEditorState;
+    const besluit = findParentNodeOfType(state.schema.nodes.besluit)(
+      state.selection
     );
+    if (!besluit) {
+      return false;
+    }
+    let hasArticleBlock;
+    besluit.node.descendants((node) => {
+      if (node.type.name === 'article_container') {
+        hasArticleBlock = true;
+      }
+    })
+    return !hasArticleBlock;
   }
 }
