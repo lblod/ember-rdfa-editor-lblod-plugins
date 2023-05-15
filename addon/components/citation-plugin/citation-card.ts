@@ -18,7 +18,6 @@ import {
 import {
   CitationDecoration,
   CitationPlugin,
-  CitationPluginEmberComponentConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
