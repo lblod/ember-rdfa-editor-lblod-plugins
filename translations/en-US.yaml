@@ -115,10 +115,23 @@ besluit-type-plugin:
 
 besluit-plugin:
   missing-title-warning: This decision is missing a title
+  missing-motivation-warning: This decision is missing a motivation block
+  missing-article-block-warning: This decision is missing an article block
   insert:
     decision-title: Insert decision title
+    motivation: Insert motivation
+    article-block: Insert article block
   placeholder:
     decision-title: Insert decision title
+    government-body: specify governing body
+    legal-jurisdiction: Legal basis providing that body has jurisdiction.
+    insert-legal-context: Insert juridische context
+    insert-factual-context: Factual context and reasoning
+    insert-article: Insert article
+  text:
+    authority: Authority
+    legal-context: Legal context
+    factual-context: Factual context and reasoning
 
 date-plugin:
   help:

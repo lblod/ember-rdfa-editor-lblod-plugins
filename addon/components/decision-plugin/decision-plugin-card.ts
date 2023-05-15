@@ -1,6 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { insertTitle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
+import {
+  insertMotivation,
+  insertArticleContainer,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
@@ -24,23 +27,30 @@ export default class DecisionPluginCard extends Component<Args> {
   }
 
   @action
-  insertTitle() {
-    this.controller.doCommand(
-      insertTitle({
-        placeholderText: this.intl.t('besluit-plugin.insert.decision-title'),
-      }),
-      {
-        view: this.controller.mainEditorView,
-      }
-    );
+  insertMotivation() {
+    this.controller.doCommand(insertMotivation({ intl: this.intl }), {
+      view: this.controller.mainEditorView,
+    });
     this.focus();
   }
 
-  get canInsertTitle() {
+  get canInsertMotivation() {
+    return this.controller.checkCommand(insertMotivation({ intl: this.intl }), {
+      view: this.controller.mainEditorView,
+    });
+  }
+
+  @action
+  insertArticleBlock() {
+    this.controller.doCommand(insertArticleContainer({ intl: this.intl }), {
+      view: this.controller.mainEditorView,
+    });
+    this.focus();
+  }
+
+  get missingArticleBlock() {
     return this.controller.checkCommand(
-      insertTitle({
-        placeholderText: this.intl.t('besluit-plugin.insert.decision-title'),
-      }),
+      insertArticleContainer({ intl: this.intl }),
       {
         view: this.controller.mainEditorView,
       }

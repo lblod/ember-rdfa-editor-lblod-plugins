@@ -8,16 +8,17 @@ import { v4 as uuid } from 'uuid';
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
 import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
+import IntlService from 'ember-intl/services/intl';
 
 interface InsertMotivationArgs {
-  placeholderText?: string;
+  intl: IntlService;
   validateShapes?: Set<string>;
 }
 
 export default function insertMotivation({
+  intl,
   validateShapes,
-  placeholderText = 'Insert motivation',
-}: InsertMotivationArgs = {}): Command {
+}: InsertMotivationArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { selection, schema } = state;
     const nodeToInsert = schema.node('motivering', { __rdfaId: uuid() }, [
@@ -25,9 +26,63 @@ export default function insertMotivation({
         'paragraph',
         null,
         schema.node('placeholder', {
-          placeholderText,
+          placeholderText: intl.t('besluit-plugin.placeholder.government-body'),
         })
       ),
+      schema.node(
+        'heading',
+        {
+          level: 5,
+        },
+        [schema.text(intl.t('besluit-plugin.text.authority'))]
+      ),
+      schema.node('bullet_list', null, [
+        schema.node('list_item', null, [
+          schema.node('paragraph', null, [
+            schema.node('placeholder', {
+              placeholderText: intl.t(
+                'besluit-plugin.placeholder.legal-jurisdiction'
+              ),
+            }),
+          ]),
+        ]),
+      ]),
+      schema.node(
+        'heading',
+        {
+          level: 5,
+        },
+        [schema.text(intl.t('besluit-plugin.text.legal-context'))]
+      ),
+      schema.node('bullet_list', null, [
+        schema.node('list_item', null, [
+          schema.node('paragraph', null, [
+            schema.node('placeholder', {
+              placeholderText: intl.t(
+                'besluit-plugin.placeholder.insert-legal-context'
+              ),
+            }),
+          ]),
+        ]),
+      ]),
+      schema.node(
+        'heading',
+        {
+          level: 5,
+        },
+        [schema.text(intl.t('besluit-plugin.text.factual-context'))]
+      ),
+      schema.node('bullet_list', null, [
+        schema.node('list_item', null, [
+          schema.node('paragraph', null, [
+            schema.node('placeholder', {
+              placeholderText: intl.t(
+                'besluit-plugin.placeholder.insert-factual-context'
+              ),
+            }),
+          ]),
+        ]),
+      ]),
     ]);
     // how the offset between the insertion point and the point where the cursor should end up
     const cursorOffset = 2;
@@ -47,8 +102,6 @@ export default function insertMotivation({
       return false;
     }
     if (dispatch) {
-      console.log('inserts in ', insertionPos);
-      console.log('selection on ', insertionPos + cursorOffset);
       const selectionPos = tr.doc.resolve(insertionPos + cursorOffset);
       // const targetPos = tr.doc.resolve(insertionPos + cursorOffset + 1);
       // TODO figure out why I cant just set a nodeSelection here

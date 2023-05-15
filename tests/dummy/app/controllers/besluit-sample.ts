@@ -325,7 +325,10 @@ export default class BesluitSampleController extends Controller {
 
   get canInsertMotivation() {
     return this.controller?.checkCommand(
-      insertMotivation({ validateShapes: new Set(['max-one-motivation']) })
+      insertMotivation({
+        intl: this.intl,
+        validateShapes: new Set(['max-one-motivation']),
+      })
     );
   }
 
@@ -333,8 +336,7 @@ export default class BesluitSampleController extends Controller {
   insertMotivation() {
     this.controller?.doCommand(
       insertMotivation({
-        placeholderText:
-          'Geef motivering op. Bv: Bevoegdheid, Juridische Context, Feitelijke Context, etc',
+        intl: this.intl,
       })
     );
     this.controller?.focus();
