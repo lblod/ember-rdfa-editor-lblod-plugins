@@ -40,6 +40,7 @@ interface Args {
   insertDecisionCitation: (decision: Decision) => void;
   insertArticleCitation: (decision: Decision, article: Article) => void;
   closeModal: (legislationTypeUri?: string, text?: string) => void;
+  config: { endpoint: string };
 }
 
 export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
@@ -99,6 +100,10 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     return this.args.text;
   }
 
+  get config() {
+    return this.args.config;
+  }
+
   get searchText() {
     return this.inputSearchText ?? this.text;
   }
@@ -135,12 +140,13 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
         publicationDateFrom: getISODate(this.publicationDateFrom),
         publicationDateTo: getISODate(this.publicationDateTo),
       };
-      const results = await fetchDecisions(
-        words,
-        filter,
-        this.pageNumber,
-        this.pageSize
-      );
+      const results = await fetchDecisions({
+        words: words,
+        filter: filter,
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        config: this.args.config,
+      });
       this.totalCount = results.totalCount;
       return results.decisions;
     } catch (e) {

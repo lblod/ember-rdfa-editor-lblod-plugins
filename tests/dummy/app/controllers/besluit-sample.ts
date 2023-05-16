@@ -212,6 +212,7 @@ export default class BesluitSampleController extends Controller {
         activeInNodeTypes(schema: Schema): Set<NodeType> {
           return new Set<NodeType>([schema.nodes.motivering]);
         },
+        endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
       },
       roadsignRegulation: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
