@@ -141,13 +141,7 @@ export function validation(
         const schemaChanged = oldState.schema !== newState.schema;
         if (schemaChanged) {
           const spec = compileSpec(configurator, newState.schema);
-          const newValidation = doValidation(
-            tr,
-            oldPluginState,
-            oldState,
-            newState,
-            spec
-          );
+          const newValidation = doValidation(newState, spec);
           tr.setMeta('validated', newValidation);
           tr.setMeta('firstPass', false);
           return { spec, report: newValidation };
@@ -166,13 +160,7 @@ export function validation(
             tr.setMeta('firstPass', false);
             return cachedValidation;
           }
-          const newValidation = doValidation(
-            tr,
-            oldPluginState,
-            oldState,
-            newState,
-            spec
-          );
+          const newValidation = doValidation(newState, spec);
           tr.setMeta('validated', newValidation);
           tr.setMeta('firstPass', false);
           return { spec, report: newValidation };
@@ -229,10 +217,7 @@ interface ValidationContext {
  * @param newState
  * @param spec
  */
-function doValidation(
-  tr: Transaction,
-  oldPluginState: ValidationState,
-  oldState: EditorState,
+export function doValidation(
   newState: EditorState,
   spec: ValidationSpec
 ): ValidationReport {

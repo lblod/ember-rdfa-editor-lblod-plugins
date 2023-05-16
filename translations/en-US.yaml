@@ -114,9 +114,9 @@ besluit-type-plugin:
   error-rest-body: '. For more specific details about this problem, inspect the browser console.'
 
 besluit-plugin:
-  missing-title-warning: This decision is missing a title
-  missing-motivation-warning: This decision is missing a motivation block
-  missing-article-block-warning: This decision is missing an article block
+  missing-title-warning: This decision is missing a title.
+  missing-motivation-warning: This decision is missing a motivation block, a decision without this block will be harder to parse by our system.
+  missing-article-block-warning: This decision is missing an article block, a decision without this block will be harder to parse by our system.
   insert:
     decision-title: Insert decision title
     motivation: Insert motivation

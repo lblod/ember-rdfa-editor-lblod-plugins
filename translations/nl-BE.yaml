@@ -117,9 +117,9 @@ besluit-type-plugin:
 
 
 besluit-plugin:
-  missing-title-warning: Dit besluit heeft geen titel
-  missing-motivation-warning: Dit besluit mist een motivatieblok
-  missing-article-block-warning: Dit besluit mist een artikelblok
+  missing-title-warning: Dit besluit heeft geen titel.
+  missing-motivation-warning: Dit besluit mist een motivatieblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
+  missing-article-block-warning: Deze besluit mist een artikelblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
   insert:
     decision-title: Voeg besluittitel in
     motivation: Voeg motivatie in

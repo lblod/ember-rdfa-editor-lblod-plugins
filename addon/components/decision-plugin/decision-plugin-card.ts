@@ -7,7 +7,7 @@ import {
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { doValidation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 
 type Args = {
   controller: SayController;
@@ -50,19 +50,20 @@ export default class DecisionPluginCard extends Component<Args> {
   }
 
   get missingArticleBlock() {
-    const state = this.controller.activeEditorState;
-    const besluit = findParentNodeOfType(state.schema.nodes.besluit)(
-      state.selection
-    );
-    if (!besluit) {
-      return false;
-    }
-    let hasArticleBlock;
-    besluit.node.descendants((node) => {
-      if (node.type.name === 'article_container') {
-        hasArticleBlock = true;
-      }
-    })
-    return !hasArticleBlock;
+    const result = doValidation(this.controller.activeEditorState, {
+      besluit: [
+        {
+          name: 'at-least-one-article-container',
+          focusNodeType: this.controller.activeEditorState.schema.nodes.besluit,
+          path: ['article_container'],
+          message: 'Document must contain at least one article container.',
+          severity: 'violation',
+          constraints: {
+            minCount: 1,
+          },
+        },
+      ],
+    });
+    return !result.conforms;
   }
 }
