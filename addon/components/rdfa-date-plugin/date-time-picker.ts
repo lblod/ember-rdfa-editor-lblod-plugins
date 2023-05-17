@@ -7,25 +7,25 @@ import { localCopy } from 'tracked-toolbox';
 import Intl from 'ember-intl/services/intl';
 
 type Args = {
-  value: Date;
+  value?: Date;
   onChange: (date: Date) => void;
 };
 
 export default class RdfaDatePluginDateTimePicker extends Component<Args> {
   @service declare intl: Intl;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  @localCopy('args.value') declare date: Date;
+  @localCopy('args.value') declare date?: Date;
 
   get hours() {
-    return this.date.getHours();
+    return this.date?.getHours();
   }
 
   get minutes() {
-    return this.date.getMinutes();
+    return this.date?.getMinutes();
   }
 
   get seconds() {
-    return this.date.getSeconds();
+    return this.date?.getSeconds();
   }
 
   get datePickerLocalization() {

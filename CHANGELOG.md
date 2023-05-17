@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0] - 2023-05-17
+### Added
+- add docker build for easy demo environments
+### Change
+- BREAKING: Endpoint config for `CitationPlugin`
+### Fixed
+- Remove structure doesn't always work - disable the "Remove <structure>" button correctly
+
+### Fixed
+- Fix initialization of default date properties
 ## [6.1.0] - 2023-05-11
 
 ### Added
@@ -18,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - validation plugin
+- Enable Firefox cursor fix for variables
  
 ### Deprecated
 - the decision-plugin card component is now deprecated in favor of the host app's choice of insert button
@@ -427,7 +438,8 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.1.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.1.0...v7.0.0
 [6.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.1...v6.0.0
 [5.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.0...v5.0.1

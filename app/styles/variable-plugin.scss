@@ -2,6 +2,10 @@
   margin-left: 0.3rem;
 }
 
+.mark-highlight-manual + .ProseMirror-firefox-fake-cursor {
+  margin-left: -0.5rem;
+}
+
 [typeof='ext:Mapping'] {
   border-bottom: 0 !important;
 

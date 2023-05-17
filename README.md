@@ -85,8 +85,26 @@ This plugin provides a card that needs to be added to the sidebar of the editor 
   <CitationPlugin::CitationCard 
     @controller={{this.controller}} 
     @plugin={{this.citationPlugin}}
+    @config={{this.config.citation}}
   />
 ```
+
+You need to specify the endpoint for the plugin in the config object
+```js
+{
+  endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql'
+}
+```
+
+Same goes for the `CitationInsert` component
+```hbs
+  <CitationPlugin::CitationInsert
+    @controller={{this.controller}}
+    @config={{this.config.citation}}
+  />
+```
+
+
 Being this.citationPlugin a tracked reference to the plugin created with the function exported from the package and the wished configuration
 ```js
   import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';

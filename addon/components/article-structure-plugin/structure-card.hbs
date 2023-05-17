@@ -34,7 +34,7 @@
                   @iconAlignment="left"
                   @skin="link"
                   @alert={{true}}
-                  @disabled={{this.currentStructureType.noUnwrap}}
+                  @disabled={{not this.canRemoveStructure}}
                   aria-describedby="remove-tooltip"
                   {{hover.velcroHook}}
                   {{hover.handleHover}}

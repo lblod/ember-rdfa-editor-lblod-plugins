@@ -37,6 +37,7 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
         this.schema.node('date', {
           onlyDate: true,
           format: this.defaultDateFormat,
+          value: new Date().toISOString(),
         })
       );
       if (tr.selection.$anchor.nodeBefore) {

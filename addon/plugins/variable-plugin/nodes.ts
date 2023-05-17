@@ -23,6 +23,7 @@ const emberNodeConfig: EmberNodeConfig = {
   recreateUri: true,
   uriAttributes: ['variableInstance'],
   draggable: false,
+  needsFFKludge: true,
   attrs: {
     mappingResource: {},
     codelistResource: {
