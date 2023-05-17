@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [7.0.0] - 2023-05-17
 ### Added
 - add docker build for easy demo environments
 ### Change
@@ -436,7 +438,8 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.1.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.1.0...v7.0.0
 [6.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.1...v6.0.0
 [5.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v5.0.0...v5.0.1
