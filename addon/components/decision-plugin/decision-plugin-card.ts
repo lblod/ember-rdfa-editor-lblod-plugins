@@ -7,7 +7,7 @@ import {
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { doValidation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
+import { VALIDATION_KEY } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 
 type Args = {
   controller: SayController;
@@ -50,20 +50,19 @@ export default class DecisionPluginCard extends Component<Args> {
   }
 
   get missingArticleBlock() {
-    const result = doValidation(this.controller.activeEditorState, {
-      besluit: [
-        {
-          name: 'at-least-one-article-container',
-          focusNodeType: this.controller.activeEditorState.schema.nodes.besluit,
-          path: ['article_container'],
-          message: 'Document must contain at least one article container.',
-          severity: 'violation',
-          constraints: {
-            minCount: 1,
-          },
-        },
-      ],
-    });
-    return !result.conforms;
+    const state = VALIDATION_KEY.getState(this.controller.activeEditorState);
+    if (state) {
+      let missingArticleBlock = false;
+      const results = state.report.results;
+      if (!results) return false;
+      for (const result of results) {
+        if (result.sourceShape.name === 'at-least-one-article-container') {
+          missingArticleBlock = true;
+        }
+      }
+      return missingArticleBlock;
+    } else {
+      return false;
+    }
   }
 }

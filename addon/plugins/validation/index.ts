@@ -217,7 +217,7 @@ interface ValidationContext {
  * @param newState
  * @param spec
  */
-export function doValidation(
+function doValidation(
   newState: EditorState,
   spec: ValidationSpec
 ): ValidationReport {

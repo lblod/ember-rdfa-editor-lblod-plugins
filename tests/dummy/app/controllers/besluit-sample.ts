@@ -82,6 +82,8 @@ import {
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 
+import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
+
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
@@ -91,6 +93,7 @@ export default class BesluitSampleController extends Controller {
   );
   @tracked validationPlugin = validation((schema: Schema) => ({
     shapes: [
+      atLeastOneArticleContainer(schema),
       {
         name: 'exactly-one-title',
         focusNodeType: schema.nodes.besluit,
