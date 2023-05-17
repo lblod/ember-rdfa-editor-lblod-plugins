@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- add docker build for easy demo environments
 ### Change
-- Endpoint config for `CitationPlugin`. Breaking.
+- BREAKING: Endpoint config for `CitationPlugin`
 ### Fixed
 - Remove structure doesn't always work - disable the "Remove <structure>" button correctly
 
