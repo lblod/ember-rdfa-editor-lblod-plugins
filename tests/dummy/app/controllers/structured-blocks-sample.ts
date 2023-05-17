@@ -71,8 +71,8 @@ export default class StructuredBlocksSampleController extends Controller {
         doc: {
           content: 'structure_title+',
         },
-        ...STRUCTURE_NODES,
         paragraph,
+        ...STRUCTURE_NODES,
         list_item,
         ordered_list,
         bullet_list,

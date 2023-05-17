@@ -174,7 +174,11 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   addArticleCommand(): Command {
     const articleNode = this.schema.nodes.structure_article.create(
       null,
-      this.schema.nodes.structure_content.create()
+      this.schema.nodes.structure_content.create(
+        null,
+        this.schema.nodes.paragraph.create()
+
+      )
     );
     const pos = this.parentArgs.getPos();
 

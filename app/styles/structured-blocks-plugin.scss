@@ -22,9 +22,9 @@ $add-button-width: 50px;
 
 
 // give the prefixes a set width they do not wrap and are consistent in children
-  .prefix-text {
-    min-width: $prefix-width;
-  }
+.prefix-text {
+  min-width: $prefix-width;
+}
 
 
 .add-button {
@@ -41,45 +41,45 @@ $add-button-width: 50px;
 }
 
 // take any available flex space left
-  .fill-flex {
-    flex: 1;
-  }
+.fill-flex {
+  flex: 1;
+}
 
 // Show `show-on-hover` when hovered over `hover-outer`
-  .hover-outer:hover.grey-on-hover, .hover-outer:hover .grey-on-hover {
-    background-color: var(--au-gray-200);
-  }
+.hover-outer:hover.grey-on-hover, .hover-outer:hover .grey-on-hover {
+  background-color: var(--au-gray-200);
+}
 
-  .hover-outer:hover .show-on-hover{ 
-    visibility: visible;
-  }
+.hover-outer:hover .show-on-hover {
+  visibility: visible;
+}
 
-  .show-on-hover {
-    visibility: hidden;
-  }
+.show-on-hover {
+  visibility: hidden;
+}
 
-  // don't show hover for child of child
-  .hover-outer:hover .hover-outer .show-on-hover {
-    visibility: hidden;
-  }
+// don't show hover for child of child
+.hover-outer:hover .hover-outer .show-on-hover {
+  visibility: hidden;
+}
 
 // Show a border around remove-border when hover over remove-button
 // implemented functionality in JS (not possible in CSS, as long as `has()` is not supported)
-  .remove-button {
-    min-width: 50px;
-  }
+.remove-button {
+  min-width: 50px;
+}
 
-  .remove-border {
-    box-shadow: var(--au-red-600) 0px 3px 8px;
-  }
+.remove-border {
+  box-shadow: var(--au-red-600) 0px 3px 8px;
+}
 
-  // content under a title block has some different defaults than AU
-  $soft-border: 1px solid var(--au-gray-400);
+// content under a title block has some different defaults than AU
+$soft-border: 1px solid var(--au-gray-400);
 
-  .title-block .au-c-input, .title-block .au-c-button--secondary, .title-block .au-c-textarea {
-    border: $soft-border;
-  } 
+.title-block .au-c-input, .title-block .au-c-button--secondary, .title-block .au-c-textarea {
+  border: $soft-border;
+}
 
-  .content-area {
-    min-height: 10rem;
-  }
+.content-area {
+  min-height: 10rem;
+}

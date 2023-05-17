@@ -61,6 +61,9 @@ export function createStructureConfig(type: string) {
     selectable: false,
     defining: true,
     isolating: true,
+    ignoreMutation() {
+      return () => false;
+    },
     stopEvent: (event: Event) => {
       // let hover events bubble up
       if (event.type === 'mouseenter' || event.type === 'mouseleave') {

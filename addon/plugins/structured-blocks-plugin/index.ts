@@ -30,6 +30,5 @@ export function STRUCTURE_VIEWS(controller: SayController) {
     structure_section: sectionView(controller),
     structure_subsection: subsectionView(controller),
     structure_article: articleView(controller),
-    structure_content: contentView(controller),
   };
 }
