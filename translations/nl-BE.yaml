@@ -117,11 +117,24 @@ besluit-type-plugin:
 
 
 besluit-plugin:
-  missing-title-warning: Dit besluit heeft geen titel
+  missing-title-warning: Dit besluit heeft geen titel.
+  missing-motivation-warning: Dit besluit mist een motivatieblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
+  missing-article-block-warning: Deze besluit mist een artikelblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
   insert:
     decision-title: Voeg besluittitel in
+    motivation: Voeg motivatie in
+    article-block: Voeg artikelblok in
   placeholder:
     decision-title: Geef titel besluit op
+    government-body: geef bestuursorgaan op
+    legal-jurisdiction: Rechtsgrond die bepaalt dat dit orgaan bevoegd is.
+    insert-legal-context: Voeg juridische context in
+    insert-factual-context: Feitelijke context en argumentatie
+    insert-article: Artikel invoegen
+  text:
+    authority: Bevoegdheid
+    legal-context: Juridische context
+    factual-context: Feitelijke context en argumentatie
 
 
 date-plugin:

@@ -114,11 +114,24 @@ besluit-type-plugin:
   error-rest-body: '. For more specific details about this problem, inspect the browser console.'
 
 besluit-plugin:
-  missing-title-warning: This decision is missing a title
+  missing-title-warning: This decision is missing a title.
+  missing-motivation-warning: This decision is missing a motivation block, a decision without this block will be harder to parse by our system.
+  missing-article-block-warning: This decision is missing an article block, a decision without this block will be harder to parse by our system.
   insert:
     decision-title: Insert decision title
+    motivation: Insert motivation
+    article-block: Insert article block
   placeholder:
     decision-title: Insert decision title
+    government-body: specify governing body
+    legal-jurisdiction: Legal basis providing that body has jurisdiction.
+    insert-legal-context: Insert juridische context
+    insert-factual-context: Factual context and reasoning
+    insert-article: Insert article
+  text:
+    authority: Authority
+    legal-context: Legal context
+    factual-context: Factual context and reasoning
 
 date-plugin:
   help:

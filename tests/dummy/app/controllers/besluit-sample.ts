@@ -82,6 +82,8 @@ import {
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 
+import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
+
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
@@ -91,6 +93,7 @@ export default class BesluitSampleController extends Controller {
   );
   @tracked validationPlugin = validation((schema: Schema) => ({
     shapes: [
+      atLeastOneArticleContainer(schema),
       {
         name: 'exactly-one-title',
         focusNodeType: schema.nodes.besluit,
@@ -326,7 +329,10 @@ export default class BesluitSampleController extends Controller {
 
   get canInsertMotivation() {
     return this.controller?.checkCommand(
-      insertMotivation({ validateShapes: new Set(['max-one-motivation']) })
+      insertMotivation({
+        intl: this.intl,
+        validateShapes: new Set(['max-one-motivation']),
+      })
     );
   }
 
@@ -334,8 +340,7 @@ export default class BesluitSampleController extends Controller {
   insertMotivation() {
     this.controller?.doCommand(
       insertMotivation({
-        placeholderText:
-          'Geef motivering op. Bv: Bevoegdheid, Juridische Context, Feitelijke Context, etc',
+        intl: this.intl,
       })
     );
     this.controller?.focus();
