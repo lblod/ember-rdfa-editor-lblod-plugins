@@ -29,6 +29,9 @@ import {
 interface Args {
   controller: SayController;
   plugin: CitationPlugin;
+  config: {
+    endpoint: string;
+  };
 }
 
 export default class CitationCardComponent extends Component<Args> {
@@ -68,6 +71,10 @@ export default class CitationCardComponent extends Component<Args> {
 
   get plugin() {
     return this.args.plugin;
+  }
+
+  get config() {
+    return this.args.config;
   }
 
   get decorations() {
@@ -121,12 +128,13 @@ export default class CitationCardComponent extends Component<Args> {
       const filter = {
         type: unwrapOr('', this.selectedLegislationTypeUri),
       };
-      const results = await fetchDecisions(
-        words,
-        filter,
-        this.pageNumber,
-        this.pageSize
-      );
+      const results = await fetchDecisions({
+        words: words,
+        filter: filter,
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        config: this.args.config,
+      });
       this.totalCount = results.totalCount;
       return results.decisions;
     } catch (e) {

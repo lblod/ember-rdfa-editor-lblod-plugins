@@ -132,6 +132,10 @@ export type CitationPluginConfig =
   | CitationPluginNodeConfig
   | CitationPluginRangeConfig;
 
+export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
+  endpoint: string;
+};
+
 export function citationPlugin(config: CitationPluginConfig): CitationPlugin {
   const citation: CitationPlugin = new ProsePlugin({
     state: {

@@ -8,10 +8,6 @@ import {
 import Ember from 'ember';
 import SafeString = Ember.Handlebars.SafeString;
 
-const SPARQL_ENDPOINT = '/codex/sparql/';
-
-//const SPARQL_ENDPOINT = 'https://codex.opendata.api.vlaanderen.be:8888/sparql';
-
 interface DecisionArgs {
   uri: string;
   legislationTypeUri: Option<string>;
@@ -106,13 +102,20 @@ export interface QueryFilter {
   publicationDateTo?: Option<string>;
 }
 
-async function fetchDecisions(
-  words: string[],
-  filter: QueryFilter,
+async function fetchDecisions({
+  words,
+  filter,
   pageNumber = 0,
-  pageSize = 5
+  pageSize = 5,
+  config,
+}: {
+  words: string[];
+  filter: QueryFilter;
+  pageNumber: number;
+  pageSize: number;
+  config: CodexQueryConfig;
+}) {
   /*abortSignal*/
-) {
   //This is silly, but null != undefined, so we have to be careful and include the correct value here
   //Also, reconstruct the whole filter object to always have the same ordering, hopefully.
   filter = {
@@ -132,12 +135,13 @@ async function fetchDecisions(
   if (results) {
     return results;
   } else {
-    const newResults = await fetchDecisionsMemo(
+    const newResults = await fetchDecisionsMemo({
       words,
       filter,
       pageNumber,
-      pageSize
-    );
+      pageSize,
+      config,
+    });
     fetchDecisionsMemory.set(stringArguments, newResults);
     return newResults;
   }
@@ -148,13 +152,19 @@ interface DecisionCollection {
   decisions: Decision[];
 }
 
-async function fetchDecisionsMemo(
-  words: string[],
-  filter: QueryFilter,
+async function fetchDecisionsMemo({
+  words,
+  filter,
   pageNumber = 0,
   pageSize = 5,
-  abortSignal?: AbortSignal
-): Promise<DecisionCollection> {
+  config,
+}: {
+  words: string[];
+  filter: QueryFilter;
+  config: CodexQueryConfig;
+  pageNumber?: number;
+  pageSize?: number;
+}): Promise<DecisionCollection> {
   // TBD/NOTE: in the context of a <http://data.europa.eu/eli/ontology#LegalResource>
   // the eli:cites can have either a <http://xmlns.com/foaf/0.1/Document> or <http://data.europa.eu/eli/ontology#LegalResource>
   // as range (see AP https://data.vlaanderen.be/doc/applicatieprofiel/besluit-publicatie/#Rechtsgrond),
@@ -199,8 +209,8 @@ async function fetchDecisionsMemo(
       'FILTER(! STRSTARTS(LCASE(?title),"tot wijziging"))'
     );
   }
-  const totalCount = await executeCountQuery(
-    `PREFIX eli: <http://data.europa.eu/eli/ontology#>
+  const totalCount = await executeCountQuery({
+    query: `PREFIX eli: <http://data.europa.eu/eli/ontology#>
 
       SELECT COUNT(DISTINCT(?expressionUri)) as ?count
       WHERE {
@@ -220,12 +230,12 @@ async function fetchDecisionsMemo(
         ${documentDateFilter}
         ${publicationDateFilter}
       }`,
-    abortSignal
-  );
+    config,
+  });
 
   if (totalCount > 0) {
-    const response = await executeQuery<DecisionBinding>(
-      `PREFIX eli: <http://data.europa.eu/eli/ontology#>
+    const response = await executeQuery<DecisionBinding>({
+      query: `PREFIX eli: <http://data.europa.eu/eli/ontology#>
 
         SELECT DISTINCT ?expressionUri as ?uri ?title ?publicationDate ?documentDate
         WHERE {
@@ -246,8 +256,8 @@ async function fetchDecisionsMemo(
           ${documentDateFilter}
           ${publicationDateFilter}
         } ORDER BY ?title LIMIT ${pageSize} OFFSET ${pageNumber * pageSize}`,
-      abortSignal
-    );
+      config,
+    });
 
     const decisions = response.results.bindings.map((binding) => {
       const escapedTitle = escapeValue(binding.title.value);
@@ -291,13 +301,19 @@ interface DecisionBinding {
 
 const fetchArticlesMemory = new Map<string, ArticleCollection>();
 
-async function fetchArticles(
-  legalExpression: string,
-  pageNumber: number,
-  pageSize: number,
-  articleFilter: string
-  /*abortSignal*/
-): Promise<ArticleCollection> {
+async function fetchArticles({
+  legalExpression,
+  pageNumber,
+  pageSize,
+  articleFilter,
+  config,
+}: {
+  legalExpression: string;
+  pageNumber: number;
+  pageSize: number;
+  articleFilter: string;
+  config: CodexQueryConfig;
+}): Promise<ArticleCollection> {
   //Simpler here, only one way arguments are set up
   const stringArguments = JSON.stringify({
     legalExpression,
@@ -309,12 +325,13 @@ async function fetchArticles(
   if (results) {
     return results;
   } else {
-    const newResults = await fetchArticlesMemo(
+    const newResults = await fetchArticlesMemo({
       legalExpression,
       pageNumber,
       pageSize,
-      articleFilter
-    );
+      articleFilter,
+      config,
+    });
     fetchArticlesMemory.set(stringArguments, newResults);
     return newResults;
   }
@@ -352,18 +369,24 @@ interface ArticleCollection {
   articles: Article[];
 }
 
-async function fetchArticlesMemo(
-  legalExpression: string,
+async function fetchArticlesMemo({
+  legalExpression,
   pageNumber = 0,
   pageSize = 10,
-  articleFilter: string,
-  abortSignal?: AbortSignal
-): Promise<ArticleCollection> {
+  articleFilter,
+  config,
+}: {
+  legalExpression: string;
+  pageNumber: number;
+  pageSize: number;
+  articleFilter: string;
+  config: CodexQueryConfig;
+}): Promise<ArticleCollection> {
   const numberFilter = articleFilter
     ? `FILTER( !BOUND(?number) || CONTAINS(?number, "${articleFilter}"))`
     : '';
-  const totalCount = await executeCountQuery(
-    `PREFIX eli: <http://data.europa.eu/eli/ontology#>
+  const totalCount = await executeCountQuery({
+    query: `PREFIX eli: <http://data.europa.eu/eli/ontology#>
     PREFIX dct: <http://purl.org/dc/terms/>
 
     SELECT COUNT(DISTINCT(?article)) as ?count
@@ -381,14 +404,14 @@ async function fetchArticlesMemo(
         OPTIONAL { ?article eli:number ?number . }
         ${numberFilter}
     }`,
-    abortSignal
-  );
+    config,
+  });
 
   if (totalCount > 0) {
     // ?number has format like "Artikel 12." We parse the number from the string for ordering
     // Second degree ordering on ?numberStr to make sure "Artikel 3/1." comes after "Artikel 3."
-    const response = await executeQuery<ArticleBinding>(
-      `PREFIX eli: <http://data.europa.eu/eli/ontology#>
+    const response = await executeQuery<ArticleBinding>({
+      query: `PREFIX eli: <http://data.europa.eu/eli/ontology#>
       PREFIX prov: <http://www.w3.org/ns/prov#>
       PREFIX dct: <http://purl.org/dc/terms/>
 
@@ -411,8 +434,8 @@ async function fetchArticlesMemo(
       } ORDER BY ?numberInt ?numberStr LIMIT ${pageSize} OFFSET ${
         pageNumber * pageSize
       }`,
-      abortSignal
-    );
+      config,
+    });
 
     const articles = response.results.bindings.map((binding) => {
       const escapedContent = escapeValue(
@@ -483,28 +506,39 @@ function dateValue(value?: string): string | null {
   }
 }
 
-async function executeCountQuery(query: string, abortSignal?: AbortSignal) {
-  const response = await executeQuery<{ count: { value: string } }>(
+async function executeCountQuery({
+  query,
+  config,
+}: {
+  query: string;
+  config: CodexQueryConfig;
+}) {
+  const response = await executeQuery<{ count: { value: string } }>({
     query,
-    abortSignal
-  );
+    config,
+  });
   return optionMapOr(0, parseInt, response.results.bindings[0]?.count.value);
 }
 
-async function executeQuery<A>(
-  query: string,
-  abortSignal?: AbortSignal
-): Promise<QueryResponse<A>> {
+type CodexQueryConfig = { endpoint: string; abortSignal?: AbortSignal };
+
+async function executeQuery<A>({
+  query,
+  config,
+}: {
+  query: string;
+  config: CodexQueryConfig;
+}): Promise<QueryResponse<A>> {
   const encodedQuery = encodeURIComponent(query.trim());
-  const endpoint = `${SPARQL_ENDPOINT}`;
-  const response = await fetch(endpoint, {
+
+  const response = await fetch(config.endpoint, {
     method: 'POST',
     headers: {
       Accept: 'application/sparql-results+json',
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
     body: `query=${encodedQuery}`,
-    signal: abortSignal,
+    signal: config.abortSignal,
   });
 
   if (response.ok) {
