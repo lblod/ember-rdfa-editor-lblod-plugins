@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - validate motivering and article section
-=======
 
 ## [7.0.0] - 2023-05-17
 ### Added
