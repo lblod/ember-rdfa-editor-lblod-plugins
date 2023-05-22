@@ -3,6 +3,7 @@ import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/addon/utils/ember-node';
 import { action } from '@ember/object';
 import { Command, PNode } from '@lblod/ember-rdfa-editor';
 import { baseStructureConfigWithChild } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes/config';
+import { isNone } from "@lblod/ember-rdfa-editor-lblod-plugins/utils/option";
 
 declare type blockArgs = {
   emberNodeArgs: EmberNodeArgs;
@@ -177,30 +178,18 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       this.schema.nodes.structure_content.create(
         null,
         this.schema.nodes.paragraph.create()
-
       )
     );
     const pos = this.parentArgs.getPos();
 
     return (state, dispatch) => {
-      if (pos === undefined) {
+      if (isNone(pos)) {
         return false;
       }
-      let offsetLastParagraph = 0;
-      //find pos after articles
-      this.node.forEach((node, offset, _index) => {
-        if (node.type.name === 'structure_paragraph') {
-          const currentEnd = offset + node.nodeSize;
-          if (currentEnd > offsetLastParagraph) {
-            offsetLastParagraph = currentEnd;
-          }
-        }
-      });
-      const insertPos = pos + offsetLastParagraph + 1;
+      const $pos = state.doc.resolve(pos);
 
-      // if (!this.node.canAppend(copiedNode)) {
-      //   return false;
-      // }
+      const insertPos = $pos.end() - 1;
+
       if (dispatch) {
         dispatch(state.tr.insert(insertPos, articleNode));
       }
