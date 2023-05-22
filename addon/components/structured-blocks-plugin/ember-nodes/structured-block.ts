@@ -205,9 +205,8 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       if (isNone(pos)) {
         return false;
       }
-      const $pos = state.doc.resolve(pos);
 
-      const insertPos = $pos.end() - 1;
+      const insertPos = pos + this.node?.nodeSize - 1;
 
       if (dispatch) {
         const tr = state.tr;
