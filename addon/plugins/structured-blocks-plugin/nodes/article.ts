@@ -41,6 +41,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     },
     toDOM: (_node) => ['h6', 0],
     parseDOM: [{ tag: 'h6' }],
+    continuous: true,
   };
 };
 

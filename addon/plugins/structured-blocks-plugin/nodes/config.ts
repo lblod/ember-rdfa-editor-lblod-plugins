@@ -80,6 +80,7 @@ export function createStructureConfig(type: string) {
       // should the css class for hovering be added. Hover is still needed to show it.
       addBlockHover: { default: true },
       config: { default: c },
+      number: { default: 1 },
     },
   };
 }

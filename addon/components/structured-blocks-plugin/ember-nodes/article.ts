@@ -1,4 +1,8 @@
 import Component from '@glimmer/component';
+import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
-// eslint-disable-next-line ember/no-empty-glimmer-component-classes
-export default class StructuredBlocksPluginEmberNodesArticleComponent extends Component {}
+export default class StructuredBlocksPluginEmberNodesArticleComponent extends Component<EmberNodeArgs> {
+  get articleNumber() {
+    return (this.args.node.attrs.number as number) ?? -1;
+  }
+}

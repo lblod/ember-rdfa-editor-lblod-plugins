@@ -1,9 +1,16 @@
 import { PNode, Transaction } from '@lblod/ember-rdfa-editor';
-import { StructureSpec } from '..';
 
 export default function recalculateStructureNumbers(
   transaction: Transaction,
-  ...structureSpecs: StructureSpec[]
+  ...structureSpecs: {
+    name: string;
+    updateNumber: (args: {
+      number: number;
+      pos: number;
+      transaction: Transaction;
+    }) => Transaction;
+    continuous: boolean;
+  }[]
 ) {
   const doc = transaction.doc;
   const indices = new Array<number>(structureSpecs.length).fill(1);

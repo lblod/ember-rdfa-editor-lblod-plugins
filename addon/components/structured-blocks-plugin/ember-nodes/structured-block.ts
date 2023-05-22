@@ -1,9 +1,18 @@
 import Component from '@glimmer/component';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/addon/utils/ember-node';
 import { action } from '@ember/object';
-import { Command, PNode } from '@lblod/ember-rdfa-editor';
+import {
+  Command,
+  NodeType,
+  PNode,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { baseStructureConfigWithChild } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structured-blocks-plugin/nodes/config';
-import { isNone } from "@lblod/ember-rdfa-editor-lblod-plugins/utils/option";
+import {
+  isNone,
+  Option,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { recalculateStructureNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 
 declare type blockArgs = {
   emberNodeArgs: EmberNodeArgs;
@@ -123,7 +132,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       //   return false;
       // }
       if (dispatch) {
-        dispatch(state.tr.replaceWith(endPos, endPos, copiedNode));
+        const tr = state.tr;
+        tr.replaceWith(endPos, endPos, copiedNode);
+        this.recalculateNumbers(tr, copiedNode.type);
+        dispatch(tr);
       }
       return true;
     };
@@ -135,14 +147,18 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       if (startPos === undefined) {
         return false;
       }
+      const nodeType = this.node?.type;
       const endPos = startPos + this.node.nodeSize;
 
       // 'check can remove
       // if (!this.node.canAppend(copiedNode)) {
       //   return false;
       // }
-      if (dispatch) {
-        dispatch(state.tr.delete(startPos, endPos));
+      if (dispatch && nodeType) {
+        const tr = state.tr;
+        tr.delete(startPos, endPos);
+        this.recalculateNumbers(tr, nodeType);
+        dispatch(tr);
       }
       return true;
     };
@@ -166,7 +182,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       //   return false;
       // }
       if (dispatch) {
-        dispatch(state.tr.insert(endPos, childNode));
+        const tr = state.tr;
+        tr.insert(endPos, childNode);
+        this.recalculateNumbers(tr, childNode.type);
+        dispatch(tr);
       }
       return true;
     };
@@ -191,7 +210,10 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
       const insertPos = $pos.end() - 1;
 
       if (dispatch) {
-        dispatch(state.tr.insert(insertPos, articleNode));
+        const tr = state.tr;
+        tr.insert(insertPos, articleNode);
+        this.recalculateNumbers(tr, articleNode.type);
+        dispatch(tr);
       }
       return true;
     };
@@ -215,5 +237,17 @@ export default class StructuredBlocksPluginEmberNodesStructuredBlockComponent ex
   @action
   removeThis() {
     this.controller.doCommand(this.removeBlockCommand());
+  }
+
+  @action
+  recalculateNumbers(tr: Transaction, nodeType: NodeType) {
+    recalculateStructureNumbers(tr, {
+      name: nodeType.name,
+      updateNumber({ number, pos, transaction }) {
+        const numberConverted = number.toString();
+        return transaction.setNodeAttribute(pos, 'number', numberConverted);
+      },
+      continuous: (nodeType.spec.continuous as Option<boolean>) ?? false,
+    });
   }
 }
