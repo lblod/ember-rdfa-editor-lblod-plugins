@@ -19,10 +19,12 @@ function generateCodeListOptionsQuery(codelistUri: string): string {
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX schema: <http://schema.org/>
+    PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     SELECT DISTINCT * WHERE { 
       <${codelistUri}> a lblodMobilitiet:Codelist.
       ?codelistOptions skos:inScheme <${codelistUri}>.
       ?codelistOptions skos:prefLabel ?label.
+      ?codelistOptions ext:value ?value.
       OPTIONAL {
         ?codelistOptions schema:position ?position .
       }
@@ -56,7 +58,7 @@ export async function fetchCodeListOptions(
 function parseCodelistOptions(queryResult: QueryResult): CodeListOption[] {
   const bindings = queryResult.results.bindings;
   return bindings.map((binding) => ({
-    value: binding['label']?.value,
+    value: binding['value']?.value,
     label: binding['label']?.value,
   }));
 }
