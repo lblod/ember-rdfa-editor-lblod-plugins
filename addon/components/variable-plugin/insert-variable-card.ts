@@ -65,11 +65,6 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     return this.args.controller;
   }
 
-  get labelPlaceholder() {
-    if (this.hasSubtype) return this.selectedSubtype?.label;
-    return this.selectedVariable?.label;
-  }
-
   @action
   updateVariableLabel(event: InputEvent) {
     this.variableLabel = (event.target as HTMLInputElement).value;
