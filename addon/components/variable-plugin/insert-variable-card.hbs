@@ -36,6 +36,21 @@
           {{subtype.label}}
         </PowerSelect>
       {{/if}}
+      <AuFormRow>
+        <AuLabel
+                  for='search-codex-datum-document-van'
+                  class='au-u-hidden-visually'
+                >{{t 'citaten-plugin.search.date-document-from'}}
+        </AuLabel>
+        <AuInput 
+          id="label" 
+          placeholder={{this.labelPlaceholder}} 
+          @type="text"
+          @width="block"
+          @value={{this.variableLabel}} 
+          {{on "input" this.updateVariableLabel}}
+        />
+      </AuFormRow>
       <AuButton
         {{on 'click' this.insert}}
         @disabled={{or

@@ -25,6 +25,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @tracked hasSubtype = false;
   @tracked selectedSubtype?: CodeList;
   @tracked subtypes?: CodeList[];
+  @tracked variableLabel?: string;
   publisher: string;
   endpoint: string;
 
@@ -64,6 +65,16 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     return this.args.controller;
   }
 
+  get labelPlaceholder() {
+    if (this.hasSubtype) return this.selectedSubtype?.label;
+    return this.selectedVariable?.label;
+  }
+
+  @action
+  updateVariableLabel(event: InputEvent) {
+    this.variableLabel = (event.target as HTMLInputElement).value;
+  }
+
   @action
   insert() {
     if (!this.selectedVariable) {
@@ -71,6 +82,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     }
     const node = this.selectedVariable.constructor(
       this.controller.schema,
+      this.variableLabel,
       this.endpoint,
       this.selectedSubtype
     );
