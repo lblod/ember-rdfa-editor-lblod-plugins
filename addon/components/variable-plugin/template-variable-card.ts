@@ -24,6 +24,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
   @tracked selectedVariable: { pos: number; node: PNode } | undefined;
   @tracked showCard = false;
   @tracked multiSelect = false;
+  @tracked label?: string;
   mappingUri?: string;
 
   get controller() {
@@ -93,6 +94,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
           const codelistURI = variable.node.attrs.codelistResource as string;
           void this.fetchCodeListOptions.perform(source, codelistURI);
           this.showCard = true;
+          this.label = variable.node.attrs.label as string;
         } else if (type === 'location') {
           const source =
             (variable.node.attrs.source as string | undefined) ??
@@ -103,6 +105,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
           const zonalityUri = roadSignRegulation?.node.attrs.zonality as
             | string
             | undefined;
+          this.label = variable.node.attrs.label as string;
           if (zonalityUri === ZONAL_URI) {
             void this.fetchCodeListOptions.perform(
               source,

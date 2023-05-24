@@ -30,8 +30,9 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           mappingResource: mappingURI,
           variableInstance,
           type: 'text',
+          label,
         },
-        schema.node('placeholder', { placeholderText: label })
+        schema.node('placeholder', { placeholderText: 'text' })
       );
     },
   },
@@ -47,8 +48,9 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           variableInstance,
           type: 'number',
           datatype: XSD('integer').prefixed,
+          label,
         },
-        schema.node('placeholder', { placeholderText: label })
+        schema.node('placeholder', { placeholderText: 'number' })
       );
     },
   },
@@ -75,9 +77,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           mappingResource: mappingURI,
           variableInstance,
           source: endpoint,
+          label,
         },
         schema.node('placeholder', {
-          placeholderText: label,
+          placeholderText: 'location',
         })
       );
     },
@@ -99,9 +102,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           codelistResource: selectedCodelist?.uri,
           variableInstance,
           source: endpoint,
+          label: label ?? selectedCodelist?.label,
         },
         schema.node('placeholder', {
-          placeholderText: label ?? selectedCodelist?.label,
+          placeholderText: selectedCodelist?.label,
         })
       );
     },
