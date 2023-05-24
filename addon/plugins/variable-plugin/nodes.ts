@@ -53,7 +53,6 @@ const emberNodeConfig: EmberNodeConfig = {
       source,
       label,
     } = node.attrs;
-    console.log(node.attrs);
     const sourceSpan = source
       ? [
           [
