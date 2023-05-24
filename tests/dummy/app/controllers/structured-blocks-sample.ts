@@ -153,7 +153,8 @@ export default class StructuredBlocksSampleController extends Controller {
   rdfaEditorInit(controller: SayController) {
     this.controller = controller;
     applyDevTools(controller.mainEditorView);
-    controller.setHtmlContent('');
+    const presetContent = localStorage.getItem('EDITOR_CONTENT') ?? '';
+    controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
   }
