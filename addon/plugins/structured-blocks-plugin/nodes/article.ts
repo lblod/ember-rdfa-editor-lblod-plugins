@@ -4,7 +4,8 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { createStructureConfig } from './config';
-import { NodeView } from '@lblod/ember-rdfa-editor/addon';
+import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   const config = createStructureConfig('article');
@@ -13,34 +14,39 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     inline: false,
     atom: false,
     content: 'structure_content',
-    ignoreMutation(view: NodeView) {
-      return function (mutation: MutationRecord) {
-        if (!view.contentDOM) {
-          console.log(
-            'ignored mutation cause there is no contentDOM',
-            mutation
-          );
-          return true;
-        }
-        if (
-          view.contentDOM.contains(mutation.target) ||
-          (mutation.addedNodes.item(0) as Element)?.classList.contains(
-            'content-area'
-          ) ||
-          (mutation.removedNodes.item(0) as Element)?.classList.contains(
-            'content-area'
-          )
-        ) {
-          console.log('accepted mutation', mutation);
+    toDOM: (node: PNode): DOMOutputSpec => [
+      'div',
+      {
+        'data-structure': config.name,
+        'data-structure-title': (node.attrs.text as string) ?? '',
+        'data-structure-number': (node.attrs.number as number) ?? 1,
+      },
+      [
+        'h5',
+        `artikel ${unwrap<string>(node.attrs.number).toString() ?? 1}: ${
+          node.attrs.text as string
+        }`,
+      ],
+      ['div', 0],
+    ],
+    parseDOM: [
+      {
+        tag: 'div',
+
+        contentElement(element: HTMLElement): HTMLElement {
+          return unwrap(element.lastElementChild) as HTMLElement;
+        },
+        getAttrs(element: HTMLElement) {
+          if (element.dataset.structure === config.name) {
+            return {
+              text: element.dataset.structureTitle ?? '',
+              number: element.dataset.structureNumber ?? 1,
+            };
+          }
           return false;
-        } else {
-          console.log('accepted mutation', mutation);
-          return false;
-        }
-      };
-    },
-    toDOM: (_node) => ['h6', 0],
-    parseDOM: [{ tag: 'h6' }],
+        },
+      },
+    ],
     continuous: true,
   };
 };

@@ -1,0 +1,69 @@
+{{! template-lint-disable no-bare-strings  }}
+{{page-title 'Dummy - Structured blocks'}}
+<div>
+  <DummyContainer>
+    <:header>
+      <DebugTools @controller={{this.controller}} />
+    </:header>
+    <:content>
+      <EditorContainer
+        @editorOptions={{
+          hash
+          showRdfa='true'
+          showRdfaHighlight='true'
+          showRdfaHover='true'
+          showPaper='true'
+          showToolbarBottom=null
+        }}
+        @showRdfaBlocks={{this.controller.showRdfaBlocks}}
+      >
+        <:top>
+          {{#if this.controller}}
+            <Toolbar as |Tb|>
+              <Tb.Group>
+                <Toolbar::History @controller={{this.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <Toolbar::Styling @controller={{this.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <Toolbar::List @controller={{this.controller}} />
+                <Plugins::Indentation::IndentationMenu
+                  @controller={{this.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Link::LinkMenu @controller={{this.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Table::TableMenu @controller={{this.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Heading::HeadingMenu
+                  @controller={{this.controller}}
+                />
+              </Tb.Group>
+              <Tb.Spacer />
+              <Tb.Group>
+                <Plugins::Formatting::FormattingToggle
+                  @controller={{this.controller}}
+                />
+                <Plugins::RdfaBlockRender::RdfaBlocksToggle
+                  @controller={{this.controller}}
+                />
+              </Tb.Group>
+            </Toolbar>
+          {{/if}}
+        </:top>
+        <:default>
+          <Editor
+            @plugins={{this.plugins}}
+            @schema={{this.schema}}
+            @nodeViews={{this.nodeViews}}
+            @rdfaEditorInit={{this.rdfaEditorInit}}
+          />
+        </:default>
+      </EditorContainer>
+    </:content>
+  </DummyContainer>
+</div>

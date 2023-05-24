@@ -4,6 +4,7 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { createStructureConfig } from './config';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   const config = createStructureConfig('subsection');
@@ -12,17 +13,30 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     toDOM: (node) => [
       'div',
       {
-        property: config.name,
+        'data-structure': config.name,
+        'data-structure-title': (node.attrs.text as string) ?? '',
+        'data-structure-number': (node.attrs.number as number) ?? 1,
       },
-      ['h5', node.attrs.text],
+      [
+        'h4',
+        `Onderafdeling ${unwrap<string>(node.attrs.number).toString() ?? 1}.: ${
+          node.attrs.text as string
+        }`,
+      ],
       ['div', 0],
     ],
     parseDOM: [
       {
-        tag: 'div h5',
+        tag: 'div',
+        contentElement(element: HTMLElement): HTMLElement {
+          return unwrap(element.lastElementChild) as HTMLElement;
+        },
         getAttrs(element: HTMLElement) {
-          if (element.parentElement?.getAttribute('property') === config.name) {
-            return { text: element.innerText };
+          if (element.dataset.structure === config.name) {
+            return {
+              text: element.dataset.structureTitle ?? '',
+              number: element.dataset.structureNumber ?? 1,
+            };
           } else {
             return false;
           }

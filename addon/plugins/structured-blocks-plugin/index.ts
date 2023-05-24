@@ -11,7 +11,6 @@ import {
   article,
   articleView,
   content,
-  contentView,
 } from './nodes';
 
 export const STRUCTURE_NODES = {

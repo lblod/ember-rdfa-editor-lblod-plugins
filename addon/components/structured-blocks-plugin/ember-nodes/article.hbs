@@ -1,10 +1,10 @@
 <StructuredBlocksPlugin::EmberNodes::StructuredBlock
   @emberNodeArgs={{this.args}}
 >
-  <:contentDOM>
-    {{yield}}
-  </:contentDOM>
   <:prefix>
     Artikel {{this.articleNumber}}.
   </:prefix>
+  <:contentDOM>
+    {{yield}}
+  </:contentDOM>
 </StructuredBlocksPlugin::EmberNodes::StructuredBlock>

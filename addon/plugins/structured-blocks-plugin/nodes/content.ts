@@ -1,30 +1,4 @@
-import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
-import {
-  createEmberNodeSpec,
-  createEmberNodeView,
-  EmberNodeConfig,
-} from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { createStructureConfig } from './config';
-
-export const emberNodeConfig: () => EmberNodeConfig = () => {
-  const config = createStructureConfig('content');
-  return {
-    ...config,
-    inline: false,
-    atom: true,
-    content: 'block+',
-    selectable: true,
-    ignoreMutation(mutation: MutationRecord) {
-      return false;
-    },
-    stopEvent: (event: Event) => {
-      return true;
-    },
-    draggable: false,
-    toDOM: (_node) => ['p', 0],
-    parseDOM: [{ tag: 'p' }],
-  };
-};
+import { NodeSpec } from '@lblod/ember-rdfa-editor';
 
 export const content: NodeSpec = {
   inline: false,
@@ -34,11 +8,11 @@ export const content: NodeSpec = {
   isolating: true,
   defining: true,
   selectable: false,
-  toDOM(node: PNode) {
+  toDOM() {
     return [
-      'p',
+      'div',
       {
-        'data-is-content': 'true',
+        'data-structure': 'content',
         class: 'au-u-11-12 border au-c-textarea content-area',
       },
       0,
@@ -46,9 +20,9 @@ export const content: NodeSpec = {
   },
   parseDOM: [
     {
-      tag: 'p',
+      tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (element.dataset['data-is-content'] === 'true') {
+        if (element.dataset.structure === 'content') {
           return {};
         }
         return false;
@@ -56,5 +30,3 @@ export const content: NodeSpec = {
     },
   ],
 };
-
-export const contentView = createEmberNodeView(emberNodeConfig());

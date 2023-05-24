@@ -10,4 +10,5 @@ Router.map(function () {
   this.route('besluit-sample', { path: '/' });
   this.route('regulatory-statement-sample');
   this.route('structured-blocks-sample');
+  this.route('structured-blocks-regulation-sample');
 });

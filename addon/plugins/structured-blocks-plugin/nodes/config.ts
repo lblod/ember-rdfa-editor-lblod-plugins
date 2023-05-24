@@ -62,7 +62,7 @@ export function createStructureConfig(type: string) {
     defining: true,
     isolating: true,
     ignoreMutation() {
-      return () => false;
+      return true;
     },
     stopEvent: (event: Event) => {
       // let hover events bubble up
