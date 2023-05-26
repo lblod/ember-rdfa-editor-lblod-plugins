@@ -19,17 +19,18 @@ ember install ember-rdfa-editor-lblod-plugins
 
 This addon contains the following editor plugins:
 
-* besluit-type-plugin
-* citaten-plugin
-* decision-plugin
-* import-snippet-plugin
-* insert-variable-plugin
-* rdfa-date-plugin
-* roadsign-regulation-plugin
-* standard-template-plugin
-* table-of-contents-plugin
-* template-variable-plugin
-* validation-plugin
+* [besluit-type-plugin](#besluit-type-plugin)
+* [citaten-plugin](#citaten-plugin)
+* [decision-plugin](#decision-plugin)
+* [import-snippet-plugin](#import-snippet-plugin)
+* [insert-variable-plugin](#insert-variable-plugin)
+* [rdfa-date-plugin](#rdfa-date-plugin)
+* [roadsign-regulation-plugin](#roadsign-regulation-plugin)
+* [standard-template-plugin](#standard-template-plugin)
+* [table-of-contents-plugin](#table-of-contents-plugin)
+* [template-variable-plugin](#template-variable-plugin)
+* [validation-plugin](#validation-plugin)
+* [address-plugin](#address-plugin)
 
 You can configure your editor like this:
 ```hbs
