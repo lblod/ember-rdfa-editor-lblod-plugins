@@ -197,7 +197,7 @@ variable-plugin:
   button: Voeg in
   enter-variable-value: Selecteer waarde
   label: Label
-  labelPlaceholder: Typ ies...
+  labelPlaceholder: Type iets...
 
 address-plugin:
   insert:
