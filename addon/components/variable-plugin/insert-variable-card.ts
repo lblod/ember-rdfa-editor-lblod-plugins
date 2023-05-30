@@ -77,7 +77,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     }
     const node = this.selectedVariable.constructor(
       this.controller.schema,
-      this.variableLabel,
+      this.variableLabel !== '' ? this.variableLabel : undefined,
       this.endpoint,
       this.selectedSubtype
     );
