@@ -1,0 +1,30 @@
+<Toolbar::Button
+  @disabled={{this.disabled}}
+  @title={{t 'generic-rdfa-variable.menu.insert'}}
+  @icon='html-plus'
+  {{on 'click' this.showModal}}
+/>
+<AuModal
+  @modalOpen={{this.modalOpen}}
+  @closeModal={{this.onCancel}}
+  class='generic-rdfa-plugin-modal'
+>
+  <:title>{{t 'generic-rdfa-variable.menu.insert'}}</:title>
+  <:body>
+    <div
+      class='generic-rdfa-variable-textarea-wrapper'
+      {{did-insert this.setupHtmlEditor}}
+    >
+    </div>
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <AuButton @skin='primary' {{on 'click' this.onInsert}}>
+        {{t 'generic-rdfa-variable.modal.insert'}}
+      </AuButton>
+      <AuButton @skin='secondary' {{on 'click' this.onCancel}}>
+        {{t 'generic-rdfa-variable.modal.cancel'}}
+      </AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>

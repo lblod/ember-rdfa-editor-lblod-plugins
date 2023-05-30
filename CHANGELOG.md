@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - navigation links in TOC of readme
 - support for option labels in Variable-plugin
+- Generic rdfa variables input plugin - HTML only input
 
 ## [7.1.0] - 2023-05-18
 
