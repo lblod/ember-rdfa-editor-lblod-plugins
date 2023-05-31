@@ -1,5 +1,9 @@
 import Component from '@glimmer/component';
-import { SayController, SayView, Selection } from '@lblod/ember-rdfa-editor';
+import {
+  NodeSelection,
+  SayController,
+  SayView,
+} from '@lblod/ember-rdfa-editor';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
@@ -9,11 +13,23 @@ type Args = {
 
 export default class VariableComponent extends Component<Args> {
   @tracked innerView?: SayView;
+
+  @action
   onClick() {
     if (this.innerView) {
-      this.innerView.state.tr.setSelection(
-        Selection['atStart'](this.innerView.state.doc)
-      );
+      if (this.innerView.state.doc.firstChild?.type.name === 'placeholder') {
+        this.innerView.focus();
+        // Use request animation frame to only change the selection when the focus has been established
+        window.requestAnimationFrame(() => {
+          if (this.innerView) {
+            const tr = this.innerView.state.tr;
+            tr.setSelection(NodeSelection.create(this.innerView?.state.doc, 0));
+            this.innerView?.dispatch(tr);
+          }
+        });
+      } else {
+        this.innerView.focus();
+      }
     }
   }
   @action
