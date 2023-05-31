@@ -7,7 +7,9 @@
     @selected={{@selected}}
     @initEditor={{this.initEditor}}
   />
-  <span class="label">
-    ({{@node.attrs.label}})
-  </span>
+  {{#if @node.attrs.label}}
+    <span class="label">
+      ({{@node.attrs.label}})
+    </span>
+  {{/if}}
 </AuPill>
