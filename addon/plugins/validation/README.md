@@ -77,7 +77,7 @@ position in the path
 
 
 
-### `minCount: number`
+### minCount
 
 - type: `number`
 - meaning: the specified shape must occur at least as many times as the specified amount in the focusNode

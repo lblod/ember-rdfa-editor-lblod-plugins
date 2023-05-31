@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Bump `@lblod/ember-rdfa-editor` package to fix annotation not present for some structures
 
+### Added
+- navigation links in TOC of readme
+
 ## [7.1.0] - 2023-05-18
 
 ### Added
