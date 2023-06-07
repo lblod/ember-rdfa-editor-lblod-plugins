@@ -35,7 +35,15 @@ export default class GenericRdfaVariableInsertMenu extends Component<Args> {
   closeModal() {
     this.modalOpen = false;
 
-    // awaiting next tick, otherwise the editor will not be focused properly
+    // The recommended way to focus the editor is to call `this.controller.focus()` before opening the modal
+    // e.g. in the `showModal` fn, then `focus-trap` inside modal will record it as the element that should
+    // be focused when `focus-trap` is deactivated (modal is closed).
+    //
+    // However, for some reason, this doesn't work in this case. Maybe because `initialFocus` is false, maybe
+    // because of something else, I wasn't able to get to the bottom of it.
+    //
+    // So, we're doing it the other way here: we wait for the modal to close, wait for the `focus-trap` to
+    // deactivate, and then focus the editor.
     setTimeout(() => {
       this.controller.focus();
     }, 0);
