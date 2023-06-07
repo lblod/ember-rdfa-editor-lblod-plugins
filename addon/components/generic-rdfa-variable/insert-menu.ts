@@ -34,7 +34,11 @@ export default class GenericRdfaVariableInsertMenu extends Component<Args> {
   @action
   closeModal() {
     this.modalOpen = false;
-    this.controller.focus();
+
+    // awaiting next tick, otherwise the editor will not be focused properly
+    setTimeout(() => {
+      this.controller.focus();
+    }, 0);
   }
 
   @action
@@ -54,6 +58,8 @@ export default class GenericRdfaVariableInsertMenu extends Component<Args> {
       }),
       parent: element,
     });
+
+    this.htmlEditor.focus();
   }
 
   @action
