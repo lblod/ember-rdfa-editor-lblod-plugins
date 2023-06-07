@@ -15,19 +15,23 @@ export type CodeListOption = {
 
 function generateCodeListOptionsQuery(codelistUri: string): string {
   const codeListOptionsQuery = `
-    PREFIX lblodMobilitiet: <http://data.lblod.info/vocabularies/mobiliteit/>
+    PREFIX lblodMobiliteit: <http://data.lblod.info/vocabularies/mobiliteit/>
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX schema: <http://schema.org/>
+    PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     SELECT DISTINCT * WHERE { 
-      <${codelistUri}> a lblodMobilitiet:Codelist.
+      <${codelistUri}> a lblodMobiliteit:Codelist.
       ?codelistOptions skos:inScheme <${codelistUri}>.
-      ?codelistOptions skos:prefLabel ?label.
+      ?codelistOptions skos:prefLabel ?value.
       OPTIONAL {
         ?codelistOptions schema:position ?position .
       }
       OPTIONAL {
         <${codelistUri}> dct:type ?type.
+      }
+      OPTIONAL {
+        ?codelistOptions ext:summary ?label.
       }
     }
     ORDER BY (!BOUND(?position)) ASC(?position)
@@ -56,8 +60,8 @@ export async function fetchCodeListOptions(
 function parseCodelistOptions(queryResult: QueryResult): CodeListOption[] {
   const bindings = queryResult.results.bindings;
   return bindings.map((binding) => ({
-    value: binding['label']?.value,
-    label: binding['label']?.value,
+    value: binding['value']?.value,
+    label: binding['label'] ? binding['label'].value : binding['value']?.value,
   }));
 }
 
