@@ -57,6 +57,7 @@
     }
     .label {
       color: var(--au-blue-700);
+      user-select: none;
     }
   }
 }
