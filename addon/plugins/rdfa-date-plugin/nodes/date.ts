@@ -11,6 +11,7 @@ import {
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { DateOptions } from '..';
 import { formatDate, validateDateFormat } from '../utils';
+import { PNode } from '@lblod/ember-rdfa-editor';
 
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
@@ -42,7 +43,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       default: '',
     },
   },
-  leafText: (node) => {
+  leafText: (node: PNode) => {
     const { value, onlyDate, format } = node.attrs;
     const humanReadableDate = value
       ? formatDate(new Date(value), format)
