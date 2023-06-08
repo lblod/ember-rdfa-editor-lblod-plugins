@@ -9,9 +9,54 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY,
+  MAXIMUM_VALUE_PNODE_KEY,
+  MINIMUM_VALUE_HTML_ATTRIBUTE_KEY,
+  MINIMUM_VALUE_PNODE_KEY,
+} from './utils/constants';
+import { PNode } from '@lblod/ember-rdfa-editor';
 
-const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'], 
+const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
+
+export const getHTMLNodeExtraAttributes = ({
+  node,
+  type,
+}: {
+  node: HTMLElement;
+  type: string;
+}) => {
+  if (type === 'number') {
+    return {
+      [MINIMUM_VALUE_PNODE_KEY]:
+        node.getAttribute(MINIMUM_VALUE_HTML_ATTRIBUTE_KEY) ?? null,
+      [MAXIMUM_VALUE_PNODE_KEY]:
+        node.getAttribute(MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY) ?? null,
+    };
+  }
+
+  return {};
+};
+
+export const getPNodeExtraAttributes = ({
+  node,
+  type,
+}: {
+  node: PNode;
+  type: string;
+}) => {
+  if (type === 'number') {
+    return {
+      [MINIMUM_VALUE_HTML_ATTRIBUTE_KEY]:
+        (node.attrs[MINIMUM_VALUE_PNODE_KEY] as string) ?? null,
+      [MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY]:
+        (node.attrs[MAXIMUM_VALUE_PNODE_KEY] as string) ?? null,
+    };
+  }
+
+  return {};
+};
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'variable',
@@ -42,6 +87,12 @@ const emberNodeConfig: EmberNodeConfig = {
     label: {
       default: '',
     },
+    minimumValue: {
+      default: null,
+    },
+    maximumValue: {
+      default: null,
+    },
   },
   toDOM: (node) => {
     const {
@@ -53,6 +104,7 @@ const emberNodeConfig: EmberNodeConfig = {
       source,
       label,
     } = node.attrs;
+
     const sourceSpan = source
       ? [
           [
@@ -81,6 +133,7 @@ const emberNodeConfig: EmberNodeConfig = {
         resource: mappingResource as string,
         typeof: EXT('Mapping').prefixed,
         'data-label': label as string,
+        ...getPNodeExtraAttributes({ node, type: type as string }),
       },
       [
         'span',
@@ -127,7 +180,7 @@ const emberNodeConfig: EmberNodeConfig = {
           const datatype = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
             ?.getAttribute('datatype');
-          if (!mappingResource) {
+          if (!mappingResource || !type) {
             return false;
           }
           return {
@@ -140,8 +193,10 @@ const emberNodeConfig: EmberNodeConfig = {
             type,
             datatype,
             label,
+            ...getHTMLNodeExtraAttributes({ type, node }),
           };
         }
+
         return false;
       },
       contentElement: CONTENT_SELECTOR,

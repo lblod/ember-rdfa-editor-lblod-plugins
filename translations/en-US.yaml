@@ -185,6 +185,12 @@ variable-plugin:
   enter-variable-value: Select value
   label: Label
   labelPlaceholder: Type something...
+  number:
+    minimum: Minimum
+    minimum-placeholder: minimum value
+    maximum: Maximum
+    maximum-placeholder: maximum value
+    to: to
 validation-plugin:
   default-fix-message: Resolve
 

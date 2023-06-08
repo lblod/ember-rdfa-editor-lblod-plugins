@@ -40,15 +40,21 @@
         <AuLabel for='label'>
           {{t 'variable-plugin.label'}}
         </AuLabel>
-        <AuInput 
-          id="label" 
-          placeholder={{t 'variable-plugin.labelPlaceholder'}} 
+        <AuInput
+          id="label"
+          placeholder={{t 'variable-plugin.labelPlaceholder'}}
           @type="text"
           @width="block"
-          @value={{this.variableLabel}} 
+          @value={{this.variableLabel}}
           {{on "input" this.updateVariableLabel}}
         />
       </AuFormRow>
+      {{#if (eq this.type 'number')}}
+        <VariablePlugin::NumberSettings
+          @minimumValue={{this.extraAttributes.minimumValue}}
+          @maximumValue={{this.extraAttributes.maximumValue}}
+        />
+      {{/if}}
       <AuButton
         {{on 'click' this.insert}}
         @disabled={{or

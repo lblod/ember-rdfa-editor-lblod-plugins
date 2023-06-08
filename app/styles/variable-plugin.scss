@@ -77,3 +77,25 @@
     }
   }
 }
+
+.number-settings {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+
+  .to {
+    display: flex;
+    justify-content: center;
+    color: var(--au-gray-900);
+
+    span {
+      position: relative;
+      top: 33px;
+    }
+  }
+
+  // AuInput @type='number' overrides width to be 100px, we have to override it again
+  input[type='number'] {
+    width: 100%;
+  }
+}
