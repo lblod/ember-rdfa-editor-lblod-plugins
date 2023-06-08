@@ -81,6 +81,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       this.endpoint,
       this.selectedSubtype
     );
+    this.variableLabel = '';
     this.controller.withTransaction(
       (tr) => {
         return tr.replaceSelectionWith(node);
