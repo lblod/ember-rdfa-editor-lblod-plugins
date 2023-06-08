@@ -205,3 +205,10 @@ address-plugin:
 dummy:
   validation-card:
     title: Document Validation
+
+generic-rdfa-variable:
+  menu:
+    insert: Insert RDFA
+  modal:
+    insert: Insert
+    cancel: Cancel

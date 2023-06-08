@@ -211,3 +211,10 @@ address-plugin:
 dummy:
   validation-card:
     title: Documentvalidatie
+
+generic-rdfa-variable:
+  menu:
+    insert: RDFA invoegen
+  modal:
+    insert: Invoegen
+    cancel: Terug

@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Bump `@lblod/ember-rdfa-editor` package to fix annotation not present for some structures
+
+### Added
+- navigation links in TOC of readme
+- support for option labels in Variable-plugin
+- Generic rdfa variables input plugin - HTML only input
 
 ### Added
 - Add label to variables
