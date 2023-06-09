@@ -27,7 +27,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       default: null,
     },
     humanReadableDate: {
-      default: formatDate(new Date(), options.formats[0].dateFormat),
+      default: options.placeholder.insertDate,
     },
     value: {},
     format: {
