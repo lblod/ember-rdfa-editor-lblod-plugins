@@ -7,6 +7,11 @@ import {
   SayView,
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
+import {
+  formatDate,
+  validateDateFormat,
+} from '../../plugins/rdfa-date-plugin/utils';
+import { DateOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 
 type Args = {
   getPos: () => number | undefined;
@@ -29,5 +34,22 @@ export default class VariableComponent extends Component<Args> {
       )
     );
     this.args.controller.activeEditorView.dispatch(tr);
+  }
+
+  get humanReadableDate() {
+    const value = this.args.node.attrs.value as string;
+    const format = this.args.node.attrs.format as string;
+    if (value) {
+      if (validateDateFormat(format).type === 'ok') {
+        return formatDate(new Date(value), format);
+      } else {
+        return 'Ongeldig formaat';
+      }
+    } else {
+      const options = this.args.node.type.spec.options as DateOptions;
+      return (this.args.node.attrs.onlyDate as boolean)
+        ? options.placeholder.insertDate
+        : options.placeholder.insertDateTime;
+    }
   }
 }

@@ -1,5 +1,6 @@
 <AuPill @icon="pencil" @iconAlignment="right" class="variable" {{on 'click' this.onClick}}>
-  {{@node.attrs.humanReadableDate}}
+
+  {{this.humanReadableDate}}
   {{#if @node.attrs.label}}
     <span class="label">
       ({{@node.attrs.label}})

@@ -22,6 +22,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   draggable: false,
   atom: true,
   defining: false,
+  options,
   attrs: {
     mappingResource: {
       default: null,
@@ -132,8 +133,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
               hasRDFaAttribute(el, 'property', EXT('content'))
             ) as HTMLElement | undefined;
             let humanReadableDate: string;
-            const value =
-              dateNode?.getAttribute('content') ?? new Date().toISOString();
+            const value = dateNode?.getAttribute('content');
             const format = dateNode?.dataset.format;
             if (value && format) {
               if (validateDateFormat(format).type === 'ok') {
