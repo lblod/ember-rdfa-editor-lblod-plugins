@@ -146,9 +146,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
                 ? options.placeholder.insertDate
                 : options.placeholder.insertDateTime;
             }
-            console.log(node);
-            const label = node.getAttribute('dataLabel');
-            console.log(label);
+            const label = node.getAttribute('dataLabel') || variableType;
             return {
               mappingResource,
               onlyDate,

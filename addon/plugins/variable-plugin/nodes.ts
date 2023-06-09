@@ -120,10 +120,10 @@ const emberNodeConfig: EmberNodeConfig = {
           const source = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', DCT('source')))
             ?.getAttribute('resource');
-          const label = node.getAttribute('dataLabel');
           const type = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
             ?.getAttribute('content');
+          const label = node.getAttribute('dataLabel') || type;
           const datatype = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
             ?.getAttribute('datatype');
