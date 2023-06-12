@@ -12,6 +12,7 @@ export type VariableType = {
   fetchSubtypes?: (endpoint: string, publisher: string) => Promise<CodeList[]>;
   constructor: (
     schema: Schema,
+    label?: string,
     endpoint?: string,
     selectedCodelist?: CodeList
   ) => PNode;
@@ -20,7 +21,7 @@ export type VariableType = {
 export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   text: {
     label: 'text',
-    constructor: (schema) => {
+    constructor: (schema, label = 'text') => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -29,6 +30,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           mappingResource: mappingURI,
           variableInstance,
           type: 'text',
+          label,
         },
         schema.node('placeholder', { placeholderText: 'text' })
       );
@@ -36,7 +38,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   },
   number: {
     label: 'number',
-    constructor: (schema) => {
+    constructor: (schema, label = 'number') => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -46,6 +48,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           variableInstance,
           type: 'number',
           datatype: XSD('integer').prefixed,
+          label,
         },
         schema.node('placeholder', { placeholderText: 'number' })
       );
@@ -53,18 +56,19 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   },
   date: {
     label: 'date',
-    constructor: (schema) => {
+    constructor: (schema, label: 'date') => {
       return unwrap(
         schema.nodes.date.createAndFill({
           mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
           value: null,
+          label,
         })
       );
     },
   },
   location: {
     label: 'location',
-    constructor: (schema, endpoint) => {
+    constructor: (schema, label = 'location', endpoint) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -74,6 +78,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           mappingResource: mappingURI,
           variableInstance,
           source: endpoint,
+          label,
         },
         schema.node('placeholder', {
           placeholderText: 'location',
@@ -87,7 +92,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
       const codelists = fetchCodeListsByPublisher(endpoint, publisher);
       return codelists;
     },
-    constructor: (schema, endpoint, selectedCodelist?: CodeList) => {
+    constructor: (schema, label, endpoint, selectedCodelist?: CodeList) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -98,9 +103,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           codelistResource: selectedCodelist?.uri,
           variableInstance,
           source: endpoint,
+          label: label ?? selectedCodelist?.label,
         },
         schema.node('placeholder', {
-          placeholderText: selectedCodelist?.label ?? '',
+          placeholderText: selectedCodelist?.label,
         })
       );
     },

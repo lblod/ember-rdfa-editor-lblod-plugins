@@ -183,6 +183,8 @@ variable-plugin:
   insert-variable: Insert variable
   button: Insert
   enter-variable-value: Select value
+  label: Label
+  labelPlaceholder: Type something...
 validation-plugin:
   default-fix-message: Resolve
 

@@ -58,7 +58,10 @@ import {
   variableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
-import date from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
+import {
+  date,
+  dateView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
 import {
   citationPlugin,
   CitationPluginConfig,
@@ -244,6 +247,7 @@ export default class BesluitSampleController extends Controller {
     return {
       variable: variableView(controller),
       link: linkView(this.config.link)(controller),
+      date: dateView(this.config.date)(controller),
     };
   };
   @tracked plugins: Plugin[] = [

@@ -1,12 +1,6 @@
 <AuPill @icon="pencil" @iconAlignment="right" class="variable" {{on 'click' this.onClick}}>
-  <EmberNode::EmbeddedEditor 
-    @controller={{@controller}} 
-    @node={{@node}} 
-    @view={{@view}} 
-    @getPos={{@getPos}} 
-    @selected={{@selected}}
-    @initEditor={{this.initEditor}}
-  />
+
+  {{this.humanReadableDate}}
   {{#if @node.attrs.label}}
     <span class="label">
       ({{@node.attrs.label}})

@@ -54,7 +54,10 @@ import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
-import date from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
+import {
+  date,
+  dateView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
 import {
   createInvisiblesPlugin,
   hardBreak,
@@ -178,6 +181,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         controller
       ),
       link: linkView(this.config.link)(controller),
+      date: dateView(this.config.date)(controller),
     };
   };
   @tracked plugins: Plugin[] = [

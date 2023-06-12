@@ -39,6 +39,9 @@ const emberNodeConfig: EmberNodeConfig = {
     datatype: {
       default: null,
     },
+    label: {
+      default: '',
+    },
   },
   toDOM: (node) => {
     const {
@@ -48,12 +51,16 @@ const emberNodeConfig: EmberNodeConfig = {
       type,
       datatype,
       source,
+      label,
     } = node.attrs;
     const sourceSpan = source
       ? [
           [
             'span',
-            { property: DCT('source').prefixed, resource: source as string },
+            {
+              property: DCT('source').prefixed,
+              resource: source as string,
+            },
           ],
         ]
       : [];
@@ -73,6 +80,7 @@ const emberNodeConfig: EmberNodeConfig = {
       {
         resource: mappingResource as string,
         typeof: EXT('Mapping').prefixed,
+        dataLabel: label as string,
       },
       [
         'span',
@@ -115,6 +123,7 @@ const emberNodeConfig: EmberNodeConfig = {
           const type = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
             ?.getAttribute('content');
+          const label = node.getAttribute('dataLabel') || type;
           const datatype = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
             ?.getAttribute('datatype');
@@ -130,6 +139,7 @@ const emberNodeConfig: EmberNodeConfig = {
             source,
             type,
             datatype,
+            label,
           };
         }
         return false;

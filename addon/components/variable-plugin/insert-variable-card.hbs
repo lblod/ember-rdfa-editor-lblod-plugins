@@ -36,6 +36,19 @@
           {{subtype.label}}
         </PowerSelect>
       {{/if}}
+      <AuFormRow>
+        <AuLabel for='label'>
+          {{t 'variable-plugin.label'}}
+        </AuLabel>
+        <AuInput 
+          id="label" 
+          placeholder={{t 'variable-plugin.labelPlaceholder'}} 
+          @type="text"
+          @width="block"
+          @value={{this.variableLabel}} 
+          {{on "input" this.updateVariableLabel}}
+        />
+      </AuFormRow>
       <AuButton
         {{on 'click' this.insert}}
         @disabled={{or

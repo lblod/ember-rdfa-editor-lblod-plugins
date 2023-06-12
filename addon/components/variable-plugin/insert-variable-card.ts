@@ -25,6 +25,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @tracked hasSubtype = false;
   @tracked selectedSubtype?: CodeList;
   @tracked subtypes?: CodeList[];
+  @tracked variableLabel?: string;
   publisher: string;
   endpoint: string;
 
@@ -65,15 +66,22 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   }
 
   @action
+  updateVariableLabel(event: InputEvent) {
+    this.variableLabel = (event.target as HTMLInputElement).value;
+  }
+
+  @action
   insert() {
     if (!this.selectedVariable) {
       return;
     }
     const node = this.selectedVariable.constructor(
       this.controller.schema,
+      this.variableLabel !== '' ? this.variableLabel : undefined,
       this.endpoint,
       this.selectedSubtype
     );
+    this.variableLabel = '';
     this.controller.withTransaction(
       (tr) => {
         return tr.replaceSelectionWith(node);

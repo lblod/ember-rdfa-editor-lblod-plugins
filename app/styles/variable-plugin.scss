@@ -55,6 +55,15 @@
       word-wrap: break-word;
       outline: 0px;
     }
+    .label {
+      font-size: var(--au-base);
+      color: var(--au-blue-700);
+      user-select: none;
+      margin: 0.5rem;
+    }
+    .au-c-icon {
+      margin: 0;
+    }
   }
 }
 
