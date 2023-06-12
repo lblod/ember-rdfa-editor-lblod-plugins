@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Bump `@lblod/ember-rdfa-editor` package to fix annotation not present for some structures
+- Change variable label to be stored in the data-attributes and solve bug with date not getting a default label
 
 ### Added
 - navigation links in TOC of readme
