@@ -80,7 +80,7 @@ const emberNodeConfig: EmberNodeConfig = {
       {
         resource: mappingResource as string,
         typeof: EXT('Mapping').prefixed,
-        dataLabel: label as string,
+        'data-label': label as string,
       },
       [
         'span',
@@ -123,7 +123,7 @@ const emberNodeConfig: EmberNodeConfig = {
           const type = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
             ?.getAttribute('content');
-          const label = node.getAttribute('dataLabel') || type;
+          const label = node.getAttribute('data-label') || type;
           const datatype = [...node.children]
             .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
             ?.getAttribute('datatype');

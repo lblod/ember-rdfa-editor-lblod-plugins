@@ -83,7 +83,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
           resource: mappingResource as string,
           typeof: EXT('Mapping').prefixed,
           class: 'date',
-          dataLabel: label as string,
+          'data-label': label as string,
         },
         ['span', { property: DCT('type').prefixed, content: 'date' }],
         ['span', dateAttrs, humanReadableDate],
@@ -146,7 +146,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
                 ? options.placeholder.insertDate
                 : options.placeholder.insertDateTime;
             }
-            const label = node.getAttribute('dataLabel') || variableType;
+            const label = node.getAttribute('data-label') || variableType;
             return {
               mappingResource,
               onlyDate,
