@@ -198,6 +198,12 @@ variable-plugin:
   enter-variable-value: Selecteer waarde
   label: Label
   labelPlaceholder: Type iets...
+  number:
+    minimum: Minimum
+    minimum-placeholder: minimumwaarde
+    maximum: Maximum
+    maximum-placeholder: maximumwaarde
+    to: tot
 
 address-plugin:
   insert:

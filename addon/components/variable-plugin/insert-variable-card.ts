@@ -26,6 +26,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @tracked selectedSubtype?: CodeList;
   @tracked subtypes?: CodeList[];
   @tracked variableLabel?: string;
+  @tracked extraAttributes: Record<string, unknown> = {};
   publisher: string;
   endpoint: string;
 
@@ -75,13 +76,20 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     if (!this.selectedVariable) {
       return;
     }
-    const node = this.selectedVariable.constructor(
-      this.controller.schema,
-      this.variableLabel !== '' ? this.variableLabel : undefined,
-      this.endpoint,
-      this.selectedSubtype
-    );
+
+    const node = this.selectedVariable.constructor({
+      schema: this.controller.schema,
+      codelist: this.selectedSubtype,
+      label: this.variableLabel !== '' ? this.variableLabel : undefined,
+      attributes: {
+        source: this.endpoint,
+        ...this.extraAttributes,
+      },
+    });
+
     this.variableLabel = '';
+    this.extraAttributes = {};
+
     this.controller.withTransaction(
       (tr) => {
         return tr.replaceSelectionWith(node);
@@ -116,6 +124,11 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @action
   updateSubtype(subtype: CodeList) {
     this.selectedSubtype = subtype;
+    this.extraAttributes = {};
+  }
+
+  get type() {
+    return this.selectedVariable?.label;
   }
 
   get showCard() {

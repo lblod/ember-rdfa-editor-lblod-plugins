@@ -1,4 +1,4 @@
-import { PNode, Schema } from '@lblod/ember-rdfa-editor';
+import { Attrs, PNode, Schema } from '@lblod/ember-rdfa-editor';
 import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 import { v4 as uuidv4 } from 'uuid';
 import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -10,18 +10,18 @@ export const MULTI_SELECT_CODELIST_TYPE =
 export type VariableType = {
   label: string;
   fetchSubtypes?: (endpoint: string, publisher: string) => Promise<CodeList[]>;
-  constructor: (
-    schema: Schema,
-    label?: string,
-    endpoint?: string,
-    selectedCodelist?: CodeList
-  ) => PNode;
+  constructor: (props: {
+    schema: Schema;
+    label?: string;
+    attributes?: Attrs;
+    codelist?: CodeList;
+  }) => PNode;
 };
 
 export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   text: {
     label: 'text',
-    constructor: (schema, label = 'text') => {
+    constructor: ({ schema, label = 'text' }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -38,9 +38,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   },
   number: {
     label: 'number',
-    constructor: (schema, label = 'number') => {
+    constructor: ({ schema, attributes, label = 'number' }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+
       return schema.node(
         'variable',
         {
@@ -49,6 +50,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           type: 'number',
           datatype: XSD('integer').prefixed,
           label,
+          ...attributes,
         },
         schema.node('placeholder', { placeholderText: 'number' })
       );
@@ -56,7 +58,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   },
   date: {
     label: 'date',
-    constructor: (schema, label = 'date') => {
+    constructor: ({ schema, label = 'date' }) => {
       return unwrap(
         schema.nodes.date.createAndFill({
           mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
@@ -68,7 +70,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   },
   location: {
     label: 'location',
-    constructor: (schema, label = 'location', endpoint) => {
+    constructor: ({ schema, attributes, label = 'location' }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -77,8 +79,8 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           type: 'location',
           mappingResource: mappingURI,
           variableInstance,
-          source: endpoint,
           label,
+          ...attributes,
         },
         schema.node('placeholder', {
           placeholderText: 'location',
@@ -92,7 +94,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
       const codelists = fetchCodeListsByPublisher(endpoint, publisher);
       return codelists;
     },
-    constructor: (schema, label, endpoint, selectedCodelist?: CodeList) => {
+    constructor: ({ schema, attributes, codelist, label }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
       return schema.node(
@@ -100,15 +102,21 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
         {
           type: 'codelist',
           mappingResource: mappingURI,
-          codelistResource: selectedCodelist?.uri,
+          codelistResource: codelist?.uri,
           variableInstance,
-          source: endpoint,
-          label: label ?? selectedCodelist?.label,
+          label: label ?? codelist?.label,
+          ...attributes,
         },
         schema.node('placeholder', {
-          placeholderText: selectedCodelist?.label,
+          placeholderText: codelist?.label,
         })
       );
     },
   },
 };
+
+export const MINIMUM_VALUE_PNODE_KEY = 'minimumValue';
+export const MAXIMUM_VALUE_PNODE_KEY = 'maximumValue';
+
+export const MINIMUM_VALUE_HTML_ATTRIBUTE_KEY = 'data-minimum-value';
+export const MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY = 'data-maximum-value';
