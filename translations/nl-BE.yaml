@@ -191,7 +191,12 @@ table-of-contents-plugin:
   title: Inhoudstafel
   toggle: Toon Inhoudstafel
 
-
+variable:
+  number:
+    placeholder: nummer
+    type-number: type een nummer...
+    error-not-integer: Only integers are allowed
+    error-not-number: Only numbers are allowed
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
