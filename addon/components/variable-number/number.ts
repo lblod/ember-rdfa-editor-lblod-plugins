@@ -13,6 +13,10 @@ import intlService from 'ember-intl/services/intl';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { localCopy } from 'tracked-toolbox';
+import {
+  MAXIMUM_VALUE_PNODE_KEY,
+  MINIMUM_VALUE_PNODE_KEY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 
 type Args = {
   getPos: () => number | undefined;
@@ -40,14 +44,43 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.args.selected;
   }
 
+  get minValue() {
+    return this.node.attrs[MINIMUM_VALUE_PNODE_KEY];
+  }
+
+  get maxValue() {
+    return this.node.attrs[MAXIMUM_VALUE_PNODE_KEY];
+  }
+
   @action onInputNumberChange(event: InputEvent) {
     this.inputNumber = (event.target as HTMLInputElement).value;
     this.validateAndSave();
   }
 
   validateAndSave() {
-    if (!Number(this.inputNumber)) {
+    let number = Number(this.inputNumber);
+    if (typeof(number) !== 'number') {
       this.errorMessage = this.intl.t('variable.number.error-not-number');
+      return;
+    }
+    let validMinimum = !this.minValue || number >= this.minValue;
+    let validMaximum = !this.maxValue || number <= this.maxValue;
+
+    if (!validMinimum || !validMaximum) {
+      if (this.minValue && this.maxValue) {
+        this.errorMessage = this.intl.t(
+          'variable.number.error-number-between',
+          { minValue: this.minValue, maxValue: this.maxValue }
+        );
+      } else if (this.minValue) {
+        this.errorMessage = this.intl.t('variable.number.error-number-above', {
+          minValue: this.minValue,
+        });
+      } else if (this.maxValue) {
+        this.errorMessage = this.intl.t('variable.number.error-number-below', {
+          maxValue: this.maxValue,
+        });
+      }
       return;
     }
 

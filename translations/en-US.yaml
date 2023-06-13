@@ -185,6 +185,9 @@ variable:
     type-number: Type a number...
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
+    error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen 
+    error-number-above: Het getal moet groter dan {minValue} zijn
+    error-number-below: Het getal moet kleiner dan {maxValue} zijn
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
