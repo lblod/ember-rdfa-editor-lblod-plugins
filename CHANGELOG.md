@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
 
+## Added
+- Numbers inputted into a number variable are validated on defined min/max and if it is a number
+
 ## [8.0.1] - 2023-06-15
 ### Fixed
 - Change problematic type in citation that made it to break with new ember
