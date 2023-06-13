@@ -45,11 +45,11 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   }
 
   get minValue() {
-    return this.node.attrs[MINIMUM_VALUE_PNODE_KEY];
+    return this.node.attrs[MINIMUM_VALUE_PNODE_KEY] as number;
   }
 
   get maxValue() {
-    return this.node.attrs[MAXIMUM_VALUE_PNODE_KEY];
+    return this.node.attrs[MAXIMUM_VALUE_PNODE_KEY] as number;
   }
 
   @action onInputNumberChange(event: InputEvent) {
@@ -58,13 +58,13 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   }
 
   validateAndSave() {
-    let number = Number(this.inputNumber);
-    if (typeof(number) !== 'number') {
+    const number = Number(this.inputNumber);
+    if (typeof number !== 'number') {
       this.errorMessage = this.intl.t('variable.number.error-not-number');
       return;
     }
-    let validMinimum = !this.minValue || number >= this.minValue;
-    let validMaximum = !this.maxValue || number <= this.maxValue;
+    const validMinimum = !this.minValue || number >= this.minValue;
+    const validMaximum = !this.maxValue || number <= this.maxValue;
 
     if (!validMinimum || !validMaximum) {
       if (this.minValue && this.maxValue) {
