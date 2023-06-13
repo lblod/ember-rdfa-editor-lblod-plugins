@@ -17,6 +17,7 @@ import {
   MAXIMUM_VALUE_PNODE_KEY,
   MINIMUM_VALUE_PNODE_KEY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
+import { isBlank } from '@ember/utils';
 
 type Args = {
   getPos: () => number | undefined;
@@ -58,8 +59,14 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   }
 
   validateAndSave() {
+    if (isBlank(this.inputNumber)) {
+      this.errorMessage = '';
+      this.args.updateAttribute('value', '');
+      return;
+    }
+
     const number = Number(this.inputNumber);
-    if (typeof number !== 'number') {
+    if (Number.isNaN(number)) {
       this.errorMessage = this.intl.t('variable.number.error-not-number');
       return;
     }
