@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+- Numbers inputted into a number variable are validated on defined min/max and if it is a number
+
 ## [7.2.0] - 2023-06-13
 ### Fixed
 - Bump `@lblod/ember-rdfa-editor` package to fix annotation not present for some structures
