@@ -14,10 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - navigation links in TOC of readme
 - support for option labels in Variable-plugin
 - Generic rdfa variables input plugin - HTML only input
-
-### Added
 - Add label to variables
 - Number variable - support min/max
+ 
 ### Dependencies
 - Bumps `webpack` from 5.75.0 to 5.76.0
 - Move `tracked-toolbox` to dependencies
