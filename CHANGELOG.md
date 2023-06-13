@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `prettier` from 2.8.0 to 2.8.8
 - Bumps `minimist` from 0.2.2 to 0.2.4
 - Bumps `socket.io-parser` from 4.2.1 to 4.2.4
+- Bumps `decode-uri-component` from 0.2.0 to 0.2.2
 
 ## [7.1.0] - 2023-05-18
 
