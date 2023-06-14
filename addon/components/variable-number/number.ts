@@ -18,6 +18,7 @@ import {
   MINIMUM_VALUE_PNODE_KEY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
+import n2words from 'n2words';
 
 type Args = {
   getPos: () => number | undefined;
@@ -38,7 +39,17 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.args.node;
   }
   get formattedNumber() {
-    return this.node.attrs.value as string;
+    const writtenNumber = Boolean(this.node.attrs.writtenNumber);
+
+    if (
+      !writtenNumber ||
+      Number.isNaN(Number(this.node.attrs.value)) ||
+      this.node.attrs.value === ''
+    ) {
+      return this.node.attrs.value as string;
+    } else {
+      return n2words(this.node.attrs.value, { lang: 'nl' }) as string;
+    }
   }
 
   get selected() {
