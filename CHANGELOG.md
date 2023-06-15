@@ -7,14 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Dependencies
-- Bumps loader-utils from 1.0.4 to 2.0.4
-- Bumps handlebars-loader from 1.7.2 to 1.7.3
 
 ### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
 
-## [7.2.0] - 2023-06-13
+## [8.0.0] - 2023-06-13
 ### Fixed
 - Bump `@lblod/ember-rdfa-editor` package to fix annotation not present for some structures
 - Change variable label to be stored in the data-attributes and solve bug with date not getting a default label
@@ -23,8 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - navigation links in TOC of readme
 - support for option labels in Variable-plugin
 - Generic rdfa variables input plugin - HTML only input
-- Add label to variables
 - Number variable - support min/max
+
+### Breaking
+- Add label to variables
  
 ### Dependencies
 - Bumps `webpack` from 5.75.0 to 5.76.0
@@ -33,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `minimist` from 0.2.2 to 0.2.4
 - Bumps `socket.io-parser` from 4.2.1 to 4.2.4
 - Bumps `decode-uri-component` from 0.2.0 to 0.2.2
+- Bumps loader-utils from 1.0.4 to 2.0.4
+- Bumps handlebars-loader from 1.7.2 to 1.7.3
 
 ## [7.1.0] - 2023-05-18
 
@@ -471,8 +472,8 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.2.0...HEAD
-[7.2.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v7.2.0
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...HEAD
+[8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
 [7.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.1.0...v7.0.0
 [6.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v6.0.0...v6.1.0
