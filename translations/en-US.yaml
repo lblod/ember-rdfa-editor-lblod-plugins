@@ -237,3 +237,9 @@ fragment-plugin:
       title: Filter on
       label: Fragment name
       placeholder: Type something...
+    alert:
+      loading: Loading…
+      no-results: No results found
+      error-title: Error while loading results
+      error-intro: 'An error occured while loading results from the Flemish Codex:'
+      error-outro: In case this problem keeps occuring, please contact

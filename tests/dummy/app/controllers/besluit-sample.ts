@@ -237,6 +237,9 @@ export default class BesluitSampleController extends Controller {
       link: {
         interactive: true,
       },
+      fragment: {
+        endpoint: 'http://localhost:8890/sparql',
+      },
     };
   }
 

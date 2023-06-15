@@ -242,3 +242,9 @@ fragment-plugin:
       title: Filter op
       label: Fragmentnaam
       placeholder: Typ iets...
+    alert:
+      loading: Laden…
+      no-results: Geen resultaten gevonden
+      error-title: Probleem bij het laden
+      error-intro: "Er heeft zich een fout voorgedaan bij het zoeken in de Vlaamse Codex:"
+      error-outro: Moest dit probleem aanhouden, neem contact op met

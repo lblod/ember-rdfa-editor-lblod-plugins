@@ -37,8 +37,30 @@
       </mc.sidebar>
       <mc.content @scroll={{true}}>
         <div class='au-u-padding-top'>
-          Hello you are searching for:
-          {{this.inputSearchText}}
+          {{#if this.fragmentsResource.isRunning}}
+            <div class='au-u-margin'>
+              <AuLoader @padding='large' />
+              <span class='au-u-hidden-visually'>
+                {{t 'fragment-plugin.alert.loading'}}
+              </span>
+            </div>
+          {{else}}
+            {{#if this.error}}
+              <FragmentPlugin::Helpers::AlertLoadError @error={{this.error}} />
+            {{else}}
+              {{#if this.fragmentsResource.value.length}}
+                {{#each this.fragmentsResource.value as |fragment|}}
+                  <AuList::Item
+                    class='au-u-padding-left-small au-u-padding-right-small'
+                  >
+                    {{fragment.title.value}}
+                  </AuList::Item>
+                {{/each}}
+              {{else}}
+                <FragmentPlugin::Helpers::AlertNoItems />
+              {{/if}}
+            {{/if}}
+          {{/if}}
         </div>
       </mc.content>
     </AuMainContainer>
