@@ -115,13 +115,12 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
 
   @action
   leaveOnEnter(event: KeyboardEvent) {
-    if(event.key === "Enter"){
-      this.selectAfterNode()
+    if (event.key === 'Enter') {
+      this.selectAfterNode();
     }
   }
 
   selectAfterNode() {
-    console.log((this.args.getPos() as number) + this.args.node.nodeSize )
     const tr = this.args.controller.activeEditorState.tr;
     tr.setSelection(
       TextSelection.create(
