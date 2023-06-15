@@ -227,3 +227,13 @@ generic-rdfa-variable:
   modal:
     insert: Insert
     cancel: Cancel
+
+fragment-plugin:
+  insert:
+    title: Insert fragment
+  modal:
+    title: Choose a fragment
+    search:
+      title: Filter on
+      label: Fragment name
+      placeholder: Type something...

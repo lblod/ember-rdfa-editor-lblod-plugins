@@ -1,0 +1,11 @@
+.fragment-modal {
+  &--main-container {
+    height: 100% !important;
+
+    background-color: var(--au-gray-100);
+
+    .au-c-sidebar {
+      border-right: 0;
+    }
+  }
+}

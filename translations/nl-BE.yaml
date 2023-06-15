@@ -197,7 +197,7 @@ variable:
     type-number: typ een nummer...
     error-not-integer: Only integers are allowed
     error-not-number: Only numbers are allowed
-    error-number-between: The number should be between {minValue} and {maxValue} 
+    error-number-between: The number should be between {minValue} and {maxValue}
     error-number-above: The number should be bigger than {minValue}
     error-number-below: The number should be smaller than {maxValue}
 variable-plugin:
@@ -232,3 +232,13 @@ generic-rdfa-variable:
   modal:
     insert: Invoegen
     cancel: Terug
+
+fragment-plugin:
+  insert:
+    title: Fragment invoegen
+  modal:
+    title: Kies een fragment
+    search:
+      title: Filter op
+      label: Fragmentnaam
+      placeholder: Typ iets...

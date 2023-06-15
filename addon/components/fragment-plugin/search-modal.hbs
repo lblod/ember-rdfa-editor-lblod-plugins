@@ -1,0 +1,46 @@
+<AuModal
+  @modalOpen={{@open}}
+  @closeModal={{fn this.closeModal this.legislationTypeUri this.text}}
+  @title={{t 'fragment-plugin.modal.title'}}
+  @size='large'
+  @padding='none'
+  as |modal|
+>
+  <modal.Body>
+    <AuMainContainer class='fragment-modal--main-container' as |mc|>
+      <mc.sidebar>
+        <div class='au-c-sidebar'>
+          <div class='au-c-sidebar__content au-u-padding'>
+            <AuHeading @level='3' @skin='4' class='au-u-padding-bottom-small'>
+              {{t 'fragment-plugin.modal.search.title'}}
+            </AuHeading>
+            <AuLabel
+              class='au-margin-bottom-small'
+              for='searchTerm'
+              @inline={{false}}
+              @required={{false}}
+              @error={{false}}
+              @warning={{false}}
+            >
+              {{t 'fragment-plugin.modal.search.label'}}
+            </AuLabel>
+            <AuNativeInput
+              @type='text'
+              @width='block'
+              id='searchTerm'
+              value={{this.searchText}}
+              placeholder={{t 'fragment-plugin.modal.search.placeholder'}}
+              {{on 'input' this.setInputSearchText}}
+            />
+          </div>
+        </div>
+      </mc.sidebar>
+      <mc.content @scroll={{true}}>
+        <div class='au-u-padding-top'>
+          Hello you are searching for:
+          {{this.inputSearchText}}
+        </div>
+      </mc.content>
+    </AuMainContainer>
+  </modal.Body>
+</AuModal>

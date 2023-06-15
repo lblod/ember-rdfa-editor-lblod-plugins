@@ -1,0 +1,15 @@
+<AuList::Item>
+  <AuButton
+    @icon='add'
+    @iconAlignment='left'
+    @skin='link'
+    {{on 'click' this.openModal}}
+  >
+    {{t 'fragment-plugin.insert.title'}}
+  </AuButton>
+</AuList::Item>
+
+<FragmentPlugin::SearchModal
+  @open={{this.showModal}}
+  @closeModal={{this.closeModal}}
+/>
