@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Added
+### Dependencies
+- Bumps loader-utils from 1.0.4 to 2.0.4
+- Bumps handlebars-loader from 1.7.2 to 1.7.3
+
+### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
 
 ## [7.2.0] - 2023-06-13
