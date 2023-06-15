@@ -35,6 +35,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @tracked errorMessage = '';
   @service declare intl: intlService;
+  cursorPositionKeyDown: number | null = null;
 
   focus(element: HTMLInputElement) {
     element.focus();
@@ -120,15 +121,40 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     }
   }
 
-  selectAfterNode() {
+  @action setPosBeforeKeypress(event: KeyboardEvent) {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      this.cursorPositionKeyDown = (
+        event.target as HTMLInputElement
+      ).selectionStart;
+    }
+  }
+  @action leaveWithArrows(event: KeyboardEvent) {
+    const size = (event.target as HTMLInputElement).value.length;
+    if (event.key === 'ArrowRight' && this.cursorPositionKeyDown === size) {
+      this.selectAfterNode();
+    }
+    if (event.key === 'ArrowLeft' && this.cursorPositionKeyDown === 0) {
+      this.selectBeforeNode();
+    }
+    this.cursorPositionKeyDown = null;
+  }
+
+  setSelectionAt(pos: number) {
     const tr = this.args.controller.activeEditorState.tr;
     tr.setSelection(
-      TextSelection.create(
-        this.args.controller.activeEditorState.doc,
-        (this.args.getPos() as number) + this.args.node.nodeSize
-      )
+      TextSelection.create(this.args.controller.activeEditorState.doc, pos)
     );
     this.args.controller.focus();
     this.args.controller.activeEditorView.dispatch(tr);
+  }
+
+  selectAfterNode() {
+    this.setSelectionAt(
+      (this.args.getPos() as number) + this.args.node.nodeSize
+    );
+  }
+
+  selectBeforeNode() {
+    this.setSelectionAt(this.args.getPos() as number);
   }
 }

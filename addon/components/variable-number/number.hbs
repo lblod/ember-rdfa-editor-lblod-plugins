@@ -1,4 +1,7 @@
-<Velcro @placement='bottom-start' @offsetOptions={{hash mainAxis=3}} as |velcro|>
+<Velcro
+  @placement='bottom-start'
+  @offsetOptions={{hash mainAxis=3}} as |velcro|
+>
   <AuPill
     @icon='pencil'
     @iconAlignment='right'
@@ -26,17 +29,18 @@
         @shadow={{true}}
         @size='small'
         id='number-input-tooltip'
-        @standOut={{true}}
-        as |card|
+        @standOut={{true}} as |card|
       >
         <card.content>
+          {{!-- template-lint-disable no-down-event-binding --}}
           <AuInput
             @value={{this.inputNumber}}
             placeholder={{t 'variable.number.type-number'}}
-            @type='number'
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
             {{on 'keyup' this.leaveOnEnter}}
+            {{on 'keyup' this.leaveWithArrows}}
+            {{on 'keydown' this.setPosBeforeKeypress}}
           />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>
