@@ -43,10 +43,10 @@ export async function fetchCodeListOptions(
   endpoint: string,
   codelistUri: string
 ): Promise<CodeListOptions> {
-  const codelistsOptionsQueryResult = await executeQuery(
+  const codelistsOptionsQueryResult = await executeQuery({
     endpoint,
-    generateCodeListOptionsQuery(codelistUri)
-  );
+    query: generateCodeListOptionsQuery(codelistUri),
+  });
   const options = parseCodelistOptions(codelistsOptionsQueryResult);
   return {
     type:
@@ -95,10 +95,10 @@ export async function fetchCodeListsByPublisher(
   endpoint: string,
   publisher: string
 ): Promise<CodeList[]> {
-  const codelistsOptionsQueryResult = await executeQuery(
+  const codelistsOptionsQueryResult = await executeQuery({
     endpoint,
-    generateCodeListsByPublisherQuery(publisher)
-  );
+    query: generateCodeListsByPublisherQuery(publisher),
+  });
   const bindings = codelistsOptionsQueryResult.results.bindings;
   return bindings.map((binding) => ({
     uri: binding['uri']?.value,
