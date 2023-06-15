@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Dependencies
+- Bumps loader-utils from 1.0.4 to 2.0.4
+- Bumps handlebars-loader from 1.7.2 to 1.7.3
+
 ## [7.2.0] - 2023-06-13
 ### Fixed
 - Bump `@lblod/ember-rdfa-editor` package to fix annotation not present for some structures
