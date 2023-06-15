@@ -27,14 +27,14 @@
         @size='small'
         id='number-input-tooltip'
         @standOut={{true}}
-        @flex={{true}}
-        class='au-u-padding-small' as |card|
+        @flex={{true}} as |card|
       >
         <card.content>
           <AuInput
             @value={{this.inputNumber}}
             placeholder={{t 'variable.number.type-number'}}
             type='number'
+            {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
           />
           {{#if this.errorMessage}}

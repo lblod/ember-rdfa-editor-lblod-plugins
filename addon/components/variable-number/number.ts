@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { modifier } from 'ember-modifier';
 import {
   DecorationSource,
   NodeSelection,
@@ -33,6 +34,10 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @tracked errorMessage = '';
   @service declare intl: intlService;
+
+  focus(element: HTMLInputElement) {
+    element.focus();
+  }
 
   get node() {
     return this.args.node;
