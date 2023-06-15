@@ -4,7 +4,7 @@
     @iconAlignment='right'
     class='variable'
     {{velcro.hook}}
-    {{on 'click' this.setSelected}}
+    {{on 'click' this.selectThisNode}}
   >
     {{#if this.formattedNumber}}
       {{this.formattedNumber}}
@@ -36,6 +36,7 @@
             @type='number'
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
+            {{on 'keyup' this.leaveOnEnter}}
           />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>

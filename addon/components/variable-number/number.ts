@@ -6,6 +6,7 @@ import {
   PNode,
   SayController,
   SayView,
+  TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -101,7 +102,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   }
 
   @action
-  setSelected() {
+  selectThisNode() {
     const tr = this.args.controller.activeEditorState.tr;
     tr.setSelection(
       NodeSelection.create(
@@ -109,6 +110,26 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
         this.args.getPos() as number
       )
     );
+    this.args.controller.activeEditorView.dispatch(tr);
+  }
+
+  @action
+  leaveOnEnter(event: KeyboardEvent) {
+    if(event.key === "Enter"){
+      this.selectAfterNode()
+    }
+  }
+
+  selectAfterNode() {
+    console.log((this.args.getPos() as number) + this.args.node.nodeSize )
+    const tr = this.args.controller.activeEditorState.tr;
+    tr.setSelection(
+      TextSelection.create(
+        this.args.controller.activeEditorState.doc,
+        (this.args.getPos() as number) + this.args.node.nodeSize
+      )
+    );
+    this.args.controller.focus();
     this.args.controller.activeEditorView.dispatch(tr);
   }
 }
