@@ -5,8 +5,7 @@ import {
   Option,
   optionMapOr,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import Ember from 'ember';
-import SafeString = Ember.Handlebars.SafeString;
+type SafeString = ReturnType<typeof htmlSafe>;
 
 interface DecisionArgs {
   uri: string;
