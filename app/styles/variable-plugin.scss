@@ -99,3 +99,8 @@
     width: 100%;
   }
 }
+
+// show tooltips above everything else
+.say-tooltip {
+ z-index: 3;
+}

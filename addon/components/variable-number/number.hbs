@@ -20,13 +20,13 @@
     {{/if}}
   </AuPill>
   {{#if this.selected}}
-    <div {{velcro.loop}}>
+    <div {{velcro.loop}} class='say-tooltip'>
       {{! AuCard gives weird behaviour when using velcro without div (cause is position:fixed in css)}}
       <AuCard
         @shadow={{true}}
         @size='small'
         id='number-input-tooltip'
-        @standOut={{true}}
+        @standOut={{true}}     
         @flex={{true}} as |card|
       >
         <card.content>
