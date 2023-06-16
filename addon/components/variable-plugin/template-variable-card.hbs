@@ -1,4 +1,3 @@
-<div {{did-update this.selectionChanged @controller.mainEditorState}}>
 {{#if this.showCard}}
   <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
     <c.header>
@@ -14,7 +13,7 @@
         <PowerSelectMultiple
           @allowClear={{false}}
           @searchEnabled={{false}}
-          @options={{this.variableOptions}}
+          @options={{this.variableOptions.value.options}}
           @selected={{this.selectedVariableOption}}
           @onChange={{this.updateVariableOption}} as |variable|
         >
@@ -24,7 +23,7 @@
         <PowerSelect
           @allowClear={{false}}
           @searchEnabled={{false}}
-          @options={{this.variableOptions}}
+          @options={{this.variableOptions.value.options}}
           @selected={{this.selectedVariableOption}}
           @onChange={{this.updateVariableOption}} as |variable|
         >
@@ -35,4 +34,3 @@
     </c.content>
   </AuCard>
 {{/if}}
-</div>
