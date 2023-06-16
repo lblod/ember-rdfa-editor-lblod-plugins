@@ -1,0 +1,18 @@
+<div
+  class='fragment-preview--container au-c-panel au-u-margin-right'
+  ...attributes
+>
+  <div class='fragment-preview--article au-u-padding au-u-padding-right-large'>
+    <Editor
+      @plugins={{@config.editorConfig.plugins}}
+      @schema={{@config.editorConfig.schema}}
+      @nodeViews={{@config.editorConfig.nodeViews}}
+      @rdfaEditorInit={{this.rdfaEditorInit}}
+    />
+  </div>
+  <div class='fragment-preview--button au-u-padding-small'>
+    <AuButton @skin='naked' {{on 'click' this.onInsert}}>
+      {{t 'fragment-plugin.modal.select'}}
+    </AuButton>
+  </div>
+</div>

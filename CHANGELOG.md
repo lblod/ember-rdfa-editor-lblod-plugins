@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fragment insert modal
 - Query backend for fragments
 - Pagination for fragments
+- Insert the fragment
 
 ### Fixed
 - Fixed woodpecker builds crashing on syntax errors

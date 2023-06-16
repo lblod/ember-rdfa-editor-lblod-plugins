@@ -233,6 +233,7 @@ fragment-plugin:
     title: Insert fragment
   modal:
     title: Choose a fragment
+    select: Select
     search:
       title: Filter on
       label: Fragment name

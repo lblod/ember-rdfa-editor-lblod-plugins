@@ -86,6 +86,7 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 
 import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
+import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -237,8 +238,16 @@ export default class BesluitSampleController extends Controller {
       link: {
         interactive: true,
       },
-      fragment: {
-        endpoint: 'http://localhost:8890/sparql',
+    };
+  }
+
+  get fragmentConfig(): FragmentPluginConfig {
+    return {
+      endpoint: 'http://localhost:8890/sparql',
+      editorConfig: {
+        schema: this.schema as Schema,
+        plugins: this.plugins,
+        nodeViews: this.nodeViews,
       },
     };
   }
@@ -292,6 +301,7 @@ export default class BesluitSampleController extends Controller {
     });
     const presetContent =
       localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
+
     controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);

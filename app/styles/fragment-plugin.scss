@@ -23,3 +23,26 @@
     font-family: var(--au-font-tertiary);
   }
 }
+
+.fragment-preview {
+  &--container {
+    flex-direction: row;
+  }
+
+  &--article {
+    flex-grow: 1;
+
+    .say-editor__paper,
+    .say-editor__inner {
+      min-height: auto;
+    }
+
+    .say-editor__inner {
+      padding: 0;
+    }
+  }
+
+  &--button {
+    border-left: 1px solid var(--au-gray-200);
+  }
+}

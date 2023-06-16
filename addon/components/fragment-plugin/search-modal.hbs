@@ -1,6 +1,6 @@
 <AuModal
   @modalOpen={{@open}}
-  @closeModal={{fn this.closeModal this.legislationTypeUri this.text}}
+  @closeModal={{this.closeModal}}
   @title={{t 'fragment-plugin.modal.title'}}
   @size='large'
   @padding='none'
@@ -49,13 +49,11 @@
               <FragmentPlugin::Helpers::AlertLoadError @error={{this.error}} />
             {{else}}
               {{#if this.fragmentsResource.value.length}}
-                {{#each this.fragmentsResource.value as |fragment|}}
-                  <AuList::Item
-                    class='au-u-padding-left-small au-u-padding-right-small'
-                  >
-                    {{fragment.title.value}}
-                  </AuList::Item>
-                {{/each}}
+                <FragmentPlugin::Fragments::FragmentList
+                  @fragments={{this.fragmentsResource.value}}
+                  @config={{this.config}}
+                  @onInsert={{@onInsert}}
+                />
               {{else}}
                 <FragmentPlugin::Helpers::AlertNoItems />
               {{/if}}

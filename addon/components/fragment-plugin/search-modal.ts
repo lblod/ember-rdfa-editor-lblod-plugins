@@ -26,6 +26,10 @@ export default class FragmentPluginSearchModalComponent extends Component<Args> 
   @tracked pageSize = 20;
   @tracked totalCount = 0;
 
+  get config() {
+    return this.args.config;
+  }
+
   @action
   setInputSearchText(event: InputEvent) {
     assert(

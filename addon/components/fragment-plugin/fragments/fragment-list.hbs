@@ -1,0 +1,13 @@
+{{#if @fragments.length}}
+  <AuList @direction='vertical'>
+    {{#each @fragments as |fragment|}}
+      <AuList::Item>
+        <FragmentPlugin::Fragments::FragmentPreview
+          @fragment={{fragment}}
+          @config={{this.config}}
+          @onInsert={{@onInsert}}
+        />
+      </AuList::Item>
+    {{/each}}
+  </AuList>
+{{/if}}

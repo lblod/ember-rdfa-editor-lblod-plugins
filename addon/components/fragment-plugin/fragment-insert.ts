@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { ProseParser, SayController } from '@lblod/ember-rdfa-editor';
 import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
 
 interface Args {
@@ -24,11 +24,27 @@ export default class FragmentInsertComponent extends Component<Args> {
 
   @action
   openModal() {
+    this.controller.focus();
     this.showModal = true;
   }
 
   @action
   closeModal() {
     this.showModal = false;
+  }
+
+  @action
+  onInsert(content: string) {
+    const domParser = new DOMParser();
+
+    this.closeModal();
+
+    this.controller.withTransaction((tr) => {
+      return tr.replaceSelectionWith(
+        ProseParser.fromSchema(this.controller.schema).parse(
+          domParser.parseFromString(content, 'text/html')
+        )
+      );
+    });
   }
 }

@@ -1,9 +1,12 @@
 import { LEGISLATION_TYPE_CONCEPTS } from './legislation-types';
-import { warn } from '@ember/debug';
 import {
   Option,
   optionMapOr,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  dateValue,
+  escapeValue,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 
 interface DecisionArgs {
   uri: string;
@@ -468,39 +471,6 @@ async function fetchArticlesMemo({
 function cleanCaches() {
   fetchDecisionsMemory.clear();
   fetchArticlesMemory.clear();
-}
-
-function escapeValue(value?: string) {
-  if (value) {
-    const shadowDomElement = document.createElement('textarea');
-    shadowDomElement.innerHTML = value;
-    return shadowDomElement.textContent;
-  } else {
-    return null;
-  }
-}
-
-function dateValue(value?: string): string | null {
-  if (value) {
-    try {
-      return new Intl.DateTimeFormat('nl-BE').format(
-        new Date(Date.parse(value))
-      );
-    } catch (e) {
-      let message: string;
-      if (e instanceof Error) {
-        message = e.message;
-      } else {
-        message = e as string;
-      }
-      warn(`Error parsing date ${value}: ${message}`, {
-        id: 'date-parsing-error',
-      });
-      return null;
-    }
-  } else {
-    return null;
-  }
 }
 
 async function executeCountQuery({
