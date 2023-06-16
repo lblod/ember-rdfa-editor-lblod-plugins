@@ -1,10 +1,13 @@
-<Velcro @placement='bottom' @offsetOptions={{hash mainAxis=3}} as |velcro|>
+<Velcro
+  @placement='bottom-start'
+  @offsetOptions={{hash mainAxis=3}} as |velcro|
+>
   <AuPill
     @icon='pencil'
     @iconAlignment='right'
     class='variable'
     {{velcro.hook}}
-    {{on 'click' this.setSelected}}
+    {{on 'click' this.selectThisNode}}
   >
     {{#if this.formattedNumber}}
       {{this.formattedNumber}}
@@ -20,22 +23,24 @@
     {{/if}}
   </AuPill>
   {{#if this.selected}}
-    <div {{velcro.loop}}>
+    <div class='say-tooltip say-number-tooltip' {{velcro.loop}}>
       {{! AuCard gives weird behaviour when using velcro without div (cause is position:fixed in css)}}
       <AuCard
         @shadow={{true}}
         @size='small'
         id='number-input-tooltip'
-        @standOut={{true}}
-        @flex={{true}}
-        class='au-u-padding-small' as |card|
+        @standOut={{true}} as |card|
       >
         <card.content>
+          {{!-- template-lint-disable no-down-event-binding --}}
           <AuInput
             @value={{this.inputNumber}}
             placeholder={{t 'variable.number.type-number'}}
-            type='number'
+            {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
+            {{on 'keyup' this.leaveOnEnter}}
+            {{on 'keyup' this.leaveWithArrows}}
+            {{on 'keydown' this.setPosBeforeKeypress}}
           />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>
