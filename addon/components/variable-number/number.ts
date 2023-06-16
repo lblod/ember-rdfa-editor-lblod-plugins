@@ -128,8 +128,8 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     }
   }
   @action leaveWithArrows(event: KeyboardEvent) {
-    const size = (event.target as HTMLInputElement).value.length;
-    if (event.key === 'ArrowRight' && this.cursorPositionKeyDown === size) {
+    const finalPos = (event.target as HTMLInputElement).value.length;
+    if (event.key === 'ArrowRight' && this.cursorPositionKeyDown === finalPos) {
       this.selectAfterNode();
     }
     if (event.key === 'ArrowLeft' && this.cursorPositionKeyDown === 0) {
