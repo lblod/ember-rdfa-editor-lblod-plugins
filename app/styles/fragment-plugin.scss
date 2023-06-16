@@ -7,6 +7,16 @@
     .au-c-sidebar {
       border-right: 0;
     }
+
+    #content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &--list-container {
+    overflow: auto;
+    flex-grow: 1;
   }
 
   &--error-code {

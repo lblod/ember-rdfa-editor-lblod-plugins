@@ -206,47 +206,15 @@
             {{/if}}
           {{/if}}
           {{#if this.decisionResource.value.length}}
-            {{! Pagination in the footer of the dialog }}
-            <div class='citaten--container-footer au-u-background-gray-100'>
-              <AuToolbar @border='top' @size='large' @nowrap={{true}}>
-                <div class='au-c-pagination'>
-                  <p>
-                    <span class='au-u-hidden-visually'>{{t
-                        'citaten-plugin.search.results'
-                      }}</span>
-                    <strong>
-                      {{this.rangeStart}}
-                      -
-                      {{this.rangeEnd}}
-                    </strong>
-                    {{t 'citaten-plugin.pagination.of'}}
-                    {{this.totalCount}}
-                  </p>
-                  <div class='au-c-pagination__list-item'>
-                    {{#unless this.isFirstPage}}
-                      <AuButton
-                        @skin='link'
-                        @icon='nav-left'
-                        @iconAlignment='left'
-                        {{on 'click' this.previousPage}}
-                      >
-                        {{t 'citaten-plugin.pagination.previous'}}
-                      </AuButton>
-                    {{/unless}}
-                    {{#unless this.isLastPage}}
-                      <AuButton
-                        @skin='link'
-                        @icon='nav-right'
-                        @iconAlignment='right'
-                        {{on 'click' this.nextPage}}
-                      >
-                        {{t 'citaten-plugin.pagination.next'}}
-                      </AuButton>
-                    {{/unless}}
-                  </div>
-                </div>
-              </AuToolbar>
-            </div>
+            <Pagination::PaginationView
+              @totalCount={{this.totalCount}}
+              @rangeStart={{this.rangeStart}}
+              @rangeEnd={{this.rangeEnd}}
+              @onNextPage={{this.nextPage}}
+              @onPreviousPage={{this.previousPage}}
+              @isFirstPage={{this.isFirstPage}}
+              @isLastPage={{this.isLastPage}}
+            />
           {{/if}}
         </mc.content>
       </AuMainContainer>

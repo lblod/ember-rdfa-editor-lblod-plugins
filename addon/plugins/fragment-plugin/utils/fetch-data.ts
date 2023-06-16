@@ -4,6 +4,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 
 type Filter = { name?: string };
+type Pagination = { pageNumber: number; pageSize: number };
 
 const buildCountQuery = ({ name }: Filter) => {
   return `
@@ -23,7 +24,13 @@ const buildCountQuery = ({ name }: Filter) => {
       `;
 };
 
-const buildFetchQuery = ({ name }: Filter) => {
+const buildFetchQuery = ({
+  filter: { name },
+  pagination: { pageSize, pageNumber },
+}: {
+  filter: Filter;
+  pagination: Pagination;
+}) => {
   return `
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
@@ -38,7 +45,9 @@ const buildFetchQuery = ({ name }: Filter) => {
               pav:createdOn ?createdOn .
           ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
       }
-      ORDER BY DESC(?createdOn) OFFSET 0 LIMIT 20
+      ORDER BY DESC(?createdOn) LIMIT ${pageSize} OFFSET ${
+    pageNumber * pageSize
+  }
       `;
 };
 
@@ -46,10 +55,12 @@ export const fetchFragments = async ({
   endpoint,
   abortSignal,
   filter,
+  pagination,
 }: {
   endpoint: string;
   abortSignal: AbortSignal;
   filter: Filter;
+  pagination: Pagination;
 }) => {
   const totalCount = await executeCountQuery({
     endpoint,
@@ -67,7 +78,7 @@ export const fetchFragments = async ({
     content: string;
   }>({
     endpoint,
-    query: buildFetchQuery(filter),
+    query: buildFetchQuery({ filter, pagination }),
     abortSignal,
   });
 

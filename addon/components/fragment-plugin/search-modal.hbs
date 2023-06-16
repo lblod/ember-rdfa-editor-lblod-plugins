@@ -36,7 +36,7 @@
         </div>
       </mc.sidebar>
       <mc.content @scroll={{true}}>
-        <div class='au-u-padding-top'>
+        <div class='au-u-padding-top fragment-modal--list-container'>
           {{#if this.fragmentsResource.isRunning}}
             <div class='au-u-margin'>
               <AuLoader @padding='large' />
@@ -62,6 +62,17 @@
             {{/if}}
           {{/if}}
         </div>
+        {{#if this.fragmentsResource.value.length}}
+          <Pagination::PaginationView
+            @totalCount={{this.totalCount}}
+            @rangeStart={{this.rangeStart}}
+            @rangeEnd={{this.rangeEnd}}
+            @onNextPage={{this.nextPage}}
+            @onPreviousPage={{this.previousPage}}
+            @isFirstPage={{this.isFirstPage}}
+            @isLastPage={{this.isLastPage}}
+          />
+        {{/if}}
       </mc.content>
     </AuMainContainer>
   </modal.Body>

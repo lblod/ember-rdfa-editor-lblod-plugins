@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
 - Fragment insert modal
 - Query backend for fragments
+- Pagination for fragments
 
 ### Fixed
 - Fixed woodpecker builds crashing on syntax errors

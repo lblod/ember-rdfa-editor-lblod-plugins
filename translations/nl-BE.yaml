@@ -248,3 +248,9 @@ fragment-plugin:
       error-title: Probleem bij het laden
       error-intro: "Er heeft zich een fout voorgedaan bij het zoeken in de Vlaamse Codex:"
       error-outro: Moest dit probleem aanhouden, neem contact op met
+
+pagination:
+  next: Volgende pagina
+  previous: Vorige pagina
+  of: van
+  results: Resultaten

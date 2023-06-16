@@ -243,3 +243,9 @@ fragment-plugin:
       error-title: Error while loading results
       error-intro: 'An error occured while loading results from the Flemish Codex:'
       error-outro: In case this problem keeps occuring, please contact
+
+pagination:
+  next: Next page
+  previous: Previous page
+  of: of
+  results: Results
