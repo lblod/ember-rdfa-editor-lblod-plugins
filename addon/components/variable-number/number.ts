@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { modifier } from 'ember-modifier';
 import {
   DecorationSource,
   NodeSelection,
