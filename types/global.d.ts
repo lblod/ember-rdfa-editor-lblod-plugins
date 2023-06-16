@@ -5,3 +5,16 @@ declare module '@lblod/ember-rdfa-editor-lblod-plugins/templates/*' {
   const tmpl: TemplateFactory;
   export default tmpl;
 }
+declare module 'n2words' {
+  export default function n2words(
+    string: string,
+    options: { lang: string }
+  ): string;
+}
+
+declare module 'tracked-toolbox' {
+  export function localCopy<C extends Component = Component, T = unknown>(
+    memo: UsefulPropsOf<C>,
+    initializer?: T | (() => T)
+  ): PropertyDecorator;
+}

@@ -11,8 +11,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { localCopy } from 'tracked-toolbox';
 import {
   MAXIMUM_VALUE_PNODE_KEY,
@@ -31,7 +29,6 @@ type Args = {
   contentDecorations?: DecorationSource;
 };
 export default class VariableNumberPluginNumberComponent extends Component<Args> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', '')
   declare writtenNumber: boolean;
@@ -56,7 +53,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     ) {
       return this.node.attrs.value as string;
     } else {
-      return n2words(this.node.attrs.value, { lang: 'nl' }) as string;
+      return n2words(this.node.attrs.value, { lang: 'nl' });
     }
   }
 

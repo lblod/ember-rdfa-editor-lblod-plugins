@@ -78,7 +78,7 @@ export const contentToDom = ({
 }) => {
   if (type === 'number') {
     if (node.attrs.writtenNumber) {
-      return n2words(content, { lang: 'nl' }) as string;
+      return n2words(content, { lang: 'nl' });
     } else {
       return content;
     }
