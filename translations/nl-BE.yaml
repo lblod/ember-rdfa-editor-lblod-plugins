@@ -200,6 +200,7 @@ variable:
     error-number-between: The number should be between {minValue} and {maxValue} 
     error-number-above: The number should be bigger than {minValue}
     error-number-below: The number should be smaller than {maxValue}
+    written-number-label: Getal voluit schrijven
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

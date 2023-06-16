@@ -29,9 +29,10 @@ const emberNodeConfig = (): EmberNodeConfig => {
         getAttrs: (node: HTMLElement) => {
           const attrs = parseAttributes(node);
           if (attrs && attrs.type === 'number') {
-            const content = [...node.children].find((el) =>
-              hasRDFaAttribute(el, 'property', EXT('content'))
-            )?.innerHTML;
+            const content = [...node.children]
+              .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
+              ?.getAttribute('content');
+            console.log(content);
             return { ...attrs, value: content };
           } else {
             return false;

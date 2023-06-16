@@ -188,6 +188,7 @@ variable:
     error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen 
     error-number-above: Het getal moet groter dan {minValue} zijn
     error-number-below: Het getal moet kleiner dan {maxValue} zijn
+    written-number-label: Write number in words
 variable-plugin:
   insert-variable: Insert variable
   button: Insert

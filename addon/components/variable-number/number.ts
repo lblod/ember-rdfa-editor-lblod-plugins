@@ -33,6 +33,8 @@ type Args = {
 export default class VariableNumberPluginNumberComponent extends Component<Args> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
+  @localCopy('args.node.attrs.writtenNumber', '')
+  declare writtenNumber: boolean;
   @tracked errorMessage = '';
   @service declare intl: intlService;
   cursorPositionKeyDown: number | null = null;
@@ -45,7 +47,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.args.node;
   }
   get formattedNumber() {
-    const writtenNumber = Boolean(this.node.attrs.writtenNumber);
+    const writtenNumber = Boolean(this.writtenNumber);
 
     if (
       !writtenNumber ||
@@ -73,6 +75,12 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   @action onInputNumberChange(event: InputEvent) {
     this.inputNumber = (event.target as HTMLInputElement).value;
     this.validateAndSave();
+  }
+
+  @action
+  changeWrittenNumber() {
+    console.log(!this.writtenNumber);
+    this.args.updateAttribute('writtenNumber', !this.writtenNumber);
   }
 
   validateAndSave() {
