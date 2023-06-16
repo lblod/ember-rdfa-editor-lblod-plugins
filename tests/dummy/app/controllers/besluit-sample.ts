@@ -53,10 +53,6 @@ import {
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import IntlService from 'ember-intl/services/intl';
-import {
-  variable,
-  variableView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   date,
@@ -86,6 +82,16 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 
 import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
+import {
+  codelistVariableView,
+  codelist_variable,
+  locationVariableView,
+  location_variable,
+  numberVariableView,
+  number_variable,
+  textVariableView,
+  text_variable,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -163,7 +169,10 @@ export default class BesluitSampleController extends Controller {
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.config.date),
-        variable,
+        text_variable,
+        number_variable,
+        codelist_variable,
+        location_variable,
         ...besluitNodes,
         roadsign_regulation,
         heading,
@@ -245,9 +254,12 @@ export default class BesluitSampleController extends Controller {
     controller: SayController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      variable: variableView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
+      text_variable: textVariableView(controller),
+      number_variable: numberVariableView(controller),
+      codelist_variable: codelistVariableView(controller),
+      location_variable: locationVariableView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

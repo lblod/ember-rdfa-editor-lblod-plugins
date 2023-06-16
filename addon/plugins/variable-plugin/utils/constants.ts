@@ -1,7 +1,7 @@
 import { Attrs, PNode, Schema } from '@lblod/ember-rdfa-editor';
 import { CodeList, fetchCodeListsByPublisher } from './fetch-data';
 import { v4 as uuidv4 } from 'uuid';
-import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const MULTI_SELECT_CODELIST_TYPE =
@@ -24,12 +24,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     constructor: ({ schema, label = 'text' }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-      return schema.node(
-        'variable',
+      return schema.nodes.text_variable.create(
         {
           mappingResource: mappingURI,
           variableInstance,
-          type: 'text',
           label,
         },
         schema.node('placeholder', { placeholderText: 'text' })
@@ -42,13 +40,10 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
-      return schema.node(
-        'variable',
+      return schema.nodes.number_variable.create(
         {
           mappingResource: mappingURI,
           variableInstance,
-          type: 'number',
-          datatype: XSD('integer').prefixed,
           label,
           ...attributes,
         },
@@ -73,10 +68,8 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     constructor: ({ schema, attributes, label = 'location' }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-      return schema.node(
-        'variable',
+      return schema.nodes.location_variable.create(
         {
-          type: 'location',
           mappingResource: mappingURI,
           variableInstance,
           label,
@@ -97,10 +90,8 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
     constructor: ({ schema, attributes, codelist, label }) => {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-      return schema.node(
-        'variable',
+      return schema.nodes.codelist_variable.create(
         {
-          type: 'codelist',
           mappingResource: mappingURI,
           codelistResource: codelist?.uri,
           variableInstance,
@@ -115,8 +106,5 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
   },
 };
 
-export const MINIMUM_VALUE_PNODE_KEY = 'minimumValue';
-export const MAXIMUM_VALUE_PNODE_KEY = 'maximumValue';
-
-export const MINIMUM_VALUE_HTML_ATTRIBUTE_KEY = 'data-minimum-value';
-export const MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY = 'data-maximum-value';
+export const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
+                          span[property~='${EXT('content').full}']`;

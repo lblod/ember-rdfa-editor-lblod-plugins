@@ -40,10 +40,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
 import {
-  variable,
-  variableView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
-import {
   bullet_list,
   list_item,
   ordered_list,
@@ -65,6 +61,16 @@ import {
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
+import {
+  text_variable,
+  number_variable,
+  codelist_variable,
+  location_variable,
+  textVariableView,
+  numberVariableView,
+  codelistVariableView,
+  locationVariableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -94,7 +100,10 @@ export default class RegulatoryStatementSampleController extends Controller {
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.config.date),
-        variable,
+        text_variable,
+        number_variable,
+        codelist_variable,
+        location_variable,
         ...STRUCTURE_NODES,
         heading,
         blockquote,
@@ -176,7 +185,10 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: SayController
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      variable: variableView(controller),
+      text_variable: textVariableView(controller),
+      number_variable: numberVariableView(controller),
+      codelist_variable: codelistVariableView(controller),
+      location_variable: locationVariableView(controller),
       table_of_contents: tableOfContentsView(this.config.tableOfContents)(
         controller
       ),
