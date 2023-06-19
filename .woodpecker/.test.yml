@@ -1,4 +1,9 @@
 steps:
+  changelog:
+    image: danlynn/ember-cli:4.8.0
+    commands:
+      - git fetch origin master
+      - git diff -wb --name-only origin/master..HEAD | grep CHANGELOG.md
   install:
     image: danlynn/ember-cli:4.8.0
     commands:
@@ -42,4 +47,4 @@ steps:
       ref: refs/tags/v*
 # according to docs, this also runs on prs targetting master
 when:
-  branch: [master, hotfix/*]
+  branch: [ master, hotfix/* ]
