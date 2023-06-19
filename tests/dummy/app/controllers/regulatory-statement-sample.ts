@@ -65,6 +65,10 @@ import {
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
+import {
+  number,
+  numberView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/number';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -95,6 +99,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.config.date),
         variable,
+        number: number,
         ...STRUCTURE_NODES,
         heading,
         blockquote,
@@ -182,6 +187,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       ),
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
+      number: numberView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

@@ -42,17 +42,15 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
       const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
       const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
-      return schema.node(
-        'variable',
-        {
+      return unwrap(
+        schema.nodes.number.createAndFill({
           mappingResource: mappingURI,
           variableInstance,
           type: 'number',
           datatype: XSD('integer').prefixed,
           label,
           ...attributes,
-        },
-        schema.node('placeholder', { placeholderText: 'number' })
+        })
       );
     },
   },

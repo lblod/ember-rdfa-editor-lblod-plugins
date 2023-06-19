@@ -99,3 +99,17 @@
     width: 100%;
   }
 }
+
+// show tooltips above everything else
+.say-tooltip {
+ z-index: 3;
+}
+
+.say-number-tooltip {
+  width: 140px;
+
+  // AuInput @type='number' overrides width to be 100px, we have to override it again
+  input[type='number'] {
+    width: 100%;
+  }
+}
