@@ -194,7 +194,7 @@ table-of-contents-plugin:
 variable:
   number:
     placeholder: nummer
-    type-number: type een nummer...
+    type-number: typ een nummer...
     error-not-integer: Only integers are allowed
     error-not-number: Only numbers are allowed
     error-number-between: The number should be between {minValue} and {maxValue} 
