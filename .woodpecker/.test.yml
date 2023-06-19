@@ -1,26 +1,25 @@
-matrix:
-  scenario:
-    - ember-lts-3.28
 steps:
   install:
     image: danlynn/ember-cli:4.8.0
     commands:
       - npm ci
   # ember-try already runs ember test, so we don't need another test step
-  ${scenario}:
-    image: danlynn/ember-cli:4.8.0
-    commands:
-      - npx ember try:one ${scenario}
   lint-js:
     image: danlynn/ember-cli:4.8.0
-    group: lint
+    group: check
     commands:
       - npm run lint:js
   lint-hbs:
     image: danlynn/ember-cli:4.8.0
-    group: lint
+    group: check
     commands:
       - npm run lint:hbs
+  test:
+    image: danlynn/ember-cli:4.8.0
+    group: check
+    commands:
+      - ember test
+
 
   release:
     image: plugins/npm
