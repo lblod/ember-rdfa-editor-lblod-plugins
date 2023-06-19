@@ -179,7 +179,7 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   get fragmentConfig(): FragmentPluginConfig {
     return {
-      endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+      endpoint: 'http://localhost:8890/sparql',
       editorConfig: {
         schema: this.schema as Schema,
         plugins: this.plugins,
