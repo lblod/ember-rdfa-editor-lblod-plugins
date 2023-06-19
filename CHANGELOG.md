@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Dependencies
 - Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
+- Bumps `@typescript-eslint/parser` from 5.45.0 to 5.59.11
 
 ## [8.0.1] - 2023-06-15
 ### Fixed
