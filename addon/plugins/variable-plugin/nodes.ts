@@ -15,9 +15,9 @@ import {
   MINIMUM_VALUE_HTML_ATTRIBUTE_KEY,
   MINIMUM_VALUE_PNODE_KEY,
 } from './utils/constants';
-import { PNode } from '@lblod/ember-rdfa-editor';
+import { Attrs, DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 
-const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
+export const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 
 export const getHTMLNodeExtraAttributes = ({
@@ -58,7 +58,110 @@ export const getPNodeExtraAttributes = ({
   return {};
 };
 
-const emberNodeConfig: EmberNodeConfig = {
+export const parseAttributes = (node: HTMLElement): false | Attrs => {
+  if (
+    hasRDFaAttribute(node, 'typeof', EXT('Mapping')) &&
+    node.querySelector(CONTENT_SELECTOR)
+  ) {
+    const variableInstance = [...node.children]
+      .find((el) => hasRDFaAttribute(el, 'property', EXT('instance')))
+      ?.getAttribute('resource');
+    const mappingResource = node.getAttribute('resource');
+    const codelistSpan = [...node.children].find((el) =>
+      hasRDFaAttribute(el, 'property', EXT('codelist'))
+    );
+    const codelistResource =
+      codelistSpan?.getAttribute('resource') ??
+      codelistSpan?.getAttribute('content');
+    const source = [...node.children]
+      .find((el) => hasRDFaAttribute(el, 'property', DCT('source')))
+      ?.getAttribute('resource');
+    const type = [...node.children]
+      .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
+      ?.getAttribute('content');
+    const label = node.getAttribute('data-label') || type;
+    const datatype = [...node.children]
+      .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
+      ?.getAttribute('datatype');
+    if (!mappingResource || !type) {
+      return false;
+    }
+    return {
+      variableInstance:
+        variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
+      mappingResource,
+      codelistResource,
+      source,
+      type,
+      datatype,
+      label,
+      ...getHTMLNodeExtraAttributes({ type, node }),
+    };
+  }
+
+  return false;
+};
+
+export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
+  const {
+    mappingResource,
+    codelistResource,
+    variableInstance,
+    type,
+    datatype,
+    source,
+    label,
+  } = node.attrs;
+
+  const sourceSpan = source
+    ? [
+        [
+          'span',
+          {
+            property: DCT('source').prefixed,
+            resource: source as string,
+          },
+        ],
+      ]
+    : [];
+  const codelistResourceSpan = codelistResource
+    ? [
+        [
+          'span',
+          {
+            property: EXT('codelist').prefixed, //becomes EXT('instance')
+            resource: codelistResource as string,
+          },
+        ],
+      ]
+    : [];
+  return [
+    'span',
+    {
+      resource: mappingResource as string,
+      typeof: EXT('Mapping').prefixed,
+      'data-label': label as string,
+      ...getPNodeExtraAttributes({ node, type: type as string }),
+    },
+    [
+      'span',
+      { property: EXT('instance'), resource: variableInstance as string },
+    ],
+    ['span', { property: DCT('type').prefixed, content: type as string }],
+    ...sourceSpan,
+    ...codelistResourceSpan,
+    [
+      'span',
+      {
+        property: EXT('content').prefixed,
+        ...(!!datatype && { datatype: datatype as string }),
+      },
+      content ? content : 0,
+    ],
+  ];
+};
+
+export const emberNodeConfig: EmberNodeConfig = {
   name: 'variable',
   componentPath: 'variable-plugin/variable',
   inline: true,
@@ -95,109 +198,18 @@ const emberNodeConfig: EmberNodeConfig = {
     },
   },
   toDOM: (node) => {
-    const {
-      mappingResource,
-      codelistResource,
-      variableInstance,
-      type,
-      datatype,
-      source,
-      label,
-    } = node.attrs;
-
-    const sourceSpan = source
-      ? [
-          [
-            'span',
-            {
-              property: DCT('source').prefixed,
-              resource: source as string,
-            },
-          ],
-        ]
-      : [];
-    const codelistResourceSpan = codelistResource
-      ? [
-          [
-            'span',
-            {
-              property: EXT('codelist').prefixed, //becomes EXT('instance')
-              resource: codelistResource as string,
-            },
-          ],
-        ]
-      : [];
-    return [
-      'span',
-      {
-        resource: mappingResource as string,
-        typeof: EXT('Mapping').prefixed,
-        'data-label': label as string,
-        ...getPNodeExtraAttributes({ node, type: type as string }),
-      },
-      [
-        'span',
-        { property: EXT('instance'), resource: variableInstance as string },
-      ],
-      ['span', { property: DCT('type').prefixed, content: type as string }],
-      ...sourceSpan,
-      ...codelistResourceSpan,
-      [
-        'span',
-        {
-          property: EXT('content').prefixed,
-          ...(!!datatype && { datatype: datatype as string }),
-        },
-        0,
-      ],
-    ];
+    return attributesToDOM(node);
   },
   parseDOM: [
     {
       tag: 'span',
       getAttrs: (node: HTMLElement) => {
-        if (
-          hasRDFaAttribute(node, 'typeof', EXT('Mapping')) &&
-          node.querySelector(CONTENT_SELECTOR)
-        ) {
-          const variableInstance = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', EXT('instance')))
-            ?.getAttribute('resource');
-          const mappingResource = node.getAttribute('resource');
-          const codelistSpan = [...node.children].find((el) =>
-            hasRDFaAttribute(el, 'property', EXT('codelist'))
-          );
-          const codelistResource =
-            codelistSpan?.getAttribute('resource') ??
-            codelistSpan?.getAttribute('content');
-          const source = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', DCT('source')))
-            ?.getAttribute('resource');
-          const type = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
-            ?.getAttribute('content');
-          const label = node.getAttribute('data-label') || type;
-          const datatype = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
-            ?.getAttribute('datatype');
-          if (!mappingResource || !type) {
-            return false;
-          }
-          return {
-            variableInstance:
-              variableInstance ??
-              `http://data.lblod.info/variables/${uuidv4()}`,
-            mappingResource,
-            codelistResource,
-            source,
-            type,
-            datatype,
-            label,
-            ...getHTMLNodeExtraAttributes({ type, node }),
-          };
+        const attr = parseAttributes(node);
+        if (attr && attr.type !== 'number') {
+          return attr;
+        } else {
+          return false;
         }
-
-        return false;
       },
       contentElement: CONTENT_SELECTOR,
     },

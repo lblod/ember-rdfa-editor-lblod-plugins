@@ -191,7 +191,15 @@ table-of-contents-plugin:
   title: Inhoudstafel
   toggle: Toon Inhoudstafel
 
-
+variable:
+  number:
+    placeholder: nummer
+    type-number: typ een nummer...
+    error-not-integer: Only integers are allowed
+    error-not-number: Only numbers are allowed
+    error-number-between: The number should be between {minValue} and {maxValue} 
+    error-number-above: The number should be bigger than {minValue}
+    error-number-below: The number should be smaller than {maxValue}
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
