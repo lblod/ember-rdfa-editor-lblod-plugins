@@ -241,17 +241,6 @@ export default class BesluitSampleController extends Controller {
     };
   }
 
-  get fragmentConfig(): FragmentPluginConfig {
-    return {
-      endpoint: 'http://localhost:8890/sparql',
-      editorConfig: {
-        schema: this.schema as Schema,
-        plugins: this.plugins,
-        nodeViews: this.nodeViews,
-      },
-    };
-  }
-
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController
