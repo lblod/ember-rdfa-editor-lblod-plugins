@@ -1,11 +1,9 @@
 import { LEGISLATION_TYPE_CONCEPTS } from './legislation-types';
 import { warn } from '@ember/debug';
-import { htmlSafe } from '@ember/template';
 import {
   Option,
   optionMapOr,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-type SafeString = ReturnType<typeof htmlSafe>;
 
 interface DecisionArgs {
   uri: string;
@@ -54,7 +52,7 @@ interface ArticleArgs {
 export class Article {
   uri: string;
   number?: number;
-  content: SafeString | null;
+  content: string | null;
   dateInForce: string | null;
   dateNoLongerInForce: string | null;
 
@@ -67,7 +65,7 @@ export class Article {
   }: ArticleArgs) {
     this.uri = uri;
     this.number = number;
-    this.content = optionMapOr(null, htmlSafe, content);
+    this.content = content;
     this.dateInForce = dateInForce;
     this.dateNoLongerInForce = dateNoLongerInForce;
   }

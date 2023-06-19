@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 - Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
 
+### Fixed
+
+- fix typo "Vlaams Codex" → "Vlaamse Codex"
+- add missing argument to citation card in dummy app
+- correct erroneous arguments to AuAlert
+
+### Changed
+- remove the unnecessary type and add the html-safe tag at the rendering site
+
 ## [8.0.1] - 2023-06-15
 ### Fixed
 - Change problematic type in citation that made it to break with new ember

@@ -3,7 +3,7 @@
   {{@article.number}} ({{@article.dateInForce}} - {{if @article.dateNoLongerInForce @article.dateNoLongerInForce "…"}})
   </AuHeading>
   <p>
-    {{@article.content}}
+    {{html-safe @article.content}}
   </p>
   <AuButton
     @skin="primary"
