@@ -1,23 +1,23 @@
 import * as RDF from '@rdfjs/types';
 import { optionMapOr } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
-export type QueryResult<Binding = Record<string, RDF.Term>> = {
+export interface QueryResult<Binding = Record<string, RDF.Term>> {
   results: {
     bindings: Binding[];
   };
-};
+}
 
-type QueryConfig = {
+interface QueryConfig {
   query: string;
   endpoint: string;
   abortSignal?: AbortSignal;
-};
+}
 
 export async function executeQuery<Binding = Record<string, RDF.Term>>({
   query,
   endpoint,
   abortSignal,
-}: { query: string } & QueryConfig) {
+}: QueryConfig) {
   const encodedQuery = encodeURIComponent(query.trim());
 
   const response = await fetch(endpoint, {

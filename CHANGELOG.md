@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - remove the unnecessary type and add the html-safe tag at the rendering site
 - dummy/app/controllers/besluit-sample.ts
+- Extract SPARQL query tools
 
 ### Removed
 - remove ensure-changelog github action
