@@ -32,7 +32,6 @@ const emberNodeConfig = (): EmberNodeConfig => {
             const content = [...node.children]
               .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
               ?.getAttribute('content');
-            console.log(content);
             return { ...attrs, value: content };
           } else {
             return false;

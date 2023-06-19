@@ -7,7 +7,7 @@ declare module '@lblod/ember-rdfa-editor-lblod-plugins/templates/*' {
 }
 declare module 'n2words' {
   export default function n2words(
-    string: string,
+    number: number,
     options: { lang: string }
   ): string;
 }

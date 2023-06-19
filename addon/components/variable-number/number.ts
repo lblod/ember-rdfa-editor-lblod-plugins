@@ -49,11 +49,12 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     if (
       !writtenNumber ||
       Number.isNaN(Number(this.node.attrs.value)) ||
+      this.node.attrs.value === null ||
       this.node.attrs.value === ''
     ) {
       return this.node.attrs.value as string;
     } else {
-      return n2words(this.node.attrs.value, { lang: 'nl' });
+      return n2words(Number(this.node.attrs.value), { lang: 'nl' });
     }
   }
 
@@ -76,7 +77,6 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
 
   @action
   changeWrittenNumber() {
-    console.log(!this.writtenNumber);
     this.args.updateAttribute('writtenNumber', !this.writtenNumber);
   }
 
