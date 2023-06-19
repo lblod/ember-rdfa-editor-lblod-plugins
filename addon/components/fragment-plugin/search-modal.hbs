@@ -63,15 +63,22 @@
           {{/if}}
         </div>
         {{#if this.fragmentsResource.value.length}}
-          <Pagination::PaginationView
-            @totalCount={{this.totalCount}}
-            @rangeStart={{this.rangeStart}}
-            @rangeEnd={{this.rangeEnd}}
-            @onNextPage={{this.nextPage}}
-            @onPreviousPage={{this.previousPage}}
-            @isFirstPage={{this.isFirstPage}}
-            @isLastPage={{this.isLastPage}}
-          />
+          {{#let
+            (pagination
+              page=this.pageNumber pageSize=this.pageSize count=this.totalCount
+            )
+            as |pg|
+          }}
+            <Pagination::PaginationView
+              @totalCount={{pg.count}}
+              @rangeStart={{pg.pageStart}}
+              @rangeEnd={{pg.pageEnd}}
+              @onNextPage={{this.nextPage}}
+              @onPreviousPage={{this.previousPage}}
+              @isFirstPage={{not pg.hasPreviousPage}}
+              @isLastPage={{not pg.hasNextPage}}
+            />
+          {{/let}}
         {{/if}}
       </mc.content>
     </AuMainContainer>

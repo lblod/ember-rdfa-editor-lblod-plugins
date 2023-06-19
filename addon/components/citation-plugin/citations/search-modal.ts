@@ -1,3 +1,4 @@
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
@@ -18,8 +19,6 @@ import {
   Option,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-
-import PaginationComponent from '../../pagination/pagination-component';
 
 function getISODate(date: Option<Date>): string | null {
   if (date) {
@@ -44,11 +43,14 @@ interface Args {
   config: { endpoint: string };
 }
 
-export default class EditorPluginsCitationsSearchModalComponent extends PaginationComponent<Args> {
+export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
   @service declare intl: IntlService;
   // Vlaamse Codex currently doesn't contain captions and content of decisions
   // @tracked isEnabledSearchCaption = false
   // @tracked isEnabledSearchContent = false
+  @tracked pageNumber = 0;
+  @tracked pageSize = 5;
+  @tracked totalCount = 0;
   @tracked decisions = [];
   @tracked error: unknown;
   @tracked selectedDecision: Decision | null = null;
@@ -204,6 +206,18 @@ export default class EditorPluginsCitationsSearchModalComponent extends Paginati
   @action
   closeDecisionDetail() {
     this.selectedDecision = null;
+  }
+
+  // Pagination
+
+  @action
+  previousPage() {
+    --this.pageNumber;
+  }
+
+  @action
+  nextPage() {
+    ++this.pageNumber;
   }
 }
 

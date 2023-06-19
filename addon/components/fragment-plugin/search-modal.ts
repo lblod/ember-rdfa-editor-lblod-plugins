@@ -1,3 +1,4 @@
+import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
@@ -8,24 +9,22 @@ import { tracked } from '@glimmer/tracking';
 import { fetchFragments } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin/utils/fetch-data';
 import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
 
-import PaginationComponent from '../pagination/pagination-component';
-
 interface Args {
   config: FragmentPluginConfig;
   closeModal: () => void;
 }
 
-export default class FragmentPluginSearchModalComponent extends PaginationComponent<Args> {
+export default class FragmentPluginSearchModalComponent extends Component<Args> {
   // Filtering
   @tracked inputSearchText: string | null = null;
 
   // Display
   @tracked error: unknown;
 
-  constructor(owner: unknown, args: Args) {
-    super(owner, args);
-    this.pageSize = 20;
-  }
+  // Pagination
+  @tracked pageNumber = 0;
+  @tracked pageSize = 20;
+  @tracked totalCount = 0;
 
   @action
   setInputSearchText(event: InputEvent) {
@@ -74,5 +73,17 @@ export default class FragmentPluginSearchModalComponent extends PaginationCompon
 
   fragmentsResource = trackedTask(this, this.fragmentSearch, () => [
     this.inputSearchText,
+    this.pageNumber,
+    this.pageSize,
   ]);
+
+  @action
+  previousPage() {
+    --this.pageNumber;
+  }
+
+  @action
+  nextPage() {
+    ++this.pageNumber;
+  }
 }
