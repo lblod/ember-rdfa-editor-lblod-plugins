@@ -4,14 +4,14 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import { ProseParser, SayController } from '@lblod/ember-rdfa-editor';
-import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
+import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
   controller: SayController;
-  config: FragmentPluginConfig;
+  config: SnippetPluginConfig;
 }
 
-export default class FragmentInsertComponent extends Component<Args> {
+export default class SnippetInsertComponent extends Component<Args> {
   @tracked showModal = false;
 
   get controller() {

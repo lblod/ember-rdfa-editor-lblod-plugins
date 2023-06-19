@@ -233,7 +233,7 @@ generic-rdfa-variable:
     insert: Invoegen
     cancel: Terug
 
-fragment-plugin:
+snippet-plugin:
   insert:
     title: Fragment invoegen
   modal:

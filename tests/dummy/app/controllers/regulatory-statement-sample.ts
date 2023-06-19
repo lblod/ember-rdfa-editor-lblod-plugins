@@ -65,7 +65,7 @@ import {
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
-import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
+import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
   number,
   numberView,
@@ -177,7 +177,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     };
   }
 
-  get fragmentConfig(): FragmentPluginConfig {
+  get snippetConfig(): SnippetPluginConfig {
     return {
       endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       editorConfig: {

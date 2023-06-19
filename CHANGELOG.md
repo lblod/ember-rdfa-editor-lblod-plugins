@@ -8,10 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
-- Fragment insert modal
-- Query backend for fragments
-- Pagination for fragments
-- Insert the fragment
+- Snippet insert modal
+- Query backend for snippets
+- Pagination for snippets
+- Insert the snippet
 
 ### Fixed
 - Fixed woodpecker builds crashing on syntax errors

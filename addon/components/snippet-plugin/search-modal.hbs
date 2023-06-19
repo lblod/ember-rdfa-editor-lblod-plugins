@@ -1,18 +1,18 @@
 <AuModal
   @modalOpen={{@open}}
   @closeModal={{this.closeModal}}
-  @title={{t 'fragment-plugin.modal.title'}}
+  @title={{t 'snippet-plugin.modal.title'}}
   @size='large'
   @padding='none'
   as |modal|
 >
   <modal.Body>
-    <AuMainContainer class='fragment-modal--main-container' as |mc|>
+    <AuMainContainer class='snippet-modal--main-container' as |mc|>
       <mc.sidebar>
         <div class='au-c-sidebar'>
           <div class='au-c-sidebar__content au-u-padding'>
             <AuHeading @level='3' @skin='4' class='au-u-padding-bottom-small'>
-              {{t 'fragment-plugin.modal.search.title'}}
+              {{t 'snippet-plugin.modal.search.title'}}
             </AuHeading>
             <AuLabel
               class='au-margin-bottom-small'
@@ -22,45 +22,45 @@
               @error={{false}}
               @warning={{false}}
             >
-              {{t 'fragment-plugin.modal.search.label'}}
+              {{t 'snippet-plugin.modal.search.label'}}
             </AuLabel>
             <AuNativeInput
               @type='text'
               @width='block'
               id='searchTerm'
               value={{this.searchText}}
-              placeholder={{t 'fragment-plugin.modal.search.placeholder'}}
+              placeholder={{t 'snippet-plugin.modal.search.placeholder'}}
               {{on 'input' this.setInputSearchText}}
             />
           </div>
         </div>
       </mc.sidebar>
       <mc.content @scroll={{true}}>
-        <div class='au-u-padding-top fragment-modal--list-container'>
-          {{#if this.fragmentsResource.isRunning}}
+        <div class='au-u-padding-top snippet-modal--list-container'>
+          {{#if this.snippetsResource.isRunning}}
             <div class='au-u-margin'>
               <AuLoader @padding='large' />
               <span class='au-u-hidden-visually'>
-                {{t 'fragment-plugin.alert.loading'}}
+                {{t 'snippet-plugin.alert.loading'}}
               </span>
             </div>
           {{else}}
             {{#if this.error}}
-              <FragmentPlugin::Helpers::AlertLoadError @error={{this.error}} />
+              <SnippetPlugin::Helpers::AlertLoadError @error={{this.error}} />
             {{else}}
-              {{#if this.fragmentsResource.value.length}}
-                <FragmentPlugin::Fragments::FragmentList
-                  @fragments={{this.fragmentsResource.value}}
+              {{#if this.snippetsResource.value.length}}
+                <SnippetPlugin::Snippets::SnippetList
+                  @snippets={{this.snippetsResource.value}}
                   @config={{this.config}}
                   @onInsert={{@onInsert}}
                 />
               {{else}}
-                <FragmentPlugin::Helpers::AlertNoItems />
+                <SnippetPlugin::Helpers::AlertNoItems />
               {{/if}}
             {{/if}}
           {{/if}}
         </div>
-        {{#if this.fragmentsResource.value.length}}
+        {{#if this.snippetsResource.value.length}}
           {{#let
             (pagination
               page=this.pageNumber pageSize=this.pageSize count=this.totalCount

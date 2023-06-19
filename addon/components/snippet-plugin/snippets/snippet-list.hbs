@@ -1,9 +1,9 @@
-{{#if @fragments.length}}
+{{#if @snippets.length}}
   <AuList @direction='vertical'>
-    {{#each @fragments as |fragment|}}
+    {{#each @snippets as |snippet|}}
       <AuList::Item>
-        <FragmentPlugin::Fragments::FragmentPreview
-          @fragment={{fragment}}
+        <SnippetPlugin::Snippets::SnippetPreview
+          @snippet={{snippet}}
           @config={{this.config}}
           @onInsert={{@onInsert}}
         />

@@ -1,14 +1,14 @@
 import Component from '@glimmer/component';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
+import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
   controller: SayController;
-  config: FragmentPluginConfig;
+  config: SnippetPluginConfig;
 }
 
-export default class FragmentListComponent extends Component<Args> {
+export default class SnippetListComponent extends Component<Args> {
   get config() {
     return this.args.config;
   }

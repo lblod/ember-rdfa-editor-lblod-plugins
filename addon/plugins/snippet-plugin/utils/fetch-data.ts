@@ -2,7 +2,7 @@ import {
   executeCountQuery,
   executeQuery,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { Fragment } from '../index';
+import { Snippet } from '../index';
 
 type Filter = { name?: string };
 type Pagination = { pageNumber: number; pageSize: number };
@@ -52,7 +52,7 @@ const buildFetchQuery = ({
       `;
 };
 
-export const fetchFragments = async ({
+export const fetchSnippets = async ({
   endpoint,
   abortSignal,
   filter,
@@ -85,7 +85,7 @@ export const fetchFragments = async ({
 
   const results = queryResult.results.bindings.map(
     (binding) =>
-      new Fragment({
+      new Snippet({
         title: binding.title?.value,
         createdOn: binding.createdOn?.value,
         content: binding.content?.value,
