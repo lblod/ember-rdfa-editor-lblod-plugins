@@ -177,7 +177,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     };
   }
 
-  get fragmentConfig(): FragmentPluginConfig {
+  get snippetConfig(): FragmentPluginConfig {
     return {
       endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       editorConfig: {

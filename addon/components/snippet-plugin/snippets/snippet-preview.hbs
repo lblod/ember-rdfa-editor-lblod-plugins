@@ -1,0 +1,23 @@
+<div
+  class='snippet-preview--container au-c-panel au-u-margin-right'
+  ...attributes
+>
+  <div
+    class='snippet-preview--article au-u-padding au-u-padding-right-large rdfa-annotations rdfa-annotations-highlight rdfa-annotations-hover'
+  >
+    <h3 class='snippet-preview--title au-u-margin-bottom'>
+      {{@snippet.title}}
+    </h3>
+    <Editor
+      @plugins={{@config.editorConfig.plugins}}
+      @schema={{@config.editorConfig.schema}}
+      @nodeViews={{@config.editorConfig.nodeViews}}
+      @rdfaEditorInit={{this.rdfaEditorInit}}
+    />
+  </div>
+  <div class='snippet-preview--button au-u-padding-small'>
+    <AuButton @skin='naked' {{on 'click' this.onInsert}}>
+      {{t 'snippet-plugin.modal.select'}}
+    </AuButton>
+  </div>
+</div>

@@ -4,28 +4,28 @@ import { tracked } from '@glimmer/tracking';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
-  Fragment,
-  FragmentPluginConfig,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
+  Snippet,
+  SnippetPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
-  config: FragmentPluginConfig;
-  fragment: Fragment;
+  config: SnippetPluginConfig;
+  snippet: Snippet;
   onInsert: (content: string) => void;
 }
 
-export default class FragmentPreviewComponent extends Component<Args> {
+export default class SnippetPreviewComponent extends Component<Args> {
   @tracked controller?: SayController;
 
-  get fragment(): Fragment {
-    return this.args.fragment;
+  get snippet(): Snippet {
+    return this.args.snippet;
   }
 
   @action
   rdfaEditorInit(controller: SayController) {
     this.controller = controller;
 
-    const presetContent: string = this.args.fragment.content?.toHTML() ?? '';
+    const presetContent: string = this.args.snippet.content?.toHTML() ?? '';
 
     controller.setHtmlContent(presetContent, { shouldFocus: false });
     controller.mainEditorView.setProps({ editable: () => false });
@@ -33,6 +33,6 @@ export default class FragmentPreviewComponent extends Component<Args> {
 
   @action
   onInsert() {
-    this.args.onInsert(this.args.fragment.content?.toHTML() ?? '');
+    this.args.onInsert(this.args.snippet.content?.toHTML() ?? '');
   }
 }

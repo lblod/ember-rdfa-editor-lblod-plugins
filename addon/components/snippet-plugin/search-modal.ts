@@ -6,15 +6,15 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
 import { tracked } from '@glimmer/tracking';
 
-import { fetchFragments } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin/utils/fetch-data';
-import { FragmentPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/fragment-plugin';
+import { fetchSnippets } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
+import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
-  config: FragmentPluginConfig;
+  config: SnippetPluginConfig;
   closeModal: () => void;
 }
 
-export default class FragmentPluginSearchModalComponent extends Component<Args> {
+export default class SnippetPluginSearchModalComponent extends Component<Args> {
   // Filtering
   @tracked inputSearchText: string | null = null;
 
@@ -46,17 +46,17 @@ export default class FragmentPluginSearchModalComponent extends Component<Args> 
 
   @action
   async closeModal() {
-    await this.fragmentsResource.cancel();
+    await this.snippetsResource.cancel();
     this.args.closeModal();
   }
 
-  fragmentSearch = restartableTask(async () => {
+  snippetsSearch = restartableTask(async () => {
     await timeout(500);
 
     const abortController = new AbortController();
 
     try {
-      const queryResult = await fetchFragments({
+      const queryResult = await fetchSnippets({
         endpoint: this.args.config.endpoint,
         abortSignal: abortController.signal,
         filter: {
@@ -79,7 +79,7 @@ export default class FragmentPluginSearchModalComponent extends Component<Args> 
     }
   });
 
-  fragmentsResource = trackedTask(this, this.fragmentSearch, () => [
+  snippetsResource = trackedTask(this, this.snippetsSearch, () => [
     this.inputSearchText,
     this.pageNumber,
     this.pageSize,

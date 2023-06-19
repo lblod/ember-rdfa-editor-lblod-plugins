@@ -5,11 +5,11 @@
     @skin='link'
     {{on 'click' this.openModal}}
   >
-    {{t 'fragment-plugin.insert.title'}}
+    {{t 'snippet-plugin.insert.title'}}
   </AuButton>
 </AuList::Item>
 
-<FragmentPlugin::SearchModal
+<SnippetPlugin::SearchModal
   @open={{this.showModal}}
   @closeModal={{this.closeModal}}
   @config={{this.config}}
