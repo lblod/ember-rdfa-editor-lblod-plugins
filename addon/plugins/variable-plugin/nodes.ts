@@ -77,8 +77,13 @@ export const contentToDom = ({
   node: PNode;
 }) => {
   if (type === 'number') {
-    if (node.attrs.writtenNumber) {
-      return n2words(content, { lang: 'nl' });
+    if (
+      node.attrs.writtenNumber ||
+      Number.isNaN(Number(content)) ||
+      content === null ||
+      content === ''
+    ) {
+      return n2words(Number(content), { lang: 'nl' });
     } else {
       return content;
     }
