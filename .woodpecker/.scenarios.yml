@@ -6,7 +6,8 @@ steps:
   - name: ${scenario}
     image: danlynn/ember-cli:4.8.0
     commands:
-      - npx --package ember-try ember try:one ${scenario} --skip-cleanup=true
+      - npm ci
+      - ember try:one ${scenario} --skip-cleanup=true
 
 when:
   branch: [ master ]
