@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@typescript-eslint/parser` from 5.45.0 to 5.60.0
 - Bumps `@types/ember__engine` from 4.0.4 to 4.0.5
 - Bumps `typescript` to 5.0.4
+- Bumps `prosemirror-dev-tools` from 3.1.0 to 4.0.0
 
 ### Fixed
 
