@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - remove the unnecessary type and add the html-safe tag at the rendering site
 
+### Removed
+- remove ensure-changelog github action
+
 ## [8.0.1] - 2023-06-15
 ### Fixed
 - Change problematic type in citation that made it to break with new ember
