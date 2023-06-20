@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
 - Bumps `@types/ember__array` from 4.0.3 to 4.0.4
 - Bumps `@typescript-eslint/parser` from 5.45.0 to 5.60.0
+- Bumps `@types/ember__engine` from 4.0.4 to 4.0.5
 
 ### Fixed
 
