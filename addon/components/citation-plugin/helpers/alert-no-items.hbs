@@ -1,8 +1,8 @@
 <AuAlert
-  @alertTitle="{{t "citaten-plugin.alert.no-results"}}"
-  @alertSkin="warning"
-  @alertIcon="cross"
-  @alertSize="{{if @fullSize "default" "small"}}"
+  @title="{{t "citaten-plugin.alert.no-results"}}"
+  @skin="warning"
+  @icon="cross"
+  @size="{{if @fullSize "default" "small"}}"
   @closable={{false}}
   class="{{unless @fullSize "au-u-margin-small"}}"
   ...attributes>
