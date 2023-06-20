@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed woodpecker builds crashing on syntax errors
 ### Dependencies
 - Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
+- Bumps `@types/ember__array` from 4.0.3 to 4.0.4
 
 ### Fixed
 
