@@ -188,7 +188,7 @@ export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
       'span',
       {
         property: EXT('content').prefixed,
-        content: content ? content : 0,
+        content: content ? content : '',
         ...(!!datatype && { datatype: datatype as string }),
       },
       content ? contentToDom({ content, type: type as string, node }) : 0,
