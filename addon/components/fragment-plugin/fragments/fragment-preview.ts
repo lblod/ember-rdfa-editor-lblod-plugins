@@ -31,6 +31,7 @@ export default class FragmentPreviewComponent extends Component<Args> {
     const presetContent: string = this.args.fragment.content?.toHTML() ?? '';
 
     controller.setHtmlContent(presetContent);
+    controller.mainEditorView.setProps({ editable: () => false });
   }
 
   @action
