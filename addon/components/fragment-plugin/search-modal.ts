@@ -30,6 +30,10 @@ export default class FragmentPluginSearchModalComponent extends Component<Args> 
     return this.args.config;
   }
 
+  get searchText() {
+    return this.inputSearchText;
+  }
+
   @action
   setInputSearchText(event: InputEvent) {
     assert(
