@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed woodpecker builds crashing on syntax errors
+- Use dutch language in static version of table of contents
 ### Dependencies
 - Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
 - Bumps `@types/ember__array` from 4.0.3 to 4.0.4
