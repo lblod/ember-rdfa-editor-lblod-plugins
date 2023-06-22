@@ -135,9 +135,10 @@ export default class RegulatoryStatementSampleController extends Controller {
             'title|chapter|section|subsection|article',
             'structure_header|article_header',
           ],
-          scrollContainer: document.getElementsByClassName(
-            'say-container__main'
-          )[0] as HTMLElement,
+          scrollContainer: () =>
+            document.getElementsByClassName(
+              'say-container__main'
+            )[0] as HTMLElement,
         },
       ],
       date: {
