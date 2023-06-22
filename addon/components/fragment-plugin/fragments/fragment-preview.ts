@@ -18,7 +18,6 @@ export default class FragmentPreviewComponent extends Component<Args> {
   @tracked controller?: SayController;
 
   get fragment(): Fragment {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.args.fragment;
   }
 
@@ -26,18 +25,14 @@ export default class FragmentPreviewComponent extends Component<Args> {
   rdfaEditorInit(controller: SayController) {
     this.controller = controller;
 
-    // The fragment is typed, not sure what is happening...
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     const presetContent: string = this.args.fragment.content?.toHTML() ?? '';
 
-    controller.setHtmlContent(presetContent);
+    controller.setHtmlContent(presetContent, { shouldFocus: false });
     controller.mainEditorView.setProps({ editable: () => false });
   }
 
   @action
   onInsert() {
-    // The fragment is typed, not sure what is happening...
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     this.args.onInsert(this.args.fragment.content?.toHTML() ?? '');
   }
 }
