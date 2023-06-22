@@ -427,14 +427,18 @@ In order to enable the plugin you need to add the table of contents button to th
 ```
 ### Configuring the plugin with a custom config
 
-You can configure the nodeview with the hiearchy of the nodes
+You can configure the nodeview with the hiearchy of the nodes, by default clicking on a link in the table of contents it will put that element in the bottom of the page. You can make it work so it appears on top if you specify a function that returns the container that contains the scrolling for the document.
+You will also need to specify the scrollPadding, you can get this value measuring the y position of the scrollContainer in the page by default or by modifying it until it scrolls to the desired position, by default this value is 150 which works if you didn't add any additional content on top of the editor
 
 ```js
 {
   nodeHierarchy: [
     'title|chapter|section|subsection|article',
-  'structure_header|article_header',
-],
+    'structure_header|article_header',
+  ],
+  scrollContainer: () =>
+    document.getElementsByClassName('say-container__main')[0],
+  scrollingPadding: 200,
 },
 ```
 
