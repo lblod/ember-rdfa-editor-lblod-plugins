@@ -30,7 +30,7 @@ type Args = {
 };
 export default class VariableNumberPluginNumberComponent extends Component<Args> {
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
-  @localCopy('args.node.attrs.writtenNumber', '')
+  @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;
   @tracked errorMessage = '';
   @service declare intl: intlService;
@@ -44,7 +44,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.args.node;
   }
   get formattedNumber() {
-    const writtenNumber = Boolean(this.writtenNumber);
+    const writtenNumber = this.writtenNumber;
 
     if (
       !writtenNumber ||
