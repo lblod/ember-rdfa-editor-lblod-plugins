@@ -78,7 +78,7 @@ export const contentToDom = ({
 }) => {
   if (type === 'number') {
     if (
-      node.attrs.writtenNumber ||
+      node.attrs[WRITTEN_NUMBER_PNODE_KEY] ||
       Number.isNaN(Number(content)) ||
       content === null ||
       content === ''
