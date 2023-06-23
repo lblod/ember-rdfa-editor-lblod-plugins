@@ -36,9 +36,10 @@ export const getHTMLNodeExtraAttributes = ({
         node.getAttribute(MINIMUM_VALUE_HTML_ATTRIBUTE_KEY) ?? null,
       [MAXIMUM_VALUE_PNODE_KEY]:
         node.getAttribute(MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY) ?? null,
-      [WRITTEN_NUMBER_PNODE_KEY]: Boolean(
-        node.getAttribute(WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY) ?? false
-      ),
+      [WRITTEN_NUMBER_PNODE_KEY]:
+        node.getAttribute(WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY) === 'true'
+          ? true
+          : false,
     };
   }
 
