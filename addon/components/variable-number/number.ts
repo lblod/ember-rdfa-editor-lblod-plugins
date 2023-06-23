@@ -47,11 +47,13 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     const writtenNumber = this.writtenNumber;
 
     if (
-      !writtenNumber ||
       Number.isNaN(Number(this.node.attrs.value)) ||
       this.node.attrs.value === null ||
       this.node.attrs.value === ''
     ) {
+      return this.node.attrs.value as string;
+    }
+    if (!writtenNumber) {
       return this.node.attrs.value as string;
     } else {
       return n2words(Number(this.node.attrs.value), { lang: 'nl' });
