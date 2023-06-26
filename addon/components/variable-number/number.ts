@@ -44,19 +44,15 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.args.node;
   }
   get formattedNumber() {
-    const writtenNumber = this.writtenNumber;
+    const value = this.node.attrs.value as string;
 
-    if (
-      Number.isNaN(Number(this.node.attrs.value)) ||
-      this.node.attrs.value === null ||
-      this.node.attrs.value === ''
-    ) {
-      return this.node.attrs.value as string;
+    if (Number.isNaN(Number(value)) || value === null || value === '') {
+      return value;
     }
-    if (!writtenNumber) {
-      return this.node.attrs.value as string;
+    if (!this.writtenNumber) {
+      return value;
     } else {
-      return n2words(Number(this.node.attrs.value), { lang: 'nl' });
+      return n2words(Number(value), { lang: 'nl' });
     }
   }
 
