@@ -423,7 +423,7 @@ In order to enable the plugin you need to add the table of contents button to th
 ```
 
 ```
-  tableOfContentsView(this.config.tableOfContents)(controller),
+  tableOfContentsView(this.config.tableOfContents, this.intl)(controller),
 ```
 ### Configuring the plugin with a custom config
 
@@ -437,6 +437,8 @@ You can configure the nodeview with the hiearchy of the nodes
 ],
 },
 ```
+
+Additionally the table-of-contents nodespec and nodeview optionally expect an instance of the IntlService ember service from the `ember-intl` package.
 
 
 ## template-variable-plugin
