@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `sass` from 1.56.1 to 1.63.6
 - Bumps `@types/ember` from 4.0.2 to 4.0.4
 - Bumps `@types/ember-data__store` from 4.0.2 to 4.0.3
+- Bumps `@types/ember__template` from 4.0.1 to 4.0.2
 
 ## [8.1.0] - 2023-06-22
 ### Added
