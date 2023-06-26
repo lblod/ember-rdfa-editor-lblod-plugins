@@ -9,7 +9,7 @@ import IntlService from 'ember-intl/services/intl';
 
 export const emberNodeConfig: (
   config: TableOfContentsConfig,
-  intl: IntlService
+  intl?: IntlService
 ) => EmberNodeConfig = (config, intl) => {
   return {
     name: 'table-of-contents',
@@ -27,7 +27,9 @@ export const emberNodeConfig: (
     },
     toDOM(node) {
       const { entries } = node.attrs;
-
+      const title = intl
+        ? intl.t('table-of-contents-plugin.title')
+        : 'Inhoudstafel';
       if (!entries) {
         return [
           'div',
@@ -35,14 +37,14 @@ export const emberNodeConfig: (
             'data-ember-node': 'table-of-contents',
             class: 'table-of-contents',
           },
-          ['h3', {}, intl.t('table-of-contents-plugin.title')],
+          ['h3', {}, title],
         ];
       }
 
       return [
         'div',
         { 'data-ember-node': 'table-of-contents', class: 'table-of-contents' },
-        ['h3', {}, intl.t('table-of-contents-plugin.title')],
+        ['h3', {}, title],
         createTableOfContents(entries),
       ];
     },
@@ -69,9 +71,9 @@ export const emberNodeConfig: (
 
 export const table_of_contents = (
   config: TableOfContentsConfig,
-  intl: IntlService
+  intl?: IntlService
 ) => createEmberNodeSpec(emberNodeConfig(config, intl));
 export const tableOfContentsView = (
   config: TableOfContentsConfig,
-  intl: IntlService
+  intl?: IntlService
 ) => createEmberNodeView(emberNodeConfig(config, intl));
