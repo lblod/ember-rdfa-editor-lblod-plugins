@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Dependencies
 - Bumps `sass` from 1.56.1 to 1.63.6
+- Bumps `@types/ember` from 4.0.2 to 4.0.4
 
 ## [8.1.0] - 2023-06-22
 ### Added
