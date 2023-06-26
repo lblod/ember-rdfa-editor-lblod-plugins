@@ -2,16 +2,12 @@ matrix:
   scenario:
     - ember-lts-3.28
 
-pipeline:
-  ${scenario}:
+steps:
+  - name: ${scenario}
     image: danlynn/ember-cli:4.8.0
     commands:
       - npm ci
-      - npx ember try:one ${scenario}
+      - ember try:one ${scenario} --skip-cleanup=true
 
 when:
-  event:
-    - pull_request
-
-depends_on:
-  - test
+  branch: [ master ]

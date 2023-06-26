@@ -6,21 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Dependencies
+- Bumps `sass` from 1.56.1 to 1.63.6
+- Bumps `@types/ember` from 4.0.2 to 4.0.4
+- Bumps `@types/ember-data__store` from 4.0.2 to 4.0.3
+- Bumps `@types/ember__template` from 4.0.1 to 4.0.2
+
+## [8.1.0] - 2023-06-22
 ### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
 - Add toggle for the user to show number variable as words
 
-### Dependencies
-- Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
-
 ### Fixed
-
+- Fixed woodpecker builds crashing on syntax errors
+- Use dutch language in static version of table of contents
 - fix typo "Vlaams Codex" → "Vlaamse Codex"
 - add missing argument to citation card in dummy app
 - correct erroneous arguments to AuAlert
 
 ### Changed
 - remove the unnecessary type and add the html-safe tag at the rendering site
+
+### Removed
+- remove ensure-changelog github action
+
+### Dependencies
+- Bumps `@types/rdfjs__dataset` from 2.0.0 to 2.0.2
+- Bumps `@types/ember__array` from 4.0.3 to 4.0.4
+- Bumps `@typescript-eslint/parser` from 5.45.0 to 5.60.0
+- Bumps `@types/ember__engine` from 4.0.4 to 4.0.5
+- Bumps `typescript` to 5.0.4
+- Bumps `prosemirror-dev-tools` from 3.1.0 to 4.0.0
 
 ## [8.0.1] - 2023-06-15
 ### Fixed
@@ -487,7 +503,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.1...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.1.0...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -503,3 +519,4 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[8.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.1...v8.1.0
