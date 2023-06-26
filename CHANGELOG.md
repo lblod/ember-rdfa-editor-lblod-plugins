@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@types/ember` from 4.0.2 to 4.0.4
 - Bumps `@types/ember-data__store` from 4.0.2 to 4.0.3
 - Bumps `@types/ember__template` from 4.0.1 to 4.0.2
+- Bumps `@types/rdfjs__parser-n3` from 1.1.5 to 2.0.1
 
 ## [8.1.0] - 2023-06-22
 ### Added
