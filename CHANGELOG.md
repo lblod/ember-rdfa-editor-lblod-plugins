@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+- Expect additional `intl: IntlService` argument for the `table_of_contents` node in order to support an internationalized static version.
+
 ## [8.1.0] - 2023-06-22
 ### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number

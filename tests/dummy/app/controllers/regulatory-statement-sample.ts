@@ -113,7 +113,10 @@ export default class RegulatoryStatementSampleController extends Controller {
 
         hard_break,
         block_rdfa,
-        table_of_contents: table_of_contents(this.config.tableOfContents),
+        table_of_contents: table_of_contents(
+          this.config.tableOfContents,
+          this.intl
+        ),
         invisible_rdfa,
         link: link(this.config.link),
       },
@@ -182,9 +185,10 @@ export default class RegulatoryStatementSampleController extends Controller {
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       variable: variableView(controller),
-      table_of_contents: tableOfContentsView(this.config.tableOfContents)(
-        controller
-      ),
+      table_of_contents: tableOfContentsView(
+        this.config.tableOfContents,
+        this.intl
+      )(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
       number: numberView(controller),
