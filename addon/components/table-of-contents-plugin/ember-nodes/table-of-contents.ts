@@ -91,11 +91,11 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
         if (config.scrollContainer) {
           const scrollContainer: HTMLElement = config.scrollContainer();
           const alreadyScrolled = scrollContainer.scrollTop;
-          const MAGIC_NUMBER_TOPBAR_HEIGHT: number =
-            config.scrollingPadding ?? 150;
           scrollContainer.scrollTo(
             0,
-            coords.top + alreadyScrolled - MAGIC_NUMBER_TOPBAR_HEIGHT
+            coords.top +
+              alreadyScrolled -
+              (scrollContainer.getBoundingClientRect().y + 10)
           );
         } else {
           tr.scrollIntoView();
