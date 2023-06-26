@@ -11,14 +11,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { localCopy } from 'tracked-toolbox';
 import {
   MAXIMUM_VALUE_PNODE_KEY,
   MINIMUM_VALUE_PNODE_KEY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
+import n2words from 'n2words';
 
 type Args = {
   getPos: () => number | undefined;
@@ -30,8 +29,9 @@ type Args = {
   contentDecorations?: DecorationSource;
 };
 export default class VariableNumberPluginNumberComponent extends Component<Args> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
+  @localCopy('args.node.attrs.writtenNumber', false)
+  declare writtenNumber: boolean;
   @tracked errorMessage = '';
   @service declare intl: intlService;
   cursorPositionKeyDown: number | null = null;
@@ -44,7 +44,16 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.args.node;
   }
   get formattedNumber() {
-    return this.node.attrs.value as string;
+    const value = this.node.attrs.value as string;
+
+    if (Number.isNaN(Number(value)) || value === null || value === '') {
+      return value;
+    }
+    if (!this.writtenNumber) {
+      return value;
+    } else {
+      return n2words(Number(value), { lang: 'nl' });
+    }
   }
 
   get selected() {
@@ -62,6 +71,11 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   @action onInputNumberChange(event: InputEvent) {
     this.inputNumber = (event.target as HTMLInputElement).value;
     this.validateAndSave();
+  }
+
+  @action
+  changeWrittenNumber() {
+    this.args.updateAttribute('writtenNumber', !this.writtenNumber);
   }
 
   validateAndSave() {

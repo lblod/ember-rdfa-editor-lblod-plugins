@@ -106,7 +106,7 @@
 }
 
 .say-number-tooltip {
-  width: 140px;
+  width: 200px;
 
   // AuInput @type='number' overrides width to be 100px, we have to override it again
   input[type='number'] {

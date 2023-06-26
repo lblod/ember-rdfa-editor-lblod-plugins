@@ -195,11 +195,12 @@ variable:
   number:
     placeholder: nummer
     type-number: typ een nummer...
-    error-not-integer: Only integers are allowed
-    error-not-number: Only numbers are allowed
-    error-number-between: The number should be between {minValue} and {maxValue} 
-    error-number-above: The number should be bigger than {minValue}
-    error-number-below: The number should be smaller than {maxValue}
+    error-not-integer: Enkel gehele getallen zijn toegelaten
+    error-not-number: Enkel getallen zijn toegelaten
+    error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen 
+    error-number-above: Het getal moet groter dan {minValue} zijn
+    error-number-below: Het getal moet kleiner dan {maxValue} zijn
+    written-number-label: Getal voluit schrijven
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

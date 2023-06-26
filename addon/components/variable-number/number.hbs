@@ -42,6 +42,13 @@
             {{on 'keyup' this.leaveWithArrows}}
             {{on 'keydown' this.setPosBeforeKeypress}}
           />
+          <AuToggleSwitch
+            @identifier="writtenNumber"
+            @name="writtenNumber"
+            @checked={{this.writtenNumber}}
+            @onChange={{this.changeWrittenNumber}}
+            @label={{t 'variable.number.written-number-label'}}
+          />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>
               {{this.errorMessage}}
