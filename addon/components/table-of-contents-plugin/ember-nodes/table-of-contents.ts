@@ -90,7 +90,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
         const config = this.config[0];
         let scrollContainer: HTMLElement | undefined;
         if (config.scrollContainer) {
-          scrollContainer = config.scrollContainer() as HTMLElement;
+          scrollContainer = config.scrollContainer();
         } else {
           scrollContainer = this.getScrollContainer();
         }
