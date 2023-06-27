@@ -88,14 +88,19 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
           selection.from
         );
         const config = this.config[0];
+        let scrollContainer: HTMLElement | undefined;
         if (config.scrollContainer) {
-          const scrollContainer: HTMLElement = config.scrollContainer();
+          scrollContainer = config.scrollContainer() as HTMLElement;
+        } else {
+          scrollContainer = this.getScrollContainer();
+        }
+        if (scrollContainer) {
           const alreadyScrolled = scrollContainer.scrollTop;
+          const beginHeight = scrollContainer.getBoundingClientRect().y;
+          const topPadding = 10; // We need top padding so the wanted position is not just on top of the page
           scrollContainer.scrollTo(
             0,
-            coords.top +
-              alreadyScrolled -
-              (scrollContainer.getBoundingClientRect().y + 10)
+            coords.top + alreadyScrolled - (beginHeight + topPadding)
           );
         } else {
           tr.scrollIntoView();
@@ -104,5 +109,23 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       return tr;
     });
     this.controller.focus();
+  }
+  getScrollContainer(): HTMLElement | undefined {
+    let currentElement = this.controller.mainEditorView.dom;
+    while (currentElement.parentElement) {
+      const parent = currentElement.parentElement;
+      if (this.isScrollable(parent)) {
+        return parent;
+      }
+      currentElement = parent;
+    }
+    return;
+  }
+  isScrollable(element: HTMLElement): boolean {
+    const hasScrollableContent = element.scrollHeight > element.clientHeight;
+    const overflowYStyle = window.getComputedStyle(element).overflowY;
+    const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
+
+    return hasScrollableContent && !isOverflowHidden;
   }
 }

@@ -427,7 +427,7 @@ In order to enable the plugin you need to add the table of contents button to th
 ```
 ### Configuring the plugin with a custom config
 
-You can configure the nodeview with the hiearchy of the nodes, by default clicking on a link in the table of contents it will put that element in the bottom of the page. You can make it work so it appears on top if you specify a function that returns the container that contains the scrolling for the document.
+You can configure the nodeview with the hiearchy of the nodes, by default the plugin will try to find the scrollContainer automatically, this is the htmlElement that provides scroll to your document, but it might happen that this doesn't work due to your setup, so you can always specify that element yourself on the plugin options as showed below.
 
 ```js
 {
