@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
  - GN-4200: Fixed bug with TOC scroll in GN and RB
+### Dependencies
+ - Bump `date-fns` from 2.29.3 to 2.30.0 
 
 ## [8.2.0] - 2023-06-26
 ### Added
