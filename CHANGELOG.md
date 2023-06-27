@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix code filtering of roadsign regulation plugin
+
 ## [8.2.0] - 2023-06-26
 ### Added
 - Add a toggle to show the number as words in a number variable
