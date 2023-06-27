@@ -95,12 +95,21 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
           scrollContainer = this.getScrollContainer();
         }
         if (scrollContainer) {
+          /*
+            coords.top = The distance from the top of the page to your element, this changes with the amount you
+            have scrolled so far
+            scrollContainerDistanceToTop = absolute y-coord of the start of the scroll container.
+            The difference between these two plus the alreadyScrolled distance is where we want to scroll
+          */
           const alreadyScrolled = scrollContainer.scrollTop;
-          const beginHeight = scrollContainer.getBoundingClientRect().y;
+          const scrollContainerDistanceToTop =
+            scrollContainer.getBoundingClientRect().y;
           const topPadding = 10; // We need top padding so the wanted position is not just on top of the page
           scrollContainer.scrollTo(
             0,
-            coords.top + alreadyScrolled - (beginHeight + topPadding)
+            coords.top +
+              alreadyScrolled -
+              (scrollContainerDistanceToTop + topPadding)
           );
         } else {
           tr.scrollIntoView();
