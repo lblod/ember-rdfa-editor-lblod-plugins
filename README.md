@@ -427,14 +427,17 @@ In order to enable the plugin you need to add the table of contents button to th
 ```
 ### Configuring the plugin with a custom config
 
-You can configure the nodeview with the hiearchy of the nodes
+You can configure the nodeview with the hierarchy of the nodes.  
+For very custom setups, the plugin might be unable to find your scrollContainer (htmlElement providing scroll to your document). You can pass the scrollContainer element via the `scrollContainer()` function in the plugin config options instead.
 
 ```js
 {
   nodeHierarchy: [
     'title|chapter|section|subsection|article',
-  'structure_header|article_header',
-],
+    'structure_header|article_header',
+  ],
+  scrollContainer: () =>
+    document.getElementsByClassName('say-container__main')[0],
 },
 ```
 
