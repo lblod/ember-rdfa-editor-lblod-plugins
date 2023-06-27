@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { localCopy } from 'tracked-toolbox';
 import Intl from 'ember-intl/services/intl';
 
@@ -13,7 +11,6 @@ type Args = {
 
 export default class RdfaDatePluginDateTimePicker extends Component<Args> {
   @service declare intl: Intl;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @localCopy('args.value') declare date?: Date;
 
   get hours() {
