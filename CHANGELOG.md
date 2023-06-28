@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix code filtering of roadsign regulation plugin
+
 ## [8.2.1] - 2023-06-28
 ### Fixed
  - GN-4200: Fixed bug with TOC scroll in GN and RB

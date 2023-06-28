@@ -156,11 +156,17 @@ export default class RoadsignRegulationCard extends Component<Args> {
   closeModal() {
     this.args.closeModal();
   }
+
   @action
   searchCodes(term: string) {
     const category = this.categorySelected?.value;
     const type = this.typeSelected?.value;
-    return this.roadsignRegistry.searchCode.perform(term, category, type);
+    return this.roadsignRegistry.searchCode.perform(
+      this.endpoint,
+      term,
+      category,
+      type
+    );
   }
 
   async fetchCodeCombinations() {
