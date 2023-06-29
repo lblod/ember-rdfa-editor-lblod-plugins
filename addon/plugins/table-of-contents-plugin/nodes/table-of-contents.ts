@@ -33,14 +33,14 @@ export const emberNodeConfig: (
             'data-ember-node': 'table-of-contents',
             class: 'table-of-contents',
           },
-          ['h3', {}, 'Table Of Contents'],
+          ['h3', {}, 'Inhoudstafel'],
         ];
       }
 
       return [
         'div',
         { 'data-ember-node': 'table-of-contents', class: 'table-of-contents' },
-        ['h3', {}, 'Table Of Contents'],
+        ['h3', {}, 'Inhoudstafel'],
         createTableOfContents(entries),
       ];
     },

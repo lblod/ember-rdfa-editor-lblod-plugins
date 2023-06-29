@@ -14,8 +14,11 @@ import {
   MAXIMUM_VALUE_PNODE_KEY,
   MINIMUM_VALUE_HTML_ATTRIBUTE_KEY,
   MINIMUM_VALUE_PNODE_KEY,
+  WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY,
+  WRITTEN_NUMBER_PNODE_KEY,
 } from './utils/constants';
 import { Attrs, DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import n2words from 'n2words';
 
 export const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -33,6 +36,10 @@ export const getHTMLNodeExtraAttributes = ({
         node.getAttribute(MINIMUM_VALUE_HTML_ATTRIBUTE_KEY) ?? null,
       [MAXIMUM_VALUE_PNODE_KEY]:
         node.getAttribute(MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY) ?? null,
+      [WRITTEN_NUMBER_PNODE_KEY]:
+        node.getAttribute(WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY) === 'true'
+          ? true
+          : false,
     };
   }
 
@@ -52,10 +59,38 @@ export const getPNodeExtraAttributes = ({
         (node.attrs[MINIMUM_VALUE_PNODE_KEY] as string) ?? null,
       [MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY]:
         (node.attrs[MAXIMUM_VALUE_PNODE_KEY] as string) ?? null,
+      [WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY]: String(
+        node.attrs[WRITTEN_NUMBER_PNODE_KEY] ?? false
+      ),
     };
   }
 
   return {};
+};
+
+export const contentToDom = ({
+  content,
+  type,
+  node,
+}: {
+  content: string;
+  type: string;
+  node: PNode;
+}) => {
+  if (type === 'number') {
+    if (
+      node.attrs[WRITTEN_NUMBER_PNODE_KEY] ||
+      Number.isNaN(Number(content)) ||
+      content === null ||
+      content === ''
+    ) {
+      return n2words(Number(content), { lang: 'nl' });
+    } else {
+      return content;
+    }
+  } else {
+    return content;
+  }
 };
 
 export const parseAttributes = (node: HTMLElement): false | Attrs => {
@@ -154,9 +189,10 @@ export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
       'span',
       {
         property: EXT('content').prefixed,
+        content: content ? content : '',
         ...(!!datatype && { datatype: datatype as string }),
       },
-      content ? content : 0,
+      content ? contentToDom({ content, type: type as string, node }) : 0,
     ],
   ];
 };
@@ -195,6 +231,9 @@ export const emberNodeConfig: EmberNodeConfig = {
     },
     maximumValue: {
       default: null,
+    },
+    writtenNumber: {
+      default: false,
     },
   },
   toDOM: (node) => {

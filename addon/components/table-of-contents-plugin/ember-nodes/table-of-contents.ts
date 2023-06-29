@@ -88,14 +88,28 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
           selection.from
         );
         const config = this.config[0];
+        let scrollContainer: HTMLElement | undefined;
         if (config.scrollContainer) {
-          const scrollContainer: HTMLElement = config.scrollContainer;
+          scrollContainer = config.scrollContainer();
+        } else {
+          scrollContainer = this.getScrollContainer();
+        }
+        if (scrollContainer) {
+          /*
+            coords.top = The distance from the top of the page to your element, this changes with the amount you
+            have scrolled so far
+            scrollContainerDistanceToTop = absolute y-coord of the start of the scroll container.
+            The difference between these two plus the alreadyScrolled distance is where we want to scroll
+          */
           const alreadyScrolled = scrollContainer.scrollTop;
-          const MAGIC_NUMBER_TOPBAR_HEIGHT: number =
-            config.scrollingPadding ?? 150;
+          const scrollContainerDistanceToTop =
+            scrollContainer.getBoundingClientRect().y;
+          const topPadding = 10; // We need top padding so the wanted position is not just on top of the page
           scrollContainer.scrollTo(
             0,
-            coords.top + alreadyScrolled - MAGIC_NUMBER_TOPBAR_HEIGHT
+            coords.top +
+              alreadyScrolled -
+              (scrollContainerDistanceToTop + topPadding)
           );
         } else {
           tr.scrollIntoView();
@@ -104,5 +118,23 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       return tr;
     });
     this.controller.focus();
+  }
+  getScrollContainer(): HTMLElement | undefined {
+    let currentElement = this.controller.mainEditorView.dom;
+    while (currentElement.parentElement) {
+      const parent = currentElement.parentElement;
+      if (this.isScrollable(parent)) {
+        return parent;
+      }
+      currentElement = parent;
+    }
+    return;
+  }
+  isScrollable(element: HTMLElement): boolean {
+    const hasScrollableContent = element.scrollHeight > element.clientHeight;
+    const overflowYStyle = window.getComputedStyle(element).overflowY;
+    const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
+
+    return hasScrollableContent && !isOverflowHidden;
   }
 }

@@ -115,6 +115,8 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
 
 export const MINIMUM_VALUE_PNODE_KEY = 'minimumValue';
 export const MAXIMUM_VALUE_PNODE_KEY = 'maximumValue';
+export const WRITTEN_NUMBER_PNODE_KEY = 'writtenNumber';
 
 export const MINIMUM_VALUE_HTML_ATTRIBUTE_KEY = 'data-minimum-value';
 export const MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY = 'data-maximum-value';
+export const WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY = 'data-written-number';

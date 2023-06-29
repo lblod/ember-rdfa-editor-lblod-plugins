@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "8.0.1",
+  "version": "8.2.2",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -39,10 +39,10 @@
     "@rdfjs/dataset": "^2.0.1",
     "@rdfjs/parser-n3": "^2.0.1",
     "@types/rdf-validate-shacl": "^0.4.0",
-    "@types/rdfjs__parser-n3": "^1.1.5",
+    "@types/rdfjs__parser-n3": "^2.0.1",
     "buffer": "^6.0.3",
     "codemirror": "^6.0.1",
-    "date-fns": "^2.29.3",
+    "date-fns": "^2.30.0",
     "ember-auto-import": "^2.4.3",
     "ember-cli-babel": "^7.26.11",
     "ember-cli-htmlbars": "^6.1.1",
@@ -53,6 +53,7 @@
     "ember-resources": "^5.6.2",
     "ember-velcro": "^1.1.0",
     "fetch-sparql-endpoint": "^3.0.0",
+    "n2words": "^1.16.4",
     "process": "0.11.10",
     "rdf-ext": "^2.1.0",
     "rdf-validate-shacl": "^0.4.5",

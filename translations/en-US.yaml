@@ -183,11 +183,12 @@ variable:
   number:
     placeholder: number
     type-number: Type a number...
-    error-not-integer: Enkel gehele getallen zijn toegelaten
-    error-not-number: Enkel getallen zijn toegelaten
-    error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen 
-    error-number-above: Het getal moet groter dan {minValue} zijn
-    error-number-below: Het getal moet kleiner dan {maxValue} zijn
+    error-not-integer: Only integers are allowed
+    error-not-number: Only numbers are allowed
+    error-number-between: The number should be between {minValue} and {maxValue} 
+    error-number-above: The number should be bigger than {minValue}
+    error-number-below: The number should be smaller than {maxValue}
+    written-number-label: Show as words
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
