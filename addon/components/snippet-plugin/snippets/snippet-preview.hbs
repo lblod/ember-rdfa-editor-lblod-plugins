@@ -8,12 +8,15 @@
     <h3 class='snippet-preview--title au-u-margin-bottom'>
       {{@snippet.title}}
     </h3>
-    <Editor
-      @plugins={{@config.editorConfig.plugins}}
-      @schema={{@config.editorConfig.schema}}
-      @nodeViews={{@config.editorConfig.nodeViews}}
-      @rdfaEditorInit={{this.rdfaEditorInit}}
-    />
+    <div class="snippet-preview--editor-container">
+      <Editor
+        @plugins={{@config.editorConfig.plugins}}
+        @schema={{@config.editorConfig.schema}}
+        @nodeViews={{@config.editorConfig.nodeViews}}
+        @rdfaEditorInit={{this.rdfaEditorInit}}
+      />
+      <div class="snippet-preview--editor-overlay"></div>
+    </div>
   </div>
   <div class='snippet-preview--button au-u-padding-small'>
     <AuButton @skin='naked' {{on 'click' this.onInsert}}>
