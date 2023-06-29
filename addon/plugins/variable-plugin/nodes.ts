@@ -78,15 +78,14 @@ export const contentToDom = ({
   node: PNode;
 }) => {
   if (type === 'number') {
-    if (
-      node.attrs[WRITTEN_NUMBER_PNODE_KEY] ||
-      Number.isNaN(Number(content)) ||
-      content === null ||
-      content === ''
-    ) {
-      return n2words(Number(content), { lang: 'nl' });
+    if (!Number.isNaN(Number(content)) && content !== null && content !== '') {
+      if (node.attrs[WRITTEN_NUMBER_PNODE_KEY]) {
+        return n2words(Number(content), { lang: 'nl' });
+      } else {
+        return content;
+      }
     } else {
-      return content;
+      return 'nummer';
     }
   } else {
     return content;
@@ -192,7 +191,9 @@ export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
         content: content ? content : '',
         ...(!!datatype && { datatype: datatype as string }),
       },
-      content ? contentToDom({ content, type: type as string, node }) : 0,
+      content !== null
+        ? contentToDom({ content, type: type as string, node })
+        : 0,
     ],
   ];
 };
