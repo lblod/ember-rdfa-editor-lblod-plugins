@@ -7,12 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Woodpecker: do not run changelog-check when PR contains `dependabot` label
+
+## [8.2.2] - 2023-06-28
+
+### Fixed
+- Fix code filtering of roadsign regulation plugin
+
+## [8.2.1] - 2023-06-28
+### Fixed
+ - GN-4200: Fixed bug with TOC scroll in GN and RB
+### Dependencies
+ - Bump `date-fns` from 2.29.3 to 2.30.0 
+
+## [8.2.0] - 2023-06-26
 ### Added
-- Add optional `intl: IntlService` argument for the `table_of_contents` node in order to support an internationalized static version.
+- Add a toggle to show the number as words in a number variable
+
+### Dependencies
+- Bumps `sass` from 1.56.1 to 1.63.6
+- Bumps `@types/ember` from 4.0.2 to 4.0.4
+- Bumps `@types/ember-data__store` from 4.0.2 to 4.0.3
+- Bumps `@types/ember__template` from 4.0.1 to 4.0.2
+- Bumps `@types/rdfjs__parser-n3` from 1.1.5 to 2.0.1
 
 ## [8.1.0] - 2023-06-22
 ### Added
 - Numbers inputted into a number variable are validated on defined min/max and if it is a number
+- Add toggle for the user to show number variable as words
 
 ### Fixed
 - Fixed woodpecker builds crashing on syntax errors
@@ -500,7 +523,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.1.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.2.2...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -516,4 +539,7 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[8.2.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.2.1...v8.2.2
+[8.2.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.2.0...v8.2.1
+[8.2.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.1.0...v8.2.0
 [8.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.1...v8.1.0
