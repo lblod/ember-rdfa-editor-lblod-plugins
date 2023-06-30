@@ -248,7 +248,7 @@ snippet-plugin:
       loading: Laden…
       no-results: Geen resultaten gevonden
       error-title: Probleem bij het laden
-      error-intro: "Er heeft zich een fout voorgedaan bij het zoeken in de Vlaamse Codex:"
+      error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
       error-outro: Moest dit probleem aanhouden, neem contact op met
 
 pagination:
