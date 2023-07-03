@@ -73,20 +73,19 @@ export const contentToDom = ({
   type,
   node,
 }: {
-  content: string;
+  content: string | null;
   type: string;
   node: PNode;
 }) => {
   if (type === 'number') {
-    if (
-      node.attrs[WRITTEN_NUMBER_PNODE_KEY] ||
-      Number.isNaN(Number(content)) ||
-      content === null ||
-      content === ''
-    ) {
-      return n2words(Number(content), { lang: 'nl' });
+    if (!Number.isNaN(Number(content)) && content !== null && content !== '') {
+      if (node.attrs[WRITTEN_NUMBER_PNODE_KEY]) {
+        return n2words(Number(content), { lang: 'nl' });
+      } else {
+        return content;
+      }
     } else {
-      return content;
+      return 'Voeg getal in';
     }
   } else {
     return content;
@@ -137,7 +136,10 @@ export const parseAttributes = (node: HTMLElement): false | Attrs => {
   return false;
 };
 
-export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
+export const attributesToDOM = (
+  node: PNode,
+  content?: string | null
+): DOMOutputSpec => {
   const {
     mappingResource,
     codelistResource,
@@ -192,7 +194,9 @@ export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
         content: content ? content : '',
         ...(!!datatype && { datatype: datatype as string }),
       },
-      content ? contentToDom({ content, type: type as string, node }) : 0,
+      content !== undefined
+        ? contentToDom({ content, type: type as string, node })
+        : 0,
     ],
   ];
 };
