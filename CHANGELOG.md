@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Woodpecker: do not run changelog-check when PR contains `dependabot` label
+### Dependencies
+- Bumps `@types/rdfjs__data-model` from 2.0.1 to 2.0.4
 
 ## [8.2.2] - 2023-06-28
 
