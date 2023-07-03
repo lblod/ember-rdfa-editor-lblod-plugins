@@ -51,7 +51,6 @@
               {{#if this.snippetsResource.value.length}}
                 <SnippetPlugin::Snippets::SnippetList
                   @snippets={{this.snippetsResource.value}}
-                  @config={{this.config}}
                   @onInsert={{@onInsert}}
                 />
               {{else}}

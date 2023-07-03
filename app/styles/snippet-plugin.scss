@@ -35,8 +35,10 @@
     .say-editor__paper,
     .say-editor__inner {
       min-height: auto;
+      white-space: inherit;
     }
 
+    .say-editor,
     .say-editor__inner {
       padding: 0;
     }

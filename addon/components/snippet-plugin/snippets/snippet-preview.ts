@@ -22,16 +22,6 @@ export default class SnippetPreviewComponent extends Component<Args> {
   }
 
   @action
-  rdfaEditorInit(controller: SayController) {
-    this.controller = controller;
-
-    const presetContent: string = this.args.snippet.content?.toHTML() ?? '';
-
-    controller.setHtmlContent(presetContent, { shouldFocus: false });
-    controller.mainEditorView.setProps({ editable: () => false });
-  }
-
-  @action
   onInsert() {
     this.args.onInsert(this.args.snippet.content?.toHTML() ?? '');
   }

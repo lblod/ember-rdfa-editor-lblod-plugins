@@ -9,12 +9,13 @@
       {{@snippet.title}}
     </h3>
     <div class="snippet-preview--editor-container">
-      <Editor
-        @plugins={{@config.editorConfig.plugins}}
-        @schema={{@config.editorConfig.schema}}
-        @nodeViews={{@config.editorConfig.nodeViews}}
-        @rdfaEditorInit={{this.rdfaEditorInit}}
-      />
+      <div class="say-container__main">
+        <div class="say-editor">
+          <div class="say-editor__inner say-content">
+            {{this.snippet.content}}
+          </div>
+        </div>
+      </div>
       <div class="snippet-preview--editor-overlay"></div>
     </div>
   </div>
