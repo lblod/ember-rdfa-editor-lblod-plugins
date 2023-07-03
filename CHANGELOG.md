@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Woodpecker: do not run changelog-check when PR contains `dependabot` label
 - Made the number variable also show placeholders
+### Dependencies
+- Bumps `@types/rdfjs__data-model` from 2.0.1 to 2.0.4
+- Bumps `eslint-plugin-ember` from 11.4.6 to 11.9.0
+- Bumps `@typescript-eslint/eslint-plugin` from 5.45.0 to 5.60.1
 
 ## [8.2.2] - 2023-06-28
 
