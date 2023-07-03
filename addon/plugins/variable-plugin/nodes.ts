@@ -73,7 +73,7 @@ export const contentToDom = ({
   type,
   node,
 }: {
-  content: string;
+  content: string | null;
   type: string;
   node: PNode;
 }) => {
@@ -85,7 +85,7 @@ export const contentToDom = ({
         return content;
       }
     } else {
-      return 'nummer';
+      return 'Voeg getal in';
     }
   } else {
     return content;
@@ -136,7 +136,10 @@ export const parseAttributes = (node: HTMLElement): false | Attrs => {
   return false;
 };
 
-export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
+export const attributesToDOM = (
+  node: PNode,
+  content?: string | null
+): DOMOutputSpec => {
   const {
     mappingResource,
     codelistResource,
@@ -191,7 +194,7 @@ export const attributesToDOM = (node: PNode, content = null): DOMOutputSpec => {
         content: content ? content : '',
         ...(!!datatype && { datatype: datatype as string }),
       },
-      content !== null
+      content !== undefined
         ? contentToDom({ content, type: type as string, node })
         : 0,
     ],
