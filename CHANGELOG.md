@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Addition of document-title plugin
+
 ### Changed
 - Woodpecker: do not run changelog-check when PR contains `dependabot` label
 ### Dependencies
