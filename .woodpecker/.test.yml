@@ -27,6 +27,10 @@ steps:
     group: check
     commands:
       - ember test
+  precompile:
+    image: danlynn/ember-cli:4.8.0
+    commands:
+      - ember ts:precompile
 
 
   release:

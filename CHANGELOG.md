@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Addition of a precompile step to woodpecker PR check
 ### Changed
 - Woodpecker: do not run changelog-check when PR contains `dependabot` label
 - Made the number variable also show placeholders
