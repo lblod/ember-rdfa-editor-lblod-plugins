@@ -65,7 +65,6 @@ import {
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
-import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
   number,
   numberView,
