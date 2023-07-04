@@ -181,17 +181,6 @@ export default class RegulatoryStatementSampleController extends Controller {
     };
   }
 
-  get snippetConfig(): SnippetPluginConfig {
-    return {
-      endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
-      editorConfig: {
-        schema: this.schema as Schema,
-        plugins: this.plugins,
-        nodeViews: this.nodeViews,
-      },
-    };
-  }
-
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController
