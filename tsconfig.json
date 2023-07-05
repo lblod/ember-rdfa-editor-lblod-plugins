@@ -23,7 +23,7 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "typeRoots": [
-      "./node_modules/@types",
+      "./node_modules/@types"
     ],
     "paths": {
       "dummy/tests/*": [
@@ -46,24 +46,16 @@
         "addon-test-support/*"
       ],
       "*": [
-        "types/*",
-        "node_modules/@lblod/ember-rdfa-editor/types/*"
-      ],
-      "@lblod/ember-rdfa-editor": [
-        "node_modules/@lblod/ember-rdfa-editor/addon"
-      ],
-      "@lblod/ember-rdfa-editor/*": [
-        "node_modules/@lblod/ember-rdfa-editor/addon/*"
-      ],
-    },
+        "types/*"
+      ]
+    }
   },
   "include": [
     "app/**/*",
     "addon/**/*",
     "tests/**/*",
     "types/**/*",
-    "node_modules/@lblod/ember-rdfa-editor/types/**/*",
     "test-support/**/*",
-    "addon-test-support/**/*",
+    "addon-test-support/**/*"
   ]
 }
