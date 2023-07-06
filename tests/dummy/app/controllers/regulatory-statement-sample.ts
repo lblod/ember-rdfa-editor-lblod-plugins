@@ -229,7 +229,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     const presetContent =
       localStorage.getItem('EDITOR_CONTENT') ??
       `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
-    controller.setHtmlContent(presetContent);
+    controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
   }
