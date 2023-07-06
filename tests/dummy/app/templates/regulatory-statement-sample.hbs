@@ -59,25 +59,28 @@
           {{#if this.controller}}
           <Sidebar as |Sidebar|>
             <Sidebar.Collapsible @title='Insert'>
-              <ArticleStructurePlugin::ArticleStructureCard 
+              <ArticleStructurePlugin::ArticleStructureCard
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <RdfaDatePlugin::Insert 
+              <RdfaDatePlugin::Insert
                 @controller={{this.controller}}
                 @options={{this.config.date}}
               />
-              
+              <SnippetPlugin::SnippetInsert
+                @controller={{this.controller}}
+                @config={{this.config.snippet}}
+              />
             </Sidebar.Collapsible>
-            <VariablePlugin::InsertVariableCard 
+            <VariablePlugin::InsertVariableCard
                 @controller={{this.controller}}
                 @options={{this.config.variable}}
               />
-            <ArticleStructurePlugin::StructureCard 
+            <ArticleStructurePlugin::StructureCard
               @controller={{this.controller}}
               @options={{this.config.structures}}
             />
-            <RdfaDatePlugin::Card 
+            <RdfaDatePlugin::Card
               @controller={{this.controller}}
               @options={{this.config.date}}
             />

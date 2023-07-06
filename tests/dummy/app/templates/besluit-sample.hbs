@@ -8,12 +8,12 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-        showRdfa='true'
-        showRdfaHighlight='true'
-        showRdfaHover='true'
-        showPaper='true'
-        showToolbarBottom=null
-      }}
+          showRdfa='true'
+          showRdfaHighlight='true'
+          showRdfaHover='true'
+          showPaper='true'
+          showToolbarBottom=null
+        }}
         @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
@@ -70,22 +70,30 @@
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Insert'>
-                <AuButton @skin="link"
-                          @disabled={{not this.canInsertDescription}}
-                  {{on "click" this.insertDescription}}>
+                <AuButton
+                  @skin='link'
+                  @disabled={{not this.canInsertDescription}}
+                  {{on 'click' this.insertDescription}}
+                >
                   description
                 </AuButton>
-                <AuButton @skin="link"
-                          @disabled={{not this.canInsertTitle}}
-                  {{on "click" this.insertTitle}}>title
+                <AuButton
+                  @skin='link'
+                  @disabled={{not this.canInsertTitle}}
+                  {{on 'click' this.insertTitle}}
+                >title
                 </AuButton>
-                <AuButton @skin="link"
-                          @disabled={{not this.canInsertMotivation}}
-                  {{on "click" this.insertMotivation}}>motivation
+                <AuButton
+                  @skin='link'
+                  @disabled={{not this.canInsertMotivation}}
+                  {{on 'click' this.insertMotivation}}
+                >motivation
                 </AuButton>
-                <AuButton @skin="link"
-                          @disabled={{not this.canInsertContainer}}
-                  {{on "click" this.insertArticleContainer}}>articles
+                <AuButton
+                  @skin='link'
+                  @disabled={{not this.canInsertContainer}}
+                  {{on 'click' this.insertArticleContainer}}
+                >articles
                 </AuButton>
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}

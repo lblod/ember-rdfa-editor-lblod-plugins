@@ -1,0 +1,12 @@
+{{#if @snippets.length}}
+  <AuList @direction='vertical'>
+    {{#each @snippets as |snippet|}}
+      <AuList::Item>
+        <SnippetPlugin::Snippets::SnippetPreview
+          @snippet={{snippet}}
+          @onInsert={{@onInsert}}
+        />
+      </AuList::Item>
+    {{/each}}
+  </AuList>
+{{/if}}

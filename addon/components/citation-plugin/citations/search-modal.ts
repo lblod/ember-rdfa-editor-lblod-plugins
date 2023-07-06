@@ -108,23 +108,6 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     return this.inputSearchText ?? this.text;
   }
 
-  get rangeStart() {
-    return this.pageNumber * this.pageSize + 1;
-  }
-
-  get rangeEnd() {
-    const end = this.rangeStart + this.pageSize - 1;
-    return end > this.totalCount ? this.totalCount : end;
-  }
-
-  get isFirstPage() {
-    return this.pageNumber == 0;
-  }
-
-  get isLastPage() {
-    return this.rangeEnd == this.totalCount;
-  }
-
   resourceSearch = restartableTask(async () => {
     await timeout(500);
     this.error = null;

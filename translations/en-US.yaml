@@ -228,3 +228,26 @@ generic-rdfa-variable:
   modal:
     insert: Insert
     cancel: Cancel
+
+snippet-plugin:
+  insert:
+    title: Insert snippet
+  modal:
+    title: Choose a snippet
+    select: Select
+    search:
+      title: Filter on
+      label: Snippet name
+      placeholder: Type something...
+    alert:
+      loading: Loading…
+      no-results: No results found
+      error-title: Error while loading results
+      error-intro: 'An error occurred while loading results'
+      error-outro: In case this problem keeps occurring, please contact
+
+pagination:
+  next: Next page
+  previous: Previous page
+  of: of
+  results: Results

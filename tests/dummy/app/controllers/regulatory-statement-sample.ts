@@ -175,6 +175,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       link: {
         interactive: true,
       },
+      snippet: {
+        endpoint: 'http://localhost/sparql',
+      },
     };
   }
 

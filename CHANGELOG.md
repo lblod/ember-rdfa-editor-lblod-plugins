@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Insert the snippet
 
 ### Added
 - Addition of a precompile step to woodpecker PR check
@@ -14,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Woodpecker: do not run changelog-check when PR contains `dependabot` label
 - Made the number variable also show placeholders
+- Extract SPARQL query tools
+
 ### Dependencies
 - Bumps `@types/rdfjs__data-model` from 2.0.1 to 2.0.4
 - Bumps `eslint-plugin-ember` from 11.4.6 to 11.9.0
@@ -72,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [8.0.1] - 2023-06-15
 ### Fixed
 - Change problematic type in citation that made it to break with new ember
+
 
 ## [8.0.0] - 2023-06-15
 ### Fixed
