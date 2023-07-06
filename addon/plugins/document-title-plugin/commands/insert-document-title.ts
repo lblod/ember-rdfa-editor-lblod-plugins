@@ -1,4 +1,5 @@
 import { Command } from '@lblod/ember-rdfa-editor';
+import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/insert-structure';
 import { v4 as uuid } from 'uuid';
 
 interface InsertDocumentTitleArgs {
@@ -8,21 +9,22 @@ export default function insertDocumentTitle({
   placeholder,
 }: InsertDocumentTitleArgs): Command {
   return function (state, dispatch) {
-    const { schema, selection } = state;
-    if (
-      !state.doc.canReplaceWith(
-        selection.$from.index(0),
-        selection.$from.index(0),
-        schema.nodes.document_title
-      )
-    ) {
+    const { schema } = state;
+    const insertionRange = findInsertionRange({
+      doc: state.doc,
+      $from: state.doc.resolve(0),
+      nodeType: schema.nodes.document_title,
+      schema,
+    });
+    if (!insertionRange) {
       return false;
     }
 
     if (dispatch) {
       const tr = state.tr;
-      tr.insert(
-        selection.from - 1,
+      tr.replaceWith(
+        insertionRange.from,
+        insertionRange.to,
         schema.node(
           'document_title',
           { __rdfaId: uuid() },
