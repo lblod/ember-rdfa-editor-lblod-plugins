@@ -9,7 +9,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { service } from '@ember/service';
+import { inject as service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
 import {
