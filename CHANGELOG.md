@@ -10,11 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - revert editor bump to 4.0.0, bump to 3.10.0 instead
+- Addition of document-title plugin
 
 ## [8.3.0] - 2023-07-06
 ### Added
 - Insert the snippet
-- Addition of document-title plugin
 - Addition of a precompile step to woodpecker PR check
 
 ### Fixed
