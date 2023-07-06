@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@typescript-eslint/eslint-plugin` from 5.45.0 to 5.60.1
 - Bumps `ember-velcro` to 2.1.0
 - Bumps `@lblod/ember-rdfa-editor` to 4.0.0
+- Bumps `ember-resources` from 5.6.2 to 6.1.1
 
 ## [8.2.2] - 2023-06-28
 
