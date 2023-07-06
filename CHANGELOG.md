@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed compatibility issue with ember 3.28 in number variable component
+
 ## [8.4.0] - 2023-07-06
 
 ### Changed
