@@ -12,6 +12,7 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
   block_rdfa,
+  docWithConfig,
   hard_break,
   horizontal_rule,
   invisible_rdfa,
@@ -84,10 +85,10 @@ export default class RegulatoryStatementSampleController extends Controller {
   get schema() {
     return new Schema({
       nodes: {
-        doc: {
+        doc: docWithConfig({
           content:
             'table_of_contents? ((chapter|block)+|(title|block)+|(article|block)+)',
-        },
+        }),
         paragraph,
 
         repaired_block,
