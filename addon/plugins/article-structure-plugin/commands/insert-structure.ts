@@ -4,8 +4,8 @@ import {
   NodeSelection,
   NodeType,
   PNode,
+  ResolvedPos,
   Schema,
-  Selection,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
@@ -14,7 +14,7 @@ import wrapStructureContent from './wrap-structure-content';
 import IntlService from 'ember-intl/services/intl';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { containsOnlyPlaceholder } from '../utils/structure';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const insertStructure = (
   structureSpec: StructureSpec,
@@ -28,7 +28,7 @@ const insertStructure = (
     }
     const insertionRange = findInsertionRange({
       doc,
-      selection,
+      $from: selection.$from,
       nodeType: schema.nodes[structureSpec.name],
       schema,
       limitTo: structureSpec.limitTo,
@@ -67,13 +67,12 @@ const insertStructure = (
 
 function findInsertionRange(args: {
   doc: PNode;
-  selection: Selection;
+  $from: ResolvedPos;
   nodeType: NodeType;
   schema: Schema;
   limitTo?: string;
 }) {
-  const { doc, selection, nodeType, schema, limitTo } = args;
-  const { $from } = selection;
+  const { doc, $from, nodeType, schema, limitTo } = args;
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
     const index = $from.index(currentDepth);
@@ -87,7 +86,10 @@ function findInsertionRange(args: {
     }
   }
   const limitContainer = limitTo
-    ? findParentNodeOfType(schema.nodes[limitTo])(selection)
+    ? findParentNodeClosestToPos(
+        $from,
+        (node) => node.type === schema.nodes[limitTo]
+      )
     : null;
 
   const limitContainerRange = limitContainer
@@ -110,14 +112,14 @@ function findInsertionRange(args: {
   const nextContainerRange =
     findNodes({
       doc,
-      start: selection.from,
+      start: $from.pos,
       visitParentUpwards: true,
       reverse: false,
       filter: filterFunction,
     }).next().value ??
     findNodes({
       doc,
-      start: selection.from,
+      start: $from.pos,
       visitParentUpwards: true,
       reverse: true,
       filter: filterFunction,
