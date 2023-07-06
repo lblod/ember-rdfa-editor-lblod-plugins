@@ -59,7 +59,8 @@
           {{#if this.controller}}
           <Sidebar as |Sidebar|>
             <Sidebar.Collapsible @title='Insert'>
-              <ArticleStructurePlugin::ArticleStructureCard
+              <DocumentTitlePlugin::InsertTitleCard @controller={{this.controller}}/>
+              <ArticleStructurePlugin::ArticleStructureCard 
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />

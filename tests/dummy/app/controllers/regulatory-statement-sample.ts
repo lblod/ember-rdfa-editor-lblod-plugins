@@ -69,6 +69,7 @@ import {
   number,
   numberView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/number';
+import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -86,10 +87,10 @@ export default class RegulatoryStatementSampleController extends Controller {
       nodes: {
         doc: {
           content:
-            'table_of_contents? ((chapter|block)+|(title|block)+|(article|block)+)',
+            'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
         },
         paragraph,
-
+        document_title,
         repaired_block,
 
         list_item,

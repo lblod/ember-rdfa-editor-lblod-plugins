@@ -179,6 +179,11 @@ date-plugin:
     required: 'This field cannot be empty'
     fractions: 'Fractions of a second, such as S or T, are not supported.'
     unknown: 'Invalid format'
+
+document-title-plugin:
+  document-title-placeholder: Enter document title
+  insert-title: Insert document title
+
 variable:
   number:
     placeholder: number

@@ -184,6 +184,10 @@ date-plugin:
     fractions: "Fracties van seconden, zoals S en T, zijn niet ondersteund."
     unknown: "Ongeldig formaat"
 
+document-title-plugin:
+  document-title-placeholder: Geef document-titel op
+  insert-title: Document-titel invoegen
+
 validation-plugin:
   default-fix-message: Oplossen
 

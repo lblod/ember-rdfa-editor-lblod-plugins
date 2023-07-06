@@ -14,9 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [8.3.0] - 2023-07-06
 ### Added
 - Insert the snippet
-
-### Added
+- Addition of document-title plugin
 - Addition of a precompile step to woodpecker PR check
+
 ### Fixed
 - fix type error due to bad tsconfig
 ### Changed
