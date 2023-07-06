@@ -65,7 +65,7 @@ const insertStructure = (
   };
 };
 
-function findInsertionRange(args: {
+export function findInsertionRange(args: {
   doc: PNode;
   $from: ResolvedPos;
   nodeType: NodeType;
