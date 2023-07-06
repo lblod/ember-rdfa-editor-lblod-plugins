@@ -1,13 +1,25 @@
 import * as RDF from '@rdfjs/types';
+import { optionMapOr } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
-export type QueryResult = {
+export interface QueryResult<Binding = Record<string, RDF.Term>> {
   results: {
-    bindings: Record<string, RDF.Term>[];
+    bindings: Binding[];
   };
-};
+}
 
-export async function executeQuery(endpoint: string, query: string) {
+interface QueryConfig {
+  query: string;
+  endpoint: string;
+  abortSignal?: AbortSignal;
+}
+
+export async function executeQuery<Binding = Record<string, RDF.Term>>({
+  query,
+  endpoint,
+  abortSignal,
+}: QueryConfig) {
   const encodedQuery = encodeURIComponent(query.trim());
+
   const response = await fetch(endpoint, {
     method: 'POST',
     mode: 'cors',
@@ -16,12 +28,22 @@ export async function executeQuery(endpoint: string, query: string) {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
     body: `query=${encodedQuery}`,
+    signal: abortSignal,
   });
+
   if (response.ok) {
-    return response.json() as unknown as QueryResult;
+    return response.json() as Promise<QueryResult<Binding>>;
   } else {
     throw new Error(
-      `Request to MOW backend was unsuccessful: [${response.status}] ${response.statusText}`
+      `Request to ${endpoint} was unsuccessful: [${response.status}] ${response.statusText}`
     );
   }
+}
+
+export async function executeCountQuery(queryConfig: QueryConfig) {
+  const response = await executeQuery<{ count: { value: string } }>(
+    queryConfig
+  );
+
+  return optionMapOr(0, parseInt, response.results.bindings[0]?.count.value);
 }

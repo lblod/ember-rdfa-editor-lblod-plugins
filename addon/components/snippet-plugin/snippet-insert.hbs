@@ -1,0 +1,17 @@
+<AuList::Item>
+  <AuButton
+    @icon='add'
+    @iconAlignment='left'
+    @skin='link'
+    {{on 'click' this.openModal}}
+  >
+    {{t 'snippet-plugin.insert.title'}}
+  </AuButton>
+</AuList::Item>
+
+<SnippetPlugin::SearchModal
+  @open={{this.showModal}}
+  @closeModal={{this.closeModal}}
+  @config={{this.config}}
+  @onInsert={{this.onInsert}}
+/>

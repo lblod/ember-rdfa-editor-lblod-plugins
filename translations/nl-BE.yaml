@@ -201,7 +201,7 @@ variable:
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
-    error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen 
+    error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen
     error-number-above: Het getal moet groter dan {minValue} zijn
     error-number-below: Het getal moet kleiner dan {maxValue} zijn
     written-number-label: Getal voluit schrijven
@@ -237,3 +237,26 @@ generic-rdfa-variable:
   modal:
     insert: Invoegen
     cancel: Terug
+
+snippet-plugin:
+  insert:
+    title: Fragment invoegen
+  modal:
+    title: Kies een fragment
+    select: Selecteer
+    search:
+      title: Filter op
+      label: Fragmentnaam
+      placeholder: Typ iets...
+    alert:
+      loading: Laden…
+      no-results: Geen resultaten gevonden
+      error-title: Probleem bij het laden
+      error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
+      error-outro: Moest dit probleem aanhouden, neem contact op met
+
+pagination:
+  next: Volgende pagina
+  previous: Vorige pagina
+  of: van
+  results: Resultaten
