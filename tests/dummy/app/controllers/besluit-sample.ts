@@ -289,7 +289,7 @@ export default class BesluitSampleController extends Controller {
     });
     const presetContent =
       localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
-    controller.initialize(presetContent);
+    controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
   }

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- revert editor bump to 4.0.0, bump to 3.10.0 instead
+
 ## [8.3.0] - 2023-07-06
 ### Added
 - Insert the snippet
