@@ -12,7 +12,6 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
   block_rdfa,
-  docWithConfig,
   hard_break,
   horizontal_rule,
   invisible_rdfa,
@@ -86,10 +85,10 @@ export default class RegulatoryStatementSampleController extends Controller {
   get schema() {
     return new Schema({
       nodes: {
-        doc: docWithConfig({
+        doc: {
           content:
             'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
-        }),
+        },
         paragraph,
         document_title,
         repaired_block,
@@ -234,7 +233,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     const presetContent =
       localStorage.getItem('EDITOR_CONTENT') ??
       `<div resource='http://localhost/test' typeof='say:DocumentContent'>Insert here</div>`;
-    controller.initialize(presetContent);
+    controller.setHtmlContent(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
   }
