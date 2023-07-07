@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Addition of documentation on the article-structure plugin
+
 ## [8.4.1] - 2023-07-06
 
 ### Fixed
