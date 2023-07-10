@@ -152,6 +152,45 @@ export type StructureSpec = {
 
 Note: for each structure you configure, the corresponding node-spec also needs to be added to the schema.
 
+By default, this plugin already exports some structure-specs and their corresponding node-specs:
+
+```js
+const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
+  titleSpec,
+  chapterSpec,
+  sectionSpec,
+  subsectionSpec,
+  articleSpec,
+  articleParagraphSpec,
+];
+
+const STRUCTURE_NODES = {
+  structure_header,
+  title,
+  title_body,
+  chapter,
+  chapter_body,
+  section,
+  section_body,
+  subsection,
+  subsection_body,
+  article,
+  article_header,
+  article_body,
+  article_paragraph,
+};
+
+```
+
+You can import these using:
+```js
+import {
+  STRUCTURE_NODES,
+  STRUCTURE_SPECS,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
+```
+
+
 Additional examples can be found in the two controllers (besluit-sample and regulatory-statement-sample) of the dummy-app contained in this repository.
 
 
