@@ -18,6 +18,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
+import n2words from 'n2words';
 
 type Args = {
   getPos: () => number | undefined;
@@ -67,6 +68,15 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
 
   get maxValue() {
     return this.node.attrs[MAXIMUM_VALUE_PNODE_KEY] as number;
+  }
+
+  get canConvertToNumber() {
+    try {
+      n2words(Number(this.node.attrs.value), { lang: 'nl' });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @action onInputNumberChange(event: InputEvent) {

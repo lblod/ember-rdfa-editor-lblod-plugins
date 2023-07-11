@@ -48,6 +48,7 @@
             @checked={{this.writtenNumber}}
             @onChange={{this.changeWrittenNumber}}
             @label={{t 'variable.number.written-number-label'}}
+            @disabled={{not this.canConvertToNumber}}
           />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>
