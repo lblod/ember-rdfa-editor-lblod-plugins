@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Addition of documentation on the article-structure plugin
+
+### Changed
+- Make `errorMessage` of number input modal reactive to attribute changes
 ### Dependencies
 - Bumps `@typescript-eslint/parser` from 5.60.0 to 5.61.0
 
