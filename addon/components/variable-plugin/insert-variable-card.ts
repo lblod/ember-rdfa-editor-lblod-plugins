@@ -25,11 +25,11 @@ type Args = {
 
 type minMaxObj = { minimumValue?: number; maximumValue?: number };
 class ExtraAttributes {
-  @tracked minimumValue: string = '';
-  @tracked maximumValue: string = '';
+  @tracked minimumValue = '';
+  @tracked maximumValue = '';
 
   asObject(): minMaxObj {
-    let obj: minMaxObj = {};
+    const obj: minMaxObj = {};
     if (isNumber(this.minimumValue)) {
       obj.minimumValue = Number(this.minimumValue);
     }
@@ -39,7 +39,7 @@ class ExtraAttributes {
     return obj;
   }
 
-  reset(){
+  reset() {
     this.minimumValue = '';
     this.maximumValue = '';
   }

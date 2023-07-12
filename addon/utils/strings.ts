@@ -33,9 +33,12 @@ export function dateValue(value?: string): string | null {
   }
 }
 
-export function isNumber(value: any): boolean {
+export function isNumber(value: string | number | null | undefined): boolean {
   return (
     typeof value === 'number' ||
-    (!Number.isNaN(Number(value)) && value !== null && value !== undefined && value !== '')
+    (!Number.isNaN(Number(value)) &&
+      value !== null &&
+      value !== undefined &&
+      value !== '')
   );
 }
