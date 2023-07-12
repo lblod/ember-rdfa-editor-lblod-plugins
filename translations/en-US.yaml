@@ -191,8 +191,8 @@ variable:
     error-not-integer: Only integers are allowed
     error-not-number: Only numbers are allowed
     error-number-between: The number should be between {minValue} and {maxValue} 
-    error-number-above: The number should be bigger than {minValue}
-    error-number-below: The number should be smaller than {maxValue}
+    error-number-above: The number should be bigger than or equal to {minValue}
+    error-number-below: The number should be smaller than or equal to {maxValue}
     error-min-bigger-than-max: The minimum should be smaller than the maximum
     written-number-label: Show as words
 variable-plugin:
