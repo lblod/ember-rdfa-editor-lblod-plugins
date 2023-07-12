@@ -18,6 +18,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
 import n2words from 'n2words';
+import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 
 type Args = {
   getPos: () => number | undefined;
@@ -46,7 +47,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   get formattedNumber() {
     const value = this.node.attrs.value as string;
 
-    if (Number.isNaN(Number(value)) || value === null || value === '') {
+    if (!isNumber(value)) {
       return value;
     }
     if (!this.writtenNumber) {
