@@ -12,8 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - When a number is too big to be converted to words, display it numerically.
+- Can only insert a number variable with a minimum that is smaller than its maximum
+- Fetch public snippets
 ### Changed
 - Make `errorMessage` of number input modal reactive to attribute changes
+- Number variable input box has a cleaner UI by adjusting the top margins.
 ### Dependencies
 - Bumps `@typescript-eslint/parser` from 5.60.0 to 5.61.0
 - Bumps `@tsconfig/ember` from 1.0.1 to 3.0.0
@@ -26,12 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@types/ember__controller` from 4.0.3 to 4.0.5
 - Bumps `ember-auto-import` from 2.5.0 to 2.6.3
 - Bumps `tracked-built-ins` from 3.1.0 to 3.1.1
-
-### Changed
-- Number variable input box has a cleaner UI by adjusting the top margins.
-
-### Fixed
-- Can only insert a number variable with a minimum that is smaller than its maximum
 
 ## [8.4.1] - 2023-07-06
 

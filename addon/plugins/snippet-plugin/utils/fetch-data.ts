@@ -13,13 +13,13 @@ const buildCountQuery = ({ name }: Filter) => {
       PREFIX pav: <http://purl.org/pav/>
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-      SELECT (COUNT(?snippetDocument) AS ?count)
+      SELECT (COUNT(?publishedSnippetVersion) AS ?count)
       WHERE {
-          ?snippetList a ext:SnippetList ;
-              ext:hasSnippet/pav:hasCurrentVersion ?snippetDocument .
-          ?snippetDocument dct:title ?title ;
-              ext:editorDocumentContent ?content ;
-              pav:createdOn ?createdOn .
+          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
+                             pav:hasCurrentVersion ?publishedSnippetVersion .
+          ?publishedSnippetVersion dct:title ?title ;
+               ext:editorDocumentContent ?content ;
+               pav:createdOn ?createdOn .
           ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
       }
       `;
@@ -39,11 +39,11 @@ const buildFetchQuery = ({
 
       SELECT DISTINCT ?title ?content ?createdOn
       WHERE {
-          ?snippetList a ext:SnippetList ;
-              ext:hasSnippet/pav:hasCurrentVersion ?snippetDocument .
-          ?snippetDocument dct:title ?title ;
-              ext:editorDocumentContent ?content ;
-              pav:createdOn ?createdOn .
+          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
+                             pav:hasCurrentVersion ?publishedSnippetVersion .
+          ?publishedSnippetVersion dct:title ?title ;
+               ext:editorDocumentContent ?content ;
+               pav:createdOn ?createdOn .
           ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
       }
       ORDER BY DESC(?createdOn) LIMIT ${pageSize} OFFSET ${
