@@ -61,6 +61,7 @@
         @disabled={{or
           (not this.selectedVariable)
           (and this.hasSubtype (not this.selectedSubtype))
+          this.numberVariableError
         }}
       >{{t 'variable-plugin.button'}}</AuButton>
     </c.content>

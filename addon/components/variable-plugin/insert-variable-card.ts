@@ -23,9 +23,26 @@ type Args = {
   };
 };
 
+type minMaxObj = { minimumValue?: number; maximumValue?: number };
 class ExtraAttributes {
-  @tracked minimumValue: number | null = null;
-  @tracked maximumValue: number | null = null;
+  @tracked minimumValue: string = '';
+  @tracked maximumValue: string = '';
+
+  asObject(): minMaxObj {
+    let obj: minMaxObj = {};
+    if (isNumber(this.minimumValue)) {
+      obj.minimumValue = Number(this.minimumValue);
+    }
+    if (isNumber(this.maximumValue)) {
+      obj.maximumValue = Number(this.maximumValue);
+    }
+    return obj;
+  }
+
+  reset(){
+    this.minimumValue = '';
+    this.maximumValue = '';
+  }
 }
 
 export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {
@@ -80,9 +97,14 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   get numberVariableError() {
     const minVal = this.extraAttributes.minimumValue;
     const maxVal = this.extraAttributes.maximumValue;
-    if (isNumber(minVal) && isNumber(maxVal) && Number(minVal) > Number(maxVal)) {
+    if (
+      isNumber(minVal) &&
+      isNumber(maxVal) &&
+      Number(minVal) > Number(maxVal)
+    ) {
       return this.intl.t('variable.number.error-min-bigger-than-max');
     }
+
     return '';
   }
 
@@ -103,12 +125,12 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       label: this.variableLabel !== '' ? this.variableLabel : undefined,
       attributes: {
         source: this.endpoint,
-        ...this.extraAttributes,
+        ...this.extraAttributes.asObject(),
       },
     });
 
     this.variableLabel = '';
-    this.extraAttributes = new ExtraAttributes();
+    this.extraAttributes.reset();
 
     this.controller.withTransaction(
       (tr) => {
@@ -144,7 +166,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @action
   updateSubtype(subtype: CodeList) {
     this.selectedSubtype = subtype;
-    this.extraAttributes = new ExtraAttributes();
+    this.extraAttributes.reset();
   }
 
   get type() {
