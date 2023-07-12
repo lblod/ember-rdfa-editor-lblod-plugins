@@ -98,6 +98,10 @@
   input[type='number'] {
     width: 100%;
   }
+
+  .au-c-help-text {
+    grid-column: span 3
+  }
 }
 
 // show tooltips above everything else

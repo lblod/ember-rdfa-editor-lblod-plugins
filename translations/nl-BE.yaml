@@ -205,6 +205,7 @@ variable:
     error-number-above: Het getal moet groter dan {minValue} zijn
     error-number-below: Het getal moet kleiner dan {maxValue} zijn
     written-number-label: Getal voluit schrijven
+    error-min-bigger-than-max: Het minimum moet kleiner zijn dan het maximum
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

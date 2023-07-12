@@ -28,4 +28,9 @@
       />
     {{/let}}
   </AuFormRow>
+  {{#if @error}}
+    <AuHelpText @error={{true}}>
+      {{@error}}
+    </AuHelpText>
+  {{/if}}
 </div>

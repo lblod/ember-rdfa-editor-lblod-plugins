@@ -10,6 +10,10 @@ import {
 import { CodeList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+
 type Args = {
   controller: SayController;
   options: {
@@ -19,6 +23,11 @@ type Args = {
   };
 };
 
+class ExtraAttributes {
+  @tracked minimumValue: number | null = null;
+  @tracked maximumValue: number | null = null;
+}
+
 export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {
   @tracked variablesArray: VariableType[];
   @tracked selectedVariable?: VariableType;
@@ -26,9 +35,11 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @tracked selectedSubtype?: CodeList;
   @tracked subtypes?: CodeList[];
   @tracked variableLabel?: string;
-  @tracked extraAttributes: Record<string, unknown> = {};
+  @tracked extraAttributes = new ExtraAttributes();
   publisher: string;
   endpoint: string;
+
+  @service declare intl: IntlService;
 
   constructor(parent: unknown, args: Args) {
     super(parent, args);
@@ -66,6 +77,15 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     return this.args.controller;
   }
 
+  get numberVariableError() {
+    const minVal = this.extraAttributes.minimumValue;
+    const maxVal = this.extraAttributes.maximumValue;
+    if (isNumber(minVal) && isNumber(maxVal) && Number(minVal) > Number(maxVal)) {
+      return this.intl.t('variable.number.error-min-bigger-than-max');
+    }
+    return '';
+  }
+
   @action
   updateVariableLabel(event: InputEvent) {
     this.variableLabel = (event.target as HTMLInputElement).value;
@@ -73,7 +93,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
 
   @action
   insert() {
-    if (!this.selectedVariable) {
+    if (!this.selectedVariable || this.numberVariableError) {
       return;
     }
 
@@ -88,7 +108,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     });
 
     this.variableLabel = '';
-    this.extraAttributes = {};
+    this.extraAttributes = new ExtraAttributes();
 
     this.controller.withTransaction(
       (tr) => {
@@ -124,7 +144,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   @action
   updateSubtype(subtype: CodeList) {
     this.selectedSubtype = subtype;
-    this.extraAttributes = {};
+    this.extraAttributes = new ExtraAttributes();
   }
 
   get type() {
