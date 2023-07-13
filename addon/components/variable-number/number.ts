@@ -8,7 +8,6 @@ import {
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
@@ -33,7 +32,6 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;
-  @tracked errorMessage = '';
   @service declare intl: intlService;
   cursorPositionKeyDown: number | null = null;
 
@@ -79,41 +77,41 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     this.args.updateAttribute('writtenNumber', !this.writtenNumber);
   }
 
-  validateAndSave() {
+  get errorMessage() {
     if (isBlank(this.inputNumber)) {
-      this.errorMessage = '';
-      this.args.updateAttribute('value', '');
-      return;
+      return '';
     }
-
     const number = Number(this.inputNumber);
     if (Number.isNaN(number)) {
-      this.errorMessage = this.intl.t('variable.number.error-not-number');
-      return;
+      return this.intl.t('variable.number.error-not-number');
     }
     const validMinimum = !this.minValue || number >= this.minValue;
     const validMaximum = !this.maxValue || number <= this.maxValue;
 
     if (!validMinimum || !validMaximum) {
       if (this.minValue && this.maxValue) {
-        this.errorMessage = this.intl.t(
-          'variable.number.error-number-between',
-          { minValue: this.minValue, maxValue: this.maxValue }
-        );
+        return this.intl.t('variable.number.error-number-between', {
+          minValue: this.minValue,
+          maxValue: this.maxValue,
+        });
       } else if (this.minValue) {
-        this.errorMessage = this.intl.t('variable.number.error-number-above', {
+        return this.intl.t('variable.number.error-number-above', {
           minValue: this.minValue,
         });
       } else if (this.maxValue) {
-        this.errorMessage = this.intl.t('variable.number.error-number-below', {
+        return this.intl.t('variable.number.error-number-below', {
           maxValue: this.maxValue,
         });
       }
-      return;
     }
+    return '';
+  }
 
-    this.errorMessage = '';
-    this.args.updateAttribute('value', this.inputNumber);
+  @action
+  validateAndSave() {
+    if (!this.errorMessage) {
+      this.args.updateAttribute('value', this.inputNumber);
+    }
   }
 
   @action
