@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Addition of documentation on the article-structure plugin
 
+### Fixed
+- When a number is too big to be converted to words, display it numerically.
 ### Changed
 - Make `errorMessage` of number input modal reactive to attribute changes
 ### Dependencies

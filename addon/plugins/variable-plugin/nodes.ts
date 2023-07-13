@@ -18,7 +18,7 @@ import {
   WRITTEN_NUMBER_PNODE_KEY,
 } from './utils/constants';
 import { Attrs, DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
-import n2words from 'n2words';
+import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 
 export const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -80,7 +80,7 @@ export const contentToDom = ({
   if (type === 'number') {
     if (!Number.isNaN(Number(content)) && content !== null && content !== '') {
       if (node.attrs[WRITTEN_NUMBER_PNODE_KEY]) {
-        return n2words(Number(content), { lang: 'nl' });
+        return numberToWords(Number(content), { lang: 'nl' });
       } else {
         return content;
       }

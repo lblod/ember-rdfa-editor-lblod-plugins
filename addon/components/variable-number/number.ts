@@ -16,7 +16,7 @@ import {
   MINIMUM_VALUE_PNODE_KEY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
-import n2words from 'n2words';
+import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 
 type Args = {
   getPos: () => number | undefined;
@@ -50,7 +50,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     if (!this.writtenNumber) {
       return value;
     } else {
-      return n2words(Number(value), { lang: 'nl' });
+      return numberToWords(Number(value), { lang: 'nl' });
     }
   }
 
