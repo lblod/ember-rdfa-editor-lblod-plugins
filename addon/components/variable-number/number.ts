@@ -36,7 +36,6 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   @tracked errorMessage = '';
   @service declare intl: intlService;
   cursorPositionKeyDown: number | null = null;
-  @tracked infoTooltipOpen = false;
 
   focus(element: HTMLInputElement) {
     element.focus();
