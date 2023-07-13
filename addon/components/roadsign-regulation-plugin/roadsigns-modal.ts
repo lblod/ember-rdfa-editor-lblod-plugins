@@ -134,7 +134,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
   changeDescription(event: InputEvent) {
     assert(
       'changeDescriptionValue must be bound to an input element',
-      event.target instanceof HTMLInputElement
+      event.target instanceof HTMLInputElement,
     );
     this.descriptionFilter = event.target.value;
     this.search();
@@ -165,7 +165,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
       this.endpoint,
       term,
       category,
-      type
+      type,
     );
   }
 
@@ -183,7 +183,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
       undefined,
       undefined,
       undefined,
-      signs
+      signs,
     );
     this.codeCombinationOptions = codes;
   }
@@ -241,7 +241,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
             ? this.categorySelected.value
             : undefined,
           pageStart: this.pageStart,
-        }
+        },
       );
     this.tableData = measures;
     this.count = count;
@@ -251,18 +251,18 @@ export default class RoadsignRegulationCard extends Component<Args> {
   async insertHtml(
     measure: Measure,
     zonalityValue: string,
-    temporalValue: string
+    temporalValue: string,
   ) {
     const instructions =
       await this.roadsignRegistry.fetchInstructionsForMeasure.perform(
         measure.uri,
-        this.endpoint
+        this.endpoint,
       );
     const zonality = zonalityValue ? zonalityValue : measure.zonality;
     const html = includeInstructions(
       measure.annotatedTemplate,
       instructions,
-      true
+      true,
     );
     const signsHTML = measure.signs
       .map((sign) => {
@@ -309,14 +309,14 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
     const contentFragment = ProseParser.fromSchema(
-      this.args.controller.schema
+      this.args.controller.schema,
     ).parseSlice(htmlNode, {
       preserveWhitespace: false,
     }).content;
 
     this.args.controller.doCommand(
       insertStructure(besluitArticleStructure, this.intl, contentFragment),
-      { view: this.args.controller.mainEditorView }
+      { view: this.args.controller.mainEditorView },
     );
     this.args.closeModal();
   }

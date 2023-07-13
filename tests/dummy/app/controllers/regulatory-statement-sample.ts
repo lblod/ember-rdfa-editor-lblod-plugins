@@ -138,7 +138,7 @@ export default class RegulatoryStatementSampleController extends Controller {
           ],
           scrollContainer: () =>
             document.getElementsByClassName(
-              'say-container__main'
+              'say-container__main',
             )[0] as HTMLElement,
         },
       ],
@@ -183,12 +183,12 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
-    controller: SayController
+    controller: SayController,
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       variable: variableView(controller),
       table_of_contents: tableOfContentsView(this.config.tableOfContents)(
-        controller
+        controller,
       ),
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
@@ -202,7 +202,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       [space, hardBreak, paragraphInvisible, headingInvisible],
       {
         shouldShowInvisibles: false,
-      }
+      },
     ),
   ];
 

@@ -7,7 +7,7 @@ import { TableOfContentsConfig } from '..';
 import { createTableOfContents } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
 
 export const emberNodeConfig: (
-  config: TableOfContentsConfig
+  config: TableOfContentsConfig,
 ) => EmberNodeConfig = (config) => {
   return {
     name: 'table-of-contents',

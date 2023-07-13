@@ -4,7 +4,7 @@ import recalculateStructureNumbers from './recalculate-structure-numbers';
 
 const removeStructure = (
   structure: { pos: number; node: PNode },
-  options: ArticleStructurePluginOptions
+  options: ArticleStructurePluginOptions,
 ): Command => {
   return (state, dispatch) => {
     if (dispatch) {

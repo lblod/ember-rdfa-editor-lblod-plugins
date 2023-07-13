@@ -35,7 +35,7 @@ export const titleSpec: StructureSpec = {
           { level: 3, number: numberConverted },
           schema.node('placeholder', {
             placeholderText: intl?.t(PLACEHOLDERS.heading),
-          })
+          }),
         ),
         schema.node(
           `title_body`,
@@ -46,10 +46,10 @@ export const titleSpec: StructureSpec = {
               {},
               schema.node('placeholder', {
                 placeholderText: intl?.t(PLACEHOLDERS.body),
-              })
-            )
+              }),
+            ),
         ),
-      ]
+      ],
     );
     const selectionConfig: {
       relativePos: number;

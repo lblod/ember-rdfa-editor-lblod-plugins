@@ -15,7 +15,7 @@ type Args = {
   insert: (
     measure: Measure,
     zonalityValue?: string,
-    temporalValue?: string
+    temporalValue?: string,
   ) => void;
 };
 
@@ -35,7 +35,7 @@ export default class ExpandedMeasureComponent extends Component<Args> {
   changeZonality(event: InputEvent) {
     assert(
       'changeZonalityValue must be bound to an input element',
-      event.target instanceof HTMLInputElement
+      event.target instanceof HTMLInputElement,
     );
     this.zonalityValue = event.target.value;
   }
@@ -43,7 +43,7 @@ export default class ExpandedMeasureComponent extends Component<Args> {
   changeTemporality(event: InputEvent) {
     assert(
       'changeTemporality must be bound to an input element',
-      event.target instanceof HTMLInputElement
+      event.target instanceof HTMLInputElement,
     );
     this.temporalValue = event.target.value;
   }

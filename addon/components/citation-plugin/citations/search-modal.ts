@@ -89,10 +89,10 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
 
   get legislationSelected() {
     const found = LEGISLATION_TYPE_CONCEPTS.find(
-      (c) => c.value === this.legislationTypeUri
+      (c) => c.value === this.legislationTypeUri,
     );
     return capitalize(
-      found ? found.label : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).label
+      found ? found.label : unwrap(LEGISLATION_TYPE_CONCEPTS[0]).label,
     );
   }
 
@@ -223,7 +223,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
 
 function getLocalizedMonths(
   intl: IntlService,
-  monthFormat: Intl.DateTimeFormatOptions['month'] = 'long'
+  monthFormat: Intl.DateTimeFormatOptions['month'] = 'long',
 ) {
   const someYear = 2021;
   return [...Array(12).keys()].map((monthIndex) => {
@@ -234,7 +234,7 @@ function getLocalizedMonths(
 
 function getLocalizedDays(
   intl: IntlService,
-  weekdayFormat: Intl.DateTimeFormatOptions['weekday'] = 'long'
+  weekdayFormat: Intl.DateTimeFormatOptions['weekday'] = 'long',
 ) {
   const someSunday = new Date('2021-01-03');
   return [...Array(7).keys()].map((index) => {

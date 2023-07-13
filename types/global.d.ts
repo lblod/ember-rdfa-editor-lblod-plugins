@@ -8,13 +8,13 @@ declare module '@lblod/ember-rdfa-editor-lblod-plugins/templates/*' {
 declare module 'n2words' {
   export default function n2words(
     number: number,
-    options: { lang: string }
+    options: { lang: string },
   ): string;
 }
 
 declare module 'tracked-toolbox' {
   export function localCopy<C extends Component = Component, T = unknown>(
     memo: UsefulPropsOf<C>,
-    initializer?: T | (() => T)
+    initializer?: T | (() => T),
   ): PropertyDecorator;
 }

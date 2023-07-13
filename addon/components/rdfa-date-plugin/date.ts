@@ -30,8 +30,8 @@ export default class VariableComponent extends Component<Args> {
     tr.setSelection(
       NodeSelection.create(
         this.args.controller.activeEditorState.doc,
-        this.args.getPos() as number
-      )
+        this.args.getPos() as number,
+      ),
     );
     this.args.controller.activeEditorView.dispatch(tr);
   }

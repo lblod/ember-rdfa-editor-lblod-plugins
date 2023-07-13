@@ -13,7 +13,7 @@ import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils
 const insertStructure = (
   structureSpec: StructureSpec,
   intl: IntlService,
-  content?: Fragment
+  content?: Fragment,
 ): Command => {
   return (state, dispatch) => {
     const { schema, selection, doc } = state;
@@ -38,17 +38,17 @@ const insertStructure = (
       transaction.replaceWith(
         insertionRange.from,
         insertionRange.to,
-        newStructureNode
+        newStructureNode,
       );
       const newSelection =
         selectionConfig.type === 'node'
           ? NodeSelection.create(
               transaction.doc,
-              insertionRange.from + selectionConfig.relativePos
+              insertionRange.from + selectionConfig.relativePos,
             )
           : TextSelection.create(
               transaction.doc,
-              insertionRange.from + selectionConfig.relativePos
+              insertionRange.from + selectionConfig.relativePos,
             );
       transaction.setSelection(newSelection);
       transaction.scrollIntoView();

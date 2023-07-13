@@ -14,7 +14,7 @@ function buildFilters({
   const filters = [];
   if (zonality) {
     filters.push(
-      `FILTER(?zonality IN (<${zonality}>, <${POTENTIALLY_ZONAL_URI}>))`
+      `FILTER(?zonality IN (<${zonality}>, <${POTENTIALLY_ZONAL_URI}>))`,
     );
   }
   if (type) {
@@ -26,7 +26,7 @@ function buildFilters({
           .map(
             (uri) => `
               ?uri ext:relation/ext:concept <${uri}>.
-            `
+            `,
           )
           .join(' ')}
     `);

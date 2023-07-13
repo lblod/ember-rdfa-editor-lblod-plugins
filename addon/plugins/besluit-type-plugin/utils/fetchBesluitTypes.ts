@@ -9,7 +9,7 @@ export type BesluitType = {
 };
 export default async function fetchBesluitTypes(
   classificationUri: string,
-  endpoint: string
+  endpoint: string,
 ) {
   const query = `
     PREFIX                    conceptscheme: <https://data.vlaanderen.be/id/conceptscheme/>

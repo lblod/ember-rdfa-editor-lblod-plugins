@@ -35,14 +35,14 @@ export async function executeQuery<Binding = Record<string, RDF.Term>>({
     return response.json() as Promise<QueryResult<Binding>>;
   } else {
     throw new Error(
-      `Request to ${endpoint} was unsuccessful: [${response.status}] ${response.statusText}`
+      `Request to ${endpoint} was unsuccessful: [${response.status}] ${response.statusText}`,
     );
   }
 }
 
 export async function executeCountQuery(queryConfig: QueryConfig) {
   const response = await executeQuery<{ count: { value: string } }>(
-    queryConfig
+    queryConfig,
   );
 
   return optionMapOr(0, parseInt, response.results.bindings[0]?.count.value);

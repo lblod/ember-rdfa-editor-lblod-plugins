@@ -16,12 +16,12 @@ export default class InsertTitleCardComponent extends Component<Args> {
     this.args.controller.doCommand(
       insertDocumentTitle({
         placeholder: this.intl.t(
-          'document-title-plugin.document-title-placeholder'
+          'document-title-plugin.document-title-placeholder',
         ),
       }),
       {
         view: this.args.controller.mainEditorView,
-      }
+      },
     );
     this.args.controller.focus();
   }
@@ -30,12 +30,12 @@ export default class InsertTitleCardComponent extends Component<Args> {
     return this.args.controller.checkCommand(
       insertDocumentTitle({
         placeholder: this.intl.t(
-          'document-title-plugin.document-title-placeholder'
+          'document-title-plugin.document-title-placeholder',
         ),
       }),
       {
         view: this.args.controller.mainEditorView,
-      }
+      },
     );
   }
 }

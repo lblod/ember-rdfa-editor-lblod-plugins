@@ -67,7 +67,7 @@ export function validateDateFormat(format?: string): ValidationResult {
         return { type: 'error', error: 'use-dd' };
       } else {
         const match = INVALID_CHAR_REGEX.exec(
-          msg
+          msg,
         ) as RegexpMatchArrayWithIndices | null;
         if (match) {
           const invalidCharacters = match.groups?.char;

@@ -17,7 +17,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',
-  intl: IntlService
+  intl: IntlService,
 ): Command => {
   return (state, dispatch) => {
     const { doc, selection, schema } = state;
@@ -27,7 +27,7 @@ const moveSelectedStructure = (
       return false;
     }
     const currentStructureSpec = unwrap(
-      options.find((spec) => spec.name === currentStructure.node.type.name)
+      options.find((spec) => spec.name === currentStructure.node.type.name),
     );
     const insertionRange = calculateInsertionRange({
       doc,
@@ -48,7 +48,7 @@ const moveSelectedStructure = (
       const transaction = state.tr;
       transaction.delete(
         currentStructure.pos,
-        currentStructure.pos + currentStructure.node.nodeSize
+        currentStructure.pos + currentStructure.node.nodeSize,
       );
       const parent = doc.resolve(currentStructure.pos).parent;
       if (parent.childCount === 1) {
@@ -56,9 +56,9 @@ const moveSelectedStructure = (
           currentStructure.pos,
           schema.node(schema.nodes['placeholder'], {
             placeholderText: intl.t(
-              'article-structure-plugin.placeholder.generic.body'
+              'article-structure-plugin.placeholder.generic.body',
             ),
-          })
+          }),
         );
       }
       const mappedFrom = transaction.mapping.map(insertionRange.from);

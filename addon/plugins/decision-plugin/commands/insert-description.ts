@@ -27,13 +27,13 @@ export default function insertDescription({
         null,
         schema.node('placeholder', {
           placeholderText,
-        })
-      )
+        }),
+      ),
     );
     const insertionPos = findInsertionPosInAncestorOfType(
       selection,
       schema.nodes.besluit,
-      nodeToInsert
+      nodeToInsert,
     );
     if (isNone(insertionPos)) {
       return false;

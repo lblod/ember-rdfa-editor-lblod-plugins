@@ -15,7 +15,7 @@ import {
 
 export function validateTransaction(
   state: EditorState,
-  tr: Transaction
+  tr: Transaction,
 ): ValidationReport {
   const validationState = VALIDATION_KEY.getState(state);
   if (!validationState) {
@@ -30,7 +30,7 @@ export function validateTransaction(
       return { conforms: true };
     }
     const cachedValidation = tr.getMeta(
-      'validated'
+      'validated',
     ) as Option<ValidationReport>;
     if (cachedValidation) {
       return cachedValidation;
@@ -83,7 +83,7 @@ export type ConstraintMap = {
 
 export type ConstraintValidator = (
   constraint: ValidationConstraint,
-  shapeContext: ShapeContext
+  shapeContext: ShapeContext,
 ) => Option<ValidationResult>;
 export type ConstraintValidatorMap = {
   [C in ValidationConstraint as C['kind']]: ConstraintValidator;
@@ -125,7 +125,7 @@ const CONSTRAINT_VALIDATOR_MAP: ConstraintValidatorMap = {
 };
 
 export function validation(
-  configurator: (schema: Schema) => ValidationPluginConfig
+  configurator: (schema: Schema) => ValidationPluginConfig,
 ): ValidationPlugin {
   const validation = new ProsePlugin<ValidationState>({
     key: VALIDATION_KEY,
@@ -152,7 +152,7 @@ export function validation(
             return oldPluginState;
           }
           const cachedValidation = tr.getMeta(
-            'validated'
+            'validated',
           ) as Option<ValidationState>;
           const firstPass = tr.getMeta('firstPass') as Option<boolean>;
 
@@ -179,7 +179,7 @@ export function validation(
  */
 function compileSpec(
   configurator: (schema: Schema) => ValidationPluginConfig,
-  schema: Schema
+  schema: Schema,
 ): ValidationSpec {
   const spec: ValidationSpec = {};
   const shapes = configurator(schema).shapes;
@@ -219,7 +219,7 @@ interface ValidationContext {
  */
 function doValidation(
   newState: EditorState,
-  spec: ValidationSpec
+  spec: ValidationSpec,
 ): ValidationReport {
   const results: ValidationResult[] = [];
   const context: ValidationContext = {
@@ -252,7 +252,7 @@ function recValidate(
   context: ValidationContext,
   results: ValidationResult[],
   node: PNode,
-  currentDepth: number
+  currentDepth: number,
 ) {
   // keep track of the global path we're on
   context.path.push(node);
@@ -341,13 +341,13 @@ function recValidate(
     // a "this should never be null" nullcheck
     const shapeContext = expect(
       'Shapecontext not initialized',
-      context.shapeContext.get(shape)
+      context.shapeContext.get(shape),
     );
     // imagine if after all that it turns out the shape has no constraints...
     if (shape.constraints) {
       // with the shape's context nicely filled, we can now validate
       for (const constraint of Object.entries(shape.constraints).map(
-        ([kind, value]) => ({ kind, value } as ValidationConstraint)
+        ([kind, value]) => ({ kind, value }) as ValidationConstraint,
       )) {
         const result = validateConstraint(constraint, shapeContext);
         if (result) {
@@ -366,14 +366,14 @@ function recValidate(
 
 function validateConstraint(
   constraint: ValidationConstraint,
-  shapeContext: ShapeContext
+  shapeContext: ShapeContext,
 ): Option<ValidationResult> {
   return CONSTRAINT_VALIDATOR_MAP[constraint.kind](constraint, shapeContext);
 }
 
 function validateMinCount(
   constraint: MinCountConstraint,
-  shapeContext: ShapeContext
+  shapeContext: ShapeContext,
 ): Option<ValidationResult> {
   const { shape, focusNode, count, path } = shapeContext;
   if (count < constraint.value) {
@@ -394,7 +394,7 @@ function validateMinCount(
 
 function validateMaxCount(
   constraint: MaxCountConstraint,
-  shapeContext: ShapeContext
+  shapeContext: ShapeContext,
 ): Option<ValidationResult> {
   const { shape, focusNode, count, path } = shapeContext;
   if (count > constraint.value) {
