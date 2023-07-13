@@ -69,15 +69,6 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     return this.node.attrs[MAXIMUM_VALUE_PNODE_KEY] as number;
   }
 
-  get canConvertToNumber() {
-    try {
-      n2words(Number(this.node.attrs.value), { lang: 'nl' });
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
   @action onInputNumberChange(event: InputEvent) {
     this.inputNumber = (event.target as HTMLInputElement).value;
     this.validateAndSave();
