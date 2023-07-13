@@ -73,7 +73,7 @@ export default class RdfaDatePluginDateTimePicker extends Component<Args> {
 
 function getLocalizedMonths(
   intl: Intl,
-  monthFormat: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' = 'long'
+  monthFormat: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' = 'long',
 ) {
   const someYear = 2021;
   return [...Array(12).keys()].map((monthIndex) => {
@@ -84,7 +84,7 @@ function getLocalizedMonths(
 
 function getLocalizedDays(
   intl: Intl,
-  weekdayFormat: 'long' | 'short' | 'narrow' = 'long'
+  weekdayFormat: 'long' | 'short' | 'narrow' = 'long',
 ) {
   const someSunday = new Date('2021-01-03');
   return [...Array(7).keys()].map((index) => {

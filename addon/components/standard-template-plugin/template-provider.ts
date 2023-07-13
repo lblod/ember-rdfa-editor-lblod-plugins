@@ -19,7 +19,7 @@ type Args = {
 
 const HACKY_LOOKUP: Record<string, Resource> = {
   'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt': BESLUIT(
-    'BehandelingVanAgendapunt'
+    'BehandelingVanAgendapunt',
   ),
   'http://data.vlaanderen.be/ns/besluit#Besluit': BESLUIT('Besluit'),
   'http://data.vlaanderen.be/ns/besluit#Artikel': BESLUIT('Artikel'),
@@ -27,7 +27,7 @@ const HACKY_LOOKUP: Record<string, Resource> = {
 
 export function findAncestors(
   pos: ResolvedPos,
-  predicate: (node: PNode) => boolean = () => true
+  predicate: (node: PNode) => boolean = () => true,
 ) {
   const result: { node: PNode; pos: number }[] = [];
   let depth = pos.depth;
@@ -59,7 +59,7 @@ export default class TemplateProviderComponent extends Component<Args> {
   get applicableTemplates() {
     return (
       this.standardTemplatePlugin.fetchTemplates.last?.value?.filter(
-        (template) => this.templateIsApplicable(template)
+        (template) => this.templateIsApplicable(template),
       ) || []
     );
   }
@@ -74,7 +74,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.contexts.some((type) =>
-          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type])
+          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type]),
         );
       }).length;
     const containsDisabledTypes =
@@ -85,7 +85,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.disabledInContexts.some((type) =>
-          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type])
+          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type]),
         );
       }).length;
 
@@ -118,9 +118,9 @@ export default class TemplateProviderComponent extends Component<Args> {
       insertHtml(
         instantiateUuids(template.body),
         insertRange.from,
-        insertRange.to
+        insertRange.to,
       ),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 }

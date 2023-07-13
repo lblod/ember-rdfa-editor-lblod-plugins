@@ -41,7 +41,7 @@ function generateCodeListOptionsQuery(codelistUri: string): string {
 
 export async function fetchCodeListOptions(
   endpoint: string,
-  codelistUri: string
+  codelistUri: string,
 ): Promise<CodeListOptions> {
   const codelistsOptionsQueryResult = await executeQuery({
     endpoint,
@@ -93,7 +93,7 @@ function generateCodeListsByPublisherQuery(publisher: string): string {
 
 export async function fetchCodeListsByPublisher(
   endpoint: string,
-  publisher: string
+  publisher: string,
 ): Promise<CodeList[]> {
   const codelistsOptionsQueryResult = await executeQuery({
     endpoint,

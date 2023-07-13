@@ -26,7 +26,7 @@ export function findInsertionRange(args: {
   const limitContainer = limitTo
     ? findParentNodeClosestToPos(
         $from,
-        (node) => node.type === schema.nodes[limitTo]
+        (node) => node.type === schema.nodes[limitTo],
       )
     : null;
 

@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 export function citedText(
   schema: CitationSchema,
   title: string,
-  uri: string
+  uri: string,
 ): PNode {
   return unwrap(schema.nodes.link).create(
     {
@@ -15,6 +15,6 @@ export function citedText(
       typeof: 'eli:LegalExpression',
       __rdfaId: uuid(),
     },
-    [schema.text(title)]
+    [schema.text(title)],
   );
 }

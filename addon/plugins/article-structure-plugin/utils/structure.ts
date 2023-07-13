@@ -119,7 +119,7 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
 export function getStructureHeaderAttrs(element: HTMLElement) {
   const numberNode = element.querySelector(
     `[property~="${ELI('number').prefixed}"],
-     [property~="${ELI('number').full}"]`
+     [property~="${ELI('number').full}"]`,
   );
   if (hasRDFaAttribute(element, 'property', SAY('heading')) && numberNode) {
     return {

@@ -27,21 +27,21 @@ export default function insertMotivation({
         null,
         schema.node('placeholder', {
           placeholderText: intl.t('besluit-plugin.placeholder.government-body'),
-        })
+        }),
       ),
       schema.node(
         'heading',
         {
           level: 5,
         },
-        [schema.text(intl.t('besluit-plugin.text.authority'))]
+        [schema.text(intl.t('besluit-plugin.text.authority'))],
       ),
       schema.node('bullet_list', null, [
         schema.node('list_item', null, [
           schema.node('paragraph', null, [
             schema.node('placeholder', {
               placeholderText: intl.t(
-                'besluit-plugin.placeholder.legal-jurisdiction'
+                'besluit-plugin.placeholder.legal-jurisdiction',
               ),
             }),
           ]),
@@ -52,14 +52,14 @@ export default function insertMotivation({
         {
           level: 5,
         },
-        [schema.text(intl.t('besluit-plugin.text.legal-context'))]
+        [schema.text(intl.t('besluit-plugin.text.legal-context'))],
       ),
       schema.node('bullet_list', null, [
         schema.node('list_item', null, [
           schema.node('paragraph', null, [
             schema.node('placeholder', {
               placeholderText: intl.t(
-                'besluit-plugin.placeholder.insert-legal-context'
+                'besluit-plugin.placeholder.insert-legal-context',
               ),
             }),
           ]),
@@ -70,14 +70,14 @@ export default function insertMotivation({
         {
           level: 5,
         },
-        [schema.text(intl.t('besluit-plugin.text.factual-context'))]
+        [schema.text(intl.t('besluit-plugin.text.factual-context'))],
       ),
       schema.node('bullet_list', null, [
         schema.node('list_item', null, [
           schema.node('paragraph', null, [
             schema.node('placeholder', {
               placeholderText: intl.t(
-                'besluit-plugin.placeholder.insert-factual-context'
+                'besluit-plugin.placeholder.insert-factual-context',
               ),
             }),
           ]),
@@ -90,7 +90,7 @@ export default function insertMotivation({
     const insertionPos = findInsertionPosInAncestorOfType(
       selection,
       schema.nodes.besluit,
-      nodeToInsert
+      nodeToInsert,
     );
     if (isNone(insertionPos)) {
       return false;
@@ -106,7 +106,7 @@ export default function insertMotivation({
       // const targetPos = tr.doc.resolve(insertionPos + cursorOffset + 1);
       // TODO figure out why I cant just set a nodeSelection here
       tr.setSelection(
-        new NodeSelection(tr.doc.resolve(selectionPos.posAtIndex(0)))
+        new NodeSelection(tr.doc.resolve(selectionPos.posAtIndex(0))),
       );
       dispatch(tr);
     }

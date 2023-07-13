@@ -88,7 +88,7 @@ export function extractOutline({
   const subResults: OutlineEntry[] = [];
   node.forEach((child, offset) => {
     subResults.push(
-      ...extractOutline({ node: child, pos: pos + 1 + offset, config })
+      ...extractOutline({ node: child, pos: pos + 1 + offset, config }),
     );
   });
   if (parent) {

@@ -127,10 +127,10 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
             ?.getAttribute('datatype');
           if (variableType === 'date' && datatype) {
             const onlyDate = !![...node.children].find((el) =>
-              hasRDFaAttribute(el, 'datatype', XSD('date'))
+              hasRDFaAttribute(el, 'datatype', XSD('date')),
             );
             const dateNode = [...node.children].find((el) =>
-              hasRDFaAttribute(el, 'property', EXT('content'))
+              hasRDFaAttribute(el, 'property', EXT('content')),
             ) as HTMLElement | undefined;
             let humanReadableDate: string;
             const value = dateNode?.getAttribute('content');

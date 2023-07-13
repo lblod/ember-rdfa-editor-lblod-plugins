@@ -60,7 +60,7 @@ export const getPNodeExtraAttributes = ({
       [MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY]:
         (node.attrs[MAXIMUM_VALUE_PNODE_KEY] as string) ?? null,
       [WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY]: String(
-        node.attrs[WRITTEN_NUMBER_PNODE_KEY] ?? false
+        node.attrs[WRITTEN_NUMBER_PNODE_KEY] ?? false,
       ),
     };
   }
@@ -102,7 +102,7 @@ export const parseAttributes = (node: HTMLElement): false | Attrs => {
       ?.getAttribute('resource');
     const mappingResource = node.getAttribute('resource');
     const codelistSpan = [...node.children].find((el) =>
-      hasRDFaAttribute(el, 'property', EXT('codelist'))
+      hasRDFaAttribute(el, 'property', EXT('codelist')),
     );
     const codelistResource =
       codelistSpan?.getAttribute('resource') ??
@@ -138,7 +138,7 @@ export const parseAttributes = (node: HTMLElement): false | Attrs => {
 
 export const attributesToDOM = (
   node: PNode,
-  content?: string | null
+  content?: string | null,
 ): DOMOutputSpec => {
   const {
     mappingResource,

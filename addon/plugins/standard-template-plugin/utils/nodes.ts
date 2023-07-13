@@ -202,12 +202,12 @@ export const besluitArticleStructure: StructureSpec = {
               {},
               schema.node('placeholder', {
                 placeholderText: intl?.t(
-                  'article-structure-plugin.placeholder.article.body'
+                  'article-structure-plugin.placeholder.article.body',
                 ),
-              })
-            )
+              }),
+            ),
         ),
-      ]
+      ],
     );
     const selectionConfig: {
       relativePos: number;
@@ -261,7 +261,7 @@ export const besluit_article_header: NodeSpec = {
       getAttrs(element: HTMLElement) {
         const numberNode = element.querySelector(
           `span[property~='${ELI('number').prefixed}'],
-           span[property~='${ELI('number').full}']`
+           span[property~='${ELI('number').full}']`,
         );
         if (numberNode) {
           return {

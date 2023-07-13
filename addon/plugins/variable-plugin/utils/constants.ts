@@ -32,7 +32,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           type: 'text',
           label,
         },
-        schema.node('placeholder', { placeholderText: 'text' })
+        schema.node('placeholder', { placeholderText: 'text' }),
       );
     },
   },
@@ -50,7 +50,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           datatype: XSD('integer').prefixed,
           label,
           ...attributes,
-        })
+        }),
       );
     },
   },
@@ -62,7 +62,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
           mappingResource: `http://data.lblod.info/mappings/${uuidv4()}`,
           value: null,
           label,
-        })
+        }),
       );
     },
   },
@@ -82,7 +82,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
         },
         schema.node('placeholder', {
           placeholderText: 'location',
-        })
+        }),
       );
     },
   },
@@ -107,7 +107,7 @@ export const DEFAULT_VARIABLE_TYPES: Record<string, VariableType> = {
         },
         schema.node('placeholder', {
           placeholderText: codelist?.label,
-        })
+        }),
       );
     },
   },

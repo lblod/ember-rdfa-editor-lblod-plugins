@@ -87,8 +87,8 @@ export default class GenericRdfaVariableInsertMenu extends Component<Args> {
     this.controller.withTransaction((tr) => {
       return tr.replaceSelectionWith(
         ProseParser.fromSchema(this.schema).parse(
-          domParser.parseFromString(editorContent, 'text/html')
-        )
+          domParser.parseFromString(editorContent, 'text/html'),
+        ),
       );
     });
 

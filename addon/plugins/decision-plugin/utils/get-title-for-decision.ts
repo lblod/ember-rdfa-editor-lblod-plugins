@@ -18,7 +18,7 @@ export function getTitleForDecision(decisionUri: string, datastore: SayStore) {
  */
 export function getTitleNodesForDecision(
   decisionUri: string,
-  datastore: SayStore
+  datastore: SayStore,
 ) {
   const mapping = datastore
     .match(`>${decisionUri}`, '>http://data.europa.eu/eli/ontology#title')

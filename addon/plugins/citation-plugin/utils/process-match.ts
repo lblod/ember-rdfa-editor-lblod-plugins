@@ -29,7 +29,7 @@ interface ProcessedMatch {
 }
 
 export default function processMatch(
-  match: RegexpMatchArrayWithIndices
+  match: RegexpMatchArrayWithIndices,
 ): ProcessedMatch | null {
   const matchgroups = match.groups;
   if (!matchgroups) {
@@ -43,7 +43,7 @@ export default function processMatch(
   let cleanedSearchTerms = cleanupText(searchTerms)
     .split(SPACES_REGEX)
     .filter(
-      (word) => !isBlank(word) && word.length > 3 && !STOP_WORDS.includes(word)
+      (word) => !isBlank(word) && word.length > 3 && !STOP_WORDS.includes(word),
     )
     .join(' ');
   if (type) {
@@ -110,7 +110,7 @@ function cleanupText(text?: string): string {
   const { textWithoutDates } = extractDates(text);
   const textWithoutOddChars = textWithoutDates.replace(
     new RegExp(`[,.:"()&${INVISIBLE_SPACE}]`, 'g'),
-    ''
+    '',
   );
   const articleIndex = textWithoutOddChars.indexOf('artikel');
   return articleIndex >= 0

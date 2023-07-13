@@ -27,12 +27,12 @@ export default class MeasureTemplateComponent extends Component<Args> {
     const instructions =
       await this.roadsignRegistry.getInstructionsForMeasure.perform(
         this.args.measure,
-        this.endpoint
+        this.endpoint,
       );
     const template = includeInstructions(
       this.args.template,
       instructions,
-      this.args.annotated
+      this.args.annotated,
     );
     this.template = template;
   });

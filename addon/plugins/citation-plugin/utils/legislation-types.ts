@@ -41,7 +41,7 @@ const LEGISLATION_TYPE_CONCEPTS = Object.entries(LEGISLATION_TYPES).map(
       label: pair[0],
       value: pair[1],
     };
-  }
+  },
 );
 
 export { LEGISLATION_TYPES, LEGISLATION_TYPE_CONCEPTS };

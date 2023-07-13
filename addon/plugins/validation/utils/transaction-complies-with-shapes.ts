@@ -12,13 +12,13 @@ import { validateTransaction } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 export function transactionCompliesWithShapes(
   state: EditorState,
   tr: Transaction,
-  validateShapes?: Set<string>
+  validateShapes?: Set<string>,
 ) {
   if (validateShapes?.size) {
     const report = validateTransaction(state, tr);
     if (
       report.results?.some((result) =>
-        validateShapes.has(result.sourceShape.name)
+        validateShapes.has(result.sourceShape.name),
       )
     ) {
       return false;

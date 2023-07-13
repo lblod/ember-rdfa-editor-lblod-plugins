@@ -33,7 +33,7 @@ export default function instantiateUuids(templateString: string) {
     /\$\{(generateUuid|generateBoundUuid)\(([^()]*)\)\}/g,
     (string) => {
       const match = /\$\{(generateUuid|generateBoundUuid)\(([^()]*)\)\}/.exec(
-        string
+        string,
       );
       if (match) {
         const functionName = match[1];
@@ -43,6 +43,6 @@ export default function instantiateUuids(templateString: string) {
       } else {
         return string;
       }
-    }
+    },
   );
 }
