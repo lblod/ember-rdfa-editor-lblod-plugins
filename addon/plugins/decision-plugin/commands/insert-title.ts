@@ -27,14 +27,14 @@ export default function insertTitle({
         null,
         schema.node('placeholder', {
           placeholderText,
-        })
-      )
+        }),
+      ),
     );
 
     const insertionPos = findInsertionPosInAncestorOfType(
       selection,
       schema.nodes.besluit,
-      nodeToInsert
+      nodeToInsert,
     );
     if (isNone(insertionPos)) {
       return false;

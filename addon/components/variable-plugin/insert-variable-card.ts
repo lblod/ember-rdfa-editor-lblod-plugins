@@ -52,7 +52,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
           variablesArray.push(variableType);
         } else {
           console.warn(
-            `Template Variable Plugin: variable type ${type} not found in the default variable types`
+            `Template Variable Plugin: variable type ${type} not found in the default variable types`,
           );
         }
       } else {
@@ -94,7 +94,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       (tr) => {
         return tr.replaceSelectionWith(node);
       },
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 
@@ -113,12 +113,12 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
     async (
       fetchFunction: (
         endpoint: string,
-        publisher: string
-      ) => Promise<CodeList[]>
+        publisher: string,
+      ) => Promise<CodeList[]>,
     ) => {
       const subtypes = await fetchFunction(this.endpoint, this.publisher);
       this.subtypes = subtypes;
-    }
+    },
   );
 
   @action
@@ -143,7 +143,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       return false;
     } else {
       const variable = findParentNodeOfType(
-        this.args.controller.schema.nodes.variable
+        this.args.controller.schema.nodes.variable,
       )(selection);
       return !variable;
     }

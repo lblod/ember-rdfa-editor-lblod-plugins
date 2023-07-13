@@ -38,8 +38,8 @@ export const articleParagraphSpec: StructureSpec = {
         {},
         schema.node('placeholder', {
           placeholderText: intl?.t(PLACEHOLDERS.body),
-        })
-      )
+        }),
+      ),
     );
     return { node, selectionConfig: { relativePos: 1, type: 'node' } };
   },

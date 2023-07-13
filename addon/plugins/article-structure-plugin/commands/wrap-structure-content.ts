@@ -12,7 +12,7 @@ import recalculateStructureNumbers from './recalculate-structure-numbers';
 
 const wrapStructureContent = (
   structureSpec: StructureSpec,
-  intl: IntlService
+  intl: IntlService,
 ): Command => {
   return (state, dispatch) => {
     if (!structureSpec.content) {
@@ -21,7 +21,7 @@ const wrapStructureContent = (
     const { selection, schema } = state;
     const container = findInsertionContainer(
       selection,
-      schema.nodes[structureSpec.name]
+      schema.nodes[structureSpec.name],
     );
     if (!container) {
       return false;
@@ -50,17 +50,17 @@ const wrapStructureContent = (
       transaction.replaceWith(
         container.pos + 1,
         container.pos + container.node.nodeSize - 1,
-        wrappingNode
+        wrappingNode,
       );
       const newSelection =
         selectionConfig.type === 'node'
           ? NodeSelection.create(
               transaction.doc,
-              container.pos + 1 + selectionConfig.relativePos
+              container.pos + 1 + selectionConfig.relativePos,
             )
           : TextSelection.create(
               transaction.doc,
-              container.pos + 1 + selectionConfig.relativePos
+              container.pos + 1 + selectionConfig.relativePos,
             );
       transaction.setSelection(newSelection);
       transaction.scrollIntoView();

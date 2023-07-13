@@ -92,7 +92,7 @@ export default class BesluitSampleController extends Controller {
   @service declare intl: IntlService;
   @tracked controller?: SayController;
   @tracked citationPlugin = citationPlugin(
-    this.config.citation as CitationPluginConfig
+    this.config.citation as CitationPluginConfig,
   );
   @tracked validationPlugin = validation((schema: Schema) => ({
     shapes: [
@@ -134,7 +134,7 @@ export default class BesluitSampleController extends Controller {
       return { conforms: true };
     }
     const validationState = this.validationPlugin.getState(
-      this.controller.mainEditorState
+      this.controller.mainEditorState,
     );
     if (!validationState) {
       return { conforms: true };
@@ -242,7 +242,7 @@ export default class BesluitSampleController extends Controller {
 
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
-    controller: SayController
+    controller: SayController,
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       variable: variableView(controller),
@@ -259,7 +259,7 @@ export default class BesluitSampleController extends Controller {
       [space, hardBreak, paragraphInvisible, headingInvisible],
       {
         shouldShowInvisibles: false,
-      }
+      },
     ),
   ];
 
@@ -299,14 +299,14 @@ export default class BesluitSampleController extends Controller {
       insertDescription({
         placeholderText: 'Geef korte beschrijving op',
         validateShapes: new Set(['exactly-one-description']),
-      })
+      }),
     );
   }
 
   @action
   insertDescription() {
     this.controller?.doCommand(
-      insertDescription({ placeholderText: 'Geef korte beschrijving op' })
+      insertDescription({ placeholderText: 'Geef korte beschrijving op' }),
     );
     this.controller?.focus();
   }
@@ -316,7 +316,7 @@ export default class BesluitSampleController extends Controller {
       insertTitle({
         placeholderText: 'Geef titel besluit op',
         validateShapes: new Set(['exactly-one-title']),
-      })
+      }),
     );
   }
 
@@ -326,7 +326,7 @@ export default class BesluitSampleController extends Controller {
       insertTitle({
         placeholderText: 'Geef titel besluit op',
         validateShapes: new Set(['exactly-one-title']),
-      })
+      }),
     );
     this.controller?.focus();
   }
@@ -336,7 +336,7 @@ export default class BesluitSampleController extends Controller {
       insertMotivation({
         intl: this.intl,
         validateShapes: new Set(['max-one-motivation']),
-      })
+      }),
     );
   }
 
@@ -345,14 +345,14 @@ export default class BesluitSampleController extends Controller {
     this.controller?.doCommand(
       insertMotivation({
         intl: this.intl,
-      })
+      }),
     );
     this.controller?.focus();
   }
 
   get canInsertContainer() {
     return this.controller?.checkCommand(
-      insertArticleContainer({ intl: this.intl })
+      insertArticleContainer({ intl: this.intl }),
     );
   }
 

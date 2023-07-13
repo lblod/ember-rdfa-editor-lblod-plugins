@@ -8,7 +8,7 @@ export default function recalculateStructureNumbers(
   const doc = transaction.doc;
   const indices = new Array<number>(structureSpecs.length).fill(1);
   const contexts: (PNode | null)[] = new Array<PNode | null>(
-    structureSpecs.length
+    structureSpecs.length,
   ).fill(null);
   doc.descendants((node, pos, parent) => {
     structureSpecs.forEach((spec, i) => {

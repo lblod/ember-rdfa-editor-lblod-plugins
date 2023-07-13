@@ -33,9 +33,9 @@ export default function insertDocumentTitle({
             null,
             schema.node('placeholder', {
               placeholderText: placeholder,
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
       dispatch(tr);
     }

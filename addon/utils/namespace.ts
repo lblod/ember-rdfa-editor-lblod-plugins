@@ -23,7 +23,7 @@ export function namespace(uri: string, prefix: string) {
 export function hasRDFaAttribute(
   element: Element,
   attr: string,
-  value: Resource
+  value: Resource,
 ) {
   const result = element.getAttribute(attr)?.split(' ');
   if (result) {
@@ -35,7 +35,7 @@ export function hasRDFaAttribute(
 export function pnodeHasRdfaAttribute(
   node: PNode,
   attr: string,
-  value: Resource
+  value: Resource,
 ) {
   const result = (node.attrs[attr] as string | null)?.split(' ');
   if (result) {
@@ -47,7 +47,7 @@ export function pnodeHasRdfaAttribute(
 export function expandPrefixedString(
   base: string,
   prefix: string,
-  stringToExpand: string
+  stringToExpand: string,
 ): string {
   if (stringToExpand.startsWith(base)) {
     return stringToExpand;

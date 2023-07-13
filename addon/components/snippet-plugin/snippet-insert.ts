@@ -42,8 +42,8 @@ export default class SnippetInsertComponent extends Component<Args> {
     this.controller.withTransaction((tr) => {
       return tr.replaceSelectionWith(
         ProseParser.fromSchema(this.controller.schema).parse(
-          domParser.parseFromString(content, 'text/html')
-        )
+          domParser.parseFromString(content, 'text/html'),
+        ),
       );
     });
   }

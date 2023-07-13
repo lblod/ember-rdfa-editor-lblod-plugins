@@ -29,7 +29,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   moveStructure(direction: 'up' | 'down') {
     this.controller.doCommand(
       moveSelectedStructure(this.structureTypes, direction, this.intl),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
     this.controller.focus();
   }
@@ -40,7 +40,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       if (withContent || this.currentStructureType.noUnwrap) {
         this.controller.doCommand(
           removeStructure(this.structure, this.structureTypes),
-          { view: this.controller.mainEditorView }
+          { view: this.controller.mainEditorView },
         );
       } else {
         this.controller.doCommand(
@@ -49,9 +49,9 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
               ...this.structure,
               type: this.currentStructureType,
             },
-            this.structureTypes
+            this.structureTypes,
           ),
-          { view: this.controller.mainEditorView }
+          { view: this.controller.mainEditorView },
         );
       }
     }
@@ -69,7 +69,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   get structureNodeSpecs() {
     return this.structureTypes.map(
-      (type) => this.controller.schema.nodes[type.name]
+      (type) => this.controller.schema.nodes[type.name],
     );
   }
 
@@ -82,7 +82,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     if (this.structure) {
       const { node: structureNode } = this.structure;
       return this.structureTypes.find(
-        (spec) => spec.name === structureNode.type.name
+        (spec) => spec.name === structureNode.type.name,
       );
     }
     return;
@@ -104,7 +104,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       return this.intl.t(translation);
     } else {
       return this.intl.t(
-        'article-structure-plugin.remove-with-content.default'
+        'article-structure-plugin.remove-with-content.default',
       );
     }
   }
@@ -116,14 +116,14 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   get canMoveDown() {
     return this.controller.checkCommand(
       moveSelectedStructure(this.structureTypes, 'down', this.intl),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 
   get canMoveUp() {
     return this.controller.checkCommand(
       moveSelectedStructure(this.structureTypes, 'up', this.intl),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 
@@ -138,9 +138,9 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
               ...this.structure,
               type: this.currentStructureType,
             },
-            this.structureTypes
+            this.structureTypes,
           ),
-          { view: this.controller.mainEditorView }
+          { view: this.controller.mainEditorView },
         );
       }
     }

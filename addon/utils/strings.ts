@@ -14,7 +14,7 @@ export function dateValue(value?: string): string | null {
   if (value) {
     try {
       return new Intl.DateTimeFormat('nl-BE').format(
-        new Date(Date.parse(value))
+        new Date(Date.parse(value)),
       );
     } catch (e) {
       let message: string;

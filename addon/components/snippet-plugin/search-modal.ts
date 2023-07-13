@@ -38,7 +38,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   setInputSearchText(event: InputEvent) {
     assert(
       'inputSearchText must be bound to an input element',
-      event.target instanceof HTMLInputElement
+      event.target instanceof HTMLInputElement,
     );
 
     this.inputSearchText = event.target.value;

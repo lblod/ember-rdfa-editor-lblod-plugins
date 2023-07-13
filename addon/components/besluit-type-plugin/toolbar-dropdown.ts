@@ -66,7 +66,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     const classificatie = await bestuurseenheid.get('classificatie');
     const types = await fetchBesluitTypes(
       classificatie.uri,
-      this.args.options.endpoint
+      this.args.options.endpoint,
     );
     return types;
   });
@@ -75,7 +75,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     const selection = this.controller.mainEditorState.selection;
     const besluit = findAncestorOfType(
       selection,
-      this.controller.schema.nodes['besluit']
+      this.controller.schema.nodes['besluit'],
     );
     if (!besluit) {
       return undefined;
@@ -106,12 +106,12 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     }
     const besluit = findAncestorOfType(
       this.controller.mainEditorState.selection,
-      this.controller.schema.nodes['besluit']
+      this.controller.schema.nodes['besluit'],
     );
     const besluitTypeof = besluit?.node.attrs.typeof as string;
     const besluitTypesUris = besluitTypeof.split(' ');
     const besluitTypeRelevant = besluitTypesUris.find((type) =>
-      type.includes('https://data.vlaanderen.be/id/concept/BesluitType/')
+      type.includes('https://data.vlaanderen.be/id/concept/BesluitType/'),
     );
     if (besluitTypeRelevant) {
       this.previousBesluitType = besluitTypeRelevant;
@@ -168,7 +168,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   findBesluitTypeParent(
     besluitType?: BesluitType,
     array: BesluitType[] | null = this.types.value,
-    parent?: BesluitType
+    parent?: BesluitType,
   ): BesluitType | undefined {
     if (!besluitType || !array) {
       return;
@@ -186,7 +186,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   findBesluitTypeByURI(
     uri: string,
-    types = this.types.value
+    types = this.types.value,
   ): BesluitType | undefined {
     if (uri && types) {
       for (const besluitType of types) {
@@ -209,12 +209,12 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       if (this.previousBesluitType) {
         this.controller.doCommand(
           removeType(this.currentBesluitRange.from, this.previousBesluitType),
-          { view: this.controller.mainEditorView }
+          { view: this.controller.mainEditorView },
         );
       }
       this.controller.doCommand(
         addType(this.currentBesluitRange.from, this.besluitType.uri),
-        { view: this.controller.mainEditorView }
+        { view: this.controller.mainEditorView },
       );
     }
   }

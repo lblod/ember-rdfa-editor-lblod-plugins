@@ -119,8 +119,8 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     tr.setSelection(
       NodeSelection.create(
         this.args.controller.activeEditorState.doc,
-        this.args.getPos() as number
-      )
+        this.args.getPos() as number,
+      ),
     );
     this.args.controller.activeEditorView.dispatch(tr);
   }
@@ -153,7 +153,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   setSelectionAt(pos: number) {
     const tr = this.args.controller.activeEditorState.tr;
     tr.setSelection(
-      TextSelection.create(this.args.controller.activeEditorState.doc, pos)
+      TextSelection.create(this.args.controller.activeEditorState.doc, pos),
     );
     this.args.controller.focus();
     this.args.controller.activeEditorView.dispatch(tr);
@@ -161,7 +161,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
 
   selectAfterNode() {
     this.setSelectionAt(
-      (this.args.getPos() as number) + this.args.node.nodeSize
+      (this.args.getPos() as number) + this.args.node.nodeSize,
     );
   }
 

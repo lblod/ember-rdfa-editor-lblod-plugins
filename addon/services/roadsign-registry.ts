@@ -41,7 +41,7 @@ export default class RoadsignRegistryService extends Service {
         skos:prefLabel ?classificationLabel.
     }
 `,
-      endpoint
+      endpoint,
     );
     const bindings = result.results.bindings;
     this.classifications = bindings.map((binding) => ({
@@ -57,12 +57,12 @@ export default class RoadsignRegistryService extends Service {
       } else {
         const instructions = await this.fetchInstructionsForMeasure.perform(
           uri,
-          endpoint
+          endpoint,
         );
         this.instructions.set(uri, instructions);
         return instructions;
       }
-    }
+    },
   );
 
   searchCode = task(
@@ -72,7 +72,7 @@ export default class RoadsignRegistryService extends Service {
       codeString?: string,
       category?: string,
       type?: string,
-      combinedSigns?: string[]
+      combinedSigns?: string[],
     ) => {
       await timeout(DEBOUNCE_MS);
       if (!Array.isArray(combinedSigns)) {
@@ -124,13 +124,13 @@ export default class RoadsignRegistryService extends Service {
         label: unwrap(binding['signCode']?.value),
       }));
       return codes;
-    }
+    },
   );
 
   executeQuery = task(
     async (
       query: string,
-      endpoint: string
+      endpoint: string,
     ): Promise<{
       results: {
         bindings: IBindings[];
@@ -154,10 +154,10 @@ export default class RoadsignRegistryService extends Service {
         };
       } else {
         throw new Error(
-          `Request to MOW backend was unsuccessful: [${response.status}] ${response.statusText}`
+          `Request to MOW backend was unsuccessful: [${response.status}] ${response.statusText}`,
         );
       }
-    }
+    },
   );
 
   fetchInstructionsForMeasure = task(
@@ -174,10 +174,10 @@ export default class RoadsignRegistryService extends Service {
           `;
       const result = await this.executeQuery.perform(query, endpoint);
       const instructions = result.results.bindings.map((binding) =>
-        Instruction.fromBinding(binding)
+        Instruction.fromBinding(binding),
       );
       return instructions;
-    }
+    },
   );
 
   fetchMeasures = task(
@@ -197,7 +197,7 @@ export default class RoadsignRegistryService extends Service {
         codes?: string[];
         category?: string;
         pageStart?: number;
-      } = {}
+      } = {},
     ) => {
       const selectQuery = generateMeasuresQuery({
         zonality,
@@ -218,7 +218,7 @@ export default class RoadsignRegistryService extends Service {
       const count = optionMapOr(
         0,
         parseInt,
-        countResult.results.bindings[0]?.['count']?.value
+        countResult.results.bindings[0]?.['count']?.value,
       );
       const measures = [];
       const result = await this.executeQuery.perform(selectQuery, endpoint);
@@ -227,13 +227,13 @@ export default class RoadsignRegistryService extends Service {
         measure.signs = await this.fetchSignsForMeasure.perform(
           measure.uri,
           endpoint,
-          imageBaseUrl
+          imageBaseUrl,
         );
         measure.classifications = makeClassificationSet(measure.signs);
         measures.push(measure);
       }
       return { measures, count };
-    }
+    },
   );
 
   fetchSignsForMeasure = task(
@@ -264,7 +264,7 @@ WHERE {
         signs.push(sign);
       }
       return signs;
-    }
+    },
   );
 }
 
