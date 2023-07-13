@@ -51,7 +51,7 @@ export default class CitationCardComponent extends Component<Args> {
   @action
   update() {
     if (this.activeDecoration) {
-      const { legislationTypeUri, searchText } = this.activeDecoration?.spec;
+      const { legislationTypeUri, searchText } = this.activeDecoration.spec;
       if (legislationTypeUri !== this.documentLegislationType) {
         this.documentLegislationType = legislationTypeUri;
       }
