@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Number variable input box has a cleaner UI by adjusting the top margins.
 
+### Fixed
+- Can only insert a number variable with a minimum that is smaller than its maximum
+
 ## [8.4.1] - 2023-07-06
 
 ### Fixed

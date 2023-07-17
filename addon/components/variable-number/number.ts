@@ -16,6 +16,7 @@ import {
   MINIMUM_VALUE_PNODE_KEY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
+import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 
 type Args = {
@@ -44,7 +45,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   get formattedNumber() {
     const value = this.node.attrs.value as string;
 
-    if (Number.isNaN(Number(value)) || value === null || value === '') {
+    if (!isNumber(value)) {
       return value;
     }
     if (!this.writtenNumber) {

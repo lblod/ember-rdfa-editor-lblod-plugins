@@ -53,6 +53,7 @@
         <VariablePlugin::NumberSettings
           @minimumValue={{this.extraAttributes.minimumValue}}
           @maximumValue={{this.extraAttributes.maximumValue}}
+          @error={{this.numberVariableError}}
         />
       {{/if}}
       <AuButton
@@ -60,6 +61,7 @@
         @disabled={{or
           (not this.selectedVariable)
           (and this.hasSubtype (not this.selectedSubtype))
+          this.numberVariableError
         }}
       >{{t 'variable-plugin.button'}}</AuButton>
     </c.content>

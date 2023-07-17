@@ -202,9 +202,10 @@ variable:
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
     error-number-between: Het getal moet tussen {minValue} en {maxValue} liggen
-    error-number-above: Het getal moet groter dan {minValue} zijn
-    error-number-below: Het getal moet kleiner dan {maxValue} zijn
+    error-number-above: Het getal moet groter dan of gelijk zijn aan {minValue}
+    error-number-below: Het getal moet kleiner dan of gelijk zijn aan {maxValue}
     written-number-label: Getal voluit schrijven
+    error-min-bigger-than-max: Het minimum moet kleiner zijn dan het maximum
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
