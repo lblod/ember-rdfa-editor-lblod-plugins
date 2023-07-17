@@ -47,8 +47,8 @@ const buildFetchQuery = ({
           ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
       }
       ORDER BY DESC(?createdOn) LIMIT ${pageSize} OFFSET ${
-    pageNumber * pageSize
-  }
+        pageNumber * pageSize
+      }
       `;
 };
 
@@ -89,7 +89,7 @@ export const fetchSnippets = async ({
         title: binding.title?.value,
         createdOn: binding.createdOn?.value,
         content: binding.content?.value,
-      })
+      }),
   );
 
   return { totalCount, results };

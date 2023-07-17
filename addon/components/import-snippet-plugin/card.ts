@@ -24,7 +24,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
   get insertRange() {
     const { selection } = this.controller.mainEditorState;
     const besluit = findParentNodeOfType(this.controller.schema.nodes.besluit)(
-      selection
+      selection,
     );
     if (besluit) {
       return {
@@ -45,7 +45,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
         (tr) => {
           return tr.replaceRangeWith(insertRange.from, insertRange.to, node);
         },
-        { view: this.controller.mainEditorView }
+        { view: this.controller.mainEditorView },
       );
       this.importRdfaSnippet.removeSnippet(snippet);
     } else {
@@ -57,7 +57,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
   generateSnippetHtml(snippet: RdfaSnippet, type: string) {
     const domParser = new DOMParser();
     const contentFragment = ProseParser.fromSchema(
-      this.controller.schema
+      this.controller.schema,
     ).parse(domParser.parseFromString(snippet.content, 'text/html')).content;
     const { schema } = this.controller;
     if (type === 'attachment') {
@@ -83,11 +83,11 @@ export default class ImportSnippetPluginCard extends Component<Args> {
               schema.node(
                 'block_rdfa',
                 { property: 'http://www.w3.org/ns/prov#value' },
-                contentFragment
+                contentFragment,
               ),
-            ]
+            ],
           ),
-        ]
+        ],
       );
     } else {
       return schema.node(
@@ -107,11 +107,11 @@ export default class ImportSnippetPluginCard extends Component<Args> {
               schema.node(
                 'block_rdfa',
                 { property: 'http://www.w3.org/ns/prov#value' },
-                contentFragment
+                contentFragment,
               ),
-            ]
+            ],
           ),
-        ]
+        ],
       );
     }
   }

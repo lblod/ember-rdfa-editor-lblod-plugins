@@ -65,7 +65,7 @@ export const roadsign_regulation: NodeSpec = {
           hasRDFaAttribute(
             node,
             'typeof',
-            MOBILITEIT('Mobiliteitsmaatregel')
+            MOBILITEIT('Mobiliteitsmaatregel'),
           ) &&
           node.querySelector(CONTENT_SELECTOR)
         ) {
@@ -73,13 +73,13 @@ export const roadsign_regulation: NodeSpec = {
           const measureUri = node
             .querySelector(
               `span[property~='${PROV('wasDerivedFrom').prefixed}'],
-             span[property~='${PROV('wasDerivedFrom').full}']`
+             span[property~='${PROV('wasDerivedFrom').full}']`,
             )
             ?.getAttribute('resource');
           const zonality = node
             .querySelector(
               `span[property~='${EXT('zonality').prefixed}'],
-           span[property~='${EXT('zonality').full}']`
+           span[property~='${EXT('zonality').full}']`,
             )
             ?.getAttribute('resource');
           if (!resourceUri || !measureUri || !zonality) {
@@ -88,7 +88,7 @@ export const roadsign_regulation: NodeSpec = {
           const temporal = node
             .querySelector(
               `span[property~='${EXT('temporal').prefixed}'],
-           span[property~='${EXT('temporal').full}']`
+           span[property~='${EXT('temporal').full}']`,
             )
             ?.getAttribute('value');
           return {

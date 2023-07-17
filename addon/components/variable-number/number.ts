@@ -16,8 +16,8 @@ import {
   MINIMUM_VALUE_PNODE_KEY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
-import n2words from 'n2words';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 
 type Args = {
   getPos: () => number | undefined;
@@ -51,7 +51,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     if (!this.writtenNumber) {
       return value;
     } else {
-      return n2words(Number(value), { lang: 'nl' });
+      return numberToWords(Number(value), { lang: 'nl' });
     }
   }
 
@@ -120,8 +120,8 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
     tr.setSelection(
       NodeSelection.create(
         this.args.controller.activeEditorState.doc,
-        this.args.getPos() as number
-      )
+        this.args.getPos() as number,
+      ),
     );
     this.args.controller.activeEditorView.dispatch(tr);
   }
@@ -154,7 +154,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   setSelectionAt(pos: number) {
     const tr = this.args.controller.activeEditorState.tr;
     tr.setSelection(
-      TextSelection.create(this.args.controller.activeEditorState.doc, pos)
+      TextSelection.create(this.args.controller.activeEditorState.doc, pos),
     );
     this.args.controller.focus();
     this.args.controller.activeEditorView.dispatch(tr);
@@ -162,7 +162,7 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
 
   selectAfterNode() {
     this.setSelectionAt(
-      (this.args.getPos() as number) + this.args.node.nodeSize
+      (this.args.getPos() as number) + this.args.node.nodeSize,
     );
   }
 

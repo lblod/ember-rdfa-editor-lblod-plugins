@@ -20,7 +20,7 @@ export default class HoverTooltip extends Component<Args> {
         element.removeEventListener('blur', this.hideTooltip);
       };
     },
-    { eager: false }
+    { eager: false },
   );
 
   @tracked tooltipOpen = false;

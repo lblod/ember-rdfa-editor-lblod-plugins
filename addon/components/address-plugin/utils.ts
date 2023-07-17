@@ -9,11 +9,11 @@ export const replaceAccents = (string: string) =>
 export async function getSuggestedLocations(query: string) {
   const result = await fetch(
     `${LOC_GEOPUNT_ENDPOINT}?q=${encodeURIComponent(
-      query.replace(/^"(.*)"$/, '$1')
+      query.replace(/^"(.*)"$/, '$1'),
     )}&c=10&type=Housenumber`,
     {
       method: 'GET',
-    }
+    },
   );
 
   const jsonResult = (await result.json()) as {

@@ -77,8 +77,8 @@ export default class AddressPluginInsertComponent extends Component<Args> {
             },
             this.schema.node('paragraph', null, [
               this.schema.text(address.volledigAdres.geografischeNaam.spelling),
-            ])
-          )
+            ]),
+          ),
         );
 
         return tr;

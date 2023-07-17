@@ -116,4 +116,14 @@
   input[type='number'] {
     width: 100%;
   }
+
+  // we want to control the padding ourselves in the tooltip
+  .au-c-content * {
+    margin-top: 0;
+  }
+
+  // add top padding starting from second element
+  * :not(*:nth-child(1)) {
+    margin-top: 5px;
+  } 
 }

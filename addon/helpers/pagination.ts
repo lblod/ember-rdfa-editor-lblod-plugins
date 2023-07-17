@@ -36,5 +36,5 @@ export function pagination({
 }
 
 export default helper<unknown[], PaginationArguments>((_, named) =>
-  pagination(named)
+  pagination(named),
 );

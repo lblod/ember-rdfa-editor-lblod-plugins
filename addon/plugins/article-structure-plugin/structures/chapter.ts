@@ -35,7 +35,7 @@ export const chapterSpec: StructureSpec = {
           { level: 4, number: numberConverted },
           schema.node('placeholder', {
             placeholderText: intl?.t(PLACEHOLDERS.title),
-          })
+          }),
         ),
         schema.node(
           `chapter_body`,
@@ -46,10 +46,10 @@ export const chapterSpec: StructureSpec = {
               {},
               schema.node('placeholder', {
                 placeholderText: intl?.t(PLACEHOLDERS.body),
-              })
-            )
+              }),
+            ),
         ),
-      ]
+      ],
     );
     const selectionConfig: {
       relativePos: number;

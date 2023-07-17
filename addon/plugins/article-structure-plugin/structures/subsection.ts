@@ -37,7 +37,7 @@ export const subsectionSpec: StructureSpec = {
           { level: 6, number: numberConverted },
           schema.node('placeholder', {
             placeholderText: intl?.t(PLACEHOLDERS.title),
-          })
+          }),
         ),
         schema.node(
           `subsection_body`,
@@ -48,10 +48,10 @@ export const subsectionSpec: StructureSpec = {
               {},
               schema.node('placeholder', {
                 placeholderText: intl?.t(PLACEHOLDERS.body),
-              })
-            )
+              }),
+            ),
         ),
-      ]
+      ],
     );
     const selectionConfig: {
       relativePos: number;

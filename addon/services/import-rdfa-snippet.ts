@@ -19,7 +19,7 @@ export class RdfaSnippet {
     readonly source: string,
     readonly type: string,
     readonly content: string,
-    readonly blocks: RdfaBlock[]
+    readonly blocks: RdfaBlock[],
   ) {}
 }
 
@@ -137,7 +137,7 @@ export default class ImportRdfaSnippet extends Service {
       .filter((v, i, a) => a.indexOf(v) === i); //This filters only unique values
     if (
       types.includes(
-        'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbord-Verkeersteken'
+        'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbord-Verkeersteken',
       )
     ) {
       return 'roadsign';
@@ -193,7 +193,7 @@ export default class ImportRdfaSnippet extends Service {
     source: string,
     type: string,
     content: string,
-    blocks: RdfaBlock[]
+    blocks: RdfaBlock[],
   ): void {
     this.snippets.push(new RdfaSnippet(source, type, content, blocks));
   }

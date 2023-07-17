@@ -38,11 +38,11 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
           onlyDate: true,
           format: this.defaultDateFormat,
           value: new Date().toISOString(),
-        })
+        }),
       );
       if (tr.selection.$anchor.nodeBefore) {
         const resolvedPos = tr.doc.resolve(
-          tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize
+          tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
         );
         tr.setSelection(new NodeSelection(resolvedPos));
       }

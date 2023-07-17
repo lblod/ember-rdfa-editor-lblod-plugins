@@ -94,7 +94,7 @@ const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOO
  */
 export const CITATION_REGEX = new RegExp(
   `((?<type>${TYPE})${NNWS}*(?<searchTerms>(${NNWS}|[${BASIC_MULTIPLANE_CHARACTER};:'"()&-_]){3,})?)`,
-  'uidg'
+  'uidg',
 );
 export type CitationSchema = Schema<string, 'citation'>;
 
@@ -147,7 +147,7 @@ export function citationPlugin(config: CitationPluginConfig): CitationPlugin {
           newState,
           config,
           oldState,
-          oldPluginState.highlights.map(tr.mapping, tr.doc)
+          oldPluginState.highlights.map(tr.mapping, tr.doc),
         );
       },
     },
@@ -164,7 +164,7 @@ function calculateCitationPluginState(
   state: EditorState,
   config: CitationPluginConfig,
   oldState?: EditorState,
-  oldDecs?: DecorationSet
+  oldDecs?: DecorationSet,
 ) {
   const { doc, schema } = state;
   let activeRanges;
@@ -175,7 +175,7 @@ function calculateCitationPluginState(
       config,
       schema,
       doc,
-      activeRanges
+      activeRanges,
     );
     highlights = calculatedDecs.decorations;
   } else {
@@ -186,7 +186,7 @@ function calculateCitationPluginState(
       nodes,
       doc,
       oldState?.doc,
-      oldDecs
+      oldDecs,
     );
     activeRanges = calculatedDecs.activeRanges;
     highlights = calculatedDecs.decorations;
@@ -203,7 +203,7 @@ function calculateDecorationsInNodes(
   nodes: Set<NodeType>,
   newDoc: PNode,
   oldDoc?: PNode,
-  oldDecorations?: DecorationSet
+  oldDecorations?: DecorationSet,
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const activeRanges: [number, number][] = [];
   const decsToAdd: Decoration[] = [];
@@ -214,7 +214,7 @@ function calculateDecorationsInNodes(
     config.regex,
     newDoc,
     decsToRemove,
-    oldDecorations
+    oldDecorations,
   );
   if (nodes.has(newDoc.type)) {
     oldDoc
@@ -235,7 +235,7 @@ function calculateDecorationsInNodes(
               return false;
             }
             return true;
-          }
+          },
         )
       : newDoc.descendants((node, pos) => {
           if (nodes.has(node.type)) {
@@ -258,14 +258,14 @@ function calculateDecorationsInRanges(
   config: CitationPluginConfig,
   schema: CitationSchema,
   doc: PNode,
-  activeRanges: [number, number][]
+  activeRanges: [number, number][],
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const decorationsToAdd: Decoration[] = [];
   const collector = collectDecorations(
     decorationsToAdd,
     schema,
     config.regex,
-    doc
+    doc,
   );
 
   for (const [start, end] of activeRanges) {
@@ -283,13 +283,13 @@ function collectDecorations(
   regex: RegExp = CITATION_REGEX,
   doc: PNode,
   decsToRemove?: Decoration[],
-  oldDecs?: DecorationSet
+  oldDecs?: DecorationSet,
 ) {
   return function (node: PNode, pos: number): boolean {
     const resolvedPos: ResolvedPos = doc.resolve(pos);
     const link = findParentNodeOfTypeClosestToPos(
       resolvedPos,
-      schema.nodes.link
+      schema.nodes.link,
     );
     if (node.isText && node.text && !link) {
       if (decsToRemove && oldDecs) {
@@ -298,14 +298,14 @@ function collectDecorations(
             pos,
             pos + node.nodeSize,
             (spec) =>
-              (spec as Record<string, string>).name === 'citationHighlight'
-          )
+              (spec as Record<string, string>).name === 'citationHighlight',
+          ),
         );
       }
 
       for (const match of node.text.matchAll(regex)) {
         const processedMatch = processMatch(
-          match as RegexpMatchArrayWithIndices
+          match as RegexpMatchArrayWithIndices,
         );
 
         if (processedMatch) {
@@ -325,8 +325,8 @@ function collectDecorations(
                 name: 'citationHighlight',
                 searchText: text,
                 legislationTypeUri,
-              }
-            )
+              },
+            ),
           );
         }
       }
