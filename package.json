@@ -119,7 +119,7 @@
     "ember-data": "^3.28.12",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-functions-as-helper-polyfill": "^2.1.1",
-    "ember-intl": "^5.7.2",
+    "ember-intl": "^6.0.0",
     "ember-load-initializers": "^2.1.2",
     "ember-page-title": "^7.0.0",
     "ember-qunit": "^6.0.0",
