@@ -53,10 +53,6 @@ import {
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import IntlService from 'ember-intl/services/intl';
-import {
-  variable,
-  variableView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   date,
@@ -86,6 +82,16 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 
 import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
+import {
+  codelist,
+  number,
+  text_variable,
+  location,
+  textVariableView,
+  numberView,
+  codelistView,
+  locationView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -163,7 +169,10 @@ export default class BesluitSampleController extends Controller {
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.config.date),
-        variable,
+        text_variable,
+        number,
+        location,
+        codelist,
         ...besluitNodes,
         roadsign_regulation,
         heading,
@@ -245,7 +254,10 @@ export default class BesluitSampleController extends Controller {
     controller: SayController,
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      variable: variableView(controller),
+      text_variable: textVariableView(controller),
+      number: numberView(controller),
+      codelist: codelistView(controller),
+      location: locationView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
     };
