@@ -74,7 +74,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 export const emberNodeConfig: EmberNodeConfig = {
   name: 'text-variable',
-  componentPath: 'variable-plugin/variable',
+  componentPath: 'variable-plugin/variable/nodeview',
   inline: true,
   group: 'inline',
   content: 'inline*',

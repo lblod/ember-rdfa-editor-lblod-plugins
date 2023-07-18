@@ -112,7 +112,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'codelist',
-  componentPath: 'variable-plugin/variable',
+  componentPath: 'variable-plugin/variable/nodeview',
   inline: true,
   group: 'inline',
   content: 'inline*',
