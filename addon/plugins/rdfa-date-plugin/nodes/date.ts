@@ -12,6 +12,11 @@ import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/n
 import { DateOptions } from '..';
 import { formatDate, validateDateFormat } from '../utils';
 import { PNode } from '@lblod/ember-rdfa-editor';
+import {
+  isVariable,
+  parseLabel,
+  parseVariableType,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
 
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
@@ -41,7 +46,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       default: false,
     },
     label: {
-      default: '',
+      default: 'date',
     },
   },
   leafText: (node: PNode) => {
@@ -114,50 +119,43 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     {
       tag: 'span',
       getAttrs: (node: HTMLElement) => {
-        if (hasRDFaAttribute(node, 'typeof', EXT('Mapping'))) {
+        if (isVariable(node) && parseVariableType(node) === 'date') {
           const mappingResource = node.getAttribute('resource');
           if (!mappingResource) {
             return false;
           }
-          const variableType = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', DCT('type')))
-            ?.getAttribute('content');
-          const datatype = [...node.children]
-            .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
-            ?.getAttribute('datatype');
-          if (variableType === 'date' && datatype) {
-            const onlyDate = !![...node.children].find((el) =>
-              hasRDFaAttribute(el, 'datatype', XSD('date')),
-            );
-            const dateNode = [...node.children].find((el) =>
-              hasRDFaAttribute(el, 'property', EXT('content')),
-            ) as HTMLElement | undefined;
-            let humanReadableDate: string;
-            const value = dateNode?.getAttribute('content');
-            const format = dateNode?.dataset.format;
-            if (value && format) {
-              if (validateDateFormat(format).type === 'ok') {
-                humanReadableDate = formatDate(new Date(value), format);
-              } else {
-                humanReadableDate = 'Ongeldig formaat';
-              }
+          const onlyDate = !![...node.children].find((el) =>
+            hasRDFaAttribute(el, 'datatype', XSD('date')),
+          );
+          const dateNode = [...node.children].find((el) =>
+            hasRDFaAttribute(el, 'property', EXT('content')),
+          ) as HTMLElement | undefined;
+          let humanReadableDate: string;
+          const value = dateNode?.getAttribute('content');
+          const format = dateNode?.dataset.format;
+          if (value && format) {
+            if (validateDateFormat(format).type === 'ok') {
+              humanReadableDate = formatDate(new Date(value), format);
             } else {
-              humanReadableDate = onlyDate
-                ? options.placeholder.insertDate
-                : options.placeholder.insertDateTime;
+              humanReadableDate = 'Ongeldig formaat';
             }
-            const label = node.getAttribute('data-label') || variableType;
-            return {
-              mappingResource,
-              onlyDate,
-              humanReadableDate,
-              value: value,
-              format: format,
-              custom: dateNode?.dataset.custom === 'true',
-              label,
-            };
+          } else {
+            humanReadableDate = onlyDate
+              ? options.placeholder.insertDate
+              : options.placeholder.insertDateTime;
           }
+          const label = parseLabel(node);
+          return {
+            mappingResource,
+            onlyDate,
+            humanReadableDate,
+            value: value,
+            format: format,
+            custom: dateNode?.dataset.custom === 'true',
+            label,
+          };
         }
+
         return false;
       },
     },
