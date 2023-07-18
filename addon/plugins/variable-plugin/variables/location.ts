@@ -1,4 +1,3 @@
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   DCT,
   EXT,
@@ -28,27 +27,19 @@ const parseDOM = [
       if (
         isVariable(node) &&
         node.querySelector(CONTENT_SELECTOR) &&
-        parseVariableType(node) === 'codelist'
+        parseVariableType(node) === 'location'
       ) {
         const mappingResource = node.getAttribute('resource');
         if (!mappingResource) {
           return false;
         }
         const variableInstance = parseVariableInstance(node);
-
         const source = parseVariableSource(node);
         const label = parseLabel(node);
-        const codelistSpan = [...node.children].find((el) =>
-          hasRDFaAttribute(el, 'property', EXT('codelist')),
-        );
-        const codelistResource =
-          codelistSpan?.getAttribute('resource') ??
-          codelistSpan?.getAttribute('content');
         return {
           variableInstance:
             variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
           mappingResource,
-          codelistResource,
           source,
           label,
         };
@@ -61,8 +52,7 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const { mappingResource, codelistResource, variableInstance, source, label } =
-    node.attrs;
+  const { mappingResource, variableInstance, source, label } = node.attrs;
 
   const sourceSpan = source
     ? [
@@ -71,17 +61,6 @@ const toDOM = (node: PNode): DOMOutputSpec => {
           {
             property: DCT('source').prefixed,
             resource: source as string,
-          },
-        ],
-      ]
-    : [];
-  const codelistResourceSpan = codelistResource
-    ? [
-        [
-          'span',
-          {
-            property: EXT('codelist').prefixed, //becomes EXT('instance')
-            resource: codelistResource as string,
           },
         ],
       ]
@@ -97,9 +76,8 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       'span',
       { property: EXT('instance'), resource: variableInstance as string },
     ],
-    ['span', { property: DCT('type').prefixed, content: 'codelist' }],
+    ['span', { property: DCT('type').prefixed, content: 'location' }],
     ...sourceSpan,
-    ...codelistResourceSpan,
     [
       'span',
       {
@@ -111,7 +89,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 };
 
 const emberNodeConfig: EmberNodeConfig = {
-  name: 'codelist',
+  name: 'location',
   componentPath: 'variable-plugin/variable',
   inline: true,
   group: 'inline',
@@ -123,20 +101,17 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   attrs: {
     mappingResource: {},
-    codelistResource: {
-      default: null,
-    },
     variableInstance: {},
     source: {
       default: null,
     },
     label: {
-      default: 'codelist',
+      default: 'location',
     },
   },
   toDOM,
   parseDOM,
 };
 
-export const codelist = createEmberNodeSpec(emberNodeConfig);
-export const codelistView = createEmberNodeView(emberNodeConfig);
+export const location = createEmberNodeSpec(emberNodeConfig);
+export const locationView = createEmberNodeView(emberNodeConfig);
