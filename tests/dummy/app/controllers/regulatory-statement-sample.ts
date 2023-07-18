@@ -65,11 +65,11 @@ import {
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
+import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
   number,
   numberView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/number';
-import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
