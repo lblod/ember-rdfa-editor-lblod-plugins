@@ -19,6 +19,7 @@ import {
 import {
   block_rdfa,
   doc,
+  docWithConfig,
   hard_break,
   horizontal_rule,
   invisible_rdfa,
@@ -152,7 +153,7 @@ export default class BesluitSampleController extends Controller {
   get schema() {
     return new Schema({
       nodes: {
-        doc,
+        doc: docWithConfig(),
         paragraph,
 
         repaired_block,
