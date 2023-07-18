@@ -28,7 +28,7 @@ type Args = {
   selected: boolean;
   contentDecorations?: DecorationSource;
 };
-export default class VariableNumberPluginNumberComponent extends Component<Args> {
+export default class NumberNodeviewComponent extends Component<Args> {
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;

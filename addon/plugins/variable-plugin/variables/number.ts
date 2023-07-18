@@ -115,7 +115,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'number',
-  componentPath: 'variable-number/number',
+  componentPath: 'variable-plugin/number/nodeview',
   inline: true,
   group: 'inline',
   content: 'inline*',
