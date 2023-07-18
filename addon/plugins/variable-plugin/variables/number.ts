@@ -3,7 +3,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { Attrs, DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   DCT,
