@@ -74,9 +74,9 @@
               />
             </Sidebar.Collapsible>
             <VariablePlugin::InsertVariableCard
-                @controller={{this.controller}}
-                @options={{this.config.variable}}
-              />
+              @controller={{this.controller}}
+              @variableTypes={{this.variableTypes}}
+            />
             <ArticleStructurePlugin::StructureCard
               @controller={{this.controller}}
               @options={{this.config.structures}}
@@ -85,7 +85,7 @@
               @controller={{this.controller}}
               @options={{this.config.date}}
             />
-            <VariablePlugin::TemplateVariableCard @controller={{this.controller}}  @options={{this.config.templateVariable}}/>
+            {{!-- <VariablePlugin::TemplateVariableCard @controller={{this.controller}}  @options={{this.config.templateVariable}}/> --}}
           </Sidebar>
           {{/if}}
         </:aside>

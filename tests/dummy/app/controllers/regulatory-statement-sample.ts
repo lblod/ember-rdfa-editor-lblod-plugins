@@ -67,9 +67,16 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
+  codelist,
+  codelistView,
+  location,
+  locationView,
   number,
   numberView,
+  textVariableView,
+  text_variable,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -99,8 +106,11 @@ export default class RegulatoryStatementSampleController extends Controller {
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.config.date),
+        text_variable,
+        number,
+        location,
+        codelist,
         variable,
-        number: number,
         ...STRUCTURE_NODES,
         heading,
         blockquote,
@@ -126,6 +136,47 @@ export default class RegulatoryStatementSampleController extends Controller {
         strikethrough,
       },
     });
+  }
+
+  get variableTypes(): VariableConfig[] {
+    return [
+      {
+        label: 'text',
+        component: {
+          path: 'variable-plugin/text/insert',
+        },
+      },
+      {
+        label: 'number',
+        component: {
+          path: 'variable-plugin/number/insert',
+        },
+      },
+      {
+        label: 'date',
+        component: {
+          path: 'variable-plugin/date/insert',
+        },
+      },
+      {
+        label: 'location',
+        component: {
+          path: 'variable-plugin/location/insert',
+          options: {
+            endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+          },
+        },
+      },
+      {
+        label: 'codelist',
+        component: {
+          path: 'variable-plugin/codelist/insert',
+          options: {
+            endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+          },
+        },
+      },
+    ];
   }
 
   get config() {
@@ -193,6 +244,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
       number: numberView(controller),
+      text_variable: textVariableView(controller),
+      location: locationView(controller),
+      codelist: codelistView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

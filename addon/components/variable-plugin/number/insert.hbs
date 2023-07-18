@@ -1,3 +1,7 @@
+
+<AuFormRow>
+  <VariablePlugin::Utils::LabelInput @label={{this.label}} @updateLabel={{this.updateLabel}}/>
+</AuFormRow>
 <div class='number-settings'>
   <AuFormRow>
     {{#let (unique-id) as |id|}}
@@ -6,7 +10,7 @@
       </AuLabel>
       <AuInput
         id={{id}}
-        @value={{@minimumValue}}
+        @value={{this.minimumValue}}
         placeholder={{t 'variable-plugin.number.minimum-placeholder'}}
         @width='block'
         @type='number'
@@ -21,16 +25,21 @@
       </AuLabel>
       <AuInput
         id={{id}}
-        @value={{@maximumValue}}
+        @value={{this.maximumValue}}
         placeholder={{t 'variable-plugin.number.maximum-placeholder'}}
         @width='block'
         @type='number'
       />
     {{/let}}
   </AuFormRow>
-  {{#if @error}}
+  {{#if this.numberVariableError}}
     <AuHelpText @error={{true}}>
-      {{@error}}
+      {{this.numberVariableError}}
     </AuHelpText>
   {{/if}}
 </div>
+<AuButton
+  {{on 'click' this.insert}}
+  @disabled={{this.numberVariableError}}>
+  {{t 'variable-plugin.button'}}
+</AuButton>
