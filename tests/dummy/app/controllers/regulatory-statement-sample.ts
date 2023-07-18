@@ -40,10 +40,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
 import {
-  variable,
-  variableView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
-import {
   bullet_list,
   list_item,
   ordered_list,
@@ -110,7 +106,6 @@ export default class RegulatoryStatementSampleController extends Controller {
         number,
         location,
         codelist,
-        variable,
         ...STRUCTURE_NODES,
         heading,
         blockquote,
@@ -212,9 +207,6 @@ export default class RegulatoryStatementSampleController extends Controller {
         ],
         allowCustomFormat: true,
       },
-      variable: {
-        defaultEndpoint: 'https://dev.roadsigns.lblod.info/sparql',
-      },
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
         zonalLocationCodelistUri:
@@ -237,7 +229,6 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: SayController,
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      variable: variableView(controller),
       table_of_contents: tableOfContentsView(this.config.tableOfContents)(
         controller,
       ),
