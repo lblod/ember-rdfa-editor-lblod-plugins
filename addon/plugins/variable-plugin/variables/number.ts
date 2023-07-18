@@ -105,7 +105,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       'span',
       {
         property: EXT('content').prefixed,
-        content: content ? content : '',
+        content: (value as string | null) ?? '',
         datatype: XSD('integer').prefixed,
       },
       content,
