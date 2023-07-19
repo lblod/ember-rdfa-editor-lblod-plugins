@@ -18,7 +18,6 @@ import {
 
 import {
   block_rdfa,
-  doc,
   docWithConfig,
   hard_break,
   horizontal_rule,
