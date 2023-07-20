@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@types/ember__controller` from 4.0.3 to 4.0.5
 - Bumps `ember-auto-import` from 2.5.0 to 2.6.3
 - Bumps `tracked-built-ins` from 3.1.0 to 3.1.1
+- Bumps `word-wrap` from 1.2.3 to 1.2.4
 
 
 
