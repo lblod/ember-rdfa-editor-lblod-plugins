@@ -6,11 +6,13 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
 
+export type LocationInsertOptions = {
+  endpoint: string;
+};
+
 type Args = {
   controller: SayController;
-  options: {
-    endpoint: string;
-  };
+  options: LocationInsertOptions;
 };
 
 export default class LocationInsertComponent extends Component<Args> {
