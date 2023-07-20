@@ -18,7 +18,7 @@ import {
 
 import {
   block_rdfa,
-  doc,
+  docWithConfig,
   hard_break,
   horizontal_rule,
   invisible_rdfa,
@@ -158,7 +158,7 @@ export default class BesluitSampleController extends Controller {
   get schema() {
     return new Schema({
       nodes: {
-        doc,
+        doc: docWithConfig(),
         paragraph,
 
         repaired_block,
@@ -301,7 +301,7 @@ export default class BesluitSampleController extends Controller {
     });
     const presetContent =
       localStorage.getItem('EDITOR_CONTENT') ?? sampleData.DecisionTemplate;
-    controller.setHtmlContent(presetContent);
+    controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
   }
