@@ -24,12 +24,11 @@ This addon contains the following editor plugins:
 * [citaten-plugin](#citaten-plugin)
 * [decision-plugin](#decision-plugin)
 * [import-snippet-plugin](#import-snippet-plugin)
-* [insert-variable-plugin](#insert-variable-plugin)
 * [rdfa-date-plugin](#rdfa-date-plugin)
 * [roadsign-regulation-plugin](#roadsign-regulation-plugin)
 * [standard-template-plugin](#standard-template-plugin)
 * [table-of-contents-plugin](#table-of-contents-plugin)
-* [template-variable-plugin](#template-variable-plugin)
+* [variable-plugin](#variable-plugin)
 * [validation-plugin](#validation-plugin)
 * [address-plugin](#address-plugin)
 
@@ -359,113 +358,6 @@ application (https://github.com/lblod/frontend-gelinkt-notuleren).
 When opening a new document, users will get the option to either include the snippet data in the document or as an
 attachment.
 
-## insert-variable-plugin
-
-Plugin which allows users to insert variable placeholders into a document.
-
-The plugin provides a card that needs to be attached to the editor sidebar like
-```hbs
-  <VariablePlugin::InsertVariableCard 
-    @controller={{this.controller}}
-    @options={{this.config.variable}}
-  />
-```
-
-### Configuring the plugin
-
-The plugin can be configured through the following optional attributes that can be added as a json to the options attribute of the card:
-
-- `publisher`: the URI of a specific codelist publisher which you can use if you want to filter the codelists by its
-  publisher.
-- `defaultEndpoint`: The default endpoint where the codelists are fetched, this is also the variable that gets passed to
-  the fetchSubtypes and template function
-- `variableTypes`: a custom list of variable types you want the plugin to use. This list can contain the following
-  default variable types: `text`, `number`,`date`,`location` and `codelist`. Additionally this list can also contain
-  custom variable types, configured by the following three sub-attributes:
-  * `label`: the label of the custom variable type
-  * `fetchSubTypes` (optional): a function which returns a list of possible variable values. The function takes two
-    optional arguments: an `endpoint` and a `publisher`.
-  * `constructor`: function which returns a prosemirror node to be inserted, the function takes three arguments, the prosemirror `schema`, the `endpoint` and the `selectedSubtype` if you are using subtypes.
-
-#### Example
-
-```js
-{
-  
-    publisher: 'http://data.lblod.info/id/bestuurseenheden/141d9d6b-54af-4d17-b313-8d1c30bc3f5b',
-      defaultEndpoint
-  :
-    'https://dev.roadsigns.lblod.info/sparql',
-      variableTypes
-  :
-    [
-      'text',
-      'number',
-      'date',
-      'location',
-      'codelist',
-      {
-        label: 'Simple Variable',
-        constructor: (schema) => {
-        const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
-        const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-        return schema.node(
-          'variable',
-          {
-            mappingResource: mappingURI,
-            variableInstance,
-            type: 'Simple Variable',
-          },
-          schema.node('placeholder', { placeholderText: 'text' })
-        );
-      },
-      },
-      {
-        label: 'Complex Variable',
-        fetchSubtypes: async (endpoint, publisher) => {
-          const subtypes = [
-            {
-              uri: '1',
-              label: '1',
-            },
-            {
-              uri: '2',
-              label: '2',
-            },
-            {
-              uri: '3',
-              label: '3',
-            },
-          ];
-          return subtypes;
-        },
-        constructor: (schema, endpoint, selectedSubtype) => {
-        const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
-        const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-        return schema.node(
-          'variable',
-          {
-            type: 'Complex Variable',
-            mappingResource: mappingURI,
-            subTypeResource: selectedSubtype?.uri,
-            variableInstance,
-            source: endpoint,
-          },
-          schema.node('placeholder', {
-            placeholderText: selectedSubtype?.label ?? '',
-          })
-        );
-      }
-    },
-  ],
-}
-```
-
-### Using the plugin
-
-When the insert-variable-plugin is enabled, users will have the option to insert a variable into a document through a
-card which pops up in the sidebar of the editor.
-
 ## rdfa-date-plugin
 
 Plugin to insert and modify semantic dates and timestamps in an editor document.
@@ -573,41 +465,169 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
 },
 ```
 
+## variable-plugin
 
-## template-variable-plugin
+Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types, but this can be extended:
+- text variable
+- number variable
+- date variable
+- codelist
+- location
 
-Editor plugin which allows you to interact with placeholders created by the insert-variable-plugin.
-
-For enabling it, you need to add the card provided by the plugin to the editor sidebar
-```hbs
-  <VariablePlugin::TemplateVariableCard @controller={{this.controller}} @options={{this.config.templateVariable}}/>
-```
-
-You will also need to add the variable node to the list of nodes of your prosemirror schema and the variable view to the list of nodeviews like `variable: variableView(controller)` imported from:
-
+For each of these variable types, a node-spec and node-view are defined. You can import them like this:
 ```js
 import {
-  variable,
-  variableView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
-
+  codelist,
+  codelistView,
+  location,
+  locationView,
+  number,
+  numberView,
+  text_variable,
+  textVariableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 ```
 
-### Configuring the plugin
+The date-variable node-spec and node-view are defined in the `rdfa-date-plugin`.
 
+For each of the variable-types you want to include in your editor instance, you should add the corresponding node-spec to your schema and the node-view to the `nodeViews` editor argument.
 
-You can configure the card with the following attributes:
+### Inserting variables into a document
+
+This addon includes an insert-component for each of these variable types:
+- `variable-plugin/text/insert`
+- `variable-plugin/number/insert`
+- `variable-plugin/date/insert`
+- `variable-plugin/location/insert`
+- `variable-plugin/codelist/insert`
+
+Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
+
+These insert-components should not be used on their own, but are to be used in combination with the `variable-plugin/insert-variable-card` component. The responsibility of this component is two-fold:
+- It allows a user to select a variable type.
+- The correct insert component corresponding to the user-selected variable type is shown.
+
+The `variable-plugin/insert-variable-card` can be easily configured: it expects two arguments:
+- `controller`: An instance of the `SayController` class
+- `variableTypes`: A list of `VariableConfig` objects. Each variable-config contains the label which should be displayed in the variable-select dropdown; the path to the insert-variable component and optionally an `options` argument object which should be passed to the insert-variable component.
+ * The `VariableConfig` type is defined as follows:
+ ```js
+  type VariableConfig = {
+    label: string;
+    component: {
+      path: string;
+      options?: unknown;
+    };
+  };
+ ```
+
+#### An example
+To allows users to insert variables into a document, add the following to the editor sidebar in your template:
+```hbs
+<VariablePlugin::InsertVariableCard
+  @controller={{this.controller}}
+  @variableTypes={{this.variableTypes}}
+/>
+```
+`this.controller` is an instance of `SayController` and `this.variableTypes` is the list of `VariableConfig` objects which should be defined in your controller/component class:
 
 ```js
-{
-  endpoint: 'https://dev.roadsigns.lblod.info/sparql', // the fallback endpoint which should be used for codelists which do not have a `dct:source` property.
-  zonalLocationCodelistUri:
-    'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF',
-  nonZonalLocationCodelistUri:
-    'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2',
+get variableTypes() {
+  return [
+    {
+      label: 'text',
+      component: {
+        path: 'variable-plugin/text/insert',
+      },
+    },
+    {
+      label: 'number',
+      component: {
+        path: 'variable-plugin/number/insert',
+      },
+    },
+    {
+      label: 'date',
+      component: {
+        path: 'variable-plugin/date/insert',
+      },
+    },
+    {
+      label: 'location',
+      component: {
+        path: 'variable-plugin/location/insert',
+        options: {
+          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        },
+      },
+    },
+    {
+      label: 'codelist',
+      component: {
+        path: 'variable-plugin/codelist/insert',
+        options: {
+          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        },
+      },
+    },
+  ];
 }
 ```
-The most important attributes are `zonalLocationCodelistUri` and `nonZonalLocationCodelistUri` that are the uri that the location codelists have on your backend.
+
+As you can see, both the `location` and `codelist` insert-components require an endpoint to be provided. They will use it to fetch the codelists/locations.
+Aside from the endpoint, the `codelist` insert-component may optionally expect a publisher argument which it will use to limit the codelist fetch to a specific publisher.
+
+### Editing variables in a document
+Each of the variables provided by this addon have a different editing experiences and use different components:
+
+#### The text variable
+Editing a text variable requires no extra components aside from its node-spec and node-view. A user can just type into the text variable directly
+
+#### The number variable
+Editing a number variable can be done in its nodeview directly. When a user clicks on a number variable in a document, it opens a popup allow you to fill in a number.
+
+#### The date variable
+The edit component for the date variable can be found in the [rdfa-date-plugin section](#rdfa-date-plugin)
+
+#### The location variable
+This addon provides a seperate edit component which allows users to fill in location variables in a document.
+This component can be added to the sidebar of an editor instance in a template as follows:
+```hbs
+<VariablePlugin::Location::Edit 
+  @controller={{this.controller}} 
+  @options={{this.locationEditOptions}}
+/>
+```
+Where `this.locationEditOptions` is a `LocationEditOptions` object used to configure the edit component. It can be defined as e.g.:
+```js
+get locationEditOptions() {
+  return {
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch location values if the location variable has no `source` attribute
+      zonalLocationCodelistUri:
+        'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF', //the uri the edit component should search for if the location variable is included in a zonal traffic measure
+      nonZonalLocationCodelistUri:
+        'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2', // the uri the edit component should search for if the location variable is included in a non-zonal traffic measure
+    };
+}
+```
+
+#### The codelist variable
+This addon provides a seperate edit component which allows users to fill in codelist variables in a document.
+This component can be added to the sidebar of an editor instance in a template as follows:
+```hbs
+<VariablePlugin::Codelist::Edit 
+  @controller={{this.controller}} 
+  @options={{this.codelistEditOptions}}
+/>
+```
+Where `this.codelistEditOptions` is a `CodelistEditOptions` object used to configure the edit component. It can be defined as e.g.:
+```js
+get codelistEditOptions() {
+  return {
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch codelist values if the codelist variable has no `source` attribute
+    };
+}
+```
 
 ## validation-plugin
 
