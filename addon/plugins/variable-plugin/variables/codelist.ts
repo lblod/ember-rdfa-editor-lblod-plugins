@@ -114,7 +114,7 @@ const emberNodeConfig: EmberNodeConfig = {
   name: 'codelist',
   componentPath: 'variable-plugin/variable/nodeview',
   inline: true,
-  group: 'inline',
+  group: 'inline variable',
   content: 'inline*',
   atom: true,
   recreateUri: true,

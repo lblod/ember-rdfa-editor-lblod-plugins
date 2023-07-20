@@ -92,7 +92,7 @@ const emberNodeConfig: EmberNodeConfig = {
   name: 'location',
   componentPath: 'variable-plugin/variable/nodeview',
   inline: true,
-  group: 'inline',
+  group: 'inline variable',
   content: 'inline*',
   atom: true,
   recreateUri: true,

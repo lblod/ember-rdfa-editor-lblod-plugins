@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Addition of documentation on the article-structure plugin
+- Addition of `variable` group to each variable node-spec.
 
 ### Fixed
 - When a number is too big to be converted to words, display it numerically.
