@@ -20,7 +20,7 @@ type Args = {
   options: CodelistInsertOptions;
 };
 
-export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {
+export default class CodelistInsertComponent extends Component<Args> {
   @tracked selectedSubtype?: CodeList;
   @tracked label?: string;
 
