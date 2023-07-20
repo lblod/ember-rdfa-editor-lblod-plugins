@@ -11,12 +11,13 @@ import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
 import { v4 as uuidv4 } from 'uuid';
 
+export type CodelistInsertOptions = {
+  publisher?: string;
+  endpoint: string;
+};
 type Args = {
   controller: SayController;
-  options: {
-    publisher: string;
-    endpoint: string;
-  };
+  options: CodelistInsertOptions;
 };
 
 export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {

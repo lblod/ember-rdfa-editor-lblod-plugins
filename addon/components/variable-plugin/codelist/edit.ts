@@ -10,12 +10,12 @@ import { NodeSelection, ProseParser } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
 import { trackedReset } from 'tracked-toolbox';
-export type CodeListEditOptions = {
+export type CodelistEditOptions = {
   endpoint: string;
 };
 type Args = {
   controller: SayController;
-  options: CodeListEditOptions;
+  options: CodelistEditOptions;
 };
 
 export default class CodelistEditComponent extends Component<Args> {

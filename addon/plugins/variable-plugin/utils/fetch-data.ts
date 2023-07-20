@@ -70,7 +70,7 @@ export type CodeList = {
   label?: string;
 };
 
-function generateCodeListsByPublisherQuery(publisher: string): string {
+function generateCodeListsByPublisherQuery(publisher?: string): string {
   const codeListOptionsQuery = `
     PREFIX lblodMobilitiet: <http://data.lblod.info/vocabularies/mobiliteit/>
     PREFIX dct: <http://purl.org/dc/terms/>
@@ -93,7 +93,7 @@ function generateCodeListsByPublisherQuery(publisher: string): string {
 
 export async function fetchCodeListsByPublisher(
   endpoint: string,
-  publisher: string,
+  publisher?: string,
 ): Promise<CodeList[]> {
   const codelistsOptionsQueryResult = await executeQuery({
     endpoint,
