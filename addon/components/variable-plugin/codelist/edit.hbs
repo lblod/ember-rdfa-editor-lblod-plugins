@@ -1,0 +1,36 @@
+{{#if this.showCard}}
+  <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
+    <c.header>
+      <AuHeading @level="3" @skin="6">
+        {{t "variable-plugin.enter-variable-value"}}
+      </AuHeading>
+    </c.header>
+    <c.content>
+      <AuLabel for='label'>
+        {{this.label}}
+      </AuLabel>
+      {{#if this.multiSelect}}
+        <PowerSelectMultiple
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{this.codelistOptions.value.options}}
+          @selected={{this.selectedCodelistOption}}
+          @onChange={{this.updateCodelistOption}} as |option|
+        >
+          {{option.label}}
+        </PowerSelectMultiple>
+      {{else}}
+        <PowerSelect
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{this.codelistOptions.value.options}}
+          @selected={{this.selectedCodelistOption}}
+          @onChange={{this.updateCodelistOption}} as |option|
+        >
+          {{option.label}}
+        </PowerSelect>
+      {{/if}}
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedCodelistOption}}>Voeg in</AuButton>
+    </c.content>
+  </AuCard>
+{{/if}}

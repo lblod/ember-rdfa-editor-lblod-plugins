@@ -85,6 +85,7 @@
               @controller={{this.controller}}
               @options={{this.config.date}}
             />
+            <VariablePlugin::Codelist::Edit @controller={{this.controller}} @options={{this.codelistOptions}}/>
             {{!-- <VariablePlugin::TemplateVariableCard @controller={{this.controller}}  @options={{this.config.templateVariable}}/> --}}
           </Sidebar>
           {{/if}}
