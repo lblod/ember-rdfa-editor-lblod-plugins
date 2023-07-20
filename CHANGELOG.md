@@ -12,9 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - When a number is too big to be converted to words, display it numerically.
+- Can only insert a number variable with a minimum that is smaller than its maximum
 ### Changed
 - Make `errorMessage` of number input modal reactive to attribute changes
+- Number variable input box has a cleaner UI by adjusting the top margins.
+- Demo uses `initialize` and `docWithConfig` introduced in `ember-rdfa-editor@4.0.0`
 ### Dependencies
+- Bumps `@lblod/ember-rdfa-editor` from 3.10.0 to 4.0.0
 - Bumps `@typescript-eslint/parser` from 5.60.0 to 5.61.0
 - Bumps `@tsconfig/ember` from 1.0.1 to 3.0.0
 - Bumps `fetch-sparql-endpoint` from 3.1.1 to 3.3.3
@@ -28,11 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `word-wrap` from 1.2.3 to 1.2.4
 - Pin `ember-auto-import` to 2.5.x
 
-### Changed
-- Number variable input box has a cleaner UI by adjusting the top margins.
 
-### Fixed
-- Can only insert a number variable with a minimum that is smaller than its maximum
+
 
 ## [8.4.1] - 2023-07-06
 
