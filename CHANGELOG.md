@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - When a number is too big to be converted to words, display it numerically.
 - Can only insert a number variable with a minimum that is smaller than its maximum
+- Fetch public snippets
 ### Changed
 - Make `errorMessage` of number input modal reactive to attribute changes
 - Number variable input box has a cleaner UI by adjusting the top margins.
@@ -31,8 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `tracked-built-ins` from 3.1.0 to 3.1.1
 - Bumps `word-wrap` from 1.2.3 to 1.2.4
 - Pin `ember-auto-import` to 2.5.x
-
-
 
 
 ## [8.4.1] - 2023-07-06

@@ -177,7 +177,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         interactive: true,
       },
       snippet: {
-        endpoint: 'http://localhost/sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info',
       },
     };
   }
