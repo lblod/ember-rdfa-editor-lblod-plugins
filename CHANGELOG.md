@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add template-comments plugin
+  - A plugin to insert and edit template comments (as a "block")
+  - can be inserted anywhere
+  - have a specific rdfa-attribute so they can be removed at publishing
+
 ## [9.0.1] - 2023-07-24
 
 ### Changed
