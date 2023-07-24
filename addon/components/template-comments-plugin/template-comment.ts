@@ -1,25 +1,10 @@
 import Component from '@glimmer/component';
-import { PluginConfig, Schema, inputRules } from '@lblod/ember-rdfa-editor';
+import { PluginConfig, inputRules } from '@lblod/ember-rdfa-editor';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
-  hard_break,
-  paragraph,
-  repaired_block,
-  text,
-} from '@lblod/ember-rdfa-editor/nodes';
-import {
-  bullet_list,
   bullet_list_input_rule,
-  list_item,
-  ordered_list,
   ordered_list_input_rule,
 } from '@lblod/ember-rdfa-editor/plugins/list';
-import {
-  strikethrough,
-  strong,
-  underline,
-} from '@lblod/ember-rdfa-editor/plugins/text-style';
-import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
 import { baseKeymap } from '@lblod/ember-rdfa-editor/core/keymap';
 
 export default class TemplateCommentsPluginTemplateCommentComponent extends Component<EmberNodeArgs> {
@@ -28,30 +13,7 @@ export default class TemplateCommentsPluginTemplateCommentComponent extends Comp
   }
 
   get schema() {
-    return new Schema({
-      nodes: {
-        doc: {
-          content: 'block+',
-        },
-        paragraph,
-        repaired_block,
-        placeholder,
-
-        text,
-
-        hard_break,
-
-        // currently a list_item can create an error when it is in an embedded editor
-        list_item,
-        ordered_list,
-        bullet_list,
-      },
-      marks: {
-        strong,
-        underline,
-        strikethrough,
-      },
-    });
+    return this.args.controller.schema;
   }
 
   get keymap() {
