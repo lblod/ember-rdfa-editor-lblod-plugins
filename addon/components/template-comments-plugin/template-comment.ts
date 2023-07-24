@@ -17,12 +17,7 @@ export default class TemplateCommentsPluginTemplateCommentComponent extends Comp
   }
 
   get keymap() {
-    const keymap = baseKeymap(this.schema, {
-      embeddedConfig: {
-        state: this.outerView.state,
-        dispatch: this.outerView.dispatch.bind(this),
-      },
-    });
+    const keymap = baseKeymap(this.schema);
     // bind ctrl+i to nothing, so it still gets catched by prosemirror
     // otherwise the browser will see this as a key pressed, which can be confusing for user.
     return {
