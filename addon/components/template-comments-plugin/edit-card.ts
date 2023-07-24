@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor/addon';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
 
 type Args = {
   controller: SayController;
@@ -15,15 +16,19 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
     return this.controller.schema.nodes.templateComment;
   }
 
-  // A template comment is an atom node ("leaf node"). This means it can't be found
-  // with node finders like `getParentOfType`. `.nodeAfter` will give the template comment as it is atom.
   get templateComment() {
-    const currentSelection = this.controller.mainEditorState.selection;
-    const maybeCommentNode = currentSelection.$from.nodeAfter;
-    if (maybeCommentNode?.type === this.commentType) {
-      return { node: maybeCommentNode, pos: currentSelection.$from.pos };
+    const { selection } = this.controller.mainEditorState;
+    if (
+      selection instanceof NodeSelection &&
+      selection.node.type === this.commentType
+    ) {
+      const comment = {
+        node: selection.node,
+        pos: selection.from,
+      };
+      return comment;
     } else {
-      return null;
+      return;
     }
   }
 
