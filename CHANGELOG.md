@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Dependencies
 - Bumps `release-it` from 15.5.0 to 15.11.0
+- Bumps `@codemirror/lang-html` from 6.4.3 to 6.4.5
 
 ## [9.0.1] - 2023-07-24
 
