@@ -1,4 +1,4 @@
-FROM madnificent/ember:4.9.2 as builder
+FROM madnificent/ember:4.12.1-node_18 as builder
 
 LABEL maintainer="info@redpencil.io"
 
@@ -6,5 +6,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-EXPOSE 80
-CMD ["ember", "s", "--port", "80"]
+RUN ember build -prod
+
+FROM semtech/static-file-service:0.2.0
+ENV EMBER_GN_FEATURE_REGULATORY_STATEMENTS=false
+COPY --from=builder /app/dist /data
