@@ -256,6 +256,13 @@ snippet-plugin:
       error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
       error-outro: Moest dit probleem aanhouden, neem contact op met
 
+template-comments-plugin:
+  placeholder: Voeg een toelichtings- of voorbeeldbepaling in
+  long-title: Toelichtings- of voorbeeldbepaling
+  insert:
+    title: Toelichtings- of voorbeeldbepaling invoegen
+  edit:
+    remove: Verwijder Toelichtings- of voorbeeldbepaling
 pagination:
   next: Volgende pagina
   previous: Vorige pagina

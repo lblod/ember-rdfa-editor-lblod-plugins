@@ -72,6 +72,9 @@
                 @controller={{this.controller}}
                 @config={{this.config.snippet}}
               />
+              <TemplateCommentsPlugin::Insert
+                @controller={{this.controller}}
+              />
             </Sidebar.Collapsible>
             <VariablePlugin::InsertVariableCard
                 @controller={{this.controller}}
@@ -84,6 +87,9 @@
             <RdfaDatePlugin::Card
               @controller={{this.controller}}
               @options={{this.config.date}}
+            />
+            <TemplateCommentsPlugin::EditCard
+              @controller={{this.controller}}
             />
             <VariablePlugin::TemplateVariableCard @controller={{this.controller}}  @options={{this.config.templateVariable}}/>
           </Sidebar>

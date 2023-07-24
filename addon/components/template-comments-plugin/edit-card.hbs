@@ -1,0 +1,28 @@
+{{#if this.isInsideComment}}
+  <AuCard
+    @flex={{true}}
+    @divided={{true}}
+    @expandable={{false}}
+    @shadow={{true}}
+    @size='flush' as |c|
+  >
+    <c.content class='au-c-content--small'>
+      <AuList
+        @divider={{true}}
+        class='au-u-padding-top-tiny au-u-padding-bottom-tiny' as |Item|
+      >
+        <Item>
+          <AuButton
+            @icon='bin'
+            @iconAlignment='left'
+            @skin='link'
+            @alert={{true}}
+            {{on 'click' this.remove}}
+          >
+            {{t 'template-comments-plugin.edit.remove'}}
+          </AuButton>
+        </Item>
+      </AuList>
+    </c.content>
+  </AuCard>
+{{/if}}

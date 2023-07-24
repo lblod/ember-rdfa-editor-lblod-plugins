@@ -1,0 +1,21 @@
+<AuAlert
+  @size='small'
+  @title={{t 'template-comments-plugin.long-title'}}
+  @skin='info'
+  @icon='circle-info'
+  class='template-comment'
+>
+  <em>
+    <EmberNode::EmbeddedEditor
+      @controller={{@controller}}
+      @node={{@node}}
+      @view={{@view}}
+      @getPos={{@getPos}}
+      @selected={{@selected}}
+      @placeholder={{t 'template-comments-plugin.placeholder'}}
+      @schema={{this.schema}}
+      @keymap={{this.keymap}}
+      @plugins={{this.plugins}}
+    />
+  </em>
+</AuAlert>

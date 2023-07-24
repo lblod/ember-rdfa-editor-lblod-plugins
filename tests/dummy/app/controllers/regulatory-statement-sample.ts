@@ -71,6 +71,10 @@ import {
   numberView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/number';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
+import {
+  templateComment,
+  templateCommentView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -97,6 +101,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         list_item,
         ordered_list,
         bullet_list,
+        templateComment,
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.config.date),
@@ -194,6 +199,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
       number: numberView(controller),
+      templateComment: templateCommentView(controller),
     };
   };
   @tracked plugins: Plugin[] = [
