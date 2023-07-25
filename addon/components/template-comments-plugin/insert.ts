@@ -46,7 +46,7 @@ export default class TemplateCommentsPluginInsertCardComponent extends Component
               .replaceRangeWith(
                 parent.start,
                 parent.start,
-                this.schema.nodes.templateComment.create(),
+                this.schema.nodes.templateComment.createAndFill(),
               )
               .scrollIntoView(),
           );

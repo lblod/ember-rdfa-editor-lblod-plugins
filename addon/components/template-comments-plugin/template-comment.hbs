@@ -6,16 +6,6 @@
   class='template-comment'
 >
   <em>
-    <EmberNode::EmbeddedEditor
-      @controller={{@controller}}
-      @node={{@node}}
-      @view={{@view}}
-      @getPos={{@getPos}}
-      @selected={{@selected}}
-      @placeholder={{t 'template-comments-plugin.placeholder'}}
-      @schema={{this.schema}}
-      @keymap={{this.keymap}}
-      @plugins={{this.plugins}}
-    />
+   {{yield}}
   </em>
 </AuAlert>
