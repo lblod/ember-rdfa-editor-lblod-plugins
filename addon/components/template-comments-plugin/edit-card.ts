@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor/addon';
-import { NodeSelection } from '@lblod/ember-rdfa-editor';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 type Args = {
   controller: SayController;
@@ -18,18 +18,7 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
 
   get templateComment() {
     const { selection } = this.controller.mainEditorState;
-    if (
-      selection instanceof NodeSelection &&
-      selection.node.type === this.commentType
-    ) {
-      const comment = {
-        node: selection.node,
-        pos: selection.from,
-      };
-      return comment;
-    } else {
-      return;
-    }
+    return findParentNodeOfType(this.commentType)(selection);
   }
 
   get isInsideComment() {
@@ -41,14 +30,9 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
     const comment = this.templateComment;
     if (!comment) return;
     const { node: node, pos: pos } = comment;
-    // when removing, we are inside an embedded editor, but want to remove
-    // a node based on the main editor. Hence the view has to be specified.
-    this.controller.withTransaction(
-      (tr) => {
-        tr.replace(pos, pos + node.nodeSize);
-        return tr;
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.withTransaction((tr) => {
+      tr.replace(pos, pos + node.nodeSize);
+      return tr;
+    });
   }
 }
