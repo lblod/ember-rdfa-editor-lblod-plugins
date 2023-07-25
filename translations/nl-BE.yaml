@@ -257,7 +257,6 @@ snippet-plugin:
       error-outro: Moest dit probleem aanhouden, neem contact op met
 
 template-comments-plugin:
-  placeholder: Voeg een toelichtings- of voorbeeldbepaling in
   long-title: Toelichtings- of voorbeeldbepaling
   insert:
     title: Toelichtings- of voorbeeldbepaling invoegen

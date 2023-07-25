@@ -253,7 +253,6 @@ snippet-plugin:
       error-outro: In case this problem keeps occurring, please contact
 
 template-comments-plugin:
-  placeholder: Add a comment
   long-title: Template comment or example
   insert:
     title: Add template comment or example
