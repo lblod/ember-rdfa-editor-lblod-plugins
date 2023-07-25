@@ -5,6 +5,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { paragraphWithConfig } from '@lblod/ember-rdfa-editor/nodes/paragraphWithConfig';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
@@ -12,12 +13,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     componentPath: 'template-comments-plugin/template-comment',
     inline: false,
     group: 'block',
-    defining: true,
-    content: 'block*',
+    content: 'block+',
     draggable: false,
     selectable: true,
-    needsFFKludge: true,
-    atom: true,
+    isolating: true,
+    atom: false,
     attrs: {},
     toDOM() {
       return [
@@ -51,3 +51,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 
 export const templateComment = createEmberNodeSpec(emberNodeConfig());
 export const templateCommentView = createEmberNodeView(emberNodeConfig());
+export const templateCommentNodes = {
+  templateComment: templateComment,
+  templateCommentParagraph: paragraphWithConfig({
+    marks: 'strong underline strikethrough',
+  }),
+};
