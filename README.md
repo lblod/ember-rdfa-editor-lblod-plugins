@@ -640,7 +640,7 @@ Logic to insert a template comment is added with
 <TemplateCommentsPlugin::Insert @controller={{this.controller}}/>
 ```
 
-A button to remove it when selected can be shown with
+Buttons to remove and move it when selected can be shown with
 ```hbs
 <TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
 ```
