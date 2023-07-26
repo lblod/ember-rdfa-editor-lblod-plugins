@@ -22,8 +22,12 @@ export default class TemplateCommentsPluginTemplateCommentComponent extends Comp
   }
 
   get selectionInside() {
-    const { selection } = this.controller.mainEditorState;
-    return !!findParentNodeOfType(this.schema.nodes.templateComment)(selection);
+    const { pos } = this.controller.mainEditorState.selection.$from;
+    const startSelectionInsideNode =
+      this.args.getPos() !== undefined &&
+      pos > this.args.getPos() &&
+      pos < this.args.getPos() + this.args.node.nodeSize;
+    return startSelectionInsideNode;
   }
 
   get keymap() {
