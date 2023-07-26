@@ -6,14 +6,24 @@ import {
   ordered_list_input_rule,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { baseKeymap } from '@lblod/ember-rdfa-editor/core/keymap';
+import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 export default class TemplateCommentsPluginTemplateCommentComponent extends Component<EmberNodeArgs> {
   get outerView() {
     return this.args.view;
   }
 
+  get controller() {
+    return this.args.controller;
+  }
+
   get schema() {
-    return this.args.controller.schema;
+    return this.controller.schema;
+  }
+
+  get selectionInside() {
+    const { selection } = this.controller.mainEditorState;
+    return !!findParentNodeOfType(this.schema.nodes.templateComment)(selection);
   }
 
   get keymap() {

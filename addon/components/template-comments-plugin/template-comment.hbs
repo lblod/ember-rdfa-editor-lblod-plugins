@@ -3,9 +3,11 @@
   @title={{t 'template-comments-plugin.long-title'}}
   @skin='info'
   @icon='circle-info'
-  class='template-comment'
+  class='template-comment {{
+    if this.selectionInside 'ProseMirror-selectednode'
+  }}'
 >
   <em>
-   {{yield}}
+    {{yield}}
   </em>
 </AuAlert>
