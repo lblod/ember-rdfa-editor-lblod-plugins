@@ -257,7 +257,9 @@ template-comments-plugin:
   insert:
     title: Add template comment or example
   edit:
-    remove: Remove template comment or example  
+    remove: Remove template comment or example
+    move-up: Move comment up
+    move-down: Move comment down
 
 pagination:
   next: Next page

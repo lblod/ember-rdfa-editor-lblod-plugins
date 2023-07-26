@@ -262,6 +262,8 @@ template-comments-plugin:
     title: Toelichtings- of voorbeeldbepaling invoegen
   edit:
     remove: Verwijder Toelichtings- of voorbeeldbepaling
+    move-down: Toelichtings- of voorbeeldbepaling naar onder
+    move-up: Toelichtings- of voorbeeldbepaling naar boven
 pagination:
   next: Volgende pagina
   previous: Vorige pagina
