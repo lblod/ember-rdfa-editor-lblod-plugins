@@ -503,7 +503,7 @@ This addon includes an insert-component for each of these variable types:
 
 Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
 
-These insert-components should not be used on their own, but are to be used in combination with the `variable-plugin/insert-variable-card` component. The responsibility of this component is two-fold:
+These insert-components can be used on their own, but can also be used in combination with the `variable-plugin/insert-variable-card` component. The responsibility of this component is two-fold:
 - It allows a user to select a variable type.
 - The correct insert component corresponding to the user-selected variable type is shown.
 
