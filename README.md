@@ -584,7 +584,7 @@ Aside from the endpoint, the `codelist` insert-component may optionally expect a
 Each of the variables provided by this addon have a different editing experiences and use different components:
 
 #### The text variable
-Editing a text variable requires no extra components aside from its node-spec and node-view. A user can just type into the text variable directly
+Editing a text variable requires no extra components aside from its node-spec and node-view. A user can just type into the text variable directly.
 
 #### The number variable
 Editing a number variable can be done in its nodeview directly. When a user clicks on a number variable in a document, it opens a popup allow you to fill in a number.
