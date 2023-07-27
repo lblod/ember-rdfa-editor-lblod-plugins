@@ -509,7 +509,10 @@ These insert-components should not be used on their own, but are to be used in c
 
 The `variable-plugin/insert-variable-card` can be easily configured: it expects two arguments:
 - `controller`: An instance of the `SayController` class
-- `variableTypes`: A list of `VariableConfig` objects. Each variable-config contains the label which should be displayed in the variable-select dropdown; the path to the insert-variable component and optionally an `options` argument object which should be passed to the insert-variable component.
+- `variableTypes`: A list of `VariableConfig` objects. With each `VariableConfig` containing:
+  - the `label` which should be displayed in the variable-select dropdown
+  - the `path` to the insert-variable component 
+  - _optionally_ an `options` argument object which should be passed to the insert-variable component.
  * The `VariableConfig` type is defined as follows:
  ```js
   type VariableConfig = {
