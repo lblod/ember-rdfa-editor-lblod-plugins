@@ -46,6 +46,7 @@ export default class NumberInsertComponent extends Component<Args> {
 
   @action
   insert() {
+	if(this.numberVariableError !== '') return;
     const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
