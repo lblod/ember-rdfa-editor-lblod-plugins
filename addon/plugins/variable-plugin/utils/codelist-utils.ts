@@ -4,6 +4,15 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { CodeListOption } from './fetch-data';
 import { PNode, ProseParser, SayController } from '@lblod/ember-rdfa-editor';
 
+/**
+ *
+ * @param text content of variable option which needs to be inserted
+ * @returns content of variable option where the placeholders (indicated by ${...})
+ * are wrapped in a span with class `mark-highlight-manual`.
+ *
+ * E.g. `This is a variable with ${placeholder}` gets converted to:
+ * `This is a variable with <span class="mark-highlight-manual">${placeholder}</span>`
+ */
 function wrapVariableInHighlight(text: string) {
   return text.replace(
     /\$\{(.+?)\}/g,
