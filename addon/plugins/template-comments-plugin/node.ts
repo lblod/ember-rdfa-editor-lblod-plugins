@@ -55,5 +55,7 @@ export const templateCommentNodes = {
   templateComment: templateComment,
   templateCommentParagraph: paragraphWithConfig({
     marks: 'strong underline strikethrough',
+    // don't add to any groups, so it is only allowed for template comment
+    group: ''
   }),
 };
