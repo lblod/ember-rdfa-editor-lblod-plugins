@@ -5,9 +5,9 @@
   @icon='circle-info'
   class='template-comment {{
     if this.selectionInside 'ProseMirror-selectednode'
-  }}'
+  }} default-cursor'
 >
-  <em>
+  <em class='text-cursor'>
     {{yield}}
   </em>
 </AuAlert>

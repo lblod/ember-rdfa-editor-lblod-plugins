@@ -6,7 +6,6 @@ import {
   ordered_list_input_rule,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { baseKeymap } from '@lblod/ember-rdfa-editor/core/keymap';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 export default class TemplateCommentsPluginTemplateCommentComponent extends Component<EmberNodeArgs> {
   get outerView() {
