@@ -38,8 +38,7 @@ export default class CodelistEditComponent extends Component<Args> {
         pos: selection.from,
       };
       return codelist;
-    } 
-    
+    }
     return;
   });
 
