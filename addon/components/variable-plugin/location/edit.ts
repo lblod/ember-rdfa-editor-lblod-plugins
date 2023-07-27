@@ -7,11 +7,12 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { NodeSelection, ProseParser } from '@lblod/ember-rdfa-editor';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
 import { trackedReset } from 'tracked-toolbox';
+import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 
 export type LocationEditOptions = {
   endpoint: string;
@@ -40,38 +41,10 @@ export default class LocationEditComponent extends Component<Args> {
     if (!this.selectedLocation || !this.selectedLocationOption) {
       return;
     }
-    let htmlToInsert: string;
-    if (Array.isArray(this.selectedLocationOption)) {
-      htmlToInsert = this.selectedLocationOption
-        .map((option) => option.value)
-        .join(', ');
-    } else {
-      htmlToInsert = unwrap(this.selectedLocationOption.value);
-    }
-    htmlToInsert = this.wrapVariableInHighlight(htmlToInsert);
-    const domParser = new DOMParser();
-    const htmlNode = domParser.parseFromString(htmlToInsert, 'text/html');
-    const contentFragment = ProseParser.fromSchema(
-      this.controller.schema,
-    ).parseSlice(htmlNode, {
-      preserveWhitespace: false,
-    }).content;
-    const range = {
-      from: this.selectedLocation.pos + 1,
-      to: this.selectedLocation.pos + this.selectedLocation.node.nodeSize - 1,
-    };
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceWith(range.from, range.to, contentFragment);
-      },
-      { view: this.controller.mainEditorView },
-    );
-  }
-
-  wrapVariableInHighlight(text: string) {
-    return text.replace(
-      /\$\{(.+?)\}/g,
-      '<span class="mark-highlight-manual">${$1}</span>',
+    updateCodelistVariable(
+      this.selectedLocation,
+      this.selectedLocationOption,
+      this.controller,
     );
   }
 

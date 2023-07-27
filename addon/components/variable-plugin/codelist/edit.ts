@@ -6,10 +6,10 @@ import {
   fetchCodeListOptions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
-import { NodeSelection, ProseParser } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'ember-resources/util/function';
 import { trackedReset } from 'tracked-toolbox';
+import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 export type CodelistEditOptions = {
   endpoint: string;
 };
@@ -80,41 +80,10 @@ export default class CodelistEditComponent extends Component<Args> {
     if (!this.selectedCodelist.value || !this.selectedCodelistOption) {
       return;
     }
-    let htmlToInsert: string;
-    if (Array.isArray(this.selectedCodelistOption)) {
-      htmlToInsert = this.selectedCodelistOption
-        .map((option) => option.value)
-        .join(', ');
-    } else {
-      htmlToInsert = unwrap(this.selectedCodelistOption.value);
-    }
-    htmlToInsert = this.wrapVariableInHighlight(htmlToInsert);
-    const domParser = new DOMParser();
-    const htmlNode = domParser.parseFromString(htmlToInsert, 'text/html');
-    const contentFragment = ProseParser.fromSchema(
-      this.args.controller.schema,
-    ).parseSlice(htmlNode, {
-      preserveWhitespace: false,
-    }).content;
-    const range = {
-      from: this.selectedCodelist.value.pos + 1,
-      to:
-        this.selectedCodelist.value.pos +
-        this.selectedCodelist.value.node.nodeSize -
-        1,
-    };
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceWith(range.from, range.to, contentFragment);
-      },
-      { view: this.controller.mainEditorView },
-    );
-  }
-
-  wrapVariableInHighlight(text: string) {
-    return text.replace(
-      /\$\{(.+?)\}/g,
-      '<span class="mark-highlight-manual">${$1}</span>',
+    updateCodelistVariable(
+      this.selectedCodelist.value,
+      this.selectedCodelistOption,
+      this.controller,
     );
   }
 
