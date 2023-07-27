@@ -6,11 +6,12 @@
       </AuHeading>
     </c.header>
     <c.content>
-      <AuLabel for='label'>
+      <AuLabel for='location-select'>
         {{this.label}}
       </AuLabel>
       {{#if this.multiSelect}}
         <PowerSelectMultiple
+          id="location-select"
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.locationOptions.value.options}}
@@ -21,6 +22,7 @@
         </PowerSelectMultiple>
       {{else}}
         <PowerSelect
+          id="location-select"
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.locationOptions.value.options}}

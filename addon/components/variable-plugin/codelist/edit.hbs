@@ -6,11 +6,12 @@
       </AuHeading>
     </c.header>
     <c.content>
-      <AuLabel for='label'>
+      <AuLabel for='codelist-select'>
         {{this.label}}
       </AuLabel>
       {{#if this.multiSelect}}
         <PowerSelectMultiple
+          id="codelist-select"
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.codelistOptions.value.options}}
@@ -21,6 +22,7 @@
         </PowerSelectMultiple>
       {{else}}
         <PowerSelect
+          id="codelist-select"
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.codelistOptions.value.options}}
