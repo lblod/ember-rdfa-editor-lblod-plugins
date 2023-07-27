@@ -467,12 +467,14 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
 
 ## variable-plugin
 
-Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types, but this can be extended:
+Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types:
 - text variable
 - number variable
 - date variable
 - codelist
 - location
+
+Additional variable types can be added in the consuming application or addon.
 
 For each of these variable types, a node-spec and node-view are defined. You can import them like this:
 ```js
