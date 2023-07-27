@@ -1,8 +1,7 @@
-import { findParentNode, canInsert } from '@curvenote/prosemirror-utils';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { Command, SayController } from '@lblod/ember-rdfa-editor';
-import { templateComment } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 
 type Args = {
   controller: SayController;

@@ -21,11 +21,12 @@ export default class TemplateCommentsPluginTemplateCommentComponent extends Comp
   }
 
   get selectionInside() {
-    const { pos } = this.controller.mainEditorState.selection.$from;
+    const { selectPos } = this.controller.mainEditorState.selection.$from;
+    const nodePos = this.args.getPos();
     const startSelectionInsideNode =
-      this.args.getPos() !== undefined &&
-      pos > this.args.getPos() &&
-      pos < this.args.getPos() + this.args.node.nodeSize;
+      nodePos !== undefined &&
+      selectPos > nodePos &&
+      selectPos < nodePos + this.args.node.nodeSize;
     return startSelectionInsideNode;
   }
 
