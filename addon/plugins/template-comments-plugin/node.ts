@@ -13,7 +13,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     componentPath: 'template-comments-plugin/template-comment',
     inline: false,
     group: 'block',
-    content: 'block+',
+    content: '(paragraph | list)+',
     draggable: false,
     selectable: true,
     isolating: true,
