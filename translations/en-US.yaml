@@ -291,6 +291,14 @@ editor-plugins:
         image:
           alt: traffic sign {code}
         no-data-message: No measures could be found.
+  import-snippet:
+    card:
+      title: Import document
+      body:
+        document-available: There is a <a href="{source}" target="_blank" rel="noopener noreferrer">document</a> available.
+        confirmation: Do you wish to insert this document?
+        insert-attachment: Insert attachment
+        insert-document: Insert document
   utils:
     insert: Insert
     cancel: Cancel

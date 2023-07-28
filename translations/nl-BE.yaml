@@ -297,7 +297,14 @@ editor-plugins:
         image:
           alt: verkeersteken {code}
         no-data-message: Er werden geen maatregelen gevonden.
-
+  import-snippet:
+    card:
+      title: Document importeren
+      body:
+        document-available: Er is een <a href="{source}" target="_blank" rel="noopener noreferrer">document</a> beschikbaar.
+        confirmation: Wenst u dit document in te voegen?
+        insert-attachment: Bijlage invoegen
+        insert-document: Document invoegen
   utils:
     insert: Voeg in
     cancel: Annuleer
