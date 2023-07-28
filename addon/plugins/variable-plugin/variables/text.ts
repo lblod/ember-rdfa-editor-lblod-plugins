@@ -87,7 +87,7 @@ export const emberNodeConfig: EmberNodeConfig = {
     mappingResource: {},
     variableInstance: {},
     label: {
-      default: 'text',
+      default: 'tekst',
     },
   },
   toDOM,

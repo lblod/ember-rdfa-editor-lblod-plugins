@@ -46,7 +46,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       default: false,
     },
     label: {
-      default: 'date',
+      default: 'datum',
     },
   },
   leafText: (node: PNode) => {

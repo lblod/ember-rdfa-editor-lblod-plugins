@@ -106,7 +106,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
     label: {
-      default: 'location',
+      default: 'locatie',
     },
   },
   toDOM,

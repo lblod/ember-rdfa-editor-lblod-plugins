@@ -131,7 +131,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
     label: {
-      default: 'codelist',
+      default: 'codelijst',
     },
   },
   toDOM,
