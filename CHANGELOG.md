@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `eslint-plugin-ember` from 11.9.0 to 11.10.0
 - Bumps `@types/ember__runloop` from 4.0.2 to 4.0.3
 
+### Fixed
+- Snippet insertion accounts for wrapping document
+
 ## [9.0.1] - 2023-07-24
 
 ### Changed
