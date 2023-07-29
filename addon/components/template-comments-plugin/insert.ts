@@ -40,8 +40,9 @@ export default class TemplateCommentsPluginInsertCardComponent extends Component
           node.type !== this.controller.schema.nodes.placeholder
         );
       })(selection);
-
       const newTemplateNode = this.schema.nodes.templateComment.createAndFill();
+      if (!newTemplateNode) return false;
+
       if (!parent) {
         // if no parent, selection is somewhere at the top of doc, so insert at start of doc
         if (dispatch) {
