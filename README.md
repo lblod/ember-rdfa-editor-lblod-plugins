@@ -648,6 +648,9 @@ Buttons to remove and move it when selected can be shown with
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
 
+## Releasing
+See the [Release](RELEASE.md) guide.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE.md).
