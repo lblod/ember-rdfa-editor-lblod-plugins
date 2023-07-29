@@ -1,0 +1,13 @@
+<AuAlert
+  @size='small'
+  @title={{t 'template-comments-plugin.long-title'}}
+  @skin='info'
+  @icon='circle-info'
+  class='template-comment {{
+    if this.selectionInside 'ProseMirror-selectednode'
+  }} default-cursor'
+>
+  <em class='text-cursor'>
+    {{yield}}
+  </em>
+</AuAlert>
