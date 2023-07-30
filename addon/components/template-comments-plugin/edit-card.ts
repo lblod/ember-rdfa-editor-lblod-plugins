@@ -1,8 +1,9 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor/addon';
-import { TextSelection } from '@lblod/ember-rdfa-editor';
+import { PNode, ResolvedPos, TextSelection } from '@lblod/ember-rdfa-editor';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { findContentMatchPosRight } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/document-walker';
 
 type Args = {
   controller: SayController;
@@ -43,10 +44,11 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
     const comment = this.templateComment;
     if (!comment) return;
     const { node: node, pos: pos } = comment;
-    const resolvedPos = this.controller.mainEditorState.doc.resolve(pos);
-    const nodeBefore = resolvedPos.nodeBefore;
-    if (!nodeBefore) return;
-    const amountToMove = -nodeBefore.nodeSize;
+    const insertPos = this.findPositionUp(pos, node);
+    if (!insertPos) return;
+
+    const amountToMove = -(pos - insertPos);
+
     const initialCursorPos =
       this.controller.mainEditorState.selection.$head.pos;
     const newPos = pos + amountToMove;
@@ -72,21 +74,25 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
     if (!comment) return;
 
     const { node: commentNode, pos: startPos } = comment;
-    const posAfterComment = startPos + commentNode.nodeSize;
-    const resolvedPos =
-      this.controller.mainEditorState.doc.resolve(posAfterComment);
-    const nodeAfterComment = resolvedPos.nodeAfter;
-    if (!nodeAfterComment) return;
+    const searchStart = startPos + commentNode.nodeSize;
+    const $afterPos = this.resolve(searchStart);
 
-    const amountToMove = commentNode.nodeSize + nodeAfterComment.nodeSize;
+    const posToInsert = findContentMatchPosRight(
+      this.controller.mainEditorState.doc,
+      $afterPos,
+      commentNode.type,
+    );
 
-    const newPos = startPos + amountToMove;
+    if (posToInsert === null) return;
+
+    const amountToMove = posToInsert - startPos;
+
     const initialCursorPos =
       this.controller.mainEditorState.selection.$head.pos;
     const newCursorPos = initialCursorPos + amountToMove;
 
     this.controller.withTransaction((tr) => {
-      tr.insert(newPos, commentNode);
+      tr.insert(posToInsert, commentNode);
       // do delete after setting the selection,
       //so the selection position can be easily constructed
       const mappedSelection = TextSelection.create(
