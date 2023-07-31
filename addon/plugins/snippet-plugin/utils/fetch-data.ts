@@ -24,7 +24,11 @@ const buildCountQuery = ({ name }: Filter) => {
                pav:createdOn ?createdOn .
           OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
-          ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
+          ${
+            name
+              ? `FILTER (CONTAINS(LCASE(?title), "${name.toLowerCase()}"))`
+              : ''
+          }
       }
       `;
 };
@@ -50,7 +54,11 @@ const buildFetchQuery = ({
           ?publishedSnippetVersion dct:title ?title ;
                ext:editorDocumentContent ?content ;
                pav:createdOn ?createdOn .
-          ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
+          ${
+            name
+              ? `FILTER (CONTAINS(LCASE(?title), "${name.toLowerCase()}"))`
+              : ''
+          }
           OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
       }
