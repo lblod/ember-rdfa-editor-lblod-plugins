@@ -252,6 +252,15 @@ snippet-plugin:
       error-intro: 'An error occurred while loading results'
       error-outro: In case this problem keeps occurring, please contact
 
+template-comments-plugin:
+  long-title: Template comment or example
+  insert:
+    title: Add template comment or example
+  edit:
+    remove: Remove template comment or example
+    move-up: Move comment up
+    move-down: Move comment down
+
 pagination:
   next: Next page
   previous: Previous page

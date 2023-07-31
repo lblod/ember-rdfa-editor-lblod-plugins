@@ -6,7 +6,6 @@ import {
 import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
-  DCT,
   EXT,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -19,6 +18,12 @@ import {
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  contentSpan,
+  instanceSpan,
+  mappingSpan,
+  typeSpan,
+} from '../utils/dom-constructors';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -74,43 +79,36 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     value,
   } = node.attrs;
 
-  let content: string;
+  let humanReadableContent: string;
 
   if (isNumber(value)) {
     if (writtenNumber) {
-      content = numberToWords(Number(value), { lang: 'nl' });
+      humanReadableContent = numberToWords(Number(value), { lang: 'nl' });
     } else {
-      content = value as string;
+      humanReadableContent = value as string;
     }
   } else {
-    content = 'Voeg getal in';
+    humanReadableContent = 'Voeg getal in';
   }
 
-  return [
-    'span',
+  return mappingSpan(
+    mappingResource,
     {
-      resource: mappingResource as string,
-      typeof: EXT('Mapping').prefixed,
       'data-label': label as string,
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
     },
-    [
-      'span',
-      { property: EXT('instance'), resource: variableInstance as string },
-    ],
-    ['span', { property: DCT('type').prefixed, content: 'number' }],
-    [
-      'span',
+    instanceSpan(variableInstance),
+    typeSpan('number'),
+    contentSpan(
       {
-        property: EXT('content').prefixed,
         content: (value as string | null) ?? '',
         datatype: XSD('integer').prefixed,
       },
-      content,
-    ],
-  ];
+      humanReadableContent,
+    ),
+  );
 };
 
 const emberNodeConfig: EmberNodeConfig = {

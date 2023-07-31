@@ -1,7 +1,4 @@
-import {
-  DCT,
-  EXT,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
@@ -16,6 +13,13 @@ import {
   parseVariableSource,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+import {
+  contentSpan,
+  instanceSpan,
+  mappingSpan,
+  sourceSpan,
+  typeSpan,
+} from '../utils/dom-constructors';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -53,39 +57,16 @@ const parseDOM = [
 
 const toDOM = (node: PNode): DOMOutputSpec => {
   const { mappingResource, variableInstance, source, label } = node.attrs;
-
-  const sourceSpan = source
-    ? [
-        [
-          'span',
-          {
-            property: DCT('source').prefixed,
-            resource: source as string,
-          },
-        ],
-      ]
-    : [];
-  return [
-    'span',
+  return mappingSpan(
+    mappingResource,
     {
-      resource: mappingResource as string,
-      typeof: EXT('Mapping').prefixed,
       'data-label': label as string,
     },
-    [
-      'span',
-      { property: EXT('instance'), resource: variableInstance as string },
-    ],
-    ['span', { property: DCT('type').prefixed, content: 'location' }],
-    ...sourceSpan,
-    [
-      'span',
-      {
-        property: EXT('content').prefixed,
-      },
-      0,
-    ],
-  ];
+    instanceSpan(variableInstance),
+    typeSpan('location'),
+    source ? sourceSpan(source) : '',
+    contentSpan({}, 0),
+  );
 };
 
 const emberNodeConfig: EmberNodeConfig = {

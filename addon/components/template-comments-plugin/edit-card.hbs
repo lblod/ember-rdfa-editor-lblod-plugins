@@ -1,0 +1,50 @@
+{{#if this.isInsideComment}}
+  <AuCard
+    @flex={{true}}
+    @divided={{true}}
+    @expandable={{false}}
+    @shadow={{true}}
+    @size='flush' as |c|
+  >
+    <c.content class='au-c-content--small'>
+      <AuList
+        @divider={{true}}
+        class='au-u-padding-top-tiny au-u-padding-bottom-tiny' as |Item|
+      >
+        <Item>
+          <AuButton
+            @icon='arrow-up'
+            @iconAlignment='left'
+            @skin='link'
+            @alert={{true}}
+            {{on 'click' this.moveUp}}
+          >
+            {{t 'template-comments-plugin.edit.move-up'}}
+          </AuButton>
+        </Item>
+        <Item>
+          <AuButton
+            @icon='bin'
+            @iconAlignment='left'
+            @skin='link'
+            @alert={{true}}
+            {{on 'click' this.remove}}
+          >
+            {{t 'template-comments-plugin.edit.remove'}}
+          </AuButton>
+        </Item>
+        <Item>
+          <AuButton
+            @icon='arrow-down'
+            @iconAlignment='left'
+            @skin='link'
+            @alert={{true}}
+            {{on 'click' this.moveDown}}
+          >
+            {{t 'template-comments-plugin.edit.move-down'}}
+          </AuButton>
+        </Item>
+      </AuList>
+    </c.content>
+  </AuCard>
+{{/if}}

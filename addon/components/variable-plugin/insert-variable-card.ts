@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
+import { hasGroups } from '@lblod/ember-rdfa-editor/utils/node-utils';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
@@ -33,6 +34,12 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   }
 
   get showCard() {
-    return !this.controller.inEmbeddedView;
+    // Do not show the card if a variable is selected.
+    const { selection } = this.controller.mainEditorState;
+    if (selection instanceof NodeSelection) {
+      return !hasGroups(selection.node, 'variable');
+    } else {
+      return true;
+    }
   }
 }

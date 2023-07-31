@@ -4,7 +4,6 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
-  DCT,
   EXT,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -17,10 +16,15 @@ import {
   parseLabel,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+import {
+  mappingSpan,
+  typeSpan,
+} from '../../variable-plugin/utils/dom-constructors';
+import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
-  group: 'inline',
+  group: 'inline variable',
   componentPath: 'rdfa-date-plugin/date',
   inline: true,
   selectable: true,
@@ -82,19 +86,14 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       ...(!!value && { content: value as string }),
     };
     if (mappingResource) {
-      return [
-        'span',
-        {
-          resource: mappingResource as string,
-          typeof: EXT('Mapping').prefixed,
-          class: 'date',
-          'data-label': label as string,
-        },
-        ['span', { property: DCT('type').prefixed, content: 'date' }],
-        ['span', dateAttrs, humanReadableDate],
-      ];
+      return mappingSpan(
+        mappingResource,
+        { class: 'date', 'data-label': label as string },
+        typeSpan('date'),
+        span(dateAttrs, humanReadableDate),
+      );
     } else {
-      return ['span', { class: 'date', ...dateAttrs }, humanReadableDate];
+      return span({ class: 'date', ...dateAttrs }, humanReadableDate);
     }
   },
   parseDOM: [
