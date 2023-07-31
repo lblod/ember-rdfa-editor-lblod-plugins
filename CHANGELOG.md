@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 - Bumps `@types/uuid` from 9.0.0 to 9.0.2
 - Bumps `@types/rdf-validate-shacl` from 0.4.0 to 0.4.2
+- Bumps `@types/ember__polyfills` from 4.0.1 to 4.0.2
 
 ## [9.1.0] - 2023-07-29
 
