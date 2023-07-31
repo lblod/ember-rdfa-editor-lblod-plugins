@@ -74,6 +74,10 @@ import {
   text_variable,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
+import {
+  templateCommentNodes,
+  templateCommentView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -86,53 +90,50 @@ export default class RegulatoryStatementSampleController extends Controller {
     say: 'https://say.data.gift/ns/',
   };
 
-  get schema() {
-    return new Schema({
-      nodes: {
-        doc: docWithConfig({
-          content:
-            'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
-        }),
-        paragraph,
-        document_title,
-        repaired_block,
+  schema = new Schema({
+    nodes: {
+      doc: docWithConfig({
+        content:
+          'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
+      }),
+      paragraph,
+      document_title,
+      repaired_block,
+      list_item,
+      ordered_list,
+      bullet_list,
+      ...templateCommentNodes,
+      placeholder,
+      ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+      date: date(this.config.date),
+      text_variable,
+      number,
+      location,
+      codelist,
+      ...STRUCTURE_NODES,
+      heading,
+      blockquote,
+      horizontal_rule,
+      code_block,
 
-        list_item,
-        ordered_list,
-        bullet_list,
-        placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-        date: date(this.config.date),
-        text_variable,
-        number,
-        location,
-        codelist,
-        ...STRUCTURE_NODES,
-        heading,
-        blockquote,
+      text,
 
-        horizontal_rule,
-        code_block,
+      image,
 
-        text,
-
-        image,
-
-        hard_break,
-        block_rdfa,
-        table_of_contents: table_of_contents(this.config.tableOfContents),
-        invisible_rdfa,
-        link: link(this.config.link),
-      },
-      marks: {
-        inline_rdfa,
-        em,
-        strong,
-        underline,
-        strikethrough,
-      },
-    });
-  }
+      hard_break,
+      block_rdfa,
+      table_of_contents: table_of_contents(this.config.tableOfContents),
+      invisible_rdfa,
+      link: link(this.config.link),
+    },
+    marks: {
+      inline_rdfa,
+      em,
+      strong,
+      underline,
+      strikethrough,
+    },
+  });
 
   get codelistOptions() {
     return {
@@ -232,7 +233,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         interactive: true,
       },
       snippet: {
-        endpoint: 'http://localhost/sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info',
       },
     };
   }
@@ -251,6 +252,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       text_variable: textVariableView(controller),
       location: locationView(controller),
       codelist: codelistView(controller),
+      templateComment: templateCommentView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

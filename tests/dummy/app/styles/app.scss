@@ -13,6 +13,7 @@
 @import 'generic-rdfa-variable';
 @import 'document-title-plugin';
 @import 'snippet-plugin';
+@import 'template-comments-plugin';
 
 div.table-of-contents {
   padding: $au-unit-small !important;

@@ -9,17 +9,21 @@ type Pagination = { pageNumber: number; pageSize: number };
 
 const buildCountQuery = ({ name }: Filter) => {
   return `
+      PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-      SELECT (COUNT(?snippetDocument) AS ?count)
+      SELECT (COUNT(?publishedSnippetVersion) AS ?count)
       WHERE {
-          ?snippetList a ext:SnippetList ;
-              ext:hasSnippet/pav:hasCurrentVersion ?snippetDocument .
-          ?snippetDocument dct:title ?title ;
-              ext:editorDocumentContent ?content ;
-              pav:createdOn ?createdOn .
+          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
+                             pav:hasCurrentVersion ?publishedSnippetVersion .
+          ?publishedSnippetVersion dct:title ?title ;
+               ext:editorDocumentContent ?content ;
+               pav:createdOn ?createdOn .
+          OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
+          FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
           ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
       }
       `;
@@ -33,18 +37,22 @@ const buildFetchQuery = ({
   pagination: Pagination;
 }) => {
   return `
+      PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
       SELECT DISTINCT ?title ?content ?createdOn
       WHERE {
-          ?snippetList a ext:SnippetList ;
-              ext:hasSnippet/pav:hasCurrentVersion ?snippetDocument .
-          ?snippetDocument dct:title ?title ;
-              ext:editorDocumentContent ?content ;
-              pav:createdOn ?createdOn .
+          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
+                             pav:hasCurrentVersion ?publishedSnippetVersion .
+          ?publishedSnippetVersion dct:title ?title ;
+               ext:editorDocumentContent ?content ;
+               pav:createdOn ?createdOn .
           ${name ? `FILTER (CONTAINS(LCASE(?title), "${name}"))` : ''}
+          OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
+          FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
       }
       ORDER BY DESC(?createdOn) LIMIT ${pageSize} OFFSET ${
         pageNumber * pageSize
