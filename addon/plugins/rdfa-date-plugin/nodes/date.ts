@@ -20,7 +20,7 @@ import {
 
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
-  group: 'inline',
+  group: 'inline variable',
   componentPath: 'rdfa-date-plugin/date',
   inline: true,
   selectable: true,
