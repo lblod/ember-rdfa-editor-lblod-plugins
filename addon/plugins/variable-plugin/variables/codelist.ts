@@ -1,8 +1,5 @@
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import {
-  DCT,
-  EXT,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
@@ -17,6 +14,13 @@ import {
   parseVariableSource,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+import {
+  contentSpan,
+  instanceSpan,
+  sourceSpan,
+  typeSpan,
+} from '../utils/dom-constructors';
+import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -64,28 +68,12 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   const { mappingResource, codelistResource, variableInstance, source, label } =
     node.attrs;
 
-  const sourceSpan = source
-    ? [
-        [
-          'span',
-          {
-            property: DCT('source').prefixed,
-            resource: source as string,
-          },
-        ],
-      ]
-    : [];
   const codelistResourceSpan = codelistResource
-    ? [
-        [
-          'span',
-          {
-            property: EXT('codelist').prefixed, //becomes EXT('instance')
-            resource: codelistResource as string,
-          },
-        ],
-      ]
-    : [];
+    ? span({
+        property: EXT('codelist').prefixed, //becomes EXT('instance')
+        resource: codelistResource as string,
+      })
+    : '';
   return [
     'span',
     {
@@ -93,20 +81,11 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       typeof: EXT('Mapping').prefixed,
       'data-label': label as string,
     },
-    [
-      'span',
-      { property: EXT('instance'), resource: variableInstance as string },
-    ],
-    ['span', { property: DCT('type').prefixed, content: 'codelist' }],
-    ...sourceSpan,
-    ...codelistResourceSpan,
-    [
-      'span',
-      {
-        property: EXT('content').prefixed,
-      },
-      0,
-    ],
+    instanceSpan(variableInstance),
+    typeSpan('codelist'),
+    source ? sourceSpan(source) : '',
+    codelistResourceSpan,
+    contentSpan({}, 0),
   ];
 };
 
