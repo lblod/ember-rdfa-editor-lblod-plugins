@@ -644,6 +644,14 @@ Buttons to remove and move it when selected can be shown with
 ```hbs
 <TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
 ```
+
+To make sure you can indent inside templateComment, you have to adjust the IndentationMenu to support `TemplateCommentParagraph`'s
+```hbs
+<Plugins::Indentation::IndentationMenu 
+  @controller={{this.controller}}
+  @allowedTypes={{array this.schema.nodes.list_item this.schema.nodes.paragraph this.schema.nodes.templateCommentParagraph}}
+/>
+```
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
