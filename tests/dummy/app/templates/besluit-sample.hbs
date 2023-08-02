@@ -107,12 +107,12 @@
                   @controller={{this.controller}}
                   @options={{this.config.date}}
                 />
-                <AddressPlugin::Insert @controller={{this.controller}} />
                 <RoadsignRegulationPlugin::RoadsignRegulationCard
                   @controller={{this.controller}}
                   @options={{this.config.roadsignRegulation}}
                 />
                 <StandardTemplatePlugin::Card @controller={{this.controller}} />
+                <VariablePlugin::Address::Insert @controller={{this.controller}}/>
               </Sidebar.Collapsible>
               <ArticleStructurePlugin::StructureCard
                 @controller={{this.controller}}
@@ -126,6 +126,7 @@
                 @plugin={{this.citationPlugin}}
                 @config={{this.config.citation}}
               />
+              <VariablePlugin::Address::Edit @controller={{this.controller}}/>
               <ImportSnippetPlugin::Card @controller={{this.controller}} />
               <RdfaDatePlugin::Card
                 @controller={{this.controller}}
