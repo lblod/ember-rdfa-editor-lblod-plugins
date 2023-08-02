@@ -30,3 +30,12 @@
 
 # broccoli-debug
 /DEBUG/
+
+# idea editor
+.idea/.gitignore
+.idea/vcs.xml
+
+# VScode & extensions settings
+.vscode/extensions.json
+.vscode/settings.json
+.favorites.json

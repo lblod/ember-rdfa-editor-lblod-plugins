@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 
+## [9.1.1] - 2023-08-02
+### Fixed
+- GN-4446: fix email-address formatting in error components
+### Dependencies
+- Bumps `@types/uuid` from 9.0.0 to 9.0.2
+- Bumps `@types/rdf-validate-shacl` from 0.4.0 to 0.4.2
+- Bumps `@types/ember__polyfills` from 4.0.1 to 4.0.2
+
+## [9.1.0] - 2023-07-29
+
+### Added
+- template-comments plugin
+  - A plugin to insert and edit template comments (as a "block")
+  - can be inserted anywhere
+  - have a specific rdfa-attribute so they can be removed at publishing
+
+
 ## [9.0.2] - 2023-07-28
 ### Dependencies
 - Bumps `release-it` from 15.5.0 to 15.11.0
@@ -600,7 +617,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.2...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.1...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -616,6 +633,8 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[9.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.0...v9.1.1
+[9.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.2...v9.1.0
 [9.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.1...v9.0.2
 [9.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.1...v9.0.0

@@ -32,6 +32,7 @@ This addon contains the following editor plugins:
 * [template-variable-plugin](#template-variable-plugin)
 * [validation-plugin](#validation-plugin)
 * [address-plugin](#address-plugin)
+* [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
 ```hbs
@@ -626,9 +627,29 @@ For enabling it, you need to add the card provided by the plugin to the editor s
 <AddressPlugin::Insert @controller={{this.controller}} />
 ```
 
+## template-comments-plugin
+A plugin to insert a template comment anywhere in the document.  
+This is meant as a block of text for extra information to provide to a created template. It has
+the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
+It supports basic text with indenting, list items and the marks strong (bold), strikethrough and underline. Italic is not possible as the text is italic by default.
+
+Add it to editor by adding `...templateCommentNodes` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+
+Logic to insert a template comment is added with
+```hbs
+<TemplateCommentsPlugin::Insert @controller={{this.controller}}/>
+```
+
+Buttons to remove and move it when selected can be shown with
+```hbs
+<TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
+```
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
+
+## Releasing
+See the [Release](RELEASE.md) guide.
 
 ## License
 

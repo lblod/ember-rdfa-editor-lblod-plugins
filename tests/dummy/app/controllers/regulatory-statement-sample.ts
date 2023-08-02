@@ -71,6 +71,10 @@ import {
   numberView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/number';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
+import {
+  templateCommentNodes,
+  templateCommentView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -83,51 +87,50 @@ export default class RegulatoryStatementSampleController extends Controller {
     say: 'https://say.data.gift/ns/',
   };
 
-  get schema() {
-    return new Schema({
-      nodes: {
-        doc: docWithConfig({
-          content:
-            'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
-        }),
-        paragraph,
-        document_title,
-        repaired_block,
+  schema = new Schema({
+    nodes: {
+      doc: docWithConfig({
+        content:
+          'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
+      }),
+      paragraph,
+      document_title,
+      repaired_block,
 
-        list_item,
-        ordered_list,
-        bullet_list,
-        placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-        date: date(this.config.date),
-        variable,
-        number: number,
-        ...STRUCTURE_NODES,
-        heading,
-        blockquote,
+      list_item,
+      ordered_list,
+      bullet_list,
+      ...templateCommentNodes,
+      placeholder,
+      ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+      date: date(this.config.date),
+      variable,
+      number: number,
+      ...STRUCTURE_NODES,
+      heading,
+      blockquote,
 
-        horizontal_rule,
-        code_block,
+      horizontal_rule,
+      code_block,
 
-        text,
+      text,
 
-        image,
+      image,
 
-        hard_break,
-        block_rdfa,
-        table_of_contents: table_of_contents(this.config.tableOfContents),
-        invisible_rdfa,
-        link: link(this.config.link),
-      },
-      marks: {
-        inline_rdfa,
-        em,
-        strong,
-        underline,
-        strikethrough,
-      },
-    });
-  }
+      hard_break,
+      block_rdfa,
+      table_of_contents: table_of_contents(this.config.tableOfContents),
+      invisible_rdfa,
+      link: link(this.config.link),
+    },
+    marks: {
+      inline_rdfa,
+      em,
+      strong,
+      underline,
+      strikethrough,
+    },
+  });
 
   get config() {
     return {
@@ -194,6 +197,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
       number: numberView(controller),
+      templateComment: templateCommentView(controller),
     };
   };
   @tracked plugins: Plugin[] = [
