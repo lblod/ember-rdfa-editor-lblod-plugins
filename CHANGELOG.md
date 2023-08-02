@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- GN-4261: addition of an address variable
+
 ## [9.1.1] - 2023-08-02
 ### Fixed
 - GN-4446: fix email-address formatting in error components
