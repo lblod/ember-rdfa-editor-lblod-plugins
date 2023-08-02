@@ -94,29 +94,29 @@ const constructAddressNode = (address?: Address | ResolvedAddress) => {
       'addressRegisterId' in address ? address.addressRegisterId : undefined;
     const houseNumberSpan = address.housenumber
       ? span({
-          property: ADRES('huisnummer').prefixed,
+          property: ADRES('huisnummer').full,
           content: address.housenumber,
         })
       : '';
     return span(
-      { resource, typeof: ADRES('Adres').prefixed },
+      { resource, typeof: ADRES('Adres').full },
       span({
-        property: ADRES('heeftStraatnaam').prefixed,
+        property: ADRES('heeftStraatnaam').full,
         content: address.street,
       }),
       houseNumberSpan,
       span(
         {
-          property: ADRES('heeftPostinfo').prefixed,
-          typeof: ADRES('Postinfo').prefixed,
+          property: ADRES('heeftPostinfo').full,
+          typeof: ADRES('Postinfo').full,
         },
         span({
-          property: ADRES('postcode').prefixed,
+          property: ADRES('postcode').full,
           content: address.zipcode,
         }),
       ),
       span({
-        property: ADRES('gemeentenaam').prefixed,
+        property: ADRES('gemeentenaam').full,
         content: address.municipality,
       }),
       address.formatted,
