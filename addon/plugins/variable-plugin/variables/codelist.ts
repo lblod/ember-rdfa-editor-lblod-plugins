@@ -17,6 +17,7 @@ import {
 import {
   contentSpan,
   instanceSpan,
+  mappingSpan,
   sourceSpan,
   typeSpan,
 } from '../utils/dom-constructors';
@@ -74,11 +75,9 @@ const toDOM = (node: PNode): DOMOutputSpec => {
         resource: codelistResource as string,
       })
     : '';
-  return [
-    'span',
+  return mappingSpan(
+    mappingResource,
     {
-      resource: mappingResource as string,
-      typeof: EXT('Mapping').prefixed,
       'data-label': label as string,
     },
     instanceSpan(variableInstance),
@@ -86,7 +85,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     source ? sourceSpan(source) : '',
     codelistResourceSpan,
     contentSpan({}, 0),
-  ];
+  );
 };
 
 const emberNodeConfig: EmberNodeConfig = {

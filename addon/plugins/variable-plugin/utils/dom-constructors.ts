@@ -15,7 +15,7 @@ type Children = unknown[];
  */
 export const mappingSpan = (
   mapping: string,
-  attributes: Attributes = {},
+  attributes: Attributes,
   ...children: Children
 ) => {
   return span(
@@ -55,10 +55,7 @@ export const sourceSpan = (variableSource: string) => {
 /**
  * Constructs a variable content span. Accepts optional additional attributes and a series of children.
  */
-export const contentSpan = (
-  attributes: Attributes = {},
-  ...children: Children
-) => {
+export const contentSpan = (attributes: Attributes, ...children: Children) => {
   return span(
     {
       property: EXT('content').prefixed,
