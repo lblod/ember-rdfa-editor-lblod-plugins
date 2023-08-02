@@ -1,6 +1,5 @@
 import {
   ADRES,
-  DCT,
   EXT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -21,6 +20,12 @@ import {
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
+import {
+  contentSpan,
+  instanceSpan,
+  mappingSpan,
+  typeSpan,
+} from '../utils/dom-constructors';
 export class Address {
   declare street: string;
   declare zipcode: string;
@@ -211,26 +216,15 @@ const parseDOM = [
 
 const toDOM = (node: PNode): DOMOutputSpec => {
   const { mappingResource, variableInstance, label, address } = node.attrs;
-  return [
-    'span',
+  return mappingSpan(
+    mappingResource,
     {
-      resource: mappingResource as string,
-      typeof: EXT('Mapping').prefixed,
       'data-label': label as string,
     },
-    [
-      'span',
-      { property: EXT('instance'), resource: variableInstance as string },
-    ],
-    ['span', { property: DCT('type').prefixed, content: 'address' }],
-    [
-      'span',
-      {
-        property: EXT('content').prefixed,
-      },
-      constructAddressNode(address),
-    ],
-  ];
+    instanceSpan(variableInstance),
+    typeSpan('address'),
+    contentSpan({}, constructAddressNode(address)),
+  );
 };
 
 const emberNodeConfig: EmberNodeConfig = {
