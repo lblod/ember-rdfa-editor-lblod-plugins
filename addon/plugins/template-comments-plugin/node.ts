@@ -52,10 +52,12 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 export const templateComment = createEmberNodeSpec(emberNodeConfig());
 export const templateCommentView = createEmberNodeView(emberNodeConfig());
 export const templateCommentNodes = {
-  templateComment: templateComment,
   templateCommentParagraph: paragraphWithConfig({
     marks: 'strong underline strikethrough',
-    // don't add to any groups, so it is only allowed for template comment
-    group: '',
+    // don't add to block group, so it is only allowed for template comment
+    // but add to paragraphGroup so lists accept it
+    group: 'paragraphGroup',
+    name: 'templateCommentParagraph',
   }),
+  templateComment: templateComment,
 };
