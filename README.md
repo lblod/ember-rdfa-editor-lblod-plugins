@@ -474,6 +474,7 @@ Editor plugin which provides node-specs and components which allow you to insert
 - date variable
 - codelist
 - location
+- address
 
 Additional variable types can be added in the consuming application or addon.
 
@@ -488,6 +489,8 @@ import {
   numberView,
   text_variable,
   textVariableView,
+  address,
+  addressView
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 ```
 
@@ -503,6 +506,7 @@ This addon includes an insert-component for each of these variable types:
 - `variable-plugin/date/insert`
 - `variable-plugin/location/insert`
 - `variable-plugin/codelist/insert`
+- `variable-plugin/address/insert`
 
 Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
 
@@ -633,6 +637,13 @@ get codelistEditOptions() {
       endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch codelist values if the codelist variable has no `source` attribute
     };
 }
+```
+
+#### The address variable
+This addon provides a seperate edit component which allows users to search for an address and update the select address variable. Additionally, they can also choose whether to include the housenumber of an address.
+You can add this edit-component to a template as follows:
+```hbs
+<VariablePlugin::Address::Edit @controller={{this.controller}}/>
 ```
 
 ## validation-plugin
