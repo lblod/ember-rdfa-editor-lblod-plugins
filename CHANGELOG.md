@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Allow `block*` content in `article_paragraph`
+- Add paragraphGroup to paragraphForTemplate so it can be wrapped by list
+- add a name to paragraphForTemplate so it gets parsed as itself 
 
 ## [9.1.1] - 2023-08-02
 ### Fixed
