@@ -32,6 +32,7 @@ export default class CodelistEditComponent extends Component<Args> {
   @action
   toggleIncludeHouseNumber() {
     this.includeHouseNumber = !this.includeHouseNumber;
+    this.selectedAddress = undefined;
   }
 
   get currentAddress() {
@@ -69,9 +70,10 @@ export default class CodelistEditComponent extends Component<Args> {
     if (this.selectedAddressVariable && this.selectedAddress) {
       const { pos } = this.selectedAddressVariable;
 
-      const address = this.includeHouseNumber
-        ? await resolveAddress(this.selectedAddress)
-        : this.selectedAddress;
+      const address =
+        this.includeHouseNumber && this.selectedAddress.hasHouseNumber
+          ? await resolveAddress(this.selectedAddress)
+          : this.selectedAddress;
       this.controller.withTransaction((tr) => {
         return tr.setNodeAttribute(pos, 'address', address);
       });
