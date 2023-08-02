@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- GN-4446: fix email-address formatting in error components
 ### Dependencies
 - Bumps `@types/uuid` from 9.0.0 to 9.0.2
 - Bumps `@types/rdf-validate-shacl` from 0.4.0 to 0.4.2
