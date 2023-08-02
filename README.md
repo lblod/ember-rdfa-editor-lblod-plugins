@@ -30,7 +30,6 @@ This addon contains the following editor plugins:
 * [table-of-contents-plugin](#table-of-contents-plugin)
 * [variable-plugin](#variable-plugin)
 * [validation-plugin](#validation-plugin)
-* [address-plugin](#address-plugin)
 * [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
@@ -649,19 +648,6 @@ You can add this edit-component to a template as follows:
 ## validation-plugin
 
 see [the plugin docs](addon/plugins/validation/README.md)
-
-## address-plugin
-
-Editor plugin which allows you to insert address based on information from
-
-- https://basisregisters.vlaanderen.be/api/v1/adressen
-- https://geo.api.vlaanderen.be/geolocation/v4/Location
-
-For enabling it, you need to add the card provided by the plugin to the editor sidebar
-
-```hbs
-<AddressPlugin::Insert @controller={{this.controller}} />
-```
 
 ## template-comments-plugin
 A plugin to insert a template comment anywhere in the document.  
