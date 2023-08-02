@@ -11,7 +11,7 @@ const unwrapStructure = (
     node: PNode;
     type: StructureSpec;
   },
-  options: ArticleStructurePluginOptions
+  options: ArticleStructurePluginOptions,
 ): Command => {
   return (state, dispatch) => {
     const { doc } = state;

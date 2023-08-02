@@ -48,7 +48,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(htmlToInsert, 'text/html');
     const contentFragment = ProseParser.fromSchema(
-      this.args.controller.schema
+      this.args.controller.schema,
     ).parseSlice(htmlNode, {
       preserveWhitespace: false,
     }).content;
@@ -60,14 +60,14 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
       (tr) => {
         return tr.replaceWith(range.from, range.to, contentFragment);
       },
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 
   wrapVariableInHighlight(text: string) {
     return text.replace(
       /\$\{(.+?)\}/g,
-      '<span class="mark-highlight-manual">${$1}</span>'
+      '<span class="mark-highlight-manual">${$1}</span>',
     );
   }
 
@@ -100,7 +100,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
             (variable.node.attrs.source as string | undefined) ??
             this.args.options.endpoint;
           const roadSignRegulation = findParentNodeOfType(
-            this.controller.schema.nodes.roadsign_regulation
+            this.controller.schema.nodes.roadsign_regulation,
           )(selection);
           const zonalityUri = roadSignRegulation?.node.attrs.zonality as
             | string
@@ -110,13 +110,13 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
             void this.fetchCodeListOptions.perform(
               source,
               this.args.options.zonalLocationCodelistUri,
-              true
+              true,
             );
           } else {
             void this.fetchCodeListOptions.perform(
               source,
               this.args.options.nonZonalLocationCodelistUri,
-              true
+              true,
             );
           }
 
@@ -135,7 +135,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
     async (endpoint: string, codelistUri: string, isLocation?: boolean) => {
       const { type, options } = await fetchCodeListOptions(
         endpoint,
-        codelistUri
+        codelistUri,
       );
       if (isLocation) {
         this.variableOptions = options.map((option) => ({
@@ -150,7 +150,7 @@ export default class EditorPluginsTemplateVariableCardComponent extends Componen
       } else {
         this.multiSelect = false;
       }
-    }
+    },
   );
 
   wrapInLocation(value: string) {

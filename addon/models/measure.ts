@@ -14,7 +14,7 @@ export default class Measure {
     readonly annotatedTemplate: string,
     readonly zonality: string,
     readonly temporal: string | false,
-    signs: Sign[] = []
+    signs: Sign[] = [],
   ) {
     this.signs = signs;
   }
@@ -32,7 +32,7 @@ export default class Measure {
       template,
       annotatedTemplate,
       zonality,
-      temporal
+      temporal,
     );
   }
 }

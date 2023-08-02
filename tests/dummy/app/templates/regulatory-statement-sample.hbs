@@ -27,7 +27,10 @@
             </Tb.Group>
             <Tb.Group>
               <Toolbar::List @controller={{this.controller}}/>
-              <Plugins::Indentation::IndentationMenu @controller={{this.controller}}/>
+              <Plugins::Indentation::IndentationMenu 
+                @controller={{this.controller}}
+                @allowedTypes={{array this.schema.nodes.list_item this.schema.nodes.paragraph this.schema.nodes.templateCommentParagraph}}
+              />
             </Tb.Group>
             <Tb.Group>
               <Plugins::Link::LinkMenu @controller={{this.controller}}/>
@@ -72,6 +75,9 @@
                 @controller={{this.controller}}
                 @config={{this.config.snippet}}
               />
+              <TemplateCommentsPlugin::Insert
+                @controller={{this.controller}}
+              />
             </Sidebar.Collapsible>
             <VariablePlugin::InsertVariableCard
                 @controller={{this.controller}}
@@ -84,6 +90,9 @@
             <RdfaDatePlugin::Card
               @controller={{this.controller}}
               @options={{this.config.date}}
+            />
+            <TemplateCommentsPlugin::EditCard
+              @controller={{this.controller}}
             />
             <VariablePlugin::TemplateVariableCard @controller={{this.controller}}  @options={{this.config.templateVariable}}/>
           </Sidebar>

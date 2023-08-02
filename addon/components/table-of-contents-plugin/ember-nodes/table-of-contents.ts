@@ -65,7 +65,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
     const subResults: OutlineEntry[] = [];
     node.forEach((child, offset) => {
       subResults.push(
-        ...this.extractOutline({ node: child, pos: pos + 1 + offset })
+        ...this.extractOutline({ node: child, pos: pos + 1 + offset }),
       );
     });
     if (parent) {
@@ -85,7 +85,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
       if (selection) {
         tr.setSelection(selection);
         const coords = this.controller.mainEditorView.coordsAtPos(
-          selection.from
+          selection.from,
         );
         const config = this.config[0];
         let scrollContainer: HTMLElement | undefined;
@@ -109,7 +109,7 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
             0,
             coords.top +
               alreadyScrolled -
-              (scrollContainerDistanceToTop + topPadding)
+              (scrollContainerDistanceToTop + topPadding),
           );
         } else {
           tr.scrollIntoView();

@@ -36,15 +36,27 @@ export default class SnippetInsertComponent extends Component<Args> {
   @action
   onInsert(content: string) {
     const domParser = new DOMParser();
+    const parsed = domParser.parseFromString(content, 'text/html').body;
+    const documentDiv = parsed.querySelector('div[data-say-document="true"]');
 
     this.closeModal();
 
-    this.controller.withTransaction((tr) => {
-      return tr.replaceSelectionWith(
-        ProseParser.fromSchema(this.controller.schema).parse(
-          domParser.parseFromString(content, 'text/html')
-        )
+    if (documentDiv) {
+      return this.controller.withTransaction((tr) =>
+        tr.replaceSelectionWith(
+          ProseParser.fromSchema(this.controller.schema).parse(documentDiv, {
+            preserveWhitespace: true,
+          }),
+        ),
       );
-    });
+    }
+
+    this.controller.withTransaction((tr) =>
+      tr.replaceSelectionWith(
+        ProseParser.fromSchema(this.controller.schema).parse(parsed, {
+          preserveWhitespace: true,
+        }),
+      ),
+    );
   }
 }

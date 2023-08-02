@@ -49,7 +49,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   selectLegislationType(type: string) {
     type = type.toLowerCase();
     const found = LEGISLATION_TYPE_CONCEPTS.find(
-      (c) => c.label.toLowerCase() === type
+      (c) => c.label.toLowerCase() === type,
     );
     this.legislationType = found
       ? found.value
@@ -63,7 +63,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     const { selection } = this.controller.mainEditorState;
     if (this.config.type === 'ranges') {
       const ranges = this.config.activeInRanges(
-        this.controller.mainEditorState
+        this.controller.mainEditorState,
       );
       for (const range of ranges) {
         if (selection.from > range[0] && selection.from < range[1]) {
@@ -74,7 +74,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     } else {
       const nodeTypes = this.config.activeInNodeTypes(
         this.controller.schema,
-        this.controller.mainEditorState
+        this.controller.mainEditorState,
       );
       // if the doc node is included, the button should always be active
       // the findParentNodeOfType util we import does NOT consider the doc node
@@ -120,11 +120,11 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
                 citedText(this.controller.schema, title, uri),
               ]),
               0,
-              0
-            )
+              0,
+            ),
           )
           .scrollIntoView(),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 
@@ -143,7 +143,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
           this.controller.schema.text(`${type} `),
           citedText(this.controller.schema, title, uri),
         ]),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 }

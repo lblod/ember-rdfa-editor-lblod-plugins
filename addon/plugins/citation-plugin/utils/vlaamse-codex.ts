@@ -32,7 +32,7 @@ export class Decision {
   }: DecisionArgs) {
     this.uri = uri;
     this.legislationType = LEGISLATION_TYPE_CONCEPTS.find(
-      (t) => t.value === legislationTypeUri
+      (t) => t.value === legislationTypeUri,
     );
     this.title = title;
     this.publicationDate = publicationDate;
@@ -81,7 +81,7 @@ export class Article {
 function replaceDiacriticsInWord(word: string): string {
   const characters =
     'Ë À Ì Â Í Ã Î Ä Ï Ç Ò È Ó É Ô Ê Õ Ö ê Ù ë Ú î Û ï Ü ô Ý õ â û ã ÿ ç'.split(
-      ' '
+      ' ',
     );
   for (const char of characters) {
     word = word.replace(new RegExp(`${char}`, 'g'), `&#${char.charCodeAt(0)};`);
@@ -201,12 +201,12 @@ async function fetchDecisionsMemo({
   const excludeAdaptationFilters = [];
   if (!words.includes('houdende')) {
     excludeAdaptationFilters.push(
-      'FILTER(! STRSTARTS(LCASE(?title),"houdende"))'
+      'FILTER(! STRSTARTS(LCASE(?title),"houdende"))',
     );
   }
   if (!words.includes('wijziging')) {
     excludeAdaptationFilters.push(
-      'FILTER(! STRSTARTS(LCASE(?title),"tot wijziging"))'
+      'FILTER(! STRSTARTS(LCASE(?title),"tot wijziging"))',
     );
   }
   const totalCount = await executeCountQuery({
@@ -222,8 +222,8 @@ async function fetchDecisionsMemo({
           .map(
             (word) =>
               `FILTER (CONTAINS(LCASE(?title), "${replaceDiacriticsInWord(
-                word
-              ).toLowerCase()}"))`
+                word,
+              ).toLowerCase()}"))`,
           )
           .join('\n')}
         ${excludeAdaptationFilters.join('\n')}
@@ -247,8 +247,8 @@ async function fetchDecisionsMemo({
             .map(
               (word) =>
                 `FILTER (CONTAINS(LCASE(?title), "${replaceDiacriticsInWord(
-                  word
-                ).toLowerCase()}"))`
+                  word,
+                ).toLowerCase()}"))`,
             )
             .join('\n')}
           OPTIONAL { ?expressionUri eli:date_publication ?publicationDate . }
@@ -262,10 +262,10 @@ async function fetchDecisionsMemo({
     const decisions = response.results.bindings.map((binding) => {
       const escapedTitle = escapeValue(binding.title.value);
       const publicationDate = dateValue(
-        binding.publicationDate && binding.publicationDate.value
+        binding.publicationDate && binding.publicationDate.value,
       );
       const documentDate = dateValue(
-        binding.documentDate && binding.documentDate.value
+        binding.documentDate && binding.documentDate.value,
       );
       return new Decision({
         uri: binding.uri.value,
@@ -439,13 +439,13 @@ async function fetchArticlesMemo({
 
     const articles = response.results.bindings.map((binding) => {
       const escapedContent = escapeValue(
-        binding.content && binding.content.value
+        binding.content && binding.content.value,
       );
       const dateInForce = dateValue(
-        binding.dateInForce && binding.dateInForce.value
+        binding.dateInForce && binding.dateInForce.value,
       );
       const dateNoLongerInForce = dateValue(
-        binding.dateNoLongerInForce && binding.dateNoLongerInForce.value
+        binding.dateNoLongerInForce && binding.dateNoLongerInForce.value,
       );
       return new Article({
         uri: binding.article.value,
@@ -512,7 +512,7 @@ async function executeQuery<A>({
     return response.json() as Promise<QueryResponse<A>>;
   } else {
     throw new Error(
-      `Request to Vlaamse Codex was unsuccessful: [${response.status}] ${response.statusText}`
+      `Request to Vlaamse Codex was unsuccessful: [${response.status}] ${response.statusText}`,
     );
   }
 }

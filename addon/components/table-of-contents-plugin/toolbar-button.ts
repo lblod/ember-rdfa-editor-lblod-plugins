@@ -34,7 +34,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
         (tr) => {
           return tr.deleteRange(from, to);
         },
-        { view: this.controller.mainEditorView }
+        { view: this.controller.mainEditorView },
       );
     } else {
       const { schema } = this.controller;
@@ -46,7 +46,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
           state.doc.canReplaceWith(
             index,
             index,
-            schema.nodes['table_of_contents']
+            schema.nodes['table_of_contents'],
           )
         ) {
           replacePosition = pos;
@@ -56,7 +56,7 @@ export default class TableOfContentsCardComponent extends Component<Args> {
           state.doc.canReplaceWith(
             index + 1,
             index + 1,
-            schema.nodes['table_of_contents']
+            schema.nodes['table_of_contents'],
           )
         ) {
           replacePosition = pos + node.nodeSize;
@@ -69,10 +69,10 @@ export default class TableOfContentsCardComponent extends Component<Args> {
             return transaction.replaceWith(
               replacePosition as number,
               replacePosition as number,
-              schema.node('table_of_contents')
+              schema.node('table_of_contents'),
             );
           },
-          { view: this.controller.mainEditorView }
+          { view: this.controller.mainEditorView },
         );
       }
     }

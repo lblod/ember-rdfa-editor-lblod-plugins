@@ -13,7 +13,7 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 export function findInsertionPosInAncestorOfType(
   selection: Selection,
   ancestorType: NodeType,
-  nodeToInsert: PNode
+  nodeToInsert: PNode,
 ): Option<number> {
   const { $from } = selection;
   const ancestor = findParentNodeOfType(ancestorType)(selection);
@@ -26,7 +26,7 @@ export function findInsertionPosInAncestorOfType(
     !ancestor.node.canReplaceWith(
       insertionIndex,
       insertionIndex,
-      nodeToInsert.type
+      nodeToInsert.type,
     )
   ) {
     return null;

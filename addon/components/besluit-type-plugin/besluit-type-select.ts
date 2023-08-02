@@ -11,7 +11,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
   constructor(parent: unknown, args: Args) {
     super(parent, args);
     this.besluitTypes = this.args.besluitTypes.sort((a, b) =>
-      a.label > b.label ? 1 : -1
+      a.label > b.label ? 1 : -1,
     );
   }
 
@@ -19,7 +19,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
   search(term: string) {
     const lowerTerm = term.toLowerCase();
     return this.args.besluitTypes.filter((besluitType) =>
-      besluitType.label.toLowerCase().includes(lowerTerm)
+      besluitType.label.toLowerCase().includes(lowerTerm),
     );
   }
 }

@@ -14,7 +14,7 @@ export function dateValue(value?: string): string | null {
   if (value) {
     try {
       return new Intl.DateTimeFormat('nl-BE').format(
-        new Date(Date.parse(value))
+        new Date(Date.parse(value)),
       );
     } catch (e) {
       let message: string;
@@ -31,4 +31,14 @@ export function dateValue(value?: string): string | null {
   } else {
     return null;
   }
+}
+
+export function isNumber(value: string | number | null | undefined): boolean {
+  return (
+    typeof value === 'number' ||
+    (!Number.isNaN(Number(value)) &&
+      value !== null &&
+      value !== undefined &&
+      value !== '')
+  );
 }

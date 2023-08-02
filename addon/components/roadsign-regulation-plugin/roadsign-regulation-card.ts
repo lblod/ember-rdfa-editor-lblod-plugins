@@ -52,7 +52,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const besluitNode = findParentNode((node) => {
       if (node.type === this.schema.nodes['besluit']) {
         const rdfTypes = (node.attrs['typeof'] as string | undefined)?.split(
-          ' '
+          ' ',
         );
         if (rdfTypes?.some((t) => acceptedTypes.includes(t))) {
           return true;

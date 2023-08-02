@@ -29,7 +29,7 @@ export default class StandardTemplatePluginService extends Service {
       fields: { templates: 'title,contexts,matches,disabled-in-contexts' },
     });
     this.templates = templates.filter(
-      (template) => !BLACKLISTED_TEMPLATES.has(template.title)
+      (template) => !BLACKLISTED_TEMPLATES.has(template.title),
     );
   }
 

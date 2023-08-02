@@ -8,6 +8,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - GN-4446: fix email-address formatting in error components
+### Dependencies
+- Bumps `@types/uuid` from 9.0.0 to 9.0.2
+- Bumps `@types/rdf-validate-shacl` from 0.4.0 to 0.4.2
+- Bumps `@types/ember__polyfills` from 4.0.1 to 4.0.2
+
+## [9.1.0] - 2023-07-29
+
+### Added
+- template-comments plugin
+  - A plugin to insert and edit template comments (as a "block")
+  - can be inserted anywhere
+  - have a specific rdfa-attribute so they can be removed at publishing
+
+
+## [9.0.2] - 2023-07-28
+### Dependencies
+- Bumps `release-it` from 15.5.0 to 15.11.0
+- Bumps `@codemirror/lang-html` from 6.4.3 to 6.4.5
+- Bumps `@types/ember-data__model` from 4.0.0 to 4.0.1
+- Bumps `eslint-plugin-ember` from 11.9.0 to 11.10.0
+- Bumps `@types/ember__runloop` from 4.0.2 to 4.0.3
+
+### Fixed
+- Snippet insertion accounts for wrapping document
+
+## [9.0.1] - 2023-07-24
+
+### Changed
+- Update docker build to serve static files
+
+## [9.0.0] - 2023-07-24
+
+### Added
+- Addition of documentation on the article-structure plugin
+
+### Fixed
+- When a number is too big to be converted to words, display it numerically.
+- Can only insert a number variable with a minimum that is smaller than its maximum
+- Fetch public snippets
+### Changed
+- Make `errorMessage` of number input modal reactive to attribute changes
+- Number variable input box has a cleaner UI by adjusting the top margins.
+- Demo uses `initialize` and `docWithConfig` introduced in `ember-rdfa-editor@4.0.0`
+### Dependencies
+- Bumps `@lblod/ember-rdfa-editor` from 3.10.0 to 4.0.0
+- Bumps `@typescript-eslint/parser` from 5.60.0 to 5.61.0
+- Bumps `@tsconfig/ember` from 1.0.1 to 3.0.0
+- Bumps `fetch-sparql-endpoint` from 3.1.1 to 3.3.3
+- Bumps `eslint` from 7.32.0 to 8.44.0
+- Bumps `semver` from 5.7.1 to 5.7.2
+- Bumps `prettier` from 2.8.8 to 3.0.0
+- Bumps `eslint-plugin-prettier` to 5.0.0
+- Bumps `@types/ember__utils` from 4.0.2 to 4.0.3
+- Bumps `@types/ember__controller` from 4.0.3 to 4.0.5
+- Bumps `tracked-built-ins` from 3.1.0 to 3.1.1
+- Bumps `word-wrap` from 1.2.3 to 1.2.4
+- Pin `ember-auto-import` to 2.5.x
+
 
 ## [8.4.1] - 2023-07-06
 
@@ -555,7 +613,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.1...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.0...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -571,6 +629,10 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[9.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.2...v9.1.0
+[9.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.1...v9.0.2
+[9.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.0...v9.0.1
+[9.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.1...v9.0.0
 [8.4.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.0...v8.4.1
 [8.4.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.3.0...v8.4.0
 [8.3.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.2.2...v8.3.0

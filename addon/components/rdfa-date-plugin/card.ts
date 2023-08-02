@@ -84,7 +84,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       (node) => {
         return !formatContainsTime(node.attrs.format);
       },
-      this.selectedDateNode
+      this.selectedDateNode,
     );
   }
 
@@ -95,14 +95,14 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
         const format = node.attrs.format as string;
         return SECONDS_REGEX.test(format.replace(/'[^']*'|"[^"]*"/g, ''));
       },
-      this.selectedDateNode
+      this.selectedDateNode,
     );
   }
 
   get documentDateFormat(): Option<string> {
     return optionMap(
       (node) => node.attrs.format as string,
-      this.selectedDateNode
+      this.selectedDateNode,
     );
   }
 
@@ -110,11 +110,11 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
     if (this.documentDateFormat) {
       if (this.onlyDate) {
         return this.formats.find(
-          (format) => format.dateFormat === this.documentDateFormat
+          (format) => format.dateFormat === this.documentDateFormat,
         );
       } else {
         return this.formats.find(
-          (format) => format.dateTimeFormat === this.documentDateFormat
+          (format) => format.dateTimeFormat === this.documentDateFormat,
         );
       }
     }
@@ -223,7 +223,7 @@ export default class RdfaDatePluginCardComponent extends Component<Args> {
       if (format) {
         this.setDateFormat(
           this.onlyDate ? format.dateFormat : format.dateTimeFormat,
-          false
+          false,
         );
       }
     }

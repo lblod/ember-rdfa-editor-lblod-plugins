@@ -51,7 +51,7 @@ export default class CitationCardComponent extends Component<Args> {
   @action
   update() {
     if (this.activeDecoration) {
-      const { legislationTypeUri, searchText } = this.activeDecoration?.spec;
+      const { legislationTypeUri, searchText } = this.activeDecoration.spec;
       if (legislationTypeUri !== this.documentLegislationType) {
         this.documentLegislationType = legislationTypeUri;
       }
@@ -159,7 +159,7 @@ export default class CitationCardComponent extends Component<Args> {
   selectLegislationType(type: string) {
     type = type.toLowerCase();
     const found = LEGISLATION_TYPE_CONCEPTS.find(
-      (c) => c.label.toLowerCase() === type
+      (c) => c.label.toLowerCase() === type,
     );
     this.cardLegislationType = found
       ? found.value
@@ -205,10 +205,10 @@ export default class CitationCardComponent extends Component<Args> {
           .replaceRangeWith(
             from,
             to,
-            citedText(this.controller.schema, title, uri)
+            citedText(this.controller.schema, title, uri),
           )
           .scrollIntoView(),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
     this.controller.focus();
   }
@@ -227,10 +227,10 @@ export default class CitationCardComponent extends Component<Args> {
           .replaceRangeWith(
             from,
             to,
-            citedText(this.controller.schema, title, uri)
+            citedText(this.controller.schema, title, uri),
           )
           .scrollIntoView(),
-      { view: this.controller.mainEditorView }
+      { view: this.controller.mainEditorView },
     );
   }
 

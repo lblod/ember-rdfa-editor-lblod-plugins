@@ -8,13 +8,13 @@ export default class Sign {
     readonly classifications: string[] = [],
     readonly uri: string,
     readonly order: string,
-    readonly zonality: string
+    readonly zonality: string,
   ) {}
   static fromBinding(binding: IBindings) {
     const code = unwrap(binding['code']?.value);
     const image = Sign.processImage(
       unwrap(binding['image']?.value),
-      unwrap(binding['imageBaseUrl']?.value)
+      unwrap(binding['imageBaseUrl']?.value),
     );
 
     const uri = unwrap(binding['uri']?.value);

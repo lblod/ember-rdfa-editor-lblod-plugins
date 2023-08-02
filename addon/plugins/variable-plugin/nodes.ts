@@ -18,7 +18,8 @@ import {
   WRITTEN_NUMBER_PNODE_KEY,
 } from './utils/constants';
 import { Attrs, DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
-import n2words from 'n2words';
+import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 
 export const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -60,7 +61,7 @@ export const getPNodeExtraAttributes = ({
       [MAXIMUM_VALUE_HTML_ATTRIBUTE_KEY]:
         (node.attrs[MAXIMUM_VALUE_PNODE_KEY] as string) ?? null,
       [WRITTEN_NUMBER_HTML_ATTRIBUTE_KEY]: String(
-        node.attrs[WRITTEN_NUMBER_PNODE_KEY] ?? false
+        node.attrs[WRITTEN_NUMBER_PNODE_KEY] ?? false,
       ),
     };
   }
@@ -78,9 +79,9 @@ export const contentToDom = ({
   node: PNode;
 }) => {
   if (type === 'number') {
-    if (!Number.isNaN(Number(content)) && content !== null && content !== '') {
+    if (isNumber(content)) {
       if (node.attrs[WRITTEN_NUMBER_PNODE_KEY]) {
-        return n2words(Number(content), { lang: 'nl' });
+        return numberToWords(Number(content), { lang: 'nl' });
       } else {
         return content;
       }
@@ -102,7 +103,7 @@ export const parseAttributes = (node: HTMLElement): false | Attrs => {
       ?.getAttribute('resource');
     const mappingResource = node.getAttribute('resource');
     const codelistSpan = [...node.children].find((el) =>
-      hasRDFaAttribute(el, 'property', EXT('codelist'))
+      hasRDFaAttribute(el, 'property', EXT('codelist')),
     );
     const codelistResource =
       codelistSpan?.getAttribute('resource') ??
@@ -138,7 +139,7 @@ export const parseAttributes = (node: HTMLElement): false | Attrs => {
 
 export const attributesToDOM = (
   node: PNode,
-  content?: string | null
+  content?: string | null,
 ): DOMOutputSpec => {
   const {
     mappingResource,

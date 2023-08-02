@@ -30,13 +30,13 @@ export default function insertArticleContainer({
       besluitArticleStructure.constructor({
         schema,
         intl,
-      }).node
+      }).node,
     );
 
     const insertionPos = findInsertionPosInAncestorOfType(
       selection,
       schema.nodes.besluit,
-      nodeToInsert
+      nodeToInsert,
     );
     if (isNone(insertionPos)) {
       return false;

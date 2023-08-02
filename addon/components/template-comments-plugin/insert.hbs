@@ -1,0 +1,11 @@
+<AuList::Item>
+  <AuButton
+    @icon='add'
+    @iconAlignment='left'
+    @skin='link'
+    @disabled={{not this.canInsert}}
+    {{on 'click' this.doInsert}}
+  >
+    {{t 'template-comments-plugin.insert.title'}}
+  </AuButton>
+</AuList::Item>
