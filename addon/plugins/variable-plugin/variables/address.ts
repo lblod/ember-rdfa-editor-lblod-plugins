@@ -98,7 +98,7 @@ const constructAddressNode = (address?: Address | ResolvedAddress) => {
           content: address.housenumber,
         })
       : '';
-    return span(
+    return contentSpan(
       { resource, typeof: ADRES('Adres').full },
       span({
         property: ADRES('heeftStraatnaam').full,
@@ -122,11 +122,11 @@ const constructAddressNode = (address?: Address | ResolvedAddress) => {
       address.formatted,
     );
   } else {
-    return 'Voeg adres in';
+    return contentSpan({}, 'Voeg adres in');
   }
 };
 
-const parseAddressNode = (addressNode: HTMLElement): Address | undefined => {
+const parseAddressNode = (addressNode: Element): Address | undefined => {
   const addressRegisterId = addressNode.getAttribute('resource');
   const street = findChildWithRdfaAttribute(
     addressNode,
@@ -189,23 +189,19 @@ const parseDOM = [
         const variableInstance = parseVariableInstance(node);
         const label = parseLabel(node);
 
-        const contentSpan = [...node.children].find((el) =>
+        const addressNode = [...node.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         );
-        if (!contentSpan) {
+        if (!addressNode) {
           return false;
         }
-        const addressNode = node.querySelector(
-          `span[typeof~='${ADRES('Adres').prefixed}'],
-           span[typeof~='${ADRES('Adres').full}']`,
-        ) as HTMLElement | undefined;
 
         return {
           variableInstance:
             variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
           mappingResource,
           label,
-          address: addressNode ? parseAddressNode(addressNode) : null,
+          address: parseAddressNode(addressNode),
         };
       }
 
@@ -223,7 +219,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     },
     instanceSpan(variableInstance),
     typeSpan('address'),
-    contentSpan({}, constructAddressNode(address)),
+    constructAddressNode(address),
   );
 };
 
