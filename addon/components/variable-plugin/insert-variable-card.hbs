@@ -17,53 +17,20 @@
       <PowerSelect
         @allowClear={{false}}
         @searchEnabled={{false}}
-        @options={{this.variablesArray}}
+        @options={{@variableTypes}}
         @selected={{this.selectedVariable}}
         @onChange={{this.updateSelectedVariable}}
         as |variable|
       >
         {{variable.label}}
       </PowerSelect>
-      {{#if this.hasSubtype}}
-        <PowerSelect
-          @allowClear={{false}}
-          @searchEnabled={{false}}
-          @options={{this.subtypes}}
-          @selected={{this.selectedSubtype}}
-          @onChange={{this.updateSubtype}}
-          as |subtype|
-        >
-          {{subtype.label}}
-        </PowerSelect>
-      {{/if}}
-      <AuFormRow>
-        <AuLabel for='label'>
-          {{t 'variable-plugin.label'}}
-        </AuLabel>
-        <AuInput
-          id="label"
-          placeholder={{t 'variable-plugin.labelPlaceholder'}}
-          @type="text"
-          @width="block"
-          @value={{this.variableLabel}}
-          {{on "input" this.updateVariableLabel}}
-        />
-      </AuFormRow>
-      {{#if (eq this.type 'number')}}
-        <VariablePlugin::NumberSettings
-          @minimumValue={{this.extraAttributes.minimumValue}}
-          @maximumValue={{this.extraAttributes.maximumValue}}
-          @error={{this.numberVariableError}}
-        />
-      {{/if}}
-      <AuButton
-        {{on 'click' this.insert}}
-        @disabled={{or
-          (not this.selectedVariable)
-          (and this.hasSubtype (not this.selectedSubtype))
-          this.numberVariableError
+      {{#if this.selectedVariable}}
+        {{component 
+          this.selectedVariable.component.path 
+          controller=this.controller 
+          options=this.selectedVariable.component.options
         }}
-      >{{t 'variable-plugin.button'}}</AuButton>
+      {{/if}}
     </c.content>
   </AuCard>
 {{/if}}

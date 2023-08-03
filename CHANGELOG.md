@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 
+### Added
+- Addition of `variable` group to each variable node-spec.
+### Breaking
+#### Major rework of variable plugin
+- Removal of generic `variable` node-spec. This node-spec is now replaced by domain-specific `text_variable`, `number`, `date`, `location` and `codelist` node-specs. These new node-specs each have their corresponding node-view.
+- Rework of the `insert-variable-card` component: this component is only a wrapper which lets you select a variable type. It then shows the insert component corresponding to that variable type. You can configure the `insert-variable-card` with a list of variable types and their corresponding insert component. Each variable type (text, number, date, codelist and location) now has a seperate insert component defined.
+- Removal of the `template-variable-card` component. This component has been replaced by two edit components for both the `location` and `codelist` variables.
+- Removal of `DEFAULT_VARIABLE_TYPES`. The insertion of the variable types are now handled by the insert components of the different variable types.
+
 ## [9.1.1] - 2023-08-02
 ### Fixed
 - GN-4446: fix email-address formatting in error components
@@ -57,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make `errorMessage` of number input modal reactive to attribute changes
 - Number variable input box has a cleaner UI by adjusting the top margins.
 - Demo uses `initialize` and `docWithConfig` introduced in `ember-rdfa-editor@4.0.0`
+
 ### Dependencies
 - Bumps `@lblod/ember-rdfa-editor` from 3.10.0 to 4.0.0
 - Bumps `@typescript-eslint/parser` from 5.60.0 to 5.61.0

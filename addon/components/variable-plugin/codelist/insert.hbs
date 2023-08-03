@@ -1,0 +1,22 @@
+<PowerSelect
+  @allowClear={{false}}
+  @searchEnabled={{false}}
+  @options={{this.subtypes.value}}
+  @selected={{this.selectedSubtype}}
+  @onChange={{this.updateSubtype}}
+  as |subtype|
+>
+  {{subtype.label}}
+</PowerSelect>
+<AuFormRow>
+  <VariablePlugin::Utils::LabelInput 
+    @label={{this.label}}
+    @updateLabel={{this.updateLabel}}
+  />
+</AuFormRow>
+<AuButton
+  {{on 'click' this.insert}}
+  @disabled={{not this.selectedSubtype}}
+>
+  {{t 'variable-plugin.button'}}
+</AuButton>

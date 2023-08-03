@@ -11,7 +11,7 @@ type Args = {
   controller: SayController;
 };
 
-export default class VariableComponent extends Component<Args> {
+export default class VariableNodeViewComponent extends Component<Args> {
   @tracked innerView?: SayView;
 
   @action
