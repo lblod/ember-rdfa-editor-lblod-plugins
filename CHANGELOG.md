@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Allow `block*` content in `article_paragraph`
-
+- Move buttons for template comments are blue
 ## [9.1.1] - 2023-08-02
 ### Fixed
 - GN-4446: fix email-address formatting in error components
