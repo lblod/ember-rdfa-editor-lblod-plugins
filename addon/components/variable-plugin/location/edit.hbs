@@ -1,4 +1,3 @@
-<div {{did-update this.selectionChanged @controller.mainEditorState}}>
 {{#if this.showCard}}
   <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
     <c.header>
@@ -7,32 +6,33 @@
       </AuHeading>
     </c.header>
     <c.content>
-      <AuLabel for='label'>
+      <AuLabel for='location-select'>
         {{this.label}}
       </AuLabel>
       {{#if this.multiSelect}}
         <PowerSelectMultiple
+          id="location-select"
           @allowClear={{false}}
           @searchEnabled={{false}}
-          @options={{this.variableOptions}}
-          @selected={{this.selectedVariableOption}}
-          @onChange={{this.updateVariableOption}} as |variable|
+          @options={{this.locationOptions.value.options}}
+          @selected={{this.selectedLocationOption}}
+          @onChange={{this.updateLocationOption}} as |option|
         >
-          {{variable.label}}
+          {{option.label}}
         </PowerSelectMultiple>
       {{else}}
         <PowerSelect
+          id="location-select"
           @allowClear={{false}}
           @searchEnabled={{false}}
-          @options={{this.variableOptions}}
-          @selected={{this.selectedVariableOption}}
-          @onChange={{this.updateVariableOption}} as |variable|
+          @options={{this.locationOptions.value.options}}
+          @selected={{this.selectedLocationOption}}
+          @onChange={{this.updateLocationOption}} as |option|
         >
-          {{variable.label}}
+          {{option.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedVariableOption}}>Voeg in</AuButton>
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedLocationOption}}>Voeg in</AuButton>
     </c.content>
   </AuCard>
 {{/if}}
-</div>

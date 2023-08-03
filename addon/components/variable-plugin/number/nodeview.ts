@@ -11,10 +11,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
-import {
-  MAXIMUM_VALUE_PNODE_KEY,
-  MINIMUM_VALUE_PNODE_KEY,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { isBlank } from '@ember/utils';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
@@ -28,7 +24,7 @@ type Args = {
   selected: boolean;
   contentDecorations?: DecorationSource;
 };
-export default class VariableNumberPluginNumberComponent extends Component<Args> {
+export default class NumberNodeviewComponent extends Component<Args> {
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;
@@ -60,11 +56,11 @@ export default class VariableNumberPluginNumberComponent extends Component<Args>
   }
 
   get minValue() {
-    return this.node.attrs[MINIMUM_VALUE_PNODE_KEY] as number;
+    return this.node.attrs.minimumValue as number;
   }
 
   get maxValue() {
-    return this.node.attrs[MAXIMUM_VALUE_PNODE_KEY] as number;
+    return this.node.attrs.maximumValue as number;
   }
 
   @action onInputNumberChange(event: InputEvent) {
