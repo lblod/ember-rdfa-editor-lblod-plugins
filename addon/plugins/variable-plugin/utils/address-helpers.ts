@@ -8,6 +8,12 @@ type LocationRegisterResult = {
     Thoroughfarename: string; // street
     Housenumber?: string | null;
     Zipcode: string;
+    Location: {
+      Lat_WGS84: number;
+      Lon_WGS84: number;
+      X_Lambert72: number;
+      Y_Lambert72: number;
+    };
   }[];
 };
 
@@ -54,6 +60,7 @@ export async function fetchAddresses(
 
   if (result.ok) {
     const jsonResult = (await result.json()) as LocationRegisterResult;
+    console.log(jsonResult);
     const addresses = jsonResult.LocationResult.map(
       (entry) =>
         new Address({
@@ -61,6 +68,10 @@ export async function fetchAddresses(
           housenumber: entry.Housenumber,
           zipcode: entry.Zipcode,
           municipality: entry.Municipality,
+          location: {
+            lat_WGS84: entry.Location.Lat_WGS84,
+            lon_WGS84: entry.Location.Lon_WGS84,
+          },
         }),
     );
     return addresses;

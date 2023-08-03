@@ -22,3 +22,8 @@ export const MOBILITEIT = namespace(
 );
 
 export const ADRES = namespace('https://data.vlaanderen.be/ns/adres/', 'adres');
+export const GENERIEK = namespace(
+  'https://data.vlaanderen.be/ns/generiek/#',
+  'generiek',
+);
+export const GEO = namespace('http://www.w3.org/2003/01/geo/wgs84_pos#', 'geo');

@@ -1,6 +1,7 @@
 import {
   ADRES,
   EXT,
+  GEO,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -26,13 +27,22 @@ import {
   mappingSpan,
   typeSpan,
 } from '../utils/dom-constructors';
+
+type Location = {
+  lat_WGS84: number;
+  lon_WGS84: number;
+};
 export class Address {
   declare street: string;
   declare zipcode: string;
   declare municipality: string;
+  declare location: Location;
   housenumber?: string | null;
   constructor(
-    args: Pick<Address, 'street' | 'housenumber' | 'zipcode' | 'municipality'>,
+    args: Pick<
+      Address,
+      'street' | 'housenumber' | 'zipcode' | 'municipality' | 'location'
+    >,
   ) {
     Object.assign(this, args);
   }
@@ -51,7 +61,9 @@ export class Address {
         this.street === other.street &&
         this.housenumber === other.housenumber &&
         this.zipcode === other.zipcode &&
-        this.municipality === other.municipality
+        this.municipality === other.municipality &&
+        this.location.lat_WGS84 === other.location.lat_WGS84 &&
+        this.location.lon_WGS84 === other.location.lon_WGS84
       );
     } else {
       return false;
@@ -74,6 +86,7 @@ export class ResolvedAddress extends Address {
       | 'zipcode'
       | 'municipality'
       | 'addressRegisterId'
+      | 'location'
     >,
   ) {
     super(args);
@@ -87,6 +100,23 @@ export class ResolvedAddress extends Address {
     });
   }
 }
+
+const constructLocationNode = (location: Location) => {
+  return span(
+    {
+      property: ADRES('positie').full,
+      typeof: GEO('Point').full,
+    },
+    span({
+      property: GEO('lat').full,
+      content: location.lat_WGS84.toString(),
+    }),
+    span({
+      property: GEO('lon').full,
+      content: location.lon_WGS84.toString(),
+    }),
+  );
+};
 
 const constructAddressNode = (address?: Address | ResolvedAddress) => {
   if (address) {
@@ -119,11 +149,36 @@ const constructAddressNode = (address?: Address | ResolvedAddress) => {
         property: ADRES('gemeentenaam').full,
         content: address.municipality,
       }),
+      constructLocationNode(address.location),
       address.formatted,
     );
   } else {
     return contentSpan({}, 'Voeg adres in');
   }
+};
+
+const parseLocationNode = (locationNode: Element): Location | undefined => {
+  const lat_WGS84 = findChildWithRdfaAttribute(
+    locationNode,
+    'property',
+    GEO('lat'),
+  )?.getAttribute('content');
+  const lon_WGS84 = findChildWithRdfaAttribute(
+    locationNode,
+    'property',
+    GEO('lon'),
+  )?.getAttribute('content');
+  if (lat_WGS84 && lon_WGS84) {
+    const lat_WGS84_number = parseFloat(lat_WGS84);
+    const lon_WGS84_number = parseFloat(lon_WGS84);
+    if (!isNaN(lat_WGS84_number) && !isNaN(lon_WGS84_number)) {
+      return {
+        lat_WGS84: lat_WGS84_number,
+        lon_WGS84: lon_WGS84_number,
+      };
+    }
+  }
+  return;
 };
 
 const parseAddressNode = (addressNode: Element): Address | undefined => {
@@ -155,7 +210,13 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
     'property',
     ADRES('gemeentenaam'),
   )?.getAttribute('content');
-  if (street && zipcode && municipality) {
+  const locationNode = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    ADRES('positie'),
+  );
+  const location = locationNode ? parseLocationNode(locationNode) : null;
+  if (street && zipcode && municipality && location) {
     if (addressRegisterId) {
       return new ResolvedAddress({
         addressRegisterId,
@@ -163,6 +224,7 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
         housenumber,
         zipcode,
         municipality,
+        location,
       });
     } else {
       return new Address({
@@ -170,6 +232,7 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
         housenumber,
         zipcode,
         municipality,
+        location,
       });
     }
   } else {
