@@ -33,8 +33,8 @@
       >
         <card.content>
           {{!-- template-lint-disable no-down-event-binding --}}
-          <AuInput
-            @value={{this.inputNumber}}
+          <AuNativeInput
+            value={{this.inputNumber}}
             placeholder={{t 'variable.number.type-number'}}
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
