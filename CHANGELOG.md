@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumps `@embroider/test-setup` from 1.8.3 to 3.0.1
 ### Fixed
 - Allow `block*` content in `article_paragraph`
+- Move buttons for template comments are blue
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
@@ -66,7 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make `errorMessage` of number input modal reactive to attribute changes
 - Number variable input box has a cleaner UI by adjusting the top margins.
 - Demo uses `initialize` and `docWithConfig` introduced in `ember-rdfa-editor@4.0.0`
-
 ### Dependencies
 - Bumps `@lblod/ember-rdfa-editor` from 3.10.0 to 4.0.0
 - Bumps `@typescript-eslint/parser` from 5.60.0 to 5.61.0
