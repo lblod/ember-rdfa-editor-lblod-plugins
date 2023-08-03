@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
 
+### Changed
+- Use one-way-binding in variable label input
+- Use one-way-binding in number variable inputs
+
 ### Added
 - Addition of `variable` group to each variable node-spec.
 ### Breaking
