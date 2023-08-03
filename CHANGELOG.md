@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Dependencies
 - Bumps `@embroider/test-setup` from 1.8.3 to 3.0.1
+### Fixed
+- Allow `block*` content in `article_paragraph`
 
 ## [9.1.1] - 2023-08-02
 ### Fixed
