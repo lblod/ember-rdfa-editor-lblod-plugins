@@ -1,11 +1,11 @@
 <AuLabel for='label'>
   {{t 'variable-plugin.label'}}
 </AuLabel>
-<AuInput
-  id='label'
+<AuNativeInput
+  id="label"
   placeholder={{t 'variable-plugin.labelPlaceholder'}}
   @type='text'
   @width='block'
-  @value={{@label}}
+  value={{@label}}
   {{on 'input' @updateLabel}}
 />
