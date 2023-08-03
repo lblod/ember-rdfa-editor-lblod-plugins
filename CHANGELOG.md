@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
+
+### Fixed
+- Enable no-bare-strings rule and update translations where needed
 ### Breaking
 #### Major rework of variable plugin
 - Removal of generic `variable` node-spec. This node-spec is now replaced by domain-specific `text_variable`, `number`, `date`, `location` and `codelist` node-specs. These new node-specs each have their corresponding node-view.
