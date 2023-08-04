@@ -2,12 +2,12 @@ import {
   executeCountQuery,
   executeQuery,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { Snippet } from '../index';
+import { Snippet, SnippetList } from '../index';
 
 type Filter = { name?: string };
 type Pagination = { pageNumber: number; pageSize: number };
 
-const buildCountQuery = ({ name }: Filter) => {
+const buildSnippetCountQuery = ({ name }: Filter) => {
   return `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
@@ -33,7 +33,23 @@ const buildCountQuery = ({ name }: Filter) => {
       `;
 };
 
-const buildFetchQuery = ({
+const buildSnippetListCountQuery = ({ name }: Filter) => {
+  return `
+      PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+      SELECT (COUNT(?snippetLists) AS ?count)
+      WHERE {
+          ?snippetLists a ext:SnippetList;
+              skos:prefLabel ?label.
+          ${
+            name
+              ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
+              : ''
+          }
+      }
+      `;
+};
+
+const buildSnippetFetchQuery = ({
   filter: { name },
   pagination: { pageSize, pageNumber },
 }: {
@@ -68,6 +84,28 @@ const buildFetchQuery = ({
       `;
 };
 
+const buildSnippetListFetchQuery = ({
+  filter: { name },
+}: {
+  filter: Filter;
+}) => {
+  return `
+        PREFIX pav: <http://purl.org/pav/>
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+        PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+
+        SELECT (?snippetLists as ?id) ?label ?createdOn WHERE {
+          ?snippetLists a ext:SnippetList;
+            skos:prefLabel ?label;
+            pav:createdOn ?createdOn.
+          ${
+            name
+              ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
+              : ''
+          }
+        }`;
+};
+
 export const fetchSnippets = async ({
   endpoint,
   abortSignal,
@@ -81,7 +119,7 @@ export const fetchSnippets = async ({
 }) => {
   const totalCount = await executeCountQuery({
     endpoint,
-    query: buildCountQuery(filter),
+    query: buildSnippetCountQuery(filter),
     abortSignal,
   });
 
@@ -95,7 +133,7 @@ export const fetchSnippets = async ({
     content: { value: string };
   }>({
     endpoint,
-    query: buildFetchQuery({ filter, pagination }),
+    query: buildSnippetFetchQuery({ filter, pagination }),
     abortSignal,
   });
 
@@ -105,6 +143,47 @@ export const fetchSnippets = async ({
         title: binding.title?.value,
         createdOn: binding.createdOn?.value,
         content: binding.content?.value,
+      }),
+  );
+
+  return { totalCount, results };
+};
+
+export const fetchSnippetLists = async ({
+  endpoint,
+  abortSignal,
+  filter,
+}: {
+  endpoint: string;
+  abortSignal: AbortSignal;
+  filter: Filter;
+}) => {
+  const totalCount = await executeCountQuery({
+    endpoint,
+    query: buildSnippetListCountQuery(filter),
+    abortSignal,
+  });
+
+  if (totalCount === 0) {
+    return { totalCount, results: [] };
+  }
+
+  const queryResult = await executeQuery<{
+    id: { value: string };
+    label: { value: string };
+    createdOn: { value: string };
+  }>({
+    endpoint,
+    query: buildSnippetListFetchQuery({ filter }),
+    abortSignal,
+  });
+
+  const results = queryResult.results.bindings.map(
+    (binding) =>
+      new SnippetList({
+        id: binding.id?.value,
+        label: binding.label?.value,
+        createdOn: binding.createdOn?.value,
       }),
   );
 
