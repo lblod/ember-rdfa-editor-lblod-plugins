@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
+- GN-4404: ensure number-variable placeholders are consistent
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
