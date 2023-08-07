@@ -123,34 +123,44 @@ const constructAddressNode = (address?: Address | ResolvedAddress) => {
     const resource =
       'addressRegisterId' in address ? address.addressRegisterId : undefined;
     const houseNumberSpan = address.housenumber
-      ? span({
-          property: ADRES('huisnummer').full,
-          content: address.housenumber,
-        })
+      ? span(
+          {
+            property: ADRES('huisnummer').full,
+          },
+          address.housenumber,
+        )
       : '';
     return contentSpan(
       { resource, typeof: ADRES('Adres').full },
-      span({
-        property: ADRES('heeftStraatnaam').full,
-        content: address.street,
-      }),
+      span(
+        {
+          property: ADRES('heeftStraatnaam').full,
+        },
+        address.street,
+      ),
+      address.housenumber ? ' ' : '', //if there is still a housenumber coming after the street, insert a space.
       houseNumberSpan,
+      ', ',
       span(
         {
           property: ADRES('heeftPostinfo').full,
           typeof: ADRES('Postinfo').full,
         },
-        span({
-          property: ADRES('postcode').full,
-          content: address.zipcode,
-        }),
+        span(
+          {
+            property: ADRES('postcode').full,
+          },
+          address.zipcode,
+        ),
       ),
-      span({
-        property: ADRES('gemeentenaam').full,
-        content: address.municipality,
-      }),
+      ' ',
+      span(
+        {
+          property: ADRES('gemeentenaam').full,
+        },
+        address.municipality,
+      ),
       constructLocationNode(address.location),
-      address.formatted,
     );
   } else {
     return contentSpan({}, 'Voeg adres in');
@@ -187,35 +197,32 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
     addressNode,
     'property',
     ADRES('heeftStraatnaam'),
-  )?.getAttribute('content');
+  )?.textContent;
   const housenumber = findChildWithRdfaAttribute(
     addressNode,
     'property',
     ADRES('huisnummer'),
-  )?.getAttribute('content');
+  )?.textContent;
   const postInfoNode = findChildWithRdfaAttribute(
     addressNode,
     'property',
     ADRES('heeftPostinfo'),
   );
   const zipcode = postInfoNode
-    ? findChildWithRdfaAttribute(
-        postInfoNode,
-        'property',
-        ADRES('postcode'),
-      )?.getAttribute('content')
+    ? findChildWithRdfaAttribute(postInfoNode, 'property', ADRES('postcode'))
+        ?.textContent
     : null;
   const municipality = findChildWithRdfaAttribute(
     addressNode,
     'property',
     ADRES('gemeentenaam'),
-  )?.getAttribute('content');
+  )?.textContent;
   const locationNode = findChildWithRdfaAttribute(
     addressNode,
     'property',
     ADRES('positie'),
   );
-  const location = locationNode ? parseLocationNode(locationNode) : null;
+  const location = locationNode && parseLocationNode(locationNode);
   if (street && zipcode && municipality && location) {
     if (addressRegisterId) {
       return new ResolvedAddress({

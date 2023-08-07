@@ -53,7 +53,7 @@ const contentSelector = `span[property~='${SAY('body').prefixed}'],
                          span[property~='${SAY('body').full}']`;
 
 export const article_paragraph: NodeSpec = {
-  content: 'paragraph*',
+  content: 'block*',
   inline: false,
   isolating: true,
   defining: true,
