@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- GN-4451: fix roadsign plugin no longer showing rendered templates in modal
+
 ## [8.4.2] - 2023-08-02
 ### Fixed
 - GN-4446: fix email-address formatting in error components

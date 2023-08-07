@@ -17,6 +17,7 @@ type Args = {
     zonalityValue?: string,
     temporalValue?: string
   ) => void;
+  endpoint: string;
 };
 
 export default class ExpandedMeasureComponent extends Component<Args> {
