@@ -1,30 +1,20 @@
 import Component from '@glimmer/component';
-import {
-  DecorationSource,
-  NodeSelection,
-  PNode,
-  SayController,
-  SayView,
-} from '@lblod/ember-rdfa-editor';
+import { NodeSelection, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/address';
 
 type Args = {
   getPos: () => number | undefined;
   node: PNode;
-  updateAttribute: (attr: string, value: unknown) => void;
   controller: SayController;
-  view: SayView;
-  selected: boolean;
-  contentDecorations?: DecorationSource;
 };
-export default class NumberNodeviewComponent extends Component<Args> {
+export default class AddressNodeviewComponent extends Component<Args> {
   get node() {
     return this.args.node;
   }
 
   get address() {
-    return this.args.node.attrs.address as Address | null;
+    return this.node.attrs.address as Address | null;
   }
 
   @action

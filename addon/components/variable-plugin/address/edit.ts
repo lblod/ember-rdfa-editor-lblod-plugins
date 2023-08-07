@@ -13,11 +13,11 @@ type Args = {
   controller: SayController;
 };
 
-export default class CodelistEditComponent extends Component<Args> {
+export default class AddressEditComponent extends Component<Args> {
   @localCopy('currentAddress')
   selectedAddress?: Address;
 
-  @trackedReset<CodelistEditComponent, boolean>({
+  @trackedReset<AddressEditComponent, boolean>({
     memo: 'currentAddress',
     update(component, _key, last) {
       if (component.currentAddress) {
