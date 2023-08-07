@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
+- GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
@@ -25,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removal of `DEFAULT_VARIABLE_TYPES`. The insertion of the variable types are now handled by the insert components of the different variable types.
 
 ## [9.1.1] - 2023-08-02
+
+## [8.4.3] - 2023-08-07
+
+### Fixed
+- GN-4451: fix roadsign plugin no longer showing rendered templates in modal
+
+## [8.4.2] - 2023-08-02
 ### Fixed
 - GN-4446: fix email-address formatting in error components
 ### Dependencies
@@ -656,6 +664,8 @@ add onclick handler to pencil icon in variable plugin
 [9.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.1...v9.0.2
 [9.0.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.0...v9.0.1
 [9.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.1...v9.0.0
+[8.4.3]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.2...v8.4.3
+[8.4.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.1...v8.4.2
 [8.4.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.4.0...v8.4.1
 [8.4.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.3.0...v8.4.0
 [8.3.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.2.2...v8.3.0
