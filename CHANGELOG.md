@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - remove unused code from template comment component
 - remove allowedTypes from indentation menu
+- allow normal type of paragraphs (=can have italic mark) in template comments
 ### Dependencies
 - Bumps `@embroider/test-setup` from 1.8.3 to 3.0.1
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
+- problems with lists in template comments
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
