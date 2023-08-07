@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Dependencies
 - Bumps `@embroider/test-setup` from 1.8.3 to 3.0.1
+- Bumps `@types/ember__application` from 4.0.4 to 4.0.6
+- Bumps `webpack` from 5.76.0 to 5.88.2
+- Bumps `@types/ember__component` from 4.0.11 to 4.0.14
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
