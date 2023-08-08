@@ -4,9 +4,22 @@ import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { Selection } from '@lblod/ember-rdfa-editor';
 import { TableOfContentsConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
 import { extractOutline } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
+  @service declare intl: IntlService;
   get config() {
     return this.args.node.attrs['config'] as TableOfContentsConfig;
+  }
+
+  get documentLanguage() {
+    return this.controller.documentLanguage;
+  }
+
+  get title() {
+    return this.intl.t('table-of-contents-plugin.title', {
+      locale: this.documentLanguage,
+    });
   }
 
   get controller() {

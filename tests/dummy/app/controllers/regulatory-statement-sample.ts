@@ -62,6 +62,7 @@ import {
   paragraph as paragraphInvisible,
   space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
+import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
   codelist,
@@ -78,6 +79,7 @@ import {
   templateCommentNodes,
   templateCommentView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
+import { getOwner } from '@ember/application';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -264,6 +266,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         shouldShowInvisibles: false,
       },
     ),
+    emberApplication({ application: getOwner(this) }),
   ];
 
   @action
