@@ -266,3 +266,49 @@ pagination:
   previous: Previous page
   of: of
   results: Results
+
+editor-plugins:
+  roadsign-regulation:
+    expanded-measure:
+      insert-measure: "Insert measure:"
+      select-zonality:
+        label: "Select zonal validity:"
+        zonal: Zonal
+        non-zonal: Non zonal
+      varying-signalisation:
+        label: Varying signalisation
+        varying: Varying
+        non-varying: Non varying
+    card:
+      insert-measure: Insert traffic measure
+    modal:
+      title: Insert traffic measure
+      filter:
+        type: Filter on type
+        code: Filter on code
+        zonal-validity: Filter op zonal validity
+      combine-with-code: Combine with code
+    pagination:
+      publications: Publications
+    table:
+      header:
+        code: Code
+        image: Image
+        template: Template
+        category: Category
+      content:
+        image:
+          alt: traffic sign {code}
+        no-data-message: No measures could be found.
+  import-snippet:
+    card:
+      title: Import document
+      body:
+        document-available: There is a <a href="{source}" target="_blank" rel="noopener noreferrer">document</a> available.
+        confirmation: Do you wish to insert this document?
+        insert-attachment: Insert attachment
+        insert-document: Insert document
+  utils:
+    insert: Insert
+    cancel: Cancel
+    loading: Loading

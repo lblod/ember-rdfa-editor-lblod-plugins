@@ -1,10 +1,10 @@
 <AuDataTable @isLoading={{@isLoading}} @noDataMessage="No data" as |table|>
   <table.content as |c|>
     <c.header>
-      <th class="data-table__header-title">Code</th>
-      <th class="data-table__header-title">Afbeelding</th>
-      <th class="data-table__header-title">Template</th>
-      <th class="data-table__header-title">Category</th>
+      <th class="data-table__header-title">{{t "editor-plugins.roadsign-regulation.table.header.code"}}</th>
+      <th class="data-table__header-title">{{t "editor-plugins.roadsign-regulation.table.header.image"}}</th>
+      <th class="data-table__header-title">{{t "editor-plugins.roadsign-regulation.table.header.template"}}</th>
+      <th class="data-table__header-title">{{t "editor-plugins.roadsign-regulation.table.header.category"}}</th>
       <th class="data-table__header-title"></th>
     </c.header>
     {{#if c.body}}
@@ -13,7 +13,7 @@
         <tr>
           <td colspan="100%" class="is-loading-data">
             <AuLoader />
-            <AuHelpText>Aan het laden</AuHelpText>
+            <AuHelpText>{{t "editor-plugins.utils.loading"}}</AuHelpText>
           </td>
         </tr>
       {{else}}
@@ -27,7 +27,10 @@
                 <div class="au-o-grid au-o-grid--tiny">
                 {{#each row.signs as |sign|}}
                   <div class="au-o-grid__item au-u-1-3">
-                    <img src={{sign.image}} alt="verkeersteken {{sign.code}}" class="au-c-data-table__image" />
+                    <img 
+                      src={{sign.image}} 
+                      alt={{t "editor-plugins.roadsign-regulation.table.content.image.alt" code=sign.code}} 
+                      class="au-c-data-table__image" />
                   </div>
                 {{/each}}
                 </div>
@@ -66,7 +69,9 @@
           {{/if}}
         {{else}}
           <tr>
-            <td colspan="5" class="no-data-message"><p>Er werden geen maatregelen gevonden.</p></td>
+            <td colspan="5" class="no-data-message">
+              <p>{{t "editor-plugins.roadsign-regulation.table.content.no-data-message"}} </p>
+            </td>
           </tr>
         {{/each}}
       {{/if}}

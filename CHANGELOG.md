@@ -21,9 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - problems with lists in template comments
 - GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
 - Snippet insertion inserts first node correctly
+- Enable no-bare-strings rule and update translations where needed
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
+
 ### Breaking
 #### Major rework of variable plugin
 - Removal of generic `variable` node-spec. This node-spec is now replaced by domain-specific `text_variable`, `number`, `date`, `location` and `codelist` node-specs. These new node-specs each have their corresponding node-view.

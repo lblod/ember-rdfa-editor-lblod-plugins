@@ -6,7 +6,7 @@
     @disabled={{not this.showCard}}
     {{on "click" this.openModal}}
   >
-    Voeg mobiliteitsmaatregel in
+    {{t "editor-plugins.roadsign-regulation.card.insert-measure"}}
   </AuButton>
 </AuList::Item>
 <RoadsignRegulationPlugin::RoadsignsModal @modalOpen={{this.modalOpen}} @closeModal={{this.closeModal}} @controller={{@controller}} @options={{@options}}/>
