@@ -77,7 +77,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
-  templateCommentNodes,
+  templateComment,
   templateCommentView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 export default class RegulatoryStatementSampleController extends Controller {
@@ -104,7 +104,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       list_item,
       ordered_list,
       bullet_list,
-      ...templateCommentNodes,
+      templateComment,
       placeholder,
       ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
       date: date(this.config.date),
