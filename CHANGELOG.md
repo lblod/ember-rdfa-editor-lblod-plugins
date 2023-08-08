@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- remove unused code from template comment component
+- remove allowedTypes from indentation menu
+- allow normal type of paragraphs (=can have italic mark) in template comments
 ### Dependencies
 - Bumps `@embroider/test-setup` from 1.8.3 to 3.0.1
 - Bumps `@types/ember__application` from 4.0.4 to 4.0.6
@@ -14,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
+- problems with lists in template comments
 - GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
 - Snippet insertion inserts first node correctly
 
