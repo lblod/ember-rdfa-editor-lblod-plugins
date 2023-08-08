@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
 - GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
+- Snippet insertion inserts first node correctly
 
 ### Added
 - Addition of `variable` group to each variable node-spec.
@@ -26,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removal of `DEFAULT_VARIABLE_TYPES`. The insertion of the variable types are now handled by the insert components of the different variable types.
 
 ## [9.1.1] - 2023-08-02
+### Fixed
+- GN-4446: fix email-address formatting in error components
+### Dependencies
+- Bumps `@types/uuid` from 9.0.0 to 9.0.2
+- Bumps `@types/rdf-validate-shacl` from 0.4.0 to 0.4.2
+- Bumps `@types/ember__polyfills` from 4.0.1 to 4.0.2
 
 ## [8.4.3] - 2023-08-07
 
@@ -35,13 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [8.4.2] - 2023-08-02
 ### Fixed
 - GN-4446: fix email-address formatting in error components
-### Dependencies
-- Bumps `@types/uuid` from 9.0.0 to 9.0.2
-- Bumps `@types/rdf-validate-shacl` from 0.4.0 to 0.4.2
-- Bumps `@types/ember__polyfills` from 4.0.1 to 4.0.2
-
-### Fixed
-- Snippet insertion inserts first node correctly
 
 ## [9.1.0] - 2023-07-29
 
