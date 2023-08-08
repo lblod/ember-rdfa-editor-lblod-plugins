@@ -656,9 +656,9 @@ For enabling it, you need to add the card provided by the plugin to the editor s
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
-It supports basic text with indenting, list items and the marks strong (bold), strikethrough and underline. Italic is not possible as the text is italic by default.
+It supports basic text with indenting, list items and the marks.
 
-Add it to editor by adding `...templateCommentNodes` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+Add it to editor by adding `templateComment` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
 
 Logic to insert a template comment is added with
 ```hbs
