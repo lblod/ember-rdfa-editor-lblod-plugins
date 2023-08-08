@@ -25,8 +25,14 @@
 }
 
 .snippet-preview {
+  // double specificity fix
+  // https://stackoverflow.com/a/47781599/20388916
+  // compiles to .snippet-preview--container.snippet-preview--container { flex-direction: row; }
+  // need this to override the default flex-direction: column of the panel container
   &--container {
-    flex-direction: row;
+    &#{&} {
+      flex-direction: row;
+    }
   }
 
   &--article {
