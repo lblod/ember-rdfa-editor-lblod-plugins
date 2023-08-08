@@ -69,7 +69,7 @@ export async function fetchAddresses(
           municipality: entry.Municipality,
           location: {
             lat_WGS84: entry.Location.Lat_WGS84,
-            lon_WGS84: entry.Location.Lon_WGS84,
+            long_WGS84: entry.Location.Lon_WGS84,
           },
         }),
     );

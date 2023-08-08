@@ -30,7 +30,7 @@ import {
 
 type Location = {
   lat_WGS84: number;
-  lon_WGS84: number;
+  long_WGS84: number;
 };
 export class Address {
   declare street: string;
@@ -63,7 +63,7 @@ export class Address {
         this.zipcode === other.zipcode &&
         this.municipality === other.municipality &&
         this.location.lat_WGS84 === other.location.lat_WGS84 &&
-        this.location.lon_WGS84 === other.location.lon_WGS84
+        this.location.long_WGS84 === other.location.long_WGS84
       );
     } else {
       return false;
@@ -112,8 +112,8 @@ const constructLocationNode = (location: Location) => {
       content: location.lat_WGS84.toString(),
     }),
     span({
-      property: GEO('lon').full,
-      content: location.lon_WGS84.toString(),
+      property: GEO('long').full,
+      content: location.long_WGS84.toString(),
     }),
   );
 };
@@ -173,18 +173,18 @@ const parseLocationNode = (locationNode: Element): Location | undefined => {
     'property',
     GEO('lat'),
   )?.getAttribute('content');
-  const lon_WGS84 = findChildWithRdfaAttribute(
+  const long_WGS84 = findChildWithRdfaAttribute(
     locationNode,
     'property',
-    GEO('lon'),
+    GEO('long'),
   )?.getAttribute('content');
-  if (lat_WGS84 && lon_WGS84) {
+  if (lat_WGS84 && long_WGS84) {
     const lat_WGS84_number = parseFloat(lat_WGS84);
-    const lon_WGS84_number = parseFloat(lon_WGS84);
-    if (!isNaN(lat_WGS84_number) && !isNaN(lon_WGS84_number)) {
+    const long_WGS84_number = parseFloat(long_WGS84);
+    if (!isNaN(lat_WGS84_number) && !isNaN(long_WGS84_number)) {
       return {
         lat_WGS84: lat_WGS84_number,
-        lon_WGS84: lon_WGS84_number,
+        long_WGS84: long_WGS84_number,
       };
     }
   }
