@@ -33,7 +33,13 @@
                 </div>
               </td>
               <td>
-                <AuHelpText skin="secondary" class="au-u-margin-none"><RoadsignRegulationPlugin::MeasureTemplate @measure={{row.uri}} @template={{row.template}} @limitText={{true}}/></AuHelpText>
+                <AuHelpText skin="secondary" class="au-u-margin-none">
+                  <RoadsignRegulationPlugin::MeasureTemplate
+                    @measure={{row.uri}}
+                    @template={{row.template}}
+                    @limitText={{true}}
+                    @endpoint={{@options.endpoint}} />
+                </AuHelpText>
               </td>
               <td>
                 {{#each row.classifications as |classification|}}
@@ -51,7 +57,12 @@
               </td>
             </tr>
           {{#if (eq this.selected row.uri)}}
-            <RoadsignRegulationPlugin::ExpandedMeasure @measure={{row}} @insert={{@insert}} @selectRow={{this.selectRow}} />
+            <RoadsignRegulationPlugin::ExpandedMeasure
+              @measure={{row}}
+              @insert={{@insert}}
+              @selectRow={{this.selectRow}}
+              @endpoint={{@options.endpoint}}
+            />
           {{/if}}
         {{else}}
           <tr>
