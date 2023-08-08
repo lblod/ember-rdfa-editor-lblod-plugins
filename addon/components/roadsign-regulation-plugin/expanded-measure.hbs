@@ -3,7 +3,11 @@
     <AuHeading @level="6" @skin="6">Voeg maatregel in:</AuHeading>
     <p>
       <AuPill>
-        <RoadsignRegulationPlugin::MeasureTemplate @measure={{@measure.uri}} @template={{@measure.template}} />
+        <RoadsignRegulationPlugin::MeasureTemplate
+          @measure={{@measure.uri}}
+          @template={{@measure.template}}
+          @endpoint={{@endpoint}}
+        />
       </AuPill>
     </p>
     {{#if this.isPotentiallyZonal}}
