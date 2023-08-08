@@ -315,3 +315,14 @@ editor-plugins:
     insert: Voeg in
     cancel: Annuleer
     loading: Aan het laden
+  address:
+    insert: Adres invoegen
+    edit:
+      title: Zoek een adres
+      no-results: Geen adressen gevonden
+      search-message: Typ om te zoeken
+      include-housenumber: Inclusief huisnummer
+      placeholder-with-number: Straatnaam huisnummer, gemeente
+      placeholder-without-number: Straatnaam, gemeente
+    nodeview:
+      placeholder: Voeg adres in

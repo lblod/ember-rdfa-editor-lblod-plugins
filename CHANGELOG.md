@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- GN-4261: addition of an address variable
+### Breaking
+- Removal of old address-plugin
+
 ## [10.0.0] - 2023-08-08
 ### Changed
 - remove unused code from template comment component
@@ -26,8 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable no-bare-strings rule and update translations where needed
 
 ### Added
-- Addition of `variable` group to each variable node-spec.
 
+- Addition of `variable` group to each variable node-spec.
 ### Breaking
 #### Major rework of variable plugin
 - Removal of generic `variable` node-spec. This node-spec is now replaced by domain-specific `text_variable`, `number`, `date`, `location` and `codelist` node-specs. These new node-specs each have their corresponding node-view.
