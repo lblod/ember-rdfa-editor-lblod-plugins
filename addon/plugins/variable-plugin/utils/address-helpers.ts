@@ -60,7 +60,6 @@ export async function fetchAddresses(
 
   if (result.ok) {
     const jsonResult = (await result.json()) as LocationRegisterResult;
-    console.log(jsonResult);
     const addresses = jsonResult.LocationResult.map(
       (entry) =>
         new Address({
@@ -99,7 +98,6 @@ export async function resolveAddress(
   });
   if (response.ok) {
     const result = (await response.json()) as AddressRegisterResult;
-    console.log(result);
     if (result.adressen.length) {
       const addressRegisterId = result.adressen[0].identificator.id;
       return ResolvedAddress.resolve(address, addressRegisterId);
