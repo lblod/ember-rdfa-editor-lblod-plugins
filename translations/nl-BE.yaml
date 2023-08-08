@@ -324,3 +324,5 @@ editor-plugins:
       include-housenumber: Inclusief huisnummer
       placeholder-with-number: Straatnaam huisnummer, gemeente
       placeholder-without-number: Straatnaam, gemeente
+    nodeview:
+      placeholder: Voeg adres in
