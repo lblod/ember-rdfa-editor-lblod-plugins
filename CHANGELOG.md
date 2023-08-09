@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - GN-4261: addition of an address variable
+- GN-4461: update readme to specify needed imports of template comment
 ### Breaking
 - Removal of old address-plugin
 
