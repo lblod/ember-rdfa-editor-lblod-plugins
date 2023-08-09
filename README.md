@@ -682,6 +682,11 @@ Buttons to remove and move it when selected can be shown with
 ```hbs
 <TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
 ```
+
+Template comments have a specific style that can be imported in the stylesheet with
+```css
+@import 'template-comments-plugin';
+```
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
