@@ -269,3 +269,60 @@ pagination:
   previous: Vorige pagina
   of: van
   results: Resultaten
+
+editor-plugins:
+  roadsign-regulation:
+    expanded-measure:
+      insert-measure: "Voeg maatregel in:"
+      select-zonality:
+        label: "Selecteer zonale geldigheid:"
+        zonal: Zonaal
+        non-zonal: Niet zonaal
+      varying-signalisation:
+        label: Variabele signalisatie
+        varying: Variabel
+        non-varying: Niet variabel
+    card:
+      insert-measure: Voeg mobiliteitsmaatregel in
+    modal:
+      title: Mobiliteitsmaatregel toevoegen
+      filter:
+        type: Filter op type
+        code: Filter op code
+        zonal-validity: Filter op zonale geldigheid
+      combine-with-code: Combineer met code
+    pagination:
+      publications: Publicaties
+    table:
+      header:
+        code: Code
+        image: Afbeelding
+        template: Template
+        category: Categorie
+      content:
+        image:
+          alt: verkeersteken {code}
+        no-data-message: Er werden geen maatregelen gevonden.
+  import-snippet:
+    card:
+      title: Document importeren
+      body:
+        document-available: Er is een <a href="{source}" target="_blank" rel="noopener noreferrer">document</a> beschikbaar.
+        confirmation: Wenst u dit document in te voegen?
+        insert-attachment: Bijlage invoegen
+        insert-document: Document invoegen
+  utils:
+    insert: Voeg in
+    cancel: Annuleer
+    loading: Aan het laden
+  address:
+    insert: Adres invoegen
+    edit:
+      title: Zoek een adres
+      no-results: Geen adressen gevonden
+      search-message: Typ om te zoeken
+      include-housenumber: Inclusief huisnummer
+      placeholder-with-number: Straatnaam huisnummer, gemeente
+      placeholder-without-number: Straatnaam, gemeente
+    nodeview:
+      placeholder: Voeg adres in

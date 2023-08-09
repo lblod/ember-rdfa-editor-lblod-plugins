@@ -32,7 +32,9 @@
           {{option.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedLocationOption}}>Voeg in</AuButton>
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedLocationOption}}>
+        {{t "editor-plugins.utils.insert"}}
+      </AuButton>
     </c.content>
   </AuCard>
 {{/if}}

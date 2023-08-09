@@ -91,6 +91,8 @@ import {
   numberView,
   codelistView,
   locationView,
+  address,
+  addressView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
 export default class BesluitSampleController extends Controller {
@@ -173,6 +175,7 @@ export default class BesluitSampleController extends Controller {
         number,
         location,
         codelist,
+        address,
         ...besluitNodes,
         roadsign_regulation,
         heading,
@@ -276,6 +279,7 @@ export default class BesluitSampleController extends Controller {
       location: locationView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.config.date)(controller),
+      address: addressView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

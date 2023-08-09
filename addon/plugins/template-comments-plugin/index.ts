@@ -1,5 +1,1 @@
-export {
-  templateComment,
-  templateCommentView,
-  templateCommentNodes,
-} from './node';
+export { templateComment, templateCommentView } from './node';

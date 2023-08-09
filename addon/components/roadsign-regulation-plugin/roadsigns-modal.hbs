@@ -1,7 +1,7 @@
 <AuModal
   class="au-c-modal--flush"
   @size="large"
-  @modalTitle="Mobiliteitsmaatregel toevoegen"
+  @modalTitle={{t "editor-plugins.roadsign-regulation.modal.title"}}
   @modalOpen={{@modalOpen}}
   @closeModal={{this.closeModal}} as |Modal| >
   <Modal.Body>
@@ -10,7 +10,7 @@
         <div class="au-o-grid au-o-grid--tiny au-o-grid--bottom">
           <div class="au-o-grid__item au-u-1-4">
             <AuLabel>
-              Filter op type
+              {{t "editor-plugins.roadsign-regulation.modal.filter.type"}}
             </AuLabel>
             <PowerSelect
               @renderInPlace={{true}}
@@ -26,7 +26,7 @@
           </div>
           <div class="au-o-grid__item au-u-1-4">
             <AuLabel>
-              Filter op code
+              {{t "editor-plugins.roadsign-regulation.modal.filter.code"}}
             </AuLabel>
             <PowerSelect
               @renderInPlace={{true}}
@@ -42,7 +42,7 @@
           </div>
             <div class="au-o-grid__item au-u-1-4">
             <AuLabel>
-              Combineer met code
+              {{t "editor-plugins.roadsign-regulation.modal.combine-with-code"}}
             </AuLabel>
             <PowerSelectMultiple
               @renderInPlace={{true}}
@@ -60,7 +60,7 @@
           </div>
           <div class="au-o-grid__item au-u-1-4">
             <AuLabel>
-              Filter op zonale geldigheid
+              {{t "editor-plugins.roadsign-regulation.modal.filter.zonal-validity"}}
             </AuLabel>
             <PowerSelect
               @renderInPlace={{true}}

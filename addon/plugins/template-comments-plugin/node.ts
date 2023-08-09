@@ -5,7 +5,6 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { paragraphWithConfig } from '@lblod/ember-rdfa-editor/nodes/paragraphWithConfig';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
@@ -13,7 +12,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     componentPath: 'template-comments-plugin/template-comment',
     inline: false,
     group: 'block',
-    content: '(templateCommentParagraph | list)+',
+    content: '(paragraph|list)+',
     draggable: false,
     selectable: true,
     isolating: true,
@@ -25,12 +24,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
         {
           typeof: EXT('TemplateComment').prefixed,
         },
-        [
-          'i',
-          {},
-          ['h3', {}, 'toelichtingsbepaling'],
-          ['div', { property: EXT('content').prefixed }, 0],
-        ],
+        ['h3', {}, 'toelichtingsbepaling'],
+        ['div', { property: EXT('content').prefixed }, 0],
       ];
     },
     parseDOM: [
@@ -51,11 +46,3 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 
 export const templateComment = createEmberNodeSpec(emberNodeConfig());
 export const templateCommentView = createEmberNodeView(emberNodeConfig());
-export const templateCommentNodes = {
-  templateComment: templateComment,
-  templateCommentParagraph: paragraphWithConfig({
-    marks: 'strong underline strikethrough',
-    // don't add to any groups, so it is only allowed for template comment
-    group: '',
-  }),
-};

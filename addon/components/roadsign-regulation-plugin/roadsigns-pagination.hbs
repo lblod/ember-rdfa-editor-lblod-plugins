@@ -5,20 +5,20 @@
   <div class="au-c-pagination">
     {{#if this.hasPreviousPage}}
       <div class="au-c-pagination__list-item">
-        <AuButton @skin="link" {{on 'click' this.goToPreviousPage}} @iconAlignment="left" @icon="nav-left">Vorige pagina</AuButton>
+        <AuButton @skin="link" {{on 'click' this.goToPreviousPage}} @iconAlignment="left" @icon="nav-left">{{t "pagination.previous"}}</AuButton>
       </div>
     {{/if}}
     <p>
-      <span class="au-u-hidden-visually">Publicaties</span>
+      <span class="au-u-hidden-visually">{{t "editor-plugins.roadsign-regulation.pagination.publications"}}</span>
       <strong>
         {{this.pageStart}} - {{this.pageEnd}}
       </strong>
-      van
+      {{t "pagination.of"}}
       {{this.count}}
     </p>
     {{#if this.hasNextPage}}
       <div class="au-c-pagination__list-item">
-        <AuButton @skin="link" {{on 'click' this.goToNextPage}}  @icon="nav-right" @iconAlignment="right">Volgende pagina</AuButton>
+        <AuButton @skin="link" {{on 'click' this.goToNextPage}}  @icon="nav-right" @iconAlignment="right">{{t "pagination.next"}}</AuButton>
       </div>
     {{/if}}
   </div>

@@ -2,16 +2,22 @@
   <AuCard @flex={{true}} @divided={{true}} @expandable={{true}} @shadow={{true}} @isOpenInitially={{true}} @size="small" as |c|>
     <c.header>
       <AuHeading @level="3" @skin="6">
-        Document importeren
+        {{t "editor-plugins.import-snippet.card.title"}}
       </AuHeading>
     </c.header>
     <c.content>
-      <p class="u-spacer--tiny">Er is een <a href="{{snippet.source}}" target="_blank" rel="noopener noreferrer">document</a> beschikbaar</p>
-      <p><strong>Wenst u dit document in te voegen?</strong></p>
+      <p class="u-spacer--tiny">
+        {{t "editor-plugins.import-snippet.card.body.document-available" htmlSafe=true source=snippet.source}}
+      </p>
+      <p><strong>{{t "editor-plugins.import-snippet.card.body.confirmation"}}</strong></p>
       {{#if this.besluitNode}}
-        <AuButton {{on "click" (fn this.insert snippet 'attachment')}} >Bijlage invoegen</AuButton>
+        <AuButton {{on "click" (fn this.insert snippet 'attachment')}}>
+          {{t "editor-plugins.import-snippet.card.body.insert-attachment"}}
+        </AuButton>
       {{/if}}
-      <AuButton {{on "click" (fn this.insert snippet)}} >Document invoegen</AuButton>
+      <AuButton {{on "click" (fn this.insert snippet)}}>
+        {{t "editor-plugins.import-snippet.card.body.insert-document"}}
+      </AuButton>
     </c.content>
   </AuCard>
 {{/each}}
