@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { modifier } from 'ember-modifier';
 
 type Args = {
   controller: SayController;
@@ -18,6 +19,26 @@ export default class NumberInsertComponent extends Component<Args> {
   @tracked maximumValue = '';
   @tracked validMinimum = true;
   @tracked validMaximum = true;
+
+  minimumInput = modifier(
+    (element: HTMLInputElement) => {
+      element.addEventListener('input', this.updateMinimumValue);
+      this.validMinimum = element.checkValidity();
+      return () =>
+        element.removeEventListener('input', this.updateMinimumValue);
+    },
+    { eager: false },
+  );
+
+  maximumInput = modifier(
+    (element: HTMLInputElement) => {
+      element.addEventListener('input', this.updateMaximumValue);
+      this.validMaximum = element.checkValidity();
+      return () =>
+        element.removeEventListener('input', this.updateMaximumValue);
+    },
+    { eager: false },
+  );
 
   get controller() {
     return this.args.controller;
