@@ -186,7 +186,7 @@ document-title-plugin:
 
 variable:
   number:
-    placeholder: number
+    placeholder: Insert number
     type-number: Type a number...
     error-not-integer: Only integers are allowed
     error-not-number: Only numbers are allowed
@@ -321,3 +321,5 @@ editor-plugins:
       include-housenumber: Include housenumber
       placeholder-with-number: Street housenumber, municipality
       placeholder-without-number: Street, municipality
+    nodeview:
+      placeholder: Insert address

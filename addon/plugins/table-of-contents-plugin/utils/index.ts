@@ -1,7 +1,7 @@
 import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 
-type OutlineEntry = {
+export type OutlineEntry = {
   content: string;
   pos: number;
   children?: OutlineEntry[];

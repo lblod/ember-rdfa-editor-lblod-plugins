@@ -197,7 +197,7 @@ table-of-contents-plugin:
 
 variable:
   number:
-    placeholder: nummer
+    placeholder: Voeg getal in
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
@@ -324,3 +324,5 @@ editor-plugins:
       include-housenumber: Inclusief huisnummer
       placeholder-with-number: Straatnaam huisnummer, gemeente
       placeholder-without-number: Straatnaam, gemeente
+    nodeview:
+      placeholder: Voeg adres in

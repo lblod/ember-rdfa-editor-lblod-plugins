@@ -465,6 +465,26 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
 },
 ```
 
+### Internationalization of the table of contents
+The dynamic version of the table of contents is internationalized based on the current document language and using the `ember-intl` service.
+The static (serialized) version of the table of contents can also be internationalized based on the current document language. For this to work correctly, the `emberApplication` prosemirror-plugin should be present. 
+You can add this plugin as follows to the controller/component in which the editor is initialized:
+```js
+import { getOwner } from '@ember/application';
+import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
+...
+plugins = [
+  ...
+  emberApplication(getOwner(this));
+  ...
+];
+...
+```
+As an example, the `emberApplication` plugin has been added to the regulatory-statement route of the dummy app included in this addon.
+
+The table of contents node needs this plugin to be able to translate the serialized version properly. If the plugin is not present, a default (dutch) version of the table of contents will be generated.
+
+
 ## variable-plugin
 
 Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types:
@@ -653,9 +673,9 @@ see [the plugin docs](addon/plugins/validation/README.md)
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
-It supports basic text with indenting, list items and the marks strong (bold), strikethrough and underline. Italic is not possible as the text is italic by default.
+It supports basic text with indenting, list items and the marks.
 
-Add it to editor by adding `...templateCommentNodes` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+Add it to editor by adding `templateComment` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
 
 Logic to insert a template comment is added with
 ```hbs

@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+- GN-4261: addition of an address variable
+- GN-4262: addition of WGS84 coordinates to address variables
+- Introduce internationalization in the table of contents node based on the document language.
+- The whole table of contents node (include its entries) is now exported in its `serialize` method without the need of an `entries` attribute.
+### Breaking
+- Removal of old address-plugin
+- Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
+
+## [10.0.0] - 2023-08-08
+### Changed
+- remove unused code from template comment component
+- remove allowedTypes from indentation menu
+- allow normal type of paragraphs (=can have italic mark) in template comments
 ### Dependencies
 - Bumps `@embroider/test-setup` from 1.8.3 to 3.0.1
 - Bumps `@types/ember__application` from 4.0.4 to 4.0.6
@@ -14,16 +29,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
+- GN-4404: ensure number-variable placeholders are consistent
+- problems with lists in template comments
 - GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
 - Snippet insertion inserts first node correctly
 - Enable no-bare-strings rule and update translations where needed
 
 ### Added
-- GN-4261: addition of an address variable
-- GN-4262: addition of WGS84 coordinates to address variables
 - Addition of `variable` group to each variable node-spec.
+
 ### Breaking
-- Removal of old address-plugin
 #### Major rework of variable plugin
 - Removal of generic `variable` node-spec. This node-spec is now replaced by domain-specific `text_variable`, `number`, `date`, `location` and `codelist` node-specs. These new node-specs each have their corresponding node-view.
 - Rework of the `insert-variable-card` component: this component is only a wrapper which lets you select a variable type. It then shows the insert component corresponding to that variable type. You can configure the `insert-variable-card` with a list of variable types and their corresponding insert component. Each variable type (text, number, date, codelist and location) now has a seperate insert component defined.
@@ -647,7 +662,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.1...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v10.0.0...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -663,6 +678,7 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[10.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.1...v10.0.0
 [9.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.0...v9.1.1
 [9.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.2...v9.1.0
 [9.0.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.1...v9.0.2
