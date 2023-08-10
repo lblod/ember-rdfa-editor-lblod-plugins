@@ -8,6 +8,12 @@ type LocationRegisterResult = {
     Thoroughfarename: string; // street
     Housenumber?: string | null;
     Zipcode: string;
+    Location: {
+      Lat_WGS84: number;
+      Lon_WGS84: number;
+      X_Lambert72: number;
+      Y_Lambert72: number;
+    };
   }[];
 };
 
@@ -61,6 +67,10 @@ export async function fetchAddresses(
           housenumber: entry.Housenumber,
           zipcode: entry.Zipcode,
           municipality: entry.Municipality,
+          location: {
+            lat_WGS84: entry.Location.Lat_WGS84,
+            long_WGS84: entry.Location.Lon_WGS84,
+          },
         }),
     );
     return addresses;
@@ -88,7 +98,6 @@ export async function resolveAddress(
   });
   if (response.ok) {
     const result = (await response.json()) as AddressRegisterResult;
-    console.log(result);
     if (result.adressen.length) {
       const addressRegisterId = result.adressen[0].identificator.id;
       return ResolvedAddress.resolve(address, addressRegisterId);

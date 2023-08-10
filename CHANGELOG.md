@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - GN-4261: addition of an address variable
+- GN-4262: addition of WGS84 coordinates to address variables
 - Introduce internationalization in the table of contents node based on the document language.
 - The whole table of contents node (include its entries) is now exported in its `serialize` method without the need of an `entries` attribute.
 - GN-4461: update readme to specify needed imports for template comment
