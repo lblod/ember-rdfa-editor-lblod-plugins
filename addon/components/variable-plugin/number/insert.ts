@@ -16,6 +16,8 @@ export default class NumberInsertComponent extends Component<Args> {
   @tracked label?: string;
   @tracked minimumValue = '';
   @tracked maximumValue = '';
+  @tracked validMinimum = true;
+  @tracked validMaximum = true;
 
   get controller() {
     return this.args.controller;
@@ -26,6 +28,9 @@ export default class NumberInsertComponent extends Component<Args> {
   }
 
   get numberVariableError() {
+    if (!this.validMinimum || !this.validMaximum) {
+      return this.intl.t('variable.number.error-not-number');
+    }
     const minVal = this.minimumValue;
     const maxVal = this.maximumValue;
     if (
@@ -44,15 +49,17 @@ export default class NumberInsertComponent extends Component<Args> {
     this.label = (event.target as HTMLInputElement).value;
   }
 
-  @action
-  updateMinimumValue(event: InputEvent) {
-    this.minimumValue = (event.target as HTMLInputElement).value;
-  }
+  updateMinimumValue = (event: InputEvent) => {
+    const element = event.target as HTMLInputElement;
+    this.validMinimum = element.checkValidity();
+    this.minimumValue = element.value;
+  };
 
-  @action
-  updateMaximumValue(event: InputEvent) {
-    this.maximumValue = (event.target as HTMLInputElement).value;
-  }
+  updateMaximumValue = (event: InputEvent) => {
+    const element = event.target as HTMLInputElement;
+    this.validMaximum = element.checkValidity();
+    this.maximumValue = element.value;
+  };
 
   @action
   insert() {
