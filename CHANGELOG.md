@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Introduce internationalization in the table of contents node based on the document language.
 - The whole table of contents node (include its entries) is now exported in its `serialize` method without the need of an `entries` attribute.
 - GN-4461: update readme to specify needed imports for template comment
+- Check validity on number minimum/maximum inputs
 
 ### Changed
 - Use one-way-binding in variable label input
