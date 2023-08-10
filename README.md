@@ -202,7 +202,7 @@ This plugin needs to be added to the toolbar as a dropdown with the following sy
   <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
 ```
 
-You can need to specify the endpoint from which the plugin will fetch the types
+You need to specify the endpoint from which the plugin will fetch the types in the config object
 ```js
 {
   endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
@@ -260,7 +260,7 @@ Same goes for the `CitationInsert` component
 ```
 
 
-Being this.citationPlugin a tracked reference to the plugin created with the function exported from the package and the wished configuration
+Make `this.citationPlugin` a tracked reference to the plugin created with the function exported from the package and the wished configuration
 ```js
   import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
@@ -370,7 +370,7 @@ This plugin provides a card to modify dates that needs to be added to the editor
     @options={{this.config.date}}/>
 ```
 
-And a insert button to insert new dates that needs to be added to the insert part of the sidebar:
+And an insert button to insert new dates that needs to be added to the insert part of the sidebar:
 ```hbs
   <RdfaDatePlugin::Insert 
     @controller={{this.controller}}
@@ -396,17 +396,20 @@ inside an editor document.
 This plugin provides a card that needs to be added to the editor sidebar like:
 
 ```hbs
-  <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
+  <RoadsignRegulationPlugin::RoadsignRegulationCard 
+    @controller={{this.controller}}
+    @options={{this.config.roadsignRegulation}}
+  />
 ```
 
-You will need to set the following configuration
+You will need to set the following configuration in the config object
 ```js
 {
   endpoint: 'https://dev.roadsigns.lblod.info/sparql',
   imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
 }
 ```
-The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed
+The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed.
 
 ## standard-template-plugin
 
@@ -446,7 +449,7 @@ In order to enable the plugin you need to add the table of contents button to th
   <TableOfContentsPlugin::ToolbarButton @controller={{this.editor}}/>
 ```
 
-```
+```js
   tableOfContentsView(this.config.tableOfContents)(controller),
 ```
 ### Configuring the plugin with a custom config
@@ -673,11 +676,24 @@ see [the plugin docs](addon/plugins/validation/README.md)
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
-It supports basic text with indenting, list items and the marks.
+It supports basic text with indenting, list items and marks.
 
-Add it to editor by adding `templateComment` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+Add it to editor by adding `templateComment` to your schema and
+```js
+templateComment: templateCommentView(controller),
+```
+as a nodeview.
 
-Logic to insert a template comment is added with
+Import with:
+```js
+import {
+  templateComment,
+  templateCommentView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
+```
+
+
+Button to insert a template comment is added with
 ```hbs
 <TemplateCommentsPlugin::Insert @controller={{this.controller}}/>
 ```
@@ -685,6 +701,11 @@ Logic to insert a template comment is added with
 Buttons to remove and move it when selected can be shown with
 ```hbs
 <TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
+```
+
+Template comments have a specific style that can be imported in the stylesheet with
+```css
+@import 'template-comments-plugin';
 ```
 ## Contributing
 
