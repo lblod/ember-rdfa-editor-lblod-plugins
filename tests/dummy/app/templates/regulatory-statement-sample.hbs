@@ -29,7 +29,6 @@
               <Toolbar::List @controller={{this.controller}}/>
               <Plugins::Indentation::IndentationMenu 
                 @controller={{this.controller}}
-                @allowedTypes={{array this.schema.nodes.list_item this.schema.nodes.paragraph this.schema.nodes.templateCommentParagraph}}
               />
             </Tb.Group>
             <Tb.Group>
@@ -78,6 +77,7 @@
               <TemplateCommentsPlugin::Insert
                 @controller={{this.controller}}
               />
+              <VariablePlugin::Address::Insert @controller={{this.controller}}/>
             </Sidebar.Collapsible>
             <VariablePlugin::InsertVariableCard
               @controller={{this.controller}}
@@ -91,6 +91,7 @@
               @controller={{this.controller}}
               @options={{this.config.date}}
             />
+            <VariablePlugin::Address::Edit @controller={{this.controller}}/>
             <VariablePlugin::Codelist::Edit @controller={{this.controller}} @options={{this.codelistOptions}}/>
             <VariablePlugin::Location::Edit @controller={{this.controller}} @options={{this.locationOptions}}/>
             <TemplateCommentsPlugin::EditCard

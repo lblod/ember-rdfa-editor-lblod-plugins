@@ -30,7 +30,6 @@ This addon contains the following editor plugins:
 * [table-of-contents-plugin](#table-of-contents-plugin)
 * [variable-plugin](#variable-plugin)
 * [validation-plugin](#validation-plugin)
-* [address-plugin](#address-plugin)
 * [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
@@ -203,7 +202,7 @@ This plugin needs to be added to the toolbar as a dropdown with the following sy
   <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
 ```
 
-You can need to specify the endpoint from which the plugin will fetch the types
+You need to specify the endpoint from which the plugin will fetch the types in the config object
 ```js
 {
   endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
@@ -261,7 +260,7 @@ Same goes for the `CitationInsert` component
 ```
 
 
-Being this.citationPlugin a tracked reference to the plugin created with the function exported from the package and the wished configuration
+Make `this.citationPlugin` a tracked reference to the plugin created with the function exported from the package and the wished configuration
 ```js
   import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
@@ -371,7 +370,7 @@ This plugin provides a card to modify dates that needs to be added to the editor
     @options={{this.config.date}}/>
 ```
 
-And a insert button to insert new dates that needs to be added to the insert part of the sidebar:
+And an insert button to insert new dates that needs to be added to the insert part of the sidebar:
 ```hbs
   <RdfaDatePlugin::Insert 
     @controller={{this.controller}}
@@ -397,17 +396,20 @@ inside an editor document.
 This plugin provides a card that needs to be added to the editor sidebar like:
 
 ```hbs
-  <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
+  <RoadsignRegulationPlugin::RoadsignRegulationCard 
+    @controller={{this.controller}}
+    @options={{this.config.roadsignRegulation}}
+  />
 ```
 
-You will need to set the following configuration
+You will need to set the following configuration in the config object
 ```js
 {
   endpoint: 'https://dev.roadsigns.lblod.info/sparql',
   imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
 }
 ```
-The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed
+The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed.
 
 ## standard-template-plugin
 
@@ -447,7 +449,7 @@ In order to enable the plugin you need to add the table of contents button to th
   <TableOfContentsPlugin::ToolbarButton @controller={{this.editor}}/>
 ```
 
-```
+```js
   tableOfContentsView(this.config.tableOfContents)(controller),
 ```
 ### Configuring the plugin with a custom config
@@ -466,6 +468,26 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
 },
 ```
 
+### Internationalization of the table of contents
+The dynamic version of the table of contents is internationalized based on the current document language and using the `ember-intl` service.
+The static (serialized) version of the table of contents can also be internationalized based on the current document language. For this to work correctly, the `emberApplication` prosemirror-plugin should be present. 
+You can add this plugin as follows to the controller/component in which the editor is initialized:
+```js
+import { getOwner } from '@ember/application';
+import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
+...
+plugins = [
+  ...
+  emberApplication(getOwner(this));
+  ...
+];
+...
+```
+As an example, the `emberApplication` plugin has been added to the regulatory-statement route of the dummy app included in this addon.
+
+The table of contents node needs this plugin to be able to translate the serialized version properly. If the plugin is not present, a default (dutch) version of the table of contents will be generated.
+
+
 ## variable-plugin
 
 Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types:
@@ -474,6 +496,7 @@ Editor plugin which provides node-specs and components which allow you to insert
 - date variable
 - codelist
 - location
+- address
 
 Additional variable types can be added in the consuming application or addon.
 
@@ -488,6 +511,8 @@ import {
   numberView,
   text_variable,
   textVariableView,
+  address,
+  addressView
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 ```
 
@@ -503,6 +528,7 @@ This addon includes an insert-component for each of these variable types:
 - `variable-plugin/date/insert`
 - `variable-plugin/location/insert`
 - `variable-plugin/codelist/insert`
+- `variable-plugin/address/insert`
 
 Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
 
@@ -635,32 +661,39 @@ get codelistEditOptions() {
 }
 ```
 
+#### The address variable
+This addon provides a seperate edit component which allows users to search for an address and update the select address variable. Additionally, they can also choose whether to include the housenumber of an address.
+You can add this edit-component to a template as follows:
+```hbs
+<VariablePlugin::Address::Edit @controller={{this.controller}}/>
+```
+
 ## validation-plugin
 
 see [the plugin docs](addon/plugins/validation/README.md)
-
-## address-plugin
-
-Editor plugin which allows you to insert address based on information from
-
-- https://basisregisters.vlaanderen.be/api/v1/adressen
-- https://geo.api.vlaanderen.be/geolocation/v4/Location
-
-For enabling it, you need to add the card provided by the plugin to the editor sidebar
-
-```hbs
-<AddressPlugin::Insert @controller={{this.controller}} />
-```
 
 ## template-comments-plugin
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
-It supports basic text with indenting, list items and the marks strong (bold), strikethrough and underline. Italic is not possible as the text is italic by default.
+It supports basic text with indenting, list items and marks.
 
-Add it to editor by adding `...templateCommentNodes` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+Add it to editor by adding `templateComment` to your schema and
+```js
+templateComment: templateCommentView(controller),
+```
+as a nodeview.
 
-Logic to insert a template comment is added with
+Import with:
+```js
+import {
+  templateComment,
+  templateCommentView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
+```
+
+
+Button to insert a template comment is added with
 ```hbs
 <TemplateCommentsPlugin::Insert @controller={{this.controller}}/>
 ```
@@ -668,6 +701,11 @@ Logic to insert a template comment is added with
 Buttons to remove and move it when selected can be shown with
 ```hbs
 <TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
+```
+
+Template comments have a specific style that can be imported in the stylesheet with
+```css
+@import 'template-comments-plugin';
 ```
 ## Contributing
 

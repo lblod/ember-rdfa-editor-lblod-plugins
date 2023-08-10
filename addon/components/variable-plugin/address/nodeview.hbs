@@ -1,0 +1,19 @@
+<AuPill
+  @icon='pencil'
+  @iconAlignment='right'
+  class='variable'
+  {{on 'click' this.selectThisNode}}
+>
+  {{#if this.address}}
+    {{this.address.formatted}}
+  {{else}}
+    <span class='mark-highlight-manual'>
+      {{t "editor-plugins.address.nodeview.placeholder"}}
+    </span>
+  {{/if}}
+  {{#if @node.attrs.label}}
+    <span class='label'>
+      ({{@node.attrs.label}})
+    </span>
+  {{/if}}
+</AuPill>

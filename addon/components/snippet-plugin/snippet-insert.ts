@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { ProseParser, SayController } from '@lblod/ember-rdfa-editor';
+import { ProseParser, SayController, Slice } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
@@ -33,6 +33,16 @@ export default class SnippetInsertComponent extends Component<Args> {
     this.showModal = false;
   }
 
+  createSliceFromElement(element: Element) {
+    return new Slice(
+      ProseParser.fromSchema(this.controller.schema).parse(element, {
+        preserveWhitespace: true,
+      }).content,
+      0,
+      0,
+    );
+  }
+
   @action
   onInsert(content: string) {
     const domParser = new DOMParser();
@@ -43,20 +53,12 @@ export default class SnippetInsertComponent extends Component<Args> {
 
     if (documentDiv) {
       return this.controller.withTransaction((tr) =>
-        tr.replaceSelectionWith(
-          ProseParser.fromSchema(this.controller.schema).parse(documentDiv, {
-            preserveWhitespace: true,
-          }),
-        ),
+        tr.replaceSelection(this.createSliceFromElement(documentDiv)),
       );
     }
 
     this.controller.withTransaction((tr) =>
-      tr.replaceSelectionWith(
-        ProseParser.fromSchema(this.controller.schema).parse(parsed, {
-          preserveWhitespace: true,
-        }),
-      ),
+      tr.replaceSelection(this.createSliceFromElement(parsed)),
     );
   }
 }
