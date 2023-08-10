@@ -9,8 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - GN-4261: addition of an address variable
+- Introduce internationalization in the table of contents node based on the document language.
+- The whole table of contents node (include its entries) is now exported in its `serialize` method without the need of an `entries` attribute.
 ### Breaking
 - Removal of old address-plugin
+- Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
 
 ## [10.0.0] - 2023-08-08
 ### Changed
@@ -32,12 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable no-bare-strings rule and update translations where needed
 
 ### Added
-
 - Addition of `variable` group to each variable node-spec.
-- Introduce internationalization in the table of contents node based on the document language.
-- The whole table of contents node (include its entries) is now exported in its `serialize` method without the need of an `entries` attribute.
+
 ### Breaking
-- Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
 #### Major rework of variable plugin
 - Removal of generic `variable` node-spec. This node-spec is now replaced by domain-specific `text_variable`, `number`, `date`, `location` and `codelist` node-specs. These new node-specs each have their corresponding node-view.
 - Rework of the `insert-variable-card` component: this component is only a wrapper which lets you select a variable type. It then shows the insert component corresponding to that variable type. You can configure the `insert-variable-card` with a list of variable types and their corresponding insert component. Each variable type (text, number, date, codelist and location) now has a seperate insert component defined.
