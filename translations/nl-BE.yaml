@@ -197,7 +197,7 @@ table-of-contents-plugin:
 
 variable:
   number:
-    placeholder: nummer
+    placeholder: Voeg getal in
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
