@@ -1,6 +1,8 @@
 <tr class="au-c-data-table__detail">
   <td colspan="5" class="au-o-flow au-o-flow--small">
-    <AuHeading @level="6" @skin="6">Voeg maatregel in:</AuHeading>
+    <AuHeading @level="6" @skin="6">
+      {{t "editor-plugins.roadsign-regulation.expanded-measure.insert-measure"}}
+    </AuHeading>
     <p>
       <AuPill>
         <RoadsignRegulationPlugin::MeasureTemplate
@@ -11,37 +13,61 @@
       </AuPill>
     </p>
     {{#if this.isPotentiallyZonal}}
-      <AuHeading @level="6" @skin="6">Selecteer zonale geldigheid:</AuHeading>
+      <AuHeading @level="6" @skin="6">
+        {{t "editor-plugins.roadsign-regulation.expanded-measure.select-zonality.label"}}
+      </AuHeading>
       <div class="au-c-form">
         <ul>
           <li>
-            <AuControlRadio @label="Zonaal" @name="zonal" @value={{this.ZONAL_URI}} @identifier="zonal" {{on 'change' this.changeZonality}} />
+            <AuControlRadio 
+              @label={{t "editor-plugins.roadsign-regulation.expanded-measure.select-zonality.zonal"}} 
+              @name="zonal" 
+              @value={{this.ZONAL_URI}} 
+              @identifier="zonal" 
+              {{on 'change' this.changeZonality}}/>
           </li>
           <li>
-            <AuControlRadio @label="Niet zonaal" @name="zonal" @value={{this.NON_ZONAL_URI}} @identifier="non-zonal" {{on 'change' this.changeZonality}} />
+            <AuControlRadio 
+              @label={{t "editor-plugins.roadsign-regulation.expanded-measure.select-zonality.non-zonal"}} 
+              @name="zonal" 
+              @value={{this.NON_ZONAL_URI}} 
+              @identifier="non-zonal" 
+              {{on 'change' this.changeZonality}} />
           </li>
         </ul>
       </div>
     {{/if}}
     {{#if @measure.temporal}}
-      <AuHeading @level="6" @skin="6">Variabele signalisatie:</AuHeading>
+      <AuHeading @level="6" @skin="6">
+        {{t "editor-plugins.roadsign-regulation.expanded-measure.varying-signalisation.label"}}
+      </AuHeading>
       <div class="au-c-form">
         <ul>
           <li>
-            <AuControlRadio @label="Variabel" @name="temporal" @value={{true}} @identifier="true" {{on 'change' this.changeTemporality}} />
+            <AuControlRadio 
+              @label={{t "editor-plugins.roadsign-regulation.expanded-measure.varying-signalisation.varying"}} 
+              @name="temporal" 
+              @value={{true}} 
+              @identifier="true" 
+              {{on 'change' this.changeTemporality}} />
           </li>
           <li>
-            <AuControlRadio @label="Niet variabel" @name="temporal" @value={{false}} @identifier="false" {{on 'change' this.changeTemporality}} />
+            <AuControlRadio 
+              @label={{t "editor-plugins.roadsign-regulation.expanded-measure.varying-signalisation.non-varying"}} 
+              @name="temporal" 
+              @value={{false}} 
+              @identifier="false" 
+              {{on 'change' this.changeTemporality}} />
           </li>
         </ul>
       </div>
     {{/if}}
     <AuButtonGroup>
       <AuButton {{on 'click' this.insert}} @disabled={{this.insertButtonDisabled}}>
-        Voeg in
+        {{t "editor-plugins.utils.insert"}}
       </AuButton>
       <AuButton @skin="secondary" {{on "click" this.unselectRow }}>
-        Annuleer
+        {{t "editor-plugins.utils.cancel"}}
       </AuButton>
     </AuButtonGroup>
   </td>

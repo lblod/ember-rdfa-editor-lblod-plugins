@@ -73,10 +73,12 @@ import {
   numberView,
   textVariableView,
   text_variable,
+  address,
+  addressView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
-  templateCommentNodes,
+  templateComment,
   templateCommentView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 import { getOwner } from '@ember/application';
@@ -104,7 +106,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       list_item,
       ordered_list,
       bullet_list,
-      ...templateCommentNodes,
+      templateComment,
       placeholder,
       ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
       date: date(this.config.date),
@@ -112,16 +114,14 @@ export default class RegulatoryStatementSampleController extends Controller {
       number,
       location,
       codelist,
+      address,
       ...STRUCTURE_NODES,
       heading,
       blockquote,
       horizontal_rule,
       code_block,
-
       text,
-
       image,
-
       hard_break,
       block_rdfa,
       table_of_contents: table_of_contents(this.config.tableOfContents),
@@ -255,6 +255,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       location: locationView(controller),
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
+      address: addressView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

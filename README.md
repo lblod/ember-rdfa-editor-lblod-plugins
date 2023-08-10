@@ -30,7 +30,6 @@ This addon contains the following editor plugins:
 * [table-of-contents-plugin](#table-of-contents-plugin)
 * [variable-plugin](#variable-plugin)
 * [validation-plugin](#validation-plugin)
-* [address-plugin](#address-plugin)
 * [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
@@ -494,6 +493,7 @@ Editor plugin which provides node-specs and components which allow you to insert
 - date variable
 - codelist
 - location
+- address
 
 Additional variable types can be added in the consuming application or addon.
 
@@ -508,6 +508,8 @@ import {
   numberView,
   text_variable,
   textVariableView,
+  address,
+  addressView
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 ```
 
@@ -523,6 +525,7 @@ This addon includes an insert-component for each of these variable types:
 - `variable-plugin/date/insert`
 - `variable-plugin/location/insert`
 - `variable-plugin/codelist/insert`
+- `variable-plugin/address/insert`
 
 Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
 
@@ -655,30 +658,24 @@ get codelistEditOptions() {
 }
 ```
 
+#### The address variable
+This addon provides a seperate edit component which allows users to search for an address and update the select address variable. Additionally, they can also choose whether to include the housenumber of an address.
+You can add this edit-component to a template as follows:
+```hbs
+<VariablePlugin::Address::Edit @controller={{this.controller}}/>
+```
+
 ## validation-plugin
 
 see [the plugin docs](addon/plugins/validation/README.md)
-
-## address-plugin
-
-Editor plugin which allows you to insert address based on information from
-
-- https://basisregisters.vlaanderen.be/api/v1/adressen
-- https://geo.api.vlaanderen.be/geolocation/v4/Location
-
-For enabling it, you need to add the card provided by the plugin to the editor sidebar
-
-```hbs
-<AddressPlugin::Insert @controller={{this.controller}} />
-```
 
 ## template-comments-plugin
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
-It supports basic text with indenting, list items and the marks strong (bold), strikethrough and underline. Italic is not possible as the text is italic by default.
+It supports basic text with indenting, list items and the marks.
 
-Add it to editor by adding `...templateCommentNodes` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+Add it to editor by adding `templateComment` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
 
 Logic to insert a template comment is added with
 ```hbs

@@ -32,6 +32,17 @@ export function hasRDFaAttribute(
   return false;
 }
 
+export function findChildWithRdfaAttribute(
+  element: Element,
+  attr: string,
+  value: Resource,
+) {
+  return [...element.children].find((child) => {
+    const result = child.getAttribute(attr)?.split(' ');
+    return result?.includes(value.full) || result?.includes(value.prefixed);
+  });
+}
+
 export function pnodeHasRdfaAttribute(
   node: PNode,
   attr: string,
