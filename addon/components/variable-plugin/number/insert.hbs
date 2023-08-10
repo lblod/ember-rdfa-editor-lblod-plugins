@@ -8,12 +8,13 @@
       <AuLabel for={{id}}>
         {{t 'variable-plugin.number.minimum'}}
       </AuLabel>
-      <AuInput
+      <AuNativeInput
         id={{id}}
-        @value={{this.minimumValue}}
+        value={{this.minimumValue}}
+        {{on 'input' this.updateMinimumValue}}
         placeholder={{t 'variable-plugin.number.minimum-placeholder'}}
         @width='block'
-        @type='number'
+        @type="number"
       />
     {{/let}}
   </AuFormRow>
@@ -23,12 +24,13 @@
       <AuLabel for={{id}}>
         {{t 'variable-plugin.number.maximum'}}
       </AuLabel>
-      <AuInput
+      <AuNativeInput
         id={{id}}
-        @value={{this.maximumValue}}
+        value={{this.maximumValue}}
+        {{on 'input' this.updateMaximumValue}}
         placeholder={{t 'variable-plugin.number.maximum-placeholder'}}
         @width='block'
-        @type='number'
+        @type="number"
       />
     {{/let}}
   </AuFormRow>

@@ -45,6 +45,16 @@ export default class NumberInsertComponent extends Component<Args> {
   }
 
   @action
+  updateMinimumValue(event: InputEvent) {
+    this.minimumValue = (event.target as HTMLInputElement).value;
+  }
+
+  @action
+  updateMaximumValue(event: InputEvent) {
+    this.maximumValue = (event.target as HTMLInputElement).value;
+  }
+
+  @action
   insert() {
     if (this.numberVariableError !== '') return;
 
