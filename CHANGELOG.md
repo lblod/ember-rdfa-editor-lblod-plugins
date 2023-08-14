@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
+
+### Fixed
+- GN-4404: ensure number-variable placeholders are consistent
+
 ### Breaking
 - Removal of old address-plugin
 - Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
@@ -34,7 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
-- GN-4404: ensure number-variable placeholders are consistent
 - problems with lists in template comments
 - GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
 - Snippet insertion inserts first node correctly
