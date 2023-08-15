@@ -1,0 +1,61 @@
+<Velcro
+  @placement='bottom-start'
+  @offsetOptions={{hash mainAxis=3}} as |velcro|
+>
+  <AuPill
+    @icon='pencil'
+    @iconAlignment='right'
+    class='variable'
+    {{velcro.hook}}
+    {{on 'click' this.selectThisNode}}
+  >
+    {{#if this.formattedNumber}}
+      {{this.formattedNumber}}
+    {{else}}
+      <span class='mark-highlight-manual'>
+        {{t 'variable.number.placeholder'}}
+      </span>
+    {{/if}}
+    {{#if @node.attrs.label}}
+      <span class='label'>
+        ({{@node.attrs.label}})
+      </span>
+    {{/if}}
+  </AuPill>
+  {{#if this.selected}}
+    <div class='say-tooltip say-number-tooltip' {{velcro.loop}}>
+      {{! AuCard gives weird behaviour when using velcro without div (cause is position:fixed in css)}}
+      <AuCard
+        @shadow={{true}}
+        @size='small'
+        id='number-input-tooltip'
+        @standOut={{true}} as |card|
+      >
+        <card.content>
+          {{!-- template-lint-disable no-down-event-binding --}}
+          <AuNativeInput
+            value={{this.inputNumber}}
+            placeholder={{t 'variable.number.type-number'}}
+            {{did-insert this.focus}}
+            {{on 'input' this.onInputNumberChange}}
+            {{on 'keyup' this.leaveOnEnter}}
+            {{on 'keyup' this.leaveWithArrows}}
+            {{on 'keydown' this.setPosBeforeKeypress}}
+          />
+          <AuToggleSwitch
+            @identifier="writtenNumber"
+            @name="writtenNumber"
+            @checked={{this.writtenNumber}}
+            @onChange={{this.changeWrittenNumber}}
+            @label={{t 'variable.number.written-number-label'}}
+          />
+          {{#if this.errorMessage}}
+            <AuHelpText @small={{true}} @error={{true}}>
+              {{this.errorMessage}}
+            </AuHelpText>
+          {{/if}}
+        </card.content>
+      </AuCard>
+    </div>
+  {{/if}}
+</Velcro>

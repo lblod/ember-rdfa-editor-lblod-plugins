@@ -1,0 +1,35 @@
+{{#if this.showCard}}
+  <AuCard @flex={{true}} @divided={{true}} @shadow={{true}} @size="small" as |c|>
+    <c.content>
+      <AuLabel for='address-select'>
+        {{t "editor-plugins.address.edit.title"}}
+      </AuLabel>
+      <PowerSelect
+        id="adress-select"
+        @loadingMessage={{t "editor-plugins.utils.loading"}}
+        @searchMessage={{t "editor-plugins.address.edit.search-message"}}
+        @noMatchesMessage={{t "editor-plugins.address.edit.no-results"}}
+        @placeholder={{if this.includeHouseNumber 
+                          (t "editor-plugins.address.edit.placeholder-with-number") 
+                          (t "editor-plugins.address.edit.placeholder-without-number")}}
+        @renderInPlace={{true}}
+        @searchEnabled={{true}}
+        @search={{perform this.searchAddress}}
+        @selected={{this.selectedAddress}}
+        @onChange={{this.selectAddress}} as |address|>
+        {{address.formatted}}
+      </PowerSelect>
+      <AuToggleSwitch
+        @checked={{this.includeHouseNumber}}
+        @onChange={{this.toggleIncludeHouseNumber}}
+        @label={{t "editor-plugins.address.edit.include-housenumber"}}
+      />
+      <AuButton 
+        {{on 'click' (perform this.updateAddressVariable)}} 
+        @disabled={{not this.canUpdate}}
+        @loading={{this.updateAddressVariable.isRunning}}>
+        {{t "editor-plugins.utils.insert"}}
+      </AuButton>
+    </c.content>
+  </AuCard>
+{{/if}}

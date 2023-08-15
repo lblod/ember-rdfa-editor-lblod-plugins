@@ -17,4 +17,14 @@ declare module 'tracked-toolbox' {
     memo: UsefulPropsOf<C>,
     initializer?: T | (() => T),
   ): PropertyDecorator;
+  export function trackedReset<C extends Component = Component>(
+    memo: UsefulPropsOf<C>,
+  ): PropertyDecorator;
+  export function trackedReset<
+    C extends Component = Component,
+    T = unknown,
+  >(args: {
+    memo: UsefulPropsOf<C>;
+    update: (component: C, key: string, last: T) => T;
+  }): PropertyDecorator;
 }

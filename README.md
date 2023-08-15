@@ -24,14 +24,12 @@ This addon contains the following editor plugins:
 * [citaten-plugin](#citaten-plugin)
 * [decision-plugin](#decision-plugin)
 * [import-snippet-plugin](#import-snippet-plugin)
-* [insert-variable-plugin](#insert-variable-plugin)
 * [rdfa-date-plugin](#rdfa-date-plugin)
 * [roadsign-regulation-plugin](#roadsign-regulation-plugin)
 * [standard-template-plugin](#standard-template-plugin)
 * [table-of-contents-plugin](#table-of-contents-plugin)
-* [template-variable-plugin](#template-variable-plugin)
+* [variable-plugin](#variable-plugin)
 * [validation-plugin](#validation-plugin)
-* [address-plugin](#address-plugin)
 * [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
@@ -204,7 +202,7 @@ This plugin needs to be added to the toolbar as a dropdown with the following sy
   <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
 ```
 
-You can need to specify the endpoint from which the plugin will fetch the types
+You need to specify the endpoint from which the plugin will fetch the types in the config object
 ```js
 {
   endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
@@ -262,7 +260,7 @@ Same goes for the `CitationInsert` component
 ```
 
 
-Being this.citationPlugin a tracked reference to the plugin created with the function exported from the package and the wished configuration
+Make `this.citationPlugin` a tracked reference to the plugin created with the function exported from the package and the wished configuration
 ```js
   import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
@@ -360,113 +358,6 @@ application (https://github.com/lblod/frontend-gelinkt-notuleren).
 When opening a new document, users will get the option to either include the snippet data in the document or as an
 attachment.
 
-## insert-variable-plugin
-
-Plugin which allows users to insert variable placeholders into a document.
-
-The plugin provides a card that needs to be attached to the editor sidebar like
-```hbs
-  <VariablePlugin::InsertVariableCard 
-    @controller={{this.controller}}
-    @options={{this.config.variable}}
-  />
-```
-
-### Configuring the plugin
-
-The plugin can be configured through the following optional attributes that can be added as a json to the options attribute of the card:
-
-- `publisher`: the URI of a specific codelist publisher which you can use if you want to filter the codelists by its
-  publisher.
-- `defaultEndpoint`: The default endpoint where the codelists are fetched, this is also the variable that gets passed to
-  the fetchSubtypes and template function
-- `variableTypes`: a custom list of variable types you want the plugin to use. This list can contain the following
-  default variable types: `text`, `number`,`date`,`location` and `codelist`. Additionally this list can also contain
-  custom variable types, configured by the following three sub-attributes:
-  * `label`: the label of the custom variable type
-  * `fetchSubTypes` (optional): a function which returns a list of possible variable values. The function takes two
-    optional arguments: an `endpoint` and a `publisher`.
-  * `constructor`: function which returns a prosemirror node to be inserted, the function takes three arguments, the prosemirror `schema`, the `endpoint` and the `selectedSubtype` if you are using subtypes.
-
-#### Example
-
-```js
-{
-  
-    publisher: 'http://data.lblod.info/id/bestuurseenheden/141d9d6b-54af-4d17-b313-8d1c30bc3f5b',
-      defaultEndpoint
-  :
-    'https://dev.roadsigns.lblod.info/sparql',
-      variableTypes
-  :
-    [
-      'text',
-      'number',
-      'date',
-      'location',
-      'codelist',
-      {
-        label: 'Simple Variable',
-        constructor: (schema) => {
-        const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
-        const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-        return schema.node(
-          'variable',
-          {
-            mappingResource: mappingURI,
-            variableInstance,
-            type: 'Simple Variable',
-          },
-          schema.node('placeholder', { placeholderText: 'text' })
-        );
-      },
-      },
-      {
-        label: 'Complex Variable',
-        fetchSubtypes: async (endpoint, publisher) => {
-          const subtypes = [
-            {
-              uri: '1',
-              label: '1',
-            },
-            {
-              uri: '2',
-              label: '2',
-            },
-            {
-              uri: '3',
-              label: '3',
-            },
-          ];
-          return subtypes;
-        },
-        constructor: (schema, endpoint, selectedSubtype) => {
-        const mappingURI = `http://data.lblod.info/mappings/${uuidv4()}`;
-        const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
-        return schema.node(
-          'variable',
-          {
-            type: 'Complex Variable',
-            mappingResource: mappingURI,
-            subTypeResource: selectedSubtype?.uri,
-            variableInstance,
-            source: endpoint,
-          },
-          schema.node('placeholder', {
-            placeholderText: selectedSubtype?.label ?? '',
-          })
-        );
-      }
-    },
-  ],
-}
-```
-
-### Using the plugin
-
-When the insert-variable-plugin is enabled, users will have the option to insert a variable into a document through a
-card which pops up in the sidebar of the editor.
-
 ## rdfa-date-plugin
 
 Plugin to insert and modify semantic dates and timestamps in an editor document.
@@ -479,7 +370,7 @@ This plugin provides a card to modify dates that needs to be added to the editor
     @options={{this.config.date}}/>
 ```
 
-And a insert button to insert new dates that needs to be added to the insert part of the sidebar:
+And an insert button to insert new dates that needs to be added to the insert part of the sidebar:
 ```hbs
   <RdfaDatePlugin::Insert 
     @controller={{this.controller}}
@@ -505,17 +396,20 @@ inside an editor document.
 This plugin provides a card that needs to be added to the editor sidebar like:
 
 ```hbs
-  <RoadsignRegulationPlugin::RoadsignRegulationCard @controller={{this.controller}}/>
+  <RoadsignRegulationPlugin::RoadsignRegulationCard 
+    @controller={{this.controller}}
+    @options={{this.config.roadsignRegulation}}
+  />
 ```
 
-You will need to set the following configuration
+You will need to set the following configuration in the config object
 ```js
 {
   endpoint: 'https://dev.roadsigns.lblod.info/sparql',
   imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
 }
 ```
-The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed
+The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed.
 
 ## standard-template-plugin
 
@@ -555,7 +449,7 @@ In order to enable the plugin you need to add the table of contents button to th
   <TableOfContentsPlugin::ToolbarButton @controller={{this.editor}}/>
 ```
 
-```
+```js
   tableOfContentsView(this.config.tableOfContents)(controller),
 ```
 ### Configuring the plugin with a custom config
@@ -574,68 +468,232 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
 },
 ```
 
-
-## template-variable-plugin
-
-Editor plugin which allows you to interact with placeholders created by the insert-variable-plugin.
-
-For enabling it, you need to add the card provided by the plugin to the editor sidebar
-```hbs
-  <VariablePlugin::TemplateVariableCard @controller={{this.controller}} @options={{this.config.templateVariable}}/>
+### Internationalization of the table of contents
+The dynamic version of the table of contents is internationalized based on the current document language and using the `ember-intl` service.
+The static (serialized) version of the table of contents can also be internationalized based on the current document language. For this to work correctly, the `emberApplication` prosemirror-plugin should be present. 
+You can add this plugin as follows to the controller/component in which the editor is initialized:
+```js
+import { getOwner } from '@ember/application';
+import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
+...
+plugins = [
+  ...
+  emberApplication(getOwner(this));
+  ...
+];
+...
 ```
+As an example, the `emberApplication` plugin has been added to the regulatory-statement route of the dummy app included in this addon.
 
-You will also need to add the variable node to the list of nodes of your prosemirror schema and the variable view to the list of nodeviews like `variable: variableView(controller)` imported from:
+The table of contents node needs this plugin to be able to translate the serialized version properly. If the plugin is not present, a default (dutch) version of the table of contents will be generated.
 
+
+## variable-plugin
+
+Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types:
+- text variable
+- number variable
+- date variable
+- codelist
+- location
+- address
+
+Additional variable types can be added in the consuming application or addon.
+
+For each of these variable types, a node-spec and node-view are defined. You can import them like this:
 ```js
 import {
-  variable,
-  variableView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/nodes';
-
+  codelist,
+  codelistView,
+  location,
+  locationView,
+  number,
+  numberView,
+  text_variable,
+  textVariableView,
+  address,
+  addressView
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 ```
 
-### Configuring the plugin
+The date-variable node-spec and node-view are defined in the `rdfa-date-plugin`.
 
+For each of the variable-types you want to include in your editor instance, you should add the corresponding node-spec to your schema and the node-view to the `nodeViews` editor argument.
 
-You can configure the card with the following attributes:
+### Inserting variables into a document
+
+This addon includes an insert-component for each of these variable types:
+- `variable-plugin/text/insert`
+- `variable-plugin/number/insert`
+- `variable-plugin/date/insert`
+- `variable-plugin/location/insert`
+- `variable-plugin/codelist/insert`
+- `variable-plugin/address/insert`
+
+Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
+
+These insert-components can be used on their own, but can also be used in combination with the `variable-plugin/insert-variable-card` component. The responsibility of this component is two-fold:
+- It allows a user to select a variable type.
+- The correct insert component corresponding to the user-selected variable type is shown.
+
+The `variable-plugin/insert-variable-card` can be easily configured: it expects two arguments:
+- `controller`: An instance of the `SayController` class
+- `variableTypes`: A list of `VariableConfig` objects. With each `VariableConfig` containing:
+  - the `label` which should be displayed in the variable-select dropdown
+  - the `path` to the insert-variable component 
+  - _optionally_ an `options` argument object which should be passed to the insert-variable component.
+ * The `VariableConfig` type is defined as follows:
+ ```js
+  type VariableConfig = {
+    label: string;
+    component: {
+      path: string;
+      options?: unknown;
+    };
+  };
+ ```
+
+#### An example
+To allows users to insert variables into a document, add the following to the editor sidebar in your template:
+```hbs
+<VariablePlugin::InsertVariableCard
+  @controller={{this.controller}}
+  @variableTypes={{this.variableTypes}}
+/>
+```
+`this.controller` is an instance of `SayController` and `this.variableTypes` is the list of `VariableConfig` objects which should be defined in your controller/component class:
 
 ```js
-{
-  endpoint: 'https://dev.roadsigns.lblod.info/sparql', // the fallback endpoint which should be used for codelists which do not have a `dct:source` property.
-  zonalLocationCodelistUri:
-    'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF',
-  nonZonalLocationCodelistUri:
-    'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2',
+get variableTypes() {
+  return [
+    {
+      label: 'text',
+      component: {
+        path: 'variable-plugin/text/insert',
+      },
+    },
+    {
+      label: 'number',
+      component: {
+        path: 'variable-plugin/number/insert',
+      },
+    },
+    {
+      label: 'date',
+      component: {
+        path: 'variable-plugin/date/insert',
+      },
+    },
+    {
+      label: 'location',
+      component: {
+        path: 'variable-plugin/location/insert',
+        options: {
+          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        },
+      },
+    },
+    {
+      label: 'codelist',
+      component: {
+        path: 'variable-plugin/codelist/insert',
+        options: {
+          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        },
+      },
+    },
+  ];
 }
 ```
-The most important attributes are `zonalLocationCodelistUri` and `nonZonalLocationCodelistUri` that are the uri that the location codelists have on your backend.
+
+As you can see, both the `location` and `codelist` insert-components require an endpoint to be provided. They will use it to fetch the codelists/locations.
+Aside from the endpoint, the `codelist` insert-component may optionally expect a publisher argument which it will use to limit the codelist fetch to a specific publisher.
+
+### Editing variables in a document
+Each of the variables provided by this addon have a different editing experiences and use different components:
+
+#### The text variable
+Editing a text variable requires no extra components aside from its node-spec and node-view. A user can just type into the text variable directly.
+
+#### The number variable
+Editing a number variable can be done in its nodeview directly. When a user clicks on a number variable in a document, it opens a popup allow you to fill in a number.
+
+#### The date variable
+The edit component for the date variable can be found in the [rdfa-date-plugin section](#rdfa-date-plugin)
+
+#### The location variable
+This addon provides a seperate edit component which allows users to fill in location variables in a document.
+This component can be added to the sidebar of an editor instance in a template as follows:
+```hbs
+<VariablePlugin::Location::Edit 
+  @controller={{this.controller}} 
+  @options={{this.locationEditOptions}}
+/>
+```
+Where `this.locationEditOptions` is a `LocationEditOptions` object used to configure the edit component. It can be defined as e.g.:
+```js
+get locationEditOptions() {
+  return {
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch location values if the location variable has no `source` attribute
+      zonalLocationCodelistUri:
+        'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF', //the uri the edit component should search for if the location variable is included in a zonal traffic measure
+      nonZonalLocationCodelistUri:
+        'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2', // the uri the edit component should search for if the location variable is included in a non-zonal traffic measure
+    };
+}
+```
+
+#### The codelist variable
+This addon provides a seperate edit component which allows users to fill in codelist variables in a document.
+This component can be added to the sidebar of an editor instance in a template as follows:
+```hbs
+<VariablePlugin::Codelist::Edit 
+  @controller={{this.controller}} 
+  @options={{this.codelistEditOptions}}
+/>
+```
+Where `this.codelistEditOptions` is a `CodelistEditOptions` object used to configure the edit component. It can be defined as e.g.:
+```js
+get codelistEditOptions() {
+  return {
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch codelist values if the codelist variable has no `source` attribute
+    };
+}
+```
+
+#### The address variable
+This addon provides a seperate edit component which allows users to search for an address and update the select address variable. Additionally, they can also choose whether to include the housenumber of an address.
+You can add this edit-component to a template as follows:
+```hbs
+<VariablePlugin::Address::Edit @controller={{this.controller}}/>
+```
 
 ## validation-plugin
 
 see [the plugin docs](addon/plugins/validation/README.md)
 
-## address-plugin
-
-Editor plugin which allows you to insert address based on information from
-
-- https://basisregisters.vlaanderen.be/api/v1/adressen
-- https://geo.api.vlaanderen.be/geolocation/v4/Location
-
-For enabling it, you need to add the card provided by the plugin to the editor sidebar
-
-```hbs
-<AddressPlugin::Insert @controller={{this.controller}} />
-```
-
 ## template-comments-plugin
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
-It supports basic text with indenting, list items and the marks strong (bold), strikethrough and underline. Italic is not possible as the text is italic by default.
+It supports basic text with indenting, list items and marks.
 
-Add it to editor by adding `...templateCommentNodes` to your schema and `templateComment: templateCommentView(controller)` as a nodeview.
+Add it to editor by adding `templateComment` to your schema and
+```js
+templateComment: templateCommentView(controller),
+```
+as a nodeview.
 
-Logic to insert a template comment is added with
+Import with:
+```js
+import {
+  templateComment,
+  templateCommentView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
+```
+
+
+Button to insert a template comment is added with
 ```hbs
 <TemplateCommentsPlugin::Insert @controller={{this.controller}}/>
 ```
@@ -643,6 +701,11 @@ Logic to insert a template comment is added with
 Buttons to remove and move it when selected can be shown with
 ```hbs
 <TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
+```
+
+Template comments have a specific style that can be imported in the stylesheet with
+```css
+@import 'template-comments-plugin';
 ```
 ## Contributing
 

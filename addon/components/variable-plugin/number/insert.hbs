@@ -1,0 +1,47 @@
+
+<AuFormRow>
+  <VariablePlugin::Utils::LabelInput @label={{this.label}} @updateLabel={{this.updateLabel}}/>
+</AuFormRow>
+<div class='number-settings'>
+  <AuFormRow>
+    {{#let (unique-id) as |id|}}
+      <AuLabel for={{id}}>
+        {{t 'variable-plugin.number.minimum'}}
+      </AuLabel>
+      <AuNativeInput
+        id={{id}}
+        value={{this.minimumValue}}
+        {{on 'input' this.updateMinimumValue}}
+        placeholder={{t 'variable-plugin.number.minimum-placeholder'}}
+        @width='block'
+        @type="number"
+      />
+    {{/let}}
+  </AuFormRow>
+  <div class='to'><span>{{t 'variable-plugin.number.to'}}</span></div>
+  <AuFormRow>
+    {{#let (unique-id) as |id|}}
+      <AuLabel for={{id}}>
+        {{t 'variable-plugin.number.maximum'}}
+      </AuLabel>
+      <AuNativeInput
+        id={{id}}
+        value={{this.maximumValue}}
+        {{on 'input' this.updateMaximumValue}}
+        placeholder={{t 'variable-plugin.number.maximum-placeholder'}}
+        @width='block'
+        @type="number"
+      />
+    {{/let}}
+  </AuFormRow>
+  {{#if this.numberVariableError}}
+    <AuHelpText @error={{true}}>
+      {{this.numberVariableError}}
+    </AuHelpText>
+  {{/if}}
+</div>
+<AuButton
+  {{on 'click' this.insert}}
+  @disabled={{this.numberVariableError}}>
+  {{t 'variable-plugin.button'}}
+</AuButton>

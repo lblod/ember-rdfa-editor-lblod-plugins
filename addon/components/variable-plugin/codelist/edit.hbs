@@ -1,0 +1,40 @@
+{{#if this.showCard}}
+  <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
+    <c.header>
+      <AuHeading @level="3" @skin="6">
+        {{t "variable-plugin.enter-variable-value"}}
+      </AuHeading>
+    </c.header>
+    <c.content>
+      <AuLabel for='codelist-select'>
+        {{this.label}}
+      </AuLabel>
+      {{#if this.multiSelect}}
+        <PowerSelectMultiple
+          id="codelist-select"
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{this.codelistOptions.value.options}}
+          @selected={{this.selectedCodelistOption}}
+          @onChange={{this.updateCodelistOption}} as |option|
+        >
+          {{option.label}}
+        </PowerSelectMultiple>
+      {{else}}
+        <PowerSelect
+          id="codelist-select"
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{this.codelistOptions.value.options}}
+          @selected={{this.selectedCodelistOption}}
+          @onChange={{this.updateCodelistOption}} as |option|
+        >
+          {{option.label}}
+        </PowerSelect>
+      {{/if}}
+      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedCodelistOption}}>
+        {{t "editor-plugins.utils.insert"}}
+      </AuButton>
+    </c.content>
+  </AuCard>
+{{/if}}
