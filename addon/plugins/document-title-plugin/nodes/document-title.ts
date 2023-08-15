@@ -10,6 +10,7 @@ export const document_title: NodeSpec = {
   defining: true,
   canSplit: false,
   group: '',
+  allowSplitByTable: false,
   attrs: {
     ...rdfaAttrs,
     property: {
