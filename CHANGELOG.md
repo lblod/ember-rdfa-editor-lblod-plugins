@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - Grey out Generic RDFA button in embedded view
 
+### Changed
+- Do not allow header nodes to be split by table
+
 ## [11.0.0] - 2023-08-22
 
 ### Added
