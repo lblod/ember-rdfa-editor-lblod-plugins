@@ -22,20 +22,14 @@ export default class NumberInsertComponent extends Component<Args> {
 
   minimumInput = modifier(
     (element: HTMLInputElement) => {
-      element.addEventListener('input', this.updateMinimumValue);
       this.validMinimum = element.checkValidity();
-      return () =>
-        element.removeEventListener('input', this.updateMinimumValue);
     },
     { eager: false },
   );
 
   maximumInput = modifier(
     (element: HTMLInputElement) => {
-      element.addEventListener('input', this.updateMaximumValue);
       this.validMaximum = element.checkValidity();
-      return () =>
-        element.removeEventListener('input', this.updateMaximumValue);
     },
     { eager: false },
   );
