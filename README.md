@@ -665,8 +665,12 @@ get codelistEditOptions() {
 This addon provides a seperate edit component which allows users to search for an address and update the select address variable. Additionally, they can also choose whether to include the housenumber of an address.
 You can add this edit-component to a template as follows:
 ```hbs
-<VariablePlugin::Address::Edit @controller={{this.controller}}/>
+<VariablePlugin::Address::Edit @controller={{this.controller}} @defaultMuncipality='Antwerpen'/>
 ```
+
+The edit card can be configured with two arguments:
+- An instance of a `SayController` (required)
+- A `defaultMuncipality` which should be used as the default value of the `muncipality` field in the edit-card (optional)
 
 ## validation-plugin
 
