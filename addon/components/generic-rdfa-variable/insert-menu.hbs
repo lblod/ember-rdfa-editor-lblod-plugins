@@ -2,6 +2,7 @@
   @title={{t 'generic-rdfa-variable.menu.insert'}}
   @icon='html-plus'
   {{on 'click' this.showModal}}
+  @disabled={{not this.canInsert}}
 />
 <AuModal
   @modalOpen={{this.modalOpen}}
