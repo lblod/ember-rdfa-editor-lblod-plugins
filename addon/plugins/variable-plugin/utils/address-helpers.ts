@@ -1,13 +1,8 @@
-import { Address, ResolvedAddress } from '../variables/address';
+import { Address } from '../variables/address';
 
-type LocationRegisterResult = {
+type MunicipalitySearchResult = {
   LocationResult: {
-    ID: number;
-    FormattedAddress: string;
     Municipality: string;
-    Thoroughfarename: string; // street
-    Housenumber?: string | null;
-    Zipcode: string;
     Location: {
       Lat_WGS84: number;
       Lon_WGS84: number;
@@ -17,96 +12,194 @@ type LocationRegisterResult = {
   }[];
 };
 
-type AddressRegisterResult = {
+type StreetSearchResult = {
+  adresMatches: [
+    {
+      gemeente: {
+        gemeentenaam: { geografischeNaam: { spelling: string } };
+      };
+      straatnaam: {
+        straatnaam: {
+          geografischeNaam: { spelling: string };
+        };
+      };
+    },
+  ];
+};
+
+type AddressSearchResult = {
   adressen: {
     identificator: {
       id: string;
-      naamruimte: string;
-      objectId: string;
-      versieId: string;
     };
     detail: string;
-    huisnummer: string;
-    volledigAdres: {
+  }[];
+};
+
+type AddressDetailResult = {
+  identificator: {
+    id: string;
+  };
+  gemeente: {
+    gemeentenaam: {
       geografischeNaam: {
         spelling: string;
         taal: string;
       };
     };
-    adresStatus: string;
-  }[];
+  };
+  postinfo: {
+    objectId: string;
+  };
+  straatnaam: {
+    straatnaam: {
+      geografischeNaam: {
+        spelling: string;
+        taal: string;
+      };
+    };
+  };
+  huisnummer: string;
+  busnummer: string;
+  adresPositie: {
+    point: {
+      coordinates: [number, number]; // coordinates in Lambert72
+    };
+  };
 };
 
+export class AddressError extends Error {
+  translation: string;
+  status?: number;
+  constructor({
+    message,
+    translation,
+    status,
+  }: Pick<AddressError, 'message' | 'translation' | 'status'>) {
+    super(message);
+    this.translation = translation;
+    this.status = status;
+  }
+}
+
 const LOC_GEOPUNT_ENDPOINT = `https://geo.api.vlaanderen.be/geolocation/v4/Location`;
-const BASISREGISTER_ADRESMATCH = `https://basisregisters.vlaanderen.be/api/v1/adressen`;
+const BASISREGISTER_ADRESMATCH =
+  'https://api.basisregisters.vlaanderen.be/v2/adresmatch';
+const BASISREGISTER_ADRES = `https://basisregisters.vlaanderen.be/api/v2/adressen`;
 
 export const replaceAccents = (string: string) =>
   string.normalize('NFD').replace(/([\u0300-\u036f])/g, '');
 
-export async function fetchAddresses(
-  query: string,
-  includeHousenumber = true,
-): Promise<Address[]> {
+export async function fetchMunicipalities(term: string): Promise<string[]> {
   const url = new URL(LOC_GEOPUNT_ENDPOINT);
-  url.searchParams.append('q', replaceAccents(query.replace(/^"(.*)"$/, '$1')));
+  url.searchParams.append('q', replaceAccents(term.replace(/^"(.*)"$/, '$1')));
   url.searchParams.append('c', '10');
-  url.searchParams.append(
-    'type',
-    includeHousenumber ? 'Housenumber' : 'Thoroughfarename',
-  );
+  url.searchParams.append('type', 'Municipality');
   const result = await fetch(url, {
     method: 'GET',
   });
-
   if (result.ok) {
-    const jsonResult = (await result.json()) as LocationRegisterResult;
-    const addresses = jsonResult.LocationResult.map(
-      (entry) =>
-        new Address({
-          street: entry.Thoroughfarename,
-          housenumber: entry.Housenumber,
-          zipcode: entry.Zipcode,
-          municipality: entry.Municipality,
-          location: {
-            lat_WGS84: entry.Location.Lat_WGS84,
-            long_WGS84: entry.Location.Lon_WGS84,
-          },
-        }),
+    const jsonResult = (await result.json()) as MunicipalitySearchResult;
+    const municipalities = jsonResult.LocationResult.map(
+      (entry) => entry.Municipality,
     );
-    return addresses;
+    return municipalities;
   } else {
-    throw new Error(
-      'An error occured when querying the location register, status code: ${response.status}',
-    );
+    throw new AddressError({
+      translation: 'editor-plugins.address.edit.errors.http-error',
+      message: `An error occured when querying the location register, status code: ${result.status}`,
+      status: result.status,
+    });
   }
 }
 
-export async function resolveAddress(
-  address: Address,
-): Promise<ResolvedAddress> {
+export async function fetchStreets(term: string, municipality: string) {
   const url = new URL(BASISREGISTER_ADRESMATCH);
-
-  url.searchParams.append('GemeenteNaam', replaceAccents(address.municipality));
-  url.searchParams.append('Straatnaam', replaceAccents(address.street));
-  if (address.housenumber) {
-    url.searchParams.append('Huisnummer', replaceAccents(address.housenumber));
+  url.searchParams.append(
+    'straatnaam',
+    replaceAccents(term.replace(/^"(.*)"$/, '$1')),
+  );
+  url.searchParams.append('gemeentenaam', municipality);
+  const result = await fetch(url, {
+    method: 'GET',
+  });
+  if (result.ok) {
+    const jsonResult = (await result.json()) as StreetSearchResult;
+    const streetnames = jsonResult.adresMatches.map((entry) => {
+      return entry.straatnaam.straatnaam.geografischeNaam.spelling;
+    });
+    return streetnames;
+  } else {
+    throw new AddressError({
+      translation: 'editor-plugins.address.edit.errors.http-error',
+      message: `An error occured when querying the address register, status code: ${result.status}`,
+      status: result.status,
+    });
   }
-  url.searchParams.append('Postcode', replaceAccents(address.zipcode));
+}
+
+type AddressInfo = {
+  municipality: string;
+  street: string;
+  housenumber: string;
+  busnumber?: string;
+};
+
+export async function resolveAddress(info: AddressInfo) {
+  const addressSearchResult = await searchAddress(info, 1);
+  if (addressSearchResult.adressen.length) {
+    const addressDetailURL = addressSearchResult.adressen[0].detail;
+    const response = await fetch(addressDetailURL);
+    if (response.ok) {
+      const result = (await response.json()) as AddressDetailResult;
+      return new Address({
+        street: result.straatnaam.straatnaam.geografischeNaam.spelling,
+        housenumber: result.huisnummer,
+        busnumber: result.busnummer,
+        zipcode: result.postinfo.objectId,
+        municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
+        id: result.identificator.id,
+      });
+    } else {
+      throw new AddressError({
+        translation: 'editor-plugins.address.edit.errors.http-error',
+        message: `An error occured when querying the address register, status code: ${response.status}`,
+        status: response.status,
+      });
+    }
+  } else {
+    throw new AddressError({
+      translation: 'editor-plugins.address.edit.errors.address-not-found',
+      message: `Could not find address in address register`,
+    });
+  }
+}
+
+export async function searchAddress(
+  { municipality, street, housenumber, busnumber }: AddressInfo,
+  limit = 10,
+) {
+  const url = new URL(BASISREGISTER_ADRES);
+
+  url.searchParams.append('GemeenteNaam', replaceAccents(municipality));
+  url.searchParams.append('Straatnaam', replaceAccents(street));
+  url.searchParams.append('limit', limit.toString());
+  url.searchParams.append('Huisnummer', replaceAccents(housenumber));
+  if (busnumber) {
+    url.searchParams.append('Busnummer', replaceAccents(busnumber));
+  }
 
   const response = await fetch(url.toString(), {
     method: 'GET',
   });
+
   if (response.ok) {
-    const result = (await response.json()) as AddressRegisterResult;
-    if (result.adressen.length) {
-      const addressRegisterId = result.adressen[0].identificator.id;
-      return ResolvedAddress.resolve(address, addressRegisterId);
-    } else {
-      throw new Error('Could not find address in address register');
-    }
+    return (await response.json()) as AddressSearchResult;
   } else {
-    throw new Error(
-      `An error occured when querying the address register, status code: ${response.status}`,
-    );
+    throw new AddressError({
+      translation: 'editor-plugins.address.edit.errors.http-error',
+      message: `An error occured when querying the address register, status code: ${response.status}`,
+      status: response.status,
+    });
   }
 }

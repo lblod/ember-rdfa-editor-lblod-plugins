@@ -1,7 +1,10 @@
 import Component from '@glimmer/component';
 import { NodeSelection, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
-import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/address';
+import {
+  Address,
+  Street,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/address';
 
 type Args = {
   getPos: () => number | undefined;
@@ -14,7 +17,7 @@ export default class AddressNodeviewComponent extends Component<Args> {
   }
 
   get address() {
-    return this.node.attrs.address as Address | null;
+    return this.node.attrs.value as Address | Street | null;
   }
 
   @action
