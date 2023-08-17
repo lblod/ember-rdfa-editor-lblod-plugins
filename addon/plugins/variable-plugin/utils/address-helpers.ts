@@ -66,8 +66,8 @@ type AddressDetailResult = {
   huisnummer: string;
   busnummer: string;
   adresPositie: {
-    point: {
-      coordinates: [number, number]; // coordinates in Lambert72
+    geometrie: {
+      gml: string; // coordinates in Lambert72
     };
   };
 };
@@ -167,6 +167,10 @@ export async function resolveStreet(info: StreetInfo) {
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
+        gml: constructLambert72GMLString({
+          x: streetinfo.Location.X_Lambert72,
+          y: streetinfo.Location.Y_Lambert72,
+        }),
       });
     } else {
       throw new AddressError({
@@ -203,6 +207,7 @@ export async function resolveAddress(info: AddressInfo) {
         zipcode: result.postinfo.objectId,
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
         id: result.identificator.id,
+        gml: result.adresPositie.geometrie.gml,
       });
     } else {
       throw new AddressError({
@@ -246,4 +251,13 @@ export async function searchAddress(
       status: response.status,
     });
   }
+}
+
+type Lambert72Coordinates = {
+  x: number;
+  y: number;
+};
+
+function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
+  return `<gml:Point srsName="https://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
 }

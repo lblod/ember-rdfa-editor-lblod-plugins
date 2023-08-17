@@ -1,6 +1,8 @@
 import {
   ADRES,
   EXT,
+  GENERIEK,
+  GEOSPARQL,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -27,11 +29,6 @@ import {
   typeSpan,
 } from '../utils/dom-constructors';
 
-// type Location = {
-//   lat_WGS84: number;
-//   long_WGS84: number;
-// };
-
 export class Address {
   declare id?: string;
   declare street: string;
@@ -39,10 +36,17 @@ export class Address {
   declare municipality: string;
   declare housenumber?: string;
   declare busnumber?: string;
+  declare gml: string;
   constructor(
     args: Pick<
       Address,
-      'street' | 'housenumber' | 'zipcode' | 'municipality' | 'id' | 'busnumber'
+      | 'street'
+      | 'housenumber'
+      | 'zipcode'
+      | 'municipality'
+      | 'id'
+      | 'busnumber'
+      | 'gml'
     >,
   ) {
     Object.assign(this, args);
@@ -77,22 +81,19 @@ export class Address {
   }
 }
 
-// const constructLocationNode = (location: Location) => {
-//   return span(
-//     {
-//       property: ADRES('positie').full,
-//       typeof: GEO('Point').full,
-//     },
-//     span({
-//       property: GEO('lat').full,
-//       content: location.lat_WGS84.toString(),
-//     }),
-//     span({
-//       property: GEO('long').full,
-//       content: location.long_WGS84.toString(),
-//     }),
-//   );
-// };
+const constructLocationNode = (gml: string) => {
+  return span(
+    {
+      property: ADRES('positie').full,
+      typeof: GENERIEK('GeografischePositie').full,
+    },
+    span({
+      property: GEOSPARQL('asGML').full,
+      datatype: GEOSPARQL('gmlLiteral').full,
+      content: gml,
+    }),
+  );
+};
 
 const constructAddressNode = (address: Address) => {
   const housenumberNode = address.housenumber
@@ -108,7 +109,7 @@ const constructAddressNode = (address: Address) => {
     : [];
   const busnumberNode = address.busnumber
     ? [
-        ' bus',
+        ' bus ',
         span(
           {
             property: ADRES('busnummer').full,
@@ -147,33 +148,9 @@ const constructAddressNode = (address: Address) => {
       },
       address.municipality,
     ),
-    // constructLocationNode(address.location),
+    constructLocationNode(address.gml),
   );
 };
-
-// const parseLocationNode = (locationNode: Element): Location | undefined => {
-//   const lat_WGS84 = findChildWithRdfaAttribute(
-//     locationNode,
-//     'property',
-//     GEO('lat'),
-//   )?.getAttribute('content');
-//   const long_WGS84 = findChildWithRdfaAttribute(
-//     locationNode,
-//     'property',
-//     GEO('long'),
-//   )?.getAttribute('content');
-//   if (lat_WGS84 && long_WGS84) {
-//     const lat_WGS84_number = parseFloat(lat_WGS84);
-//     const long_WGS84_number = parseFloat(long_WGS84);
-//     if (!isNaN(lat_WGS84_number) && !isNaN(long_WGS84_number)) {
-//       return {
-//         lat_WGS84: lat_WGS84_number,
-//         long_WGS84: long_WGS84_number,
-//       };
-//     }
-//   }
-//   return;
-// };
 
 const parseAddressNode = (addressNode: Element): Address | undefined => {
   const id = addressNode.getAttribute('resource');
@@ -206,13 +183,21 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
     'property',
     ADRES('gemeentenaam'),
   )?.textContent;
-  // const locationNode = findChildWithRdfaAttribute(
-  //   addressNode,
-  //   'property',
-  //   ADRES('positie'),
-  // );
-  // const location = locationNode && parseLocationNode(locationNode);
-  if (street && municipality && zipcode) {
+
+  const locationNode = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    ADRES('positie'),
+  );
+  const gml =
+    locationNode &&
+    findChildWithRdfaAttribute(
+      locationNode,
+      'property',
+      GEOSPARQL('asGML'),
+    )?.getAttribute('content');
+
+  if (street && municipality && zipcode && gml) {
     return new Address({
       id: id ?? undefined,
       street,
@@ -220,7 +205,7 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
       zipcode,
       municipality,
       busnumber: busnumber ?? undefined,
-      // location,
+      gml,
     });
   } else {
     return;

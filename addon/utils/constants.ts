@@ -27,3 +27,7 @@ export const GENERIEK = namespace(
   'generiek',
 );
 export const GEO = namespace('http://www.w3.org/2003/01/geo/wgs84_pos#', 'geo');
+export const GEOSPARQL = namespace(
+  'http://www.opengis.net/ont/geosparql#',
+  'geosparql',
+);
