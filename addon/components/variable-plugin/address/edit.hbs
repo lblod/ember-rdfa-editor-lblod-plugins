@@ -65,8 +65,7 @@
         </div>
         
         {{#if this.newAddress.isRunning}}
-        {{t "editor-plugins.address.edit.loading"}}
-        <AuLoader @padding="small"/>
+          <LoadingAlert @title={{t "editor-plugins.address.edit.loading"}} @size="small" @skin="info"/>
         {{/if}}
         {{#if this.message}}
           <AuAlert @skin={{this.message.skin}} @icon={{this.message.icon}} @title={{this.message.title}}>
