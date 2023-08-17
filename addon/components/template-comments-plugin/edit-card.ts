@@ -6,7 +6,10 @@ import {
   findParentNodeOfType,
   hasParentNodeOfType,
 } from '@curvenote/prosemirror-utils';
-import { findContentMatchPosRight } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-contentmatch';
+import {
+  findContentMatchPosLeft,
+  findContentMatchPosRight,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-contentmatch';
 
 type Args = {
   controller: SayController;
@@ -44,22 +47,25 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
   /* Move the template comment before the node left of this */
   @action
   moveUp() {
-    return;
     const comment = this.templateComment;
     if (!comment) return;
     const { node: node, pos: pos } = comment;
-    //const insertPos = this.findPositionUp(pos, node);
-    if (!insertPos) return;
+    const insertPos = findContentMatchPosLeft(
+      this.controller.mainEditorState.doc,
+      pos,
+      this.commentType,
+      ($pos) =>
+        !hasParentNodeOfType(this.commentType)(new TextSelection($pos, $pos)),
+    );
+    if (insertPos === undefined) return;
 
     const amountToMove = -(pos - insertPos);
-
     const initialCursorPos =
       this.controller.mainEditorState.selection.$head.pos;
-    const newPos = pos + amountToMove;
     const newCursorPos = initialCursorPos + amountToMove;
     this.controller.withTransaction((tr) => {
       tr.delete(pos, pos + node.nodeSize);
-      tr.insert(newPos, node);
+      tr.insert(insertPos, node);
       const mappedSelection = TextSelection.create(
         tr.doc,
         newCursorPos,
