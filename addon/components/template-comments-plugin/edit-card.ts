@@ -1,9 +1,12 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor/addon';
-import { PNode, ResolvedPos, TextSelection } from '@lblod/ember-rdfa-editor';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
-import { findContentMatchPosRight } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/document-walker';
+import { TextSelection } from '@lblod/ember-rdfa-editor';
+import {
+  findParentNodeOfType,
+  hasParentNodeOfType,
+} from '@curvenote/prosemirror-utils';
+import { findContentMatchPosRight } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-contentmatch';
 
 type Args = {
   controller: SayController;
@@ -41,10 +44,11 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
   /* Move the template comment before the node left of this */
   @action
   moveUp() {
+    return;
     const comment = this.templateComment;
     if (!comment) return;
     const { node: node, pos: pos } = comment;
-    const insertPos = this.findPositionUp(pos, node);
+    //const insertPos = this.findPositionUp(pos, node);
     if (!insertPos) return;
 
     const amountToMove = -(pos - insertPos);
@@ -75,16 +79,23 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
 
     const { node: commentNode, pos: startPos } = comment;
     const searchStart = startPos + commentNode.nodeSize;
-    const $afterPos = this.resolve(searchStart);
+    const $afterPos = this.controller.mainEditorState.doc.resolve(searchStart);
 
+    // lists in template comments can have any content, including template comments...
+    // This means we have to avoid moving inside a template comment, as the contentMatch would be valid
     const posToInsert = findContentMatchPosRight(
       this.controller.mainEditorState.doc,
       $afterPos,
       commentNode.type,
+      (pos) => {
+        const $pos = this.controller.mainEditorState.doc.resolve(pos);
+        return !hasParentNodeOfType(this.commentType)(
+          new TextSelection($pos, $pos),
+        );
+      },
     );
 
-    if (posToInsert === null) return;
-
+    if (posToInsert === undefined) return;
     const amountToMove = posToInsert - startPos;
 
     const initialCursorPos =
