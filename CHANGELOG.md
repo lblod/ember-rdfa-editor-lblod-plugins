@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
-
+- GN-4442: template comments can move up and down over the *whole* document
 ### Fixed
 - GN-4404: ensure number-variable placeholders are consistent
 
