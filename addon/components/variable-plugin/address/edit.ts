@@ -1,15 +1,13 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
-import {
-  Address,
-  Street,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
   AddressError,
   fetchMunicipalities,
   fetchStreets,
   resolveAddress,
+  resolveStreet,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { localCopy, trackedReset } from 'tracked-toolbox';
@@ -43,7 +41,7 @@ export default class AddressEditComponent extends Component<Args> {
   @localCopy('currentBusnumber') newBusnumber?: string;
 
   get message() {
-    const value = this.newAddress.value as Address | Street | undefined;
+    const value = this.newAddress.value as Address | undefined;
     if (
       this.newAddress.isSuccessful &&
       value &&
@@ -75,11 +73,7 @@ export default class AddressEditComponent extends Component<Args> {
   }
 
   get currentAddress() {
-    return this.selectedAddressVariable?.node.attrs.value as
-      | Address
-      | Street
-      | undefined
-      | null;
+    return this.selectedAddressVariable?.node.attrs.value as Address | null;
   }
 
   get currentMunicipality() {
@@ -137,39 +131,38 @@ export default class AddressEditComponent extends Component<Args> {
     return (
       this.newAddress.isSuccessful &&
       this.newAddress.value &&
-      !this.currentAddress?.sameAs(this.newAddress.value)
+      !this.currentAddress?.sameAs(this.newAddress.value as Address)
     );
   }
 
   resolveAddressTask = restartableTask(async () => {
     const { newStreetName, newMunicipality, newHousenumber, newBusnumber } =
       this;
-    if (newStreetName && newMunicipality) {
-      if (newHousenumber) {
-        // Before trying to resolve the address,
-        // check if the inputs are the same as the current address, if so, no request is necessary.
-        if (
-          this.currentAddress instanceof Address &&
-          this.currentAddress.street === newStreetName &&
-          this.currentAddress.municipality === newMunicipality &&
-          this.currentAddress.housenumber === newHousenumber &&
-          this.currentAddress.busnumber === newBusnumber
-        ) {
-          return this.currentAddress;
-        }
-        // The inputted address is not the same as the current one, so we resolve it with the address register.
-        await timeout(200);
-        return await resolveAddress({
+    if (newMunicipality && newStreetName) {
+      if (
+        this.currentAddress?.sameAs({
           street: newStreetName,
           municipality: newMunicipality,
-          housenumber: newHousenumber,
           busnumber: newBusnumber,
-        });
+          housenumber: newHousenumber,
+        })
+      ) {
+        return this.currentAddress;
       } else {
-        return new Street({
-          municipality: newMunicipality,
-          street: newStreetName,
-        });
+        await timeout(200);
+        if (newHousenumber) {
+          return resolveAddress({
+            street: newStreetName,
+            municipality: newMunicipality,
+            housenumber: newHousenumber,
+            busnumber: newBusnumber,
+          });
+        } else {
+          return resolveStreet({
+            street: newStreetName,
+            municipality: newMunicipality,
+          });
+        }
       }
     } else {
       return;

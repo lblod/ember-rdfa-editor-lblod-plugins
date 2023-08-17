@@ -1,15 +1,19 @@
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { Address } from '../variables/address';
 
-type MunicipalitySearchResult = {
-  LocationResult: {
-    Municipality: string;
-    Location: {
-      Lat_WGS84: number;
-      Lon_WGS84: number;
-      X_Lambert72: number;
-      Y_Lambert72: number;
-    };
-  }[];
+type LocationRegisterSearchResult = {
+  LocationResult: [
+    {
+      Municipality: string;
+      Zipcode: string | null;
+      Thoroughfarename: string | null;
+      Housenumber: string | null;
+      Location: {
+        X_Lambert72: number;
+        Y_Lambert72: number;
+      };
+    },
+  ];
 };
 
 type StreetSearchResult = {
@@ -99,7 +103,7 @@ export async function fetchMunicipalities(term: string): Promise<string[]> {
     method: 'GET',
   });
   if (result.ok) {
-    const jsonResult = (await result.json()) as MunicipalitySearchResult;
+    const jsonResult = (await result.json()) as LocationRegisterSearchResult;
     const municipalities = jsonResult.LocationResult.map(
       (entry) => entry.Municipality,
     );
@@ -138,6 +142,46 @@ export async function fetchStreets(term: string, municipality: string) {
   }
 }
 
+type StreetInfo = {
+  municipality: string;
+  street: string;
+};
+
+export async function resolveStreet(info: StreetInfo) {
+  const searchTerm = `${info.street}, ${info.municipality}`;
+  const url = new URL(LOC_GEOPUNT_ENDPOINT);
+  url.searchParams.append(
+    'q',
+    replaceAccents(searchTerm.replace(/^"(.*)"$/, '$1')),
+  );
+  url.searchParams.append('c', '1');
+  url.searchParams.append('type', 'ThoroughFarename');
+  const result = await fetch(url, {
+    method: 'GET',
+  });
+  if (result.ok) {
+    const jsonResult = (await result.json()) as LocationRegisterSearchResult;
+    const streetinfo = jsonResult.LocationResult[0];
+    if (streetinfo) {
+      return new Address({
+        street: unwrap(streetinfo.Thoroughfarename),
+        municipality: streetinfo.Municipality,
+        zipcode: unwrap(streetinfo.Zipcode),
+      });
+    } else {
+      throw new AddressError({
+        translation: 'editor-plugins.address.edit.errors.address-not-found',
+        message: `Could not find address in address register`,
+      });
+    }
+  } else {
+    throw new AddressError({
+      translation: 'editor-plugins.address.edit.errors.http-error',
+      message: `An error occured when querying the location register, status code: ${result.status}`,
+      status: result.status,
+    });
+  }
+}
 type AddressInfo = {
   municipality: string;
   street: string;

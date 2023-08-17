@@ -32,35 +32,13 @@ import {
 //   long_WGS84: number;
 // };
 
-export class Street {
-  declare street: string;
-  declare municipality: string;
-
-  constructor(args: Pick<Street, 'municipality' | 'street'>) {
-    Object.assign(this, args);
-  }
-
-  get formatted() {
-    return `${this.street}, ${this.municipality}`;
-  }
-
-  sameAs(other?: unknown) {
-    if (other instanceof Street) {
-      return (
-        this.street === other.street && this.municipality === other.municipality
-      );
-    } else {
-      return false;
-    }
-  }
-}
 export class Address {
-  declare id: string;
+  declare id?: string;
   declare street: string;
   declare zipcode: string;
   declare municipality: string;
-  declare housenumber: string;
-  declare busnumber?: string | null;
+  declare housenumber?: string;
+  declare busnumber?: string;
   constructor(
     args: Pick<
       Address,
@@ -71,27 +49,27 @@ export class Address {
   }
 
   get formatted() {
-    const firstPart = this.busnumber
-      ? `${this.street} ${this.housenumber} bus ${this.busnumber}`
-      : `${this.street} ${this.housenumber}`;
-    const secondPart = `${this.zipcode} ${this.municipality}`;
-    return `${firstPart}, ${secondPart}`;
+    if (this.housenumber && this.busnumber) {
+      return `${this.street} ${this.housenumber} bus ${this.busnumber}, ${this.zipcode} ${this.municipality}`;
+    } else if (this.housenumber) {
+      return `${this.street} ${this.housenumber}, ${this.zipcode} ${this.municipality}`;
+    } else {
+      return `${this.street}, ${this.zipcode} ${this.municipality}`;
+    }
   }
 
-  sameAs(other?: unknown) {
-    if (other instanceof Address) {
-      return (
-        this.street === other.street &&
-        this.housenumber === other.housenumber &&
-        this.busnumber === other.busnumber &&
-        this.zipcode === other.zipcode &&
-        this.municipality === other.municipality
-        // this.location.lat_WGS84 === other.location.lat_WGS84 &&
-        // this.location.long_WGS84 === other.location.long_WGS84
-      );
-    } else {
-      return false;
-    }
+  sameAs(
+    other?: Pick<
+      Address,
+      'street' | 'housenumber' | 'busnumber' | 'municipality'
+    > | null,
+  ) {
+    return (
+      this.street === other?.street &&
+      this.housenumber === other?.housenumber &&
+      this.busnumber === other?.busnumber &&
+      this.municipality === other?.municipality
+    );
   }
 
   get hasHouseNumber() {
@@ -116,26 +94,18 @@ export class Address {
 //   );
 // };
 
-const constructStreetNode = (street: Street) => {
-  return contentSpan(
-    { typeof: ADRES('Adres').full },
-    span(
-      {
-        property: ADRES('heeftStraatnaam').full,
-      },
-      street.street,
-    ),
-    ', ',
-    span(
-      {
-        property: ADRES('gemeentenaam').full,
-      },
-      street.municipality,
-    ),
-  );
-};
-
 const constructAddressNode = (address: Address) => {
+  const housenumberNode = address.housenumber
+    ? [
+        ' ',
+        span(
+          {
+            property: ADRES('huisnummer').full,
+          },
+          address.housenumber,
+        ),
+      ]
+    : [];
   const busnumberNode = address.busnumber
     ? [
         ' bus',
@@ -155,13 +125,7 @@ const constructAddressNode = (address: Address) => {
       },
       address.street,
     ),
-    ' ',
-    span(
-      {
-        property: ADRES('huisnummer').full,
-      },
-      address.housenumber,
-    ),
+    ...housenumberNode,
     ...busnumberNode,
     ', ',
     span(
@@ -211,9 +175,7 @@ const constructAddressNode = (address: Address) => {
 //   return;
 // };
 
-const parseAddressNode = (
-  addressNode: Element,
-): Address | Street | undefined => {
+const parseAddressNode = (addressNode: Element): Address | undefined => {
   const id = addressNode.getAttribute('resource');
   const street = findChildWithRdfaAttribute(
     addressNode,
@@ -235,10 +197,10 @@ const parseAddressNode = (
     'property',
     ADRES('heeftPostinfo'),
   );
-  const zipcode = postInfoNode
-    ? findChildWithRdfaAttribute(postInfoNode, 'property', ADRES('postcode'))
-        ?.textContent
-    : null;
+  const zipcode =
+    postInfoNode &&
+    findChildWithRdfaAttribute(postInfoNode, 'property', ADRES('postcode'))
+      ?.textContent;
   const municipality = findChildWithRdfaAttribute(
     addressNode,
     'property',
@@ -250,23 +212,16 @@ const parseAddressNode = (
   //   ADRES('positie'),
   // );
   // const location = locationNode && parseLocationNode(locationNode);
-  if (street && municipality) {
-    if (id && zipcode && housenumber) {
-      return new Address({
-        id,
-        street,
-        housenumber,
-        zipcode,
-        municipality,
-        busnumber,
-        // location,
-      });
-    } else {
-      return new Street({
-        street,
-        municipality,
-      });
-    }
+  if (street && municipality && zipcode) {
+    return new Address({
+      id: id ?? undefined,
+      street,
+      housenumber: housenumber ?? undefined,
+      zipcode,
+      municipality,
+      busnumber: busnumber ?? undefined,
+      // location,
+    });
   } else {
     return;
   }
@@ -309,11 +264,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   const { mappingResource, variableInstance, label, value } = node.attrs;
   let contentNode: DOMOutputSpec;
   if (value) {
-    if (value instanceof Address) {
-      contentNode = constructAddressNode(value);
-    } else {
-      contentNode = constructStreetNode(value);
-    }
+    contentNode = constructAddressNode(value);
   } else {
     contentNode = contentSpan({}, 'Voeg adres in');
   }
