@@ -49,7 +49,7 @@
     "ember-cli-typescript": "^5.2.1",
     "ember-concurrency": "^2.3.7",
     "ember-mu-transform-helpers": "^2.0.0",
-    "ember-power-select": "^6.0.1",
+    "ember-power-select": "^7.1.1",
     "ember-resources": "^6.1.1",
     "ember-velcro": "^2.1.0",
     "fetch-sparql-endpoint": "^3.0.0",
