@@ -9,6 +9,7 @@ import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 interface Args {
   controller: SayController;
   config: SnippetPluginConfig;
+  assignedSnippetListsIds: string[];
 }
 
 export default class SnippetInsertComponent extends Component<Args> {

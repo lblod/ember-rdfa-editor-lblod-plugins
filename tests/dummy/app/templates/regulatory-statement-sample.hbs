@@ -27,7 +27,7 @@
             </Tb.Group>
             <Tb.Group>
               <Toolbar::List @controller={{this.controller}}/>
-              <Plugins::Indentation::IndentationMenu 
+              <Plugins::Indentation::IndentationMenu
                 @controller={{this.controller}}
               />
             </Tb.Group>
@@ -62,7 +62,7 @@
           <Sidebar as |Sidebar|>
             <Sidebar.Collapsible @title='Insert'>
               <DocumentTitlePlugin::InsertTitleCard @controller={{this.controller}}/>
-              <ArticleStructurePlugin::ArticleStructureCard 
+              <ArticleStructurePlugin::ArticleStructureCard
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
@@ -96,6 +96,10 @@
             <VariablePlugin::Location::Edit @controller={{this.controller}} @options={{this.locationOptions}}/>
             <TemplateCommentsPlugin::EditCard
               @controller={{this.controller}}
+            />
+            <AuHr/>
+            <SnippetPlugin::SnippetListSelect
+              @config={{this.config.snippet}}
             />
           </Sidebar>
           {{/if}}

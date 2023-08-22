@@ -1,0 +1,80 @@
+<AuModal
+  @modalOpen={{@open}}
+  @closeModal={{this.closeModal}}
+  @title={{t 'snippet-plugin.snippet-list.modal.title'}}
+  @size='large'
+  @padding='none'
+  as |modal|
+>
+  <modal.Body>
+    <AuMainContainer class='snippet-modal--main-container' as |mc|>
+      <mc.sidebar>
+        <div class='au-c-sidebar'>
+          <div class='au-c-sidebar__content au-u-padding'>
+            <AuHeading @level='3' @skin='4' class='au-u-padding-bottom-small'>
+              {{t 'snippet-plugin.snippet-list.modal.search.title'}}
+            </AuHeading>
+            <AuLabel
+              class='au-margin-bottom-small'
+              for='searchTerm'
+              @inline={{false}}
+              @required={{false}}
+              @error={{false}}
+              @warning={{false}}
+            >
+              {{t 'snippet-plugin.snippet-list.modal.search.label'}}
+            </AuLabel>
+            <AuNativeInput
+              @type='text'
+              @width='block'
+              id='searchTerm'
+              value={{this.searchText}}
+              placeholder={{t 'snippet-plugin.snippet-list.modal.search.placeholder'}}
+              {{on 'input' this.setInputSearchText}}
+            />
+          </div>
+        </div>
+      </mc.sidebar>
+      <mc.content @scroll={{true}}>
+        <div class='au-u-padding-top snippet-modal--list-container'>
+          {{#if this.snippetListResource.isRunning}}
+            <div class='au-u-margin'>
+              <AuLoader @padding='large' />
+              <span class='au-u-hidden-visually'>
+                {{t 'snippet-plugin.alert.loading'}}
+              </span>
+            </div>
+          {{else}}
+            {{#if this.error}}
+              <SnippetPlugin::Helpers::AlertLoadError @error={{this.error}} />
+            {{else}}
+              {{#if this.snippetListResource.value.length}}
+                <SnippetPlugin::SnippetList::SnippetListView
+                  @snippetLists={{this.snippetListResource.value}}
+                  @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
+                  @onChange={{this.onChange}}
+                />
+              {{else}}
+                <SnippetPlugin::Helpers::AlertNoItems />
+              {{/if}}
+            {{/if}}
+          {{/if}}
+        </div>
+        <AuToolbar @border='top' @size='large' @nowrap={{true}} @reverse={{true}}>
+          <AuButtonGroup>
+            <AuButton @skin='secondary' {{on 'click' this.closeModal}}>
+              {{t 'snippet-plugin.snippet-list.modal.button.cancel'}}
+            </AuButton>
+            <AuButton
+              @skin='primary'
+              {{on 'click' this.saveAndClose}}
+              @disabled={{@onSaveSnippetListIds.isRunning}}
+            >
+              {{t 'snippet-plugin.snippet-list.modal.button.update'}}
+            </AuButton>
+          </AuButtonGroup>
+        </AuToolbar>
+      </mc.content>
+    </AuMainContainer>
+  </modal.Body>
+</AuModal>
