@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GN-4461: update readme to specify needed imports for template comment
 
 ### Changed
+- GN-4263: update address variable edit UI/UX according to updated design
+- Allow the address municipality-edit field to be prefilled
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
 - Manage snippet list connection with template

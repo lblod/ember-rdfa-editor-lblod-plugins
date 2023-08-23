@@ -14,7 +14,7 @@ export default class AddressNodeviewComponent extends Component<Args> {
   }
 
   get address() {
-    return this.node.attrs.address as Address | null;
+    return this.node.attrs.value as Address | null;
   }
 
   @action

@@ -331,10 +331,29 @@ editor-plugins:
     insert: Insert address
     edit:
       title: Search for an address
-      no-results: No addresses found
-      search-message: Type to search
-      include-housenumber: Include housenumber
-      placeholder-with-number: Street housenumber, municipality
-      placeholder-without-number: Street, municipality
+      municipality:
+        label: Municipality
+        placeholder: Municipality
+        search-message: Type to search for a municipality
+        no-results: No municipalities found
+      street:
+        label: Street
+        placeholder: Street
+        search-message: Type to search for a street
+        no-results: No streets found
+      housenumber:
+        label: Housenumber
+        placeholder: Housenumber
+      busnumber:
+        label: Busnumber
+        placeholder: Busnumber
+      loading: Resolving address.
+      success:
+        address-found: Address found.
+      errors:
+        address-not-found: We could not resolve the provided address
+        http-error: "Something went wrong while resolving this address, status code: {status}."
+        contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Insert address
+    
