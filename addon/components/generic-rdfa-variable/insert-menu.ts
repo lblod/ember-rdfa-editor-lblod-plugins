@@ -1,14 +1,14 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { Command, SayController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { tracked } from 'tracked-built-ins';
-
-import { DOMParser as ProseParser } from 'prosemirror-model';
 
 import { basicSetup, EditorView } from 'codemirror';
 import { EditorState } from '@codemirror/state';
 import { html } from '@codemirror/lang-html';
 import { tooltips } from '@codemirror/view';
+
+import { insertGenericRdfa } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/generic-rdfa-variable/commands/insert-generic-rdfa';
 
 type Args = {
   controller: SayController;
@@ -27,7 +27,11 @@ export default class GenericRdfaVariableInsertMenu extends Component<Args> {
   }
 
   get canInsert() {
-    return this.controller.checkCommand(this.insertCommand(''));
+    if (this.controller.inEmbeddedView) {
+      return false;
+    }
+
+    return this.controller.checkCommand(insertGenericRdfa(''));
   }
 
   @action
@@ -86,32 +90,10 @@ export default class GenericRdfaVariableInsertMenu extends Component<Args> {
       return;
     }
 
-    this.args.controller.doCommand(this.insertCommand(editorContent), {
+    this.args.controller.doCommand(insertGenericRdfa(editorContent), {
       view: this.controller.mainEditorView,
     });
 
     this.closeModal();
-  }
-
-  insertCommand(editorContent: string): Command {
-    return (state, dispatch) => {
-      if (!this.controller || this.controller.inEmbeddedView) return false;
-
-      const { schema, tr } = state;
-
-      const domParser = new DOMParser();
-
-      tr.replaceSelectionWith(
-        ProseParser.fromSchema(schema).parse(
-          domParser.parseFromString(editorContent, 'text/html'),
-        ),
-      );
-
-      if (dispatch) {
-        dispatch(tr);
-      }
-
-      return true;
-    };
   }
 }
