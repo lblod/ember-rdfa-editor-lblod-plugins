@@ -70,3 +70,14 @@
     position: relative;
   }
 }
+
+.snippet-lists-table {
+  .au-c-table-wrapper {
+    margin-top: 20px;
+    margin-right: 100px;
+
+    .selectColumn {
+      width: 200px;
+    }
+  }
+}

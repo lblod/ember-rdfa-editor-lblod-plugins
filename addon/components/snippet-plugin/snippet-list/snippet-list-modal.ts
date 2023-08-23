@@ -1,31 +1,35 @@
 import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask, Task, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
 import { tracked } from '@glimmer/tracking';
 
-import { fetchSnippets } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
-import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { fetchSnippetLists } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
+
+import {
+  SnippetPluginConfig,
+  SnippetList,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
   config: SnippetPluginConfig;
+  onSaveSnippetListIds: Task<Promise<void>, [snippetIds: string[]]>;
   assignedSnippetListsIds: string[];
   closeModal: () => void;
 }
 
-export default class SnippetPluginSearchModalComponent extends Component<Args> {
+export default class SnippetListModalComponent extends Component<Args> {
   // Filtering
   @tracked inputSearchText: string | null = null;
 
   // Display
   @tracked error: unknown;
 
-  // Pagination
-  @tracked pageNumber = 0;
-  @tracked pageSize = 20;
-  @tracked totalCount = 0;
+  @tracked assignedSnippetListsIds: string[] = [
+    ...this.args.assignedSnippetListsIds,
+  ];
 
   get config() {
     return this.args.config;
@@ -46,32 +50,31 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   }
 
   @action
-  async closeModal() {
-    await this.snippetsResource.cancel();
+  closeModal() {
     this.args.closeModal();
   }
 
-  snippetsSearch = restartableTask(async () => {
+  @action
+  async saveAndClose() {
+    await this.snippetListResource.cancel();
+
+    await this.args.onSaveSnippetListIds.perform(this.assignedSnippetListsIds);
+    this.args.closeModal();
+  }
+
+  snippetListSearch = restartableTask(async () => {
     await timeout(500);
 
     const abortController = new AbortController();
 
     try {
-      const queryResult = await fetchSnippets({
+      const queryResult = await fetchSnippetLists({
         endpoint: this.args.config.endpoint,
         abortSignal: abortController.signal,
         filter: {
           name: this.inputSearchText ?? undefined,
-          assignedSnippetListIds:
-            this.args.assignedSnippetListsIds ?? undefined,
-        },
-        pagination: {
-          pageNumber: this.pageNumber,
-          pageSize: this.pageSize,
         },
       });
-
-      this.totalCount = queryResult.totalCount;
 
       return queryResult.results;
     } catch (error) {
@@ -82,20 +85,14 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
     }
   });
 
-  snippetsResource = trackedTask(this, this.snippetsSearch, () => [
-    this.inputSearchText,
-    this.pageNumber,
-    this.pageSize,
-    this.args.assignedSnippetListsIds,
-  ]);
+  snippetListResource = trackedTask<SnippetList[]>(
+    this,
+    this.snippetListSearch,
+    () => [this.inputSearchText],
+  );
 
   @action
-  previousPage() {
-    --this.pageNumber;
-  }
-
-  @action
-  nextPage() {
-    ++this.pageNumber;
+  onChange(assignedSnippetListsIds: string[]) {
+    this.assignedSnippetListsIds = assignedSnippetListsIds;
   }
 }

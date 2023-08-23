@@ -190,7 +190,7 @@ variable:
     type-number: Type a number...
     error-not-integer: Only integers are allowed
     error-not-number: Only numbers are allowed
-    error-number-between: The number should be between {minValue} and {maxValue} 
+    error-number-between: The number should be between {minValue} and {maxValue}
     error-number-above: The number should be bigger than or equal to {minValue}
     error-number-below: The number should be smaller than or equal to {maxValue}
     error-min-bigger-than-max: The minimum should be smaller than the maximum
@@ -251,6 +251,21 @@ snippet-plugin:
       error-title: Error while loading results
       error-intro: 'An error occurred while loading results'
       error-outro: In case this problem keeps occurring, please contact
+  snippet-list:
+    open-modal: Manage snippet lists
+    modal:
+      title: Select available snippet lists for this template
+      subtitle: Select available snippets lists for this template
+      search:
+        title: Filter on
+        label: Snippet list name
+        placeholder: Type something...
+      button:
+        cancel: Cancel
+        update: Save snippet lists
+      table:
+        select: Select
+        list: List
 
 template-comments-plugin:
   long-title: Template comment or example

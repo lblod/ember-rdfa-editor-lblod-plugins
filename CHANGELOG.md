@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.0.0] - 2023-08-22
+
 ### Added
 - GN-4261: addition of an address variable
 - GN-4262: addition of WGS84 coordinates to address variables
@@ -19,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow the address municipality-edit field to be prefilled
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
+- Manage snippet list connection with template
 
 ### Fixed
 - GN-4404: ensure number-variable placeholders are consistent
@@ -26,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking
 - Removal of old address-plugin
 - Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
+### Dependencies
+- Bumps `@codemirror/view` from 6.12.0 to 6.16.0
 
 ## [10.0.0] - 2023-08-08
 ### Changed
@@ -672,7 +677,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v10.0.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v11.0.0...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -688,6 +693,7 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[11.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v10.0.0...v11.0.0
 [10.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.1...v10.0.0
 [9.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.0...v9.1.1
 [9.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.2...v9.1.0

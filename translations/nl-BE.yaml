@@ -255,6 +255,21 @@ snippet-plugin:
       error-title: Probleem bij het laden
       error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
       error-outro: Moest dit probleem aanhouden, neem contact op met
+  snippet-list:
+    open-modal: Fragmentlijsten beheren
+    modal:
+      title: Selecteer beschikbare fragmentlijsten voor deze sjabloon
+      subtitle: Selecteer beschikbare fragmentlijsten voor deze sjabloon
+      search:
+        title: Filter op
+        label: Naam lijst
+        placeholder: Typ iets..
+      button:
+        cancel: Annuleer
+        update: Fragmentlijsten opslaan
+      table:
+        select: Selecteer
+        list: Lijst
 
 template-comments-plugin:
   long-title: Toelichtings- of voorbeeldbepaling
