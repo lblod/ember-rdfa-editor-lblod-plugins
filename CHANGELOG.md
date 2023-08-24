@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Do not allow header nodes to be split by table
 - Grey out Generic RDFA button in embedded view
+- GN-4425: Smarter content wrapping for structure nodes
 
 ### Changed
 - GN-4442: template comments can move up and down over the *whole* document
