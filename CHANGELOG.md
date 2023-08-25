@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not allow header nodes to be split by table
 - Grey out Generic RDFA button in embedded view
 
+### Changed
+- GN-4442: template comments can move up and down over the *whole* document
+
 ## [11.0.0] - 2023-08-22
 
 ### Added
@@ -25,7 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow the address municipality-edit field to be prefilled
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
-- GN-4442: template comments can move up and down over the *whole* document
 - Manage snippet list connection with template
 
 ### Fixed
