@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow the address municipality-edit field to be prefilled
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
+- GN-4442: template comments can move up and down over the *whole* document
 - Manage snippet list connection with template
 
 ### Fixed
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
 ### Dependencies
 - Bumps `@codemirror/view` from 6.12.0 to 6.16.0
+- Bumps `@lblod/ember-rdfa-editor` from 4.2.0 to 5.1.0
 
 ## [10.0.0] - 2023-08-08
 ### Changed
