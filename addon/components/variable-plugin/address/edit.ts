@@ -3,43 +3,101 @@ import Component from '@glimmer/component';
 import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
-  fetchAddresses,
+  AddressError,
+  fetchMunicipalities,
+  fetchStreets,
   resolveAddress,
+  resolveStreet,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
-import { dropTask, restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { localCopy, trackedReset } from 'tracked-toolbox';
+import { trackedTask } from 'ember-resources/util/ember-concurrency';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 
 type Args = {
   controller: SayController;
+  defaultMunicipality?: string;
 };
 
 export default class AddressEditComponent extends Component<Args> {
-  @localCopy('currentAddress')
-  selectedAddress?: Address;
+  @service declare intl: IntlService;
 
-  @trackedReset<AddressEditComponent, boolean>({
+  @trackedReset<AddressEditComponent, string | undefined>({
     memo: 'currentAddress',
-    update(component, _key, last) {
-      if (component.currentAddress) {
-        return component.currentAddress.hasHouseNumber;
-      } else {
-        return last;
-      }
+    update(component) {
+      const { currentMunicipality } = component;
+      return currentMunicipality
+        ? currentMunicipality
+        : component.args.defaultMunicipality;
     },
   })
-  includeHouseNumber = true;
+  newMunicipality?: string;
 
-  @action
-  toggleIncludeHouseNumber() {
-    this.includeHouseNumber = !this.includeHouseNumber;
-    this.selectedAddress = undefined;
+  @localCopy('currentStreetName') newStreetName?: string;
+
+  @localCopy('currentHousenumber') newHousenumber?: string;
+
+  @localCopy('currentBusnumber') newBusnumber?: string;
+
+  get message() {
+    const value = this.newAddress.value as Address | undefined;
+    if (
+      this.newAddress.isSuccessful &&
+      value &&
+      !value.sameAs(this.currentAddress)
+    ) {
+      return {
+        skin: 'success',
+        icon: 'check',
+        title: this.intl.t('editor-plugins.address.edit.success.address-found'),
+        body: value.formatted,
+      };
+    } else if (
+      this.newAddress.isError &&
+      this.newAddress.error instanceof AddressError
+    ) {
+      const { error } = this.newAddress;
+      return {
+        skin: 'warning',
+        icon: 'alert-triangle',
+        title: this.intl.t(error.translation, { status: error.status }),
+        body: this.intl.t('editor-plugins.address.edit.errors.contact', {
+          htmlSafe: true,
+          email: 'gelinktnotuleren@vlaanderen.be',
+        }),
+      };
+    } else {
+      return;
+    }
   }
 
   get currentAddress() {
-    return this.selectedAddressVariable?.node.attrs.address as
-      | Address
-      | undefined
-      | null;
+    return this.selectedAddressVariable?.node.attrs.value as Address | null;
+  }
+
+  get currentMunicipality() {
+    return this.currentAddress?.municipality;
+  }
+
+  get currentStreetName() {
+    return this.currentAddress?.street;
+  }
+
+  get currentHousenumber() {
+    if (this.currentAddress instanceof Address) {
+      return this.currentAddress.housenumber;
+    } else {
+      return;
+    }
+  }
+
+  get currentBusnumber() {
+    if (this.currentAddress instanceof Address) {
+      return this.currentAddress.busnumber;
+    } else {
+      return;
+    }
   }
 
   get selectedAddressVariable() {
@@ -53,44 +111,123 @@ export default class AddressEditComponent extends Component<Args> {
     return;
   }
 
+  get canUpdateStreet() {
+    return !!this.newMunicipality;
+  }
+
+  get canUpdateHousenumber() {
+    return this.newMunicipality && this.newStreetName;
+  }
+
+  get canUpdateBusnumber() {
+    return this.newMunicipality && this.newStreetName && this.newHousenumber;
+  }
+
   get showCard() {
     return !!this.selectedAddressVariable;
   }
 
-  get canUpdate() {
+  get canUpdateAddressVariable() {
     return (
-      !!this.selectedAddress &&
-      !this.selectedAddress.sameAs(
-        this.selectedAddressVariable?.node.attrs.address as Address | undefined,
-      )
+      this.newAddress.isSuccessful &&
+      this.newAddress.value &&
+      !this.currentAddress?.sameAs(this.newAddress.value as Address)
     );
   }
 
-  updateAddressVariable = dropTask(async () => {
-    if (this.selectedAddressVariable && this.selectedAddress) {
-      const { pos } = this.selectedAddressVariable;
-
-      const address =
-        this.includeHouseNumber && this.selectedAddress.hasHouseNumber
-          ? await resolveAddress(this.selectedAddress)
-          : this.selectedAddress;
-      this.controller.withTransaction((tr) => {
-        return tr.setNodeAttribute(pos, 'address', address);
-      });
+  resolveAddressTask = restartableTask(async () => {
+    const { newStreetName, newMunicipality, newHousenumber, newBusnumber } =
+      this;
+    if (newMunicipality && newStreetName) {
+      if (
+        this.currentAddress?.sameAs({
+          street: newStreetName,
+          municipality: newMunicipality,
+          busnumber: newBusnumber,
+          housenumber: newHousenumber,
+        })
+      ) {
+        return this.currentAddress;
+      } else {
+        await timeout(200);
+        if (newHousenumber) {
+          return resolveAddress({
+            street: newStreetName,
+            municipality: newMunicipality,
+            housenumber: newHousenumber,
+            busnumber: newBusnumber,
+          });
+        } else {
+          return resolveStreet({
+            street: newStreetName,
+            municipality: newMunicipality,
+          });
+        }
+      }
+    } else {
+      return;
     }
   });
 
+  newAddress = trackedTask(this, this.resolveAddressTask, () => [
+    this.newMunicipality,
+    this.newStreetName,
+    this.newHousenumber,
+    this.newBusnumber,
+  ]);
+
   @action
-  selectAddress(address: Address) {
-    this.selectedAddress = address;
+  updateAddressVariable() {
+    if (this.selectedAddressVariable && this.newAddress.isSuccessful) {
+      const { pos } = this.selectedAddressVariable;
+      this.controller.withTransaction((tr) => {
+        return tr.setNodeAttribute(pos, 'value', this.newAddress.value);
+      });
+    }
+  }
+
+  @action
+  selectMunicipality(municipality: string) {
+    this.newMunicipality = municipality;
+    this.newStreetName = '';
+    this.newHousenumber = '';
+    this.newBusnumber = '';
+  }
+
+  @action
+  selectStreet(street: string) {
+    this.newStreetName = street;
+    this.newHousenumber = '';
+    this.newBusnumber = '';
+  }
+
+  @action
+  updateHousenumber(event: InputEvent) {
+    this.newHousenumber = (event.target as HTMLInputElement).value;
+    this.newBusnumber = '';
+  }
+
+  @action
+  updateBusnumber(event: InputEvent) {
+    this.newBusnumber = (event.target as HTMLInputElement).value;
   }
 
   get controller() {
     return this.args.controller;
   }
 
-  searchAddress = restartableTask(async (term: string) => {
-    await timeout(400);
-    return fetchAddresses(term, this.includeHouseNumber);
+  searchMunicipality = restartableTask(async (term: string) => {
+    await timeout(200);
+    return fetchMunicipalities(term);
+  });
+
+  searchStreet = restartableTask(async (term: string) => {
+    if (this.newMunicipality) {
+      await timeout(200);
+      const streets = await fetchStreets(term, this.newMunicipality);
+      return streets;
+    } else {
+      return [];
+    }
   });
 }

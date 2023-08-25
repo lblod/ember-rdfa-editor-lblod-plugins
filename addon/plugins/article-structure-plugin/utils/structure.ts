@@ -20,6 +20,7 @@ export function constructStructureNodeSpec(config: {
   type: Resource;
   content: string;
   group?: string;
+  allowSplitByTable?: boolean;
 }): NodeSpec {
   const { group, content, type } = config;
   return {
@@ -35,6 +36,7 @@ export function constructStructureNodeSpec(config: {
       },
       resource: {},
     },
+    allowSplitByTable: config.allowSplitByTable,
     toDOM(node) {
       return [
         'div',
@@ -66,6 +68,7 @@ export function constructStructureNodeSpec(config: {
 
 export function constructStructureBodyNodeSpec(config: {
   content: string;
+  allowSplitByTable?: boolean;
 }): NodeSpec {
   const { content } = config;
   return {
@@ -73,6 +76,7 @@ export function constructStructureBodyNodeSpec(config: {
     inline: false,
     defining: true,
     isolating: true,
+    allowSplitByTable: config.allowSplitByTable,
     toDOM() {
       return [
         'div',

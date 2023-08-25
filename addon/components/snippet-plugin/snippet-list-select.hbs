@@ -1,0 +1,16 @@
+<AuButton
+  @icon='unordered-list'
+  @skin='secondary'
+  @iconAlignment='left'
+  {{on 'click' this.openModal}}
+>
+  {{t 'snippet-plugin.snippet-list.open-modal'}}
+</AuButton>
+
+<SnippetPlugin::SnippetList::SnippetListModal
+  @config={{@config}}
+  @assignedSnippetListsIds={{@assignedSnippetListsIds}}
+  @onSaveSnippetListIds={{@onSaveSnippetListIds}}
+  @open={{this.showModal}}
+  @closeModal={{this.closeModal}}
+/>

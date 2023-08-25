@@ -255,6 +255,21 @@ snippet-plugin:
       error-title: Probleem bij het laden
       error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
       error-outro: Moest dit probleem aanhouden, neem contact op met
+  snippet-list:
+    open-modal: Fragmentlijsten beheren
+    modal:
+      title: Selecteer beschikbare fragmentlijsten voor deze sjabloon
+      subtitle: Selecteer beschikbare fragmentlijsten voor deze sjabloon
+      search:
+        title: Filter op
+        label: Naam lijst
+        placeholder: Typ iets..
+      button:
+        cancel: Annuleer
+        update: Fragmentlijsten opslaan
+      table:
+        select: Selecteer
+        list: Lijst
 
 template-comments-plugin:
   long-title: Toelichtings- of voorbeeldbepaling
@@ -319,10 +334,29 @@ editor-plugins:
     insert: Adres invoegen
     edit:
       title: Zoek een adres
-      no-results: Geen adressen gevonden
-      search-message: Typ om te zoeken
-      include-housenumber: Inclusief huisnummer
-      placeholder-with-number: Straatnaam huisnummer, gemeente
-      placeholder-without-number: Straatnaam, gemeente
+      municipality:
+        label: Gemeente
+        placeholder: Gemeente
+        search-message: Typ om een gemeente op te zoeken
+        no-results: Geen gemeenten gevonden
+      street:
+        label: Straatnaam
+        placeholder: Straatnaam
+        search-message: Typ om een straatnaam op te zoeken
+        no-results: Geen straatnamen gevonden
+      housenumber:
+        label: Huisnummer
+        placeholder: Huisnummer
+      busnumber:
+        label: Busnummer
+        placeholder: Busnummer
+      loading: Adres aan het opzoeken.
+      success:
+        address-found: Adres gevonden.
+      errors:
+        address-not-found: We konden het adres niet terugvinden.
+        http-error: "Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}."
+        contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Voeg adres in
+    
