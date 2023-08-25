@@ -22,6 +22,7 @@ export const structure_header: NodeSpec = {
   defining: true,
   isolating: true,
   selectable: false,
+  allowSplitByTable: false,
   attrs: {
     property: {
       default: SAY('heading').prefixed,
@@ -72,7 +73,7 @@ export const structure_header: NodeSpec = {
 
         return false;
       },
-      contentElement: `span[property~='${EXT('title').prefixed}'], 
+      contentElement: `span[property~='${EXT('title').prefixed}'],
                        span[property~='${EXT('title').full}']`,
     },
   ],

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Fixed
+- Do not allow header nodes to be split by table
 - Grey out Generic RDFA button in embedded view
 
 ## [11.0.0] - 2023-08-22
