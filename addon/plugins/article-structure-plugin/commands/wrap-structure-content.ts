@@ -115,9 +115,9 @@ function findInsertionContainer(
     /**
      * Special case when we reach `doc` node, but cannot replace the content.
      * e.g. we reached doc, and it contains "document_title article article",
-     * we might not be able to wrap single `article`, depending on the `content` definiton,
-     * of the `doc`. Therefore we need to find sibling nodes of same type and try
-     * to wrap them all together
+     * we might not be able to wrap single `article`, depending on the `content` definition,
+     * of the `doc`. We try to find sibling nodes of same type and try
+     * to wrap them all together, that includes the content that might be between them.
      */
     if (currentAncestorParent.type.spec === schema.nodes.doc.spec) {
       const doc = currentAncestorParent;
@@ -125,8 +125,8 @@ function findInsertionContainer(
       let firstOfTypePosition: null | number = null;
       let lastOfTypePosition: null | number = null;
 
-      currentAncestorParent.content.forEach((node, pos) => {
-        if (node.type.name === currentAncestor.type.name) {
+      currentAncestorParent.forEach((node, pos) => {
+        if (node.type === currentAncestor.type) {
           if (!firstOfTypePosition) {
             firstOfTypePosition = pos;
           }
