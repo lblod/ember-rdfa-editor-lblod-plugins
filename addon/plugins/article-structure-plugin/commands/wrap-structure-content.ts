@@ -10,7 +10,6 @@ import {
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import IntlService from 'ember-intl/services/intl';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
-import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
 const wrapStructureContent = (
   structureSpec: StructureSpec,
@@ -113,11 +112,6 @@ function findInsertionContainer(
       };
     }
 
-    // special case when we reach `doc` but cannot replace the content
-    // e.g. we reached doc, but there is "document_title article article", we might not be
-    // able to wrap the title around single `article` node, depending on the `content` definiton
-    // of the `doc`
-
     /**
      * Special case when we reach `doc` node, but cannot replace the content.
      * e.g. we reached doc, and it contains "document_title article article",
@@ -128,58 +122,36 @@ function findInsertionContainer(
     if (currentAncestorParent.type.spec === schema.nodes.doc.spec) {
       const doc = currentAncestorParent;
 
-      const start = pos <= 0 ? 0 : pos - 1;
+      let firstOfTypePosition: null | number = null;
+      let lastOfTypePosition: null | number = null;
 
-      const filter = ({ from }: { from: number }) => {
-        const node = doc.nodeAt(from);
+      currentAncestorParent.content.forEach((node, pos) => {
+        if (node.type.name === currentAncestor.type.name) {
+          if (!firstOfTypePosition) {
+            firstOfTypePosition = pos;
+          }
 
-        return node?.type.name === currentAncestor.type.name;
-      };
-
-      const previousNodeIterator = findNodes({
-        doc,
-        start,
-        visitParentUpwards: true,
-        reverse: true,
-        filter: filter,
+          lastOfTypePosition = pos;
+        }
       });
 
-      const nextNodeIterator = findNodes({
-        doc,
-        start,
-        visitParentUpwards: true,
-        reverse: false,
-        filter,
-      });
+      if (firstOfTypePosition !== null && lastOfTypePosition !== null) {
+        const from = firstOfTypePosition;
+        const to = doc.resolve(lastOfTypePosition).end();
 
-      let previousNodePosition: null | { from: number; to: number } = null;
-      let nextNodePosition: null | { from: number; to: number } = null;
-
-      for (const iter of previousNodeIterator) {
-        previousNodePosition = iter;
-      }
-
-      for (const iter of nextNodeIterator) {
-        nextNodePosition = iter;
-      }
-
-      if (previousNodePosition && nextNodePosition) {
-        const node = doc.cut(
-          previousNodePosition.from,
-          nextNodePosition.to - 1,
-        ).content;
+        const node = doc.cut(from, to).content;
 
         if (
           currentAncestorParent.canReplaceWith(
-            doc.resolve(previousNodePosition.from).index(),
-            doc.resolve(nextNodePosition.to).index(),
+            doc.resolve(from).index(),
+            doc.resolve(to).index(),
             nodeType,
           )
         ) {
           return {
-            node: node,
-            from: previousNodePosition.from,
-            to: nextNodePosition.to,
+            node,
+            from,
+            to,
           };
         }
       }
