@@ -1,3 +1,4 @@
+import { NodeType, PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
 import {
   findNodePosDown,
   findNodePosUp,
