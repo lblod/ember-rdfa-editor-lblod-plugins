@@ -21,7 +21,7 @@ type Args = {
 };
 
 export default class CodelistInsertComponent extends Component<Args> {
-  @tracked selectedSubtype?: CodeList;
+  @tracked selectedCodelist?: CodeList;
   @tracked label?: string;
 
   @service declare intl: IntlService;
@@ -42,7 +42,7 @@ export default class CodelistInsertComponent extends Component<Args> {
     return this.args.options.endpoint;
   }
 
-  subtypes = trackedFunction(this, async () => {
+  codelistData = trackedFunction(this, async () => {
     return fetchCodeListsByPublisher(this.endpoint, this.publisher);
   });
   @action
@@ -58,12 +58,12 @@ export default class CodelistInsertComponent extends Component<Args> {
       {
         mappingResource,
         variableInstance,
-        codelistResource: this.selectedSubtype?.uri,
-        label: this.label ?? this.selectedSubtype?.label,
+        codelistResource: this.selectedCodelist?.uri,
+        label: this.label ?? this.selectedCodelist?.label,
         source: this.endpoint,
       },
       this.schema.node('placeholder', {
-        placeholderText: this.selectedSubtype?.label,
+        placeholderText: this.selectedCodelist?.label,
       }),
     );
 
@@ -78,7 +78,7 @@ export default class CodelistInsertComponent extends Component<Args> {
   }
 
   @action
-  updateSubtype(subtype: CodeList) {
-    this.selectedSubtype = subtype;
+  selectCodelist(codelist: CodeList) {
+    this.selectedCodelist = codelist;
   }
 }
