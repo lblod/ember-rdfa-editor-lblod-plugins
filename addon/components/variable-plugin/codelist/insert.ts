@@ -19,12 +19,16 @@ type Args = {
   controller: SayController;
   options: CodelistInsertOptions;
 };
+interface SelectStyle {
+  label: string;
+  value: string;
+}
 
 export default class CodelistInsertComponent extends Component<Args> {
+  @service declare intl: IntlService;
   @tracked selectedCodelist?: CodeList;
   @tracked label?: string;
-
-  @service declare intl: IntlService;
+  @tracked selectedStyleValue: string = 'single';
 
   get controller() {
     return this.args.controller;
@@ -42,6 +46,23 @@ export default class CodelistInsertComponent extends Component<Args> {
     return this.args.options.endpoint;
   }
 
+  get selectionStyles() {
+    const singleSelect = {
+      label: this.intl.t('variable.codelist.single-select'),
+      value: 'single',
+    };
+    const multiSelect = {
+      label: this.intl.t('variable.codelist.multi-select'),
+      value: 'multi',
+    };
+    return [singleSelect, multiSelect];
+  }
+
+  get selectedStyle() {
+    return this.selectionStyles.find(
+      (style) => style.value === this.selectedStyleValue,
+    );
+  }
   codelistData = trackedFunction(this, async () => {
     return fetchCodeListsByPublisher(this.endpoint, this.publisher);
   });
@@ -80,5 +101,9 @@ export default class CodelistInsertComponent extends Component<Args> {
   @action
   selectCodelist(codelist: CodeList) {
     this.selectedCodelist = codelist;
+  }
+  @action
+  selectStyle(style: SelectStyle) {
+    this.selectedStyleValue = style.value;
   }
 }

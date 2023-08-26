@@ -8,6 +8,16 @@
 >
   {{codelist.label}}
 </PowerSelect>
+<PowerSelect
+  @allowClear={{false}}
+  @searchEnabled={{false}}
+  @options={{this.selectionStyles}}
+  @selected={{this.selectedStyle}}
+  @onChange={{this.selectStyle}}
+  as |style|
+>
+  {{style.label}}
+</PowerSelect>
 <AuFormRow>
   <VariablePlugin::Utils::LabelInput 
     @label={{this.label}}
