@@ -28,7 +28,7 @@ export default class CodelistInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked selectedCodelist?: CodeList;
   @tracked label?: string;
-  @tracked selectedStyleValue: string = 'single';
+  @tracked selectedStyleValue = 'single';
 
   get controller() {
     return this.args.controller;

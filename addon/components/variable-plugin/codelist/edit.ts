@@ -72,7 +72,8 @@ export default class CodelistEditComponent extends Component<Args> {
   });
 
   get multiSelect() {
-    const localStyle = this.selectedCodelist.value?.node.attrs.selectionStyle;
+    const localStyle = this.selectedCodelist.value?.node.attrs
+      .selectionStyle as string;
     if (localStyle) {
       return localStyle === 'multi';
     } else
