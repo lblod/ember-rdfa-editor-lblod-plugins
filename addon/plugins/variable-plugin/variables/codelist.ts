@@ -26,6 +26,9 @@ import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-sp
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 
+function parseSelectionStyle(element: HTMLElement): string | null {
+  return element.dataset.selectionStyle ?? null;
+}
 const parseDOM = [
   {
     tag: 'span',
@@ -43,6 +46,7 @@ const parseDOM = [
 
         const source = parseVariableSource(node);
         const label = parseLabel(node);
+        const selectionStyle = parseSelectionStyle(node);
         const codelistSpan = [...node.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('codelist')),
         );
@@ -53,6 +57,7 @@ const parseDOM = [
           variableInstance:
             variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
           mappingResource,
+          selectionStyle,
           codelistResource,
           source,
           label,
@@ -66,8 +71,14 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const { mappingResource, codelistResource, variableInstance, source, label } =
-    node.attrs;
+  const {
+    mappingResource,
+    codelistResource,
+    variableInstance,
+    source,
+    label,
+    selectionStyle,
+  } = node.attrs;
 
   const codelistResourceSpan = codelistResource
     ? span({
@@ -79,6 +90,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     mappingResource,
     {
       'data-label': label as string,
+      'data-selection-style': selectionStyle as string,
     },
     instanceSpan(variableInstance),
     typeSpan('codelist'),
@@ -110,6 +122,9 @@ const emberNodeConfig: EmberNodeConfig = {
     },
     label: {
       default: 'codelijst',
+    },
+    selectionStyle: {
+      default: null,
     },
   },
   toDOM,

@@ -82,6 +82,7 @@ export default class CodelistInsertComponent extends Component<Args> {
         codelistResource: this.selectedCodelist?.uri,
         label: this.label ?? this.selectedCodelist?.label,
         source: this.endpoint,
+        selectionStyle: this.selectedStyleValue,
       },
       this.schema.node('placeholder', {
         placeholderText: this.selectedCodelist?.label,
