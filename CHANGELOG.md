@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Do not allow header nodes to be split by table
+- Grey out Generic RDFA button in embedded view
+
+### Changed
+- GN-4442: template comments can move up and down over the *whole* document
+
+## [11.0.0] - 2023-08-22
+
 ### Added
 - GN-4261: addition of an address variable
 - GN-4262: addition of WGS84 coordinates to address variables
@@ -16,11 +25,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Check validity on number minimum/maximum inputs
 
 ### Changed
+- GN-4263: update address variable edit UI/UX according to updated design
+- Allow the address municipality-edit field to be prefilled
 - Use one-way-binding in variable label input
 - Use one-way-binding in number variable inputs
+- Manage snippet list connection with template
+
+### Fixed
+- GN-4404: ensure number-variable placeholders are consistent
+
 ### Breaking
 - Removal of old address-plugin
 - Removal of the `entries` attribute from the table-of-contents prosemirror node. The node can now generate it's own outline in its `serialize` method.
+### Dependencies
+- Bumps `@codemirror/view` from 6.12.0 to 6.16.0
+- Bumps `@lblod/ember-rdfa-editor` from 4.2.0 to 5.1.0
 
 ## [10.0.0] - 2023-08-08
 ### Changed
@@ -35,7 +54,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow `block*` content in `article_paragraph`
 - Move buttons for template comments are blue
-- GN-4404: ensure number-variable placeholders are consistent
 - problems with lists in template comments
 - GN-4451: fix roadsign plugin no longer showing rendered templates in modal (merge hotfix v8.4.3)
 - Snippet insertion inserts first node correctly
@@ -668,7 +686,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v10.0.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v11.0.0...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -684,6 +702,7 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[11.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v10.0.0...v11.0.0
 [10.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.1...v10.0.0
 [9.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.0...v9.1.1
 [9.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.0.2...v9.1.0

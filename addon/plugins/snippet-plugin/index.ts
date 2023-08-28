@@ -25,3 +25,23 @@ export class Snippet {
     this.title = title;
   }
 }
+
+interface SnippetListArgs {
+  id: string | null;
+  label: string | null;
+  createdOn: string | null;
+}
+
+const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
+
+export class SnippetList {
+  id: string | null;
+  label: string | null;
+  createdOn: string | null;
+
+  constructor({ id, label, createdOn }: SnippetListArgs) {
+    this.id = id?.replace(snippetListBase, '') ?? null;
+    this.label = label;
+    this.createdOn = dateValue(createdOn ?? undefined);
+  }
+}

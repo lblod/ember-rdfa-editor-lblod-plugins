@@ -1,0 +1,29 @@
+<AuHeading @level='3' @skin='4'>
+  {{t 'snippet-plugin.snippet-list.modal.subtitle'}}
+</AuHeading>
+{{#if @snippetLists.length}}
+  <div class="snippet-lists-table">
+    <AuTable class="snippet-lists-table">
+      <:header>
+        <tr>
+          <th class="selectColumn">{{t 'snippet-plugin.snippet-list.modal.table.select'}}</th>
+          <th>{{t 'snippet-plugin.snippet-list.modal.table.list'}}</th>
+        </tr>
+      </:header>
+      <:body>
+        {{#each @snippetLists as |snippetList|}}
+          <tr>
+            <td class="selectColumn">
+              <AuControlCheckbox
+                @identifier={{snippetList.label}}
+                @onChange={{fn this.onChange snippetList.id}}
+                @checked={{in-array @assignedSnippetListsIds snippetList.id}}
+              />
+            </td>
+            <td>{{snippetList.label}}</td>
+          </tr>
+        {{/each}}
+      </:body>
+    </AuTable>
+  </div>
+{{/if}}

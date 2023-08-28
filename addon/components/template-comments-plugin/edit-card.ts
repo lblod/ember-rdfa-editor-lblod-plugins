@@ -2,7 +2,14 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor/addon';
 import { TextSelection } from '@lblod/ember-rdfa-editor';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import {
+  findParentNodeOfType,
+  hasParentNodeOfType,
+} from '@curvenote/prosemirror-utils';
+import {
+  findContentMatchPosLeft,
+  findContentMatchPosRight,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-contentmatch';
 
 type Args = {
   controller: SayController;
@@ -43,17 +50,22 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
     const comment = this.templateComment;
     if (!comment) return;
     const { node: node, pos: pos } = comment;
-    const resolvedPos = this.controller.mainEditorState.doc.resolve(pos);
-    const nodeBefore = resolvedPos.nodeBefore;
-    if (!nodeBefore) return;
-    const amountToMove = -nodeBefore.nodeSize;
+    const insertPos = findContentMatchPosLeft(
+      this.controller.mainEditorState.doc,
+      pos,
+      this.commentType,
+      ($pos) =>
+        !hasParentNodeOfType(this.commentType)(new TextSelection($pos, $pos)),
+    );
+    if (insertPos === undefined) return;
+
+    const amountToMove = -(pos - insertPos);
     const initialCursorPos =
       this.controller.mainEditorState.selection.$head.pos;
-    const newPos = pos + amountToMove;
     const newCursorPos = initialCursorPos + amountToMove;
     this.controller.withTransaction((tr) => {
       tr.delete(pos, pos + node.nodeSize);
-      tr.insert(newPos, node);
+      tr.insert(insertPos, node);
       const mappedSelection = TextSelection.create(
         tr.doc,
         newCursorPos,
@@ -72,21 +84,32 @@ export default class TemplateCommentsPluginEditCardComponent extends Component<A
     if (!comment) return;
 
     const { node: commentNode, pos: startPos } = comment;
-    const posAfterComment = startPos + commentNode.nodeSize;
-    const resolvedPos =
-      this.controller.mainEditorState.doc.resolve(posAfterComment);
-    const nodeAfterComment = resolvedPos.nodeAfter;
-    if (!nodeAfterComment) return;
+    const searchStart = startPos + commentNode.nodeSize;
+    const $afterPos = this.controller.mainEditorState.doc.resolve(searchStart);
 
-    const amountToMove = commentNode.nodeSize + nodeAfterComment.nodeSize;
+    // lists in template comments can have any content, including template comments...
+    // This means we have to avoid moving inside a template comment, as the contentMatch would be valid
+    const posToInsert = findContentMatchPosRight(
+      this.controller.mainEditorState.doc,
+      $afterPos,
+      commentNode.type,
+      (pos) => {
+        const $pos = this.controller.mainEditorState.doc.resolve(pos);
+        return !hasParentNodeOfType(this.commentType)(
+          new TextSelection($pos, $pos),
+        );
+      },
+    );
 
-    const newPos = startPos + amountToMove;
+    if (posToInsert === undefined) return;
+    const amountToMove = posToInsert - startPos;
+
     const initialCursorPos =
       this.controller.mainEditorState.selection.$head.pos;
     const newCursorPos = initialCursorPos + amountToMove;
 
     this.controller.withTransaction((tr) => {
-      tr.insert(newPos, commentNode);
+      tr.insert(posToInsert, commentNode);
       // do delete after setting the selection,
       //so the selection position can be easily constructed
       const mappedSelection = TextSelection.create(

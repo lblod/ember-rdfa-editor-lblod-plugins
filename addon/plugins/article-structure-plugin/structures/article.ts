@@ -96,6 +96,7 @@ export const article_header: NodeSpec = {
       default: SAY('heading').prefixed,
     },
   },
+  allowSplitByTable: false,
   outlineText: (node: PNode) => {
     const { number } = node.attrs;
     return `Artikel ${number as string}: ${node.textContent}`;
