@@ -12,6 +12,7 @@
         id={{id}}
         value={{this.minimumValue}}
         {{on 'input' this.updateMinimumValue}}
+        {{this.minimumInput}}
         placeholder={{t 'variable-plugin.number.minimum-placeholder'}}
         @width='block'
         @type="number"
@@ -28,6 +29,7 @@
         id={{id}}
         value={{this.maximumValue}}
         {{on 'input' this.updateMaximumValue}}
+        {{this.maximumInput}}
         placeholder={{t 'variable-plugin.number.maximum-placeholder'}}
         @width='block'
         @type="number"
