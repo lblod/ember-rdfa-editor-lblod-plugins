@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - GN-4442: template comments can move up and down over the *whole* document
+- GN-4322: Add ORDER to snippet list query 
 
 ## [11.0.0] - 2023-08-22
 
