@@ -8,13 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Do not allow header nodes to be split by table
+- GN-4370: Do not allow header nodes to be split by table
 - Grey out Generic RDFA button in embedded view
 - GN-4425: Smarter content wrapping for structure nodes
 
 ### Changed
 - GN-4442: template comments can move up and down over the *whole* document
 - GN-4322: Add ORDER to snippet list query 
+- Bumps `@lblod/ember-rdfa-editor` from 5.1.0 to 5.2.0
 
 ## [11.0.0] - 2023-08-22
 
