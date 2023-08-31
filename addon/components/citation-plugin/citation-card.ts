@@ -3,12 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { capitalize } from '@ember/string';
-import {
-  Article,
-  cleanCaches,
-  Decision,
-  fetchDecisions,
-} from '../../plugins/citation-plugin/utils/vlaamse-codex';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
   Option,
@@ -24,7 +18,13 @@ import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citati
 import {
   LEGISLATION_TYPES,
   LEGISLATION_TYPE_CONCEPTS,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
+import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
+import {
+  fetchLegalDocuments,
+  LegalDocument,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
+import { cleanCaches } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cache';
 
 interface Args {
   controller: SayController;
@@ -42,7 +42,7 @@ export default class CitationCardComponent extends Component<Args> {
   @tracked decisions = [];
   @tracked error: unknown;
   @tracked showModal = false;
-  @tracked decision: Decision | null = null;
+  @tracked decision: LegalDocument | null = null;
   @tracked cardText: string | null = null;
   @tracked cardLegislationType: string | null = null;
   @tracked documentLegislationType: Option<string>;
@@ -128,7 +128,7 @@ export default class CitationCardComponent extends Component<Args> {
       const filter = {
         type: unwrapOr('', this.selectedLegislationTypeUri),
       };
-      const results = await fetchDecisions({
+      const results = await fetchLegalDocuments({
         words: words,
         filter: filter,
         pageNumber: this.pageNumber,
@@ -136,7 +136,7 @@ export default class CitationCardComponent extends Component<Args> {
         config: this.args.config,
       });
       this.totalCount = results.totalCount;
-      return results.decisions;
+      return results.legalDocuments;
     } catch (e) {
       console.warn(e); // eslint-ignore-line no-console
       this.totalCount = 0;
@@ -167,7 +167,7 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   @action
-  openDecisionDetailModal(decision: Decision): void {
+  openDecisionDetailModal(decision: LegalDocument): void {
     this.decision = decision;
     /** why focus? see {@link EditorPluginsCitationInsertComponent.openModal } */
     this.focus();
@@ -195,7 +195,7 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   @action
-  insertDecisionCitation(decision: Decision): void {
+  insertDecisionCitation(decision: LegalDocument): void {
     const uri = decision.uri;
     const title = decision.title ?? '';
     const { from, to } = unwrap(this.activeDecoration);
@@ -214,7 +214,7 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   @action
-  insertArticleCitation(decision: Decision, article: Article): void {
+  insertArticleCitation(decision: LegalDocument, article: Article): void {
     const uri = article.uri;
     let title = '';
     if (decision.title) {

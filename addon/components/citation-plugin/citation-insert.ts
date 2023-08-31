@@ -7,18 +7,16 @@ import {
   Slice,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import {
-  Article,
-  Decision,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 import { CitationPluginEmberComponentConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
+import { LegalDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 
 interface Args {
   controller: SayController;
@@ -106,7 +104,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   }
 
   @action
-  insertDecisionCitation(decision: Decision) {
+  insertDecisionCitation(decision: LegalDocument) {
     const type = decision.legislationType?.label || '';
     const uri = decision.uri;
     const title = decision.title ?? '';
@@ -129,7 +127,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   }
 
   @action
-  insertArticleCitation(decision: Decision, article: Article) {
+  insertArticleCitation(decision: LegalDocument, article: Article) {
     const type = decision.legislationType?.label || '';
     const uri = article.uri;
     let title = '';

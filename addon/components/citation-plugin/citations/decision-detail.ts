@@ -2,14 +2,13 @@ import Component from '@glimmer/component';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import {
-  Decision,
-  fetchArticles,
-} from '../../../plugins/citation-plugin/utils/vlaamse-codex';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
+import { LegalDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
+import { fetchArticles } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
+
 interface Args {
-  decision: Decision;
+  decision: LegalDocument;
   close: () => void;
   config: { endpoint: string };
 }

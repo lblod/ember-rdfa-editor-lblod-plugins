@@ -1,5 +1,5 @@
 import { isBlank } from '@ember/utils';
-import { LEGISLATION_TYPES } from './legislation-types';
+import { LEGISLATION_TYPES } from './types';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const STOP_WORDS = ['het', 'de', 'van', 'tot', 'dat'];

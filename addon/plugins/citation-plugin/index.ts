@@ -134,6 +134,7 @@ export type CitationPluginConfig =
 
 export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
   endpoint: string;
+  decisionsEndpoint?: string;
 };
 
 export function citationPlugin(config: CitationPluginConfig): CitationPlugin {

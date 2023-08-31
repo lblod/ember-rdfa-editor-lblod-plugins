@@ -1,4 +1,4 @@
-const LEGISLATION_TYPES = {
+export const LEGISLATION_TYPES = {
   decreet: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
   'koninklijk besluit':
     'https://data.vlaanderen.be/id/concept/AardWetgeving/KoninklijkBesluit',
@@ -24,24 +24,21 @@ const LEGISLATION_TYPES = {
   'genummerd koninklijk besluit':
     'https://data.vlaanderen.be/id/concept/AardWetgeving/GenummerdKoninklijkBesluit',
   protocol: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Protocol',
+  besluit: 'https://data.vlaanderen.be/doc/concept/AardWetgeving/Besluit',
 };
 
 export type Legislations = typeof LEGISLATION_TYPES;
-export type LegislationKey = keyof Legislations;
-// export type MappedLegislations = {
-//   [K in LegislationKey]: {
-//     label: K;
-//     value: Legislations[K];
-//   };
-// };
-// export type MappedLegislation = MappedLegislations[LegislationKey];
-const LEGISLATION_TYPE_CONCEPTS = Object.entries(LEGISLATION_TYPES).map(
-  (pair: [string, string]) => {
-    return {
-      label: pair[0],
-      value: pair[1],
-    };
-  },
+
+export const isBesluitType = (type: string) =>
+  type === LEGISLATION_TYPES['besluit'];
+
+export const LEGISLATION_TYPE_CONCEPTS = Object.entries(LEGISLATION_TYPES).map(
+  ([label, value]) => ({
+    label,
+    value,
+  }),
 );
 
-export { LEGISLATION_TYPES, LEGISLATION_TYPE_CONCEPTS };
+export interface Binding<A> {
+  value: A;
+}

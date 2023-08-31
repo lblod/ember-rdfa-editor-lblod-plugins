@@ -6,19 +6,21 @@ import { inject as service } from '@ember/service';
 import { capitalize } from '@ember/string';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
+  isBesluitType,
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legislation-types';
-import {
-  Article,
-  Decision,
-  fetchDecisions,
-} from '../../../plugins/citation-plugin/utils/vlaamse-codex';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
+import { CitationPluginEmberComponentConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import IntlService from 'ember-intl/services/intl';
 import {
   Option,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
+import {
+  fetchLegalDocuments,
+  LegalDocument,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 
 function getISODate(date: Option<Date>): string | null {
   if (date) {
@@ -34,13 +36,13 @@ function getISODate(date: Option<Date>): string | null {
 }
 
 interface Args {
-  selectedDecision: Decision;
+  selectedDecision: LegalDocument;
   legislationTypeUri: string;
   text: string;
-  insertDecisionCitation: (decision: Decision) => void;
-  insertArticleCitation: (decision: Decision, article: Article) => void;
+  insertDecisionCitation: (decision: LegalDocument) => void;
+  insertArticleCitation: (decision: LegalDocument, article: Article) => void;
   closeModal: (legislationTypeUri?: string, text?: string) => void;
-  config: { endpoint: string };
+  config: CitationPluginEmberComponentConfig;
 }
 
 export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
@@ -53,7 +55,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @tracked totalCount = 0;
   @tracked decisions = [];
   @tracked error: unknown;
-  @tracked selectedDecision: Decision | null = null;
+  @tracked selectedDecision: LegalDocument | null = null;
   @tracked documentDateFrom: Date | null = null;
   @tracked documentDateTo: Date | null = null;
   @tracked publicationDateFrom: Date | null = null;
@@ -123,7 +125,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
         publicationDateFrom: getISODate(this.publicationDateFrom),
         publicationDateTo: getISODate(this.publicationDateTo),
       };
-      const results = await fetchDecisions({
+      const results = await fetchLegalDocuments({
         words: words,
         filter: filter,
         pageNumber: this.pageNumber,
@@ -131,7 +133,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
         config: this.args.config,
       });
       this.totalCount = results.totalCount;
-      return results.decisions;
+      return results.legalDocuments;
     } catch (e) {
       console.warn(e); // eslint-ignore-line no-console
       this.totalCount = 0;
@@ -153,6 +155,10 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     this.publicationDateFrom,
     this.publicationDateTo,
   ]);
+
+  get isBesluitType() {
+    return isBesluitType(this.legislationTypeUri);
+  }
 
   @action
   setInputSearchText(event: InputEvent) {
@@ -180,13 +186,13 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   }
 
   @action
-  async insertDecisionCitation(decision: Decision) {
+  async insertDecisionCitation(decision: LegalDocument) {
     this.args.insertDecisionCitation(decision);
     await this.closeModal();
   }
 
   @action
-  async insertArticleCitation(decision: Decision, article: Article) {
+  async insertArticleCitation(decision: LegalDocument, article: Article) {
     this.args.insertArticleCitation(decision, article);
     await this.closeModal();
   }
@@ -199,7 +205,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   }
 
   @action
-  openDecisionDetail(decision: Decision) {
+  openDecisionDetail(decision: LegalDocument) {
     this.selectedDecision = decision;
   }
 
