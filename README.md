@@ -248,8 +248,11 @@ You need to specify the endpoint for the plugin in the config object
 ```js
 {
   endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql'
+  decisionsEndpoint: 'https://https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql'
 }
 ```
+
+The `decisionsEndpoint` is optional, and is required if you want to display decisions from the Publicatie.
 
 Same goes for the `CitationInsert` component
 ```hbs
