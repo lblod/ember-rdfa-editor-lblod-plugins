@@ -1,3 +1,5 @@
+import { capitalize } from '@ember/string';
+
 export const LEGISLATION_TYPES = {
   decreet: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
   'koninklijk besluit':
@@ -27,7 +29,9 @@ export const LEGISLATION_TYPES = {
   besluit: 'https://data.vlaanderen.be/doc/concept/AardWetgeving/Besluit',
 };
 
-export type Legislations = typeof LEGISLATION_TYPES;
+export const legislationKeysCapitalized = Object.keys(LEGISLATION_TYPES).map(
+  capitalize,
+) as [Capitalize<keyof typeof LEGISLATION_TYPES>];
 
 export const isBesluitType = (type: string) =>
   type === LEGISLATION_TYPES['besluit'];

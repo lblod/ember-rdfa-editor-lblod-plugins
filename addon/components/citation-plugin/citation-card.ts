@@ -12,12 +12,14 @@ import {
 import {
   CitationDecoration,
   CitationPlugin,
+  CitationPluginEmberComponentConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 import {
   LEGISLATION_TYPES,
   LEGISLATION_TYPE_CONCEPTS,
+  legislationKeysCapitalized,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
 import {
@@ -29,9 +31,7 @@ import { cleanCaches } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/cita
 interface Args {
   controller: SayController;
   plugin: CitationPlugin;
-  config: {
-    endpoint: string;
-  };
+  config: CitationPluginEmberComponentConfig;
 }
 
 export default class CitationCardComponent extends Component<Args> {
@@ -91,7 +91,11 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   get legislationTypes() {
-    return Object.keys(LEGISLATION_TYPES).map(capitalize);
+    if (this.config.decisionsEndpoint) {
+      return legislationKeysCapitalized;
+    }
+
+    return legislationKeysCapitalized.filter((key) => key !== 'Besluit');
   }
 
   get selectedLegislationType() {

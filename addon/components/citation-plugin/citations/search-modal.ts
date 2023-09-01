@@ -9,6 +9,7 @@ import {
   isBesluitType,
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
+  legislationKeysCapitalized,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { CitationPluginEmberComponentConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import IntlService from 'ember-intl/services/intl';
@@ -86,7 +87,11 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   }
 
   get legislationTypes() {
-    return Object.keys(LEGISLATION_TYPES).map(capitalize);
+    if (this.config.decisionsEndpoint) {
+      return legislationKeysCapitalized;
+    }
+
+    return legislationKeysCapitalized.filter((key) => key !== 'Besluit');
   }
 
   get legislationSelected() {
