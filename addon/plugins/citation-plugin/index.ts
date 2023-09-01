@@ -86,7 +86,7 @@ const ENUM_ROYAL = `genummerd${NNWS}?${ROYAL}`;
  */
 const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${SPECIAL}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}`;
 /**
- * The monster regex that makes the citation plugin trigger.
+ * The monster regex that makes the citation plugin trigger to show `CitationCard`.
  * In restructuring, I've made sure that I didn't abstract away any of the capturing groups,
  * only their content, so you can still see what's going on
  *

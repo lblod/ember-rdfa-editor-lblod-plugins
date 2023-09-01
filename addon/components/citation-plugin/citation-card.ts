@@ -33,6 +33,7 @@ interface Args {
   config: CitationPluginEmberComponentConfig;
 }
 
+/* A component card that will only show up when certain keywords are typed */
 export default class CitationCardComponent extends Component<Args> {
   @tracked pageNumber = 0;
   @tracked pageSize = 5;

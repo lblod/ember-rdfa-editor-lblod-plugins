@@ -235,7 +235,7 @@ With these changes you will see a warning if the decision is missing a title, a 
 
 Plugin which allows a user to insert references to a legal resource or legal expression into the document.
 
-This plugin provides a card that needs to be added to the sidebar of the editor like
+This plugin provides a card that shows up when using certain keywords. This needs to be added to the sidebar of the editor like
 ```hbs
   <CitationPlugin::CitationCard 
     @controller={{this.controller}} 
@@ -244,7 +244,15 @@ This plugin provides a card that needs to be added to the sidebar of the editor 
   />
 ```
 
-You need to specify the endpoint for the plugin in the config object
+Same goes for the `CitationInsert` component, with which you can directly insert a citation
+```hbs
+  <CitationPlugin::CitationInsert
+    @controller={{this.controller}}
+    @config={{this.config.citation}}
+  />
+```
+
+You need to specify the endpoints for the plugin in the config object
 ```js
 {
   endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql'
@@ -253,14 +261,6 @@ You need to specify the endpoint for the plugin in the config object
 ```
 
 The `decisionsEndpoint` is optional, and is required if you want to display decisions from the Publicatie.
-
-Same goes for the `CitationInsert` component
-```hbs
-  <CitationPlugin::CitationInsert
-    @controller={{this.controller}}
-    @config={{this.config.citation}}
-  />
-```
 
 
 Make `this.citationPlugin` a tracked reference to the plugin created with the function exported from the package and the wished configuration
@@ -310,7 +310,7 @@ const configB = {
 
 If used with the example configuration provided this plugin can be triggered by typing one of the following in the correct RDFa context (
 the [besluit:motivering](http://data.vlaanderen.be/ns/besluit#motivering) of
-a [besluit:Besluit](https://data.vlaanderen.be/ns/besluit#Besluit)).
+a [besluit:Besluit](https://data.vlaanderen.be/ns/besluit#Besluit)).These will make `CitationCard` visible with the typed search terms.
 
 * [specification]**decreet** [words to search for] *(e.g. "gemeentedecreet wijziging")*
 * **omzendbrief** [words to search for]
@@ -326,8 +326,7 @@ a [besluit:Besluit](https://data.vlaanderen.be/ns/besluit#Besluit)).
 * **ministerieel besluit** [words to search for]
 * **genummerd besluit** [words to search for]
 
-You should be able to add a reference manually by clicking on the `Insert` > `Insert reference` item in the Insert menu
-located on the top right of the editor. This will open the advanced search window. **Note** that this will only be
+You can also add a reference manually by clicking on the `Insert` > `Insert reference` item in the Insert menu located on the top right of the editor (this is the `CitationInsert` component). This will open the advanced search window. **Note** that this will only be
 avaliable in the proper context (see above in this section).
 
 ## import-snippet-plugin
