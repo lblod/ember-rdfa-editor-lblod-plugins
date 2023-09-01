@@ -9,11 +9,11 @@ interface Args {
 }
 
 export default class DecisionPreviewComponent extends Component<Args> {
-  get isDecision() {
+  get isBesluit() {
     return isBesluitLegalDocument(this.args.decision);
   }
 
   get hasPublicationLink() {
-    return this.isDecision && this.args.decision.meta?.publicationLink;
+    return this.isBesluit && this.args.decision.meta?.publicationLink;
   }
 }

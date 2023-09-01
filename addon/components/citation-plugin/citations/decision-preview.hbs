@@ -21,8 +21,8 @@
           {{on "click" @onCitationInsert}}>
           {{t "citaten-plugin.references.insert"}}
         </AuButton>
-        {{#if this.isDecision}}
-          {{#if @decision.meta.publicationLink}}
+        {{#if this.isBesluit}}
+          {{#if this.hasPublicationLink}}
             <AuLinkExternal
               @skin="button"
               @icon="link-external"
@@ -63,8 +63,8 @@
         {{on "click" @onCitationInsert}}>
         {{t "citaten-plugin.references.insert"}}
       </AuButton>
-      {{#if this.isDecision}}
-        {{#if @decision.meta.publicationLink}}
+      {{#if this.isBesluit}}
+        {{#if this.hasPublicationLink}}
           <AuLinkExternal
             @skin="link"
             @icon="link-external"
