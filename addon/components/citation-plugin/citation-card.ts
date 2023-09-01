@@ -17,7 +17,6 @@ import {
 import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 import {
-  LEGISLATION_TYPES,
   LEGISLATION_TYPE_CONCEPTS,
   legislationKeysCapitalized,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
