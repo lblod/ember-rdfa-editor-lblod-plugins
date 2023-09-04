@@ -10,6 +10,7 @@ import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import {
   isVariable,
   parseLabel,
+  parseSelectionStyle,
   parseVariableInstance,
   parseVariableSource,
   parseVariableType,
@@ -26,9 +27,6 @@ import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-sp
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 
-function parseSelectionStyle(element: HTMLElement): string | null {
-  return element.dataset.selectionStyle ?? null;
-}
 const parseDOM = [
   {
     tag: 'span',

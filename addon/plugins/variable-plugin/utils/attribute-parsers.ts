@@ -29,3 +29,7 @@ export function parseVariableSource(variableNode: HTMLElement) {
     .find((el) => hasRDFaAttribute(el, 'property', DCT('source')))
     ?.getAttribute('resource');
 }
+
+export function parseSelectionStyle(element: HTMLElement): string | null {
+  return element.dataset.selectionStyle ?? null;
+}
