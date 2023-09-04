@@ -34,4 +34,12 @@ export default class InsertAddressComponent extends Component<Args> {
       return tr;
     });
   }
+
+  get canInsertAddress() {
+    if (this.controller.activeEditorView.props.nodeViews?.address) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
