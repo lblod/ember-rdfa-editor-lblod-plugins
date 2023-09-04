@@ -1,6 +1,7 @@
 <PowerSelect
   @allowClear={{false}}
   @searchEnabled={{false}}
+  @renderInPlace={{true}}
   @options={{this.codelistData.value}}
   @selected={{this.selectedCodelist}}
   @onChange={{this.selectCodelist}}
@@ -11,6 +12,7 @@
 <PowerSelect
   @allowClear={{false}}
   @searchEnabled={{false}}
+  @renderInPlace={{true}}
   @options={{this.selectionStyles}}
   @selected={{this.selectedStyle}}
   @onChange={{this.selectStyle}}
@@ -19,7 +21,7 @@
   {{style.label}}
 </PowerSelect>
 <AuFormRow>
-  <VariablePlugin::Utils::LabelInput 
+  <VariablePlugin::Utils::LabelInput
     @label={{this.label}}
     @updateLabel={{this.updateLabel}}
   />

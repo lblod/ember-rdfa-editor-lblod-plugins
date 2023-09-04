@@ -17,6 +17,7 @@
       <PowerSelect
         @allowClear={{false}}
         @searchEnabled={{false}}
+        @renderInPlace={{true}}
         @options={{@variableTypes}}
         @selected={{this.selectedVariable}}
         @onChange={{this.updateSelectedVariable}}
@@ -25,9 +26,9 @@
         {{variable.label}}
       </PowerSelect>
       {{#if this.selectedVariable}}
-        {{component 
-          this.selectedVariable.component.path 
-          controller=this.controller 
+        {{component
+          this.selectedVariable.component.path
+          controller=this.controller
           options=this.selectedVariable.component.options
         }}
       {{/if}}
