@@ -6,6 +6,10 @@
   margin-left: -0.5rem;
 }
 
+.variable-dropdowns .ember-power-select-options[role=listbox] {
+  margin-left: 0;
+}
+
 [typeof='ext:Mapping'] {
   border-bottom: 0 !important;
 
@@ -125,5 +129,5 @@
   // add top padding starting from second element
   * :not(*:nth-child(1)) {
     margin-top: 5px;
-  } 
+  }
 }
