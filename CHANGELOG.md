@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GN-4322: Add ORDER to snippet list query 
 - Bumps `@lblod/ember-rdfa-editor` from 5.1.0 to 5.2.0
 
+### Added
+- GN4470: ability to specifly single/multi-select per codelist instance
+
 ## [11.0.0] - 2023-08-22
 
 ### Added

@@ -1,12 +1,22 @@
 <PowerSelect
   @allowClear={{false}}
   @searchEnabled={{false}}
-  @options={{this.subtypes.value}}
-  @selected={{this.selectedSubtype}}
-  @onChange={{this.updateSubtype}}
-  as |subtype|
+  @options={{this.codelistData.value}}
+  @selected={{this.selectedCodelist}}
+  @onChange={{this.selectCodelist}}
+  as |codelist|
 >
-  {{subtype.label}}
+  {{codelist.label}}
+</PowerSelect>
+<PowerSelect
+  @allowClear={{false}}
+  @searchEnabled={{false}}
+  @options={{this.selectionStyles}}
+  @selected={{this.selectedStyle}}
+  @onChange={{this.selectStyle}}
+  as |style|
+>
+  {{style.label}}
 </PowerSelect>
 <AuFormRow>
   <VariablePlugin::Utils::LabelInput 
@@ -16,7 +26,7 @@
 </AuFormRow>
 <AuButton
   {{on 'click' this.insert}}
-  @disabled={{not this.selectedSubtype}}
+  @disabled={{not this.selectedCodelist}}
 >
   {{t 'variable-plugin.button'}}
 </AuButton>

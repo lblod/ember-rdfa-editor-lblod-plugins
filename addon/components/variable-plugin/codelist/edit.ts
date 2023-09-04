@@ -72,7 +72,12 @@ export default class CodelistEditComponent extends Component<Args> {
   });
 
   get multiSelect() {
-    return this.codelistOptions.value?.type === MULTI_SELECT_CODELIST_TYPE;
+    const localStyle = this.selectedCodelist.value?.node.attrs
+      .selectionStyle as string;
+    if (localStyle) {
+      return localStyle === 'multi';
+    } else
+      return this.codelistOptions.value?.type === MULTI_SELECT_CODELIST_TYPE;
   }
 
   @action
