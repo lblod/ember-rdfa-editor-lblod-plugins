@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [11.1.0] - 2023-08-29
+
 ### Fixed
-- Do not allow header nodes to be split by table
+- GN-4370: Do not allow header nodes to be split by table
 - Grey out Generic RDFA button in embedded view
+- GN-4425: Smarter content wrapping for structure nodes
 
 ### Changed
 - GN-4442: template comments can move up and down over the *whole* document
+- GN-4322: Add ORDER to snippet list query 
+- Bumps `@lblod/ember-rdfa-editor` from 5.1.0 to 5.2.0
 
 ### Added
 - GN4470: ability to specifly single/multi-select per codelist instance
@@ -25,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Introduce internationalization in the table of contents node based on the document language.
 - The whole table of contents node (include its entries) is now exported in its `serialize` method without the need of an `entries` attribute.
 - GN-4461: update readme to specify needed imports for template comment
+- Check validity on number minimum/maximum inputs
 
 ### Changed
 - GN-4263: update address variable edit UI/UX according to updated design
@@ -688,7 +694,7 @@ add onclick handler to pencil icon in variable plugin
 
 # Changelog
 
-[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v11.0.0...HEAD
+[unreleased]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v11.1.0...HEAD
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.1.0...v8.0.0
 [7.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v7.0.0...v7.1.0
@@ -704,6 +710,7 @@ add onclick handler to pencil icon in variable plugin
 [3.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.2...v3.0.0
 [2.1.2]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v2.1.0...v2.1.1
+[11.1.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v11.0.0...v11.1.0
 [11.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v10.0.0...v11.0.0
 [10.0.0]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.1...v10.0.0
 [9.1.1]: https://github.com/lblod/ember-rdfa-editor-lblod-plugins/compare/v9.1.0...v9.1.1

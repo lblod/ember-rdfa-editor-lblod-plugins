@@ -128,7 +128,9 @@ const buildSnippetListFetchQuery = ({
               ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
               : ''
           }
-        }`;
+        }
+        ORDER BY DESC(?createdOn)
+        `;
 };
 
 export const fetchSnippets = async ({
