@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - ember-modifier is now explicitely a peerDependency
+- GN4470: ability to specifly single/multi-select per codelist instance
 ## [11.1.0] - 2023-08-29
 
 ### Fixed
@@ -19,9 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GN-4442: template comments can move up and down over the *whole* document
 - GN-4322: Add ORDER to snippet list query 
 - Bumps `@lblod/ember-rdfa-editor` from 5.1.0 to 5.2.0
-
-### Added
-- GN4470: ability to specifly single/multi-select per codelist instance
 
 ## [11.0.0] - 2023-08-22
 
