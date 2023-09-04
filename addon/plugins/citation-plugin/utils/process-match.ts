@@ -1,5 +1,5 @@
 import { isBlank } from '@ember/utils';
-import { LEGISLATION_TYPES } from './types';
+import { isLegislationType, LEGISLATION_TYPES } from './types';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const STOP_WORDS = ['het', 'de', 'van', 'tot', 'dat'];
@@ -28,6 +28,44 @@ interface ProcessedMatch {
   };
 }
 
+const getTypeLabel = (
+  type: string,
+): keyof typeof LEGISLATION_TYPES | string => {
+  switch (true) {
+    case /\w+decreet/i.test(type):
+    case /decreet/i.test(type):
+      return 'decreet';
+    case /\w+wetboek/i.test(type):
+    case /wetboek/i.test(type):
+      return 'wetboek';
+    case /geco[oö]rdineerde[^\S\n]wet(ten)?/i.test(type):
+      return 'gecoördineerde wetten';
+    case /grondwets?wijziging/i.test(type):
+      return 'grondwetswijziging';
+    case /grondwet/i.test(type):
+      return 'grondwet';
+    case /bijzondere[^\S\n]wet/i.test(type):
+      return 'bijzondere wet';
+    case /\w+wet/i.test(type):
+    case /wet/i.test(type):
+      return 'wet';
+    default:
+      return type.toLowerCase().trim();
+  }
+};
+
+const getAugmentedSearchTerms = (type: string, searchTerms: string) => {
+  if (
+    /\w+decreet/i.test(type) ||
+    /\w+wetboek/i.test(type) ||
+    /\w+wet/i.test(type)
+  ) {
+    return `${type} ${searchTerms}`;
+  }
+
+  return searchTerms;
+};
+
 export default function processMatch(
   match: RegexpMatchArrayWithIndices,
 ): ProcessedMatch | null {
@@ -40,45 +78,23 @@ export default function processMatch(
   if (!type || !searchTerms) {
     return null;
   }
-  let cleanedSearchTerms = cleanupText(searchTerms)
+
+  const cleanedSearchTerms = cleanupText(searchTerms)
     .split(SPACES_REGEX)
     .filter(
       (word) => !isBlank(word) && word.length > 3 && !STOP_WORDS.includes(word),
     )
     .join(' ');
+
   if (type) {
-    let typeLabel: string;
-    if (/\w+decreet/i.test(type)) {
-      typeLabel = 'decreet';
-      cleanedSearchTerms = `${type} ${cleanedSearchTerms}`;
-    } else if (/decreet/i.test(type)) {
-      typeLabel = 'decreet';
-    } else if (/\w+wetboek/i.test(type)) {
-      typeLabel = 'wetboek';
-      cleanedSearchTerms = `${type} ${cleanedSearchTerms}`;
-    } else if (/wetboek/i.test(type)) {
-      typeLabel = 'wetboek';
-    } else if (/geco[oö]rdineerde[^\S\n]wet(ten)?/i.test(type)) {
-      typeLabel = 'gecoördineerde wetten';
-    } else if (/grondwets?wijziging/i.test(type)) {
-      typeLabel = 'grondwetswijziging';
-    } else if (/grondwet/i.test(type)) {
-      typeLabel = 'grondwet';
-    } else if (/bijzondere[^\S\n]wet/i.test(type)) {
-      typeLabel = 'bijzondere wet';
-    } else if (/\w+wet/i.test(type)) {
-      typeLabel = 'wet';
-      cleanedSearchTerms = `${type} ${cleanedSearchTerms}`;
-    } else if (/wet/i.test(type)) {
-      typeLabel = 'wet';
-    } else {
-      typeLabel = type.toLowerCase().trim();
-    }
-    const typeUri =
-      (LEGISLATION_TYPES as Record<string, string>)[typeLabel] ||
-      LEGISLATION_TYPES['decreet'];
+    const typeLabel = getTypeLabel(type);
+
+    const typeUri = isLegislationType(typeLabel)
+      ? LEGISLATION_TYPES[typeLabel]
+      : LEGISLATION_TYPES['decreet'];
+
     return {
-      text: cleanedSearchTerms,
+      text: getAugmentedSearchTerms(type, cleanedSearchTerms),
       legislationTypeUri: typeUri,
       typeMatch: {
         text: type,
@@ -91,18 +107,18 @@ export default function processMatch(
         end: unwrap(match.indices.groups['searchTerms'])[1],
       },
     };
-  } else {
-    return {
-      text: cleanedSearchTerms,
-      legislationTypeUri: LEGISLATION_TYPES['decreet'],
-      typeMatch: null,
-      searchTextMatch: {
-        text: searchTerms,
-        start: unwrap(match.indices.groups['searchTerms'])[0],
-        end: unwrap(match.indices.groups['searchTerms'])[1],
-      },
-    };
   }
+
+  return {
+    text: cleanedSearchTerms,
+    legislationTypeUri: LEGISLATION_TYPES['decreet'],
+    typeMatch: null,
+    searchTextMatch: {
+      text: searchTerms,
+      start: unwrap(match.indices.groups['searchTerms'])[0],
+      end: unwrap(match.indices.groups['searchTerms'])[1],
+    },
+  };
 }
 
 function cleanupText(text?: string): string {

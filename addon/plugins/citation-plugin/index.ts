@@ -82,9 +82,14 @@ const MINISTERIAL = `ministerieel${NNWS}?besluit`;
 const ENUM_ROYAL = `genummerd${NNWS}?${ROYAL}`;
 
 /**
+ * match for "decision of the flemish government"
+ */
+const DECISION = 'besluit';
+
+/**
  * The type of citation that we need to search for
  */
-const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${SPECIAL}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}`;
+const TYPE = `${DECREE}|${MEMO}|${TREATY}|${CONSTITUTION_CHANGE}|${COLLAB}|${BOOK}|${PROTOCOL}|${FLEMGOV}|${COORD}|${SPECIAL}|${LAW}|${ROYAL}|${MINISTERIAL}|${ENUM_ROYAL}|${DECISION}`;
 /**
  * The monster regex that makes the citation plugin trigger to show `CitationCard`.
  * In restructuring, I've made sure that I didn't abstract away any of the capturing groups,

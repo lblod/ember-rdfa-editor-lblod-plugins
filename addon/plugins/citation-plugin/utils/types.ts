@@ -33,6 +33,11 @@ export const legislationKeysCapitalized = Object.keys(LEGISLATION_TYPES).map(
   capitalize,
 ) as [Capitalize<keyof typeof LEGISLATION_TYPES>];
 
+export const isLegislationType = (
+  type: string,
+): type is keyof typeof LEGISLATION_TYPES =>
+  Object.keys(LEGISLATION_TYPES).includes(type);
+
 export const isBesluitType = (type: string) =>
   type === LEGISLATION_TYPES['besluit'];
 
