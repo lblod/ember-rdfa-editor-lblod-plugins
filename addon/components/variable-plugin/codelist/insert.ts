@@ -15,10 +15,12 @@ export type CodelistInsertOptions = {
   publisher?: string;
   endpoint: string;
 };
+
 type Args = {
   controller: SayController;
   options: CodelistInsertOptions;
 };
+
 interface SelectStyle {
   label: string;
   value: string;
@@ -63,9 +65,11 @@ export default class CodelistInsertComponent extends Component<Args> {
       (style) => style.value === this.selectedStyleValue,
     );
   }
+
   codelistData = trackedFunction(this, async () => {
     return fetchCodeListsByPublisher(this.endpoint, this.publisher);
   });
+
   @action
   updateLabel(event: InputEvent) {
     this.label = (event.target as HTMLInputElement).value;
@@ -103,6 +107,7 @@ export default class CodelistInsertComponent extends Component<Args> {
   selectCodelist(codelist: CodeList) {
     this.selectedCodelist = codelist;
   }
+
   @action
   selectStyle(style: SelectStyle) {
     this.selectedStyleValue = style.value;
