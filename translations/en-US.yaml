@@ -195,6 +195,9 @@ variable:
     error-number-below: The number should be smaller than or equal to {maxValue}
     error-min-bigger-than-max: The minimum should be smaller than the maximum
     written-number-label: Show as words
+  codelist:
+    single-select: Single selection
+    multi-select: Multiple selection
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
