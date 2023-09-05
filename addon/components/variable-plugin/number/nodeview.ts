@@ -38,6 +38,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   get node() {
     return this.args.node;
   }
+
   get formattedNumber() {
     const value = this.node.attrs.value as string;
 
@@ -108,61 +109,5 @@ export default class NumberNodeviewComponent extends Component<Args> {
     if (!this.errorMessage) {
       this.args.updateAttribute('value', this.inputNumber);
     }
-  }
-
-  @action
-  selectThisNode() {
-    const tr = this.args.controller.activeEditorState.tr;
-    tr.setSelection(
-      NodeSelection.create(
-        this.args.controller.activeEditorState.doc,
-        this.args.getPos() as number,
-      ),
-    );
-    this.args.controller.activeEditorView.dispatch(tr);
-  }
-
-  @action
-  leaveOnEnter(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.selectAfterNode();
-    }
-  }
-
-  @action setPosBeforeKeypress(event: KeyboardEvent) {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-      this.cursorPositionKeyDown = (
-        event.target as HTMLInputElement
-      ).selectionStart;
-    }
-  }
-  @action leaveWithArrows(event: KeyboardEvent) {
-    const finalPos = (event.target as HTMLInputElement).value.length;
-    if (event.key === 'ArrowRight' && this.cursorPositionKeyDown === finalPos) {
-      this.selectAfterNode();
-    }
-    if (event.key === 'ArrowLeft' && this.cursorPositionKeyDown === 0) {
-      this.selectBeforeNode();
-    }
-    this.cursorPositionKeyDown = null;
-  }
-
-  setSelectionAt(pos: number) {
-    const tr = this.args.controller.activeEditorState.tr;
-    tr.setSelection(
-      TextSelection.create(this.args.controller.activeEditorState.doc, pos),
-    );
-    this.args.controller.focus();
-    this.args.controller.activeEditorView.dispatch(tr);
-  }
-
-  selectAfterNode() {
-    this.setSelectionAt(
-      (this.args.getPos() as number) + this.args.node.nodeSize,
-    );
-  }
-
-  selectBeforeNode() {
-    this.setSelectionAt(this.args.getPos() as number);
   }
 }

@@ -7,7 +7,7 @@
     @iconAlignment='right'
     class='variable'
     {{velcro.hook}}
-    {{on 'click' this.selectThisNode}}
+    {{select-node-on-click @controller @getPos}}
   >
     {{#if this.formattedNumber}}
       {{this.formattedNumber}}
@@ -32,19 +32,18 @@
         @standOut={{true}} as |card|
       >
         <card.content>
-          {{!-- template-lint-disable no-down-event-binding --}}
+          {{! template-lint-disable no-down-event-binding }}
           <AuNativeInput
             value={{this.inputNumber}}
             placeholder={{t 'variable.number.type-number'}}
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
-            {{on 'keyup' this.leaveOnEnter}}
-            {{on 'keyup' this.leaveWithArrows}}
-            {{on 'keydown' this.setPosBeforeKeypress}}
+            {{leave-with-arrow-keys @controller @getPos}}
+            {{leave-on-enter-key @controller @getPos}}
           />
           <AuToggleSwitch
-            @identifier="writtenNumber"
-            @name="writtenNumber"
+            @identifier='writtenNumber'
+            @name='writtenNumber'
             @checked={{this.writtenNumber}}
             @onChange={{this.changeWrittenNumber}}
             @label={{t 'variable.number.written-number-label'}}
