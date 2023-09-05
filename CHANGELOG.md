@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- CI: move changelog check to seperate CI pipeline
+
 ## [11.2.0] - 2023-09-04
 ### Added
 - ember-modifier is now explicitely a peerDependency
