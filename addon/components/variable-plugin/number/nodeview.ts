@@ -1,11 +1,9 @@
 import Component from '@glimmer/component';
 import {
   DecorationSource,
-  NodeSelection,
   PNode,
   SayController,
   SayView,
-  TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
