@@ -247,6 +247,8 @@ export default class BesluitSampleController extends Controller {
           return new Set<NodeType>([schema.nodes.motivering]);
         },
         endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
+        decisionsEndpoint:
+          'https://publicatie.gelinkt-notuleren.lblod.info/sparql',
       },
       roadsignRegulation: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
