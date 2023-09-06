@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fixed compat with 3.28 by importing inject as service
+- got rid of all uses of ember/string
+
 ## [11.3.0] - 2023-09-06
 
 ### Changed
