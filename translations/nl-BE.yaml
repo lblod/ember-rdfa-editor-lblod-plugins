@@ -95,6 +95,10 @@ citaten-plugin:
     refer-whole: Verwijs naar volledig document
     refer-article: Verwijs naar artikel
     lookup-codex: Bekijk in Vlaamse Codex
+    lookup-publicatie: Bekijk in Publicatie
+    lookup-publicatie-short: Publicatie
+    publicatie-non-available: Volledige inhoud niet publiek
+    publicatie-non-available-short: Niet publiek
   alert:
     loading: Laden…
     no-results: Geen resultaten gevonden

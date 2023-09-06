@@ -118,55 +118,57 @@
               </AuFormRow>
 
               {{! Date of staatsblad }}
-              <AuLabel
-                class='au-u-margin-top au-u-margin-bottom-small'
-                for='search-codex-datum-staatsblad-van'
-                @inline={{false}}
-              >{{t 'citaten-plugin.search.date-publication'}}</AuLabel>
-              {{! From }}
-              <AuFormRow @alignment='pre' class='au-u-margin-bottom-tiny'>
+              {{#unless this.isBesluitType}}
                 <AuLabel
+                  class='au-u-margin-top au-u-margin-bottom-small'
                   for='search-codex-datum-staatsblad-van'
-                  class='au-u-hidden-visually'
-                >{{t 'citaten-plugin.search.date-publication-from'}}</AuLabel>
-                <AuLabel
-                  for='search-codex-datum-staatsblad-van'
-                  aria-hidden='true'
-                  class='au-u-1-4'
-                  @inline={{true}}
-                >{{t 'citaten-plugin.search.from'}}</AuLabel>
-                <AuDatePicker
-                  @id='search-codex-datum-staatsblad-van'
-                  @alignment='top'
-                  @onChange={{this.updatePublicationDateFrom}}
-                  @value={{this.publicationDateFrom}}
-                  @min={{this.minDate}}
-                  @max={{this.maxDate}}
-                  @localization={{this.datePickerLocalization}}
-                />
-              </AuFormRow>
-              {{! To }}
-              <AuFormRow @alignment='pre'>
-                <AuLabel
-                  for='search-codex-datum-staatsblad-tot'
-                  class='au-u-hidden-visually'
-                >{{t 'citaten-plugin.search.date-publication-to'}}</AuLabel>
-                <AuLabel
-                  for='search-codex-datum-staatsblad-tot'
-                  aria-hidden='true'
-                  class='au-u-1-4'
-                  @inline={{true}}
-                >{{t 'citaten-plugin.search.to'}}</AuLabel>
-                <AuDatePicker
-                  @id='search-codex-datum-staatsblad-tot'
-                  @alignment='top'
-                  @onChange={{this.updatePublicationDateTo}}
-                  @value={{this.publicationDateTo}}
-                  @min={{this.minDate}}
-                  @max={{this.maxDate}}
-                  @localization={{this.datePickerLocalization}}
-                />
-              </AuFormRow>
+                  @inline={{false}}
+                >{{t 'citaten-plugin.search.date-publication'}}</AuLabel>
+                {{! From }}
+                <AuFormRow @alignment='pre' class='au-u-margin-bottom-tiny'>
+                  <AuLabel
+                    for='search-codex-datum-staatsblad-van'
+                    class='au-u-hidden-visually'
+                  >{{t 'citaten-plugin.search.date-publication-from'}}</AuLabel>
+                  <AuLabel
+                    for='search-codex-datum-staatsblad-van'
+                    aria-hidden='true'
+                    class='au-u-1-4'
+                    @inline={{true}}
+                  >{{t 'citaten-plugin.search.from'}}</AuLabel>
+                  <AuDatePicker
+                    @id='search-codex-datum-staatsblad-van'
+                    @alignment='top'
+                    @onChange={{this.updatePublicationDateFrom}}
+                    @value={{this.publicationDateFrom}}
+                    @min={{this.minDate}}
+                    @max={{this.maxDate}}
+                    @localization={{this.datePickerLocalization}}
+                  />
+                </AuFormRow>
+                {{! To }}
+                <AuFormRow @alignment='pre'>
+                  <AuLabel
+                    for='search-codex-datum-staatsblad-tot'
+                    class='au-u-hidden-visually'
+                  >{{t 'citaten-plugin.search.date-publication-to'}}</AuLabel>
+                  <AuLabel
+                    for='search-codex-datum-staatsblad-tot'
+                    aria-hidden='true'
+                    class='au-u-1-4'
+                    @inline={{true}}
+                  >{{t 'citaten-plugin.search.to'}}</AuLabel>
+                  <AuDatePicker
+                    @id='search-codex-datum-staatsblad-tot'
+                    @alignment='top'
+                    @onChange={{this.updatePublicationDateTo}}
+                    @value={{this.publicationDateTo}}
+                    @min={{this.minDate}}
+                    @max={{this.maxDate}}
+                    @localization={{this.datePickerLocalization}}
+                  />
+                </AuFormRow>
+              {{/unless}}
             </div>
           </div>
         </mc.sidebar>

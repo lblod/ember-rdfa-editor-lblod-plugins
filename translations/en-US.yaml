@@ -94,6 +94,10 @@ citaten-plugin:
     refer-whole: Refer to whole document
     refer-article: Refer to this article
     lookup-codex: Lookup in Flemish Codex
+    lookup-publicatie: Lookup in Publicatie
+    lookup-publicatie-short: Publicatie
+    publicatie-non-available: Full content not public
+    publicatie-non-available-short: Not public
   alert:
     loading: Loading…
     no-results: No results found
@@ -359,4 +363,3 @@ editor-plugins:
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Insert address
-    
