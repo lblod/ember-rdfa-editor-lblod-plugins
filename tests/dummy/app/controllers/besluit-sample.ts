@@ -44,7 +44,7 @@ import {
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
-import { service } from '@ember/service';
+import { inject as service } from '@ember/service';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   besluitNodes,

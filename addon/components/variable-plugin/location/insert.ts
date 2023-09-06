@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { service } from '@ember/service';
+import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
 
