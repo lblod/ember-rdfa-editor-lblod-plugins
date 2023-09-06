@@ -1,4 +1,4 @@
-import { capitalize } from '@ember/string';
+import { capitalize } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 
 export const LEGISLATION_TYPES = {
   decreet: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Decreet',
