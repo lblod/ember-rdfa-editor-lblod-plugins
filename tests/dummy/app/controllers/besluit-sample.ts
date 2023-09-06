@@ -94,6 +94,10 @@ import {
   address,
   addressView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
+import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
+import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
+import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -285,8 +289,12 @@ export default class BesluitSampleController extends Controller {
     };
   };
   @tracked plugins: Plugin[] = [
+    firefoxCursorFix(),
+    chromeHacksPlugin(),
+    lastKeyPressedPlugin,
     tablePlugin,
     tableKeymap,
+    linkPasteHandler(this.schema.nodes.link),
     this.citationPlugin,
     this.validationPlugin,
     createInvisiblesPlugin(
