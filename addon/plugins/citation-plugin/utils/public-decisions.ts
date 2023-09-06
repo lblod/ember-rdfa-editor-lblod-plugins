@@ -42,6 +42,12 @@ const getFilters = ({
     );
   }
 
+  const governmentNameFilter = filter.governmentName?.trim()
+    ? `FILTER (CONTAINS(LCASE(?governmentName), "${replaceDiacriticsInWord(
+        filter.governmentName,
+      ).toLowerCase()}"))`
+    : '';
+
   return `
     ${words
       .map(
@@ -51,7 +57,9 @@ const getFilters = ({
           ).toLowerCase()}"))`,
       )
       .join('\n')}
-    ${documentDateFilter.join('\n')}`;
+    ${documentDateFilter.join('\n')}
+    ${governmentNameFilter}
+    `;
 };
 
 const getCountQuery = ({

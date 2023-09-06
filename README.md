@@ -254,13 +254,15 @@ Same goes for the `CitationInsert` component, with which you can directly insert
 
 You need to specify the endpoints for the plugin in the config object
 ```js
-{
-  endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql'
-  decisionsEndpoint: 'https://https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql'
+const citationPluginConfig = {
+  endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
+  decisionsEndpoint: 'https://https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql',
+  defaultDecisionsGovernmentName: 'Gemeenteraad Edegem'
 }
 ```
 
-The `decisionsEndpoint` is optional, and is required if you want to display decisions from the Publicatie.
+The `decisionsEndpoint` is optional, and is required if you want to display decisions from the Publicatie.  
+The `defaultDecisionsGovernmentName` is also optional, and is used to filter the decisions from the Publicatie by government name, the government name for the filter can be changed by the user during the search.
 
 
 Make `this.citationPlugin` a tracked reference to the plugin created with the function exported from the package and the wished configuration

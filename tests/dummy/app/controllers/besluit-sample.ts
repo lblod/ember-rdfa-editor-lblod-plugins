@@ -253,6 +253,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
         decisionsEndpoint:
           'https://publicatie.gelinkt-notuleren.lblod.info/sparql',
+        defaultDecisionsGovernmentName: 'Gemeenteraad Edegem',
       },
       roadsignRegulation: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',

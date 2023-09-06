@@ -140,6 +140,7 @@ export type CitationPluginConfig =
 export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
   endpoint: string;
   decisionsEndpoint?: string;
+  defaultDecisionsGovernmentName?: string;
 };
 
 export function citationPlugin(config: CitationPluginConfig): CitationPlugin {
