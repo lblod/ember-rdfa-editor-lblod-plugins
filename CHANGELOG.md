@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor number-variable: component now uses modifiers for keyboard navigation (arrow keys and enter)
 - Bumps `@lblod/ember-rdfa-editor` from 5.2.0 to 5.3.0
 
+### Changed
+- Bumps `@lblod/ember-rdfa-editor` from 5.2.0 to 5.3.0
+
 ## [11.3.0] - 2023-09-06
 ### Changed
 - CI: move changelog check to seperate CI pipeline
