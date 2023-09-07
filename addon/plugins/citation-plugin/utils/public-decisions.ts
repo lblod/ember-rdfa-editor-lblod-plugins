@@ -44,7 +44,7 @@ const getFilters = ({
 
   const governmentNameFilter = filter.governmentName?.trim()
     ? `FILTER (CONTAINS(LCASE(?administrativeUnitName), "${replaceDiacriticsInWord(
-        filter.governmentName,
+        filter.governmentName?.trim(),
       ).toLowerCase()}"))`
     : '';
 
@@ -253,8 +253,6 @@ const getPublicationLink = ({
   treatmentUuid: string;
   decisionsEndpoint: string;
 }) => {
-  console.log({ decisionsEndpoint });
-
   return `https://${
     new URL(decisionsEndpoint).host
   }/${administrativeUnitName}/${administrativeUnitTypeName}/zittingen/${zittingUuid}/uittreksels/${treatmentUuid}`;
