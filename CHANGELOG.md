@@ -1,5 +1,3 @@
-## 11.3.0 - 2023-09-06
-
 ## 12.0.0
 
 ### Major Changes
@@ -17,6 +15,7 @@
 
 - [#289](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/289) [`d1e2af1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d1e2af14bab0eb4ed6e1d7d62a5c55e396c707ce) Thanks [@elpoelma](https://github.com/elpoelma)! - Bumps `@lblod/ember-rdfa-editor` from 5.2.0 to 5.3.0
 
+## [11.3.0] - 2023-09-06
 ### Changed
 
 - CI: move changelog check to separate CI pipeline
