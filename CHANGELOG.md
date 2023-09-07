@@ -1,4 +1,4 @@
-## [11.3.0] - 2023-09-06
+## 11.3.0 - 2023-09-06
 
 ### Changed
 - CI: move changelog check to separate CI pipeline
