@@ -82,6 +82,10 @@ import {
   templateCommentView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 import { getOwner } from '@ember/application';
+import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
+import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
+import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
+import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -260,8 +264,12 @@ export default class RegulatoryStatementSampleController extends Controller {
     };
   };
   @tracked plugins: Plugin[] = [
+    firefoxCursorFix(),
+    chromeHacksPlugin(),
+    lastKeyPressedPlugin,
     tablePlugin,
     tableKeymap,
+    linkPasteHandler(this.schema.nodes.link),
     createInvisiblesPlugin(
       [space, hardBreak, paragraphInvisible, headingInvisible],
       {
