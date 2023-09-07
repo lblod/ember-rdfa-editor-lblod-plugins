@@ -1,14 +1,13 @@
 ## [11.3.0] - 2023-09-06
-
 ### Changed
-- CI: move changelog check to seperate CI pipeline
+- CI: move changelog check to separate CI pipeline
 
 ### Added
 - GN-4266: Referring to published decisions
 ## [11.2.0] - 2023-09-04
 ### Added
-- ember-modifier is now explicitely a peerDependency
-- GN4470: ability to specifly single/multi-select per codelist instance
+- ember-modifier is now explicitly a peerDependency
+- GN4470: ability to specify single/multi-select per codelist instance
 ## [11.1.0] - 2023-08-29
 
 ### Fixed
