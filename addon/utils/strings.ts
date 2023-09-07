@@ -1,5 +1,11 @@
 import { warn } from '@ember/debug';
 
+const STRING_CAPITALIZE_REGEXP = /(^|\/)([a-z\u00C0-\u024F])/g;
+export function capitalize(value: string): string {
+  return value.replace(STRING_CAPITALIZE_REGEXP, (match) =>
+    match.toUpperCase(),
+  );
+}
 export function escapeValue(value?: string) {
   if (value) {
     const shadowDomElement = document.createElement('textarea');
