@@ -43,7 +43,7 @@ const getFilters = ({
   }
 
   const governmentNameFilter = filter.governmentName?.trim()
-    ? `FILTER (CONTAINS(LCASE(?governmentName), "${replaceDiacriticsInWord(
+    ? `FILTER (CONTAINS(LCASE(?administrativeUnitName), "${replaceDiacriticsInWord(
         filter.governmentName,
       ).toLowerCase()}"))`
     : '';
@@ -86,8 +86,12 @@ const getCountQuery = ({
     SELECT (COUNT(DISTINCT(?decision)) as ?count) WHERE {
       ?session rdf:type besluit:Zitting;
         mu:uuid ?zittingUuid;
-        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan/skos:prefLabel) ?governmentName;
+        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit;
         ext:besluitenlijst ?decisionList.
+      ?administrativeUnit skos:prefLabel ?administrativeUnitFullName;
+        besluit:bestuurt ?bestuurseenheid.
+      ?bestuurseenheid skos:prefLabel ?administrativeUnitName;
+        (besluit:classificatie/skos:prefLabel) ?administrativeUnitTypeName.
       ?decisionList ext:besluitenlijstBesluit ?decision.
       ?decision eli:title ?decisionTitle.
       OPTIONAL {
@@ -127,11 +131,15 @@ const getQuery = ({
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
 
-    SELECT DISTINCT ?governmentName ?decision ?decisionTitle ?documentDate ?zittingUuid ?treatmentUuid WHERE {
+    SELECT DISTINCT ?administrativeUnitFullName ?administrativeUnitTypeName ?administrativeUnitName ?decision ?decisionTitle ?documentDate ?zittingUuid ?treatmentUuid WHERE {
       ?session rdf:type besluit:Zitting;
         mu:uuid ?zittingUuid;
-        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan/skos:prefLabel) ?governmentName;
+        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit;
         ext:besluitenlijst ?decisionList.
+      ?administrativeUnit skos:prefLabel ?administrativeUnitFullName;
+        besluit:bestuurt ?bestuurseenheid.
+      ?bestuurseenheid skos:prefLabel ?administrativeUnitName;
+        (besluit:classificatie/skos:prefLabel) ?administrativeUnitTypeName.
       ?decisionList ext:besluitenlijstBesluit ?decision.
       ?decision eli:title ?decisionTitle.
       OPTIONAL {
@@ -150,7 +158,9 @@ const getQuery = ({
 };
 
 interface PublicDecisionLegalDocumentBinding {
-  governmentName: Binding<string>;
+  administrativeUnitName: Binding<string>;
+  administrativeUnitTypeName: Binding<string>;
+  administrativeUnitFullName: Binding<string>;
   decision: Binding<string>;
   decisionTitle: Binding<string>;
   documentDate?: Binding<string>;
@@ -184,7 +194,7 @@ export async function fetchPublicDecisions({
 
     const legalDocuments = response.results.bindings.map((binding) => {
       const escapedGovernmentName =
-        escapeValue(binding.governmentName.value) ?? '';
+        escapeValue(binding.administrativeUnitFullName.value) ?? '';
 
       const escapedTitle = escapeValue(binding.decisionTitle.value) ?? '';
 
@@ -206,8 +216,12 @@ export async function fetchPublicDecisions({
           publicationLink:
             binding.zittingUuid.value && binding.treatmentUuid?.value
               ? getPublicationLink({
+                  administrativeUnitName: binding.administrativeUnitName.value,
+                  administrativeUnitTypeName:
+                    binding.administrativeUnitTypeName.value,
                   zittingUuid: binding.zittingUuid.value,
                   treatmentUuid: binding.treatmentUuid.value,
+                  decisionsEndpoint: config.endpoint,
                 })
               : null,
         },
@@ -227,10 +241,21 @@ export async function fetchPublicDecisions({
 }
 
 const getPublicationLink = ({
+  administrativeUnitName,
+  administrativeUnitTypeName,
   zittingUuid,
   treatmentUuid,
+  decisionsEndpoint,
 }: {
+  administrativeUnitName: string;
+  administrativeUnitTypeName: string;
   zittingUuid: string;
   treatmentUuid: string;
-}) =>
-  `https://publicatie.gelinkt-notuleren.lblod.info/Edegem/Gemeente/zittingen/${zittingUuid}/uittreksels/${treatmentUuid}`;
+  decisionsEndpoint: string;
+}) => {
+  console.log({ decisionsEndpoint });
+
+  return `https://${
+    new URL(decisionsEndpoint).host
+  }/${administrativeUnitName}/${administrativeUnitTypeName}/zittingen/${zittingUuid}/uittreksels/${treatmentUuid}`;
+};
