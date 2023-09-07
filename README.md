@@ -256,7 +256,7 @@ You need to specify the endpoints for the plugin in the config object
 ```js
 const citationPluginConfig = {
   endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
-  decisionsEndpoint: 'https://https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql',
+  decisionsEndpoint: 'https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql',
   defaultDecisionsGovernmentName: 'Gemeenteraad Edegem'
 }
 ```
