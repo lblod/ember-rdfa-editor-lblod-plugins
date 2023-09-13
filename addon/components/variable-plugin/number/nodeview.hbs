@@ -13,7 +13,7 @@
       {{this.formattedNumber}}
     {{else}}
       <span class='mark-highlight-manual'>
-        {{t 'variable.number.placeholder'}}
+        {{this.translations.placeholder}}
       </span>
     {{/if}}
     {{#if @node.attrs.label}}
@@ -35,7 +35,7 @@
           {{! template-lint-disable no-down-event-binding }}
           <AuNativeInput
             value={{this.inputNumber}}
-            placeholder={{t 'variable.number.type-number'}}
+            placeholder={{this.translations.typeNumber}}
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
             {{leave-with-arrow-keys @controller @getPos}}
@@ -46,7 +46,7 @@
             @name='writtenNumber'
             @checked={{this.writtenNumber}}
             @onChange={{this.changeWrittenNumber}}
-            @label={{t 'variable.number.written-number-label'}}
+            @label={{this.translations.writtenNumberLabel}}
           />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>
