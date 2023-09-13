@@ -59,6 +59,7 @@ const getFilters = ({
       .join('\n')}
     ${documentDateFilter.join('\n')}
     ${governmentNameFilter}
+    FILTER(BOUND(?decisionTitle))
     `;
 };
 
@@ -77,29 +78,31 @@ const getCountQuery = ({
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX eli: <http://data.europa.eu/eli/ontology#>
     PREFIX prov: <http://www.w3.org/ns/prov#>
-    PREFIX schema: <http://schema.org/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    PREFIX dct: <http://purl.org/dc/terms/>
 
     SELECT (COUNT(DISTINCT(?decision)) as ?count) WHERE {
       ?session rdf:type besluit:Zitting;
         mu:uuid ?zittingUuid;
-        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit;
-        ext:besluitenlijst ?decisionList.
+        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit.
       ?administrativeUnit skos:prefLabel ?administrativeUnitFullName;
         besluit:bestuurt ?bestuurseenheid.
       ?bestuurseenheid skos:prefLabel ?administrativeUnitName;
         (besluit:classificatie/skos:prefLabel) ?administrativeUnitTypeName.
-      ?decisionList ext:besluitenlijstBesluit ?decision.
-      ?decision eli:title ?decisionTitle.
       OPTIONAL {
-        ?agenda rdf:type besluit:BehandelingVanAgendapunt;
+        ?session besluit:behandelt ?agendaPoint.
+        ?agendaPointTreatment dct:subject ?agendaPoint;
           prov:generated ?decision.
-        ?treatment rdf:type ext:Uittreksel;
-          ext:uittrekselBvap ?agenda;
-          mu:uuid ?treatmentUuida.
+        ?decision eli:title ?decisionTitle.
+      }
+      OPTIONAL {
+        ?session ext:uittreksel ?treatment.
+        ?treatment mu:uuid ?treatmentUuid.
+        ?treatment ext:uittrekselBvap ?agendaPointTreatment.
+        ?agendaPointTreatment prov:generated ?decision.
+        ?decision eli:title ?decisionTitle.
       }
       ${filterString}
     }
@@ -125,29 +128,31 @@ const getQuery = ({
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX eli: <http://data.europa.eu/eli/ontology#>
     PREFIX prov: <http://www.w3.org/ns/prov#>
-    PREFIX schema: <http://schema.org/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    PREFIX dct: <http://purl.org/dc/terms/>
 
-    SELECT DISTINCT ?administrativeUnitFullName ?administrativeUnitTypeName ?administrativeUnitName ?decision ?decisionTitle ?documentDate ?zittingUuid ?treatmentUuid WHERE {
+    SELECT DISTINCT ?administrativeUnitFullName ?administrativeUnitTypeName ?administrativeUnitName ?documentDate ?decision ?decisionTitle ?zittingUuid ?treatmentUuid WHERE {
       ?session rdf:type besluit:Zitting;
         mu:uuid ?zittingUuid;
-        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit;
-        ext:besluitenlijst ?decisionList.
+        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit.
       ?administrativeUnit skos:prefLabel ?administrativeUnitFullName;
         besluit:bestuurt ?bestuurseenheid.
       ?bestuurseenheid skos:prefLabel ?administrativeUnitName;
         (besluit:classificatie/skos:prefLabel) ?administrativeUnitTypeName.
-      ?decisionList ext:besluitenlijstBesluit ?decision.
-      ?decision eli:title ?decisionTitle.
       OPTIONAL {
-        ?agenda rdf:type besluit:BehandelingVanAgendapunt;
+        ?session besluit:behandelt ?agendaPoint.
+        ?agendaPointTreatment dct:subject ?agendaPoint;
           prov:generated ?decision.
-        ?treatment rdf:type ext:Uittreksel;
-          ext:uittrekselBvap ?agenda;
-          mu:uuid ?treatmentUuid.
+        ?decision eli:title ?decisionTitle.
+      }
+      OPTIONAL {
+        ?session ext:uittreksel ?treatment.
+        ?treatment mu:uuid ?treatmentUuid.
+        ?treatment ext:uittrekselBvap ?agendaPointTreatment.
+        ?agendaPointTreatment prov:generated ?decision.
+        ?decision eli:title ?decisionTitle.
       }
       ${filterString}
     }
