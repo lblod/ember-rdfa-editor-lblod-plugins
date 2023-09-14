@@ -7,7 +7,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import intlService, { TOptions } from 'ember-intl/services/intl';
+import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
 import { isBlank } from '@ember/utils';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
@@ -42,15 +42,11 @@ export default class NumberNodeviewComponent extends Component<Args> {
     return this.controller.documentLanguage;
   }
 
-  t(key: string, options?: TOptions) {
-    return this.intl.t(key, { ...options, locale: this.documentLanguage });
-  }
-
   get translations() {
     return {
-      placeholder: this.t('variable.number.placeholder'),
-      typeNumber: this.t('variable.number.type-number'),
-      writtenNumberLabel: this.t('variable.number.written-number-label'),
+      placeholder: this.intl.t('variable.number.placeholder', {
+        locale: this.documentLanguage,
+      }),
     };
   }
 
@@ -106,16 +102,16 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
     if (!validMinimum || !validMaximum) {
       if (this.minValue && this.maxValue) {
-        return this.t('variable.number.error-number-between', {
+        return this.intl.t('variable.number.error-number-between', {
           minValue: this.minValue,
           maxValue: this.maxValue,
         });
       } else if (this.minValue) {
-        return this.t('variable.number.error-number-above', {
+        return this.intl.t('variable.number.error-number-above', {
           minValue: this.minValue,
         });
       } else if (this.maxValue) {
-        return this.t('variable.number.error-number-below', {
+        return this.intl.t('variable.number.error-number-below', {
           maxValue: this.maxValue,
         });
       }

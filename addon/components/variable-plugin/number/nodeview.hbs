@@ -35,7 +35,7 @@
           {{! template-lint-disable no-down-event-binding }}
           <AuNativeInput
             value={{this.inputNumber}}
-            placeholder={{this.translations.typeNumber}}
+            placeholder={{t 'variable.number.type-number'}}
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
             {{leave-with-arrow-keys @controller @getPos}}
@@ -46,7 +46,7 @@
             @name='writtenNumber'
             @checked={{this.writtenNumber}}
             @onChange={{this.changeWrittenNumber}}
-            @label={{this.translations.writtenNumberLabel}}
+            @label={{t 'variable.number.written-number-label'}}
           />
           {{#if this.errorMessage}}
             <AuHelpText @small={{true}} @error={{true}}>
