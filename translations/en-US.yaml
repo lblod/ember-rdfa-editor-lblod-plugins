@@ -192,6 +192,7 @@ document-title-plugin:
 variable:
   number:
     placeholder: Insert number
+    label: number
     type-number: Type a number...
     error-not-integer: Only integers are allowed
     error-not-number: Only numbers are allowed
@@ -203,6 +204,12 @@ variable:
   codelist:
     single-select: Single selection
     multi-select: Multiple selection
+  location:
+    label: location
+  text:
+    label: text
+  date:
+    label: date
 variable-plugin:
   insert-variable: Insert variable
   button: Insert

@@ -28,6 +28,10 @@ export default class LocationInsertComponent extends Component<Args> {
     return this.controller.schema;
   }
 
+  get documentLanguage() {
+    return this.controller.documentLanguage;
+  }
+
   get endpoint() {
     return this.args.options.endpoint;
   }
@@ -41,15 +45,20 @@ export default class LocationInsertComponent extends Component<Args> {
   insert() {
     const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+
+    const placeholder = this.intl.t('variable.location.label', {
+      locale: this.documentLanguage,
+    });
+
     const node = this.schema.nodes.location.create(
       {
         mappingResource,
         variableInstance,
-        label: this.label,
+        label: this.label ?? placeholder,
         source: this.endpoint,
       },
       this.schema.node('placeholder', {
-        placeholderText: 'location',
+        placeholderText: placeholder,
       }),
     );
 

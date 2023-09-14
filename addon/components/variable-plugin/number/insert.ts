@@ -42,6 +42,10 @@ export default class NumberInsertComponent extends Component<Args> {
     return this.args.controller.schema;
   }
 
+  get documentLanguage() {
+    return this.controller.documentLanguage;
+  }
+
   get numberVariableError() {
     if (!this.validMinimum || !this.validMaximum) {
       return this.intl.t('variable.number.error-not-number');
@@ -83,8 +87,12 @@ export default class NumberInsertComponent extends Component<Args> {
     const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
+    const defaultLabel = this.intl.t('variable.number.label', {
+      locale: this.documentLanguage,
+    });
+
     const node = this.schema.nodes.number.create({
-      label: this.label,
+      label: this.label ?? defaultLabel,
       value: null,
       mappingResource,
       variableInstance,

@@ -203,6 +203,7 @@ table-of-contents-plugin:
 variable:
   number:
     placeholder: Voeg getal in
+    label: nummer
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
@@ -214,6 +215,12 @@ variable:
   codelist:
     single-select: Enkelvoudige selectie
     multi-select: Meervoudige selectie
+  location:
+    label: locatie
+  text:
+    label: tekst
+  date:
+    label: datum
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
