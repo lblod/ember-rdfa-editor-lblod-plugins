@@ -10,7 +10,7 @@ import {
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { DateOptions } from '..';
 import { formatDate, validateDateFormat } from '../utils';
-import { PNode } from '@lblod/ember-rdfa-editor';
+import { EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import {
   isVariable,
   parseLabel,
@@ -21,6 +21,11 @@ import {
   typeSpan,
 } from '../../variable-plugin/utils/dom-constructors';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+
+const insertDate = 'Datum invoegen';
+const insertDateTime = 'Datum en tijd invoegen';
+const unknownFormat = 'Ongeldig formaat';
 
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
@@ -37,7 +42,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       default: null,
     },
     humanReadableDate: {
-      default: options.placeholder.insertDate,
+      default: insertDate,
     },
     value: {},
     format: {
@@ -55,14 +60,30 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   },
   leafText: (node: PNode) => {
     const { value, onlyDate, format } = node.attrs;
+
     const humanReadableDate = value
       ? formatDate(new Date(value), format)
       : onlyDate
-      ? options.placeholder.insertDate
-      : options.placeholder.insertDateTime;
+      ? insertDate
+      : insertDateTime;
+
     return humanReadableDate;
   },
-  toDOM: (node) => {
+  outlineText: (node: PNode, state: EditorState) => {
+    const t = getTranslationFunction(state);
+    const { value, onlyDate, format } = node.attrs;
+
+    const humanReadableDate = value
+      ? formatDate(new Date(value), format)
+      : onlyDate
+      ? t('date-plugin.insert.date', insertDate)
+      : t('date-plugin.insert.datetime', insertDateTime);
+
+    return humanReadableDate;
+  },
+  serialize: (node, state) => {
+    const t = getTranslationFunction(state);
+
     const { value, onlyDate, format, mappingResource, custom, label } =
       node.attrs;
     const datatype = onlyDate ? XSD('date') : XSD('dateTime');
@@ -71,12 +92,12 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       if (validateDateFormat(format).type === 'ok') {
         humanReadableDate = formatDate(new Date(value), format);
       } else {
-        humanReadableDate = 'Ongeldig formaat';
+        humanReadableDate = t('date-plugin.validation.unknown', unknownFormat);
       }
     } else {
       humanReadableDate = (onlyDate as boolean)
-        ? options.placeholder.insertDate
-        : options.placeholder.insertDateTime;
+        ? t('date-plugin.insert.date', insertDate)
+        : t('date-plugin.insert.datetime', insertDateTime);
     }
     const dateAttrs = {
       datatype: datatype.prefixed,
@@ -136,12 +157,10 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
             if (validateDateFormat(format).type === 'ok') {
               humanReadableDate = formatDate(new Date(value), format);
             } else {
-              humanReadableDate = 'Ongeldig formaat';
+              humanReadableDate = unknownFormat;
             }
           } else {
-            humanReadableDate = onlyDate
-              ? options.placeholder.insertDate
-              : options.placeholder.insertDateTime;
+            humanReadableDate = onlyDate ? insertDate : insertDateTime;
           }
           const label = parseLabel(node);
           return {

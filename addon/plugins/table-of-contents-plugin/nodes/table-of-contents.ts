@@ -32,6 +32,7 @@ export const emberNodeConfig: (
         node: state.doc,
         pos: -1,
         config: config as TableOfContentsConfig,
+        state,
       });
 
       const title = t('table-of-contents-plugin.title', 'Inhoudstafel');

@@ -19,10 +19,6 @@ export type DateFormat = {
 };
 
 export type DateOptions = {
-  placeholder: {
-    insertDate: string;
-    insertDateTime: string;
-  };
   formats: DateFormat[];
   allowCustomFormat: boolean;
 };

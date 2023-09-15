@@ -7,11 +7,12 @@ import {
   SayView,
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
+import IntlService from 'ember-intl/services/intl';
+import { service } from '@ember/service';
 import {
   formatDate,
   validateDateFormat,
 } from '../../plugins/rdfa-date-plugin/utils';
-import { DateOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 
 type Args = {
   getPos: () => number | undefined;
@@ -24,6 +25,16 @@ type Args = {
 };
 
 export default class VariableComponent extends Component<Args> {
+  @service declare intl: IntlService;
+
+  get controller() {
+    return this.args.controller;
+  }
+
+  get documentLanguage() {
+    return this.controller.documentLanguage;
+  }
+
   @action
   onClick() {
     const tr = this.args.controller.activeEditorState.tr;
@@ -46,10 +57,13 @@ export default class VariableComponent extends Component<Args> {
         return 'Ongeldig formaat';
       }
     } else {
-      const options = this.args.node.type.spec.options as DateOptions;
       return (this.args.node.attrs.onlyDate as boolean)
-        ? options.placeholder.insertDate
-        : options.placeholder.insertDateTime;
+        ? this.intl.t('date-plugin.insert.date', {
+            locale: this.documentLanguage,
+          })
+        : this.intl.t('date-plugin.insert.datetime', {
+            locale: this.documentLanguage,
+          });
     }
   }
 }
