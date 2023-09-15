@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function replaceSelectionWithAddress(
   controller: SayController,
-  label: string,
+  label?: string,
 ) {
   const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
   const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
