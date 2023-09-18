@@ -532,7 +532,7 @@ This addon includes an insert-component for each of these variable types:
 - `variable-plugin/date/insert`
 - `variable-plugin/location/insert`
 - `variable-plugin/codelist/insert`
-- `variable-plugin/address/insert`
+- `variable-plugin/address/insert-variable`
 
 Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
 
@@ -606,6 +606,12 @@ get variableTypes() {
         },
       },
     },
+    {
+      label: 'address',
+      component: {
+        path: 'variable-plugin/address/insert-variable',
+      },
+    },
   ];
 }
 ```
@@ -675,6 +681,12 @@ You can add this edit-component to a template as follows:
 The edit card can be configured with two arguments:
 - An instance of a `SayController` (required)
 - A `defaultMuncipality` which should be used as the default value of the `muncipality` field in the edit-card (optional)
+
+
+You can also add an insert component meant for use outside of `insert-variable-card` by using the `variable-plugin/address/insert` component. This has no label-input and will show a default label.
+```hbs
+  <VariablePlugin::Address::Insert @controller={{this.controller}}/>
+```
 
 ## validation-plugin
 
