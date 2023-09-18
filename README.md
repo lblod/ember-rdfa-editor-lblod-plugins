@@ -477,6 +477,15 @@ In order to enable the plugin you need to add the table of contents button to th
 ```js
   tableOfContentsView(this.config.tableOfContents)(controller),
 ```
+
+You also need to allow this node as content by adding it to the doc node of the schema. It is *not* part of the block group.
+``` js
+// example to allow the table of contents at the top and any blocks underneath
+doc: docWithConfig({
+        content: 'table-of-contents? block+'
+     }),
+```
+
 ### Configuring the plugin with a custom config
 
 You can configure the nodeview with the hierarchy of the nodes.  
