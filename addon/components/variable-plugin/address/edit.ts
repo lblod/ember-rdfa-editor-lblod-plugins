@@ -101,7 +101,7 @@ export default class AddressEditComponent extends Component<Args> {
   }
 
   get selectedAddressVariable() {
-    const { selection, schema } = this.controller.mainEditorState;
+    const { selection, schema } = this.controller.activeEditorState;
     if (
       selection instanceof NodeSelection &&
       selection.node.type === schema.nodes.address

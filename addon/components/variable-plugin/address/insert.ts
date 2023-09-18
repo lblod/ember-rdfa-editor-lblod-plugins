@@ -16,4 +16,12 @@ export default class InsertAddressComponent extends Component<Args> {
   insertAddress() {
     replaceSelectionWithAddress(this.controller);
   }
+
+  get canInsertAddress() {
+    if (this.controller.activeEditorView.props.nodeViews?.address) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
