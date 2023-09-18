@@ -215,12 +215,15 @@ variable:
   codelist:
     single-select: Enkelvoudige selectie
     multi-select: Meervoudige selectie
+    label: codelijst
   location:
     label: locatie
   text:
     label: tekst
   date:
     label: datum
+  address:
+    label: adres
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

@@ -285,9 +285,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     mappingResource: {},
     variableInstance: {},
-    label: {
-      default: 'adres',
-    },
+    label: {},
     value: {
       default: null,
     },

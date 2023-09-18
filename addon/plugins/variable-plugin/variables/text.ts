@@ -78,9 +78,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     mappingResource: {},
     variableInstance: {},
-    label: {
-      default: 'tekst',
-    },
+    label: {},
   },
   toDOM,
   parseDOM,

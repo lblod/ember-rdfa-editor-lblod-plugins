@@ -204,12 +204,15 @@ variable:
   codelist:
     single-select: Single selection
     multi-select: Multiple selection
+    label: codelist
   location:
     label: location
   text:
     label: text
   date:
     label: date
+  address:
+    label: address
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
