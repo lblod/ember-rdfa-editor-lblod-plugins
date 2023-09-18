@@ -191,6 +191,12 @@ export default class RegulatoryStatementSampleController extends Controller {
           options: this.codelistOptions,
         },
       },
+      {
+        label: 'address',
+        component: {
+          path: 'variable-plugin/address/insert-variable',
+        },
+      },
     ];
   }
 
