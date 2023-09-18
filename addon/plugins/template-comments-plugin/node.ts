@@ -5,6 +5,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
@@ -18,13 +19,19 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     isolating: true,
     atom: false,
     attrs: {},
-    toDOM() {
+    serialize(_, state) {
+      const t = getTranslationFunction(state);
+      const heading = t(
+        'template-comments-plugin.heading',
+        'toelichtingsbepaling',
+      );
+
       return [
         'div',
         {
           typeof: EXT('TemplateComment').prefixed,
         },
-        ['h3', {}, 'toelichtingsbepaling'],
+        ['h3', {}, heading],
         ['div', { property: EXT('content').prefixed }, 0],
       ];
     },

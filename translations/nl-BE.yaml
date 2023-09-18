@@ -297,6 +297,8 @@ template-comments-plugin:
     remove: Verwijder Toelichtings- of voorbeeldbepaling
     move-down: Toelichtings- of voorbeeldbepaling naar onder
     move-up: Toelichtings- of voorbeeldbepaling naar boven
+  heading: toelichtingsbepaling
+
 pagination:
   next: Volgende pagina
   previous: Vorige pagina
