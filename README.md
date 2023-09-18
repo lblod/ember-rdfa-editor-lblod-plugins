@@ -5,7 +5,9 @@ related to the LBLOD Project.
 
 ## Compatibility
 
-* Ember.js v3.28 or above
+* Ember.js and ember data v3.28 or 4.x
+note: we smoke-test for 3.28 but develop on the latest 4.x minor. The 5.x range is currently untested and not officially supported, but we accept issues and PRs to do so.
+
 * Embroider or ember-auto-import v2
 * Node 18 or above
 
