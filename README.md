@@ -380,15 +380,38 @@ And an insert button to insert new dates that needs to be added to the insert pa
   />
 ```
 
-You will also need to add the date node with the following configuration (being the insertDate and insertDateTime the placeholder strings):
+You will also need to add a configuration like the following:
 ```js
   date: date({
     placeholder: {
       insertDate: this.intl.t('date-plugin.insert.date'),
       insertDateTime: this.intl.t('date-plugin.insert.datetime'),
     },
+     formats: [
+      {
+        label: 'Short Date',
+        key: 'short',
+        dateFormat: 'dd/MM/yy',
+        dateTimeFormat: 'dd/MM/yy HH:mm',
+      },
+      {
+        label: 'Long Date',
+        key: 'long',
+        dateFormat: 'EEEE dd MMMM yyyy',
+        dateTimeFormat: 'PPPPp',
+      },
+    ],
+    allowCustomFormat: true,
   }),
 ```
+- `formats`: specify default formats to show for selection in the date card.
+	- `label` (optional): The label shown to the user on the card. If not provided, the format is used instead e.g.: `dd/MM/yyyy`
+	- `key`: A **unique** identifier used for identification in the internal code. 
+	- `dateFormat`: The date format used when this is selected.
+	- `dateTimeFormat`: The datetime format to use when this is selected. Used when the user selects "Include time".
+- `allowCustomFormat`: true/false, determines if the option to insert a fully custom format is available.
+
+The syntax of formats can be found at [date-fns](https://date-fns.org/v2.29.3/docs/format).
 
 ## roadsign-regulation-plugin
 
@@ -411,7 +434,7 @@ You will need to set the following configuration in the config object
   imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
 }
 ```
-The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified, probably you won't need it if your data is correctly constructed.
+The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified. This won't be used if your data is correctly constructed.
 
 ## standard-template-plugin
 
@@ -469,6 +492,11 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
     document.getElementsByClassName('say-container__main')[0],
 },
 ```
+
+`nodeHierarchy` is a list of *regex* strings to specify the node structure of the document. Note that this means the order of the words does not matter. The example shows this for article structures.
+The *first string* selects the main nodes in the document that define the structure.
+The strings afterwards are the sub-nodes inside main nodes that should be used to find the actual content to display in the table of contents, if the main node does not contain the content directly. In the example a title will have a `structure_header` that contains the actual text of the title.  
+In the case that `structure_header` contains a node `actual_title_text` that should be used as content, you'd have to add a third regex string that matches `actual_title_text`.
 
 ### Internationalization of the table of contents
 The dynamic version of the table of contents is internationalized based on the current document language and using the `ember-intl` service.
