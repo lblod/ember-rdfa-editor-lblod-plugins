@@ -69,6 +69,7 @@ citaten-plugin:
     title: Insert reference
   search:
     term: Search term
+    government-search: Filter by government
     advanced: Advanced search
     type: Type of document
     placeholder: Type to search
