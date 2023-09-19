@@ -293,7 +293,7 @@ template-comments-plugin:
     remove: Remove template comment or example
     move-up: Move comment up
     move-down: Move comment down
-  heading: explanation of provision
+  heading: comment or example
 
 pagination:
   next: Next page
