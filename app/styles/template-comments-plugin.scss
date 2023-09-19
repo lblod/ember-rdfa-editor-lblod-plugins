@@ -1,6 +1,6 @@
 @import "ember-appuniversum";
 
-.template-comment {
+.say-template-comment {
   color: var(--au-blue-900);
 
   .au-c-alert__content {
@@ -31,10 +31,10 @@
   }
 }
 
-.default-cursor {
+.say-default-cursor {
   cursor: default;
 }
 
-.text-cursor {
+.say-text-cursor {
   cursor: text;
 }

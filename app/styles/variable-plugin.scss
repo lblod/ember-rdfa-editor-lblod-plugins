@@ -82,7 +82,7 @@
   }
 }
 
-.number-settings {
+.say-number-settings {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr;
@@ -129,5 +129,5 @@
   // add top padding starting from second element
   * :not(*:nth-child(1)) {
     margin-top: 5px;
-  } 
+  }
 }
