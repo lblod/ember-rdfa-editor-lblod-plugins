@@ -24,6 +24,8 @@ import {
   mappingSpan,
   typeSpan,
 } from '../utils/dom-constructors';
+import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
+import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
@@ -116,7 +118,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'number',
-  componentPath: 'variable-plugin/number/nodeview',
+  component: NumberNodeviewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
   content: 'inline*',

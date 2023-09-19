@@ -20,6 +20,8 @@ import {
   sourceSpan,
   typeSpan,
 } from '../utils/dom-constructors';
+import LocationNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/nodeview';
+import type { ComponentLike } from '@glint/template';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -71,7 +73,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'location',
-  componentPath: 'variable-plugin/location/nodeview',
+  component: LocationNodeViewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
   content: 'inline*',

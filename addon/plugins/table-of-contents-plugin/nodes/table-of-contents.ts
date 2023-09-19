@@ -8,6 +8,8 @@ import {
   createTableOfContents,
   extractOutline,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
+import TableOfContentsComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/table-of-contents-plugin/ember-nodes/table-of-contents';
+import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 export const emberNodeConfig: (
@@ -15,7 +17,7 @@ export const emberNodeConfig: (
 ) => EmberNodeConfig = (config) => {
   return {
     name: 'table-of-contents',
-    componentPath: 'table-of-contents-plugin/ember-nodes/table-of-contents',
+    component: TableOfContentsComponent as unknown as ComponentLike,
     inline: false,
     group: 'table_of_contents',
     atom: true,
