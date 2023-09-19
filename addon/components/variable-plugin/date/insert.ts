@@ -10,7 +10,7 @@ type Args = {
   controller: SayController;
 };
 
-export default class DateVariableInsertComponent extends Component<Args> {
+export default class DateInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked label?: string;
 

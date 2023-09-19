@@ -12,7 +12,7 @@ import { service } from '@ember/service';
 import {
   formatDate,
   validateDateFormat,
-} from '../../plugins/rdfa-date-plugin/utils';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 
 type Args = {
   getPos: () => number | undefined;
@@ -24,7 +24,7 @@ type Args = {
   contentDecorations?: DecorationSource;
 };
 
-export default class VariableComponent extends Component<Args> {
+export default class DateNodeviewComponent extends Component<Args> {
   @service declare intl: IntlService;
 
   get controller() {
