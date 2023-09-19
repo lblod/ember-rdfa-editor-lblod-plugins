@@ -66,10 +66,6 @@
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <RdfaDatePlugin::Insert
-                @controller={{this.controller}}
-                @options={{this.config.date}}
-              />
               <SnippetPlugin::SnippetInsert
                 @controller={{this.controller}}
                 @config={{this.config.snippet}}
@@ -87,12 +83,9 @@
               @controller={{this.controller}}
               @options={{this.config.structures}}
             />
-            <RdfaDatePlugin::Card
-              @controller={{this.controller}}
-              @options={{this.config.date}}
-            />
             <VariablePlugin::Address::Edit @controller={{this.controller}} @defaultMunicipality="Gent"/>
             <VariablePlugin::Codelist::Edit @controller={{this.controller}} @options={{this.codelistOptions}}/>
+            <VariablePlugin::Date::Edit @controller={{this.controller}} @options={{this.dateOptions}}/>
             <VariablePlugin::Location::Edit @controller={{this.controller}} @options={{this.locationOptions}}/>
             <TemplateCommentsPlugin::EditCard
               @controller={{this.controller}}

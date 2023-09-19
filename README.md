@@ -5,11 +5,11 @@ related to the LBLOD Project.
 
 ## Compatibility
 
-* Ember.js and ember data v3.28 or 4.x
-note: we smoke-test for 3.28 but develop on the latest 4.x minor. The 5.x range is currently untested and not officially supported, but we accept issues and PRs to do so.
+- Ember.js and ember data v3.28 or 4.x
+  note: we smoke-test for 3.28 but develop on the latest 4.x minor. The 5.x range is currently untested and not officially supported, but we accept issues and PRs to do so.
 
-* Embroider or ember-auto-import v2
-* Node 18 or above
+- Embroider or ember-auto-import v2
+- Node 18 or above
 
 ## Installation
 
@@ -21,20 +21,20 @@ ember install ember-rdfa-editor-lblod-plugins
 
 This addon contains the following editor plugins:
 
-* [article-structure-plugin](#article-structure-plugin)
-* [besluit-type-plugin](#besluit-type-plugin)
-* [citaten-plugin](#citaten-plugin)
-* [decision-plugin](#decision-plugin)
-* [import-snippet-plugin](#import-snippet-plugin)
-* [rdfa-date-plugin](#rdfa-date-plugin)
-* [roadsign-regulation-plugin](#roadsign-regulation-plugin)
-* [standard-template-plugin](#standard-template-plugin)
-* [table-of-contents-plugin](#table-of-contents-plugin)
-* [variable-plugin](#variable-plugin)
-* [validation-plugin](#validation-plugin)
-* [template-comments-plugin](#template-comments-plugin)
+- [article-structure-plugin](#article-structure-plugin)
+- [besluit-type-plugin](#besluit-type-plugin)
+- [citaten-plugin](#citaten-plugin)
+- [decision-plugin](#decision-plugin)
+- [import-snippet-plugin](#import-snippet-plugin)
+- [roadsign-regulation-plugin](#roadsign-regulation-plugin)
+- [standard-template-plugin](#standard-template-plugin)
+- [table-of-contents-plugin](#table-of-contents-plugin)
+- [variable-plugin](#variable-plugin)
+- [validation-plugin](#validation-plugin)
+- [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
+
 ```hbs
 <EditorContainer
   @editorOptions={{hash
@@ -54,7 +54,8 @@ You can configure your editor like this:
       @plugins={{this.plugins}}
       @schema={{this.schema}}
       @nodeViews={{this.nodeViews}}
-      @rdfaEditorInit={{this.rdfaEditorInit}}/>
+      @rdfaEditorInit={{this.rdfaEditorInit}}
+    />
   </:default>
   <:aside>
     {...}
@@ -69,18 +70,22 @@ You will have 2 anchor points where to put your plugins: `top` for a toolbar, an
 Plugin which allows a user to insert different types of structures, like chapters, sections, articles etc.
 
 This plugin provides two widgets which can be added to the sidebar.
+
 ### The structure insertion widget
 
 This widget displays a series of buttons which allows the user to insert the configured widgets.
 
 You can add this widget to the sidebar using the following syntax:
+
 ```hbs
 <ArticleStructurePlugin::ArticleStructureCard
   @controller={{this.controller}}
   @options={{this.config.structures}}
 />
 ```
+
 The widgets accepts two properties:
+
 - `controller`: an instance of a `SayController` which the widgets uses two insert structures into a document
 - `options`: a list of structure configurations which are supported.
 
@@ -89,6 +94,7 @@ The widgets accepts two properties:
 This widget displays a context card in the sidebar when a structure is selected by the user. The card displays controls which allow users to move a structure around or remove it alltogether.
 
 You can add this widget to the sidebar using the following syntax:
+
 ```hbs
 <ArticleStructurePlugin::StructureCard
   @controller={{this.controller}}
@@ -99,6 +105,7 @@ You can add this widget to the sidebar using the following syntax:
 Just like the insertion widget, this widget also accepts the same two properties.
 
 ### Configuring the plugin
+
 Both widgets require an `options` property which allows you to configure which type of structures are supported, which is a list of `StructureSpec` objects.
 
 E.g. a regulatory statement document will typically have the following configuration of structures:
@@ -115,10 +122,11 @@ export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
 ```
 
 Each of these entries is a seperate `StructureSpec` object. The `StructureSpec` interface is defined as:
+
 ```js
 export type StructureSpec = {
   name: SpecName; // the name of the corresponding structure node-spec
-  translations: { // the ember-intl translation keys which are to be used in the widgets 
+  translations: { // the ember-intl translation keys which are to be used in the widgets
     insert: string;
     move?: {
       up?: string;
@@ -184,6 +192,7 @@ const STRUCTURE_NODES = {
 ```
 
 You can import these using:
+
 ```js
 import {
   STRUCTURE_NODES,
@@ -191,20 +200,23 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 ```
 
-
 Additional examples can be found in the two controllers (besluit-sample and regulatory-statement-sample) of the dummy-app contained in this repository.
-
 
 ## besluit-type-plugin
 
 Plugin which allows a user to change the type of a [besluit](https://data.vlaanderen.be/ns/besluit#Besluit).
 
 This plugin needs to be added to the toolbar as a dropdown with the following syntax:
+
 ```hbs
-  <BesluitTypePlugin::ToolbarDropdown @controller={{this.controller}} @options={{this.config.besluitType}}/>
+<BesluitTypePlugin::ToolbarDropdown
+  @controller={{this.controller}}
+  @options={{this.config.besluitType}}
+/>
 ```
 
 You need to specify the endpoint from which the plugin will fetch the types in the config object
+
 ```js
 {
   endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
@@ -215,13 +227,13 @@ You need to specify the endpoint from which the plugin will fetch the types in t
 
 This plugin provides some warnings to the user if the validation for a besluit fails, it need to be used with the validation plugin as it exports some validation rules for it.
 In order to use it you will need to add its card to the sidebar like
+
 ```hbs
- <DecisionPlugin::DecisionPluginCard
-    @controller={{this.controller}}
-  />
+<DecisionPlugin::DecisionPluginCard @controller={{this.controller}} />
 ```
 
 and then import the rule and add it to the config of your validation plugin like
+
 ```js
 import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
 ...
@@ -231,6 +243,7 @@ import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugi
     ]
  })
 ```
+
 With these changes you will see a warning if the decision is missing a title, a motivation block or an article block.
 
 ## citaten-plugin
@@ -238,36 +251,40 @@ With these changes you will see a warning if the decision is missing a title, a 
 Plugin which allows a user to insert references to a legal resource or legal expression into the document.
 
 This plugin provides a card that shows up when using certain keywords. This needs to be added to the sidebar of the editor like
+
 ```hbs
-  <CitationPlugin::CitationCard 
-    @controller={{this.controller}} 
-    @plugin={{this.citationPlugin}}
-    @config={{this.config.citation}}
-  />
+<CitationPlugin::CitationCard
+  @controller={{this.controller}}
+  @plugin={{this.citationPlugin}}
+  @config={{this.config.citation}}
+/>
 ```
 
 Same goes for the `CitationInsert` component, with which you can directly insert a citation
+
 ```hbs
-  <CitationPlugin::CitationInsert
-    @controller={{this.controller}}
-    @config={{this.config.citation}}
-  />
+<CitationPlugin::CitationInsert
+  @controller={{this.controller}}
+  @config={{this.config.citation}}
+/>
 ```
 
 You need to specify the endpoints for the plugin in the config object
+
 ```js
 const citationPluginConfig = {
   endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
-  decisionsEndpoint: 'https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql',
-  defaultDecisionsGovernmentName: 'Edegem'
-}
+  decisionsEndpoint:
+    'https://publicatie.gelinkt-notuleren.vlaanderen.be/sparql',
+  defaultDecisionsGovernmentName: 'Edegem',
+};
 ```
 
 The `decisionsEndpoint` is optional, and is required if you want to display decisions from the Publicatie.  
 The `defaultDecisionsGovernmentName` is also optional, and is used to filter the decisions from the Publicatie by government name, the government name for the filter can be changed by the user during the search.
 
-
 Make `this.citationPlugin` a tracked reference to the plugin created with the function exported from the package and the wished configuration
+
 ```js
   import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
@@ -280,55 +297,56 @@ Make `this.citationPlugin` a tracked reference to the plugin created with the fu
 ```
 
 Configuration:
-  - type: it can be 'nodes' or 'ranges' if nodes is selected you are expected to pass the `activeInNodeTypes` function, otherwise you should pass the `activeInRanges` function
-  - activeInNodeTypes: it's a function that gets the prosemirror schema and the state of the actual instance of the editor and returns a `Set` of nodetypes where the plugin should be active
-  - activeInRanges: it's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`
-  - regex: you can provide your custom regex to detect citations, if not the default one will be used
 
+- type: it can be 'nodes' or 'ranges' if nodes is selected you are expected to pass the `activeInNodeTypes` function, otherwise you should pass the `activeInRanges` function
+- activeInNodeTypes: it's a function that gets the prosemirror schema and the state of the actual instance of the editor and returns a `Set` of nodetypes where the plugin should be active
+- activeInRanges: it's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`
+- regex: you can provide your custom regex to detect citations, if not the default one will be used
 
 A common usecase is to have the plugin active in the entire document. Here's how to do that using each configuration type:
 
 ```js
-import { citationPlugin } from "@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin";
+import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
 const configA = {
-   type: "nodes",
-   activeInNodeTypes(schema) {
-     // the root node of the document should always have the doc type
-     return new Set([schema.nodes.doc]);
-   }
- };
-  
+  type: 'nodes',
+  activeInNodeTypes(schema) {
+    // the root node of the document should always have the doc type
+    return new Set([schema.nodes.doc]);
+  },
+};
+
 const configB = {
-  type: "ranges",
+  type: 'ranges',
   activeInRanges(state) {
     // a node's nodeSize follows the Prosemirror definition
     // a non-leaf node's size is the sum of its children's sizes + 2
     // so to get the last valid position "inside" a node, you need to subtract two from its nodeSize
-    // ref: https://prosemirror.net/docs/ref/#model.Node.nodeSize 
+    // ref: https://prosemirror.net/docs/ref/#model.Node.nodeSize
     return [[0, state.doc.nodeSize - 2]];
-  }
+  },
 };
 ```
+
 ### Using the plugin
 
 If used with the example configuration provided this plugin can be triggered by typing one of the following in the correct RDFa context (
 the [besluit:motivering](http://data.vlaanderen.be/ns/besluit#motivering) of
 a [besluit:Besluit](https://data.vlaanderen.be/ns/besluit#Besluit)).These will make `CitationCard` visible with the typed search terms.
 
-* [specification]**decreet** [words to search for] *(e.g. "gemeentedecreet wijziging")*
-* **omzendbrief** [words to search for]
-* **verdrag** [words to search for]
-* **grondwetswijziging** [words to search for]
-* **samenwerkingsakkoord** [words to search for]
-* [specification]**wetboek** [words to search for]
-* **protocol** [words to search for]
-* **besluit van de vlaamse regering** [words to search for]
-* **gecoordineerde wetten** [words to search for]
-* [specification]**wet** [words to search for] *(e.g. "kieswet wijziging", or "grondwet")*
-* **koninklijk besluit** [words to search for]
-* **ministerieel besluit** [words to search for]
-* **genummerd besluit** [words to search for]
+- [specification]**decreet** [words to search for] _(e.g. "gemeentedecreet wijziging")_
+- **omzendbrief** [words to search for]
+- **verdrag** [words to search for]
+- **grondwetswijziging** [words to search for]
+- **samenwerkingsakkoord** [words to search for]
+- [specification]**wetboek** [words to search for]
+- **protocol** [words to search for]
+- **besluit van de vlaamse regering** [words to search for]
+- **gecoordineerde wetten** [words to search for]
+- [specification]**wet** [words to search for] _(e.g. "kieswet wijziging", or "grondwet")_
+- **koninklijk besluit** [words to search for]
+- **ministerieel besluit** [words to search for]
+- **genummerd besluit** [words to search for]
 
 You can also add a reference manually by clicking on the `Insert` > `Insert reference` item in the Insert menu located on the top right of the editor (this is the `CitationInsert` component). This will open the advanced search window. **Note** that this will only be
 avaliable in the proper context (see above in this section).
@@ -338,8 +356,9 @@ avaliable in the proper context (see above in this section).
 Plugin allowing importing of external RDFA snippets and inserting it in the document.
 
 The plugin has a card that needs to be added to the sidebar:
+
 ```hbs
-  <ImportSnippetPlugin::Card @controller={{this.controller}}/>
+<ImportSnippetPlugin::Card @controller={{this.controller}} />
 ```
 
 ### Using the plugin
@@ -350,11 +369,10 @@ manner:
 ```js
 import { inject as service } from '@ember/service';
 
-
 // An entry point to download the resouce (e.g a route) in your host app.
 // (...)
 
-let downloadData = { source: 'http://remote/resource.html' }
+let downloadData = { source: 'http://remote/resource.html' };
 await this.importRdfaSnippet.downloadSnippet(downloadData);
 ```
 
@@ -364,55 +382,6 @@ application (https://github.com/lblod/frontend-gelinkt-notuleren).
 When opening a new document, users will get the option to either include the snippet data in the document or as an
 attachment.
 
-## rdfa-date-plugin
-
-Plugin to insert and modify semantic dates and timestamps in an editor document.
-
-This plugin provides a card to modify dates that needs to be added to the editor sidebar like
-
-```hbs
-  <RdfaDatePlugin::Card 
-    @controller={{this.controller}}
-    @options={{this.config.date}}/>
-```
-
-And an insert button to insert new dates that needs to be added to the insert part of the sidebar:
-```hbs
-  <RdfaDatePlugin::Insert 
-    @controller={{this.controller}}
-    @options={{this.config.date}}
-  />
-```
-
-You will also need to add a configuration like the following:
-```js
-  date: date({
-     formats: [
-      {
-        label: 'Short Date',
-        key: 'short',
-        dateFormat: 'dd/MM/yy',
-        dateTimeFormat: 'dd/MM/yy HH:mm',
-      },
-      {
-        label: 'Long Date',
-        key: 'long',
-        dateFormat: 'EEEE dd MMMM yyyy',
-        dateTimeFormat: 'PPPPp',
-      },
-    ],
-    allowCustomFormat: true,
-  })
-```
-- `formats`: specify default formats to show for selection in the date card.
-	- `label` (optional): The label shown to the user on the card. If not provided, the format is used instead e.g.: `dd/MM/yyyy`
-	- `key`: A **unique** identifier used for identification in the internal code. 
-	- `dateFormat`: The date format used when this is selected.
-	- `dateTimeFormat`: The datetime format to use when this is selected. Used when the user selects "Include time".
-- `allowCustomFormat`: true/false, determines if the option to insert a fully custom format is available.
-
-The syntax of formats can be found at [date-fns](https://date-fns.org/v2.29.3/docs/format).
-
 ## roadsign-regulation-plugin
 
 A plugin that fetches data from the mow regulation and roadsign registry and allows users to insert roadsign regulations
@@ -421,19 +390,21 @@ inside an editor document.
 This plugin provides a card that needs to be added to the editor sidebar like:
 
 ```hbs
-  <RoadsignRegulationPlugin::RoadsignRegulationCard 
-    @controller={{this.controller}}
-    @options={{this.config.roadsignRegulation}}
-  />
+<RoadsignRegulationPlugin::RoadsignRegulationCard
+  @controller={{this.controller}}
+  @options={{this.config.roadsignRegulation}}
+/>
 ```
 
 You will need to set the following configuration in the config object
+
 ```js
 {
   endpoint: 'https://dev.roadsigns.lblod.info/sparql',
   imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
 }
 ```
+
 The `endpoint` from where the plugin will fetch the roadsigns, and the `imageBaseUrl` is a fallback for the images that don't have a baseUrl specified. This won't be used if your data is correctly constructed.
 
 ## standard-template-plugin
@@ -443,19 +414,20 @@ selected text, a dropdown will appear in the toolbar of the editor that lets you
 context at the location of the cursor.
 
 In order to use this plugin you will need to add its card:
+
 ```hbs
-  <StandardTemplatePlugin::Card @controller={{this.controller}}/>
+<StandardTemplatePlugin::Card @controller={{this.controller}} />
 ```
 
 ### Template resource used by the plugin
 
 When creating a template in your database, the following properties are used by the plugin:
 
-* the title of the template (`title`)
-* its HTML content (`content`)
-* the words of the document the template should match on (`matches`)
-* the contexts in which it should be active (`contexts`)
-* the contexts in which it should not be active (`disabled-in-contexts`)
+- the title of the template (`title`)
+- its HTML content (`content`)
+- the words of the document the template should match on (`matches`)
+- the contexts in which it should be active (`contexts`)
+- the contexts in which it should not be active (`disabled-in-contexts`)
 
 ### Using the plugin
 
@@ -469,17 +441,19 @@ menu. This attribute can be set on an element in the content of the editor or pr
 
 Plugin implementing an auto-refreshing table of contents using an ember-rdfa-editor inline component.
 
-In order to enable the plugin you need to add the table of contents button to the toolbar and the table of contents node view to the list of editor node views. 
+In order to enable the plugin you need to add the table of contents button to the toolbar and the table of contents node view to the list of editor node views.
+
 ```hbs
-  <TableOfContentsPlugin::ToolbarButton @controller={{this.editor}}/>
+<TableOfContentsPlugin::ToolbarButton @controller={{this.editor}} />
 ```
 
 ```js
   tableOfContentsView(this.config.tableOfContents)(controller),
 ```
 
-You also need to allow this node as content by adding it to the doc node of the schema. It is *not* part of the block group.
-``` js
+You also need to allow this node as content by adding it to the doc node of the schema. It is _not_ part of the block group.
+
+```js
 // example to allow the table of contents at the top and any blocks underneath
 doc: docWithConfig({
         content: 'table-of-contents? block+'
@@ -502,15 +476,17 @@ For very custom setups, the plugin might be unable to find your scrollContainer 
 },
 ```
 
-`nodeHierarchy` is a list of *regex* strings to specify the node structure of the document. Note that this means the order of the words does not matter. The example shows this for article structures.
-The *first string* selects the main nodes in the document that define the structure.
+`nodeHierarchy` is a list of _regex_ strings to specify the node structure of the document. Note that this means the order of the words does not matter. The example shows this for article structures.
+The _first string_ selects the main nodes in the document that define the structure.
 The strings afterwards are the sub-nodes inside main nodes that should be used to find the actual content to display in the table of contents, if the main node does not contain the content directly. In the example a title will have a `structure_header` that contains the actual text of the title.  
 In the case that `structure_header` contains a node `actual_title_text` that should be used as content, you'd have to add a third regex string that matches `actual_title_text`.
 
 ### Internationalization of the table of contents
+
 The dynamic version of the table of contents is internationalized based on the current document language and using the `ember-intl` service.
-The static (serialized) version of the table of contents can also be internationalized based on the current document language. For this to work correctly, the `emberApplication` prosemirror-plugin should be present. 
+The static (serialized) version of the table of contents can also be internationalized based on the current document language. For this to work correctly, the `emberApplication` prosemirror-plugin should be present.
 You can add this plugin as follows to the controller/component in which the editor is initialized:
+
 ```js
 import { getOwner } from '@ember/application';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
@@ -522,14 +498,15 @@ plugins = [
 ];
 ...
 ```
+
 As an example, the `emberApplication` plugin has been added to the regulatory-statement route of the dummy app included in this addon.
 
 The table of contents node needs this plugin to be able to translate the serialized version properly. If the plugin is not present, a default (dutch) version of the table of contents will be generated.
 
-
 ## variable-plugin
 
 Editor plugin which provides node-specs and components which allow you to insert and edit different types of variables in a document. The plugin provides the following variable types:
+
 - text variable
 - number variable
 - date variable
@@ -540,6 +517,7 @@ Editor plugin which provides node-specs and components which allow you to insert
 Additional variable types can be added in the consuming application or addon.
 
 For each of these variable types, a node-spec and node-view are defined. You can import them like this:
+
 ```js
 import {
   codelist,
@@ -551,17 +529,20 @@ import {
   text_variable,
   textVariableView,
   address,
-  addressView
+  addressView,
+  date,
+  dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 ```
 
-The date-variable node-spec and node-view are defined in the `rdfa-date-plugin`.
-
 For each of the variable-types you want to include in your editor instance, you should add the corresponding node-spec to your schema and the node-view to the `nodeViews` editor argument.
+
+Both the `date` node-spec and `dateView` nodeview are functions which expect a `DateOptions` object, more information on how to define such a `DateOptions` object can be found in the section on the [date-edit component](#the-date-variable)
 
 ### Inserting variables into a document
 
 This addon includes an insert-component for each of these variable types:
+
 - `variable-plugin/text/insert`
 - `variable-plugin/number/insert`
 - `variable-plugin/date/insert`
@@ -572,34 +553,41 @@ This addon includes an insert-component for each of these variable types:
 Each of these components presents a custom UI which allows a user to insert a variable of the corresponding type in a document.
 
 These insert-components can be used on their own, but can also be used in combination with the `variable-plugin/insert-variable-card` component. The responsibility of this component is two-fold:
+
 - It allows a user to select a variable type.
 - The correct insert component corresponding to the user-selected variable type is shown.
 
 The `variable-plugin/insert-variable-card` can be easily configured: it expects two arguments:
+
 - `controller`: An instance of the `SayController` class
 - `variableTypes`: A list of `VariableConfig` objects. With each `VariableConfig` containing:
   - the `label` which should be displayed in the variable-select dropdown
-  - the `path` to the insert-variable component 
+  - the `path` to the insert-variable component
   - _optionally_ an `options` argument object which should be passed to the insert-variable component.
- * The `VariableConfig` type is defined as follows:
- ```js
-  type VariableConfig = {
-    label: string;
-    component: {
-      path: string;
-      options?: unknown;
-    };
-  };
- ```
+
+* The `VariableConfig` type is defined as follows:
+
+```js
+ type VariableConfig = {
+   label: string;
+   component: {
+     path: string;
+     options?: unknown;
+   };
+ };
+```
 
 #### An example
+
 To allows users to insert variables into a document, add the following to the editor sidebar in your template:
+
 ```hbs
 <VariablePlugin::InsertVariableCard
   @controller={{this.controller}}
   @variableTypes={{this.variableTypes}}
 />
 ```
+
 `this.controller` is an instance of `SayController` and `this.variableTypes` is the list of `VariableConfig` objects which should be defined in your controller/component class:
 
 ```js
@@ -655,27 +643,76 @@ As you can see, both the `location` and `codelist` insert-components require an 
 Aside from the endpoint, the `codelist` insert-component may optionally expect a publisher argument which it will use to limit the codelist fetch to a specific publisher.
 
 ### Editing variables in a document
+
 Each of the variables provided by this addon have a different editing experiences and use different components:
 
 #### The text variable
+
 Editing a text variable requires no extra components aside from its node-spec and node-view. A user can just type into the text variable directly.
 
 #### The number variable
+
 Editing a number variable can be done in its nodeview directly. When a user clicks on a number variable in a document, it opens a popup allow you to fill in a number.
 
 #### The date variable
-The edit component for the date variable can be found in the [rdfa-date-plugin section](#rdfa-date-plugin)
+
+This addon provides a seperate edit component which allows users to fill in date variables in a document.
+This component can be added to the sidebar of an editor instance in a template as follows:
+
+```hbs
+<RdfaDatePlugin::Card
+  @controller={{this.controller}}
+  @options={{this.dateOptions}}
+/>
+```
+
+Where `this.dateOptions` is a `DateOptions` object used to configure the edit component. It can be defined as e.g.:
+
+```js
+get dateOptions(){
+  return {
+     formats: [
+      {
+        label: 'Short Date',
+        key: 'short',
+        dateFormat: 'dd/MM/yy',
+        dateTimeFormat: 'dd/MM/yy HH:mm',
+      },
+      {
+        label: 'Long Date',
+        key: 'long',
+        dateFormat: 'EEEE dd MMMM yyyy',
+        dateTimeFormat: 'PPPPp',
+      },
+    ],
+    allowCustomFormat: true,
+  }
+}
+```
+
+- `formats`: specify default formats to show for selection in the date card.
+	- `label` (optional): The label shown to the user on the card. If not provided, the format is used instead e.g.: `dd/MM/yyyy`
+	- `key`: A **unique** identifier used for identification in the internal code. 
+	- `dateFormat`: The date format used when this is selected.
+	- `dateTimeFormat`: The datetime format to use when this is selected. Used when the user selects "Include time".
+- `allowCustomFormat`: true/false, determines if the option to insert a fully custom format is available.
+
+The syntax of formats can be found at [date-fns](https://date-fns.org/v2.29.3/docs/format).
 
 #### The location variable
+
 This addon provides a seperate edit component which allows users to fill in location variables in a document.
 This component can be added to the sidebar of an editor instance in a template as follows:
+
 ```hbs
-<VariablePlugin::Location::Edit 
-  @controller={{this.controller}} 
+<VariablePlugin::Location::Edit
+  @controller={{this.controller}}
   @options={{this.locationEditOptions}}
 />
 ```
+
 Where `this.locationEditOptions` is a `LocationEditOptions` object used to configure the edit component. It can be defined as e.g.:
+
 ```js
 get locationEditOptions() {
   return {
@@ -689,15 +726,19 @@ get locationEditOptions() {
 ```
 
 #### The codelist variable
+
 This addon provides a seperate edit component which allows users to fill in codelist variables in a document.
 This component can be added to the sidebar of an editor instance in a template as follows:
+
 ```hbs
-<VariablePlugin::Codelist::Edit 
-  @controller={{this.controller}} 
+<VariablePlugin::Codelist::Edit
+  @controller={{this.controller}}
   @options={{this.codelistEditOptions}}
 />
 ```
+
 Where `this.codelistEditOptions` is a `CodelistEditOptions` object used to configure the edit component. It can be defined as e.g.:
+
 ```js
 get codelistEditOptions() {
   return {
@@ -707,20 +748,26 @@ get codelistEditOptions() {
 ```
 
 #### The address variable
+
 This addon provides a seperate edit component which allows users to search for an address and update the select address variable. Additionally, they can also choose whether to include the housenumber of an address.
 You can add this edit-component to a template as follows:
+
 ```hbs
-<VariablePlugin::Address::Edit @controller={{this.controller}} @defaultMuncipality='Antwerpen'/>
+<VariablePlugin::Address::Edit
+  @controller={{this.controller}}
+  @defaultMuncipality='Antwerpen'
+/>
 ```
 
 The edit card can be configured with two arguments:
+
 - An instance of a `SayController` (required)
 - A `defaultMuncipality` which should be used as the default value of the `muncipality` field in the edit-card (optional)
 
-
 You can also add an insert component meant for use outside of `insert-variable-card` by using the `variable-plugin/address/insert` component. This has no label-input and will show a default label.
+
 ```hbs
-  <VariablePlugin::Address::Insert @controller={{this.controller}}/>
+<VariablePlugin::Address::Insert @controller={{this.controller}} />
 ```
 
 ## validation-plugin
@@ -728,18 +775,22 @@ You can also add an insert component meant for use outside of `insert-variable-c
 see [the plugin docs](addon/plugins/validation/README.md)
 
 ## template-comments-plugin
+
 A plugin to insert a template comment anywhere in the document.  
 This is meant as a block of text for extra information to provide to a created template. It has
 the attribute `ext:TemplateComment`. This can (and should) be filtered out when publishing the document, as it is only meant as extra information while filling in a template.  
 It supports basic text with indenting, list items and marks.
 
 Add it to editor by adding `templateComment` to your schema and
+
 ```js
 templateComment: templateCommentView(controller),
 ```
+
 as a nodeview.
 
 Import with:
+
 ```js
 import {
   templateComment,
@@ -747,26 +798,30 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 ```
 
-
 Button to insert a template comment is added with
+
 ```hbs
-<TemplateCommentsPlugin::Insert @controller={{this.controller}}/>
+<TemplateCommentsPlugin::Insert @controller={{this.controller}} />
 ```
 
 Buttons to remove and move it when selected can be shown with
+
 ```hbs
-<TemplateCommentsPlugin::EditCard @controller={{this.controller}}/>
+<TemplateCommentsPlugin::EditCard @controller={{this.controller}} />
 ```
 
 Template comments have a specific style that can be imported in the stylesheet with
+
 ```css
 @import 'template-comments-plugin';
 ```
+
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
 
 ## Releasing
+
 See the [Release](RELEASE.md) guide.
 
 ## License

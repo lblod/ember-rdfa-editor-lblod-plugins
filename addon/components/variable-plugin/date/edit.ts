@@ -3,15 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
-import {
-  DateFormat,
-  DateOptions,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
-import {
-  formatContainsTime,
-  validateDateFormat,
-  ValidationError,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/utils';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -22,13 +13,22 @@ import {
   optionMapOr,
   unwrapOr,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  DateFormat,
+  DateOptions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
+import {
+  ValidationError,
+  formatContainsTime,
+  validateDateFormat,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 
 type Args = {
   controller: SayController;
   options: DateOptions;
 };
 const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
-export default class RdfaDatePluginCardComponent extends Component<Args> {
+export default class DateEditComponent extends Component<Args> {
   @service
   declare intl: IntlService;
 

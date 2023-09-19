@@ -55,10 +55,6 @@ import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
 import IntlService from 'ember-intl/services/intl';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
-  date,
-  dateView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
-import {
   citationPlugin,
   CitationPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
@@ -98,6 +94,10 @@ import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
 import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
+import {
+  date,
+  dateView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -174,7 +174,7 @@ export default class BesluitSampleController extends Controller {
         bullet_list,
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-        date: date(this.config.date),
+        date: date(this.dateOptions),
         text_variable,
         number,
         location,
@@ -223,23 +223,26 @@ export default class BesluitSampleController extends Controller {
     };
   }
 
+  get dateOptions() {
+    return {
+      formats: [
+        {
+          key: 'short',
+          dateFormat: 'dd/MM/yy',
+          dateTimeFormat: 'dd/MM/yy HH:mm',
+        },
+        {
+          key: 'long',
+          dateFormat: 'EEEE dd MMMM yyyy',
+          dateTimeFormat: 'PPPPp',
+        },
+      ],
+      allowCustomFormat: true,
+    };
+  }
+
   get config() {
     return {
-      date: {
-        formats: [
-          {
-            key: 'short',
-            dateFormat: 'dd/MM/yy',
-            dateTimeFormat: 'dd/MM/yy HH:mm',
-          },
-          {
-            key: 'long',
-            dateFormat: 'EEEE dd MMMM yyyy',
-            dateTimeFormat: 'PPPPp',
-          },
-        ],
-        allowCustomFormat: true,
-      },
       structures: structureSpecs,
       citation: {
         type: 'nodes',
@@ -281,7 +284,7 @@ export default class BesluitSampleController extends Controller {
       codelist: codelistView(controller),
       location: locationView(controller),
       link: linkView(this.config.link)(controller),
-      date: dateView(this.config.date)(controller),
+      date: dateView(this.dateOptions)(controller),
       address: addressView(controller),
     };
   };

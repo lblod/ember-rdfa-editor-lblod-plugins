@@ -52,10 +52,6 @@ import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 import {
-  date,
-  dateView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/nodes/date';
-import {
   createInvisiblesPlugin,
   hardBreak,
   heading as headingInvisible,
@@ -86,6 +82,10 @@ import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-curso
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
 import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
+import {
+  date,
+  dateView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -113,7 +113,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment,
       placeholder,
       ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-      date: date(this.config.date),
+      date: date(this.dateOptions),
       text_variable,
       number,
       location,
@@ -157,6 +157,24 @@ export default class RegulatoryStatementSampleController extends Controller {
     };
   }
 
+  get dateOptions() {
+    return {
+      formats: [
+        {
+          key: 'short',
+          dateFormat: 'dd/MM/yy',
+          dateTimeFormat: 'dd/MM/yy HH:mm',
+        },
+        {
+          key: 'long',
+          dateFormat: 'EEEE dd MMMM yyyy',
+          dateTimeFormat: 'PPPPp',
+        },
+      ],
+      allowCustomFormat: true,
+    };
+  }
+
   get variableTypes(): VariableConfig[] {
     return [
       {
@@ -174,7 +192,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       {
         label: 'date',
         component: {
-          path: 'variable-plugin/date/insert',
+          path: 'variable-plugin/date/insert-variable',
         },
       },
       {
@@ -214,21 +232,6 @@ export default class RegulatoryStatementSampleController extends Controller {
             )[0] as HTMLElement,
         },
       ],
-      date: {
-        formats: [
-          {
-            key: 'short',
-            dateFormat: 'dd/MM/yy',
-            dateTimeFormat: 'dd/MM/yy HH:mm',
-          },
-          {
-            key: 'long',
-            dateFormat: 'EEEE dd MMMM yyyy',
-            dateTimeFormat: 'PPPPp',
-          },
-        ],
-        allowCustomFormat: true,
-      },
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
         zonalLocationCodelistUri:
@@ -256,7 +259,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         controller,
       ),
       link: linkView(this.config.link)(controller),
-      date: dateView(this.config.date)(controller),
+      date: dateView(this.dateOptions)(controller),
       number: numberView(controller),
       text_variable: textVariableView(controller),
       location: locationView(controller),

@@ -9,7 +9,7 @@ type Args = {
   onChange: (date: Date) => void;
 };
 
-export default class RdfaDatePluginDateTimePicker extends Component<Args> {
+export default class DateTimePickerComponent extends Component<Args> {
   @service declare intl: Intl;
   @localCopy('args.value') declare date?: Date;
 

@@ -1,13 +1,13 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { formatDate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin/utils';
+import { formatDate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 
 interface Args {
   modalOpen: boolean;
   closeModal: () => void;
 }
 
-export default class HelpModalComponent extends Component<Args> {
+export default class DateHelpComponent extends Component<Args> {
   exampleDate: Date = new Date();
 
   @action

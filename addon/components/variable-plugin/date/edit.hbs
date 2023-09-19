@@ -6,7 +6,7 @@
       </c.header>
       <c.content class="au-o-box au-o-box--small">
         <div class="au-o-flow au-o-flow--small">
-          <RdfaDatePlugin::DateTimePicker
+          <VariablePlugin::Date::DateTimePicker
             @onChange={{this.changeDate}}
             @value={{this.pickerDate}}
             @onlyDate={{this.onlyDate}}
@@ -43,7 +43,7 @@
                 </Velcro>
               {{/if}}
             </AuFormRow>
-          </RdfaDatePlugin::DateTimePicker>
+          </VariablePlugin::Date::DateTimePicker>
           {{#each this.formats as |format|}}
             <AuFormRow>
               <AuControlRadio
@@ -86,4 +86,4 @@
     </AuCard>
   {{/if}}
 </div>
-<RdfaDatePlugin::HelpModal @modalOpen={{this.helpModalOpen}} @closeModal={{this.toggleHelpModal}} />
+<VariablePlugin::Date::HelpModal @modalOpen={{this.helpModalOpen}} @closeModal={{this.toggleHelpModal}} />
