@@ -1,5 +1,22 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 12.1.0
+
+### Minor Changes
+
+- [#286](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/286) [`955535b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/955535b4d99d729b40f0e01bf1c634042894bf60) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4266: Referring to published decisions - filter by government name
+
+- [#299](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/299) [`3732e50`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3732e5041df3d3e994df34de9dd436f59f7bade0) Thanks [@x-m-el](https://github.com/x-m-el)! - Update readme documentation for RDFa date and Table of Contents plugin to include explanation about their configurations
+
+- [#290](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/290) [`8c1ad72`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8c1ad729b0eb1a159637d3ed9f3b49a02a659a96) Thanks [@elpoelma](https://github.com/elpoelma)! - Add support for address variables inside location variables
+
+- [#296](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/296) [`bcf7a2d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/bcf7a2d7314dfd1156ca1e310d5c15d1d2c2fbfe) Thanks [@abeforgit](https://github.com/abeforgit)! - bump ember and ember data to 4.12 for development, and add correct peerdep specification for consumers
+
+- [#298](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/298) [`2908aa3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2908aa355b6dadc694ee90fd93ad2e79faa22257) Thanks [@x-m-el](https://github.com/x-m-el)! - Added a second address insert `variable-plugin/address/insert-variable`. This replaces the `insert` from before when used inside the `insert-variable-card` dropdown.
+
+  - same UI as other variables
+  - allows using a custom label
+
 ## 12.0.0
 
 ### Major Changes
@@ -18,6 +35,7 @@
 - [#289](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/289) [`d1e2af1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d1e2af14bab0eb4ed6e1d7d62a5c55e396c707ce) Thanks [@elpoelma](https://github.com/elpoelma)! - Bumps `@lblod/ember-rdfa-editor` from 5.2.0 to 5.3.0
 
 ## [11.3.0] - 2023-09-06
+
 ### Changed
 
 - CI: move changelog check to separate CI pipeline
