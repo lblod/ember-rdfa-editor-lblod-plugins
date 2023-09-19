@@ -66,6 +66,28 @@
               />
 
               <AuHr @size='large' />
+              {{#if this.isBesluitType}}
+                <AuLabel
+                  class='au-u-margin-top au-margin-bottom-small'
+                  for='search-government'
+                  @inline={{false}}
+                  @required={{false}}
+                  @error={{false}}
+                  @warning={{false}}
+                >
+                  {{t 'citaten-plugin.search.government-search'}}
+                </AuLabel>
+                <AuNativeInput
+                  @icon='search'
+                  @type='text'
+                  @width='block'
+                  @iconAlignment='right'
+                  id='search-government'
+                  value={{this.governmentSearchText}}
+                  placeholder={{t 'citaten-plugin.search.placeholder'}}
+                  {{on 'input' this.setGovernmentSearchText}}
+                />
+              {{/if}}
               {{! Date of document }}
               <AuLabel
                 class='au-u-margin-top au-u-margin-bottom-small'

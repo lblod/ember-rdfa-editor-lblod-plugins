@@ -191,6 +191,12 @@ export default class RegulatoryStatementSampleController extends Controller {
           options: this.codelistOptions,
         },
       },
+      {
+        label: 'address',
+        component: {
+          path: 'variable-plugin/address/insert-variable',
+        },
+      },
     ];
   }
 
@@ -209,10 +215,6 @@ export default class RegulatoryStatementSampleController extends Controller {
         },
       ],
       date: {
-        placeholder: {
-          insertDate: this.intl.t('date-plugin.insert.date'),
-          insertDateTime: this.intl.t('date-plugin.insert.datetime'),
-        },
         formats: [
           {
             key: 'short',

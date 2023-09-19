@@ -71,7 +71,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'location',
-  componentPath: 'variable-plugin/variable/nodeview',
+  componentPath: 'variable-plugin/location/nodeview',
   inline: true,
   group: 'inline variable',
   content: 'inline*',
@@ -86,9 +86,7 @@ const emberNodeConfig: EmberNodeConfig = {
     source: {
       default: null,
     },
-    label: {
-      default: 'locatie',
-    },
+    label: { default: null },
   },
   toDOM,
   parseDOM,

@@ -5,7 +5,7 @@
   <AuPill
     @icon='pencil'
     @iconAlignment='right'
-    class='variable'
+    class='variable atomic'
     {{velcro.hook}}
     {{select-node-on-click @controller @getPos}}
   >
@@ -13,7 +13,7 @@
       {{this.formattedNumber}}
     {{else}}
       <span class='mark-highlight-manual'>
-        {{t 'variable.number.placeholder'}}
+        {{this.translations.placeholder}}
       </span>
     {{/if}}
     {{#if @node.attrs.label}}

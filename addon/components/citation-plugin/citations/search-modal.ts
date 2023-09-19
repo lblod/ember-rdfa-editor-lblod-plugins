@@ -62,6 +62,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @tracked publicationDateFrom: Date | null = null;
   @tracked publicationDateTo: Date | null = null;
   @tracked inputSearchText: string | null = null;
+  @tracked inputGovernmentSearchText: string | null = null;
   minDate = new Date('1930-01-01T12:00:00');
   maxDate = new Date(`${new Date().getFullYear() + 10}-01-01T12:00:00`);
 
@@ -115,6 +116,13 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     return this.inputSearchText ?? this.text;
   }
 
+  get governmentSearchText() {
+    return (
+      this.inputGovernmentSearchText ??
+      this.config.defaultDecisionsGovernmentName
+    );
+  }
+
   resourceSearch = restartableTask(async () => {
     await timeout(500);
     this.error = null;
@@ -129,6 +137,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
         documentDateTo: getISODate(this.documentDateTo),
         publicationDateFrom: getISODate(this.publicationDateFrom),
         publicationDateTo: getISODate(this.publicationDateTo),
+        governmentName: this.governmentSearchText,
       };
       const results = await fetchLegalDocuments({
         words: words,
@@ -152,6 +161,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
 
   decisionResource = trackedTask(this, this.resourceSearch, () => [
     this.searchText,
+    this.governmentSearchText,
     this.legislationTypeUri,
     this.pageSize,
     this.pageNumber,
@@ -168,6 +178,11 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   @action
   setInputSearchText(event: InputEvent) {
     this.inputSearchText = (event.target as HTMLInputElement).value;
+  }
+
+  @action
+  setGovernmentSearchText(event: InputEvent) {
+    this.inputGovernmentSearchText = (event.target as HTMLInputElement).value;
   }
 
   @action

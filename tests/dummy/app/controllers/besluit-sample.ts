@@ -226,10 +226,6 @@ export default class BesluitSampleController extends Controller {
   get config() {
     return {
       date: {
-        placeholder: {
-          insertDate: this.intl.t('date-plugin.insert.date'),
-          insertDateTime: this.intl.t('date-plugin.insert.datetime'),
-        },
         formats: [
           {
             key: 'short',
@@ -253,6 +249,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
         decisionsEndpoint:
           'https://publicatie.gelinkt-notuleren.lblod.info/sparql',
+        defaultDecisionsGovernmentName: 'Edegem',
       },
       roadsignRegulation: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',

@@ -1,17 +1,18 @@
 import Component from '@glimmer/component';
+import { replaceSelectionWithAddress } from './utils';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-
-import { replaceSelectionWithAddress } from './utils';
 
 type Args = {
   controller: SayController;
 };
 
-export default class InsertAddressComponent extends Component<Args> {
+export default class VariablePluginAddressInsertVariableComponent extends Component<Args> {
   @service declare intl: IntlService;
+  @tracked label?: string;
 
   get controller() {
     return this.args.controller;
@@ -22,20 +23,18 @@ export default class InsertAddressComponent extends Component<Args> {
   }
 
   @action
+  updateLabel(event: InputEvent) {
+    this.label = (event.target as HTMLInputElement).value;
+  }
+
+  @action
   insertAddress() {
     replaceSelectionWithAddress(
       this.controller,
-      this.intl.t('variable.address.label', {
-        locale: this.documentLanguage,
-      }),
+      this.label ??
+        this.intl.t('variable.address.label', {
+          locale: this.documentLanguage,
+        }),
     );
-  }
-
-  get canInsertAddress() {
-    if (this.controller.activeEditorView.props.nodeViews?.address) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }

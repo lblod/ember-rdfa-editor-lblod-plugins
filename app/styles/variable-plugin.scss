@@ -48,12 +48,14 @@
 }
 
 .ember-node {
+  white-space: normal !important;
   .variable {
     [contenteditable] {
       white-space: break-spaces;
       word-break: break-all;
       word-wrap: break-word;
       outline: 0px;
+      padding: 2px;
     }
     .label {
       font-size: var(--au-base);
@@ -68,8 +70,10 @@
 }
 
 .ember-node.ProseMirror-selectednode {
-  .variable {
-    background-color: var(--au-blue-200);
+  > .variable {
+    &.atomic {
+      background-color: var(--au-blue-200);
+    }
     outline: 2px solid var(--au-blue-500);
 
     ::selection {
