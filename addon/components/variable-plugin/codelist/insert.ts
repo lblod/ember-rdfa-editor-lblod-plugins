@@ -36,6 +36,10 @@ export default class CodelistInsertComponent extends Component<Args> {
     return this.args.controller;
   }
 
+  get documentLanguage() {
+    return this.controller.documentLanguage;
+  }
+
   get schema() {
     return this.args.controller.schema;
   }
@@ -84,7 +88,12 @@ export default class CodelistInsertComponent extends Component<Args> {
         mappingResource,
         variableInstance,
         codelistResource: this.selectedCodelist?.uri,
-        label: this.label ?? this.selectedCodelist?.label,
+        label:
+          this.label ??
+          this.selectedCodelist?.label ??
+          this.intl.t('variable.codelist.label', {
+            locale: this.documentLanguage,
+          }),
         source: this.endpoint,
         selectionStyle: this.selectedStyleValue,
       },

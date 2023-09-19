@@ -10,7 +10,7 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { v4 as uuidv4 } from 'uuid';
-import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import {
   isVariable,
   parseLabel,
@@ -30,6 +30,7 @@ import {
 } from '../utils/dom-constructors';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/nodeview';
 import type { ComponentLike } from '@glint/template';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 export class Address {
   declare id?: string;
@@ -247,13 +248,19 @@ const parseDOM = [
   },
 ];
 
-const toDOM = (node: PNode): DOMOutputSpec => {
+const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
+  const t = getTranslationFunction(state);
+
   const { mappingResource, variableInstance, label, value } = node.attrs;
   let contentNode: DOMOutputSpec;
   if (value) {
     contentNode = constructAddressNode(value);
   } else {
-    contentNode = contentSpan({}, 'Voeg adres in');
+    const placeholder = t(
+      'editor-plugins.address.nodeview.placeholder',
+      'Voeg adres in',
+    );
+    contentNode = contentSpan({}, placeholder);
   }
   return mappingSpan(
     mappingResource,
@@ -280,14 +287,12 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     mappingResource: {},
     variableInstance: {},
-    label: {
-      default: 'adres',
-    },
+    label: { default: null },
     value: {
       default: null,
     },
   },
-  toDOM,
+  serialize,
   parseDOM,
 };
 

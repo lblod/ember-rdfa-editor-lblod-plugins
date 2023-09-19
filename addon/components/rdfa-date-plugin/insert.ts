@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import {
@@ -7,6 +8,7 @@ import {
   DateOptions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/rdfa-date-plugin';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import IntlService from 'ember-intl/services/intl';
 
 type Args = {
   controller: SayController;
@@ -14,12 +16,18 @@ type Args = {
 };
 
 export default class RdfaDatePluginInsertComponent extends Component<Args> {
+  @service declare intl: IntlService;
+
   get controller() {
     return this.args.controller;
   }
 
   get schema() {
     return this.controller.schema;
+  }
+
+  get documentLanguage() {
+    return this.controller.documentLanguage;
   }
 
   get formats(): DateFormat[] {
@@ -38,6 +46,9 @@ export default class RdfaDatePluginInsertComponent extends Component<Args> {
           onlyDate: true,
           format: this.defaultDateFormat,
           value: new Date().toISOString(),
+          label: this.intl.t('variable.date.label', {
+            locale: this.documentLanguage,
+          }),
         }),
       );
       if (tr.selection.$anchor.nodeBefore) {
