@@ -118,7 +118,7 @@ const emberNodeConfig: EmberNodeConfig = {
     source: {
       default: null,
     },
-    label: {},
+    label: { default: null },
     selectionStyle: {
       default: null,
     },

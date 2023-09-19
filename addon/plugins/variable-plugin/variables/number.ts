@@ -128,7 +128,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     mappingResource: {},
     variableInstance: {},
-    label: {},
+    label: { default: null },
     value: { default: null },
     writtenNumber: { default: false },
     minimumValue: { default: null },

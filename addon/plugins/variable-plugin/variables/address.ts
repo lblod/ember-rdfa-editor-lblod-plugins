@@ -285,7 +285,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     mappingResource: {},
     variableInstance: {},
-    label: {},
+    label: { default: null },
     value: {
       default: null,
     },
