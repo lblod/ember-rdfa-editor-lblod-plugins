@@ -109,11 +109,8 @@
                 />
                 <StandardTemplatePlugin::Card @controller={{this.controller}} />
                 <VariablePlugin::Address::Insert @controller={{this.controller}}/>
+                <VariablePlugin::Date::Insert @controller={{this.controller}}/>
               </Sidebar.Collapsible>
-              <VariablePlugin::InsertVariableCard
-                @controller={{this.controller}}
-                @variableTypes={{this.variableTypes}}
-              />
               <ArticleStructurePlugin::StructureCard
                 @controller={{this.controller}}
                 @options={{this.config.structures}}

@@ -1,27 +1,34 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
+import IntlService from 'ember-intl/services/intl';
 
 type Args = {
   controller: SayController;
 };
 
-export default class DateInsertComponent extends Component<Args> {
+export default class DateInsertVariableComponent extends Component<Args> {
   @service declare intl: IntlService;
+  @tracked label?: string;
 
   get controller() {
     return this.args.controller;
   }
 
   get schema() {
-    return this.controller.schema;
+    return this.args.controller.schema;
   }
 
   get documentLanguage() {
     return this.controller.documentLanguage;
+  }
+
+  @action
+  updateLabel(event: InputEvent) {
+    this.label = (event.target as HTMLInputElement).value;
   }
 
   @action
@@ -33,10 +40,12 @@ export default class DateInsertComponent extends Component<Args> {
     });
 
     const node = this.schema.nodes.date.create({
-      label: defaultLabel,
+      label: this.label ?? defaultLabel,
       value: null,
       mappingResource,
     });
+
+    this.label = undefined;
 
     this.controller.withTransaction(
       (tr) => {

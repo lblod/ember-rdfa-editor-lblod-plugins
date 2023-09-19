@@ -192,7 +192,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       {
         label: 'date',
         component: {
-          path: 'variable-plugin/date/insert',
+          path: 'variable-plugin/date/insert-variable',
         },
       },
       {

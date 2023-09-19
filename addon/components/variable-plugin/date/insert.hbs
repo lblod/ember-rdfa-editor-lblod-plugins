@@ -1,9 +1,9 @@
-<AuFormRow>
-  <VariablePlugin::Utils::LabelInput 
-    @label={{this.label}} 
-    @updateLabel={{this.updateLabel}}
-  />
-</AuFormRow>
-<AuButton {{on 'click' this.insert}}>
-  {{t 'variable-plugin.button'}}
-</AuButton>
+<AuList::Item>
+  <AuButton
+    @icon="add"
+    @iconAlignment="left"
+    @skin="link"
+    {{on 'click' this.insert}}>
+    {{t "date-plugin.insert.date"}}
+  </AuButton>
+</AuList::Item>

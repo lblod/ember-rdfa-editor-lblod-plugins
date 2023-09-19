@@ -98,7 +98,6 @@ import {
   date,
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
-import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -240,23 +239,6 @@ export default class BesluitSampleController extends Controller {
       ],
       allowCustomFormat: true,
     };
-  }
-
-  get variableTypes(): VariableConfig[] {
-    return [
-      {
-        label: 'address',
-        component: {
-          path: 'variable-plugin/address/insert-variable',
-        },
-      },
-      {
-        label: 'date',
-        component: {
-          path: 'variable-plugin/date/insert',
-        },
-      },
-    ];
   }
 
   get config() {
