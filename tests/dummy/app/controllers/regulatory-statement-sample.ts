@@ -215,10 +215,6 @@ export default class RegulatoryStatementSampleController extends Controller {
         },
       ],
       date: {
-        placeholder: {
-          insertDate: this.intl.t('date-plugin.insert.date'),
-          insertDateTime: this.intl.t('date-plugin.insert.datetime'),
-        },
         formats: [
           {
             key: 'short',

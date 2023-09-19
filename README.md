@@ -387,10 +387,6 @@ And an insert button to insert new dates that needs to be added to the insert pa
 You will also need to add a configuration like the following:
 ```js
   date: date({
-    placeholder: {
-      insertDate: this.intl.t('date-plugin.insert.date'),
-      insertDateTime: this.intl.t('date-plugin.insert.datetime'),
-    },
      formats: [
       {
         label: 'Short Date',
@@ -406,7 +402,7 @@ You will also need to add a configuration like the following:
       },
     ],
     allowCustomFormat: true,
-  }),
+  })
 ```
 - `formats`: specify default formats to show for selection in the date card.
 	- `label` (optional): The label shown to the user on the card. If not provided, the format is used instead e.g.: `dd/MM/yyyy`

@@ -86,9 +86,7 @@ const emberNodeConfig: EmberNodeConfig = {
     source: {
       default: null,
     },
-    label: {
-      default: 'locatie',
-    },
+    label: { default: null },
   },
   toDOM,
   parseDOM,

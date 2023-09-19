@@ -1,4 +1,4 @@
-import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 
 export type OutlineEntry = {
@@ -49,10 +49,12 @@ export function extractOutline({
   node,
   pos,
   config,
+  state,
 }: {
   node: PNode;
   pos: number;
   config: Config;
+  state: EditorState;
 }): OutlineEntry[] {
   let result: OutlineEntry[] = [];
   let parent: OutlineEntry | undefined;
@@ -74,10 +76,11 @@ export function extractOutline({
       }
       if (currentNode) {
         const outlineText = currentNode.node.type.spec.outlineText as
-          | ((node: PNode) => string)
+          | ((node: PNode, state: EditorState) => string)
           | undefined;
         const content =
-          outlineText?.(currentNode.node) ?? currentNode.node.textContent;
+          outlineText?.(currentNode.node, state) ??
+          currentNode.node.textContent;
         parent = {
           pos: currentNode.pos,
           content,
@@ -88,7 +91,7 @@ export function extractOutline({
   const subResults: OutlineEntry[] = [];
   node.forEach((child, offset) => {
     subResults.push(
-      ...extractOutline({ node: child, pos: pos + 1 + offset, config }),
+      ...extractOutline({ node: child, pos: pos + 1 + offset, config, state }),
     );
   });
   if (parent) {

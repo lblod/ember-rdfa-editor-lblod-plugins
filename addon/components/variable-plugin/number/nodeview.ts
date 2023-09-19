@@ -22,6 +22,7 @@ type Args = {
   selected: boolean;
   contentDecorations?: DecorationSource;
 };
+
 export default class NumberNodeviewComponent extends Component<Args> {
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
@@ -31,6 +32,22 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
   focus(element: HTMLInputElement) {
     element.focus();
+  }
+
+  get controller() {
+    return this.args.controller;
+  }
+
+  get documentLanguage() {
+    return this.controller.documentLanguage;
+  }
+
+  get translations() {
+    return {
+      placeholder: this.intl.t('variable.number.placeholder', {
+        locale: this.documentLanguage,
+      }),
+    };
   }
 
   get node() {

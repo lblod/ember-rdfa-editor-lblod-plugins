@@ -8,8 +8,7 @@ import {
   createTableOfContents,
   extractOutline,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
-import { emberApplicationPluginKey } from '@lblod/ember-rdfa-editor/plugins/ember-application';
-import IntlService from 'ember-intl/services/intl';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 export const emberNodeConfig: (
   config: TableOfContentsConfig,
@@ -26,23 +25,17 @@ export const emberNodeConfig: (
       },
     },
     serialize(node, state) {
-      const intl = emberApplicationPluginKey
-        .getState(state)
-        ?.application.lookup('service:intl') as IntlService | undefined;
-      const lang = state.doc.attrs.lang as string;
+      const t = getTranslationFunction(state);
+
       const { config } = node.attrs;
       const entries = extractOutline({
         node: state.doc,
         pos: -1,
         config: config as TableOfContentsConfig,
+        state,
       });
 
-      const title = intl
-        ? intl.t('table-of-contents-plugin.title', {
-            locale: lang,
-          })
-        : 'Inhoudstafel';
-
+      const title = t('table-of-contents-plugin.title', 'Inhoudstafel');
       return [
         'div',
         { 'data-ember-node': 'table-of-contents', class: 'table-of-contents' },

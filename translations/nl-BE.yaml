@@ -203,6 +203,7 @@ table-of-contents-plugin:
 variable:
   number:
     placeholder: Voeg getal in
+    label: nummer
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
     error-not-number: Enkel getallen zijn toegelaten
@@ -214,6 +215,15 @@ variable:
   codelist:
     single-select: Enkelvoudige selectie
     multi-select: Meervoudige selectie
+    label: codelijst
+  location:
+    label: locatie
+  text:
+    label: tekst
+  date:
+    label: datum
+  address:
+    label: adres
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
@@ -287,6 +297,8 @@ template-comments-plugin:
     remove: Verwijder Toelichtings- of voorbeeldbepaling
     move-down: Toelichtings- of voorbeeldbepaling naar onder
     move-up: Toelichtings- of voorbeeldbepaling naar boven
+  heading: toelichtingsbepaling
+
 pagination:
   next: Volgende pagina
   previous: Vorige pagina

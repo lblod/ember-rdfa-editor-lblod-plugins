@@ -226,10 +226,6 @@ export default class BesluitSampleController extends Controller {
   get config() {
     return {
       date: {
-        placeholder: {
-          insertDate: this.intl.t('date-plugin.insert.date'),
-          insertDateTime: this.intl.t('date-plugin.insert.datetime'),
-        },
         formats: [
           {
             key: 'short',

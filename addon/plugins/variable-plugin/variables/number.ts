@@ -3,7 +3,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   EXT,
@@ -24,6 +24,7 @@ import {
   mappingSpan,
   typeSpan,
 } from '../utils/dom-constructors';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -68,7 +69,9 @@ const parseDOM = [
   },
 ];
 
-const toDOM = (node: PNode): DOMOutputSpec => {
+const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
+  const t = getTranslationFunction(state);
+
   const {
     mappingResource,
     variableInstance,
@@ -88,7 +91,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       humanReadableContent = value as string;
     }
   } else {
-    humanReadableContent = 'Voeg getal in';
+    humanReadableContent = t('variable.number.placeholder', 'Voeg getal in');
   }
 
   return mappingSpan(
@@ -125,9 +128,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     mappingResource: {},
     variableInstance: {},
-    label: {
-      default: 'nummer',
-    },
+    label: { default: null },
     value: { default: null },
     writtenNumber: { default: false },
     minimumValue: { default: null },
@@ -138,7 +139,7 @@ const emberNodeConfig: EmberNodeConfig = {
     return value as string;
   },
   parseDOM,
-  toDOM,
+  serialize,
 };
 
 export const number = createEmberNodeSpec(emberNodeConfig);
