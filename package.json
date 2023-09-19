@@ -1,8 +1,11 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "12.0.0",
+  "version": "12.1.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
-  "keywords": ["ember-addon", "ember-rdfa-editor"],
+  "keywords": [
+    "ember-addon",
+    "ember-rdfa-editor"
+  ],
   "repository": "https://github.com/lblod/ember-rdfa-editor-lblod-plugins.git",
   "license": "MIT",
   "author": "vlaanderen.be",
