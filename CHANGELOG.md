@@ -1,5 +1,34 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 13.0.0
+
+### Major Changes
+
+- [#304](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/304) [`d52be6c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d52be6c70c30e81dffdbf14f91e140d3fc1b5e7e) Thanks [@elpoelma](https://github.com/elpoelma)! - Merge rdfa-date plugin into variable plugin
+
+  Breaking changes:
+
+  - Rename of variable date insert component from `VariablePlugin::Date::Insert` to `VariablePlugin::Date::InsertVariable`
+  - Rename of standalone date insert component from `RdfaDatePlugin::Insert` to `VariablePlugin::Date::Insert`
+  - Removal of `RdfaDatePlugin::Card` component, replaced by `VariablePlugin::Date::Edit` component
+  - Removal of `RdfaDatePlugin::Date` component, replace by `VariablePlugin::Date::Nodeview` component
+  - Removal of `RdfaDatePlugin::DateTimePicker` component, replaced by `VariablePlugin::Date::DateTimePicker` component
+  - Removal of `RdfaDatePlugin::HelpModal` component, replaced by `VariablePlugin::Date::HelpModal` component
+  - The `date` node-spec and `dateView` node-view should now be imported from `@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables`
+
+- [#297](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/297) [`30aad4d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/30aad4df3fc45c37d985dc76d955ed051fc837b2) Thanks [@dkozickis](https://github.com/dkozickis)! - Internationalization of variable plugins using document language
+
+  Breaking: date plugins does not accept `placeholder` config anymore, the plugin won't break
+  if the config is still present, but it will be ignored.
+
+- [#303](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/303) [`80f92d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/80f92d293404883871b7ac4e9ab4175d5deb8b46) Thanks [@elpoelma](https://github.com/elpoelma)! - Addition of @glint/template to peerDependencies
+
+- [#303](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/303) [`80f92d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/80f92d293404883871b7ac4e9ab4175d5deb8b46) Thanks [@elpoelma](https://github.com/elpoelma)! - Update @lblod/ember-rdfa-editor to 6.0.0 and increase peerdependency requirement to ^6.0.0
+
+### Patch Changes
+
+- [#302](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/302) [`90b5d1a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/90b5d1a8e1b25f944305445eb653a11bf463fa6e) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4517: Reduce possible CSS conflicts
+
 ## 12.1.0
 
 ### Minor Changes
