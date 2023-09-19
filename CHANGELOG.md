@@ -1,3 +1,5 @@
+# @lblod/ember-rdfa-editor-lblod-plugins
+
 ## 12.0.0
 
 ### Major Changes
