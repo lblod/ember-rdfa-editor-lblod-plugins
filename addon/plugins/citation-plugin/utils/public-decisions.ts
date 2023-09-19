@@ -42,6 +42,12 @@ const getFilters = ({
     );
   }
 
+  const governmentNameFilter = filter.governmentName?.trim()
+    ? `FILTER (CONTAINS(LCASE(?administrativeUnitName), "${replaceDiacriticsInWord(
+        filter.governmentName?.trim(),
+      ).toLowerCase()}"))`
+    : '';
+
   return `
     ${words
       .map(
@@ -51,7 +57,10 @@ const getFilters = ({
           ).toLowerCase()}"))`,
       )
       .join('\n')}
-    ${documentDateFilter.join('\n')}`;
+    ${documentDateFilter.join('\n')}
+    ${governmentNameFilter}
+    FILTER(BOUND(?decisionTitle))
+    `;
 };
 
 const getCountQuery = ({
@@ -69,25 +78,31 @@ const getCountQuery = ({
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX eli: <http://data.europa.eu/eli/ontology#>
     PREFIX prov: <http://www.w3.org/ns/prov#>
-    PREFIX schema: <http://schema.org/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    PREFIX dct: <http://purl.org/dc/terms/>
 
     SELECT (COUNT(DISTINCT(?decision)) as ?count) WHERE {
       ?session rdf:type besluit:Zitting;
         mu:uuid ?zittingUuid;
-        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan/skos:prefLabel) ?governmentName;
-        ext:besluitenlijst ?decisionList.
-      ?decisionList ext:besluitenlijstBesluit ?decision.
-      ?decision eli:title ?decisionTitle.
+        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit.
+      ?administrativeUnit skos:prefLabel ?administrativeUnitFullName;
+        besluit:bestuurt ?bestuurseenheid.
+      ?bestuurseenheid skos:prefLabel ?administrativeUnitName;
+        (besluit:classificatie/skos:prefLabel) ?administrativeUnitTypeName.
       OPTIONAL {
-        ?agenda rdf:type besluit:BehandelingVanAgendapunt;
+        ?session besluit:behandelt ?agendaPoint.
+        ?agendaPointTreatment dct:subject ?agendaPoint;
           prov:generated ?decision.
-        ?treatment rdf:type ext:Uittreksel;
-          ext:uittrekselBvap ?agenda;
-          mu:uuid ?treatmentUuida.
+        ?decision eli:title ?decisionTitle.
+      }
+      OPTIONAL {
+        ?session ext:uittreksel ?treatment.
+        ?treatment mu:uuid ?treatmentUuid.
+        ?treatment ext:uittrekselBvap ?agendaPointTreatment.
+        ?agendaPointTreatment prov:generated ?decision.
+        ?decision eli:title ?decisionTitle.
       }
       ${filterString}
     }
@@ -113,25 +128,31 @@ const getQuery = ({
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX eli: <http://data.europa.eu/eli/ontology#>
     PREFIX prov: <http://www.w3.org/ns/prov#>
-    PREFIX schema: <http://schema.org/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    PREFIX dct: <http://purl.org/dc/terms/>
 
-    SELECT DISTINCT ?governmentName ?decision ?decisionTitle ?documentDate ?zittingUuid ?treatmentUuid WHERE {
+    SELECT DISTINCT ?administrativeUnitFullName ?administrativeUnitTypeName ?administrativeUnitName ?documentDate ?decision ?decisionTitle ?zittingUuid ?treatmentUuid WHERE {
       ?session rdf:type besluit:Zitting;
         mu:uuid ?zittingUuid;
-        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan/skos:prefLabel) ?governmentName;
-        ext:besluitenlijst ?decisionList.
-      ?decisionList ext:besluitenlijstBesluit ?decision.
-      ?decision eli:title ?decisionTitle.
+        (besluit:isGehoudenDoor/mandaat:isTijdspecialisatieVan) ?administrativeUnit.
+      ?administrativeUnit skos:prefLabel ?administrativeUnitFullName;
+        besluit:bestuurt ?bestuurseenheid.
+      ?bestuurseenheid skos:prefLabel ?administrativeUnitName;
+        (besluit:classificatie/skos:prefLabel) ?administrativeUnitTypeName.
       OPTIONAL {
-        ?agenda rdf:type besluit:BehandelingVanAgendapunt;
+        ?session besluit:behandelt ?agendaPoint.
+        ?agendaPointTreatment dct:subject ?agendaPoint;
           prov:generated ?decision.
-        ?treatment rdf:type ext:Uittreksel;
-          ext:uittrekselBvap ?agenda;
-          mu:uuid ?treatmentUuid.
+        ?decision eli:title ?decisionTitle.
+      }
+      OPTIONAL {
+        ?session ext:uittreksel ?treatment.
+        ?treatment mu:uuid ?treatmentUuid.
+        ?treatment ext:uittrekselBvap ?agendaPointTreatment.
+        ?agendaPointTreatment prov:generated ?decision.
+        ?decision eli:title ?decisionTitle.
       }
       ${filterString}
     }
@@ -142,7 +163,9 @@ const getQuery = ({
 };
 
 interface PublicDecisionLegalDocumentBinding {
-  governmentName: Binding<string>;
+  administrativeUnitName: Binding<string>;
+  administrativeUnitTypeName: Binding<string>;
+  administrativeUnitFullName: Binding<string>;
   decision: Binding<string>;
   decisionTitle: Binding<string>;
   documentDate?: Binding<string>;
@@ -176,7 +199,7 @@ export async function fetchPublicDecisions({
 
     const legalDocuments = response.results.bindings.map((binding) => {
       const escapedGovernmentName =
-        escapeValue(binding.governmentName.value) ?? '';
+        escapeValue(binding.administrativeUnitFullName.value) ?? '';
 
       const escapedTitle = escapeValue(binding.decisionTitle.value) ?? '';
 
@@ -198,8 +221,12 @@ export async function fetchPublicDecisions({
           publicationLink:
             binding.zittingUuid.value && binding.treatmentUuid?.value
               ? getPublicationLink({
+                  administrativeUnitName: binding.administrativeUnitName.value,
+                  administrativeUnitTypeName:
+                    binding.administrativeUnitTypeName.value,
                   zittingUuid: binding.zittingUuid.value,
                   treatmentUuid: binding.treatmentUuid.value,
+                  decisionsEndpoint: config.endpoint,
                 })
               : null,
         },
@@ -219,10 +246,19 @@ export async function fetchPublicDecisions({
 }
 
 const getPublicationLink = ({
+  administrativeUnitName,
+  administrativeUnitTypeName,
   zittingUuid,
   treatmentUuid,
+  decisionsEndpoint,
 }: {
+  administrativeUnitName: string;
+  administrativeUnitTypeName: string;
   zittingUuid: string;
   treatmentUuid: string;
-}) =>
-  `https://publicatie.gelinkt-notuleren.lblod.info/Edegem/Gemeente/zittingen/${zittingUuid}/uittreksels/${treatmentUuid}`;
+  decisionsEndpoint: string;
+}) => {
+  return `https://${
+    new URL(decisionsEndpoint).host
+  }/${administrativeUnitName}/${administrativeUnitTypeName}/zittingen/${zittingUuid}/uittreksels/${treatmentUuid}`;
+};

@@ -3,7 +3,8 @@
     @icon="add"
     @iconAlignment="left"
     @skin="link"
-    {{on 'click' (fn this.insertAddress true)}}>
+    {{on 'click' (fn this.insertAddress true)}}
+    @disabled={{not this.canInsertAddress}}>
     {{t "editor-plugins.address.insert"}}
   </AuButton>
 </AuList::Item>

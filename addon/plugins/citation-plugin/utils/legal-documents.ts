@@ -65,6 +65,7 @@ export interface LegalDocumentsQueryFilter {
   documentDateTo?: Option<string>;
   publicationDateFrom?: Option<string>;
   publicationDateTo?: Option<string>;
+  governmentName?: Option<string>;
 }
 
 export type LegalDocumentsQueryConfig = {
@@ -94,6 +95,7 @@ export async function fetchLegalDocuments({
     documentDateTo: filter.documentDateTo || null,
     publicationDateFrom: filter.publicationDateFrom || null,
     publicationDateTo: filter.publicationDateTo || null,
+    governmentName: filter.governmentName || null,
   };
   const stringArguments = JSON.stringify({
     words,

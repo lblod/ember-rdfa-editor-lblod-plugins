@@ -70,6 +70,7 @@ citaten-plugin:
     title: Citeeropschrift invoegen
   search:
     term: Zoekterm
+    government-search: Filter op bestuursorgaan
     advanced: Uitgebreid zoeken
     type: Type van document
     placeholder: Typ om te zoeken

@@ -6,6 +6,9 @@ module.exports = {
     return process.env.EMBER_ENV === 'development';
   },
   options: {
+    'ember-cli-babel': {
+      enableTypeScriptTransform: true,
+    },
     babel: {
       sourceMaps: 'inline',
     },
