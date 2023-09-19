@@ -1,3 +1,5 @@
+import type { ComponentLike } from '@glint/template';
+import TemplateCommentsComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/template-comments-plugin/template-comment';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -10,7 +12,7 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
     name: 'template-comment',
-    componentPath: 'template-comments-plugin/template-comment',
+    component: TemplateCommentsComponent as unknown as ComponentLike,
     inline: false,
     group: 'block',
     content: '(paragraph|list)+',
