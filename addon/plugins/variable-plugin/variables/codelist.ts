@@ -23,6 +23,8 @@ import {
   typeSpan,
 } from '../utils/dom-constructors';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
+import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
+import type { ComponentLike } from '@glint/template';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -100,7 +102,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'codelist',
-  componentPath: 'variable-plugin/variable/nodeview',
+  component: VariableNodeViewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
   content: 'inline*',

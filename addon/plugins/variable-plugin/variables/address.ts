@@ -28,6 +28,8 @@ import {
   mappingSpan,
   typeSpan,
 } from '../utils/dom-constructors';
+import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/nodeview';
+import type { ComponentLike } from '@glint/template';
 
 export class Address {
   declare id?: string;
@@ -266,7 +268,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'address',
-  componentPath: 'variable-plugin/address/nodeview',
+  component: AddressNodeviewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
   content: 'inline*',

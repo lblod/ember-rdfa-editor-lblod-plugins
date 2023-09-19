@@ -21,11 +21,12 @@ import {
   typeSpan,
 } from '../../variable-plugin/utils/dom-constructors';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
-
+import DateComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/rdfa-date-plugin/date';
+import type { ComponentLike } from '@glint/template';
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
   group: 'inline variable',
-  componentPath: 'rdfa-date-plugin/date',
+  component: DateComponent as unknown as ComponentLike,
   inline: true,
   selectable: true,
   draggable: false,

@@ -10,13 +10,14 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
 import { emberApplicationPluginKey } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import IntlService from 'ember-intl/services/intl';
-
+import TableOfContentsComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/table-of-contents-plugin/ember-nodes/table-of-contents';
+import type { ComponentLike } from '@glint/template';
 export const emberNodeConfig: (
   config: TableOfContentsConfig,
 ) => EmberNodeConfig = (config) => {
   return {
     name: 'table-of-contents',
-    componentPath: 'table-of-contents-plugin/ember-nodes/table-of-contents',
+    component: TableOfContentsComponent as unknown as ComponentLike,
     inline: false,
     group: 'table_of_contents',
     atom: true,
