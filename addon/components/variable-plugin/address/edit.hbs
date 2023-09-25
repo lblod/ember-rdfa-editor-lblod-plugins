@@ -11,6 +11,7 @@
           @searchMessage={{t "editor-plugins.address.edit.municipality.search-message"}}
           @noMatchesMessage={{t "editor-plugins.address.edit.municipality.no-results"}}
           @placeholder={{t "editor-plugins.address.edit.municipality.placeholder"}}
+          @allowClear={{true}}
           @renderInPlace={{true}}
           @searchEnabled={{true}}
           @search={{perform this.searchMunicipality}}
@@ -27,6 +28,7 @@
           @searchMessage={{t "editor-plugins.address.edit.street.search-message"}}
           @noMatchesMessage={{t "editor-plugins.address.edit.street.no-results"}}
           @placeholder={{t "editor-plugins.address.edit.street.placeholder"}}
+          @allowClear={{true}}
           @renderInPlace={{true}}
           @searchEnabled={{true}}
           @search={{perform this.searchStreet}}
@@ -40,11 +42,11 @@
             <AuLabel for="housenumber-select">
               {{t "editor-plugins.address.edit.housenumber.label"}}
             </AuLabel>
-            <AuNativeInput 
+            <AuNativeInput
               id="housenumber-select"
               placeholder={{t "editor-plugins.address.edit.housenumber.placeholder"}}
-              @width="block"  
-              value={{this.newHousenumber}} 
+              @width="block"
+              value={{this.newHousenumber}}
               @disabled={{not this.canUpdateHousenumber}}
               {{on 'input' this.updateHousenumber}}
             />
@@ -53,17 +55,17 @@
             <AuLabel for="busnumber-select">
               {{t "editor-plugins.address.edit.busnumber.label"}}
             </AuLabel>
-            <AuNativeInput 
+            <AuNativeInput
               id="busnumber-select"
               placeholder={{t "editor-plugins.address.edit.busnumber.placeholder"}}
-              @width="block"  
-              value={{this.newBusnumber}} 
+              @width="block"
+              value={{this.newBusnumber}}
               @disabled={{not this.canUpdateBusnumber}}
               {{on 'input' this.updateBusnumber}}
             />
           </div>
         </div>
-        
+
         {{#if this.newAddress.isRunning}}
           <LoadingAlert @title={{t "editor-plugins.address.edit.loading"}} @size="small" @skin="info"/>
         {{/if}}
@@ -72,14 +74,14 @@
             {{this.message.body}}
           </AuAlert>
         {{/if}}
-        <AuButton 
-          {{on 'click' this.updateAddressVariable}} 
+        <AuButton
+          {{on 'click' this.updateAddressVariable}}
           @disabled={{not this.canUpdateAddressVariable}}>
           {{t "editor-plugins.utils.insert"}}
         </AuButton>
-        
+
       </form>
-      
+
     </c.content>
   </AuCard>
 {{/if}}
