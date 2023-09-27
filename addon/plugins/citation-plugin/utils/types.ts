@@ -26,20 +26,24 @@ export const LEGISLATION_TYPES = {
   'genummerd koninklijk besluit':
     'https://data.vlaanderen.be/id/concept/AardWetgeving/GenummerdKoninklijkBesluit',
   protocol: 'https://data.vlaanderen.be/id/concept/AardWetgeving/Protocol',
-  besluit: 'https://data.vlaanderen.be/doc/concept/AardWetgeving/Besluit',
+  gemeentebesluit:
+    'https://data.vlaanderen.be/doc/concept/AardWetgeving/Besluit',
 };
 
 export const legislationKeysCapitalized = Object.keys(LEGISLATION_TYPES).map(
   capitalize,
 ) as [Capitalize<keyof typeof LEGISLATION_TYPES>];
 
+export const legislationKeysCapitalizedWithoutGemeentebesluit =
+  legislationKeysCapitalized.filter((key) => key !== 'Gemeentebesluit');
+
 export const isLegislationType = (
   type: string,
 ): type is keyof typeof LEGISLATION_TYPES =>
   Object.keys(LEGISLATION_TYPES).includes(type);
 
-export const isBesluitType = (type: string) =>
-  type === LEGISLATION_TYPES['besluit'];
+export const isGemeenteBesluitType = (type: string) =>
+  type === LEGISLATION_TYPES['gemeentebesluit'];
 
 export const LEGISLATION_TYPE_CONCEPTS = Object.entries(LEGISLATION_TYPES).map(
   ([label, value]) => ({

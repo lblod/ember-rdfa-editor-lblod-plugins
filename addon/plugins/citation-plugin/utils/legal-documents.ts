@@ -1,5 +1,5 @@
 import {
-  isBesluitType,
+  isGemeenteBesluitType,
   LEGISLATION_TYPE_CONCEPTS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { fetchVlaamseCodexLegalDocuments } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/vlaamse-codex';
@@ -47,7 +47,7 @@ export class LegalDocument {
 }
 
 export const isBesluitLegalDocument = (legalDocument: LegalDocument) =>
-  isBesluitType(legalDocument.legislationType?.value ?? '');
+  isGemeenteBesluitType(legalDocument.legislationType?.value ?? '');
 
 export const fetchLegalDocumentsCache = new Map<
   string,
@@ -109,7 +109,7 @@ export async function fetchLegalDocuments({
     return results;
   } else {
     const shouldQueryPublicDecisions =
-      isBesluitType(filter.type) && config.decisionsEndpoint;
+      isGemeenteBesluitType(filter.type) && config.decisionsEndpoint;
 
     const fetchConfig = {
       words,

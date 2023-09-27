@@ -8,12 +8,12 @@ import { LegalDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/ci
 import { fetchArticles } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
 
 interface Args {
-  decision: LegalDocument;
+  legalDocument: LegalDocument;
   close: () => void;
   config: { endpoint: string };
 }
 
-export default class EditorPluginsCitationsDecisionDetailComponent extends Component<Args> {
+export default class LegalDocumentDetailComponent extends Component<Args> {
   @tracked error: unknown;
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
@@ -33,13 +33,16 @@ export default class EditorPluginsCitationsDecisionDetailComponent extends Compo
     const abortController = new AbortController();
     try {
       const results = await fetchArticles({
-        legalExpression: this.args.decision.uri,
+        legalExpression: this.args.legalDocument.uri,
         pageNumber: this.pageNumber,
         pageSize: this.pageSize,
         articleFilter: this.articleFilterAfterTimeout,
         config: this.args.config,
       });
       this.totalCount = results.totalCount;
+
+      console.log({ result: results.articles });
+
       return results.articles;
     } catch (e) {
       console.warn(e); // eslint-ignore-line no-console

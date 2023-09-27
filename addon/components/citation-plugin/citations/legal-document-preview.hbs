@@ -1,14 +1,14 @@
 <div class="citaten--decision-list-item {{if @fullSize "au-u-padding-small"}}" ...attributes>
   <p class="citaten--decision-title {{if @fullSize "au-u-h6 au-u-medium" "au-u-h-functional"}}">
-    {{if @fullSize (capitalize @decision.fullTitle) @decision.title}}
+    {{if @fullSize (capitalize @legalDocument.fullTitle) @legalDocument.title}}
   </p>
-  {{#if (and @fullSize @decision.publicationDate)}}
+  {{#if (and @fullSize @legalDocument.publicationDate)}}
     <AuPill
       class="au-u-margin-top-small au-u-margin-bottom-small"
       @skin="border"
       @icon="calendar"
       @iconAlignment="left">
-      {{@decision.publicationDate}}
+      {{@legalDocument.publicationDate}}
     </AuPill>
   {{/if}}
   {{#if @fullSize}}
@@ -27,7 +27,7 @@
               @skin="button"
               @icon="link-external"
               @iconAlignment="left"
-              href={{@decision.meta.publicationLink}}
+              href={{@legalDocument.meta.publicationLink}}
               rel="noreferrer noopener">
               {{t "citaten-plugin.references.lookup-publicatie"}}
             </AuLinkExternal>
@@ -69,7 +69,7 @@
             @skin="link"
             @icon="link-external"
             @iconAlignment="left"
-            href={{@decision.meta.publicationLink}}
+            href={{@legalDocument.meta.publicationLink}}
             rel="noreferrer noopener"
             class="au-u-h-functional"
           >

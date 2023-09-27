@@ -104,10 +104,10 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   }
 
   @action
-  insertDecisionCitation(decision: LegalDocument) {
-    const type = decision.legislationType?.label || '';
-    const uri = decision.uri;
-    const title = decision.title ?? '';
+  insertLegalDocumentCitation(legalDocument: LegalDocument) {
+    const type = legalDocument.legislationType?.label || '';
+    const uri = legalDocument.uri;
+    const title = legalDocument.title ?? '';
     this.controller.withTransaction(
       (tr: Transaction) =>
         tr
@@ -127,12 +127,12 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   }
 
   @action
-  insertArticleCitation(decision: LegalDocument, article: Article) {
-    const type = decision.legislationType?.label || '';
+  insertArticleCitation(legalDocument: LegalDocument, article: Article) {
+    const type = legalDocument.legislationType?.label || '';
     const uri = article.uri;
     let title = '';
-    if (decision.title) {
-      title = `${decision.title}, ${article.number ?? ''}`;
+    if (legalDocument.title) {
+      title = `${legalDocument.title}, ${article.number ?? ''}`;
     }
     const { from, to } = this.controller.mainEditorState.selection;
     this.controller.withTransaction(
