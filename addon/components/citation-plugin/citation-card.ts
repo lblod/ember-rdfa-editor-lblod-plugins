@@ -121,6 +121,10 @@ export default class CitationCardComponent extends Component<Args> {
     this.cardText = (event.target as HTMLInputElement).value;
   }
 
+  get governmentName() {
+    return this.config.defaultDecisionsGovernmentName;
+  }
+
   resourceSearch = restartableTask(async () => {
     await timeout(100);
     this.error = null;
@@ -131,6 +135,7 @@ export default class CitationCardComponent extends Component<Args> {
       const words = this.searchText.match(/\S+/g) || [];
       const filter = {
         type: unwrapOr('', this.selectedLegislationTypeUri),
+        governmentName: this.governmentName,
       };
       const results = await fetchLegalDocuments({
         words: words,
