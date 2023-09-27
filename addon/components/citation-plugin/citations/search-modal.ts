@@ -37,26 +37,28 @@ function getISODate(date: Option<Date>): string | null {
 }
 
 interface Args {
-  selectedDecision: LegalDocument;
+  selectedLegalDocument: LegalDocument;
   legislationTypeUri: string;
   text: string;
-  insertDecisionCitation: (decision: LegalDocument) => void;
-  insertArticleCitation: (decision: LegalDocument, article: Article) => void;
+  insertLegalDocumentCitation: (legalDocument: LegalDocument) => void;
+  insertArticleCitation: (
+    legalDocument: LegalDocument,
+    article: Article,
+  ) => void;
   closeModal: (legislationTypeUri?: string, text?: string) => void;
   config: CitationPluginEmberComponentConfig;
 }
 
 export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
   @service declare intl: IntlService;
-  // Vlaamse Codex currently doesn't contain captions and content of decisions
+  // Vlaamse Codex currently doesn't contain captions and content of legal document
   // @tracked isEnabledSearchCaption = false
   // @tracked isEnabledSearchContent = false
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
   @tracked totalCount = 0;
-  @tracked decisions = [];
   @tracked error: unknown;
-  @tracked selectedDecision: LegalDocument | null = null;
+  @tracked selectedLegalDocument: LegalDocument | null = null;
   @tracked documentDateFrom: Date | null = null;
   @tracked documentDateTo: Date | null = null;
   @tracked publicationDateFrom: Date | null = null;
@@ -159,7 +161,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
     }
   });
 
-  decisionResource = trackedTask(this, this.resourceSearch, () => [
+  legalDocumentResource = trackedTask(this, this.resourceSearch, () => [
     this.searchText,
     this.governmentSearchText,
     this.legislationTypeUri,
@@ -206,32 +208,32 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   }
 
   @action
-  async insertDecisionCitation(decision: LegalDocument) {
-    this.args.insertDecisionCitation(decision);
+  async insertLegalDocumentCitation(legalDocument: LegalDocument) {
+    this.args.insertLegalDocumentCitation(legalDocument);
     await this.closeModal();
   }
 
   @action
-  async insertArticleCitation(decision: LegalDocument, article: Article) {
-    this.args.insertArticleCitation(decision, article);
+  async insertArticleCitation(legalDocument: LegalDocument, article: Article) {
+    this.args.insertArticleCitation(legalDocument, article);
     await this.closeModal();
   }
 
   @action
   async closeModal(legislationTypeUri?: string, text?: string) {
-    await this.decisionResource.cancel();
+    await this.legalDocumentResource.cancel();
     this.inputSearchText = null;
     this.args.closeModal(legislationTypeUri, text);
   }
 
   @action
-  openDecisionDetail(decision: LegalDocument) {
-    this.selectedDecision = decision;
+  openLegalDocumentDetail(legalDocument: LegalDocument) {
+    this.selectedLegalDocument = legalDocument;
   }
 
   @action
-  closeDecisionDetail() {
-    this.selectedDecision = null;
+  closeLegalDocumentDetail() {
+    this.selectedLegalDocument = null;
   }
 
   // Pagination

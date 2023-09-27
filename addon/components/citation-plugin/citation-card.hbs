@@ -79,7 +79,7 @@
       </div>
     </c.content>
     <c.footer class='au-u-background-gray-100 au-u-padding-none'>
-      {{#if this.decisionResource.isRunning}}
+      {{#if this.legalDocumentsResource.isRunning}}
         <AuLoader />
         <span class='au-u-hidden-visually'>{{t
             'citaten-plugin.alert.loading'
@@ -99,10 +99,10 @@
           <div
             class='citaten--decision-list au-u-margin-none au-u-padding-top-tiny au-u-padding-bottom-tiny'
           >
-            <CitationPlugin::Citations::DecisionList
-              @decisions={{this.decisionResource.value}}
-              @onCitationInsert={{this.insertDecisionCitation}}
-              @onCitationDetails={{this.openDecisionDetailModal}}
+            <CitationPlugin::Citations::LegalDocumentList
+              @legalDocuments={{this.legalDocumentsResource.value}}
+              @onCitationInsert={{this.insertLegalDocumentCitation}}
+              @onCitationDetails={{this.openLegalDocumentDetailModal}}
             />
           </div>
         {{/if}}
@@ -113,9 +113,9 @@
 <CitationPlugin::Citations::SearchModal
   @open={{this.showModal}}
   @closeModal={{this.closeModal}}
-  @insertDecisionCitation={{this.insertDecisionCitation}}
+  @insertLegalDocumentCitation={{this.insertLegalDocumentCitation}}
   @insertArticleCitation={{this.insertArticleCitation}}
-  @selectedDecision={{this.decision}}
+  @selectedLegalDocument={{this.legalDocument}}
   @legislationTypeUri={{this.selectedLegislationTypeUri}}
   @selectLegislationType={{this.selectLegislationType}}
   @text={{this.searchText}}

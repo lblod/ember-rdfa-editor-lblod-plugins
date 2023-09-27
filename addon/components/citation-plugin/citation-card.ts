@@ -39,10 +39,9 @@ export default class CitationCardComponent extends Component<Args> {
   @tracked pageSize = 5;
   @tracked totalSize = 0;
   @tracked totalCount = 0;
-  @tracked decisions = [];
   @tracked error: unknown;
   @tracked showModal = false;
-  @tracked decision: LegalDocument | null = null;
+  @tracked legalDocument: LegalDocument | null = null;
   @tracked cardText: string | null = null;
   @tracked cardLegislationType: string | null = null;
   @tracked documentLegislationType: Option<string>;
@@ -157,7 +156,7 @@ export default class CitationCardComponent extends Component<Args> {
     }
   });
 
-  decisionResource = trackedTask(this, this.resourceSearch, () => [
+  legalDocumentsResource = trackedTask(this, this.resourceSearch, () => [
     this.searchText,
     this.selectedLegislationType,
     this.pageNumber,
@@ -176,8 +175,8 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   @action
-  openDecisionDetailModal(decision: LegalDocument): void {
-    this.decision = decision;
+  openLegalDocumentDetailModal(legalDocument: LegalDocument): void {
+    this.legalDocument = legalDocument;
     /** why focus? see {@link EditorPluginsCitationInsertComponent.openModal } */
     this.focus();
     this.showModal = true;
@@ -185,8 +184,8 @@ export default class CitationCardComponent extends Component<Args> {
 
   @action
   async openSearchModal(): Promise<void> {
-    await this.decisionResource.cancel();
-    this.decision = null;
+    await this.legalDocumentsResource.cancel();
+    this.legalDocument = null;
     this.focus();
     this.showModal = true;
   }
@@ -194,7 +193,7 @@ export default class CitationCardComponent extends Component<Args> {
   @action
   closeModal(lastSearchType: string, lastSearchTerm: string): void {
     this.showModal = false;
-    this.decision = null;
+    this.legalDocument = null;
     if (lastSearchType) {
       this.cardLegislationType = lastSearchType;
     }
@@ -204,9 +203,9 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   @action
-  insertDecisionCitation(decision: LegalDocument): void {
-    const uri = decision.uri;
-    const title = decision.title ?? '';
+  insertLegalDocumentCitation(legalDocument: LegalDocument): void {
+    const uri = legalDocument.uri;
+    const title = legalDocument.title ?? '';
     const { from, to } = unwrap(this.activeDecoration);
     this.controller.withTransaction(
       (tr: Transaction) =>
@@ -223,11 +222,11 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   @action
-  insertArticleCitation(decision: LegalDocument, article: Article): void {
+  insertArticleCitation(legalDocument: LegalDocument, article: Article): void {
     const uri = article.uri;
     let title = '';
-    if (decision.title) {
-      title = `${decision.title}, ${article.number || ''}`;
+    if (legalDocument.title) {
+      title = `${legalDocument.title}, ${article.number || ''}`;
     }
     const { from, to } = unwrap(this.activeDecoration);
     this.controller.withTransaction(
@@ -250,7 +249,7 @@ export default class CitationCardComponent extends Component<Args> {
 
   willDestroy(): void {
     // Not necessary as ember-concurrency does this for us.
-    // this.decisionResource.cancel();
+    // this.legalDocumentsResource.cancel();
     cleanCaches();
     super.willDestroy();
   }

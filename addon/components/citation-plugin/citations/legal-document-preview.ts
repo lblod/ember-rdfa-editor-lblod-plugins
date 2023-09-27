@@ -5,15 +5,15 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 
 interface Args {
-  decision: LegalDocument;
+  legalDocument: LegalDocument;
 }
 
-export default class DecisionPreviewComponent extends Component<Args> {
+export default class LegalDocumentPreviewComponent extends Component<Args> {
   get isBesluit() {
-    return isBesluitLegalDocument(this.args.decision);
+    return isBesluitLegalDocument(this.args.legalDocument);
   }
 
   get hasPublicationLink() {
-    return this.isBesluit && this.args.decision.meta?.publicationLink;
+    return this.isBesluit && this.args.legalDocument.meta?.publicationLink;
   }
 }

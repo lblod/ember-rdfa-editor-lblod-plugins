@@ -1,11 +1,11 @@
-{{#if @decisions.length}}
+{{#if @legalDocuments.length}}
   <AuList @direction="vertical" @divider={{true}}>
-    {{#each @decisions as |decision|}}
+    {{#each @legalDocuments as |legalDocument|}}
       <AuList::Item class="au-u-padding-left-small au-u-padding-right-small">
-        <CitationPlugin::Citations::DecisionPreview
-          @decision={{decision}}
-          @onCitationInsert={{fn @onCitationInsert decision}}
-          @onCitationDetails={{fn @onCitationDetails decision}}
+        <CitationPlugin::Citations::LegalDocumentPreview
+          @legalDocument={{legalDocument}}
+          @onCitationInsert={{fn @onCitationInsert legalDocument}}
+          @onCitationDetails={{fn @onCitationDetails legalDocument}}
           @fullSize={{@fullSize}} />
       </AuList::Item>
     {{/each}}

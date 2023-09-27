@@ -3,15 +3,15 @@
     {{! Heading with title and actions }}
     <div class="citaten--container-header au-u-background-gray-100 au-o-box">
       <AuHeading @level="2" @skin="4">
-        {{capitalize @decision.fullTitle}}
+        {{capitalize @legalDocument.fullTitle}}
       </AuHeading>
-      {{#if @decision.publicationDate}}
+      {{#if @legalDocument.publicationDate}}
         <AuPill
           class="au-u-margin-top-small au-u-margin-bottom-small"
           @skin="border"
           @icon="calendar"
           @iconAlignment="left">
-          {{@decision.publicationDate}}
+          {{@legalDocument.publicationDate}}
         </AuPill>
       {{/if}}
       <br/>
@@ -20,14 +20,14 @@
         @icon="plus-text"
         @iconAlignment="left"
         class="au-u-margin-right"
-        {{on "click" (fn @insertDecisionCitation @decision)}}>
+        {{on "click" (fn @insertLegalDocumentCitation @legalDocument)}}>
         {{t "citaten-plugin.references.refer-whole"}}
       </AuButton>
       <AuLinkExternal
         @skin="primary"
         @icon="link-external"
         @iconAlignment="left"
-        href={{@decision.uri}}
+        href={{@legalDocument.uri}}
         rel="noreferrer noopener">
         {{t "citaten-plugin.references.lookup-codex"}}
       </AuLinkExternal>
@@ -50,7 +50,7 @@
           <CitationPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
         {{else}}
           <CitationPlugin::Citations::ArticleList
-            @insertArticleCitation={{fn @insertArticleCitation @decision}}
+            @insertArticleCitation={{fn @insertArticleCitation @legalDocument}}
             @articles={{this.articleResource.value}}
             @fullSize={{true}}/>
         {{/if}}
