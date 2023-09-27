@@ -19,6 +19,7 @@ import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citati
 import {
   LEGISLATION_TYPE_CONCEPTS,
   legislationKeysCapitalized,
+  legislationKeysCapitalizedWithoutGemeentebesluit,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
 import {
@@ -94,7 +95,7 @@ export default class CitationCardComponent extends Component<Args> {
       return legislationKeysCapitalized;
     }
 
-    return legislationKeysCapitalized.filter((key) => key !== 'Besluit');
+    return legislationKeysCapitalizedWithoutGemeentebesluit;
   }
 
   get selectedLegislationType() {

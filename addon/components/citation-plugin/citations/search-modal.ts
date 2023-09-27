@@ -6,10 +6,11 @@ import { inject as service } from '@ember/service';
 import { capitalize } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
-  isBesluitType,
+  isGemeenteBesluitType,
   LEGISLATION_TYPE_CONCEPTS,
   LEGISLATION_TYPES,
   legislationKeysCapitalized,
+  legislationKeysCapitalizedWithoutGemeentebesluit,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { CitationPluginEmberComponentConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import IntlService from 'ember-intl/services/intl';
@@ -94,7 +95,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
       return legislationKeysCapitalized;
     }
 
-    return legislationKeysCapitalized.filter((key) => key !== 'Besluit');
+    return legislationKeysCapitalizedWithoutGemeentebesluit;
   }
 
   get legislationSelected() {
@@ -174,7 +175,7 @@ export default class EditorPluginsCitationsSearchModalComponent extends Componen
   ]);
 
   get isBesluitType() {
-    return isBesluitType(this.legislationTypeUri);
+    return isGemeenteBesluitType(this.legislationTypeUri);
   }
 
   @action
