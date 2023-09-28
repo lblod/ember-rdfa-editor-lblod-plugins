@@ -375,6 +375,8 @@ editor-plugins:
         address-found: Adres gevonden.
       errors:
         address-not-found: We konden het adres niet terugvinden.
+        address-not-found-short: Adres niet gevonden
+        alternative-address: "Geef nog een invoer op of ga verder met het volgende adres: {address}"
         http-error: "Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}."
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:

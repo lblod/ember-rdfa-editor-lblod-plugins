@@ -75,14 +75,20 @@ type AddressDetailResult = {
 export class AddressError extends Error {
   translation: string;
   status?: number;
+  alternativeAddress?: Address;
   constructor({
     message,
     translation,
     status,
-  }: Pick<AddressError, 'message' | 'translation' | 'status'>) {
+    alternativeAddress,
+  }: Pick<
+    AddressError,
+    'message' | 'translation' | 'status' | 'alternativeAddress'
+  >) {
     super(message);
     this.translation = translation;
     this.status = status;
+    this.alternativeAddress = alternativeAddress;
   }
 }
 
@@ -217,9 +223,15 @@ export async function resolveAddress(info: AddressInfo) {
       });
     }
   } else {
+    const alternativeAddress = await resolveStreet({
+      street: info.street,
+      municipality: info.municipality,
+    });
+
     throw new AddressError({
       translation: 'editor-plugins.address.edit.errors.address-not-found',
       message: `Could not find address in address register`,
+      alternativeAddress,
     });
   }
 }

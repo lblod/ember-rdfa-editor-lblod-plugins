@@ -42,6 +42,7 @@ export default class AddressEditComponent extends Component<Args> {
 
   get message() {
     const value = this.newAddress.value as Address | undefined;
+
     if (
       this.newAddress.isSuccessful &&
       value &&
@@ -53,11 +54,28 @@ export default class AddressEditComponent extends Component<Args> {
         title: this.intl.t('editor-plugins.address.edit.success.address-found'),
         body: value.formatted,
       };
-    } else if (
+    }
+
+    if (
       this.newAddress.isError &&
       this.newAddress.error instanceof AddressError
     ) {
       const { error } = this.newAddress;
+
+      if (this.newAddress.error.alternativeAddress) {
+        return {
+          skin: 'warning',
+          icon: 'alert-triangle',
+          title: this.intl.t(
+            'editor-plugins.address.edit.errors.address-not-found-short',
+          ),
+          body: this.intl.t(
+            'editor-plugins.address.edit.errors.alternative-address',
+            { address: this.newAddress.error.alternativeAddress.formatted },
+          ),
+        };
+      }
+
       return {
         skin: 'warning',
         icon: 'alert-triangle',
@@ -67,9 +85,9 @@ export default class AddressEditComponent extends Component<Args> {
           email: 'gelinktnotuleren@vlaanderen.be',
         }),
       };
-    } else {
-      return;
     }
+
+    return;
   }
 
   get currentAddress() {
@@ -127,12 +145,38 @@ export default class AddressEditComponent extends Component<Args> {
     return !!this.selectedAddressVariable;
   }
 
+  get alternativeAddressFromError() {
+    if (
+      this.newAddress.isError &&
+      this.newAddress.error instanceof AddressError &&
+      this.newAddress.error.alternativeAddress
+    ) {
+      return this.newAddress.error.alternativeAddress;
+    }
+
+    return undefined;
+  }
+
+  get addressToInsert() {
+    if (this.newAddress.isSuccessful) {
+      return this.newAddress.value;
+    }
+
+    return this.alternativeAddressFromError;
+  }
+
   get canUpdateAddressVariable() {
-    return (
-      this.newAddress.isSuccessful &&
-      this.newAddress.value &&
-      !this.currentAddress?.sameAs(this.newAddress.value as Address)
-    );
+    const addressToInsert = this.addressToInsert;
+
+    if (!addressToInsert) {
+      return false;
+    }
+
+    if (this.currentAddress?.sameAs(this.addressToInsert)) {
+      return false;
+    }
+
+    return true;
   }
 
   resolveAddressTask = restartableTask(async () => {
@@ -169,19 +213,23 @@ export default class AddressEditComponent extends Component<Args> {
     }
   });
 
-  newAddress = trackedTask(this, this.resolveAddressTask, () => [
-    this.newMunicipality,
-    this.newStreetName,
-    this.newHousenumber,
-    this.newBusnumber,
-  ]);
+  newAddress = trackedTask<Address | undefined>(
+    this,
+    this.resolveAddressTask,
+    () => [
+      this.newMunicipality,
+      this.newStreetName,
+      this.newHousenumber,
+      this.newBusnumber,
+    ],
+  );
 
   @action
   updateAddressVariable() {
-    if (this.selectedAddressVariable && this.newAddress.isSuccessful) {
+    if (this.selectedAddressVariable && this.addressToInsert) {
       const { pos } = this.selectedAddressVariable;
       this.controller.withTransaction((tr) => {
-        return tr.setNodeAttribute(pos, 'value', this.newAddress.value);
+        return tr.setNodeAttribute(pos, 'value', this.addressToInsert);
       });
     }
   }
