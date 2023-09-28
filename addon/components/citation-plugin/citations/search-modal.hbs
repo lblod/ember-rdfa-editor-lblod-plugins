@@ -6,13 +6,13 @@
   @padding='none'
   as |modal|
 >
-  {{#if this.selectedDecision}}
+  {{#if this.selectedLegalDocument}}
     <modal.Body>
-      <CitationPlugin::Citations::DecisionDetail
-        @insertDecisionCitation={{this.insertDecisionCitation}}
+      <CitationPlugin::Citations::LegalDocumentDetail
+        @insertLegalDocumentCitation={{this.insertLegalDocumentCitation}}
         @insertArticleCitation={{this.insertArticleCitation}}
-        @close={{this.closeDecisionDetail}}
-        @decision={{this.selectedDecision}}
+        @close={{this.closeLegalDocumentDetail}}
+        @legalDocument={{this.selectedLegalDocument}}
         @config={{this.config}}
       />
     </modal.Body>
@@ -195,7 +195,7 @@
           </div>
         </mc.sidebar>
         <mc.content>
-          {{#if this.decisionResource.isRunning}}
+          {{#if this.legalDocumentResource.isRunning}}
             <div class='au-u-margin'>
               <AuLoader @padding='large' />
               <span class='au-u-hidden-visually'>{{t
@@ -210,14 +210,14 @@
                 class='au-u-margin'
               />
             {{else}}
-              {{#if this.decisionResource.value.length}}
+              {{#if this.legalDocumentResource.value.length}}
                 <div
                   class='citaten--container-content au-u-padding-top-small au-u-padding-bottom-small'
                 >
-                  <CitationPlugin::Citations::DecisionList
-                    @decisions={{this.decisionResource.value}}
-                    @onCitationInsert={{this.insertDecisionCitation}}
-                    @onCitationDetails={{this.openDecisionDetail}}
+                  <CitationPlugin::Citations::LegalDocumentList
+                    @legalDocuments={{this.legalDocumentResource.value}}
+                    @onCitationInsert={{this.insertLegalDocumentCitation}}
+                    @onCitationDetails={{this.openLegalDocumentDetail}}
                     @fullSize={{true}}
                   />
                 </div>
@@ -229,7 +229,7 @@
               {{/if}}
             {{/if}}
           {{/if}}
-          {{#if this.decisionResource.value.length}}
+          {{#if this.legalDocumentResource.value.length}}
             {{#let
               (pagination
                 page=this.pageNumber

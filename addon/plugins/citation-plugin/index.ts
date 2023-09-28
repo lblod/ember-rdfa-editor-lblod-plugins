@@ -84,7 +84,7 @@ const ENUM_ROYAL = `genummerd${NNWS}?${ROYAL}`;
 /**
  * match for "decision of the flemish government"
  */
-const DECISION = 'besluit';
+const DECISION = 'gemeentebesluit';
 
 /**
  * The type of citation that we need to search for
