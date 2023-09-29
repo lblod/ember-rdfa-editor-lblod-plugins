@@ -107,7 +107,10 @@
                   @controller={{this.controller}}
                   @options={{this.config.roadsignRegulation}}
                 />
-                <StandardTemplatePlugin::Card @controller={{this.controller}} />
+                <StandardTemplatePlugin::Card
+                  @controller={{this.controller}}
+                  @templates={{this.standardTemplates}}
+                />
                 <VariablePlugin::Address::Insert @controller={{this.controller}}/>
                 <VariablePlugin::Date::Insert @controller={{this.controller}}/>
               </Sidebar.Collapsible>
