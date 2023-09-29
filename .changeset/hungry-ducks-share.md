@@ -3,3 +3,4 @@
 ---
 
 Breaking change: Standard Template plugin now requires a list of templates to be passed in.
+No depends on ember-data.

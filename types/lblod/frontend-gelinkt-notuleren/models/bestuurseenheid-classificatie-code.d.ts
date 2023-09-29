@@ -1,6 +1,7 @@
 declare module '@lblod/frontend-gelinkt-notuleren/models/bestuurseenheid-classificatie' {
-  import Model from '@ember-data/model';
-  export default class BestuurseenheidClassificatieCodeModel extends Model {
+  import ObjectProxy from '@ember/object/proxy';
+
+  export default class BestuurseenheidClassificatieCodeModel extends ObjectProxy {
     label: string;
     scopeNote: string;
     uri: string;
