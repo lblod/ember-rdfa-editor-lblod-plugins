@@ -371,6 +371,8 @@ editor-plugins:
         address-found: Address found.
       errors:
         address-not-found: We could not resolve the provided address
+        address-not-found-short: Address not found
+        alternative-address: "Provide another input or proceed with the following address: {address}"
         http-error: "Something went wrong while resolving this address, status code: {status}."
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
