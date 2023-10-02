@@ -1,13 +1,11 @@
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import {
   addType,
   removeType,
 } from '@lblod/ember-rdfa-editor/commands/type-commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import CurrentSessionService from '@lblod/frontend-gelinkt-notuleren/services/current-session';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import fetchBesluitTypes, {
@@ -30,8 +28,6 @@ type Args = {
 };
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
-  @service declare currentSession: CurrentSessionService;
-
   /**
    * Actual besluit type selected
    * @property besluitType
@@ -61,11 +57,8 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   types = trackedFunction(this, async () => {
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    const bestuurseenheid = await this.currentSession.get('group');
-    const classificatie = await bestuurseenheid.get('classificatie');
     const types = await fetchBesluitTypes(
-      classificatie.uri,
+      this.args.options.classificatieUri,
       this.args.options.endpoint,
     );
     return types;
