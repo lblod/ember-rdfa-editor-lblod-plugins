@@ -10,7 +10,7 @@ import {
   resolveStreet,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { localCopy, trackedReset } from 'tracked-toolbox';
+import { trackedReset } from 'tracked-toolbox';
 import { trackedTask } from 'ember-resources/util/ember-concurrency';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
@@ -23,9 +23,9 @@ type Args = {
 export default class AddressEditComponent extends Component<Args> {
   @service declare intl: IntlService;
 
-  @trackedReset<AddressEditComponent, string | undefined>({
+  @trackedReset({
     memo: 'currentAddress',
-    update(component) {
+    update(component: AddressEditComponent) {
       const { currentMunicipality } = component;
       return currentMunicipality
         ? currentMunicipality
@@ -34,11 +34,29 @@ export default class AddressEditComponent extends Component<Args> {
   })
   newMunicipality?: string;
 
-  @localCopy('currentStreetName') newStreetName?: string;
+  @trackedReset({
+    memo: 'currentAddress',
+    update(component: AddressEditComponent) {
+      return component.currentStreetName;
+    },
+  })
+  newStreetName?: string;
 
-  @localCopy('currentHousenumber') newHousenumber?: string;
+  @trackedReset({
+    memo: 'currentAddress',
+    update(component: AddressEditComponent) {
+      return component.currentHousenumber;
+    },
+  })
+  newHousenumber?: string;
 
-  @localCopy('currentBusnumber') newBusnumber?: string;
+  @trackedReset({
+    memo: 'currentAddress',
+    update(component: AddressEditComponent) {
+      return component.currentBusnumber;
+    },
+  })
+  newBusnumber?: string;
 
   get message() {
     const value = this.newAddress.value as Address | undefined;
