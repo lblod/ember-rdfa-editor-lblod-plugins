@@ -1,15 +1,17 @@
 declare module '@lblod/frontend-gelinkt-notuleren/models/gebruiker' {
-  import Model, { AsyncHasMany } from '@ember-data/model';
+  import { ArrayProxy } from '@ember/object';
+  import ObjectProxy from '@ember/object/proxy';
   import AccountModel from '@lblod/frontend-gelinkt-notuleren/models/account';
   import BestuurseenheidModel from '@lblod/frontend-gelinkt-notuleren/models/bestuurseenheid';
-  export default class GebruikerModel extends Model {
+
+  export default class GebruikerModel extends ObjectProxy {
     voornaam: string;
     achternaam: string;
     rijksregisterNummer: string;
 
-    account: AsyncHasMany<AccountModel>;
+    account: Promise<ArrayProxy<AccountModel>>;
 
-    bestuurseenheden: AsyncHasMany<BestuurseenheidModel>;
+    bestuurseenheden: Promise<ArrayProxy<BestuurseenheidModel>>;
 
     // this is only used for mock login afaik
     get group(): BestuurseenheidModel;

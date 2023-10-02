@@ -1,9 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import StandardTemplatePluginService from '@lblod/ember-rdfa-editor-lblod-plugins/services/standard-template-plugin';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import TemplateModel from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
+import StandardTemplate from '@lblod/ember-rdfa-editor-lblod-plugins/models/template';
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import instantiateUuids from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/instantiate-uuids';
 import { PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
@@ -15,6 +13,7 @@ import {
 
 type Args = {
   controller: SayController;
+  templates: StandardTemplate[];
 };
 
 const HACKY_LOOKUP: Record<string, Resource> = {
@@ -42,12 +41,6 @@ export function findAncestors(
 }
 
 export default class TemplateProviderComponent extends Component<Args> {
-  @service declare standardTemplatePlugin: StandardTemplatePluginService;
-
-  get busy() {
-    return this.standardTemplatePlugin.fetchTemplates.isRunning;
-  }
-
   get controller() {
     return this.args.controller;
   }
@@ -58,13 +51,13 @@ export default class TemplateProviderComponent extends Component<Args> {
 
   get applicableTemplates() {
     return (
-      this.standardTemplatePlugin.fetchTemplates.last?.value?.filter(
-        (template) => this.templateIsApplicable(template),
+      this.args.templates.filter((template) =>
+        this.templateIsApplicable(template),
       ) || []
     );
   }
 
-  templateIsApplicable(template: TemplateModel) {
+  templateIsApplicable(template: StandardTemplate) {
     const { $from } = this.controller.mainEditorState.selection;
     const containsTypes =
       this.controller.externalContextStore
@@ -93,8 +86,7 @@ export default class TemplateProviderComponent extends Component<Args> {
   }
 
   @action
-  async insert(template: TemplateModel) {
-    await template.reload();
+  insert(template: StandardTemplate) {
     const selection = this.controller.mainEditorState.selection;
     let insertRange: { from: number; to: number } = selection;
     const { $from, $to } = selection;
