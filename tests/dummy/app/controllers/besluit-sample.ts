@@ -403,4 +403,56 @@ export default class BesluitSampleController extends Controller {
     this.controller?.doCommand(insertArticleContainer({ intl: this.intl }));
     this.controller?.focus();
   }
+
+  get standardTemplates() {
+    return [
+      {
+        id: '728cc126-2bb2-11e9-a884-97ead76424d3',
+        title: 'Vrije tekst',
+        matches: [
+          'Voeg sjabloon in voor besluit of vrij tekstveld (bijvoorbeeld voor een vraag, antwoord of tussenkomst)',
+        ],
+        contexts: [
+          'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
+        ],
+        disabledInContexts: [],
+      },
+      {
+        id: 'b04fc03e-e8ff-496a-9343-1f07b4f55551',
+        title: 'Minimaal besluit',
+        matches: [
+          'Voeg sjabloon in voor besluit of vrij tekstveld (bijvoorbeeld voor een vraag, antwoord of tussenkomst)',
+        ],
+        contexts: [
+          'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
+        ],
+        disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
+      },
+      {
+        id: '2deed136-94c2-47ec-a542-8746cd020579',
+        title: 'Aanvullend Reglement besluit',
+        matches: [
+          'Voeg sjabloon in voor besluit of vrij tekstveld (bijvoorbeeld voor een vraag, antwoord of tussenkomst)',
+        ],
+        contexts: [
+          'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
+        ],
+        disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
+      },
+      {
+        id: '39c31a7e-2ba9-11e9-88cf-83ebfda837dc',
+        title: 'Generiek besluit (klassieke stijl)',
+        matches: [],
+        contexts: [],
+        disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
+      },
+      {
+        id: '6933312e-2bac-11e9-af69-3baeff70b1a8',
+        title: 'Generiek besluit (nieuwe stijl)',
+        matches: [],
+        contexts: [],
+        disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
+      },
+    ];
+  }
 }

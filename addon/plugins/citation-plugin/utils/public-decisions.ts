@@ -95,15 +95,16 @@ const getCountQuery = ({
         ?session besluit:behandelt ?agendaPoint.
         ?agendaPointTreatment dct:subject ?agendaPoint;
           prov:generated ?decision.
-        ?decision eli:title ?decisionTitle.
+        ?decision eli:title ?decisionTitleViaAgenda.
       }
       OPTIONAL {
         ?session ext:uittreksel ?treatment.
         ?treatment mu:uuid ?treatmentUuid.
         ?treatment ext:uittrekselBvap ?agendaPointTreatment.
         ?agendaPointTreatment prov:generated ?decision.
-        ?decision eli:title ?decisionTitle.
+        ?decision eli:title ?decisionTitleViaTreatment.
       }
+      BIND(COALESCE(?decisionTitleViaAgenda, ?decisionTitleViaTreatment) as ?decisionTitle)
       ${filterString}
     }
   `;
@@ -145,15 +146,16 @@ const getQuery = ({
         ?session besluit:behandelt ?agendaPoint.
         ?agendaPointTreatment dct:subject ?agendaPoint;
           prov:generated ?decision.
-        ?decision eli:title ?decisionTitle.
+        ?decision eli:title ?decisionTitleViaAgenda.
       }
       OPTIONAL {
         ?session ext:uittreksel ?treatment.
         ?treatment mu:uuid ?treatmentUuid.
         ?treatment ext:uittrekselBvap ?agendaPointTreatment.
         ?agendaPointTreatment prov:generated ?decision.
-        ?decision eli:title ?decisionTitle.
+        ?decision eli:title ?decisionTitleViaTreatment.
       }
+      BIND(COALESCE(?decisionTitleViaAgenda, ?decisionTitleViaTreatment) as ?decisionTitle)
       ${filterString}
     }
     ORDER BY DESC (?documentDate) (?decisionTitle) LIMIT ${pageSize} OFFSET ${
