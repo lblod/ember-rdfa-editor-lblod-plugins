@@ -260,6 +260,8 @@ export default class BesluitSampleController extends Controller {
       },
       besluitType: {
         endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
+        classificatieUri:
+          'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001',
       },
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
