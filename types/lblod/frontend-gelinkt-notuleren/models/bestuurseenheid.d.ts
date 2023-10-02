@@ -1,11 +1,12 @@
 declare module '@lblod/frontend-gelinkt-notuleren/models/bestuurseenheid' {
-  import Model, { AsyncBelongsTo } from '@ember-data/model';
+  import ObjectProxy from '@ember/object/proxy';
   import BestuurseenheidClassificatieCodeModel from '@lblod/frontend-gelinkt-notuleren/models/bestuurseenheid-classificatie';
-  export default class BestuurseenheidModel extends Model {
+
+  export default class BestuurseenheidModel extends ObjectProxy {
     naam: string;
     uri: string;
 
-    classificatie: AsyncBelongsTo<BestuurseenheidClassificatieCodeModel>;
+    classificatie: Promise<BestuurseenheidClassificatieCodeModel>;
 
     rdfaBindings: Record<string, string>;
   }
