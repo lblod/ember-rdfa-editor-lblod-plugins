@@ -1,5 +1,35 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 14.0.0
+
+### Major Changes
+
+- [#314](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/314) [`a4402a0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a4402a0eb3acc4b7184ed362451875a6cf43be76) Thanks [@piemonkey](https://github.com/piemonkey)! - Remove Current Session Service from plugins, now classificatie uri needs to be passed in to the besluit-type plugin
+
+- [#313](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/313) [`d4127ce`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d4127cece3424051447b0b3407202f0f05f23512) Thanks [@piemonkey](https://github.com/piemonkey)! - Breaking change: Standard Template plugin now requires a list of templates to be passed in.
+  No depends on ember-data.
+
+### Patch Changes
+
+- [#309](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/309) [`679b030`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/679b030539d5b604e5eaa4276a4e3d966998fc3f) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4539: Rename `besluit` to `gemeentebesluit`
+
+- [#310](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/310) [`b07035f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b07035f8568ea397a5ed6514701ebedb284078b9) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4501: Fail gracefully when house number does not exist
+
+  When house number does not exist provide user with an alternative of inserting
+  address with just the street information.
+
+- [#309](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/309) [`679b030`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/679b030539d5b604e5eaa4276a4e3d966998fc3f) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4539: Rename references to `decision` in Citation plugin
+
+  Instead of using `decision` use `legalDocument` in Citation plugin, to not confuse with `besluit` usage (which also means "decision" in Flemish).
+
+- [#311](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/311) [`bb8eee6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/bb8eee6f60acaae7c243b85a30979137757ba1dc) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4544: Decision title sometimes is not present from public decisions query
+
+- [#308](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/308) [`39f3105`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/39f31053b59a5077c9a118431154c6d766f494eb) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4534: Citation insert card filter enhancement
+
+- [#307](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/307) [`03ab824`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/03ab824d7dbe3eab6a86b6b0aa6c99a27d9fbeee) Thanks [@elpoelma](https://github.com/elpoelma)! - Allow municipality and street fields of address-variable to be cleared when editing
+
+- [#312](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/312) [`52420c6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/52420c62846b18532b1d87b8d746c201ac1be408) Thanks [@elpoelma](https://github.com/elpoelma)! - reset address-edit input fields when `currentAddress` property changes
+
 ## 13.0.0
 
 ### Major Changes
