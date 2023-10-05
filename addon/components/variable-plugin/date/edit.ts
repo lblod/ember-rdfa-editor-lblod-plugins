@@ -125,6 +125,13 @@ export default class DateEditComponent extends Component<Args> {
     return unwrapOr(false, this.selectedDateNode?.attrs.custom as boolean);
   }
 
+  get isCustomAllowed(): boolean {
+    return unwrapOr(
+      true,
+      this.selectedDateNode?.attrs.customAllowed as boolean,
+    );
+  }
+
   get dateFormatType(): string {
     if (this.isCustom) {
       return 'custom';

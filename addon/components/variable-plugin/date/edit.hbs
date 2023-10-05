@@ -56,16 +56,18 @@
               />
             </AuFormRow>
           {{/each}}
-          <AuFormRow>
-            <AuControlRadio
-              @label={{t "date-plugin.card.custom-date" }}
-              @identifier="custom"
-              @name="dateFormat"
-              @value="custom"
-              checked={{eq this.dateFormatType "custom"}}
-              @onChange={{this.setDateFormatFromKey}}
-            />
-          </AuFormRow>
+          {{#if this.isCustomAllowed}}
+            <AuFormRow>
+              <AuControlRadio
+                @label={{t "date-plugin.card.custom-date" }}
+                @identifier="custom"
+                @name="dateFormat"
+                @value="custom"
+                checked={{eq this.dateFormatType "custom"}}
+                @onChange={{this.setDateFormatFromKey}}
+              />
+            </AuFormRow>
+          {{/if}}  
           {{#if (eq this.dateFormatType "custom")}}
             <AuFormRow @alignment="post">
               <AuButton @skin="secondary" @icon="info-circle"
