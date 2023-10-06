@@ -14,6 +14,7 @@ import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import IntlService from 'ember-intl/services/intl';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',
@@ -52,11 +53,13 @@ const moveSelectedStructure = (
       );
       const parent = doc.resolve(currentStructure.pos).parent;
       if (parent.childCount === 1) {
+        const translationWithDocLang = getTranslationFunction(state);
         transaction.insert(
           currentStructure.pos,
           schema.node(schema.nodes['placeholder'], {
-            placeholderText: intl.t(
+            placeholderText: translationWithDocLang(
               'article-structure-plugin.placeholder.generic.body',
+              intl?.t('article-structure-plugin.placeholder.generic.body') || '',
             ),
           }),
         );

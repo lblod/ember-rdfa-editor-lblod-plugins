@@ -41,6 +41,7 @@ const wrapStructureContent = (
         schema,
         content: contentToWrap,
         intl,
+        state,
       });
     } catch (e) {
       return false;
