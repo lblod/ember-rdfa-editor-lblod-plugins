@@ -11,6 +11,8 @@ import {
   besluitArticleStructure,
 } from './utils/nodes';
 
+export { default as instantiateUuids } from './utils/instantiate-uuids';
+
 export const besluitNodes = {
   besluit,
   besluit_title,

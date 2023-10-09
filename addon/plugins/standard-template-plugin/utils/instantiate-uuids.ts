@@ -17,7 +17,8 @@ import { v4 as uuidv4 } from 'uuid';
  */
 
 export default function instantiateUuids(templateString: string) {
-  const generateBoundUuid = memoize(uuidv4) as (...args: unknown[]) => string;
+  // We're not interested in the args in this case, we just use them to memoize
+  const generateBoundUuid = memoize((..._args: unknown[]) => uuidv4());
 
   const determineFunction = (string: string) => {
     switch (string) {
@@ -31,18 +32,9 @@ export default function instantiateUuids(templateString: string) {
   };
   return templateString.replace(
     /\$\{(generateUuid|generateBoundUuid)\(([^()]*)\)\}/g,
-    (string) => {
-      const match = /\$\{(generateUuid|generateBoundUuid)\(([^()]*)\)\}/.exec(
-        string,
-      );
-      if (match) {
-        const functionName = match[1];
-        const functionArgs = match[2];
-        const func = determineFunction(functionName);
-        return functionArgs ? func(functionArgs) : func();
-      } else {
-        return string;
-      }
+    (_match, functionName, functionArgs) => {
+      const func = determineFunction(functionName);
+      return functionArgs ? func(functionArgs) : func();
     },
   );
 }
