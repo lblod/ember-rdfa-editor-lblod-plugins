@@ -65,6 +65,7 @@ const parseDOM = [
           onlyDate,
           format: node.dataset.format,
           custom: node.dataset.custom === 'true',
+          customAllowed: node.dataset.customAllowed !== 'false',
         };
       }
       return false;
@@ -96,6 +97,7 @@ const parseDOM = [
           value: value,
           format: format,
           custom: dateNode?.dataset.custom === 'true',
+          customAllowed: dateNode?.dataset.customAllowed !== 'false',
           label,
         };
       }
@@ -108,8 +110,15 @@ const parseDOM = [
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
 
-  const { value, onlyDate, format, mappingResource, custom, label } =
-    node.attrs;
+  const {
+    value,
+    onlyDate,
+    format,
+    mappingResource,
+    custom,
+    customAllowed,
+    label,
+  } = node.attrs;
   const datatype = onlyDate ? XSD('date') : XSD('dateTime');
   let humanReadableDate: string;
   if (value) {
@@ -130,6 +139,7 @@ const serialize = (node: PNode, state: EditorState) => {
     datatype: datatype.prefixed,
     'data-format': format as string,
     'data-custom': custom ? 'true' : 'false',
+    'data-custom-allowed': customAllowed ? 'true' : 'false',
     ...(!!value && { content: value as string }),
   };
   return mappingSpan(
@@ -163,6 +173,9 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     },
     custom: {
       default: false,
+    },
+    customAllowed: {
+      default: options.allowCustomFormat,
     },
     label: { default: null },
   },
