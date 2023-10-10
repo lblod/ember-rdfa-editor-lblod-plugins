@@ -696,7 +696,7 @@ get dateOptions(){
 	- `key`: A **unique** identifier used for identification in the internal code. 
 	- `dateFormat`: The date format used when this is selected.
 	- `dateTimeFormat`: The datetime format to use when this is selected. Used when the user selects "Include time".
-- `allowCustomFormat`: true/false, determines if the option to insert a fully custom format is available.
+- `allowCustomFormat`: true by default, determines if the option to insert a fully custom format is available for newly created date nodes.
 
 The syntax of formats can be found at [date-fns](https://date-fns.org/v2.29.3/docs/format).
 

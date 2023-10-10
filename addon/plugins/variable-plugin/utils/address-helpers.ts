@@ -22,7 +22,7 @@ type StreetSearchResult = {
       gemeente: {
         gemeentenaam: { geografischeNaam: { spelling: string } };
       };
-      straatnaam: {
+      straatnaam?: {
         straatnaam: {
           geografischeNaam: { spelling: string };
         };
@@ -135,9 +135,11 @@ export async function fetchStreets(term: string, municipality: string) {
   });
   if (result.ok) {
     const jsonResult = (await result.json()) as StreetSearchResult;
-    const streetnames = jsonResult.adresMatches.map((entry) => {
-      return entry.straatnaam.straatnaam.geografischeNaam.spelling;
-    });
+
+    const streetnames = jsonResult.adresMatches
+      .map((entry) => entry.straatnaam?.straatnaam.geografischeNaam.spelling)
+      .filter(Boolean);
+
     return streetnames;
   } else {
     throw new AddressError({
