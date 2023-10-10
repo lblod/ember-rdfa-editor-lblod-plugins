@@ -17,6 +17,7 @@ export default class InsertTitleCardComponent extends Component<Args> {
       insertDocumentTitle({
         placeholder: this.intl.t(
           'document-title-plugin.document-title-placeholder',
+          { locale: this.args.controller.documentLanguage },
         ),
       }),
       {
@@ -31,6 +32,7 @@ export default class InsertTitleCardComponent extends Component<Args> {
       insertDocumentTitle({
         placeholder: this.intl.t(
           'document-title-plugin.document-title-placeholder',
+          { locale: this.args.controller.documentLanguage },
         ),
       }),
       {

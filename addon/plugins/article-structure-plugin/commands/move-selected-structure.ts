@@ -59,7 +59,8 @@ const moveSelectedStructure = (
           schema.node(schema.nodes['placeholder'], {
             placeholderText: translationWithDocLang(
               'article-structure-plugin.placeholder.generic.body',
-              intl?.t('article-structure-plugin.placeholder.generic.body') || '',
+              intl?.t('article-structure-plugin.placeholder.generic.body') ||
+                '',
             ),
           }),
         );
