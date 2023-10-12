@@ -1,6 +1,6 @@
-<AuList @divider={{true}} class='table-of-contents'>
+<AuList @divider={{true}} class='table-of-contents' as |Item|>
   {{#each @entries as |outlineEntry|}}
-    <AuList::Item>
+    <Item>
       <AuButton
         @wrap={{true}}
         {{! template-lint-disable no-capital-arguments }}
@@ -16,6 +16,6 @@
           @onEntryClick={{@onEntryClick}}
         />
       {{/if}}
-    </AuList::Item>
+    </Item>
   {{/each}}
 </AuList>
