@@ -5,13 +5,12 @@ import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { hasGroups } from '@lblod/ember-rdfa-editor/utils/node-utils';
 import { inject as service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { ComponentLike } from '@glint/template';
 
 export type VariableConfig = {
   label: string;
-  component: {
-    path: string;
-    options?: unknown;
-  };
+  component: ComponentLike;
+  options?: unknown;
 };
 
 type Args = {

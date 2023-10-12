@@ -25,11 +25,10 @@
         {{variable.label}}
       </PowerSelect>
       {{#if this.selectedVariable}}
-        {{component 
-          this.selectedVariable.component.path 
-          controller=this.controller 
-          options=this.selectedVariable.component.options
-        }}
+        <this.selectedVariable.component
+          @controller={{this.controller}}
+          @options={{this.selectedVariable.options}}
+        />
       {{/if}}
     </c.content>
   </AuCard>
