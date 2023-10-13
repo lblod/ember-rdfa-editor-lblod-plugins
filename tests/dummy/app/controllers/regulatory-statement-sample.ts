@@ -87,7 +87,6 @@ import {
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
-import { ComponentLike } from '@glint/template';
 import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/insert';
 import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
 import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
@@ -186,30 +185,29 @@ export default class RegulatoryStatementSampleController extends Controller {
     return [
       {
         label: 'text',
-        component: TextVariableInsertComponent as unknown as ComponentLike,
+        component: TextVariableInsertComponent,
       },
       {
         label: 'number',
-        component: NumberInsertComponent as unknown as ComponentLike,
+        component: NumberInsertComponent,
       },
       {
         label: 'date',
-        component: DateInsertVariableComponent as unknown as ComponentLike,
+        component: DateInsertVariableComponent,
       },
       {
         label: 'location',
-        component: LocationInsertComponent as unknown as ComponentLike,
+        component: LocationInsertComponent,
         options: this.locationOptions,
       },
       {
         label: 'codelist',
-        component: CodelistInsertComponent as unknown as ComponentLike,
+        component: CodelistInsertComponent,
         options: this.codelistOptions,
       },
       {
         label: 'address',
-        component:
-          VariablePluginAddressInsertVariableComponent as unknown as ComponentLike,
+        component: VariablePluginAddressInsertVariableComponent,
       },
     ];
   }
