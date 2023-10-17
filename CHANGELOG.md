@@ -1,5 +1,18 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 14.1.0
+
+### Minor Changes
+
+- [#315](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/315) [`01163d8`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/01163d8d45b801a50728b9aeabaf0e52a1cf9a33) Thanks [@piemonkey](https://github.com/piemonkey)! - Export standard-template-plugin's uuid instantiation function
+
+### Patch Changes
+
+- [#317](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/317) [`1d28bc9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1d28bc9b9b0e07e8eb5698988dfe0e3dd946c2a3) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4538: Display correctly that there are no streets when searching in the address plugin
+
+- [#316](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/316) [`e109035`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e109035809df341ede0a03fb0b146909883903ef) Thanks [@x-m-el](https://github.com/x-m-el)! - - Bugfix: `allowCustomFormat` for rdfa-date variable will now disable custom formats if set to false.
+  - No changes for old documents: date variables in old documents will allow custom formats, which is the default.
+
 ## 14.0.0
 
 ### Major Changes
