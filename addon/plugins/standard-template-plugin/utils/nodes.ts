@@ -205,7 +205,9 @@ export const besluitArticleStructure: StructureSpec = {
               schema.node('placeholder', {
                 placeholderText: translationWithDocLang(
                   'article-structure-plugin.placeholder.article.body',
-                  intl?.t('article-structure-plugin.placeholder.article.body') || '',
+                  intl?.t(
+                    'article-structure-plugin.placeholder.article.body',
+                  ) || '',
                 ),
               }),
             ),
