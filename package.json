@@ -52,7 +52,7 @@
     "ember-resources": "^6.1.1",
     "ember-velcro": "^2.1.0",
     "fetch-sparql-endpoint": "^3.0.0",
-    "n2words": "^1.16.4",
+    "n2words": "^1.18.0",
     "process": "0.11.10",
     "rdf-ext": "^2.1.0",
     "rdf-validate-shacl": "^0.4.5",

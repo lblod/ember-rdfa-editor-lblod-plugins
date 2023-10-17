@@ -7,6 +7,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.subsection.heading',
@@ -26,8 +27,9 @@ export const subsectionSpec: StructureSpec = {
     removeWithContent:
       'article-structure-plugin.remove-with-content.subsection',
   },
-  constructor: ({ schema, number, intl, content }) => {
+  constructor: ({ schema, number, intl, content, state }) => {
     const numberConverted = romanize(number ?? 1);
+    const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `subsection`,
       { resource: `http://data.lblod.info/subsections/${uuid()}` },
@@ -36,7 +38,10 @@ export const subsectionSpec: StructureSpec = {
           'structure_header',
           { level: 6, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: intl?.t(PLACEHOLDERS.title),
+            placeholderText: translationWithDocLang(
+              PLACEHOLDERS.title,
+              intl?.t(PLACEHOLDERS.title) || '',
+            ),
           }),
         ),
         schema.node(
@@ -47,7 +52,10 @@ export const subsectionSpec: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: intl?.t(PLACEHOLDERS.body),
+                placeholderText: translationWithDocLang(
+                  PLACEHOLDERS.body,
+                  intl?.t(PLACEHOLDERS.body) || '',
+                ),
               }),
             ),
         ),
