@@ -4,3 +4,4 @@ import { capitalize as utilCapitalize } from '../utils/strings';
 export default helper(function capitalize([string]: string[]) {
   return utilCapitalize(string);
 });
+export const capitalize = utilCapitalize;
