@@ -1,8 +1,8 @@
-<Velcro @placement={{this.placement}} as |velcro|>
+<this.Velcro @placement={{this.placement}} as |velcro|>
   {{#let velcro.loop as |loop|}}
     {{yield (hash velcroHook=velcro.hook handleHover=(modifier this.hover)) to='hover' }}
     {{#if this.tooltipOpen}}
       {{yield loop to='tooltip'}}
     {{/if}}
   {{/let}}
-</Velcro>
+</this.Velcro>
