@@ -21,7 +21,7 @@
                 @onChange={{this.changeIncludeTime}}
               />
               {{#if this.isCustom}}
-                <Velcro @placement="top" @offsetOptions={{hash mainAxis=10}} as |velcro|>
+                <this.Velcro @placement="top" @offsetOptions={{hash mainAxis=10}} as |velcro|>
                   <AuBadge
                     @size="small"
                     @icon="info-circle"
@@ -40,7 +40,7 @@
                       {{t 'date-plugin.card.info-custom-time'}}
                     </AuPill>
                   {{/if}}
-                </Velcro>
+                </this.Velcro>
               {{/if}}
             </AuFormRow>
           </VariablePlugin::Date::DateTimePicker>
@@ -67,7 +67,7 @@
                 @onChange={{this.setDateFormatFromKey}}
               />
             </AuFormRow>
-          {{/if}}  
+          {{/if}}
           {{#if (eq this.dateFormatType "custom")}}
             <AuFormRow @alignment="post">
               <AuButton @skin="secondary" @icon="info-circle"

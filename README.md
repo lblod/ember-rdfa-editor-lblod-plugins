@@ -5,8 +5,8 @@ related to the LBLOD Project.
 
 ## Compatibility
 
-- Ember.js and ember data v3.28 or 4.x
-  note: we smoke-test for 3.28 but develop on the latest 4.x minor. The 5.x range is currently untested and not officially supported, but we accept issues and PRs to do so.
+- Ember.js 4.8+
+  The 5.x range is currently untested and not officially supported, but we accept issues and PRs to do so.
 
 - Embroider or ember-auto-import v2
 - Node 18 or above
@@ -368,7 +368,7 @@ This plugin provides an Ember service, `import-rdfa-snippet` which allows you to
 manner:
 
 ```js
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 // An entry point to download the resouce (e.g a route) in your host app.
 // (...)
@@ -809,6 +809,25 @@ Template comments have a specific style that can be imported in the stylesheet w
 ```css
 @import 'template-comments-plugin';
 ```
+
+## Embroider
+To use `@lblod/ember-rdfa-editor-lblod-plugins` with Embroider some extra Webpack configuration is needed, which you can import like this:
+
+```js
+// ember-cli-build.js
+  // ...
+  const { Webpack } = require('@embroider/webpack');
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    // other Embroider options
+    packagerOptions: {
+      webpackConfig: require('@lblod/ember-rdfa-editor-lblod-plugins/webpack-config'),
+    },
+    extraPublicTrees: [],
+  });
+};
+```
+
+If you already provide some Webpack configuration, you can deep merge that with the config object we provide.
 
 ## Contributing
 

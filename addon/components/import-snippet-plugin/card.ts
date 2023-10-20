@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
 import { SayController } from '@lblod/ember-rdfa-editor';

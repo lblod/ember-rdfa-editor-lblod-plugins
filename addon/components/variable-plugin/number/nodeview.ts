@@ -6,12 +6,13 @@ import {
   SayView,
 } from '@lblod/ember-rdfa-editor';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
 import { isBlank } from '@ember/utils';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
+import { Velcro } from 'ember-velcro';
 
 type Args = {
   getPos: () => number | undefined;
@@ -24,6 +25,8 @@ type Args = {
 };
 
 export default class NumberNodeviewComponent extends Component<Args> {
+  Velcro = Velcro;
+
   @localCopy('args.node.attrs.value', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;

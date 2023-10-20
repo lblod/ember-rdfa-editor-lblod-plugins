@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { v4 as uuid } from 'uuid';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import includeInstructions from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/includeInstructions';
 import {
   NON_ZONAL_URI,
