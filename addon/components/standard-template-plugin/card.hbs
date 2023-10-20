@@ -1,7 +1,7 @@
 <StandardTemplatePlugin::TemplateProvider @controller={{@controller}} @templates={{@templates}} as |provider|>
   {{#if provider.hasApplicableTemplates}}
     {{#each provider.applicableTemplates as |template|}}
-      <AuList::Item>
+      <li class="au-c-list__item">
         <AuButton
           @skin="link"
           @icon="add"
@@ -10,7 +10,7 @@
         >
           {{template.title}}
         </AuButton>
-      </AuList::Item>
+      </li>
     {{/each}}
   {{/if}}
 </StandardTemplatePlugin::TemplateProvider>
