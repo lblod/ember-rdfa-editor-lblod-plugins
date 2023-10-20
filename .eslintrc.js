@@ -40,6 +40,7 @@ module.exports = {
         './blueprints/*/index.js',
         './config/**/*.js',
         './tests/dummy/config/**/*.js',
+        './webpack-config.js',
       ],
       parserOptions: {
         sourceType: 'script',
