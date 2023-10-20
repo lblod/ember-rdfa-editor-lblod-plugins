@@ -1,14 +1,21 @@
-const editorWebPackConfig = require('@lblod/ember-rdfa-editor/webpack-config');
 // eslint-disable-next-line node/no-unpublished-require
 const webpack = require('webpack');
 
 module.exports = {
-  ...editorWebPackConfig,
+  node: {
+    global: true,
+    __filename: true,
+    __dirname: true,
+  },
+  resolve: {
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify'),
+    },
+  },
   plugins: [
     new webpack.ProvidePlugin({
-      process: 'process/browser',
-    }),
-    new webpack.ProvidePlugin({
+      process: 'process/browser.js',
       Buffer: ['buffer', 'Buffer'],
     }),
   ],
