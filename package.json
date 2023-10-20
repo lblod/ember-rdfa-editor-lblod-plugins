@@ -48,7 +48,6 @@
     "ember-cli-htmlbars": "^6.1.1",
     "ember-concurrency": "^2.3.7",
     "ember-mu-transform-helpers": "^2.0.0",
-    "ember-power-select": "^6.0.1",
     "ember-resources": "^6.1.1",
     "ember-velcro": "^2.1.0",
     "fetch-sparql-endpoint": "^3.0.0",
@@ -117,6 +116,7 @@
     "ember-intl": "^5.7.2",
     "ember-load-initializers": "^2.1.2",
     "ember-page-title": "^8.0.0",
+    "ember-power-select": "^7.1.2",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^11.0.1",
     "ember-simple-auth": "4.2.2",
@@ -147,7 +147,9 @@
     "@lblod/ember-rdfa-editor": "^6.0.0",
     "ember-concurrency": "^2.3.7",
     "ember-modifier": "^3.2.7",
-    "ember-source": "^3.28.0 || ^4.0.0"
+    "ember-source": "^3.28.0 || ^4.0.0",
+    "ember-power-select": "6.x || 7.x",
+    "@ember/string": "3.x"
   },
   "overrides": {
     "ember-intl": {
