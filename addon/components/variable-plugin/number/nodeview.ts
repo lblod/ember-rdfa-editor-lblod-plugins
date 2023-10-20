@@ -63,7 +63,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
     if (!this.writtenNumber) {
       return value;
     } else {
-      return numberToWords(Number(value), { lang: 'nl' });
+      return numberToWords(Number(value), { lang: this.documentLanguage });
     }
   }
 

@@ -9,6 +9,7 @@ import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
 import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
 import IntlService from 'ember-intl/services/intl';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 interface InsertMotivationArgs {
   intl: IntlService;
@@ -20,13 +21,17 @@ export default function insertMotivation({
   validateShapes,
 }: InsertMotivationArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
+    const translationWithDocLang = getTranslationFunction(state);
     const { selection, schema } = state;
     const nodeToInsert = schema.node('motivering', { __rdfaId: uuid() }, [
       schema.node(
         'paragraph',
         null,
         schema.node('placeholder', {
-          placeholderText: intl.t('besluit-plugin.placeholder.government-body'),
+          placeholderText: translationWithDocLang(
+            'besluit-plugin.placeholder.government-body',
+            intl.t('besluit-plugin.placeholder.government-body'),
+          ),
         }),
       ),
       schema.node(
@@ -40,8 +45,9 @@ export default function insertMotivation({
         schema.node('list_item', null, [
           schema.node('paragraph', null, [
             schema.node('placeholder', {
-              placeholderText: intl.t(
+              placeholderText: translationWithDocLang(
                 'besluit-plugin.placeholder.legal-jurisdiction',
+                intl.t('besluit-plugin.placeholder.legal-jurisdiction'),
               ),
             }),
           ]),
@@ -52,14 +58,22 @@ export default function insertMotivation({
         {
           level: 5,
         },
-        [schema.text(intl.t('besluit-plugin.text.legal-context'))],
+        [
+          schema.text(
+            translationWithDocLang(
+              'besluit-plugin.text.legal-context',
+              intl.t('besluit-plugin.text.legal-context'),
+            ),
+          ),
+        ],
       ),
       schema.node('bullet_list', null, [
         schema.node('list_item', null, [
           schema.node('paragraph', null, [
             schema.node('placeholder', {
-              placeholderText: intl.t(
+              placeholderText: translationWithDocLang(
                 'besluit-plugin.placeholder.insert-legal-context',
+                intl.t('besluit-plugin.placeholder.insert-legal-context'),
               ),
             }),
           ]),
@@ -70,14 +84,22 @@ export default function insertMotivation({
         {
           level: 5,
         },
-        [schema.text(intl.t('besluit-plugin.text.factual-context'))],
+        [
+          schema.text(
+            translationWithDocLang(
+              'besluit-plugin.text.factual-context',
+              intl.t('besluit-plugin.text.factual-context'),
+            ),
+          ),
+        ],
       ),
       schema.node('bullet_list', null, [
         schema.node('list_item', null, [
           schema.node('paragraph', null, [
             schema.node('placeholder', {
-              placeholderText: intl.t(
+              placeholderText: translationWithDocLang(
                 'besluit-plugin.placeholder.insert-factual-context',
+                intl.t('besluit-plugin.placeholder.insert-factual-context'),
               ),
             }),
           ]),

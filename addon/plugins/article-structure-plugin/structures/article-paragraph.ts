@@ -7,6 +7,7 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 const PLACEHOLDERS = {
   body: 'article-structure-plugin.placeholder.paragraph.body',
@@ -25,8 +26,9 @@ export const articleParagraphSpec: StructureSpec = {
   },
   continuous: false,
   noUnwrap: true,
-  constructor: ({ schema, number, intl }) => {
+  constructor: ({ schema, number, intl, state }) => {
     const numberConverted = number?.toString() ?? '1';
+    const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `article_paragraph`,
       {
@@ -37,7 +39,10 @@ export const articleParagraphSpec: StructureSpec = {
         'paragraph',
         {},
         schema.node('placeholder', {
-          placeholderText: intl?.t(PLACEHOLDERS.body),
+          placeholderText: translationWithDocLang(
+            PLACEHOLDERS.body,
+            intl?.t(PLACEHOLDERS.body) || '',
+          ),
         }),
       ),
     );

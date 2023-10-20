@@ -1,5 +1,29 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 14.2.0
+
+### Minor Changes
+
+- [#322](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/322) [`a168dc5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a168dc54b5ddc0a4a5b3bf8c521ccb914bb91b7a) Thanks [@x-m-el](https://github.com/x-m-el)! - For article-structure plugin
+
+  - The `StructureSpec`'s `constructor` now also contains the optional argument `state` (an EditorState)
+  - The existing structures' placeholders are translated using the document language
+    - This is only the case if emberApplication plugin is configured.
+      **Recommended change**: activate emberApplication plugin
+    - Will fallback to translating based on browser locale (=old logic) if emberApplication plugin is not configured
+
+- [#322](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/322) [`690738f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/690738f56692555880c5ad29c25c76f400a48bcb) Thanks [@x-m-el](https://github.com/x-m-el)! - For decision-plugin and standard-template-plugin
+
+  Make use of `state` argument to translate placeholders based on document language instead of browser locale
+  Depending on the place where placeholders are defined either of the following logic happens:
+
+  - will always use document language
+  - will use document language if emberApplication plugin is active. If not, defaults to browser locale (like before)
+
+### Patch Changes
+
+- [#322](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/322) [`5ceca68`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/5ceca68ec271477dfcf75c7d9fba35c21880642e) Thanks [@x-m-el](https://github.com/x-m-el)! - Using "show as words" for a number variable will convert the number to a string in the language in the document, instead of always showing Dutch.
+
 ## 14.1.0
 
 ### Minor Changes

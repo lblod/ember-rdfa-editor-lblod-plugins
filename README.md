@@ -140,6 +140,7 @@ export type StructureSpec = {
     number?: number;
     intl?: IntlService;
     content?: PNode | Fragment;
+    state?: EditorState;
   }) => {
     node: PNode;
     selectionConfig: {

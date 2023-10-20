@@ -13,6 +13,7 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.article.heading',
@@ -30,8 +31,9 @@ export const articleSpec: StructureSpec = {
     removeWithContent: 'article-structure-plugin.remove-with-content.article',
   },
   continuous: true,
-  constructor: ({ schema, number, content, intl }) => {
+  constructor: ({ schema, number, content, intl, state }) => {
     const numberConverted = number?.toString() ?? '1';
+    const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `article`,
       { resource: `http://data.lblod.info/articles/${uuid()}` },
@@ -40,7 +42,10 @@ export const articleSpec: StructureSpec = {
           'article_header',
           { level: 4, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: intl?.t(PLACEHOLDERS.title),
+            placeholderText: translationWithDocLang(
+              PLACEHOLDERS.title,
+              intl?.t(PLACEHOLDERS.title) || '',
+            ),
           }),
         ),
         schema.node(
@@ -51,7 +56,10 @@ export const articleSpec: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: intl?.t(PLACEHOLDERS.body),
+                placeholderText: translationWithDocLang(
+                  PLACEHOLDERS.body,
+                  intl?.t(PLACEHOLDERS.body) || '',
+                ),
               }),
             ),
         ),
