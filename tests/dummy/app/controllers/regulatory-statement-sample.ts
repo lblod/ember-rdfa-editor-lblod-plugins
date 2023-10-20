@@ -86,6 +86,12 @@ import {
   date,
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
+import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
+import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/insert';
+import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
+import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
+import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
+import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -179,41 +185,29 @@ export default class RegulatoryStatementSampleController extends Controller {
     return [
       {
         label: 'text',
-        component: {
-          path: 'variable-plugin/text/insert',
-        },
+        component: TextVariableInsertComponent,
       },
       {
         label: 'number',
-        component: {
-          path: 'variable-plugin/number/insert',
-        },
+        component: NumberInsertComponent,
       },
       {
         label: 'date',
-        component: {
-          path: 'variable-plugin/date/insert-variable',
-        },
+        component: DateInsertVariableComponent,
       },
       {
         label: 'location',
-        component: {
-          path: 'variable-plugin/location/insert',
-          options: this.locationOptions,
-        },
+        component: LocationInsertComponent,
+        options: this.locationOptions,
       },
       {
         label: 'codelist',
-        component: {
-          path: 'variable-plugin/codelist/insert',
-          options: this.codelistOptions,
-        },
+        component: CodelistInsertComponent,
+        options: this.codelistOptions,
       },
       {
         label: 'address',
-        component: {
-          path: 'variable-plugin/address/insert-variable',
-        },
+        component: VariablePluginAddressInsertVariableComponent,
       },
     ];
   }

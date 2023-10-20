@@ -15,6 +15,7 @@ import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/n
 import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 export const besluit_title: NodeSpec = {
   content: 'paragraph+',
@@ -180,7 +181,8 @@ export const besluitArticleStructure: StructureSpec = {
     remove: 'article-structure-plugin.remove.article',
   },
   limitTo: 'besluit',
-  constructor: ({ schema, number, content, intl }) => {
+  constructor: ({ schema, number, content, intl, state }) => {
+    const translationWithDocLang = getTranslationFunction(state);
     const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
       `besluit_article`,
@@ -201,8 +203,11 @@ export const besluitArticleStructure: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: intl?.t(
+                placeholderText: translationWithDocLang(
                   'article-structure-plugin.placeholder.article.body',
+                  intl?.t(
+                    'article-structure-plugin.placeholder.article.body',
+                  ) || '',
                 ),
               }),
             ),
