@@ -5,7 +5,7 @@ import {
   insertArticleContainer,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { VALIDATION_KEY } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 
