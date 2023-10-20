@@ -1,5 +1,84 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 15.0.0
+
+### Major Changes
+
+- [#323](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/323) [`5bedaab`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/5bedaabb7efa05626012333e63095671309e9f97) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove usage of `component` helper in preparation of embroider-compatibility.
+
+  This removal also causes a change in the variable-plugin insert-component API, the insert-components now need to be passed directly (instead of their path).
+
+  Before:
+
+  ```typescript
+  get variableTypes(): VariableConfig[] {
+    return [
+      {
+        label: 'text',
+        component: {
+          path: 'variable-plugin/text/insert',
+        },
+      },
+      {
+        label: 'location',
+        component: {
+          path: 'variable-plugin/location/insert',
+          options: {
+            endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+          },
+        },
+      },
+    ];
+  }
+  ```
+
+  After:
+
+  ```typescript
+  import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
+  import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
+  ...
+  get variableTypes() {
+    return [
+      {
+        label: 'text',
+        component: TextVariableInsertComponent,
+      },
+      {
+        label: 'location',
+        component: LocationInsertComponent,
+        options: {
+          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        },
+      },
+    ];
+  }
+  ```
+
+- [#333](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/333) [`04ea965`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/04ea96580189ee0a9440fe77618b8b2c1d9941a5) Thanks [@elpoelma](https://github.com/elpoelma)! - Drop support for ember 3.28
+  The minimum required version of `ember-source` is now 4.8.0.
+  The 5.x range remains untested.
+
+### Minor Changes
+
+- [#332](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/332) [`cf7082f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cf7082fdd89c862936276cfb562a0a07e5a49c4b) Thanks [@elpoelma](https://github.com/elpoelma)! - Expose a Webpack config for Embroidered apps
+
+- [#332](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/332) [`cf7082f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cf7082fdd89c862936276cfb562a0a07e5a49c4b) Thanks [@elpoelma](https://github.com/elpoelma)! - Specify `@ember/string` 3.x as a peerdep
+
+- [#334](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/334) [`fd271a1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/fd271a1dd9b32e4081707ea416f35be70f57aa30) Thanks [@elpoelma](https://github.com/elpoelma)! - Add support for the ember-concurrency 3.x range
+
+- [#332](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/332) [`cf7082f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cf7082fdd89c862936276cfb562a0a07e5a49c4b) Thanks [@elpoelma](https://github.com/elpoelma)! - Specify `ember-power-select` 6.x|7.x as a peerdep
+
+- [#325](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/325) [`4c402d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4c402d21f6e45a03436fd5155bb508ce6c3fb091) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove redundant types for `string-set` ember-data transform
+
+- [#324](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/324) [`95634ed`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/95634eda12927736fa16945ff85b80876b7c0058) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove direct usages of aulist::item in order to ensure compatibility with `@appuniversum/ember-appuniversum` 2.16.0
+
+- [#325](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/325) [`4c402d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4c402d21f6e45a03436fd5155bb508ce6c3fb091) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix internal types for tracked-toolbox
+
+### Patch Changes
+
+- [#331](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/331) [`910ec85`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/910ec8596b602a0ff408da0fcec4222ad81fb75a) Thanks [@piemonkey](https://github.com/piemonkey)! - Small internal changes to allow for embroider builds
+
 ## 14.2.0
 
 ### Minor Changes
