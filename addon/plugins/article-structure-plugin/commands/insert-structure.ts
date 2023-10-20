@@ -32,7 +32,7 @@ const insertStructure = (
     }
     if (dispatch) {
       const { node: newStructureNode, selectionConfig } =
-        structureSpec.constructor({ schema, intl, content });
+        structureSpec.constructor({ schema, intl, content, state });
       const transaction = state.tr;
 
       transaction.replaceWith(

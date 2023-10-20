@@ -7,6 +7,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 const PLACEHOLDERS = {
   heading: 'article-structure-plugin.placeholder.generic.heading',
@@ -24,8 +25,9 @@ export const titleSpec: StructureSpec = {
     remove: 'article-structure-plugin.remove.title',
     removeWithContent: 'article-structure-plugin.remove-with-content.title',
   },
-  constructor: ({ schema, number, content, intl }) => {
+  constructor: ({ schema, number, content, intl, state }) => {
     const numberConverted = romanize(number ?? 1);
+    const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `title`,
       { resource: `http://data.lblod.info/titles/${uuid()}` },
@@ -34,7 +36,10 @@ export const titleSpec: StructureSpec = {
           'structure_header',
           { level: 3, number: numberConverted },
           schema.node('placeholder', {
-            placeholderText: intl?.t(PLACEHOLDERS.heading),
+            placeholderText: translationWithDocLang(
+              PLACEHOLDERS.heading,
+              intl?.t(PLACEHOLDERS.heading) || '',
+            ),
           }),
         ),
         schema.node(
@@ -45,7 +50,10 @@ export const titleSpec: StructureSpec = {
               'paragraph',
               {},
               schema.node('placeholder', {
-                placeholderText: intl?.t(PLACEHOLDERS.body),
+                placeholderText: translationWithDocLang(
+                  PLACEHOLDERS.body,
+                  intl?.t(PLACEHOLDERS.body) || '',
+                ),
               }),
             ),
         ),
