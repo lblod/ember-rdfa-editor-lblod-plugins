@@ -563,7 +563,7 @@ The `variable-plugin/insert-variable-card` can be easily configured: it expects 
 - `controller`: An instance of the `SayController` class
 - `variableTypes`: A list of `VariableConfig` objects. With each `VariableConfig` containing:
   - the `label` which should be displayed in the variable-select dropdown
-  - the `path` to the insert-variable component
+  - the `component`: class of the component which should be displayed upon selecting the variable type.
   - _optionally_ an `options` argument object which should be passed to the insert-variable component.
 
 * The `VariableConfig` type is defined as follows:
@@ -571,10 +571,8 @@ The `variable-plugin/insert-variable-card` can be easily configured: it expects 
 ```js
  type VariableConfig = {
    label: string;
-   component: {
-     path: string;
-     options?: unknown;
-   };
+   component: ComponentLike;
+   options?: unknown;
  };
 ```
 
@@ -592,49 +590,44 @@ To allows users to insert variables into a document, add the following to the ed
 `this.controller` is an instance of `SayController` and `this.variableTypes` is the list of `VariableConfig` objects which should be defined in your controller/component class:
 
 ```js
+import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
+import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/insert';
+import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
+import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
+import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
+import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
+...
 get variableTypes() {
   return [
     {
       label: 'text',
-      component: {
-        path: 'variable-plugin/text/insert',
-      },
+      component: TextVariableInsertComponent,
     },
     {
       label: 'number',
-      component: {
-        path: 'variable-plugin/number/insert',
-      },
+      component: NumberInsertComponent,
     },
     {
       label: 'date',
-      component: {
-        path: 'variable-plugin/date/insert',
-      },
+      component: DateInsertVariableComponent
     },
     {
       label: 'location',
-      component: {
-        path: 'variable-plugin/location/insert',
-        options: {
-          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
-        },
+      component: LocationInsertComponent,
+      options: {
+        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
       },
     },
     {
       label: 'codelist',
-      component: {
-        path: 'variable-plugin/codelist/insert',
-        options: {
-          endpoint: 'https://dev.roadsigns.lblod.info/sparql',
-        },
+      component: CodelistInsertComponent,
+      options: {
+        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
       },
     },
     {
       label: 'address',
-      component: {
-        path: 'variable-plugin/address/insert-variable',
-      },
+      component: VariablePluginAddressInsertVariableComponent,
     },
   ];
 }
