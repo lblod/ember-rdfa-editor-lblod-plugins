@@ -12,7 +12,7 @@ import {
 import { restartableTask, timeout } from 'ember-concurrency';
 import { trackedReset } from 'tracked-toolbox';
 import { trackedTask } from 'ember-resources/util/ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 type Args = {
