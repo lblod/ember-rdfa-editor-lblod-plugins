@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import {
   ArticleStructurePluginOptions,

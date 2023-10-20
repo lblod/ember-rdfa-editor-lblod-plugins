@@ -6,7 +6,7 @@ import {
   CodeList,
   fetchCodeListsByPublisher,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
 import { v4 as uuidv4 } from 'uuid';
