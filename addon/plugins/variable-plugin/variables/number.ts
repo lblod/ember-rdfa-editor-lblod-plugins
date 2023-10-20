@@ -73,7 +73,7 @@ const parseDOM = [
 
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
-
+  const docLang = state.doc.attrs.lang as string;
   const {
     mappingResource,
     variableInstance,
@@ -88,7 +88,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
 
   if (isNumber(value)) {
     if (writtenNumber) {
-      humanReadableContent = numberToWords(Number(value), { lang: 'nl' });
+      humanReadableContent = numberToWords(Number(value), { lang: docLang });
     } else {
       humanReadableContent = value as string;
     }

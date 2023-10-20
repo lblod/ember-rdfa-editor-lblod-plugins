@@ -8,10 +8,8 @@ import IntlService from 'ember-intl/services/intl';
 
 export type VariableConfig = {
   label: string;
-  component: {
-    path: string;
-    options?: unknown;
-  };
+  component: typeof Component;
+  options?: unknown;
 };
 
 type Args = {
