@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { v4 as uuidv4 } from 'uuid';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { modifier } from 'ember-modifier';
 

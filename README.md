@@ -368,7 +368,7 @@ This plugin provides an Ember service, `import-rdfa-snippet` which allows you to
 manner:
 
 ```js
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 // An entry point to download the resouce (e.g a route) in your host app.
 // (...)

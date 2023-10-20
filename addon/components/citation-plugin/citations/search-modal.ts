@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { capitalize } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import {
