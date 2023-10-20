@@ -12,5 +12,8 @@ module.exports = {
     babel: {
       sourceMaps: 'inline',
     },
+    autoImport: {
+      webpack: require('./webpack-config'),
+    },
   },
 };

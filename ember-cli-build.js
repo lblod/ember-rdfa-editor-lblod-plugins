@@ -1,34 +1,11 @@
 'use strict';
 
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
-const webpack = require('webpack');
 module.exports = function (defaults) {
   const app = new EmberAddon(defaults, {
     // Add options here
     sassOptions: {
       sourceMapEmbed: true,
-    },
-    autoImport: {
-      webpack: {
-        node: {
-          global: true,
-          __filename: true,
-          __dirname: true,
-        },
-        resolve: {
-          fallback: {
-            stream: require.resolve('stream-browserify'),
-          },
-        },
-        plugins: [
-          new webpack.ProvidePlugin({
-            process: 'process/browser',
-          }),
-          new webpack.ProvidePlugin({
-            Buffer: ['buffer', 'Buffer'],
-          }),
-        ],
-      },
     },
     '@appuniversum/ember-appuniversum': {
       disableWormholeElement: true,
@@ -44,6 +21,9 @@ module.exports = function (defaults) {
 
   const { maybeEmbroider } = require('@embroider/test-setup');
   return maybeEmbroider(app, {
+    packagerOptions: {
+      webpackConfig: require('./webpack-config'),
+    },
     skipBabel: [
       {
         package: 'qunit',

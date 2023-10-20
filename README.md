@@ -810,6 +810,25 @@ Template comments have a specific style that can be imported in the stylesheet w
 @import 'template-comments-plugin';
 ```
 
+## Embroider
+To use `@lblod/ember-rdfa-editor-lblod-plugins` with Embroider some extra Webpack configuration is needed, which you can import like this:
+
+```js
+// ember-cli-build.js
+  // ...
+  const { Webpack } = require('@embroider/webpack');
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    // other Embroider options
+    packagerOptions: {
+      webpackConfig: require('@lblod/ember-rdfa-editor-lblod-plugins/webpack-config'),
+    },
+    extraPublicTrees: [],
+  });
+};
+```
+
+If you already provide some Webpack configuration, you can deep merge that with the config object we provide.
+
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.
