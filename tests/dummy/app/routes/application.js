@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 // DO NOT CHANGE THIS FILE TO TYPESCRIPT
 // see https://github.com/typed-ember/ember-cli-typescript/issues/780

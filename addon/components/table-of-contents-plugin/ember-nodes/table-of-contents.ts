@@ -4,7 +4,7 @@ import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { Selection } from '@lblod/ember-rdfa-editor';
 import { TableOfContentsConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin';
 import { extractOutline } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/utils';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   @service declare intl: IntlService;

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { ValidationResult } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 interface Args {
