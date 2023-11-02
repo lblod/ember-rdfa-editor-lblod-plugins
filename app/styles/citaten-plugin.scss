@@ -48,3 +48,41 @@
 .citaten--error-code {
   font-family: var(--au-font-tertiary);
 }
+
+// Start: Styling the highlight when detecting search term inside the editor
+@mixin hints($before, $after) {
+  .rdfa-annotations.show-rdfa-blocks [data-editor-highlight=true] {
+    &:before {
+      content: "#{$before}";
+    }
+
+    &:not([contenteditable=""]):after {
+      content: "#{$after}";
+    }
+  }
+}
+
+@include hints("Selecteer de juiste optie", "Actie nodig");
+
+[data--language=en], [lang=en] {
+  @include hints("Select the correct option", "Action required");
+}
+
+.rdfa-annotations {
+  [data-editor-highlight=true]:not([contenteditable=""]) {
+    background-color: var(--au-gray-100);
+    border-bottom: 0.2rem dotted var(--au-gray-300);
+    padding-bottom: 0.2rem;
+    transition: background-color var(--au-transition);
+
+    &::selection {
+      background-color: var(--au-gray-300);
+    }
+
+    &:hover {
+      background-color: var(--au-gray-200);
+    }
+  }
+}
+
+// End: Styling the highlight when detecting search term inside the editor
