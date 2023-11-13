@@ -71,6 +71,10 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import {
+  STRUCTURE_NODES,
+  STRUCTURE_SPECS,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
@@ -82,6 +86,7 @@ export default class EditableBlockController extends Controller {
   schema = new Schema({
     nodes: {
       doc: docWithConfig({
+        content: '((chapter|block)+|(title|block)+|(article|block)+)',
         defaultLanguage: 'nl-BE',
       }),
       paragraph,
@@ -106,6 +111,7 @@ export default class EditableBlockController extends Controller {
       hard_break,
       block_rdfa,
       link: link(this.linkOptions),
+      ...STRUCTURE_NODES,
     },
     marks: {
       inline_rdfa,
@@ -181,5 +187,9 @@ export default class EditableBlockController extends Controller {
   @action
   togglePlugin() {
     console.warn('Live toggling plugins is currently not supported');
+  }
+
+  get structureConfig() {
+    return STRUCTURE_SPECS;
   }
 }
