@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import {
   EditorState,

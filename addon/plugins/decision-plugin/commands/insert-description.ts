@@ -3,7 +3,6 @@ import {
   NodeSelection,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { v4 as uuid } from 'uuid';
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
 import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
