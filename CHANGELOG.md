@@ -1,5 +1,20 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 15.1.0
+
+### Minor Changes
+
+- [#343](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/343) [`e9b428c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e9b428cdffca32164ce9f2c03540dd5ad6a9ba19) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4130: Move styles for `data-editor-highlight`
+
+  Styles that were applied to elements with the `data-editor-highlight` attribute (used by `citation-plugin`) moved from
+  [editor repository](https://github.com/lblod/ember-rdfa-editor/pull/1013) to this repo as part of the `citation-plugin`.
+
+- [#351](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/351) [`f6fa933`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f6fa933569a70c3cc0f7d4348c4c8a121b77cd1f) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove explicit creation of `rdfa-id` attributes
+
+### Patch Changes
+
+- [`83cc1ae`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/83cc1ae8b3bba280aa001566e7d77109a2d43170) Thanks [@abeforgit](https://github.com/abeforgit)! - bump peerdep to allow editor v7
+
 ## 15.0.0
 
 ### Major Changes
