@@ -13,7 +13,6 @@ export function citedText(
       href: uri,
       property: 'eli:cites',
       typeof: 'eli:LegalExpression',
-      __rdfaId: uuid(),
     },
     [schema.text(title)],
   );

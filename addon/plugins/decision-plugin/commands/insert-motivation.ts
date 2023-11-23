@@ -23,7 +23,7 @@ export default function insertMotivation({
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const translationWithDocLang = getTranslationFunction(state);
     const { selection, schema } = state;
-    const nodeToInsert = schema.node('motivering', { __rdfaId: uuid() }, [
+    const nodeToInsert = schema.node('motivering', {}, [
       schema.node(
         'paragraph',
         null,

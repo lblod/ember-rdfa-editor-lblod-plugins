@@ -21,7 +21,7 @@ export default function insertDescription({
     const { selection, schema } = state;
     const nodeToInsert = schema.node(
       'description',
-      { __rdfaId: uuid() },
+      {},
       schema.node(
         'paragraph',
         null,

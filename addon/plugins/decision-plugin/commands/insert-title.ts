@@ -21,7 +21,7 @@ export default function insertTitle({
     const { selection, schema } = state;
     const nodeToInsert = schema.node(
       'besluit_title',
-      { __rdfaId: uuid() },
+      {},
       schema.node(
         'paragraph',
         null,

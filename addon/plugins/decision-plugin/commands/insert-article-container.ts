@@ -24,9 +24,7 @@ export default function insertArticleContainer({
     const { selection, schema } = state;
     const nodeToInsert = schema.node(
       'article_container',
-      {
-        __rdfaId: uuid(),
-      },
+      {},
       besluitArticleStructure.constructor({
         schema,
         intl,

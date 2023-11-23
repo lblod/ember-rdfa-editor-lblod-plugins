@@ -27,7 +27,7 @@ export default function insertDocumentTitle({
         insertionRange.to,
         schema.node(
           'document_title',
-          { __rdfaId: uuid() },
+          {},
           schema.node(
             'paragraph',
             null,
