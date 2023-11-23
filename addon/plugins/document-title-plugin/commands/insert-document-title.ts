@@ -1,6 +1,5 @@
 import { Command } from '@lblod/ember-rdfa-editor';
 import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-insertion-range';
-import { v4 as uuid } from 'uuid';
 
 interface InsertDocumentTitleArgs {
   placeholder: string;
@@ -27,7 +26,7 @@ export default function insertDocumentTitle({
         insertionRange.to,
         schema.node(
           'document_title',
-          { __rdfaId: uuid() },
+          {},
           schema.node(
             'paragraph',
             null,

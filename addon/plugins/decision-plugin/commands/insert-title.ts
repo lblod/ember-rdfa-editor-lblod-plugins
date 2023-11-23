@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import {
   EditorState,
@@ -21,7 +20,7 @@ export default function insertTitle({
     const { selection, schema } = state;
     const nodeToInsert = schema.node(
       'besluit_title',
-      { __rdfaId: uuid() },
+      {},
       schema.node(
         'paragraph',
         null,

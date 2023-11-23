@@ -4,7 +4,6 @@ import {
   NodeSelection,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { v4 as uuid } from 'uuid';
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
 import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
@@ -23,7 +22,7 @@ export default function insertMotivation({
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const translationWithDocLang = getTranslationFunction(state);
     const { selection, schema } = state;
-    const nodeToInsert = schema.node('motivering', { __rdfaId: uuid() }, [
+    const nodeToInsert = schema.node('motivering', {}, [
       schema.node(
         'paragraph',
         null,

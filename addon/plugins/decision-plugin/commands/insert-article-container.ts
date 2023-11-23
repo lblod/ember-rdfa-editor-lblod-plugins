@@ -4,7 +4,6 @@ import {
   NodeSelection,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { v4 as uuid } from 'uuid';
 import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
 import IntlService from 'ember-intl/services/intl';
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -24,9 +23,7 @@ export default function insertArticleContainer({
     const { selection, schema } = state;
     const nodeToInsert = schema.node(
       'article_container',
-      {
-        __rdfaId: uuid(),
-      },
+      {},
       besluitArticleStructure.constructor({
         schema,
         intl,

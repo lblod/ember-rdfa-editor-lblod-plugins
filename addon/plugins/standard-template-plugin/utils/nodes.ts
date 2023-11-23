@@ -188,16 +188,14 @@ export const besluitArticleStructure: StructureSpec = {
       `besluit_article`,
       {
         resource: `http://data.lblod.info/articles/${uuid()}`,
-        __rdfaId: uuid(),
       },
       [
         schema.node('besluit_article_header', {
           number: numberConverted,
-          __rdfaId: uuid(),
         }),
         schema.node(
           `besluit_article_content`,
-          { __rdfaId: uuid() },
+          {},
           content ??
             schema.node(
               'paragraph',
