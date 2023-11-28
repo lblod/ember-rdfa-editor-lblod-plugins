@@ -9,6 +9,15 @@ import IntlService from 'ember-intl/services/intl';
 
 export type SpecName = string;
 
+export type SpecConstructorResult = {
+  node: PNode;
+  selectionConfig: {
+    relativePos: number;
+    type: 'node' | 'text';
+  };
+  newResource: string;
+};
+
 export type StructureSpec = {
   name: SpecName;
   translations: {
@@ -26,13 +35,7 @@ export type StructureSpec = {
     intl?: IntlService;
     content?: PNode | Fragment;
     state?: EditorState;
-  }) => {
-    node: PNode;
-    selectionConfig: {
-      relativePos: number;
-      type: 'node' | 'text';
-    };
-  };
+  }) => SpecConstructorResult;
   updateNumber: (args: {
     number: number;
     pos: number;
