@@ -4,8 +4,14 @@ import {
   constructStructureNodeSpec,
   romanize,
 } from '../utils/structure';
+import { constructStructureHeader } from './structure-header';
 import { v4 as uuid } from 'uuid';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { RdfaAttrs } from '@lblod/ember-rdfa-editor';
+import {
+  ELI,
+  EXT,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
@@ -28,37 +34,77 @@ export const titleSpec: StructureSpec = {
   constructor: ({ schema, number, content, intl, state }) => {
     const numberConverted = romanize(number ?? 1);
     const translationWithDocLang = getTranslationFunction(state);
-    const node = schema.node(
-      `title`,
-      { resource: `http://data.lblod.info/titles/${uuid()}` },
-      [
-        schema.node(
-          'structure_header',
-          { level: 3, number: numberConverted },
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.heading,
-              intl?.t(PLACEHOLDERS.heading) || '',
-            ),
-          }),
-        ),
-        schema.node(
-          `title_body`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  PLACEHOLDERS.body,
-                  intl?.t(PLACEHOLDERS.body) || '',
-                ),
-              }),
-            ),
-        ),
-      ],
+    const __rdfaId = uuid();
+    const titleRdfaId = uuid();
+    const bodyRdfaId = uuid();
+    const resource = `http://data.lblod.info/titles/${__rdfaId}`;
+    const titleText = translationWithDocLang(
+      PLACEHOLDERS.heading,
+      intl?.t(PLACEHOLDERS.heading) || '',
     );
+    const titleAttrs: RdfaAttrs = {
+      __rdfaId,
+      rdfaNodeType: 'resource',
+      resource,
+      properties: [
+        {
+          type: 'attribute',
+          predicate: ELI('number').prefixed,
+          object: numberConverted,
+        },
+        {
+          type: 'attribute',
+          predicate: SAY('heading').prefixed,
+          object: `${numberConverted}. ${titleText}`,
+        },
+        {
+          type: 'external',
+          predicate: EXT('title').prefixed,
+          object: { type: 'literal', rdfaId: titleRdfaId },
+        },
+        {
+          type: 'external',
+          predicate: SAY('body').prefixed,
+          object: { type: 'literal', rdfaId: bodyRdfaId },
+        },
+      ],
+      backlinks: [],
+    };
+    const bodyAttrs: RdfaAttrs = {
+      __rdfaId: bodyRdfaId,
+      rdfaNodeType: 'literal',
+      backlinks: [
+        {
+          subject: resource,
+          predicate: SAY('body').prefixed,
+        },
+      ],
+    };
+    const node = schema.node(`title`, titleAttrs, [
+      constructStructureHeader({
+        schema,
+        level: 3,
+        number: numberConverted,
+        titleRdfaId,
+        titleText,
+        backlinkResource: resource,
+      }),
+      schema.node(
+        `title_body`,
+        bodyAttrs,
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                PLACEHOLDERS.body,
+                intl?.t(PLACEHOLDERS.body) || '',
+              ),
+            }),
+          ),
+      ),
+    ]);
     const selectionConfig: {
       relativePos: number;
       type: 'text' | 'node';
@@ -68,6 +114,7 @@ export const titleSpec: StructureSpec = {
     return {
       node,
       selectionConfig,
+      newResource: resource,
     };
   },
   updateNumber: ({ number, pos, transaction }) => {

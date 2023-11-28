@@ -2,9 +2,11 @@ import {
   NodeSpec,
   NodeType,
   PNode,
+  rdfaAttrSpec,
   Schema,
   Selection,
 } from '@lblod/ember-rdfa-editor';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
   ELI,
@@ -27,7 +29,10 @@ export function constructStructureNodeSpec(config: {
     group,
     content,
     inline: false,
+    editable: true,
+    isolating: true,
     attrs: {
+      ...rdfaAttrSpec,
       property: {
         default: SAY('hasPart').prefixed,
       },
@@ -38,26 +43,24 @@ export function constructStructureNodeSpec(config: {
     },
     allowSplitByTable: config.allowSplitByTable,
     toDOM(node) {
-      return [
-        'div',
-        {
-          property: node.attrs.property as string,
-          typeof: node.attrs.typeof as string,
-          resource: node.attrs.resource as string,
+      return renderRdfaAware({
+        renderable: node,
+        tag: 'div',
+        attrs: {
+          ...node.attrs,
+          class: 'say-editable',
         },
-        0,
-      ];
+        content: 0,
+      });
     },
     parseDOM: [
       {
         tag: 'div',
+        priority: 55,
         getAttrs(element: HTMLElement) {
-          if (
-            hasRDFaAttribute(element, 'property', SAY('hasPart')) &&
-            hasRDFaAttribute(element, 'typeof', type) &&
-            element.getAttribute('resource')
-          ) {
-            return { resource: element.getAttribute('resource') };
+          const resource = element.getAttribute('resource');
+          if (hasRDFaAttribute(element, 'typeof', type) && resource) {
+            return { resource };
           }
           return false;
         },
@@ -75,17 +78,22 @@ export function constructStructureBodyNodeSpec(config: {
     content,
     inline: false,
     defining: true,
+    editable: true,
     isolating: true,
     allowSplitByTable: config.allowSplitByTable,
-    toDOM() {
-      return [
-        'div',
-        {
+    attrs: rdfaAttrSpec,
+    toDOM(node) {
+      return renderRdfaAware({
+        renderable: node,
+        tag: 'div',
+        attrs: {
+          ...node.attrs,
+          class: 'say-editable',
           property: SAY('body').prefixed,
           datatype: RDF('XMLLiteral').prefixed,
         },
-        0,
-      ];
+        content: 0,
+      });
     },
     parseDOM: [
       {
@@ -99,6 +107,7 @@ export function constructStructureBodyNodeSpec(config: {
           }
           return false;
         },
+        contentElement: 'div[data-content-container="true"]',
       },
     ],
   };
@@ -125,7 +134,7 @@ export function getStructureHeaderAttrs(element: HTMLElement) {
     `[property~="${ELI('number').prefixed}"],
      [property~="${ELI('number').full}"]`,
   );
-  if (hasRDFaAttribute(element, 'property', SAY('heading')) && numberNode) {
+  if (numberNode) {
     return {
       number: numberNode.textContent,
     };
