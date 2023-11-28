@@ -1,11 +1,8 @@
-import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { NodeSpec, PNode, RdfaAttrs, Schema } from '@lblod/ember-rdfa-editor';
 import {
-  ELI,
   EXT,
   SAY,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { getStructureHeaderAttrs } from '../utils/structure';
 
 const TAG_TO_LEVEL = new Map([
   ['h1', 1],
@@ -17,7 +14,7 @@ const TAG_TO_LEVEL = new Map([
 ]);
 
 export const structure_header: NodeSpec = {
-  content: 'text*|placeholder',
+  content: 'structure_header_title',
   inline: false,
   defining: true,
   isolating: true,
@@ -41,40 +38,70 @@ export const structure_header: NodeSpec = {
   toDOM(node) {
     return [
       `h${node.attrs.level as number}`,
-      { property: node.attrs.property as string },
+      {
+        level: node.attrs.level as number,
+        property: node.attrs.property as string,
+      },
       [
         'span',
         {
-          property: ELI('number').prefixed,
-          datatype: XSD('string').prefixed,
           contenteditable: false,
         },
         node.attrs.number,
       ],
       ['span', { contenteditable: false }, '. '],
-      [
-        'span',
-        {
-          property: EXT('title').prefixed,
-        },
-        0,
-      ],
+      ['span', {}, 0],
     ];
   },
   parseDOM: [
     {
-      tag: 'h1,h2,h3,h4,h5,h6,span',
+      tag: 'h1,h2,h3,h4,h5,h6',
+      priority: 60,
       getAttrs(element: HTMLElement) {
         const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
-        const headerAttrs = getStructureHeaderAttrs(element);
-        if (headerAttrs) {
-          return { level, ...headerAttrs };
+        const property = element.getAttribute('property');
+        if (property === SAY('heading').prefixed) {
+          return { level };
         }
 
         return false;
       },
-      contentElement: `span[property~='${EXT('title').prefixed}'],
-                       span[property~='${EXT('title').full}']`,
+      contentElement: (node) => node.lastChild as HTMLElement,
     },
   ],
 };
+
+type ConstructArgs = {
+  schema: Schema;
+  backlinkResource: string;
+  titleRdfaId: string;
+  titleText: string;
+  level: number;
+  number?: string;
+  headingProperty?: string;
+};
+export function constructStructureHeader({
+  schema,
+  backlinkResource,
+  titleRdfaId,
+  titleText,
+  level,
+  number,
+  headingProperty,
+}: ConstructArgs) {
+  const titleAttrs: RdfaAttrs = {
+    __rdfaId: titleRdfaId,
+    rdfaNodeType: 'literal',
+    backlinks: [
+      {
+        subject: backlinkResource,
+        predicate: EXT('title').prefixed,
+      },
+    ],
+  };
+  return schema.node(
+    'structure_header',
+    { level, number, property: headingProperty },
+    schema.node('structure_header_title', titleAttrs, schema.text(titleText)),
+  );
+}

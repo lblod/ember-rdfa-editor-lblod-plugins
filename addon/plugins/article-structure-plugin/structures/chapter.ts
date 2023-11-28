@@ -1,3 +1,4 @@
+import { RdfaAttrs } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
@@ -5,9 +6,14 @@ import {
   romanize,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  ELI,
+  EXT,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { constructStructureHeader } from './structure-header';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.chapter.heading',
@@ -28,37 +34,76 @@ export const chapterSpec: StructureSpec = {
   constructor: ({ schema, number, content, intl, state }) => {
     const numberConverted = romanize(number ?? 1);
     const translationWithDocLang = getTranslationFunction(state);
-    const node = schema.node(
-      `chapter`,
-      { resource: `http://data.lblod.info/chapters/${uuid()}` },
-      [
-        schema.node(
-          'structure_header',
-          { level: 4, number: numberConverted },
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.title,
-              intl?.t(PLACEHOLDERS.title) || '',
-            ),
-          }),
-        ),
-        schema.node(
-          `chapter_body`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  PLACEHOLDERS.body,
-                  intl?.t(PLACEHOLDERS.body) || '',
-                ),
-              }),
-            ),
-        ),
-      ],
+    const titleText = translationWithDocLang(
+      PLACEHOLDERS.title,
+      intl?.t(PLACEHOLDERS.title) || '',
     );
+    const chapterUuid = uuid();
+    const headingUuid = uuid();
+    const bodyUuid = uuid();
+    const chapterResource = `http://data.lblod.info/chapters/${chapterUuid}`;
+    const chapterAttrs: RdfaAttrs = {
+      __rdfaId: chapterUuid,
+      rdfaNodeType: 'resource',
+      resource: chapterResource,
+      properties: [
+        {
+          type: 'attribute',
+          predicate: ELI('number').prefixed,
+          object: numberConverted,
+        },
+        {
+          type: 'attribute',
+          predicate: SAY('heading').prefixed,
+          object: `${numberConverted}. ${titleText}`,
+        },
+        {
+          type: 'external',
+          predicate: EXT('title').prefixed,
+          object: { type: 'literal', rdfaId: headingUuid },
+        },
+        {
+          type: 'external',
+          predicate: SAY('body').prefixed,
+          object: { type: 'literal', rdfaId: bodyUuid },
+        },
+      ],
+      backlinks: [],
+    };
+    const bodyAttrs: RdfaAttrs = {
+      __rdfaId: bodyUuid,
+      rdfaNodeType: 'literal',
+      backlinks: [
+        {
+          subject: chapterResource,
+          predicate: SAY('body').prefixed,
+        },
+      ],
+    };
+    const node = schema.node(`chapter`, chapterAttrs, [
+      constructStructureHeader({
+        schema,
+        titleRdfaId: headingUuid,
+        titleText,
+        backlinkResource: chapterResource,
+        level: 4,
+      }),
+      schema.node(
+        `chapter_body`,
+        bodyAttrs,
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                PLACEHOLDERS.body,
+                intl?.t(PLACEHOLDERS.body) || '',
+              ),
+            }),
+          ),
+      ),
+    ]);
     const selectionConfig: {
       relativePos: number;
       type: 'text' | 'node';
@@ -68,6 +113,7 @@ export const chapterSpec: StructureSpec = {
     return {
       node,
       selectionConfig,
+      newResource: chapterResource,
     };
   },
   updateNumber: ({ number, pos, transaction }) => {
