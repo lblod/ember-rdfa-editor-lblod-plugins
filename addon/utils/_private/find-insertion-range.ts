@@ -3,23 +3,36 @@ import { NodeType, PNode, ResolvedPos, Schema } from '@lblod/ember-rdfa-editor';
 import { containsOnlyPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
+type Return = {
+  from: number;
+  to: number;
+  containerNode: PNode;
+};
 export function findInsertionRange(args: {
   doc: PNode;
   $from: ResolvedPos;
   nodeType: NodeType;
   schema: Schema;
   limitTo?: string;
-}) {
+}): Return | null {
   const { doc, $from, nodeType, schema, limitTo } = args;
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
     const index = $from.index(currentDepth);
     if (currentAncestor.canReplaceWith(index, index, nodeType)) {
       if (containsOnlyPlaceholder(schema, currentAncestor)) {
-        return { from: $from.start(currentDepth), to: $from.end(currentDepth) };
+        return {
+          from: $from.start(currentDepth),
+          to: $from.end(currentDepth),
+          containerNode: currentAncestor,
+        };
       } else {
         const insertPos = $from.after(currentDepth + 1);
-        return { from: insertPos, to: insertPos };
+        return {
+          from: insertPos,
+          to: insertPos,
+          containerNode: currentAncestor,
+        };
       }
     }
   }
@@ -66,10 +79,11 @@ export function findInsertionRange(args: {
     const { from, to } = nextContainerRange;
     const containerNode = doc.nodeAt(from);
     if (containerNode) {
+      console.warn('now we have a container', containerNode)
       if (containsOnlyPlaceholder(schema, containerNode)) {
-        return { from: from + 1, to: to - 1 };
+        return { from: from + 1, to: to - 1, containerNode };
       } else {
-        return { from: to - 1, to: to - 1 };
+        return { from: to - 1, to: to - 1, containerNode };
       }
     }
   }

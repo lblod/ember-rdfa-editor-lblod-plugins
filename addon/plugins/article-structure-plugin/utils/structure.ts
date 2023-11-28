@@ -1,3 +1,4 @@
+import type { DOMOutputSpec } from 'prosemirror-model';
 import {
   NodeSpec,
   NodeType,
@@ -10,6 +11,7 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
   ELI,
+  EXT,
   RDF,
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -108,6 +110,88 @@ export function constructStructureBodyNodeSpec(config: {
           return false;
         },
         contentElement: 'div[data-content-container="true"]',
+      },
+    ],
+  };
+}
+
+const TAG_TO_LEVEL = new Map([
+  ['h1', 1],
+  ['h2', 2],
+  ['h3', 3],
+  ['h4', 4],
+  ['h5', 5],
+  ['h6', 6],
+]);
+
+type StructureHeaderArgs = {
+  outlineText: (node: PNode) => string;
+  numberContentDOM: (number: number | string) => DOMOutputSpec[];
+  includeLevel: boolean;
+};
+
+export function constructStructureHeaderNodeSpec({
+  outlineText,
+  numberContentDOM,
+  includeLevel,
+}: StructureHeaderArgs): NodeSpec {
+  return {
+    content: 'structure_header_title',
+    inline: false,
+    defining: true,
+    isolating: true,
+    selectable: false,
+    allowSplitByTable: false,
+    attrs: {
+      property: {
+        default: SAY('heading').prefixed,
+      },
+      number: {
+        default: '1',
+      },
+      ...(includeLevel
+        ? {
+            level: {
+              default: 1,
+            },
+          }
+        : {}),
+    },
+    outlineText,
+    toDOM(node) {
+      return [
+        includeLevel ? `h${node.attrs.level as number}` : 'span',
+        {
+          property: node.attrs.property as string,
+          ...(includeLevel
+            ? {
+                level: node.attrs.level as number,
+              }
+            : {}),
+        },
+        ...numberContentDOM(node.attrs.number),
+        ['span', {}, 0],
+      ];
+    },
+    parseDOM: [
+      {
+        tag: 'h1,h2,h3,h4,h5,h6,span',
+        priority: 60,
+        getAttrs(element: HTMLElement) {
+          const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
+          const property = element.getAttribute('property');
+          if (property === SAY('heading').prefixed) {
+            const titleChild = element.querySelector(`
+              span[property~='${EXT('title').prefixed}'],
+              span[property~='${EXT('title').full}']`);
+            if (titleChild) {
+              return { level };
+            }
+          }
+
+          return false;
+        },
+        contentElement: (node) => node.lastChild as HTMLElement,
       },
     ],
   };
