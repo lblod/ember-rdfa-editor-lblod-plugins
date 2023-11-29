@@ -67,13 +67,13 @@ const wrapStructureContent = (
       if (resource) {
         const newState = state.apply(transaction);
         addProperty({
-          resource,
+          resource: newResource,
           property: {
             type: 'external',
             predicate: SAY('hasPart').prefixed,
             object: {
               type: 'resource',
-              resource: newResource,
+              resource,
             },
           },
           transaction,
