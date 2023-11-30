@@ -56,6 +56,13 @@ export function hasParsedRDFaAttribute(
   });
 }
 
+export function hasBacklink(rdfaAttrs: RdfaAttrs | false, predicate: Resource) {
+  return (
+    rdfaAttrs &&
+    rdfaAttrs.backlinks.some((bl) => predicate.matches(bl.predicate))
+  );
+}
+
 export function findChildWithRdfaAttribute(
   element: Element,
   attr: string,

@@ -19,6 +19,7 @@ import {
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
+  hasBacklink,
   hasParsedRDFaAttribute,
   hasRDFaAttribute,
   Resource,
@@ -140,9 +141,11 @@ export function constructStructureHeaderNodeSpec({
     inline: false,
     defining: true,
     isolating: true,
+    editable: true,
     selectable: false,
     allowSplitByTable: false,
     attrs: {
+      ...rdfaAttrSpec,
       property: {
         default: SAY('heading').prefixed,
       },
@@ -159,19 +162,18 @@ export function constructStructureHeaderNodeSpec({
     },
     outlineText,
     toDOM(node) {
-      return [
-        includeLevel ? `h${node.attrs.level as number}` : 'span',
-        {
-          property: node.attrs.property as string,
-          ...(includeLevel
-            ? {
-                level: node.attrs.level as number,
-              }
-            : {}),
+      const { level, ...attrs } = node.attrs;
+      return renderRdfaAware({
+        renderable: node,
+        tag: includeLevel ? `h${level as number}` : 'span',
+        rdfaContainerTag: 'span',
+        contentContainerTag: 'span',
+        attrs: {
+          ...attrs,
+          ...(includeLevel ? { level: level as number } : {}),
         },
-        ...numberContentDOM(node.attrs.number),
-        ['span', {}, 0],
-      ];
+        contentArray: [...numberContentDOM(attrs.number), ['span', {}, 0]],
+      });
     },
     parseDOM: [
       {
@@ -181,19 +183,23 @@ export function constructStructureHeaderNodeSpec({
         priority: 60,
         getAttrs(element: HTMLElement) {
           const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
-          const property = element.getAttribute('property');
-          if (property === SAY('heading').prefixed) {
+          const rdfaAttrs = getRdfaAttrs(element);
+          if (hasBacklink(rdfaAttrs, SAY('heading'))) {
             const titleChild = element.querySelector(`
               span[property~='${EXT('title').prefixed}'],
               span[property~='${EXT('title').full}']`);
             if (titleChild) {
-              return { level };
+              return { level, ...rdfaAttrs };
             }
           }
 
           return false;
         },
-        contentElement: (node) => node.lastChild as HTMLElement,
+        contentElement: (node) => {
+          return ((node as HTMLElement)?.querySelector(
+            '[data-content-container="true"]',
+          )?.lastElementChild ?? node) as HTMLElement;
+        },
       },
     ],
   };

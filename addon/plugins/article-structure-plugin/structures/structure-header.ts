@@ -1,5 +1,8 @@
 import { NodeSpec, PNode, RdfaAttrs, Schema } from '@lblod/ember-rdfa-editor';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  EXT,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { constructStructureHeaderNodeSpec } from '../utils/structure';
 
 export const structure_header: NodeSpec = constructStructureHeaderNodeSpec({
@@ -25,21 +28,33 @@ type ConstructArgs = {
   backlinkResource: string;
   titleRdfaId: string;
   titleText: string;
+  headingRdfaId: string;
+  headingProperty?: string;
   level?: number;
   number?: string;
   headerType?: string;
-  headingProperty?: string;
 };
 export function constructStructureHeader({
   schema,
   backlinkResource,
   titleRdfaId,
   titleText,
+  headingRdfaId,
+  headingProperty = SAY('heading').prefixed,
   level,
   number,
   headerType = 'structure_header',
-  headingProperty,
 }: ConstructArgs) {
+  const headingAttrs: RdfaAttrs = {
+    __rdfaId: headingRdfaId,
+    rdfaNodeType: 'literal',
+    backlinks: [
+      {
+        subject: backlinkResource,
+        predicate: headingProperty,
+      },
+    ],
+  };
   const titleAttrs: RdfaAttrs = {
     __rdfaId: titleRdfaId,
     rdfaNodeType: 'literal',
@@ -52,7 +67,7 @@ export function constructStructureHeader({
   };
   return schema.node(
     headerType,
-    { level, number, property: headingProperty },
+    { level, number, ...headingAttrs },
     schema.node('structure_header_title', titleAttrs, schema.text(titleText)),
   );
 }

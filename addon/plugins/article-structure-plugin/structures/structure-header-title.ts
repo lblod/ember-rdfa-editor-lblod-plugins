@@ -32,6 +32,7 @@ export const structure_header_title: NodeSpec = {
         }
         return false;
       },
+      contentElement: '[data-content-container~="true"]',
     },
   ],
 };

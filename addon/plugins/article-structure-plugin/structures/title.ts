@@ -36,6 +36,7 @@ export const titleSpec: StructureSpec = {
     const translationWithDocLang = getTranslationFunction(state);
     const __rdfaId = uuid();
     const titleRdfaId = uuid();
+    const headingRdfaId = uuid();
     const bodyRdfaId = uuid();
     const resource = `http://data.lblod.info/titles/${__rdfaId}`;
     const titleText = translationWithDocLang(
@@ -53,9 +54,9 @@ export const titleSpec: StructureSpec = {
           object: numberConverted,
         },
         {
-          type: 'attribute',
+          type: 'external',
           predicate: SAY('heading').prefixed,
-          object: `${numberConverted}. ${titleText}`,
+          object: { type: 'literal', rdfaId: headingRdfaId },
         },
         {
           type: 'external',
@@ -87,6 +88,7 @@ export const titleSpec: StructureSpec = {
         number: numberConverted,
         titleRdfaId,
         titleText,
+        headingRdfaId,
         backlinkResource: resource,
       }),
       schema.node(
