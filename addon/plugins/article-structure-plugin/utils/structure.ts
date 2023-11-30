@@ -7,7 +7,10 @@ import {
   Schema,
   Selection,
 } from '@lblod/ember-rdfa-editor';
-import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  getRdfaAttrs,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
   ELI,
@@ -16,6 +19,7 @@ import {
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
+  hasParsedRDFaAttribute,
   hasRDFaAttribute,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -35,9 +39,6 @@ export function constructStructureNodeSpec(config: {
     isolating: true,
     attrs: {
       ...rdfaAttrSpec,
-      property: {
-        default: SAY('hasPart').prefixed,
-      },
       typeof: {
         default: type.prefixed,
       },
@@ -58,11 +59,10 @@ export function constructStructureNodeSpec(config: {
     parseDOM: [
       {
         tag: 'div',
-        priority: 55,
         getAttrs(element: HTMLElement) {
-          const resource = element.getAttribute('resource');
-          if (hasRDFaAttribute(element, 'typeof', type) && resource) {
-            return { resource };
+          const rdfaAttrs = getRdfaAttrs(element);
+          if (hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), type)) {
+            return rdfaAttrs;
           }
           return false;
         },
@@ -176,6 +176,8 @@ export function constructStructureHeaderNodeSpec({
     parseDOM: [
       {
         tag: 'h1,h2,h3,h4,h5,h6,span',
+        // Need to have higher priority than default (50) as otherwise seems to get parsed as a
+        // generic header
         priority: 60,
         getAttrs(element: HTMLElement) {
           const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;

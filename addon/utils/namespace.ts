@@ -1,4 +1,5 @@
 import { PNode } from '@lblod/ember-rdfa-editor';
+import type { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 
 export class Resource {
   full: string;
@@ -11,6 +12,10 @@ export class Resource {
 
   toString() {
     return this.full;
+  }
+
+  matches(fullOrPrefixed: string) {
+    return this.full === fullOrPrefixed || this.prefixed === fullOrPrefixed;
   }
 }
 
@@ -30,6 +35,25 @@ export function hasRDFaAttribute(
     return result.includes(value.full) || result.includes(value.prefixed);
   }
   return false;
+}
+
+export function hasParsedRDFaAttribute(
+  rdfaAttrs: RdfaAttrs | false,
+  predicate: Resource,
+  object: Resource | string,
+) {
+  if (!rdfaAttrs || rdfaAttrs.rdfaNodeType !== 'resource') {
+    return false;
+  }
+  return rdfaAttrs.properties.some((prop) => {
+    return (
+      prop.type === 'attribute' &&
+      predicate.matches(prop.predicate) &&
+      (typeof object === 'string'
+        ? prop.object === object
+        : object.matches(prop.object))
+    );
+  });
 }
 
 export function findChildWithRdfaAttribute(

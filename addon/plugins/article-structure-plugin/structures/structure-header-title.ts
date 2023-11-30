@@ -6,7 +6,6 @@ import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 export const structure_header_title: NodeSpec = {
   attrs: {
     ...rdfaAttrSpec,
-    __tag: { default: 'span' },
   },
   content: 'text*',
   inline: true,
