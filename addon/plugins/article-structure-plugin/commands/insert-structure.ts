@@ -4,6 +4,7 @@ import {
   NodeSelection,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
+import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { addProperty } from '@lblod/ember-rdfa-editor/commands';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
@@ -54,17 +55,18 @@ const insertStructure = (
         insertionRange.to,
         newStructureNode,
       );
-      const newSelection =
-        selectionConfig.type === 'node'
-          ? NodeSelection.create(
-              transaction.doc,
-              insertionRange.from + selectionConfig.relativePos,
-            )
-          : TextSelection.create(
-              transaction.doc,
-              insertionRange.from + selectionConfig.relativePos,
-            );
-      transaction.setSelection(newSelection);
+      const target = getNodeByRdfaId(
+        state.apply(transaction),
+        selectionConfig.rdfaId,
+      );
+      if (target) {
+        const newSelection =
+          selectionConfig.type === 'node'
+            ? NodeSelection.create(transaction.doc, target.pos)
+            : TextSelection.create(transaction.doc, target.pos + 1);
+        transaction.setSelection(newSelection);
+      }
+
       transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, structureSpec);
 

@@ -39,7 +39,7 @@ export const articleSpec: StructureSpec = {
     const titleRdfaId = uuid();
     const headingRdfaId = uuid();
     const numberRdfaId = uuid();
-    const bodyUuid = uuid();
+    const bodyRdfaId = uuid();
     const resource = `http://data.lblod.info/articles/${articleUuid}`;
     const titleText = translationWithDocLang(
       PLACEHOLDERS.title,
@@ -68,13 +68,13 @@ export const articleSpec: StructureSpec = {
         {
           type: 'external',
           predicate: SAY('body').prefixed,
-          object: { type: 'literal', rdfaId: bodyUuid },
+          object: { type: 'literal', rdfaId: bodyRdfaId },
         },
       ],
       backlinks: [],
     };
     const bodyAttrs: RdfaAttrs = {
-      __rdfaId: bodyUuid,
+      __rdfaId: bodyRdfaId,
       rdfaNodeType: 'literal',
       backlinks: [
         {
@@ -110,15 +110,13 @@ export const articleSpec: StructureSpec = {
           ),
       ),
     ]);
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 5, type: 'text' }
-      : { relativePos: 6, type: 'node' };
+
     return {
       node,
-      selectionConfig,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: bodyRdfaId,
+      },
       newResource: resource,
     };
   },

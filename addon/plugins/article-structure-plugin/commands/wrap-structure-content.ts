@@ -8,6 +8,7 @@ import {
   Selection,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
+import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { addProperty } from '@lblod/ember-rdfa-editor/commands';
 import {
   SpecConstructorResult,
@@ -50,17 +51,19 @@ const wrapStructureContent = (
       const { node: wrappingNode, selectionConfig, newResource } = result;
       let transaction = state.tr;
       transaction.replaceWith(container.from, container.to, wrappingNode);
-      const newSelection =
-        selectionConfig.type === 'node'
-          ? NodeSelection.create(
-              transaction.doc,
-              container.from + 1 + selectionConfig.relativePos,
-            )
-          : TextSelection.create(
-              transaction.doc,
-              container.from + 1 + selectionConfig.relativePos,
-            );
-      transaction.setSelection(newSelection);
+
+      const target = getNodeByRdfaId(
+        state.apply(transaction),
+        selectionConfig.rdfaId,
+      );
+      if (target) {
+        const newSelection =
+          selectionConfig.type === 'node'
+            ? NodeSelection.create(transaction.doc, target.pos)
+            : TextSelection.create(transaction.doc, target.pos + 1);
+        transaction.setSelection(newSelection);
+      }
+
       transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, structureSpec);
 

@@ -42,7 +42,7 @@ export const chapterSpec: StructureSpec = {
     const headingRdfaId = uuid();
     const titleRdfaId = uuid();
     const numberRdfaId = uuid();
-    const bodyUuid = uuid();
+    const bodyRdfaId = uuid();
     const chapterResource = `http://data.lblod.info/chapters/${chapterUuid}`;
     const chapterAttrs: RdfaAttrs = {
       __rdfaId: chapterUuid,
@@ -67,13 +67,13 @@ export const chapterSpec: StructureSpec = {
         {
           type: 'external',
           predicate: SAY('body').prefixed,
-          object: { type: 'literal', rdfaId: bodyUuid },
+          object: { type: 'literal', rdfaId: bodyRdfaId },
         },
       ],
       backlinks: [],
     };
     const bodyAttrs: RdfaAttrs = {
-      __rdfaId: bodyUuid,
+      __rdfaId: bodyRdfaId,
       rdfaNodeType: 'literal',
       backlinks: [
         {
@@ -109,15 +109,13 @@ export const chapterSpec: StructureSpec = {
           ),
       ),
     ]);
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 5, type: 'text' }
-      : { relativePos: 6, type: 'node' };
+
     return {
       node,
-      selectionConfig,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: bodyRdfaId,
+      },
       newResource: chapterResource,
     };
   },

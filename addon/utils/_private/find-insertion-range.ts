@@ -79,7 +79,6 @@ export function findInsertionRange(args: {
     const { from, to } = nextContainerRange;
     const containerNode = doc.nodeAt(from);
     if (containerNode) {
-      console.warn('now we have a container', containerNode)
       if (containsOnlyPlaceholder(schema, containerNode)) {
         return { from: from + 1, to: to - 1, containerNode };
       } else {

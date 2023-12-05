@@ -101,15 +101,13 @@ export const subsectionSpec: StructureSpec = {
           ),
       ),
     ]);
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 5, type: 'text' }
-      : { relativePos: 6, type: 'node' };
+
     return {
       node,
-      selectionConfig,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: bodyRdfaId,
+      },
       newResource: resource,
     };
   },

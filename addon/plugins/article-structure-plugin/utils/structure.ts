@@ -12,7 +12,6 @@ import {
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
-  ELI,
   EXT,
   RDF,
   SAY,
@@ -215,19 +214,6 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
     };
   }
   return;
-}
-
-export function getStructureHeaderAttrs(element: HTMLElement) {
-  const numberNode = element.querySelector(
-    `[property~="${ELI('number').prefixed}"],
-     [property~="${ELI('number').full}"]`,
-  );
-  if (numberNode) {
-    return {
-      number: numberNode.textContent,
-    };
-  }
-  return false;
 }
 
 export function romanize(num: number) {

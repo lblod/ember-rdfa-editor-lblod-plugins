@@ -12,7 +12,7 @@ export type SpecName = string;
 export type SpecConstructorResult = {
   node: PNode;
   selectionConfig: {
-    relativePos: number;
+    rdfaId: string;
     type: 'node' | 'text';
   };
   newResource: string;
