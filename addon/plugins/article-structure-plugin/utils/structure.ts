@@ -73,9 +73,10 @@ export function constructStructureNodeSpec(config: {
 
 export function constructStructureBodyNodeSpec(config: {
   content: string;
+  context: string;
   allowSplitByTable?: boolean;
 }): NodeSpec {
-  const { content } = config;
+  const { content, context } = config;
   return {
     content,
     inline: false,
@@ -100,12 +101,14 @@ export function constructStructureBodyNodeSpec(config: {
     parseDOM: [
       {
         tag: 'div',
+        context,
         getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element);
           if (
-            hasRDFaAttribute(element, 'property', SAY('body')) &&
+            hasBacklink(rdfaAttrs, SAY('body')) &&
             hasRDFaAttribute(element, 'datatype', RDF('XMLLiteral'))
           ) {
-            return {};
+            return rdfaAttrs;
           }
           return false;
         },

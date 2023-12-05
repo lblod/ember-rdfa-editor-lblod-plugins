@@ -130,4 +130,5 @@ export const subsection = constructStructureNodeSpec({
 
 export const subsection_body = constructStructureBodyNodeSpec({
   content: '(article|block)+',
+  context: 'subsection/',
 });

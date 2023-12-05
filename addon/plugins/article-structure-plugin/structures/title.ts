@@ -139,5 +139,6 @@ export const title = constructStructureNodeSpec({
 
 export const title_body = constructStructureBodyNodeSpec({
   content: '(chapter|block)+|(article|block)+',
+  context: 'title/',
   allowSplitByTable: false,
 });

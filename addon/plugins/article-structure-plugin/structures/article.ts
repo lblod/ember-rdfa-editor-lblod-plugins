@@ -147,4 +147,5 @@ export const article_header = constructStructureHeaderNodeSpec({
 
 export const article_body = constructStructureBodyNodeSpec({
   content: '(block|article_paragraph)+',
+  context: 'article/',
 });
