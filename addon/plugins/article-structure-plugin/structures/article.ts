@@ -38,6 +38,7 @@ export const articleSpec: StructureSpec = {
     const articleUuid = uuid();
     const titleRdfaId = uuid();
     const headingRdfaId = uuid();
+    const numberRdfaId = uuid();
     const bodyUuid = uuid();
     const resource = `http://data.lblod.info/articles/${articleUuid}`;
     const titleText = translationWithDocLang(
@@ -50,9 +51,9 @@ export const articleSpec: StructureSpec = {
       resource,
       properties: [
         {
-          type: 'attribute',
+          type: 'external',
           predicate: ELI('number').prefixed,
-          object: numberConverted,
+          object: { type: 'literal', rdfaId: numberRdfaId },
         },
         {
           type: 'external',
@@ -89,6 +90,7 @@ export const articleSpec: StructureSpec = {
         titleRdfaId,
         titleText,
         headingRdfaId,
+        numberRdfaId,
         number: numberConverted,
         headerType: 'article_header',
       }),
@@ -141,19 +143,6 @@ export const article_header = constructStructureHeaderNodeSpec({
     const { number } = node.attrs;
     return `Artikel ${number as string}: ${node.textContent}`;
   },
-  numberContentDOM: (number) => [
-    'Artikel ',
-    [
-      'span',
-      {
-        property: ELI('number').prefixed,
-        datatype: XSD('string').prefixed,
-        contenteditable: false,
-      },
-      number,
-    ],
-    ['span', { contenteditable: false }, ': '],
-  ],
 });
 
 export const article_body = constructStructureBodyNodeSpec({

@@ -1,10 +1,10 @@
 import { NodeSpec } from 'prosemirror-model';
 import { getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasBacklink } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
-export const structure_header_title: NodeSpec = {
+export const structure_header_number: NodeSpec = {
   attrs: rdfaAttrSpec,
   content: 'text*',
   inline: true,
@@ -14,7 +14,10 @@ export const structure_header_title: NodeSpec = {
     return renderRdfaAware({
       renderable: node,
       tag: 'span',
-      attrs: node.attrs,
+      attrs: {
+        contenteditable: false,
+        ...node.attrs,
+      },
       content: 0,
     });
   },
@@ -23,7 +26,7 @@ export const structure_header_title: NodeSpec = {
       tag: 'span',
       getAttrs(node: HTMLElement) {
         const attrs = getRdfaAttrs(node);
-        if (hasBacklink(attrs, EXT('title'))) {
+        if (hasBacklink(attrs, ELI('number'))) {
           return attrs;
         }
         return false;

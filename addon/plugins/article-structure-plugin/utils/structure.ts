@@ -1,4 +1,3 @@
-import type { DOMOutputSpec } from 'prosemirror-model';
 import {
   NodeSpec,
   NodeType,
@@ -127,17 +126,15 @@ const TAG_TO_LEVEL = new Map([
 
 type StructureHeaderArgs = {
   outlineText: (node: PNode) => string;
-  numberContentDOM: (number: number | string) => DOMOutputSpec[];
   includeLevel: boolean;
 };
 
 export function constructStructureHeaderNodeSpec({
   outlineText,
-  numberContentDOM,
   includeLevel,
 }: StructureHeaderArgs): NodeSpec {
   return {
-    content: 'structure_header_title',
+    content: 'text* structure_header_number text* structure_header_title',
     inline: false,
     defining: true,
     isolating: true,
@@ -172,7 +169,7 @@ export function constructStructureHeaderNodeSpec({
           ...attrs,
           ...(includeLevel ? { level: level as number } : {}),
         },
-        contentArray: [...numberContentDOM(attrs.number), ['span', {}, 0]],
+        content: 0,
       });
     },
     parseDOM: [
@@ -195,11 +192,7 @@ export function constructStructureHeaderNodeSpec({
 
           return false;
         },
-        contentElement: (node) => {
-          return ((node as HTMLElement)?.querySelector(
-            '[data-content-container="true"]',
-          )?.lastElementChild ?? node) as HTMLElement;
-        },
+        contentElement: '[data-content-container="true"]',
       },
     ],
   };

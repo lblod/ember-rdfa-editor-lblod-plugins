@@ -41,6 +41,7 @@ export const chapterSpec: StructureSpec = {
     const chapterUuid = uuid();
     const headingRdfaId = uuid();
     const titleRdfaId = uuid();
+    const numberRdfaId = uuid();
     const bodyUuid = uuid();
     const chapterResource = `http://data.lblod.info/chapters/${chapterUuid}`;
     const chapterAttrs: RdfaAttrs = {
@@ -49,9 +50,9 @@ export const chapterSpec: StructureSpec = {
       resource: chapterResource,
       properties: [
         {
-          type: 'attribute',
+          type: 'external',
           predicate: ELI('number').prefixed,
-          object: numberConverted,
+          object: { type: 'literal', rdfaId: numberRdfaId },
         },
         {
           type: 'external',
@@ -88,6 +89,8 @@ export const chapterSpec: StructureSpec = {
         titleText,
         headingRdfaId,
         backlinkResource: chapterResource,
+        numberRdfaId,
+        number: numberConverted,
         level: 4,
       }),
       schema.node(
