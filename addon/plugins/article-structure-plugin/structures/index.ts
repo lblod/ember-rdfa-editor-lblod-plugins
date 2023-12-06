@@ -1,6 +1,11 @@
 import { ArticleStructurePluginOptions } from '..';
 import { article, articleSpec, article_body, article_header } from './article';
-import { articleParagraphSpec, article_paragraph } from './article-paragraph';
+import {
+  articleParagraphSpec,
+  article_paragraph,
+  article_paragraph_number,
+  article_paragraph_body,
+} from './article-paragraph';
 import { chapterSpec, chapter, chapter_body } from './chapter';
 import { titleSpec, title, title_body } from './title';
 import { sectionSpec, section, section_body } from './section';
@@ -32,6 +37,8 @@ export const STRUCTURE_NODES = {
   article_header,
   article_body,
   article_paragraph,
+  article_paragraph_number,
+  article_paragraph_body,
   structure_header_title,
   structure_header_number,
 };

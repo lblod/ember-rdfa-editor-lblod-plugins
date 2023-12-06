@@ -73,7 +73,8 @@ const wrapStructureContent = (
           resource: newResource,
           property: {
             type: 'external',
-            predicate: SAY('hasPart').prefixed,
+            predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
+              .prefixed,
             object: {
               type: 'resource',
               resource,

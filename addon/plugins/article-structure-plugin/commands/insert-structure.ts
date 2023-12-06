@@ -14,8 +14,6 @@ import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { Backlink } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
-const wrappingResources = [SAY('body').prefixed, SAY('body').full];
-
 const insertStructure = (
   structureSpec: StructureSpec,
   intl: IntlService,
@@ -41,7 +39,7 @@ const insertStructure = (
         | Backlink[]
         | undefined;
       const resource = backlinks?.find((backlink) =>
-        wrappingResources.includes(backlink.predicate),
+        SAY('body').matches(backlink.predicate),
       )?.subject;
       const {
         node: newStructureNode,
@@ -76,7 +74,8 @@ const insertStructure = (
           resource,
           property: {
             type: 'external',
-            predicate: SAY('hasPart').prefixed,
+            predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
+              .prefixed,
             object: {
               type: 'resource',
               resource: newResource,

@@ -74,8 +74,9 @@ export function constructStructureBodyNodeSpec(config: {
   content: string;
   context: string;
   allowSplitByTable?: boolean;
+  tag?: string;
 }): NodeSpec {
-  const { content, context } = config;
+  const { content, context, tag = 'div' } = config;
   return {
     content,
     inline: false,
@@ -87,7 +88,7 @@ export function constructStructureBodyNodeSpec(config: {
     toDOM(node) {
       return renderRdfaAware({
         renderable: node,
-        tag: 'div',
+        tag,
         attrs: {
           ...node.attrs,
           class: 'say-editable',
@@ -99,7 +100,7 @@ export function constructStructureBodyNodeSpec(config: {
     },
     parseDOM: [
       {
-        tag: 'div',
+        tag,
         context,
         getAttrs(element: HTMLElement) {
           const rdfaAttrs = getRdfaAttrs(element);
@@ -111,7 +112,7 @@ export function constructStructureBodyNodeSpec(config: {
           }
           return false;
         },
-        contentElement: 'div[data-content-container="true"]',
+        contentElement: `${tag}[data-content-container="true"]`,
       },
     ],
   };

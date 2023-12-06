@@ -6,6 +6,7 @@ import {
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
+import type { Resource } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export type SpecName = string;
 
@@ -45,6 +46,7 @@ export type StructureSpec = {
   continuous: boolean;
   limitTo?: string;
   noUnwrap?: boolean;
+  relationshipPredicate?: Resource;
 };
 
 export type ArticleStructurePluginOptions = StructureSpec[];

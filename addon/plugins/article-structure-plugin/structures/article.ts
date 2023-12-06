@@ -11,7 +11,6 @@ import {
   ELI,
   EXT,
   SAY,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
@@ -145,5 +144,5 @@ export const article_header = constructStructureHeaderNodeSpec({
 
 export const article_body = constructStructureBodyNodeSpec({
   content: '(block|article_paragraph)+',
-  context: 'article/',
+  context: 'article//',
 });

@@ -1,6 +1,15 @@
 [typeof="say:Paragraph"] {
   display: flex;
 
+  > [data-content-container="true"] {
+    display: flex;
+    // align-items: flex-start;
+
+    > span:first-child {
+      display: inline-block;
+    }
+  }
+
   [property="eli:number"], [contenteditable="false"], [property="say:body"] {
     margin-top: 0;
   }
