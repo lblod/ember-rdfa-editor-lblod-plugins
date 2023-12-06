@@ -112,9 +112,8 @@ export const articleParagraphSpec: StructureSpec = {
       newResource: resource,
     };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = number.toString();
-    return transaction.setNodeAttribute(pos, 'number', numberConverted);
+  updateNumber: {
+    convertNumber: (number) => number.toString(),
   },
 };
 

@@ -65,7 +65,7 @@ const wrapStructureContent = (
       }
 
       transaction.scrollIntoView();
-      recalculateStructureNumbers(transaction, structureSpec);
+      recalculateStructureNumbers(transaction, schema, structureSpec);
 
       if (resource) {
         const newState = state.apply(transaction);

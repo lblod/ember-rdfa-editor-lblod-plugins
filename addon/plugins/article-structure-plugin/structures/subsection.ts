@@ -111,9 +111,8 @@ export const subsectionSpec: StructureSpec = {
       newResource: resource,
     };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = romanize(number);
-    return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
+  updateNumber: {
+    convertNumber: romanize,
   },
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));

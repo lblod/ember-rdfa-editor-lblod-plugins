@@ -119,9 +119,8 @@ export const articleSpec: StructureSpec = {
       newResource: resource,
     };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = number.toString();
-    return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
+  updateNumber: {
+    convertNumber: (number) => number.toString(),
   },
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));

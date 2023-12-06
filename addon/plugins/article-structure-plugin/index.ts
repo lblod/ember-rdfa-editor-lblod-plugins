@@ -37,11 +37,16 @@ export type StructureSpec = {
     content?: PNode | Fragment;
     state?: EditorState;
   }) => SpecConstructorResult;
-  updateNumber: (args: {
-    number: number;
-    pos: number;
-    transaction: Transaction;
-  }) => Transaction;
+  updateNumber:
+    | {
+        numberPredicate?: Resource;
+        convertNumber: (number: number) => string;
+      }
+    | ((args: {
+        number: number;
+        pos: number;
+        transaction: Transaction;
+      }) => Transaction);
   content?: (args: { pos: number; state: EditorState }) => Fragment;
   continuous: boolean;
   limitTo?: string;
