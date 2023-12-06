@@ -184,10 +184,13 @@ export const besluitArticleStructure: StructureSpec = {
   constructor: ({ schema, number, content, intl, state }) => {
     const translationWithDocLang = getTranslationFunction(state);
     const numberConverted = number?.toString() ?? '1';
+    const articleRdfaId = uuid();
+    const resource = `http://data.lblod.info/articles/${articleRdfaId}`;
     const node = schema.node(
       `besluit_article`,
       {
-        resource: `http://data.lblod.info/articles/${uuid()}`,
+        resource,
+        __rdfaId: articleRdfaId,
       },
       [
         schema.node('besluit_article_header', {
@@ -212,15 +215,14 @@ export const besluitArticleStructure: StructureSpec = {
         ),
       ],
     );
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 3, type: 'text' }
-      : { relativePos: 4, type: 'node' };
+
     return {
       node,
-      selectionConfig,
+      newResource: resource,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: articleRdfaId,
+      },
     };
   },
   updateNumber: function ({ number, pos, transaction }): Transaction {
