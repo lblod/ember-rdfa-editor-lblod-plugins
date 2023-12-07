@@ -9,7 +9,7 @@ import {
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
 import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
-import { addProperty } from '@lblod/ember-rdfa-editor/commands';
+import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import {
   SpecConstructorResult,
   StructureSpec,
@@ -27,7 +27,7 @@ const wrapStructureContent = (
       return false;
     }
     const { selection, schema } = state;
-    const [container, resource] = findInsertionContainer(
+    const [container, resourceHierarchy] = findInsertionContainer(
       selection,
       schema.nodes[structureSpec.name],
       schema,
@@ -67,24 +67,49 @@ const wrapStructureContent = (
       transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, schema, structureSpec);
 
-      if (resource) {
-        const newState = state.apply(transaction);
+      const { toCreate, toRemove } = findUpdatedRelationships({
+        contentToWrap,
+        resourceHierarchy,
+        newResource,
+      });
+      let newState = state;
+      toCreate.forEach(([outer, inner]) => {
+        newState = state.apply(transaction);
         addProperty({
-          resource: newResource,
+          resource: outer,
           property: {
             type: 'external',
             predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
               .prefixed,
             object: {
               type: 'resource',
-              resource,
+              resource: inner,
             },
           },
           transaction,
         })(newState, (newTransaction) => {
           transaction = newTransaction;
         });
-      }
+      });
+      toRemove.forEach(([outer, inner]) => {
+        newState = state.apply(transaction);
+        removeProperty({
+          resource: outer,
+          property: {
+            type: 'external',
+            predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
+              .prefixed,
+            object: {
+              type: 'resource',
+              resource: inner,
+            },
+          },
+          transaction,
+        })(newState, (newTransaction) => {
+          transaction = newTransaction;
+        });
+      });
+
       dispatch(transaction);
     }
     return true;
@@ -96,15 +121,16 @@ function findInsertionContainer(
   selection: Selection,
   nodeType: NodeType,
   schema: Schema,
-): [ContainerNode | null, string | undefined] {
+): [ContainerNode | null, string[]] {
   const { $from } = selection;
   let container: ContainerNode | null = null;
-  let resource: string | undefined;
-  // Loop from current depth to top looking for a container and resource URI
+  const resourceHierarchy: string[] = [];
+  // Loop from current depth to top looking for a container and resource URIs
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
-    if (!resource) {
-      resource = currentAncestor.attrs?.resource as string | undefined;
+    const resource = currentAncestor.attrs?.resource as string | undefined;
+    if (resource) {
+      resourceHierarchy.unshift(resource);
     }
     if (!container) {
       const pos = currentDepth > 0 ? $from.before(currentDepth) : -1;
@@ -189,7 +215,49 @@ function findInsertionContainer(
       }
     }
   }
-  return [container, resource];
+  return [container, resourceHierarchy];
+}
+
+function findUpdatedRelationships({
+  contentToWrap,
+  newResource,
+  resourceHierarchy,
+}: {
+  contentToWrap: PNode | Fragment;
+  newResource: string;
+  resourceHierarchy: string[];
+}): { toCreate: [string, string][]; toRemove: [string, string][] } {
+  const wrappedResource = (
+    'attrs' in contentToWrap
+      ? contentToWrap.attrs
+      : contentToWrap.firstChild?.attrs
+  )?.resource as string;
+
+  const toCreate: [string, string][] = [];
+  const toRemove: [string, string][] = [];
+  if (resourceHierarchy.length === 0) {
+    // There are no existing resources, so no relationships
+  } else if (!wrappedResource) {
+    // There's no resource inside the new resource, so the only potential relationship is with the
+    // inner resource of the existing hierarchy
+    toCreate.push([
+      resourceHierarchy[resourceHierarchy.length - 1],
+      newResource,
+    ]);
+  } else {
+    // There is a resource wrapped by our new one
+    toCreate.push([newResource, wrappedResource]);
+    // Now check if that resource was inside another, so we undo that relationship and put our new
+    // resource in the middle
+    const wrappedIndex = resourceHierarchy.indexOf(wrappedResource);
+    const resourceBeforeWrapped = resourceHierarchy[wrappedIndex - 1];
+    if (resourceBeforeWrapped) {
+      toRemove.push([resourceBeforeWrapped, wrappedResource]);
+      toCreate.push([resourceBeforeWrapped, newResource]);
+    }
+  }
+
+  return { toCreate, toRemove };
 }
 
 export default wrapStructureContent;
