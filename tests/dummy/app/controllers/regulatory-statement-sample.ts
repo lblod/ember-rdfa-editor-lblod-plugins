@@ -91,6 +91,8 @@ import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/
 import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
+import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
+
 export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
@@ -143,6 +145,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       strong,
       underline,
       strikethrough,
+      redacted,
     },
   });
 

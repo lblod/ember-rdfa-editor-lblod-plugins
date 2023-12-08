@@ -97,6 +97,7 @@ import {
   date,
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
+import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -202,6 +203,7 @@ export default class BesluitSampleController extends Controller {
         strong,
         underline,
         strikethrough,
+        redacted,
       },
     });
   }
