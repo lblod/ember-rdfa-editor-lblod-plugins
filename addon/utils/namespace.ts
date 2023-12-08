@@ -12,6 +12,14 @@ export class Resource {
   toString() {
     return this.full;
   }
+
+  equals(resource: Resource | string) {
+    if (resource instanceof Resource) {
+      return this.full === resource.full;
+    } else {
+      return this.full === resource || this.prefixed === resource;
+    }
+  }
 }
 
 export function namespace(uri: string, prefix: string) {

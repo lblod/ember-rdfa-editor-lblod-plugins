@@ -33,8 +33,7 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+    const resource = `http://data.lblod.info/variables/${uuidv4()}`;
 
     const placeholder = this.intl.t('variable.text.label', {
       locale: this.documentLanguage,
@@ -43,8 +42,7 @@ export default class TextVariableInsertComponent extends Component<Args> {
     const node = this.schema.nodes.text_variable.create(
       {
         label: this.label ?? placeholder,
-        mappingResource,
-        variableInstance,
+        resource,
       },
       this.schema.node('placeholder', { placeholderText: placeholder }),
     );

@@ -7,24 +7,57 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import {
+  filterOutContentProperties,
   isVariable,
+  isVariableNew,
   parseLabel,
   parseVariableInstance,
   parseVariableType,
+  parseVariableTypeNew,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
-import {
-  contentSpan,
-  instanceSpan,
-  typeSpan,
-  mappingSpan,
-} from '../utils/dom-constructors';
+import { contentSpan } from '../utils/dom-constructors';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
+import {
+  getRdfaAttrs,
+  renderInvisibleRdfa,
+} from '@lblod/ember-rdfa-editor/core/schema';
+import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 
 const parseDOM = [
+  //Parsing rule that cares less about html structure (only about the RDFa).
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const rdfaAttrs = getRdfaAttrs(node);
+      if (!rdfaAttrs || rdfaAttrs.rdfaNodeType === 'literal') {
+        return false;
+      }
+      // Parse properties and filter out 'special' properites (still TODO)
+      if (
+        isVariableNew(node) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        parseVariableTypeNew(node) === 'text'
+      ) {
+        const resource = rdfaAttrs.resource;
+        const label = parseLabel(node);
+        const { properties, backlinks } = rdfaAttrs;
+        const filteredProperties = filterOutContentProperties(properties);
+        return {
+          resource,
+          label,
+          backlinks,
+          properties: filteredProperties,
+        };
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
+  //Parsing rule for the old structure (should actually not be needed)
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -33,16 +66,10 @@ const parseDOM = [
         node.querySelector(CONTENT_SELECTOR) &&
         parseVariableType(node) === 'text'
       ) {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
-          return false;
-        }
-        const variableInstance = parseVariableInstance(node);
+        const resource = parseVariableInstance(node);
         const label = parseLabel(node);
         return {
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
+          resource: resource ?? `http://data.lblod.info/variables/${uuidv4()}`,
           label,
         };
       }
@@ -54,16 +81,31 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const { mappingResource, variableInstance, label } = node.attrs;
-  return mappingSpan(
-    mappingResource,
+  const { label, resource, properties } = node.attrs;
+  const extendedProperties = [
+    ...(properties as Property[]),
     {
-      'data-label': label as string,
+      type: 'attribute',
+      predicate: 'rdf:type',
+      object: EXT('Variable').prefixed,
     },
-    instanceSpan(variableInstance),
-    typeSpan('text'),
-    contentSpan({}, 0),
+    {
+      type: 'attribute',
+      predicate: 'dct:type',
+      object: 'text',
+    },
+  ];
+  const nodeCopy = node.type.create(
+    { ...node.attrs, properties: extendedProperties },
+    node.content,
+    node.marks,
   );
+  return [
+    'span',
+    { 'data-label': label as string, resource: resource as string },
+    renderInvisibleRdfa(nodeCopy, 'span'),
+    contentSpan({}, 0),
+  ];
 };
 
 const emberNodeConfig: EmberNodeConfig = {
@@ -78,8 +120,16 @@ const emberNodeConfig: EmberNodeConfig = {
   draggable: false,
   needsFFKludge: true,
   attrs: {
-    mappingResource: {},
-    variableInstance: {},
+    properties: {
+      default: [],
+    },
+    backlinks: {
+      default: [],
+    },
+    resource: {},
+    rdfaNodeType: {
+      default: 'resource',
+    },
     label: { default: null },
   },
   toDOM,
