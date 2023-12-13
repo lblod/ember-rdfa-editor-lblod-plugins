@@ -26,8 +26,8 @@ function updateNumber(
     numberRdfaId && findNodeByRdfaId(transaction.doc, numberRdfaId);
   if (numberNode) {
     transaction.replaceWith(
-      numberNode.pos,
-      numberNode.pos + numberNode.value.nodeSize,
+      numberNode.pos + 1,
+      numberNode.pos + numberNode.value.nodeSize - 1,
       schema.text(number),
     );
   }
