@@ -5,7 +5,6 @@
   <:content>
     <EditorContainer
       @editorOptions={{hash
-        showRdfa="true"
         showRdfaHighlight="true"
         showRdfaHover="true"
         showPaper="true"
@@ -26,8 +25,18 @@
       </:default>
       <:aside>
         <Sidebar>
+          {{#if this.rdfaEditor}}
+            <ArticleStructurePlugin::ArticleStructureCard
+              @controller={{this.rdfaEditor}}
+              @options={{this.structureConfig}}
+            />
+          {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
           {{#if this.activeNode}}
+            <ArticleStructurePlugin::StructureCard
+              @controller={{this.rdfaEditor}}
+              @options={{this.structureConfig}}
+            />
             <this.RdfaEditor
               @node={{this.activeNode}}
               @controller={{this.rdfaEditor}}

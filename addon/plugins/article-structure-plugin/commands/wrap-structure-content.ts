@@ -1,5 +1,6 @@
 import {
   Command,
+  Fragment,
   NodeSelection,
   NodeType,
   PNode,
@@ -7,9 +8,15 @@ import {
   Selection,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
-import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
+import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
+import {
+  SpecConstructorResult,
+  StructureSpec,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import IntlService from 'ember-intl/services/intl';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const wrapStructureContent = (
   structureSpec: StructureSpec,
@@ -20,7 +27,7 @@ const wrapStructureContent = (
       return false;
     }
     const { selection, schema } = state;
-    const container = findInsertionContainer(
+    const [container, resourceHierarchy] = findInsertionContainer(
       selection,
       schema.nodes[structureSpec.name],
       schema,
@@ -29,136 +36,228 @@ const wrapStructureContent = (
       return false;
     }
     const contentToWrap = container.node;
-    let result: {
-      node: PNode;
-      selectionConfig: {
-        relativePos: number;
-        type: 'node' | 'text';
-      };
-    };
-    try {
-      result = structureSpec.constructor({
-        schema,
-        content: contentToWrap,
-        intl,
-        state,
-      });
-    } catch (e) {
-      return false;
-    }
-    const { node: wrappingNode, selectionConfig } = result;
+    let result: SpecConstructorResult;
     if (dispatch) {
-      const transaction = state.tr;
+      try {
+        result = structureSpec.constructor({
+          schema,
+          content: contentToWrap,
+          intl,
+          state,
+        });
+      } catch (e) {
+        return false;
+      }
+      const { node: wrappingNode, selectionConfig, newResource } = result;
+      let transaction = state.tr;
       transaction.replaceWith(container.from, container.to, wrappingNode);
-      const newSelection =
-        selectionConfig.type === 'node'
-          ? NodeSelection.create(
-              transaction.doc,
-              container.from + 1 + selectionConfig.relativePos,
-            )
-          : TextSelection.create(
-              transaction.doc,
-              container.from + 1 + selectionConfig.relativePos,
-            );
-      transaction.setSelection(newSelection);
+
+      const target = getNodeByRdfaId(
+        state.apply(transaction),
+        selectionConfig.rdfaId,
+      );
+      if (target) {
+        const newSelection =
+          selectionConfig.type === 'node'
+            ? NodeSelection.create(transaction.doc, target.pos)
+            : TextSelection.create(transaction.doc, target.pos + 1);
+        transaction.setSelection(newSelection);
+      }
+
       transaction.scrollIntoView();
-      recalculateStructureNumbers(transaction, structureSpec);
+      recalculateStructureNumbers(transaction, schema, structureSpec);
+
+      const { toCreate, toRemove } = findUpdatedRelationships({
+        contentToWrap,
+        resourceHierarchy,
+        newResource,
+      });
+      let newState = state;
+      toCreate.forEach(([outer, inner]) => {
+        newState = state.apply(transaction);
+        addProperty({
+          resource: outer,
+          property: {
+            type: 'external',
+            predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
+              .prefixed,
+            object: {
+              type: 'resource',
+              resource: inner,
+            },
+          },
+          transaction,
+        })(newState, (newTransaction) => {
+          transaction = newTransaction;
+        });
+      });
+      toRemove.forEach(([outer, inner]) => {
+        newState = state.apply(transaction);
+        removeProperty({
+          resource: outer,
+          property: {
+            type: 'external',
+            predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
+              .prefixed,
+            object: {
+              type: 'resource',
+              resource: inner,
+            },
+          },
+          transaction,
+        })(newState, (newTransaction) => {
+          transaction = newTransaction;
+        });
+      });
+
       dispatch(transaction);
     }
     return true;
   };
 };
 
+type ContainerNode = { node: PNode | Fragment; from: number; to: number };
 function findInsertionContainer(
   selection: Selection,
   nodeType: NodeType,
   schema: Schema,
-) {
+): [ContainerNode | null, string[]] {
   const { $from } = selection;
+  let container: ContainerNode | null = null;
+  const resourceHierarchy: string[] = [];
+  // Loop from current depth to top looking for a container and resource URIs
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
-    const pos = currentDepth > 0 ? $from.before(currentDepth) : -1;
-
-    // Simple like for like replacement from 0th index
-    if (
-      currentAncestor.canReplaceWith(0, currentAncestor.childCount, nodeType)
-    ) {
-      return {
-        node: currentAncestor.content,
-        from: pos + 1,
-        to: pos + currentAncestor.nodeSize - 1,
-      };
+    const resource = currentAncestor.attrs?.resource as string | undefined;
+    if (resource) {
+      resourceHierarchy.unshift(resource);
     }
+    if (!container) {
+      const pos = currentDepth > 0 ? $from.before(currentDepth) : -1;
 
-    const currentAncestorParent = $from.node(currentDepth - 1);
-    const currentAncestorIndexInParent = $from.index(currentDepth - 1);
+      // Simple like for like replacement from 0th index
+      if (
+        currentAncestor.canReplaceWith(0, currentAncestor.childCount, nodeType)
+      ) {
+        container = {
+          node: currentAncestor.content,
+          from: pos + 1,
+          to: pos + currentAncestor.nodeSize - 1,
+        };
+      }
 
-    if (!currentAncestorParent) {
-      return null;
-    }
+      const currentAncestorParent = $from.node(currentDepth - 1);
+      const currentAncestorIndexInParent = $from.index(currentDepth - 1);
 
-    // Sometimes we might not be able to replace from 0th index, but we can try to go one
-    // level up and attempt to replace `currentAncestor` as a child of its parent
-    if (
-      currentAncestorParent.canReplaceWith(
-        currentAncestorIndexInParent,
-        currentAncestorIndexInParent + 1,
-        nodeType,
-      )
-    ) {
-      return {
-        node: currentAncestor,
-        from: pos,
-        to: pos + currentAncestor.nodeSize - 1,
-      };
-    }
+      if (!currentAncestorParent) {
+        break;
+      }
 
-    /**
-     * Special case when we reach `doc` node, but cannot replace the content.
-     * e.g. we reached doc, and it contains "document_title article article",
-     * we might not be able to wrap single `article`, depending on the `content` definition,
-     * of the `doc`. We try to find sibling nodes of same type and try
-     * to wrap them all together, that includes the content that might be between them.
-     */
-    if (currentAncestorParent.type.spec === schema.nodes.doc.spec) {
-      const doc = currentAncestorParent;
+      // Sometimes we might not be able to replace from 0th index, but we can try to go one
+      // level up and attempt to replace `currentAncestor` as a child of its parent
+      if (
+        currentAncestorParent.canReplaceWith(
+          currentAncestorIndexInParent,
+          currentAncestorIndexInParent + 1,
+          nodeType,
+        )
+      ) {
+        container = {
+          node: currentAncestor,
+          from: pos,
+          to: pos + currentAncestor.nodeSize - 1,
+        };
+      }
 
-      let firstOfTypePosition: null | number = null;
-      let lastOfTypePosition: null | number = null;
+      /**
+       * Special case when we reach `doc` node, but cannot replace the content.
+       * e.g. we reached doc, and it contains "document_title article article",
+       * we might not be able to wrap single `article`, depending on the `content` definition,
+       * of the `doc`. We try to find sibling nodes of same type and try
+       * to wrap them all together, that includes the content that might be between them.
+       */
+      if (currentAncestorParent.type.spec === schema.nodes.doc.spec) {
+        const doc = currentAncestorParent;
 
-      currentAncestorParent.forEach((node, pos) => {
-        if (node.type === currentAncestor.type) {
-          if (!firstOfTypePosition) {
-            firstOfTypePosition = pos;
+        let firstOfTypePosition: null | number = null;
+        let lastOfTypePosition: null | number = null;
+
+        currentAncestorParent.forEach((node, pos) => {
+          if (node.type === currentAncestor.type) {
+            if (!firstOfTypePosition) {
+              firstOfTypePosition = pos;
+            }
+
+            lastOfTypePosition = pos;
           }
+        });
 
-          lastOfTypePosition = pos;
-        }
-      });
+        if (firstOfTypePosition !== null && lastOfTypePosition !== null) {
+          const from = firstOfTypePosition;
+          const to = doc.resolve(lastOfTypePosition).end();
 
-      if (firstOfTypePosition !== null && lastOfTypePosition !== null) {
-        const from = firstOfTypePosition;
-        const to = doc.resolve(lastOfTypePosition).end();
+          const node = doc.cut(from, to).content;
 
-        const node = doc.cut(from, to).content;
-
-        if (
-          currentAncestorParent.canReplaceWith(
-            doc.resolve(from).index(),
-            doc.resolve(to).index(),
-            nodeType,
-          )
-        ) {
-          return {
-            node,
-            from,
-            to,
-          };
+          if (
+            currentAncestorParent.canReplaceWith(
+              doc.resolve(from).index(),
+              doc.resolve(to).index(),
+              nodeType,
+            )
+          ) {
+            container = {
+              node,
+              from,
+              to,
+            };
+          }
         }
       }
     }
   }
-  return null;
+  return [container, resourceHierarchy];
+}
+
+function findUpdatedRelationships({
+  contentToWrap,
+  newResource,
+  resourceHierarchy,
+}: {
+  contentToWrap: PNode | Fragment;
+  newResource: string;
+  resourceHierarchy: string[];
+}): { toCreate: [string, string][]; toRemove: [string, string][] } {
+  const wrappedResource = (
+    'attrs' in contentToWrap
+      ? contentToWrap.attrs
+      : contentToWrap.firstChild?.attrs
+  )?.resource as string;
+
+  const toCreate: [string, string][] = [];
+  const toRemove: [string, string][] = [];
+  if (resourceHierarchy.length === 0) {
+    // There are no existing resources, so no relationships
+  } else if (!wrappedResource) {
+    // There's no resource inside the new resource, so the only potential relationship is with the
+    // inner resource of the existing hierarchy
+    toCreate.push([
+      resourceHierarchy[resourceHierarchy.length - 1],
+      newResource,
+    ]);
+  } else {
+    // There is a resource wrapped by our new one
+    toCreate.push([newResource, wrappedResource]);
+    // Now check if that resource was inside another, so we undo that relationship and put our new
+    // resource in the middle
+    const wrappedIndex = resourceHierarchy.indexOf(wrappedResource);
+    const resourceBeforeWrapped = resourceHierarchy[wrappedIndex - 1];
+    if (resourceBeforeWrapped) {
+      toRemove.push([resourceBeforeWrapped, wrappedResource]);
+      toCreate.push([resourceBeforeWrapped, newResource]);
+    }
+  }
+
+  return { toCreate, toRemove };
 }
 
 export default wrapStructureContent;

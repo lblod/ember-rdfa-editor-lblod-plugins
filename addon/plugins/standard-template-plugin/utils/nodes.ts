@@ -1,7 +1,7 @@
 import {
   getRdfaAttrs,
   NodeSpec,
-  rdfaAttrs,
+  rdfaAttrSpec,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import {
@@ -23,7 +23,7 @@ export const besluit_title: NodeSpec = {
   defining: true,
   canSplit: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'eli:title',
     },
@@ -53,7 +53,7 @@ export const description: NodeSpec = {
   inline: false,
   canSplit: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'eli:description',
     },
@@ -82,7 +82,7 @@ export const motivering: NodeSpec = {
   inline: false,
   canSplit: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'besluit:motivering',
     },
@@ -112,7 +112,7 @@ export const article_container: NodeSpec = {
   inline: false,
   canSplit: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'prov:value',
     },
@@ -142,7 +142,7 @@ export const besluit_article: NodeSpec = {
     'besluit_article_header{1}(language_node*)besluit_article_content{1}',
   inline: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'eli:has_part',
     },
@@ -184,10 +184,13 @@ export const besluitArticleStructure: StructureSpec = {
   constructor: ({ schema, number, content, intl, state }) => {
     const translationWithDocLang = getTranslationFunction(state);
     const numberConverted = number?.toString() ?? '1';
+    const articleRdfaId = uuid();
+    const resource = `http://data.lblod.info/articles/${articleRdfaId}`;
     const node = schema.node(
       `besluit_article`,
       {
-        resource: `http://data.lblod.info/articles/${uuid()}`,
+        resource,
+        __rdfaId: articleRdfaId,
       },
       [
         schema.node('besluit_article_header', {
@@ -212,15 +215,14 @@ export const besluitArticleStructure: StructureSpec = {
         ),
       ],
     );
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 3, type: 'text' }
-      : { relativePos: 4, type: 'node' };
+
     return {
       node,
-      selectionConfig,
+      newResource: resource,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: articleRdfaId,
+      },
     };
   },
   updateNumber: function ({ number, pos, transaction }): Transaction {
@@ -238,7 +240,7 @@ export const besluit_article_header: NodeSpec = {
   inline: false,
   selectable: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     number: {
       default: '1',
     },
@@ -283,7 +285,7 @@ export const besluit_article_content: NodeSpec = {
   content: 'block+',
   inline: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'prov:value',
     },
@@ -316,7 +318,7 @@ export const besluit: NodeSpec = {
   isolating: true,
   canSplit: false,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     property: {
       default: 'prov:generated',
     },
@@ -350,7 +352,7 @@ export const language_node: NodeSpec = {
   inline: false,
   atom: true,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec,
     style: {
       default: 'style="display:none;"',
     },

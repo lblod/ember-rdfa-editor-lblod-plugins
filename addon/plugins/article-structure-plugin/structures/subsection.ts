@@ -5,9 +5,15 @@ import {
   romanize,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { RdfaAttrs } from '@lblod/ember-rdfa-editor';
+import {
+  ELI,
+  EXT,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { constructStructureHeader } from './structure-header';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.subsection.heading',
@@ -30,51 +36,83 @@ export const subsectionSpec: StructureSpec = {
   constructor: ({ schema, number, intl, content, state }) => {
     const numberConverted = romanize(number ?? 1);
     const translationWithDocLang = getTranslationFunction(state);
-    const node = schema.node(
-      `subsection`,
-      { resource: `http://data.lblod.info/subsections/${uuid()}` },
-      [
-        schema.node(
-          'structure_header',
-          { level: 6, number: numberConverted },
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.title,
-              intl?.t(PLACEHOLDERS.title) || '',
-            ),
-          }),
-        ),
-        schema.node(
-          `subsection_body`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  PLACEHOLDERS.body,
-                  intl?.t(PLACEHOLDERS.body) || '',
-                ),
-              }),
-            ),
-        ),
-      ],
+    const resourceUuid = uuid();
+    const titleRdfaId = uuid();
+    const headingRdfaId = uuid();
+    const numberRdfaId = uuid();
+    const bodyRdfaId = uuid();
+    const resource = `http://data.lblod.info/subsections/${resourceUuid}`;
+    const titleText = translationWithDocLang(
+      PLACEHOLDERS.title,
+      intl?.t(PLACEHOLDERS.title) || '',
     );
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 5, type: 'text' }
-      : { relativePos: 6, type: 'node' };
+    const sectionAttrs: RdfaAttrs = {
+      __rdfaId: resourceUuid,
+      rdfaNodeType: 'resource',
+      resource,
+      properties: [
+        {
+          type: 'external',
+          predicate: ELI('number').prefixed,
+          object: { type: 'literal', rdfaId: numberRdfaId },
+        },
+        {
+          type: 'external',
+          predicate: SAY('heading').prefixed,
+          object: { type: 'literal', rdfaId: headingRdfaId },
+        },
+        {
+          type: 'external',
+          predicate: EXT('title').prefixed,
+          object: { type: 'literal', rdfaId: titleRdfaId },
+        },
+        {
+          type: 'external',
+          predicate: SAY('body').prefixed,
+          object: { type: 'literal', rdfaId: bodyRdfaId },
+        },
+      ],
+      backlinks: [],
+    };
+    const node = schema.node(`subsection`, sectionAttrs, [
+      constructStructureHeader({
+        schema,
+        level: 6,
+        number: numberConverted,
+        titleRdfaId,
+        titleText,
+        headingRdfaId,
+        numberRdfaId,
+        backlinkResource: resource,
+      }),
+      schema.node(
+        `subsection_body`,
+        {},
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                PLACEHOLDERS.body,
+                intl?.t(PLACEHOLDERS.body) || '',
+              ),
+            }),
+          ),
+      ),
+    ]);
+
     return {
       node,
-      selectionConfig,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: bodyRdfaId,
+      },
+      newResource: resource,
     };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = romanize(number);
-    return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
+  updateNumber: {
+    convertNumber: romanize,
   },
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
@@ -89,4 +127,5 @@ export const subsection = constructStructureNodeSpec({
 
 export const subsection_body = constructStructureBodyNodeSpec({
   content: '(article|block)+',
+  context: 'subsection/',
 });
