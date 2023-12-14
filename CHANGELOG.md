@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 15.2.0
+
+### Minor Changes
+
+- [#362](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/362) [`47f2337`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/47f233767cd5f6169e2d4b8a3c71619d0718c035) Thanks [@piemonkey](https://github.com/piemonkey)! - Add incredibly small plugin for highlighting text as redacted
+
 ## 15.1.0
 
 ### Minor Changes
