@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { Schema } from 'prosemirror-model';
 import {
   em,
   strikethrough,
@@ -36,7 +35,10 @@ import {
   ordered_list,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
+import {
+  inline_rdfa,
+  inlineRdfaView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import SayController from '@lblod/ember-rdfa-editor/core/say-controller';
 import {
   link,
@@ -60,7 +62,19 @@ import {
   bullet_list_input_rule,
   ordered_list_input_rule,
 } from '@lblod/ember-rdfa-editor/plugins/list/input_rules';
-import { inputRules, PluginConfig } from '@lblod/ember-rdfa-editor';
+import {
+  codelist,
+  number,
+  text_variable,
+  location,
+  textVariableView,
+  numberView,
+  codelistView,
+  locationView,
+  address,
+  addressView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import { inputRules, PluginConfig, Schema } from '@lblod/ember-rdfa-editor';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { getOwner } from '@ember/application';
@@ -75,7 +89,8 @@ import {
   STRUCTURE_NODES,
   STRUCTURE_SPECS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
-
+import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
+import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -100,6 +115,7 @@ export default class EditableBlockController extends Controller {
       ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
       heading,
       blockquote,
+      text_variable,
 
       horizontal_rule,
       code_block,
@@ -110,11 +126,11 @@ export default class EditableBlockController extends Controller {
 
       hard_break,
       block_rdfa,
+      inline_rdfa,
       link: link(this.linkOptions),
       ...STRUCTURE_NODES,
     },
     marks: {
-      inline_rdfa,
       code,
       em,
       strong,
@@ -133,6 +149,36 @@ export default class EditableBlockController extends Controller {
     };
   }
 
+  get variableTypes(): VariableConfig[] {
+    return [
+      {
+        label: 'text',
+        component: TextVariableInsertComponent,
+      },
+      // {
+      //   label: 'number',
+      //   component: NumberInsertComponent,
+      // },
+      // {
+      //   label: 'date',
+      //   component: DateInsertVariableComponent,
+      // },
+      // {
+      //   label: 'location',
+      //   component: LocationInsertComponent,
+      //   options: this.locationOptions,
+      // },
+      // {
+      //   label: 'codelist',
+      //   component: CodelistInsertComponent,
+      //   options: this.codelistOptions,
+      // },
+      // {
+      //   label: 'address',
+      //   component: VariablePluginAddressInsertVariableComponent,
+      // },
+    ];
+  }
   @tracked plugins: PluginConfig = [
     firefoxCursorFix(),
     chromeHacksPlugin(),
@@ -140,12 +186,9 @@ export default class EditableBlockController extends Controller {
     tablePlugin,
     tableKeymap,
     linkPasteHandler(this.schema.nodes.link),
-    createInvisiblesPlugin(
-      [space, hardBreak, paragraphInvisible, headingInvisible],
-      {
-        shouldShowInvisibles: false,
-      },
-    ),
+    createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
+      shouldShowInvisibles: false,
+    }),
     inputRules({
       rules: [
         bullet_list_input_rule(this.schema.nodes.bullet_list),
@@ -153,13 +196,15 @@ export default class EditableBlockController extends Controller {
       ],
     }),
     emberApplication({ application: getOwner(this) }),
-    editableNodePlugin,
+    editableNodePlugin(),
   ];
 
   @tracked nodeViews = (controller: SayController) => {
     return {
       link: linkView(this.linkOptions)(controller),
       image: imageView(controller),
+      inline_rdfa: inlineRdfaView(controller),
+      text_variable: textVariableView(controller)
     };
   };
 
@@ -172,6 +217,9 @@ export default class EditableBlockController extends Controller {
 
   get showRdfaBlocks() {
     return this.rdfaEditor?.showRdfaBlocks;
+  }
+  get controller() {
+    return this.rdfaEditor;
   }
 
   @action

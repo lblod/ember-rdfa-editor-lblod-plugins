@@ -5,7 +5,12 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { v4 as uuidv4 } from 'uuid';
-import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
+import {
+  DOMOutputSpec,
+  getRdfaAttrs,
+  PNode,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
 import {
   isVariable,
   parseLabel,
@@ -25,6 +30,33 @@ const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 
 const parseDOM = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      if (
+        isVariable(node) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        parseVariableType(node) === 'text'
+      ) {
+        const mappingResource = node.getAttribute('resource');
+        if (!mappingResource) {
+          return false;
+        }
+        const variableInstance = parseVariableInstance(node);
+        const label = parseLabel(node);
+        return {
+          variableInstance:
+            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
+          mappingResource,
+          label,
+          ...getRdfaAttrs(node),
+        };
+      }
+
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -77,10 +109,12 @@ const emberNodeConfig: EmberNodeConfig = {
   uriAttributes: ['variableInstance'],
   draggable: false,
   needsFFKludge: true,
+  editable: true,
   attrs: {
     mappingResource: {},
     variableInstance: {},
     label: { default: null },
+    ...rdfaAttrSpec,
   },
   toDOM,
   parseDOM,

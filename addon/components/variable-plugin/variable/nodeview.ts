@@ -4,16 +4,21 @@ import {
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
+import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
+import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 type Args = {
   controller: SayController;
 };
 
-export default class VariableNodeViewComponent extends Component<Args> {
+export default class VariableNodeViewComponent extends Component<EmberNodeArgs> {
   @tracked innerView?: SayView;
 
+  get plugins() {
+    return [editableNodePlugin(this.args.getPos)];
+  }
   @action
   onClick() {
     if (this.innerView) {

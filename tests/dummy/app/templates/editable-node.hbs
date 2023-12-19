@@ -30,6 +30,10 @@
               @controller={{this.rdfaEditor}}
               @options={{this.structureConfig}}
             />
+            <VariablePlugin::InsertVariableCard
+              @controller={{this.controller}}
+              @variableTypes={{this.variableTypes}}
+            />
           {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
           {{#if this.activeNode}}
