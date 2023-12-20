@@ -1,0 +1,8 @@
+@import 'ember-appuniversum';
+
+.rdfa-annotations {
+  [property='ext:redacted'] {
+    background-color: var(--au-red-400);
+    border: 1px solid var(--au-red-600);
+  }
+}
