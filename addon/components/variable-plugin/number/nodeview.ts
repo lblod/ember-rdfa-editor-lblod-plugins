@@ -13,6 +13,8 @@ import { isBlank } from '@ember/utils';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 import { Velcro } from 'ember-velcro';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 type Args = {
   getPos: () => number | undefined;
@@ -126,6 +128,19 @@ export default class NumberNodeviewComponent extends Component<Args> {
   validateAndSave() {
     if (!this.errorMessage) {
       this.args.updateAttribute('value', this.inputNumber);
+      this.args.updateAttribute(
+        'properties',
+        this.node.attrs.properties.map((prop: Property) => {
+          if (
+            prop.type === 'attribute' &&
+            EXT('content').matches(prop.predicate)
+          ) {
+            return { ...prop, object: this.inputNumber };
+          } else {
+            return prop;
+          }
+        }),
+      );
     }
   }
 }

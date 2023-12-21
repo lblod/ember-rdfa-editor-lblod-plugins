@@ -3,15 +3,27 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  DOMOutputSpec,
+  EditorState,
+  getRdfaAttrs,
+  PNode,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
+import {
+    getParsedRDFAAttribute,
+  hasParsedRDFaAttribute,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   EXT,
+  RDF,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 import {
+  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableInstance,
@@ -27,11 +39,51 @@ import {
 import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 
 const parseDOM = [
+  {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node);
+      console.log('attrs', attrs);
+      if (
+        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasRdfaVariableType(attrs, 'number')
+      ) {
+        const mappingResource = attrs.subject;
+        if (!mappingResource) {
+          return false;
+        }
+        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
+          ?.object;
+        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
+
+        const value =
+          getParsedRDFAAttribute(attrs, EXT('content'))?.object ?? 0;
+        const writtenNumber =
+          node.getAttribute('data-written-number') === 'true' ? true : false;
+        const minimumValue = node.getAttribute('data-minimum-value');
+        const maximumValue = node.getAttribute('data-maximum-value');
+        return {
+          ...attrs,
+          variableInstance:
+            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
+          mappingResource,
+          label,
+          writtenNumber,
+          minimumValue,
+          maximumValue,
+          value,
+        };
+      }
+      return false;
+    },
+    contentElement: '[data-content-container="true"]',
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -96,24 +148,17 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     humanReadableContent = t('variable.number.placeholder', 'Voeg getal in');
   }
 
-  return mappingSpan(
-    mappingResource,
-    {
+  return renderRdfaAware({
+    renderable: node,
+    tag: 'span',
+    attrs: {
       'data-label': label as string,
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
     },
-    instanceSpan(variableInstance),
-    typeSpan('number'),
-    contentSpan(
-      {
-        content: (value as string | null) ?? '',
-        datatype: XSD('integer').prefixed,
-      },
-      humanReadableContent,
-    ),
-  );
+    content: humanReadableContent.toString(),
+  });
 };
 
 const emberNodeConfig: EmberNodeConfig = {
@@ -125,9 +170,11 @@ const emberNodeConfig: EmberNodeConfig = {
   atom: true,
   recreateUri: true,
   uriAttributes: ['variableInstance'],
+  editable: true,
   draggable: false,
   needsFFKludge: true,
   attrs: {
+    ...rdfaAttrSpec,
     mappingResource: {},
     variableInstance: {},
     label: { default: null },

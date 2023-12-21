@@ -91,6 +91,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
+import NumberInsertComponent from 'dummy/components/variable-plugin/number/insert';
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -116,6 +117,7 @@ export default class EditableBlockController extends Controller {
       heading,
       blockquote,
       text_variable,
+      number,
 
       horizontal_rule,
       code_block,
@@ -155,10 +157,10 @@ export default class EditableBlockController extends Controller {
         label: 'text',
         component: TextVariableInsertComponent,
       },
-      // {
-      //   label: 'number',
-      //   component: NumberInsertComponent,
-      // },
+      {
+        label: 'number',
+        component: NumberInsertComponent,
+      },
       // {
       //   label: 'date',
       //   component: DateInsertVariableComponent,
@@ -204,7 +206,8 @@ export default class EditableBlockController extends Controller {
       link: linkView(this.linkOptions)(controller),
       image: imageView(controller),
       inline_rdfa: inlineRdfaView(controller),
-      text_variable: textVariableView(controller)
+      number: numberView(controller),
+      text_variable: textVariableView(controller),
     };
   };
 
