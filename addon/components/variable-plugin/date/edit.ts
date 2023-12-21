@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
@@ -23,6 +23,8 @@ import {
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { Velcro } from 'ember-velcro';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 type Args = {
   controller: SayController;
@@ -184,8 +186,25 @@ export default class DateEditComponent extends Component<Args> {
   changeDate(date: Date) {
     const pos = this.documentDatePos;
     if (pos) {
-      this.controller.withTransaction((tr) => {
-        return tr.setNodeAttribute(pos, 'value', date.toISOString());
+      this.controller.withTransaction((tr: Transaction) => {
+        tr.setNodeAttribute(pos, 'value', date.toISOString());
+        const node = tr.doc.nodeAt(pos);
+        if (!node) {
+          return tr;
+        }
+        return tr.setNodeAttribute(
+          pos,
+          'properties',
+          node.attrs.properties.map((prop: Property) => {
+            if (
+              prop.type === 'attribute' &&
+              EXT('content').matches(prop.predicate)
+            ) {
+              return { ...prop, object: date.toISOString() };
+            }
+            return prop;
+          }),
+        );
       });
     }
   }

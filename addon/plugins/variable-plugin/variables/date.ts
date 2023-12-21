@@ -5,11 +5,17 @@ import {
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
   EXT,
+  RDF,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import {
+  getParsedRDFAAttribute,
+  hasParsedRDFaAttribute,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EditorState, getRdfaAttrs, PNode, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableType,
@@ -24,6 +30,7 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { formatDate, validateDateFormat } from '../utils/date-helpers';
 import DateNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/nodeview';
 import { v4 as uuidv4 } from 'uuid';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const TRANSLATION_FALLBACKS = {
   insertDate: 'Datum invoegen',
@@ -45,6 +52,44 @@ export type DateOptions = {
 
 const parseDOM = [
   {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node);
+      console.log('attrs', attrs);
+      if (
+        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasRdfaVariableType(attrs, 'date')
+      ) {
+        const mappingResource = attrs.subject;
+        if (!mappingResource) {
+          return false;
+        }
+        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
+          ?.object;
+        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
+
+        const value = getParsedRDFAAttribute(attrs, EXT('content'))?.object;
+
+        const format = dateNode?.dataset.format;
+
+        return {
+          ...attrs,
+          variableInstance:
+            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
+          mappingResource,
+          onlyDate: true,
+          value: value,
+          format: format,
+          custom: node.dataset.custom === 'true',
+          customAllowed: node.dataset.customAllowed !== 'false',
+          label,
+        };
+      }
+      return false;
+    },
+    contentElement: '[data-content-container="true"]',
+  },
+  {
     /**
      * Parses dates in the form of e.g.:
      * <span datatype=XSD('date) content=.../>
@@ -60,6 +105,7 @@ const parseDOM = [
         const onlyDate = hasRDFaAttribute(node, 'datatype', XSD('date'));
         const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
         return {
+          ...getRdfaAttrs(node),
           mappingResource,
           value: node.getAttribute('content'),
           onlyDate,
@@ -92,6 +138,7 @@ const parseDOM = [
         const format = dateNode?.dataset.format;
         const label = parseLabel(node);
         return {
+          ...getRdfaAttrs(node),
           mappingResource,
           onlyDate,
           value: value,
@@ -142,12 +189,12 @@ const serialize = (node: PNode, state: EditorState) => {
     'data-custom-allowed': customAllowed ? 'true' : 'false',
     ...(!!value && { content: value as string }),
   };
-  return mappingSpan(
-    mappingResource,
-    { class: 'date', 'data-label': label as string },
-    typeSpan('date'),
-    contentSpan(dateAttrs, humanReadableDate),
-  );
+  return renderRdfaAware({
+    renderable: node,
+    tag: 'span',
+    attrs: dateAttrs,
+    content: humanReadableDate,
+  });
 };
 
 const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
@@ -161,6 +208,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   defining: false,
   options,
   attrs: {
+    ...rdfaAttrSpec,
     mappingResource: {},
     value: {
       default: null,

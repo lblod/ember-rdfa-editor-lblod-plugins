@@ -64,6 +64,7 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/list/input_rules';
 import {
   codelist,
+  date,
   number,
   text_variable,
   location,
@@ -73,6 +74,7 @@ import {
   locationView,
   address,
   addressView,
+  dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { inputRules, PluginConfig, Schema } from '@lblod/ember-rdfa-editor';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
@@ -92,6 +94,7 @@ import {
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
 import NumberInsertComponent from 'dummy/components/variable-plugin/number/insert';
+import DateInsertVariableComponent from 'dummy/components/variable-plugin/date/insert-variable';
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -118,6 +121,7 @@ export default class EditableBlockController extends Controller {
       blockquote,
       text_variable,
       number,
+      date: date(this.dateOptions),
 
       horizontal_rule,
       code_block,
@@ -150,6 +154,23 @@ export default class EditableBlockController extends Controller {
       interactive: true,
     };
   }
+  get dateOptions() {
+    return {
+      formats: [
+        {
+          key: 'short',
+          dateFormat: 'dd/MM/yy',
+          dateTimeFormat: 'dd/MM/yy HH:mm',
+        },
+        {
+          key: 'long',
+          dateFormat: 'EEEE dd MMMM yyyy',
+          dateTimeFormat: 'PPPPp',
+        },
+      ],
+      allowCustomFormat: true,
+    };
+  }
 
   get variableTypes(): VariableConfig[] {
     return [
@@ -161,10 +182,10 @@ export default class EditableBlockController extends Controller {
         label: 'number',
         component: NumberInsertComponent,
       },
-      // {
-      //   label: 'date',
-      //   component: DateInsertVariableComponent,
-      // },
+      {
+        label: 'date',
+        component: DateInsertVariableComponent,
+      },
       // {
       //   label: 'location',
       //   component: LocationInsertComponent,
@@ -208,6 +229,7 @@ export default class EditableBlockController extends Controller {
       inline_rdfa: inlineRdfaView(controller),
       number: numberView(controller),
       text_variable: textVariableView(controller),
+      date: dateView(this.dateOptions)(controller),
     };
   };
 

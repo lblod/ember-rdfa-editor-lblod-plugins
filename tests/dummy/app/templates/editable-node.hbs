@@ -5,9 +5,9 @@
   <:content>
     <EditorContainer
       @editorOptions={{hash
-        showRdfaHighlight="true"
-        showRdfaHover="true"
-        showPaper="true"
+        showRdfaHighlight='true'
+        showRdfaHover='true'
+        showPaper='true'
         showToolbarBottom=null
       }}
       @showRdfaBlocks={{this.showRdfaBlocks}}
@@ -33,6 +33,10 @@
             <VariablePlugin::InsertVariableCard
               @controller={{this.controller}}
               @variableTypes={{this.variableTypes}}
+            />
+            <VariablePlugin::Date::Edit
+              @controller={{this.controller}}
+              @options={{this.dateOptions}}
             />
           {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
