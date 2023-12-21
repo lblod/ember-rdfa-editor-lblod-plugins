@@ -8,6 +8,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaAttrs,
+  getRdfaContentElement,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
@@ -58,6 +59,7 @@ export function constructStructureNodeSpec(config: {
     parseDOM: [
       {
         tag: 'div',
+        preserveWhitespace: false,
         getAttrs(element: HTMLElement) {
           const rdfaAttrs = getRdfaAttrs(element);
           if (hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), type)) {
@@ -112,7 +114,7 @@ export function constructStructureBodyNodeSpec(config: {
           }
           return false;
         },
-        contentElement: `${tag}[data-content-container="true"]`,
+        contentElement: getRdfaContentElement,
       },
     ],
   };
@@ -195,7 +197,7 @@ export function constructStructureHeaderNodeSpec({
 
           return false;
         },
-        contentElement: '[data-content-container="true"]',
+        contentElement: getRdfaContentElement,
       },
     ],
   };
