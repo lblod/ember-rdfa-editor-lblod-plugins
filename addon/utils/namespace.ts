@@ -1,4 +1,5 @@
 import { PNode } from '@lblod/ember-rdfa-editor';
+import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import type { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 
 export class Resource {
@@ -54,6 +55,15 @@ export function hasParsedRDFaAttribute(
         : object.matches(prop.object))
     );
   });
+}
+export function getParsedRDFAAttribute(
+  rdfaAttrs: RdfaAttrs | false,
+  predicate: Resource,
+): Property | null {
+  if (!rdfaAttrs) {
+    return null;
+  }
+  return rdfaAttrs.properties.find((prop) => predicate.matches(prop.predicate));
 }
 
 export function hasBacklink(rdfaAttrs: RdfaAttrs | false, predicate: Resource) {

@@ -40,6 +40,7 @@ export const titleSpec: StructureSpec = {
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
     const resource = `http://data.lblod.info/titles/${__rdfaId}`;
+    const subject = `http://data.lblod.info/titles/${__rdfaId}`;
     const titleText = translationWithDocLang(
       PLACEHOLDERS.heading,
       intl?.t(PLACEHOLDERS.heading) || '',
@@ -48,6 +49,7 @@ export const titleSpec: StructureSpec = {
       __rdfaId,
       rdfaNodeType: 'resource',
       resource,
+      subject,
       properties: [
         {
           type: 'external',
@@ -77,7 +79,7 @@ export const titleSpec: StructureSpec = {
       rdfaNodeType: 'literal',
       backlinks: [
         {
-          subject: resource,
+          subject,
           predicate: SAY('body').prefixed,
         },
       ],
@@ -91,7 +93,7 @@ export const titleSpec: StructureSpec = {
         titleText,
         headingRdfaId,
         numberRdfaId,
-        backlinkResource: resource,
+        backlinkResource: subject,
       }),
       schema.node(
         `title_body`,
@@ -116,7 +118,7 @@ export const titleSpec: StructureSpec = {
         type: content ? 'text' : 'node',
         rdfaId: bodyRdfaId,
       },
-      newResource: resource,
+      newResource: subject,
     };
   },
   updateNumber: {
