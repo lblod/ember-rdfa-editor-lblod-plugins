@@ -95,6 +95,7 @@ import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/component
 import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
 import NumberInsertComponent from 'dummy/components/variable-plugin/number/insert';
 import DateInsertVariableComponent from 'dummy/components/variable-plugin/date/insert-variable';
+import CodelistInsertComponent from 'dummy/components/variable-plugin/codelist/insert';
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -122,6 +123,7 @@ export default class EditableBlockController extends Controller {
       text_variable,
       number,
       date: date(this.dateOptions),
+      codelist,
 
       horizontal_rule,
       code_block,
@@ -152,6 +154,11 @@ export default class EditableBlockController extends Controller {
   get linkOptions() {
     return {
       interactive: true,
+    };
+  }
+  get codelistOptions() {
+    return {
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql',
     };
   }
   get dateOptions() {
@@ -191,11 +198,11 @@ export default class EditableBlockController extends Controller {
       //   component: LocationInsertComponent,
       //   options: this.locationOptions,
       // },
-      // {
-      //   label: 'codelist',
-      //   component: CodelistInsertComponent,
-      //   options: this.codelistOptions,
-      // },
+      {
+        label: 'codelist',
+        component: CodelistInsertComponent,
+        options: this.codelistOptions,
+      },
       // {
       //   label: 'address',
       //   component: VariablePluginAddressInsertVariableComponent,
@@ -230,6 +237,7 @@ export default class EditableBlockController extends Controller {
       number: numberView(controller),
       text_variable: textVariableView(controller),
       date: dateView(this.dateOptions)(controller),
+      codelist: codelistView(controller),
     };
   };
 

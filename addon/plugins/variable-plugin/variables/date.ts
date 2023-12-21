@@ -55,7 +55,6 @@ const parseDOM = [
     tag: 'span',
     getAttrs(node: HTMLElement) {
       const attrs = getRdfaAttrs(node);
-      console.log('attrs', attrs);
       if (
         hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
         hasRdfaVariableType(attrs, 'date')
@@ -201,6 +200,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   name: 'date',
   group: 'inline variable',
   component: DateNodeviewComponent as unknown as ComponentLike,
+  editable: true,
   inline: true,
   selectable: true,
   draggable: false,

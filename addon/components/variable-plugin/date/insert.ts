@@ -39,10 +39,13 @@ export default class DateInsertComponent extends Component<Args> {
     });
     const label = defaultLabel;
 
+    const variableId = uuidv4();
     const node = this.schema.nodes.date.create({
       label,
       value: null,
       mappingResource,
+      rdfaNodeType: 'resource',
+      __rdfaId: variableId,
       properties: [
         {
           type: 'attribute',
