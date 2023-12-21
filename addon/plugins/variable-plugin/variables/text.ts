@@ -1,4 +1,7 @@
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
@@ -12,6 +15,7 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
+  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableInstance,
@@ -25,11 +29,46 @@ import {
 } from '../utils/dom-constructors';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
+import {
+  getParsedRDFAAttribute,
+  hasParsedRDFaAttribute,
+  Resource,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import { isElement } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
-
 const parseDOM = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node);
+
+      if (
+        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasRdfaVariableType(attrs, 'text')
+      ) {
+        const mappingResource = attrs.subject;
+        if (!mappingResource) {
+          return false;
+        }
+        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
+          ?.object;
+        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
+        return {
+          ...getRdfaAttrs(node),
+          variableInstance:
+            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
+          mappingResource,
+          label,
+        };
+      }
+
+      return false;
+    },
+    contentElement: '[data-content-container="true"]',
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -57,45 +96,15 @@ const parseDOM = [
     },
     contentElement: CONTENT_SELECTOR,
   },
-  {
-    tag: 'span',
-    getAttrs: (node: HTMLElement) => {
-      if (
-        isVariable(node) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        parseVariableType(node) === 'text'
-      ) {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
-          return false;
-        }
-        const variableInstance = parseVariableInstance(node);
-        const label = parseLabel(node);
-        return {
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
-        };
-      }
-
-      return false;
-    },
-    contentElement: CONTENT_SELECTOR,
-  },
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const { mappingResource, variableInstance, label } = node.attrs;
-  return mappingSpan(
-    mappingResource,
-    {
-      'data-label': label as string,
-    },
-    instanceSpan(variableInstance),
-    typeSpan('text'),
-    contentSpan({}, 0),
-  );
+  return renderRdfaAware({
+    renderable: node,
+    tag: 'span',
+    attrs: node.attrs,
+    content: 0,
+  });
 };
 
 const emberNodeConfig: EmberNodeConfig = {
