@@ -13,6 +13,7 @@ import {
   formatDate,
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
+import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 
 type Args = {
   getPos: () => number | undefined;

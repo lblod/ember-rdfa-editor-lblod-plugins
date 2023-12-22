@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -45,6 +45,7 @@ export default class DateInsertComponent extends Component<Args> {
       value: null,
       mappingResource,
       rdfaNodeType: 'resource',
+      subject: mappingResource,
       __rdfaId: variableId,
       properties: [
         {
@@ -70,9 +71,10 @@ export default class DateInsertComponent extends Component<Args> {
         },
       ],
     });
+    console.log(node);
 
     this.controller.withTransaction(
-      (tr) => {
+      (tr: Transaction) => {
         return tr.replaceSelectionWith(node);
       },
       { view: this.controller.mainEditorView },

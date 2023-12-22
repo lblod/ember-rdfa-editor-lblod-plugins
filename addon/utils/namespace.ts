@@ -63,7 +63,9 @@ export function getParsedRDFAAttribute(
   if (!rdfaAttrs) {
     return null;
   }
-  return rdfaAttrs.properties.find((prop) => predicate.matches(prop.predicate));
+  return (rdfaAttrs.properties as Property[]).find((prop) =>
+    predicate.matches(prop.predicate),
+  );
 }
 
 export function hasBacklink(rdfaAttrs: RdfaAttrs | false, predicate: Resource) {

@@ -13,7 +13,12 @@ import {
   hasParsedRDFaAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { EditorState, getRdfaAttrs, PNode, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  EditorState,
+  getRdfaAttrs,
+  PNode,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
 import {
   hasRdfaVariableType,
   isVariable,
@@ -69,7 +74,7 @@ const parseDOM = [
 
         const value = getParsedRDFAAttribute(attrs, EXT('content'))?.object;
 
-        const format = dateNode?.dataset.format;
+        const format = node.dataset.format;
 
         return {
           ...attrs,
@@ -208,7 +213,6 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   defining: false,
   options,
   attrs: {
-    ...rdfaAttrSpec,
     mappingResource: {},
     value: {
       default: null,
@@ -226,6 +230,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       default: options.allowCustomFormat,
     },
     label: { default: null },
+    ...rdfaAttrSpec,
   },
   // TODO: is this property still required?
   leafText: (node: PNode) => {
