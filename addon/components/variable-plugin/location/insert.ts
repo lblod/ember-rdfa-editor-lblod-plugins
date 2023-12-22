@@ -5,6 +5,11 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  DCT,
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export type LocationInsertOptions = {
   endpoint: string;
@@ -49,13 +54,52 @@ export default class LocationInsertComponent extends Component<Args> {
     const placeholder = this.intl.t('variable.location.label', {
       locale: this.documentLanguage,
     });
+    const source = this.endpoint;
+    const label = this.label ?? placeholder;
+    const variableId = uuidv4();
 
     const node = this.schema.nodes.location.create(
       {
         mappingResource,
         variableInstance,
-        label: this.label ?? placeholder,
-        source: this.endpoint,
+        label,
+        source,
+        subject: mappingResource,
+        rdfaNodeType: 'resource',
+        __rdfaId: variableId,
+        properties: [
+          {
+            type: 'attribute',
+            predicate: RDF('type').full,
+            object: EXT('Mapping').full,
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('instance').full,
+            object: variableInstance,
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('label').full,
+            object: label,
+          },
+          {
+            type: 'attribute',
+            predicate: DCT('source').full,
+            object: source,
+          },
+
+          {
+            type: 'attribute',
+            predicate: DCT('type').full,
+            object: 'location',
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('content').full,
+            object: null,
+          },
+        ],
       },
       this.schema.node('placeholder', {
         placeholderText: placeholder,

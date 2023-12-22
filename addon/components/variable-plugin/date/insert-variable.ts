@@ -40,7 +40,7 @@ export default class DateInsertVariableComponent extends Component<Args> {
     const defaultLabel = this.intl.t('variable.date.label', {
       locale: this.documentLanguage,
     });
-    const label = defaultLabel;
+    const label = this.label ?? defaultLabel;
     const variableId = uuidv4();
 
     const node = this.schema.nodes.date.create({
@@ -73,6 +73,7 @@ export default class DateInsertVariableComponent extends Component<Args> {
           object: label,
         },
       ],
+      backlinks: []
     });
 
     this.label = undefined;

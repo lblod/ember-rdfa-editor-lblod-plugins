@@ -96,6 +96,7 @@ import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/
 import NumberInsertComponent from 'dummy/components/variable-plugin/number/insert';
 import DateInsertVariableComponent from 'dummy/components/variable-plugin/date/insert-variable';
 import CodelistInsertComponent from 'dummy/components/variable-plugin/codelist/insert';
+import LocationInsertComponent from 'dummy/components/variable-plugin/location/insert';
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -122,6 +123,7 @@ export default class EditableBlockController extends Controller {
       blockquote,
       text_variable,
       number,
+      location,
       date: date(this.dateOptions),
       codelist,
 
@@ -178,6 +180,15 @@ export default class EditableBlockController extends Controller {
       allowCustomFormat: true,
     };
   }
+  get locationOptions() {
+    return {
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+      zonalLocationCodelistUri:
+        'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF',
+      nonZonalLocationCodelistUri:
+        'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2',
+    };
+  }
 
   get variableTypes(): VariableConfig[] {
     return [
@@ -193,11 +204,11 @@ export default class EditableBlockController extends Controller {
         label: 'date',
         component: DateInsertVariableComponent,
       },
-      // {
-      //   label: 'location',
-      //   component: LocationInsertComponent,
-      //   options: this.locationOptions,
-      // },
+      {
+        label: 'location',
+        component: LocationInsertComponent,
+        options: this.locationOptions,
+      },
       {
         label: 'codelist',
         component: CodelistInsertComponent,
@@ -238,6 +249,7 @@ export default class EditableBlockController extends Controller {
       text_variable: textVariableView(controller),
       date: dateView(this.dateOptions)(controller),
       codelist: codelistView(controller),
+      location: locationView(controller)
     };
   };
 

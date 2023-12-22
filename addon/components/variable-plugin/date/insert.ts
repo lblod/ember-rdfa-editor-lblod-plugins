@@ -70,6 +70,7 @@ export default class DateInsertComponent extends Component<Args> {
           object: null,
         },
       ],
+      backlinks: []
     });
     console.log(node);
 
