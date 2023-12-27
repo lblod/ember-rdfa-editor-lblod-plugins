@@ -16,11 +16,6 @@
       color: var(--au-red-900);
       background-color: var(--au-red-300);
     }
-
-    &::-moz-selection {
-      color: var(--au-red-900);
-      background-color: var(--au-red-300);
-    }
   }
 
   [property='ext:redacted'] del:before {
