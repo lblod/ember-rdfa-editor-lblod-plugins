@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 15.2.2
+
+### Patch Changes
+
+- [#364](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/364) [`0cf1600`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0cf160031bfc27ce84fd34d532654b74269ceed8) Thanks [@piemonkey](https://github.com/piemonkey)! - Improve styling of redacted text
+
 ## 15.2.1
 
 ### Patch Changes
