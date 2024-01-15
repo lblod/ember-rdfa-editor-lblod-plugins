@@ -117,7 +117,7 @@
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "3.2.7",
     "ember-page-title": "^8.0.0",
-    "ember-power-select": "^7.1.2",
+    "ember-power-select": "6.0.0",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^11.0.1",
     "ember-simple-auth": "4.2.2",
