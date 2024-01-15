@@ -45,6 +45,13 @@
               @defaultMunicipality="Gent"
             />
           {{/if}}
+          {{#if this.activeNode}}
+            <this.SnippetInsert
+              @controller={{this.rdfaEditor}}
+              @config={{this.config.snippet}}
+              @node={{this.activeNode}}
+            />
+          {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
           {{#if this.activeNode}}
             <ArticleStructurePlugin::StructureCard
@@ -59,6 +66,11 @@
             <this.AttributeEditor
               @node={{this.activeNode}}
               @controller={{this.rdfaEditor}}
+            />
+            <this.SnippetListSelect
+              @node={{this.activeNode}}
+              @controller={{this.rdfaEditor}}
+              @config={{this.config.snippet}}
             />
           {{/if}}
         </Sidebar>
