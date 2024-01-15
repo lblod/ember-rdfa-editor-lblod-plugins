@@ -62,7 +62,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "^2.4.2",
+    "@appuniversum/ember-appuniversum": "2.15.0",
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
     "@ember/optional-features": "^2.0.0",
@@ -142,7 +142,7 @@
     "webpack": "^5.74.0"
   },
   "peerDependencies": {
-    "@appuniversum/ember-appuniversum": "^2.4.2",
+    "@appuniversum/ember-appuniversum": "^2.15.0",
     "@ember/string": "3.x",
     "@glint/template": "^1.1.0",
     "@lblod/ember-rdfa-editor": "^6.0.0 || ^7.0.1 || ^8.0.1",
