@@ -88,6 +88,10 @@ export function constructStructureHeader({
     ...beforeNumberNodes,
     schema.node('structure_header_number', numberAttrs, schema.text(number)),
     ...afterNumberNodes,
-    schema.node('structure_header_title', titleAttrs, schema.text(titleText)),
+    schema.node(
+      'structure_header_title',
+      titleAttrs,
+      schema.node('placeholder', { placeholderText: titleText }),
+    ),
   ]);
 }

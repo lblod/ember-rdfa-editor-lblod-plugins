@@ -153,7 +153,7 @@ export default class EditableBlockController extends Controller {
       ],
     }),
     emberApplication({ application: getOwner(this) }),
-    editableNodePlugin,
+    editableNodePlugin(),
   ];
 
   @tracked nodeViews = (controller: SayController) => {

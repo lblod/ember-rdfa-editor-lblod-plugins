@@ -1,6 +1,9 @@
 import { NodeSpec } from 'prosemirror-model';
 import { getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
-import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  getRdfaContentElement,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasBacklink } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -31,7 +34,7 @@ export const structure_header_number: NodeSpec = {
         }
         return false;
       },
-      contentElement: '[data-content-container~="true"]',
+      contentElement: getRdfaContentElement,
     },
   ],
 };
