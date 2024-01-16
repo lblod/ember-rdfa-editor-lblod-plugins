@@ -1,41 +1,50 @@
 import { PNode } from '@lblod/ember-rdfa-editor';
 import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { getProperties } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
+import { getSnippetIdFromUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 export const SNIPPET_LIST_RDFA_PREDICATE = 'say:snippetListIds';
 
-export const getSnippetListIdsProperty = (
+export const getSnippetListIdsProperties = (
   node: PNode,
-): AttributeProperty | undefined => {
+): AttributeProperty[] | undefined => {
   const properties = getProperties(node);
 
   if (!properties) {
     return undefined;
   }
 
-  return properties.find(
+  return properties.filter(
     (property): property is AttributeProperty =>
       property.predicate === SNIPPET_LIST_RDFA_PREDICATE &&
       property.type === 'attribute',
   );
 };
 
-export const getAssignedSnippetListsIdsFromProperty = (
-  snippetListIdsProperty: AttributeProperty | undefined,
+export const getAssignedSnippetListsIdsFromProperties = (
+  snippetListIdsProperty: AttributeProperty[] | undefined,
 ) => {
   if (!snippetListIdsProperty) {
     return [];
   }
 
-  if (snippetListIdsProperty.object === null) {
+  const snippetListUris = snippetListIdsProperty
+    .map((property) => property.object)
+    .filter((object) => object !== undefined);
+
+  if (snippetListUris.length === 0) {
     return [];
   }
 
-  const parsed = JSON.parse(snippetListIdsProperty.object) as unknown;
+  const snippetListIds = snippetListUris
+    .map((uri) => {
+      try {
+        return getSnippetIdFromUri(JSON.parse(uri));
+      } catch (e) {
+        return undefined;
+      }
+    })
+    .filter((id) => id !== undefined);
 
-  if (!Array.isArray(parsed)) {
-    return [];
-  }
-
-  return parsed as string[];
+  return snippetListIds as string[];
 };

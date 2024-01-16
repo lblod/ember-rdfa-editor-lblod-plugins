@@ -7,8 +7,8 @@ import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/_private/typ
 import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
 import {
-  getAssignedSnippetListsIdsFromProperty,
-  getSnippetListIdsProperty,
+  getAssignedSnippetListsIdsFromProperties,
+  getSnippetListIdsProperties,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
 interface Args {
@@ -34,11 +34,11 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
     return isResourceNode(this.node.value);
   }
 
-  get snippetListIdsProperty(): AttributeProperty | undefined {
+  get snippetListIdsProperty(): AttributeProperty[] | undefined {
     const activeNode = this.node.value;
-    const activeNodeSnippetListIds = getSnippetListIdsProperty(activeNode);
+    const activeNodeSnippetListIds = getSnippetListIdsProperties(activeNode);
 
-    if (activeNodeSnippetListIds) {
+    if (activeNodeSnippetListIds && activeNodeSnippetListIds.length > 0) {
       return activeNodeSnippetListIds;
     }
 
@@ -50,7 +50,7 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
     );
 
     while (parentNode) {
-      const properties = getSnippetListIdsProperty(parentNode.node);
+      const properties = getSnippetListIdsProperties(parentNode.node);
 
       if (properties) {
         return properties;
@@ -66,6 +66,8 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
   }
 
   get assignedSnippetListsIds(): string[] {
-    return getAssignedSnippetListsIdsFromProperty(this.snippetListIdsProperty);
+    return getAssignedSnippetListsIdsFromProperties(
+      this.snippetListIdsProperty,
+    );
   }
 }
