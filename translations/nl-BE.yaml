@@ -381,3 +381,6 @@ editor-plugins:
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Voeg adres in
+
+confidentiality-plugin:
+  redact: Redigeren

@@ -377,3 +377,6 @@ editor-plugins:
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Insert address
+
+confidentiality-plugin:
+  redact: Redact

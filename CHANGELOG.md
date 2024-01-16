@@ -1,5 +1,38 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 16.0.0
+
+### Major Changes
+
+- [#371](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/371) [`ed260b7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ed260b7e674fec5a5fe2829eeba5ce9a1778bc9e) Thanks [@elpoelma](https://github.com/elpoelma)! - Stricten `ember-concurrency` peerdep to `^2.3.7 || ^3.1.0`
+
+- [#374](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/374) [`e726eb5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e726eb521229aedb574dbaf1cbb7a5b98d712d01) Thanks [@elpoelma](https://github.com/elpoelma)! - Restrict `@lblod/ember-rdfa-editor` peerdep to `^9.0.0`
+
+- [#372](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/372) [`55e871b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/55e871b554cc13edc97c7cae5502bb8c4db4623d) Thanks [@elpoelma](https://github.com/elpoelma)! - Drop `ember-source` 4.8.x support.
+  The supported `ember-source` version range is now `^4.12.0`
+
+- [`c066646`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c066646f144f7ee4b36cfa67e5d689df57b4f03a) Thanks [@elpoelma](https://github.com/elpoelma)! - Add `ember-intl` `^6.1.0` to peerdependencies
+
+- [#370](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/370) [`cb6c311`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cb6c311f650e3081a153fb6582a2a278d4be9177) Thanks [@elpoelma](https://github.com/elpoelma)! - Increase `@appuniversum/ember-appuniversum` peerdependency requirement to `^2.15.0`
+
+## 15.2.2
+
+### Patch Changes
+
+- [#364](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/364) [`0cf1600`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0cf160031bfc27ce84fd34d532654b74269ceed8) Thanks [@piemonkey](https://github.com/piemonkey)! - Improve styling of redacted text
+
+## 15.2.1
+
+### Patch Changes
+
+- [`763d762`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/763d76255bcee0fe9cf7be9472c2120793cad277) Thanks [@dkozickis](https://github.com/dkozickis)! - Bump editor version
+
+## 15.2.0
+
+### Minor Changes
+
+- [#362](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/362) [`47f2337`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/47f233767cd5f6169e2d4b8a3c71619d0718c035) Thanks [@piemonkey](https://github.com/piemonkey)! - Add incredibly small plugin for highlighting text as redacted
+
 ## 15.1.0
 
 ### Minor Changes
