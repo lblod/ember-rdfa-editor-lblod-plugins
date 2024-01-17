@@ -79,6 +79,29 @@
 
           </AuButtonGroup>
         </Item>
+        <Item class="au-u-padding-left-small">
+          <AuFormRow>
+            {{#let (unique-id) as |id|}}
+              <AuLabel for={{id}}>
+                {{t 'article-structure-plugin.start-number.start-number'}}
+              </AuLabel>
+              <AuInput
+                id={{id}}
+                value={{this.startNumberInputValue}}
+                {{on "change" this.onStartNumberChange}}
+                placeholder={{t 'article-structure-plugin.start-number.start-number'}}
+                type="number"
+              />
+          {{/let}}
+          </AuFormRow>
+          <AuButton
+            @iconAlignment="left"
+            class="au-u-margin-top-tiny"
+            {{on 'click' this.setStructureStartNumber}}
+          >
+            {{t 'article-structure-plugin.start-number.set'}}
+          </AuButton>
+        </Item>
       </AuList>
     </c.content>
   </AuCard>

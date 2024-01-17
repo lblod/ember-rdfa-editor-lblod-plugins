@@ -17,6 +17,13 @@ export default function recalculateStructureNumbers(
           indices[i] = 1;
           contexts[i] = parent;
         }
+
+        const startNumber = spec.getStartNumber({ pos, transaction });
+
+        if (startNumber) {
+          indices[i] = startNumber;
+        }
+
         spec.updateNumber({ number: indices[i], pos, transaction });
         indices[i] += 1;
       }

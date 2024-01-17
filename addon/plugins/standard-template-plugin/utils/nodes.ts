@@ -1,21 +1,21 @@
-import {
-  getRdfaAttrs,
-  NodeSpec,
-  rdfaAttrs,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { getRdfaAttrs, NodeSpec, rdfaAttrs } from '@lblod/ember-rdfa-editor';
 import {
   BESLUIT,
   ELI,
   PROV,
   SKOS,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import {
+  getNumberAttributeFromElement,
+  getNumberAttributesFromNode,
+  getNumberDocSpecFromNode,
+  getNumberUtils,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 
 export const besluit_title: NodeSpec = {
   content: 'paragraph+',
@@ -223,10 +223,7 @@ export const besluitArticleStructure: StructureSpec = {
       selectionConfig,
     };
   },
-  updateNumber: function ({ number, pos, transaction }): Transaction {
-    transaction.setNodeAttribute(pos + 1, 'number', number.toString());
-    return transaction;
-  },
+  ...getNumberUtils(1),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return unwrap(node.lastChild).content;
@@ -242,6 +239,12 @@ export const besluit_article_header: NodeSpec = {
     number: {
       default: '1',
     },
+    numberDisplayStyle: {
+      default: 'decimal', // decimal, roman
+    },
+    startNumber: {
+      default: null,
+    },
   },
   toDOM(node) {
     const toplevelAttrs = { ...node.attrs };
@@ -249,29 +252,35 @@ export const besluit_article_header: NodeSpec = {
     delete toplevelAttrs.datatype;
     return [
       'div',
-      { ...toplevelAttrs, contenteditable: false },
+      {
+        ...toplevelAttrs,
+        contenteditable: false,
+        ...getNumberAttributesFromNode(node),
+      },
       'Artikel ',
-      [
-        'span',
-        { property: ELI('number').prefixed, datatype: XSD('string').prefixed },
-        node.attrs.number,
-      ],
+      getNumberDocSpecFromNode(node),
     ];
   },
   parseDOM: [
     {
       tag: 'p,div',
       getAttrs(element: HTMLElement) {
-        const numberNode = element.querySelector(
+        const numberElement = element.querySelector(
           `span[property~='${ELI('number').prefixed}'],
            span[property~='${ELI('number').full}']`,
         );
-        if (numberNode) {
+
+        const numberAttributes =
+          numberElement &&
+          getNumberAttributeFromElement(element, numberElement);
+
+        if (numberAttributes) {
           return {
             ...getRdfaAttrs(element),
-            number: numberNode.textContent,
+            ...numberAttributes,
           };
         }
+
         return false;
       },
     },

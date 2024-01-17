@@ -8,6 +8,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { getNumberUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 
 const PLACEHOLDERS = {
   body: 'article-structure-plugin.placeholder.paragraph.body',
@@ -48,10 +49,7 @@ export const articleParagraphSpec: StructureSpec = {
     );
     return { node, selectionConfig: { relativePos: 1, type: 'node' } };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = number.toString();
-    return transaction.setNodeAttribute(pos, 'number', numberConverted);
-  },
+  ...getNumberUtils(),
 };
 
 const contentSelector = `span[property~='${SAY('body').prefixed}'],

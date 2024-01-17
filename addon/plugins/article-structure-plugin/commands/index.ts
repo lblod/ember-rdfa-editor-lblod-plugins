@@ -4,3 +4,4 @@ export { default as recalculateStructureNumbers } from './recalculate-structure-
 export { default as removeStructure } from './remove-structure';
 export { default as unwrapStructure } from './unwrap-structure';
 export { default as wrapStructureContent } from './wrap-structure-content';
+export { default as setStructureStartNumber } from './set-structure-start-number';

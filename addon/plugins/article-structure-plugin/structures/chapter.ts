@@ -2,7 +2,7 @@ import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
-  romanize,
+  getNumberUtils,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -26,7 +26,7 @@ export const chapterSpec: StructureSpec = {
     removeWithContent: 'article-structure-plugin.remove-with-content.chapter',
   },
   constructor: ({ schema, number, content, intl, state }) => {
-    const numberConverted = romanize(number ?? 1);
+    const numberConverted = number?.toString() ?? '1';
     const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `chapter`,
@@ -34,7 +34,7 @@ export const chapterSpec: StructureSpec = {
       [
         schema.node(
           'structure_header',
-          { level: 4, number: numberConverted },
+          { level: 4, number: numberConverted, numberDisplayStyle: 'roman' },
           schema.node('placeholder', {
             placeholderText: translationWithDocLang(
               PLACEHOLDERS.title,
@@ -70,10 +70,7 @@ export const chapterSpec: StructureSpec = {
       selectionConfig,
     };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = romanize(number);
-    return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
-  },
+  ...getNumberUtils(1),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;

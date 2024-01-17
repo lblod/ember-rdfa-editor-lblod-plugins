@@ -22,6 +22,9 @@ article-structure-plugin:
     section: Afdeling naar beneden verplaatsen
     subsection: Onderafdeling naar beneden verplaatsen
     default: Structuur naar beneden verplaatsen
+  start-number:
+    start-number: Startnummer
+    set: Startnummer instellen
   title:
     structure-card: Structuur card
   remove:

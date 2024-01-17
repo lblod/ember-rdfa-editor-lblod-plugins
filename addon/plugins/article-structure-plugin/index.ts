@@ -38,6 +38,16 @@ export type StructureSpec = {
     pos: number;
     transaction: Transaction;
   }) => Transaction;
+  getNumber: (args: { pos: number; transaction: Transaction }) => number | null;
+  setStartNumber: (args: {
+    number: number;
+    pos: number;
+    transaction: Transaction;
+  }) => Transaction;
+  getStartNumber: (args: {
+    pos: number;
+    transaction: Transaction;
+  }) => number | null;
   content?: (args: { pos: number; state: EditorState }) => Fragment;
   continuous: boolean;
   limitTo?: string;

@@ -5,6 +5,7 @@ import {
   moveSelectedStructure,
   removeStructure,
   unwrapStructure,
+  setStructureStartNumber,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
@@ -20,6 +21,7 @@ type Args = {
 export default class EditorPluginsStructureCardComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked removeStructureContent = false;
+  @tracked startNumber: number | null = null;
 
   get controller() {
     return this.args.controller;
@@ -32,6 +34,16 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
       { view: this.controller.mainEditorView },
     );
     this.controller.focus();
+  }
+
+  @action
+  setStructureStartNumber() {
+    if (this.startNumber) {
+      this.controller.doCommand(
+        setStructureStartNumber(this.structureTypes, this.startNumber),
+      );
+      this.startNumber = null;
+    }
   }
 
   @action
@@ -146,4 +158,24 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     }
     return false;
   }
+
+  get structureNumber() {
+    if (this.structure && this.currentStructureType) {
+      return this.currentStructureType.getNumber({
+        pos: this.structure.pos,
+        transaction: this.controller.mainEditorState.tr,
+      });
+    }
+
+    return;
+  }
+
+  get startNumberInputValue() {
+    return this.startNumber ?? this.structureNumber ?? '';
+  }
+
+  onStartNumberChange = (event: InputEvent) => {
+    const target = event.target as HTMLInputElement;
+    this.startNumber = parseInt(target.value);
+  };
 }

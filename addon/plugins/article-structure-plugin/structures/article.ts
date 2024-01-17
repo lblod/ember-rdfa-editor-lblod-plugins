@@ -3,14 +3,15 @@ import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
+  getNumberDocSpecFromNode,
+  getNumberAttributesFromNode,
+  getNumberUtils,
   getStructureHeaderAttrs,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import {
-  ELI,
   EXT,
   SAY,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
@@ -76,10 +77,7 @@ export const articleSpec: StructureSpec = {
       selectionConfig,
     };
   },
-  updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = number.toString();
-    return transaction.setNodeAttribute(pos + 1, 'number', numberConverted);
-  },
+  ...getNumberUtils(1),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
@@ -100,6 +98,12 @@ export const article_header: NodeSpec = {
     number: {
       default: '1',
     },
+    numberDisplayStyle: {
+      default: 'decimal', // decimal, roman
+    },
+    startNumber: {
+      default: null,
+    },
     property: {
       default: SAY('heading').prefixed,
     },
@@ -112,17 +116,12 @@ export const article_header: NodeSpec = {
   toDOM(node) {
     return [
       'div',
-      { property: node.attrs.property as string },
+      {
+        property: node.attrs.property as string,
+        ...getNumberAttributesFromNode(node),
+      },
       'Artikel ',
-      [
-        'span',
-        {
-          property: ELI('number').prefixed,
-          datatype: XSD('string').prefixed,
-          contenteditable: false,
-        },
-        node.attrs.number,
-      ],
+      getNumberDocSpecFromNode(node),
       ['span', { contenteditable: false }, ': '],
       [
         'span',
@@ -138,9 +137,11 @@ export const article_header: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const headerAttrs = getStructureHeaderAttrs(element);
+
         if (headerAttrs) {
           return headerAttrs;
         }
+
         return false;
       },
       contentElement: `span[property~='${EXT('title').prefixed}'],
