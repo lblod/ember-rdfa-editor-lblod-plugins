@@ -7,11 +7,11 @@ import {
   DOMOutputSpec,
   EditorState,
   getRdfaAttrs,
+  ParseRule,
   PNode,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
-  getParsedRDFAAttribute,
   hasParsedRDFaAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -19,7 +19,6 @@ import {
   DCT,
   EXT,
   RDF,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
@@ -36,10 +35,7 @@ import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
-const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
-                          span[property~='${EXT('content').full}']`;
-
-const parseDOM = [
+const parseDOM: ParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
@@ -67,16 +63,11 @@ const parseDOM = [
       }
       return false;
     },
-    contentElement: '[data-content-container="true"]',
   },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
-      if (
-        isVariable(node) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        parseVariableType(node) === 'number'
-      ) {
+      if (isVariable(node) && parseVariableType(node) === 'number') {
         const mappingResource = node.getAttribute('resource');
         if (!mappingResource) {
           return false;
@@ -132,7 +123,6 @@ const parseDOM = [
         return false;
       }
     },
-    contentElement: CONTENT_SELECTOR,
   },
 ];
 
