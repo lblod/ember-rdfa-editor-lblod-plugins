@@ -1,7 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
+import {
+  RdfaAttrs,
+  SayController,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
@@ -25,6 +29,7 @@ import {
 import { Velcro } from 'ember-velcro';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
   controller: SayController;
@@ -65,11 +70,16 @@ export default class DateEditComponent extends Component<Args> {
   }
 
   get documentDate(): Option<Date> {
-    const dateVal = this.selectedDateNode?.attrs.value as Option<string>;
-    if (dateVal) {
-      return new Date(dateVal);
+    if (this.selectedDateNode) {
+      const dateVal = getParsedRDFAAttribute(
+        this.selectedDateNode.attrs as RdfaAttrs,
+        EXT('content'),
+      )?.object as Option<string>;
+      if (dateVal) {
+        return new Date(dateVal);
+      }
     }
-    return null;
+    return;
   }
 
   get documentDatePos(): Option<number> {
@@ -187,24 +197,22 @@ export default class DateEditComponent extends Component<Args> {
     const pos = this.documentDatePos;
     if (pos) {
       this.controller.withTransaction((tr: Transaction) => {
-        tr.setNodeAttribute(pos, 'value', date.toISOString());
         const node = tr.doc.nodeAt(pos);
         if (!node) {
           return tr;
         }
-        return tr.setNodeAttribute(
-          pos,
-          'properties',
-          node.attrs.properties.map((prop: Property) => {
-            if (
-              prop.type === 'attribute' &&
-              EXT('content').matches(prop.predicate)
-            ) {
-              return { ...prop, object: date.toISOString() };
-            }
-            return prop;
-          }),
-        );
+        const properties = node.attrs.properties as Property[];
+        const newProperties = properties.filter((prop) => {
+          return !(
+            prop.type === 'attribute' && EXT('content').matches(prop.predicate)
+          );
+        });
+        newProperties.push({
+          type: 'attribute',
+          predicate: EXT('content').full,
+          object: date.toISOString(),
+        });
+        return tr.setNodeAttribute(pos, 'properties', newProperties);
       });
     }
   }

@@ -41,9 +41,6 @@ export default class DateInsertComponent extends Component<Args> {
 
     const variableId = uuidv4();
     const node = this.schema.nodes.date.create({
-      label,
-      value: null,
-      mappingResource,
       rdfaNodeType: 'resource',
       subject: mappingResource,
       __rdfaId: variableId,
@@ -64,13 +61,8 @@ export default class DateInsertComponent extends Component<Args> {
           object: label,
         },
         { type: 'attribute', predicate: DCT('type').full, object: 'date' },
-        {
-          type: 'attribute',
-          predicate: EXT('content').full,
-          object: null,
-        },
       ],
-      backlinks: []
+      backlinks: [],
     });
     console.log(node);
 
