@@ -84,7 +84,6 @@ const parseDOM = [
       }
       return false;
     },
-    contentElement: '[data-content-container="true"]',
   },
   {
     /**
