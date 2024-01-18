@@ -22,21 +22,10 @@ import {
   parseVariableInstance,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
-import {
-  contentSpan,
-  instanceSpan,
-  typeSpan,
-  mappingSpan,
-} from '../utils/dom-constructors';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
-import {
-  getParsedRDFAAttribute,
-  hasParsedRDFaAttribute,
-  Resource,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { hasParsedRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
-import { isElement } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -51,21 +40,11 @@ const parseDOM = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'text')
       ) {
-        const mappingResource = attrs.subject;
-        if (!mappingResource) {
+        if (!attrs.subject) {
           return false;
         }
-        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
-          ?.object;
-        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
         console.log('parse text-var');
-        return {
-          ...getRdfaAttrs(node),
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
-        };
+        return attrs;
       }
 
       return false;
@@ -87,10 +66,6 @@ const parseDOM = [
         const variableInstance = parseVariableInstance(node);
         const label = parseLabel(node);
         return {
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
           __rdfaId: uuidv4(),
           subject: mappingResource,
           resource: mappingResource,
@@ -150,9 +125,6 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   editable: true,
   attrs: {
-    mappingResource: {},
-    variableInstance: {},
-    label: { default: null },
     ...rdfaAttrSpec,
   },
   toDOM,

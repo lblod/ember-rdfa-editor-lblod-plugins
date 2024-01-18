@@ -49,9 +49,6 @@ export default class TextVariableInsertComponent extends Component<Args> {
     const label = this.label ?? placeholder;
     const node = this.schema.nodes.text_variable.create(
       {
-        label,
-        mappingResource,
-        variableInstance,
         resource: mappingResource,
         subject: mappingResource,
         rdfaNodeType: 'resource',
