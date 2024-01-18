@@ -1,4 +1,5 @@
 import {
+  DCT,
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -47,6 +48,7 @@ const parseDOM = [
 
       if (
         hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'text')
       ) {
         const mappingResource = attrs.subject;
@@ -56,6 +58,7 @@ const parseDOM = [
         const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
           ?.object;
         const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
+        console.log('parse text-var');
         return {
           ...getRdfaAttrs(node),
           variableInstance:
@@ -88,7 +91,34 @@ const parseDOM = [
             variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
           mappingResource,
           label,
-          ...getRdfaAttrs(node),
+          __rdfaId: uuidv4(),
+          subject: mappingResource,
+          resource: mappingResource,
+          rdfaNodeType: 'resource',
+          properties: [
+            {
+              type: 'attribute',
+              predicate: RDF('type').full,
+              object: EXT('Mapping').full,
+            },
+            {
+              type: 'attribute',
+              predicate: EXT('instance').full,
+              object:
+                variableInstance ??
+                `http://data.lblod.info/variables/${uuidv4()}`,
+            },
+            {
+              type: 'attribute',
+              predicate: EXT('label').full,
+              object: label,
+            },
+            { type: 'attribute', predicate: DCT('type').full, object: 'text' },
+            {
+              type: 'content',
+              predicate: EXT('content').full,
+            },
+          ],
         };
       }
 
