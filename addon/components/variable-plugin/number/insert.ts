@@ -100,12 +100,7 @@ export default class NumberInsertComponent extends Component<Args> {
     const variableId = uuidv4();
 
     const node = this.schema.nodes.number.create({
-      label,
-      value: null,
-      mappingResource,
-      variableInstance,
       subject,
-
       rdfaNodeType: 'resource',
       __rdfaId: variableId,
       properties: [

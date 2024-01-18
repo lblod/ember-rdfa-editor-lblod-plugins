@@ -11,11 +11,12 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
-    getParsedRDFAAttribute,
+  getParsedRDFAAttribute,
   hasParsedRDFaAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
+  DCT,
   EXT,
   RDF,
   XSD,
@@ -30,12 +31,6 @@ import {
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  contentSpan,
-  instanceSpan,
-  mappingSpan,
-  typeSpan,
-} from '../utils/dom-constructors';
 import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
@@ -52,32 +47,22 @@ const parseDOM = [
       console.log('attrs', attrs);
       if (
         hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'number')
       ) {
         const mappingResource = attrs.subject;
         if (!mappingResource) {
           return false;
         }
-        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
-          ?.object;
-        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
-
-        const value =
-          getParsedRDFAAttribute(attrs, EXT('content'))?.object ?? 0;
         const writtenNumber =
           node.getAttribute('data-written-number') === 'true' ? true : false;
         const minimumValue = node.getAttribute('data-minimum-value');
         const maximumValue = node.getAttribute('data-maximum-value');
         return {
           ...attrs,
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
           writtenNumber,
           minimumValue,
           maximumValue,
-          value,
         };
       }
       return false;
@@ -106,14 +91,42 @@ const parseDOM = [
         const minimumValue = node.getAttribute('data-minimum-value');
         const maximumValue = node.getAttribute('data-maximum-value');
         return {
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
           writtenNumber,
           minimumValue,
           maximumValue,
-          value,
+          subject: mappingResource,
+
+          rdfaNodeType: 'resource',
+          __rdfaId: uuidv4(),
+          properties: [
+            {
+              type: 'attribute',
+              predicate: RDF('type').full,
+              object: EXT('Mapping').full,
+            },
+            {
+              type: 'attribute',
+              predicate: EXT('instance').full,
+              object:
+                variableInstance ??
+                `http://data.lblod.info/variables/${uuidv4()}`,
+            },
+            {
+              type: 'attribute',
+              predicate: EXT('label').full,
+              object: label,
+            },
+            {
+              type: 'attribute',
+              predicate: DCT('type').full,
+              object: 'number',
+            },
+            {
+              type: 'attribute',
+              predicate: EXT('content').full,
+              object: value,
+            },
+          ],
         };
       } else {
         return false;
@@ -126,15 +139,7 @@ const parseDOM = [
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
-  const {
-    mappingResource,
-    variableInstance,
-    label,
-    writtenNumber,
-    minimumValue,
-    maximumValue,
-    value,
-  } = node.attrs;
+  const { writtenNumber, minimumValue, maximumValue, value } = node.attrs;
 
   let humanReadableContent: string;
 
@@ -152,7 +157,6 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      'data-label': label as string,
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
@@ -175,10 +179,6 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   attrs: {
     ...rdfaAttrSpec,
-    mappingResource: {},
-    variableInstance: {},
-    label: { default: null },
-    value: { default: null },
     writtenNumber: { default: false },
     minimumValue: { default: null },
     maximumValue: { default: null },
