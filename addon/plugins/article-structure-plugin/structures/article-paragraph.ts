@@ -1,6 +1,7 @@
 import { Fragment, NodeSpec, RdfaAttrs } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaAttrs,
+  getRdfaContentElement,
   rdfaAttrSpec,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
@@ -183,7 +184,7 @@ export const article_paragraph: NodeSpec = {
         }
         return false;
       },
-      contentElement: '[data-content-container~="true"]',
+      contentElement: getRdfaContentElement,
     },
     // Parsing rule for backwards compatibility (when content was not inside seperate say:body div)
     {
