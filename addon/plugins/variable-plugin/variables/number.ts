@@ -12,6 +12,7 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
+  getParsedRDFAAttribute,
   hasParsedRDFaAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -46,8 +47,7 @@ const parseDOM: ParseRule[] = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'number')
       ) {
-        const mappingResource = attrs.subject;
-        if (!mappingResource) {
+        if (!attrs.subject) {
           return false;
         }
         const writtenNumber =
@@ -81,43 +81,48 @@ const parseDOM: ParseRule[] = [
           node.getAttribute('data-written-number') === 'true' ? true : false;
         const minimumValue = node.getAttribute('data-minimum-value');
         const maximumValue = node.getAttribute('data-maximum-value');
+
+        const properties = [
+          {
+            type: 'attribute',
+            predicate: RDF('type').full,
+            object: EXT('Mapping').full,
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('instance').full,
+            object:
+              variableInstance ??
+              `http://data.lblod.info/variables/${uuidv4()}`,
+          },
+          {
+            type: 'attribute',
+            predicate: DCT('type').full,
+            object: 'number',
+          },
+        ];
+        if (label) {
+          properties.push({
+            type: 'attribute',
+            predicate: EXT('label').full,
+            object: label,
+          });
+        }
+        if (value) {
+          properties.push({
+            type: 'attribute',
+            predicate: EXT('content').full,
+            object: value,
+          });
+        }
         return {
           writtenNumber,
           minimumValue,
           maximumValue,
           subject: mappingResource,
-
           rdfaNodeType: 'resource',
           __rdfaId: uuidv4(),
-          properties: [
-            {
-              type: 'attribute',
-              predicate: RDF('type').full,
-              object: EXT('Mapping').full,
-            },
-            {
-              type: 'attribute',
-              predicate: EXT('instance').full,
-              object:
-                variableInstance ??
-                `http://data.lblod.info/variables/${uuidv4()}`,
-            },
-            {
-              type: 'attribute',
-              predicate: EXT('label').full,
-              object: label,
-            },
-            {
-              type: 'attribute',
-              predicate: DCT('type').full,
-              object: 'number',
-            },
-            {
-              type: 'attribute',
-              predicate: EXT('content').full,
-              object: value,
-            },
-          ],
+          properties,
         };
       } else {
         return false;
@@ -129,7 +134,8 @@ const parseDOM: ParseRule[] = [
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
-  const { writtenNumber, minimumValue, maximumValue, value } = node.attrs;
+  const { writtenNumber, minimumValue, maximumValue } = node.attrs;
+  const value = getParsedRDFAAttribute(node.attrs, EXT('content'))?.object;
 
   let humanReadableContent: string;
 

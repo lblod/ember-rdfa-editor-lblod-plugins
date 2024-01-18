@@ -120,11 +120,6 @@ export default class NumberInsertComponent extends Component<Args> {
           object: label,
         },
         { type: 'attribute', predicate: DCT('type').full, object: 'number' },
-        {
-          type: 'attribute',
-          predicate: EXT('content').full,
-          object: null,
-        },
       ],
       ...(isNumber(this.minimumValue) && {
         minimumValue: Number(this.minimumValue),

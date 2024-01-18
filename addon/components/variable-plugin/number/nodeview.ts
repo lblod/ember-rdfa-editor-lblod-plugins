@@ -139,19 +139,20 @@ export default class NumberNodeviewComponent extends Component<Args> {
   @action
   validateAndSave() {
     if (!this.errorMessage) {
-      this.args.updateAttribute(
-        'properties',
-        this.node.attrs.properties.map((prop: Property) => {
-          if (
-            prop.type === 'attribute' &&
-            EXT('content').matches(prop.predicate)
-          ) {
-            return { ...prop, object: this.inputNumber };
-          } else {
-            return prop;
-          }
-        }),
-      );
+      const properties = this.node.attrs.properties as Property[];
+      const newProperties = properties.filter((prop: Property) => {
+        return !(
+          prop.type === 'attribute' && EXT('content').matches(prop.predicate)
+        );
+      });
+      if (this.inputNumber) {
+        newProperties.push({
+          type: 'attribute',
+          predicate: EXT('content').full,
+          object: this.inputNumber,
+        });
+      }
+      this.args.updateAttribute('properties', newProperties);
     }
   }
 }
