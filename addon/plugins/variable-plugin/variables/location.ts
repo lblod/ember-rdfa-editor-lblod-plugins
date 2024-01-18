@@ -9,7 +9,12 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { v4 as uuidv4 } from 'uuid';
-import { DOMOutputSpec, getRdfaAttrs, PNode, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  DOMOutputSpec,
+  getRdfaAttrs,
+  PNode,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
 import {
   hasRdfaVariableType,
   isVariable,
@@ -18,19 +23,9 @@ import {
   parseVariableSource,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
-import {
-  contentSpan,
-  instanceSpan,
-  mappingSpan,
-  sourceSpan,
-  typeSpan,
-} from '../utils/dom-constructors';
 import LocationNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/nodeview';
 import type { ComponentLike } from '@glint/template';
-import {
-  getParsedRDFAAttribute,
-  hasParsedRDFaAttribute,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { hasParsedRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
@@ -41,28 +36,18 @@ const parseDOM = [
     tag: 'span',
     getAttrs(node: HTMLElement) {
       const attrs = getRdfaAttrs(node);
-      console.log('attrs', attrs);
+      if (!attrs) {
+        return false;
+      }
       if (
         hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'location')
       ) {
-        const mappingResource = attrs.subject;
-        if (!mappingResource) {
+        if (!attrs.subject) {
           return false;
         }
-        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
-          ?.object;
-        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
-        const source = getParsedRDFAAttribute(attrs, DCT('source'))?.object;
-
-        return {
-          ...attrs,
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          source,
-          label,
-        };
+        return attrs;
       }
       return false;
     },
@@ -83,13 +68,46 @@ const parseDOM = [
         const variableInstance = parseVariableInstance(node);
         const source = parseVariableSource(node);
         const label = parseLabel(node);
+        const properties = [
+          {
+            type: 'attribute',
+            predicate: RDF('type').full,
+            object: EXT('Mapping').full,
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('instance').full,
+            object:
+              variableInstance ??
+              `http://data.lblod.info/variables/${uuidv4()}`,
+          },
+          {
+            type: 'attribute',
+            predicate: DCT('source').full,
+            object: source,
+          },
+          {
+            type: 'attribute',
+            predicate: DCT('type').full,
+            object: 'location',
+          },
+          {
+            type: 'content',
+            predicate: EXT('content').full,
+          },
+        ];
+        if (label) {
+          properties.push({
+            type: 'attribute',
+            predicate: EXT('label').full,
+            object: label,
+          });
+        }
         return {
-          ...getRdfaAttrs(node),
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          source,
-          label,
+          subject: mappingResource,
+          rdfaNodeType: 'resource',
+          __rdfaId: uuidv4(),
+          properties,
         };
       }
 
@@ -122,12 +140,6 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   attrs: {
     ...rdfaAttrSpec,
-    mappingResource: {},
-    variableInstance: {},
-    source: {
-      default: null,
-    },
-    label: { default: null },
   },
   toDOM,
   parseDOM,

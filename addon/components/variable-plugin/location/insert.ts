@@ -60,10 +60,6 @@ export default class LocationInsertComponent extends Component<Args> {
 
     const node = this.schema.nodes.location.create(
       {
-        mappingResource,
-        variableInstance,
-        label,
-        source,
         subject: mappingResource,
         rdfaNodeType: 'resource',
         __rdfaId: variableId,
@@ -88,16 +84,14 @@ export default class LocationInsertComponent extends Component<Args> {
             predicate: DCT('source').full,
             object: source,
           },
-
           {
             type: 'attribute',
             predicate: DCT('type').full,
             object: 'location',
           },
           {
-            type: 'attribute',
+            type: 'content',
             predicate: EXT('content').full,
-            object: null,
           },
         ],
       },

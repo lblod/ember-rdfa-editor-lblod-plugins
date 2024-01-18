@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
-import { SayController, SayView } from '@lblod/ember-rdfa-editor';
+import { PNode, SayController, SayView } from '@lblod/ember-rdfa-editor';
 import { tracked } from '@glimmer/tracking';
 import { addressView } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
 type Args = {
   controller: SayController;
+  node: PNode;
 };
 
 export default class LocationNodeViewComponent extends Component<Args> {

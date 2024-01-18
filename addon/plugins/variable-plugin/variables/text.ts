@@ -34,7 +34,9 @@ const parseDOM = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       const attrs = getRdfaAttrs(node);
-
+      if (!attrs) {
+        return false;
+      }
       if (
         hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
