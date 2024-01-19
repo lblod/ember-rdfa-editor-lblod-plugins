@@ -40,6 +40,10 @@
               @controller={{this.controller}}
               @options={{this.dateOptions}}
             />
+            <VariablePlugin::Address::Edit
+              @controller={{this.controller}}
+              @defaultMunicipality="Gent"
+            />
           {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
           {{#if this.activeNode}}

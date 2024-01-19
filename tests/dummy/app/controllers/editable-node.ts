@@ -96,6 +96,7 @@ import NumberInsertComponent from 'dummy/components/variable-plugin/number/inser
 import DateInsertVariableComponent from 'dummy/components/variable-plugin/date/insert-variable';
 import CodelistInsertComponent from 'dummy/components/variable-plugin/codelist/insert';
 import LocationInsertComponent from 'dummy/components/variable-plugin/location/insert';
+import VariablePluginAddressInsertVariableComponent from 'dummy/components/variable-plugin/address/insert-variable';
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -125,6 +126,7 @@ export default class EditableBlockController extends Controller {
       location,
       date: date(this.dateOptions),
       codelist,
+      address,
 
       horizontal_rule,
       code_block,
@@ -213,10 +215,10 @@ export default class EditableBlockController extends Controller {
         component: CodelistInsertComponent,
         options: this.codelistOptions,
       },
-      // {
-      //   label: 'address',
-      //   component: VariablePluginAddressInsertVariableComponent,
-      // },
+      {
+        label: 'address',
+        component: VariablePluginAddressInsertVariableComponent,
+      },
     ];
   }
   @tracked plugins: PluginConfig = [
@@ -248,7 +250,8 @@ export default class EditableBlockController extends Controller {
       text_variable: textVariableView(controller),
       date: dateView(this.dateOptions)(controller),
       codelist: codelistView(controller),
-      location: locationView(controller)
+      location: locationView(controller),
+      address: addressView(controller),
     };
   };
 
