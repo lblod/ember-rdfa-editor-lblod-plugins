@@ -24,8 +24,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     serialize(_, state) {
       const t = getTranslationFunction(state);
       const heading = t(
-        'template-comments-plugin.heading',
-        'toelichtingsbepaling',
+        'template-comments-plugin.long-title',
+        'Toelichtings- of voorbeeldbepaling',
       );
 
       return [
