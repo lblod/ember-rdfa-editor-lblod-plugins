@@ -32,8 +32,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
         'div',
         {
           typeof: EXT('TemplateComment').prefixed,
+          class: 'say-template-comment',
         },
-        ['h3', {}, heading],
+        ['p', {}, ['strong', {}, heading]],
         ['div', { property: EXT('content').prefixed }, 0],
       ];
     },
