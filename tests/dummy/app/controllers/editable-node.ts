@@ -52,7 +52,6 @@ import {
   hardBreak,
   heading as headingInvisible,
   paragraph as paragraphInvisible,
-  space,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
 import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';

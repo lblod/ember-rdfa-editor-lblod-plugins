@@ -204,7 +204,7 @@ const parseDOM = [
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
   const value = getParsedRDFAAttribute(node.attrs as RdfaAttrs, EXT('content'))
-    ?.object as Option<string>;
+    ?.object;
   const { onlyDate, format, custom, customAllowed } = node.attrs;
   let humanReadableDate: string;
   if (value) {
@@ -265,7 +265,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     const value = getParsedRDFAAttribute(
       node.attrs as RdfaAttrs,
       EXT('content'),
-    )?.object as Option<string>;
+    )?.object;
     const { onlyDate, format } = node.attrs;
 
     const humanReadableDate = value

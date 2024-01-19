@@ -5,7 +5,11 @@ import { service } from '@ember/service';
 import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
-import { DCT, EXT, RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  DCT,
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
   controller: SayController;

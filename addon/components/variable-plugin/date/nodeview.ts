@@ -54,7 +54,7 @@ export default class DateNodeviewComponent extends Component<Args> {
     const value = getParsedRDFAAttribute(
       this.args.node.attrs as RdfaAttrs,
       EXT('content'),
-    )?.object as Option<string>;
+    )?.object;
     const format = this.args.node.attrs.format as string;
     if (value) {
       if (validateDateFormat(format).type === 'ok') {

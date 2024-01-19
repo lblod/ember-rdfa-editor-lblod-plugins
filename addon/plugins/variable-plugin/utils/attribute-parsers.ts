@@ -3,11 +3,9 @@ import {
   EXT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  Resource,
   getParsedRDFAAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 
 export function isVariable(element: HTMLElement) {
