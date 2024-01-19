@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 16.0.1
+
+### Patch Changes
+
+- [#375](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/375) [`93d3f7b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/93d3f7b63bc0e720e9f6f328ffa9a384947ca31f) Thanks [@elpoelma](https://github.com/elpoelma)! - Widen support for `ember-intl` to include version 5.7.2 due to outstanding issues with the 6.x releases.
+
 ## 16.0.0
 
 ### Major Changes
