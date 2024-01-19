@@ -1,5 +1,4 @@
 import {
-  getParsedRDFAAttribute,
   hasParsedRDFaAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -29,14 +28,6 @@ import {
   parseVariableSource,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
-import {
-  contentSpan,
-  instanceSpan,
-  mappingSpan,
-  sourceSpan,
-  typeSpan,
-} from '../utils/dom-constructors';
-import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
@@ -50,32 +41,22 @@ const parseDOM = [
     getAttrs(node: HTMLElement) {
       const attrs = getRdfaAttrs(node);
       console.log('attrs', attrs);
+      if (!attrs) {
+        return false;
+      }
       if (
         hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'codelist')
       ) {
-        const mappingResource = attrs.subject;
-        if (!mappingResource) {
+        if (!attrs.subject) {
           return false;
         }
-        const variableInstance = getParsedRDFAAttribute(attrs, EXT('instance'))
-          ?.object;
-        const label = getParsedRDFAAttribute(attrs, EXT('label'))?.object;
-        const source = getParsedRDFAAttribute(attrs, DCT('source'))?.object;
         const selectionStyle = node.dataset.selectionStyle ?? null;
-
-        const codelistResource = getParsedRDFAAttribute(attrs, EXT('codelist'))
-          ?.object;
 
         return {
           ...attrs,
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
           selectionStyle,
-          codelistResource,
-          source,
-          label,
         };
       }
       return false;
@@ -105,15 +86,57 @@ const parseDOM = [
         const codelistResource =
           codelistSpan?.getAttribute('resource') ??
           codelistSpan?.getAttribute('content');
+
+        const properties = [
+          {
+            type: 'attribute',
+            predicate: RDF('type').full,
+            object: EXT('Mapping').full,
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('instance').full,
+            object:
+              variableInstance ??
+              `http://data.lblod.info/variables/${uuidv4()}`,
+          },
+          {
+            type: 'attribute',
+            predicate: DCT('type').full,
+            object: 'codelist',
+          },
+          {
+            type: 'content',
+            predicate: EXT('content').full,
+          },
+        ];
+        if (label) {
+          properties.push({
+            type: 'attribute',
+            predicate: EXT('label').full,
+            object: label,
+          });
+        }
+        if (codelistResource) {
+          properties.push({
+            type: 'attribute',
+            predicate: EXT('codelist').full,
+            object: codelistResource,
+          });
+        }
+        if (source) {
+          properties.push({
+            type: 'attribute',
+            predicate: DCT('source').full,
+            object: source,
+          });
+        }
         return {
-          ...getRdfaAttrs(node),
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
           selectionStyle,
-          codelistResource,
-          source,
-          label,
+          subject: mappingResource,
+          rdfaNodeType: 'resource',
+          __rdfaId: uuidv4(),
+          properties,
         };
       }
 
@@ -150,15 +173,6 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   attrs: {
     ...rdfaAttrSpec,
-    mappingResource: {},
-    codelistResource: {
-      default: null,
-    },
-    variableInstance: {},
-    source: {
-      default: null,
-    },
-    label: { default: null },
     selectionStyle: {
       default: null,
     },

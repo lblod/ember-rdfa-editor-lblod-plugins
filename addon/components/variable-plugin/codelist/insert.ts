@@ -99,13 +99,8 @@ export default class CodelistInsertComponent extends Component<Args> {
     const variableId = uuidv4();
     const node = this.schema.nodes.codelist.create(
       {
-        mappingResource,
-        variableInstance,
-        codelistResource,
-        label,
-        source,
-        subject: mappingResource,
         selectionStyle: this.selectedStyleValue,
+        subject: mappingResource,
         rdfaNodeType: 'resource',
         __rdfaId: variableId,
         properties: [
@@ -134,16 +129,14 @@ export default class CodelistInsertComponent extends Component<Args> {
             predicate: DCT('source').full,
             object: source,
           },
-
           {
             type: 'attribute',
             predicate: DCT('type').full,
             object: 'codelist',
           },
           {
-            type: 'attribute',
+            type: 'content',
             predicate: EXT('content').full,
-            object: null,
           },
         ],
       },
