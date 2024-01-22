@@ -4,11 +4,15 @@ import { v4 as uuid } from 'uuid';
 import {
   ELI,
   SAY,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { getNumberUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import {
+  getNumberAttributeFromElement,
+  getNumberAttributesFromNode,
+  getNumberDocSpecFromNode,
+  getNumberUtils,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 
 const PLACEHOLDERS = {
   body: 'article-structure-plugin.placeholder.paragraph.body',
@@ -71,6 +75,12 @@ export const article_paragraph: NodeSpec = {
     number: {
       default: '1',
     },
+    numberDisplayStyle: {
+      default: 'decimal', // decimal, roman
+    },
+    startNumber: {
+      default: null,
+    },
   },
   toDOM(node) {
     return [
@@ -79,17 +89,10 @@ export const article_paragraph: NodeSpec = {
         property: node.attrs.property as string,
         typeof: node.attrs.typeof as string,
         resource: node.attrs.resource as string,
+        ...getNumberAttributesFromNode(node),
       },
       ['span', { contenteditable: false }, '§'],
-      [
-        'span',
-        {
-          property: ELI('number').prefixed,
-          datatype: XSD('integer').prefixed,
-          contenteditable: false,
-        },
-        node.attrs.number,
-      ],
+      getNumberDocSpecFromNode(node),
       ['span', { contenteditable: false }, '. '],
       ['span', { property: SAY('body').prefixed }, 0],
     ];
@@ -108,9 +111,14 @@ export const article_paragraph: NodeSpec = {
           element.querySelector(contentSelector) &&
           numberSpan
         ) {
+          const numberAttributes = getNumberAttributeFromElement(
+            element,
+            numberSpan,
+          );
+
           return {
             resource: element.getAttribute('resource'),
-            number: numberSpan.textContent,
+            ...numberAttributes,
           };
         }
         return false;
