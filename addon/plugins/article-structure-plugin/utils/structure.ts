@@ -191,7 +191,9 @@ export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
 }
 
 export const getNumberAttributesFromNode = (node: PNode) => ({
-  ['data-start-number']: node.attrs.startNumber as string | undefined,
+  ['data-start-number']: node.attrs.startNumber
+    ? `${node.attrs.startNumber}`
+    : null,
   ['data-number-display-style']: node.attrs.numberDisplayStyle as string,
 });
 
@@ -247,14 +249,14 @@ export const getNumberUtils = (
   },
   getStartNumber: ({ pos, transaction }) => {
     const node = unwrap(transaction.doc.nodeAt(pos + offset));
-    const startNumber = node.attrs.startNumber as string | undefined | null;
+    const startNumber = node.attrs.startNumber as number | undefined | null;
 
-    if (typeof startNumber === 'string' && startNumber.length > 0) {
-      return parseInt(startNumber, 10);
+    if (typeof startNumber === 'number') {
+      return startNumber;
     }
 
     return null;
   },
   setStartNumber: ({ number, pos, transaction }) =>
-    transaction.setNodeAttribute(pos + offset, 'startNumber', `${number}`),
+    transaction.setNodeAttribute(pos + offset, 'startNumber', number),
 });
