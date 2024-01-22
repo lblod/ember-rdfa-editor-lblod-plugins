@@ -1,4 +1,5 @@
 import {
+  DOMOutputSpec,
   NodeSpec,
   NodeType,
   PNode,
@@ -22,7 +23,6 @@ import {
   romanize,
   romanToInt,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
-import { DOMOutputSpec } from 'prosemirror-model/src/to_dom';
 
 export function constructStructureNodeSpec(config: {
   type: Resource;
