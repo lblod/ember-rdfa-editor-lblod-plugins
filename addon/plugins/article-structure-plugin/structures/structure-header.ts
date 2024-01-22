@@ -30,7 +30,7 @@ export const structure_header: NodeSpec = {
       default: SAY('heading').prefixed,
     },
     number: {
-      default: '1',
+      default: 1,
     },
     numberDisplayStyle: {
       default: 'decimal', // decimal, roman

@@ -33,7 +33,6 @@ export const articleSpec: StructureSpec = {
   },
   continuous: true,
   constructor: ({ schema, number, content, intl, state }) => {
-    const numberConverted = number?.toString() ?? '1';
     const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `article`,
@@ -41,7 +40,7 @@ export const articleSpec: StructureSpec = {
       [
         schema.node(
           'article_header',
-          { level: 4, number: numberConverted },
+          { level: 4, number: number ?? 1 },
           schema.node('placeholder', {
             placeholderText: translationWithDocLang(
               PLACEHOLDERS.title,
@@ -96,7 +95,7 @@ export const article_header: NodeSpec = {
   defining: true,
   attrs: {
     number: {
-      default: '1',
+      default: 1,
     },
     numberDisplayStyle: {
       default: 'decimal', // decimal, roman

@@ -26,7 +26,6 @@ export const chapterSpec: StructureSpec = {
     removeWithContent: 'article-structure-plugin.remove-with-content.chapter',
   },
   constructor: ({ schema, number, content, intl, state }) => {
-    const numberConverted = number?.toString() ?? '1';
     const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `chapter`,
@@ -34,7 +33,7 @@ export const chapterSpec: StructureSpec = {
       [
         schema.node(
           'structure_header',
-          { level: 4, number: numberConverted, numberDisplayStyle: 'roman' },
+          { level: 4, number: number ?? 1, numberDisplayStyle: 'roman' },
           schema.node('placeholder', {
             placeholderText: translationWithDocLang(
               PLACEHOLDERS.title,

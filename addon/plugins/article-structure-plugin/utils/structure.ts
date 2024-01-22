@@ -132,8 +132,9 @@ export function getNumberAttributeFromElement(
   containerElement: Element,
   numberElement: Element,
 ): {
-  number: string;
+  number: number;
   numberDisplayStyle: string;
+  startNumber: number | null;
 } {
   // Storing the number in the content attribute was not introduced straight away,
   // so we need to check for both the content attribute and the textContent.
@@ -142,7 +143,7 @@ export function getNumberAttributeFromElement(
   // If the content attribute is present, we can assume it is the correct number.
   if (contentAttribute) {
     return {
-      number: contentAttribute,
+      number: parseInt(contentAttribute, 10),
       ...getNodeNumberAttrsFromElement(containerElement),
     };
   }
@@ -150,20 +151,20 @@ export function getNumberAttributeFromElement(
   const textContentNumber = numberElement.textContent;
 
   if (!textContentNumber) {
-    return { number: '1', ...getNodeNumberAttrsFromElement(containerElement) };
+    return { number: 1, ...getNodeNumberAttrsFromElement(containerElement) };
   }
 
   // If the textContent is a number, we can assume it is the correct number.
   if (/^[0-9]+$/.exec(textContentNumber)) {
     return {
-      number: textContentNumber,
+      number: parseInt(textContentNumber, 10),
       ...getNodeNumberAttrsFromElement(containerElement),
     };
   }
 
   // Otherwise, we assume it is a roman number.
   return {
-    number: `${romanToInt(textContentNumber)}`,
+    number: romanToInt(textContentNumber),
     ...getNodeNumberAttrsFromElement(containerElement),
     numberDisplayStyle: 'roman',
   };
@@ -201,13 +202,13 @@ export const getNumberDocSpecFromNode = (node: PNode): DOMOutputSpec => [
   'span',
   {
     property: ELI('number').prefixed,
-    datatype: XSD('string').prefixed,
+    datatype: XSD('integer').prefixed,
     content: node.attrs.number as string,
     contenteditable: false,
   },
   node.attrs.numberDisplayStyle === 'roman'
     ? romanize(node.attrs.number ?? '1')
-    : node.attrs.number,
+    : `${node.attrs.number ?? '1'}`,
 ];
 
 const getNodeNumberAttrsFromElement = (element: Element) => {
@@ -216,7 +217,7 @@ const getNodeNumberAttrsFromElement = (element: Element) => {
 
   return {
     numberDisplayStyle: numberDisplayStyle ?? 'decimal',
-    startNumber: startNumber ?? null,
+    startNumber: startNumber ? parseInt(startNumber, 10) : null,
   };
 };
 
@@ -230,26 +231,33 @@ export const getNumberUtils = (
   'setStartNumber' | 'getStartNumber' | 'getNumber' | 'updateNumber'
 > => ({
   updateNumber: ({ number, pos, transaction }) => {
-    const numberConverted = number.toString();
-    return transaction.setNodeAttribute(
-      pos + offset,
-      'number',
-      numberConverted,
-    );
+    return transaction.setNodeAttribute(pos + offset, 'number', number);
   },
   getNumber: ({ pos, transaction }) => {
     const node = unwrap(transaction.doc.nodeAt(pos + offset));
-    const number = node.attrs.number as string | undefined | null;
+    const number = node.attrs.number as string | number | undefined | null;
 
     if (typeof number === 'string' && number.length > 0) {
       return parseInt(number, 10);
+    }
+
+    if (typeof number === 'number') {
+      return number;
     }
 
     return null;
   },
   getStartNumber: ({ pos, transaction }) => {
     const node = unwrap(transaction.doc.nodeAt(pos + offset));
-    const startNumber = node.attrs.startNumber as number | undefined | null;
+    const startNumber = node.attrs.startNumber as
+      | string
+      | number
+      | undefined
+      | null;
+
+    if (typeof startNumber === 'string' && startNumber.length > 0) {
+      return parseInt(startNumber, 10);
+    }
 
     if (typeof startNumber === 'number') {
       return startNumber;

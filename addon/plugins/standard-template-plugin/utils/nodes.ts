@@ -183,7 +183,6 @@ export const besluitArticleStructure: StructureSpec = {
   limitTo: 'besluit',
   constructor: ({ schema, number, content, intl, state }) => {
     const translationWithDocLang = getTranslationFunction(state);
-    const numberConverted = number?.toString() ?? '1';
     const node = schema.node(
       `besluit_article`,
       {
@@ -191,7 +190,7 @@ export const besluitArticleStructure: StructureSpec = {
       },
       [
         schema.node('besluit_article_header', {
-          number: numberConverted,
+          number: number ?? 1,
         }),
         schema.node(
           `besluit_article_content`,
@@ -237,7 +236,7 @@ export const besluit_article_header: NodeSpec = {
   attrs: {
     ...rdfaAttrs,
     number: {
-      default: '1',
+      default: 1,
     },
     numberDisplayStyle: {
       default: 'decimal', // decimal, roman

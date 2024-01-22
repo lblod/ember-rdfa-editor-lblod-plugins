@@ -32,13 +32,12 @@ export const articleParagraphSpec: StructureSpec = {
   continuous: false,
   noUnwrap: true,
   constructor: ({ schema, number, intl, state }) => {
-    const numberConverted = number?.toString() ?? '1';
     const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `article_paragraph`,
       {
         resource: `http://data.lblod.info/paragraphs/${uuid()}`,
-        number: numberConverted,
+        number,
       },
       schema.node(
         'paragraph',
@@ -73,7 +72,7 @@ export const article_paragraph: NodeSpec = {
     },
     resource: {},
     number: {
-      default: '1',
+      default: 1,
     },
     numberDisplayStyle: {
       default: 'decimal', // decimal, roman

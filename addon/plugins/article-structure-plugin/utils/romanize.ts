@@ -81,5 +81,5 @@ export function romanToInt(romanString: string) {
       total = total + lookup[fst];
     }
   }
-  return total.toString();
+  return total;
 }

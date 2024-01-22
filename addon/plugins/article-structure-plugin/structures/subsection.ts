@@ -28,7 +28,6 @@ export const subsectionSpec: StructureSpec = {
       'article-structure-plugin.remove-with-content.subsection',
   },
   constructor: ({ schema, number, intl, content, state }) => {
-    const numberConverted = number?.toString() ?? '1';
     const translationWithDocLang = getTranslationFunction(state);
     const node = schema.node(
       `subsection`,
@@ -36,7 +35,7 @@ export const subsectionSpec: StructureSpec = {
       [
         schema.node(
           'structure_header',
-          { level: 6, number: numberConverted, numberDisplayStyle: 'roman' },
+          { level: 6, number: number ?? 1, numberDisplayStyle: 'roman' },
           schema.node('placeholder', {
             placeholderText: translationWithDocLang(
               PLACEHOLDERS.title,
