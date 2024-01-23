@@ -25,6 +25,7 @@ article-structure-plugin:
   start-number:
     start-number: Start number
     set: Set start number
+    reset: Reset
   title:
     structure-card: Structure Card
   remove:

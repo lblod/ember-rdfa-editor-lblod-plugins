@@ -7,7 +7,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const setStructureStartNumber = (
   options: ArticleStructurePluginOptions,
-  startNumber: number,
+  startNumber: number | null,
 ): Command => {
   return (state, dispatch) => {
     const { selection, schema } = state;
