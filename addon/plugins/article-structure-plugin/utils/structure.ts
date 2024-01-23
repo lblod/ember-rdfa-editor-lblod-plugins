@@ -9,6 +9,7 @@ import {
 import {
   getRdfaAttrs,
   getRdfaContentElement,
+  hasRdfaContentChild,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
@@ -20,7 +21,6 @@ import {
 import {
   hasBacklink,
   hasParsedRDFaAttribute,
-  hasRDFaAttribute,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -108,13 +108,25 @@ export function constructStructureBodyNodeSpec(config: {
           const rdfaAttrs = getRdfaAttrs(element);
           if (
             hasBacklink(rdfaAttrs, SAY('body')) &&
-            hasRDFaAttribute(element, 'datatype', RDF('XMLLiteral'))
+            hasRdfaContentChild(element)
           ) {
             return rdfaAttrs;
           }
           return false;
         },
         contentElement: getRdfaContentElement,
+      },
+      // Backwards compatibility with old versions, without explicit content nodes
+      {
+        tag,
+        context,
+        getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element);
+          if (hasBacklink(rdfaAttrs, SAY('body'))) {
+            return rdfaAttrs;
+          }
+          return false;
+        },
       },
     ],
   };
