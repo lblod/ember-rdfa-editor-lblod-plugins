@@ -141,12 +141,15 @@ const TAG_TO_LEVEL = new Map([
   ['h6', 6],
 ]);
 
+export type StructureHeaderType = 'structure_header' | 'article_header';
 type StructureHeaderArgs = {
+  type: StructureHeaderType;
   outlineText: (node: PNode) => string;
   includeLevel: boolean;
 };
 
 export function constructStructureHeaderNodeSpec({
+  type,
   outlineText,
   includeLevel,
 }: StructureHeaderArgs): NodeSpec {
@@ -191,7 +194,8 @@ export function constructStructureHeaderNodeSpec({
     },
     parseDOM: [
       {
-        tag: 'h1,h2,h3,h4,h5,h6,span',
+        tag: `h1,h2,h3,h4,h5,h6,span${type === 'article_header' ? ',div' : ''}`,
+        context: type === 'article_header' ? 'article/' : undefined,
         // Need to have higher priority than default (50) as otherwise seems to get parsed as a
         // generic header
         priority: 60,
