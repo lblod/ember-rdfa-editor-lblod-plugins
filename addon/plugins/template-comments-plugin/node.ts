@@ -24,16 +24,17 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     serialize(_, state) {
       const t = getTranslationFunction(state);
       const heading = t(
-        'template-comments-plugin.heading',
-        'toelichtingsbepaling',
+        'template-comments-plugin.long-title',
+        'Toelichtings- of voorbeeldbepaling',
       );
 
       return [
         'div',
         {
           typeof: EXT('TemplateComment').prefixed,
+          class: 'say-template-comment',
         },
-        ['h3', {}, heading],
+        ['p', {}, ['strong', {}, heading]],
         ['div', { property: EXT('content').prefixed }, 0],
       ];
     },

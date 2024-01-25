@@ -1,7 +1,8 @@
-@import "ember-appuniversum";
-
 .say-template-comment {
   color: var(--au-blue-900);
+  padding: var(--au-unit-small);
+  border-radius: var(--au-radius);
+  border: 0.1rem solid var(--au-gray-300);
 
   .au-c-alert__content {
     margin-top: 0;
