@@ -24,6 +24,7 @@ export const structure_header_title: NodeSpec = {
   parseDOM: [
     {
       tag: 'span',
+      context: 'structure_header/|article_header/',
       getAttrs(node: HTMLElement) {
         const attrs = getRdfaAttrs(node);
         if (hasBacklink(attrs, EXT('title'))) {

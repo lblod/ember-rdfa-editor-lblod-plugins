@@ -1,7 +1,7 @@
 import { Fragment, NodeSpec, RdfaAttrs } from '@lblod/ember-rdfa-editor';
 import {
+  hasRdfaContentChild,
   getRdfaAttrs,
-  getRdfaContentElement,
   rdfaAttrSpec,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
@@ -179,20 +179,65 @@ export const article_paragraph: NodeSpec = {
       context: 'article/article_body/',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element);
-        if (hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), SAY('Paragraph'))) {
+        if (
+          hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), SAY('Paragraph')) &&
+          hasRdfaContentChild(element)
+        ) {
           return rdfaAttrs;
         }
         return false;
       },
-      contentElement: getRdfaContentElement,
+    },
+    // Older structures (without an explicit 'content' element) don't have a separate element
+    // around the paragraph number, so we manually create that to use as a content element
+    {
+      tag: 'div',
+      context: 'article/article_body/',
+      getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (rdfaAttrs) {
+          return rdfaAttrs;
+        }
+        return false;
+      },
+      contentElement(node) {
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+          throw new Error('content element is not an element');
+        }
+        let contentElem = node as HTMLElement;
+        if (
+          contentElem.lastElementChild &&
+          hasRDFaAttribute(
+            contentElem.lastElementChild,
+            'property',
+            SAY('body'),
+          )
+        ) {
+          const bodyElem = contentElem.lastElementChild;
+          const headingSpan = document.createElement('span');
+          const children = [...contentElem.childNodes];
+          // Just in case there's a non-element child after the body
+          let child: Node | undefined;
+          do {
+            child = children.pop();
+          } while (child && child.nodeType !== Node.ELEMENT_NODE);
+          headingSpan.replaceChildren(...children);
+
+          contentElem = document.createElement('div');
+          contentElem.replaceChildren(headingSpan, bodyElem);
+        }
+
+        return contentElem;
+      },
     },
     // Parsing rule for backwards compatibility (when content was not inside seperate say:body div)
     {
       tag: 'div',
+      context: 'article/article_body/',
       getAttrs(element: HTMLElement) {
         const numberSpan = element.querySelector(`
-        span[property~='${ELI('number').prefixed}'],
-        span[property~='${ELI('number').full}']`);
+          span[property~='${ELI('number').prefixed}'],
+          span[property~='${ELI('number').full}']`);
         if (
           hasRDFaAttribute(element, 'property', SAY('hasParagraph')) &&
           hasRDFaAttribute(element, 'typeof', SAY('Paragraph')) &&

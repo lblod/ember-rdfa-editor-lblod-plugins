@@ -9,6 +9,7 @@ import {
 import {
   getRdfaAttrs,
   getRdfaContentElement,
+  hasRdfaContentChild,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
@@ -20,7 +21,6 @@ import {
 import {
   hasBacklink,
   hasParsedRDFaAttribute,
-  hasRDFaAttribute,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -108,13 +108,25 @@ export function constructStructureBodyNodeSpec(config: {
           const rdfaAttrs = getRdfaAttrs(element);
           if (
             hasBacklink(rdfaAttrs, SAY('body')) &&
-            hasRDFaAttribute(element, 'datatype', RDF('XMLLiteral'))
+            hasRdfaContentChild(element)
           ) {
             return rdfaAttrs;
           }
           return false;
         },
         contentElement: getRdfaContentElement,
+      },
+      // Backwards compatibility with old versions, without explicit content nodes
+      {
+        tag,
+        context,
+        getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element);
+          if (hasBacklink(rdfaAttrs, SAY('body'))) {
+            return rdfaAttrs;
+          }
+          return false;
+        },
       },
     ],
   };
@@ -129,12 +141,15 @@ const TAG_TO_LEVEL = new Map([
   ['h6', 6],
 ]);
 
+export type StructureHeaderType = 'structure_header' | 'article_header';
 type StructureHeaderArgs = {
+  type: StructureHeaderType;
   outlineText: (node: PNode) => string;
   includeLevel: boolean;
 };
 
 export function constructStructureHeaderNodeSpec({
+  type,
   outlineText,
   includeLevel,
 }: StructureHeaderArgs): NodeSpec {
@@ -179,7 +194,8 @@ export function constructStructureHeaderNodeSpec({
     },
     parseDOM: [
       {
-        tag: 'h1,h2,h3,h4,h5,h6,span',
+        tag: `h1,h2,h3,h4,h5,h6,span${type === 'article_header' ? ',div' : ''}`,
+        context: type === 'article_header' ? 'article/' : undefined,
         // Need to have higher priority than default (50) as otherwise seems to get parsed as a
         // generic header
         priority: 60,

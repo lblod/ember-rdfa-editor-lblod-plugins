@@ -134,6 +134,7 @@ export const article = constructStructureNodeSpec({
 });
 
 export const article_header = constructStructureHeaderNodeSpec({
+  type: 'article_header',
   includeLevel: false,
   outlineText: (node: PNode) => {
     const { number } = node.attrs;

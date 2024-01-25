@@ -4,9 +4,13 @@ import {
   EXT,
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { constructStructureHeaderNodeSpec } from '../utils/structure';
+import {
+  constructStructureHeaderNodeSpec,
+  StructureHeaderType,
+} from '../utils/structure';
 
 export const structure_header: NodeSpec = constructStructureHeaderNodeSpec({
+  type: 'structure_header',
   includeLevel: true,
   outlineText: (node: PNode) => {
     const { number } = node.attrs;
@@ -14,11 +18,10 @@ export const structure_header: NodeSpec = constructStructureHeaderNodeSpec({
   },
 });
 
-type HeaderType = 'structure_header' | 'article_header';
 const headerNodes = (
   schema: Schema,
 ): Record<
-  HeaderType,
+  StructureHeaderType,
   { beforeNumberNodes?: PNode[]; afterNumberNodes: PNode[] }
 > => ({
   structure_header: { afterNumberNodes: [schema.text('. ')] },
@@ -38,7 +41,7 @@ type ConstructArgs = {
   numberRdfaId: string;
   number: string;
   level?: number;
-  headerType?: HeaderType;
+  headerType?: StructureHeaderType;
 };
 export function constructStructureHeader({
   schema,
