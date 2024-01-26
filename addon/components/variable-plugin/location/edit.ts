@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { RdfaAttrs, SayController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   CodeListOption,
   fetchCodeListOptions,
@@ -9,15 +9,10 @@ import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
-import {
-  Option,
-  unwrap,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'ember-resources/util/function';
 import { trackedReset } from 'tracked-toolbox';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
-import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { DCT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export type LocationEditOptions = {
   endpoint: string;
@@ -73,17 +68,10 @@ export default class LocationEditComponent extends Component<Args> {
   }
 
   get source() {
-    const node = this.selectedLocation?.node;
-    if (node) {
-      const source = getParsedRDFAAttribute(
-        node.attrs as RdfaAttrs,
-        DCT('source'),
-      )?.object as Option<string>;
-      if (source) {
-        return source;
-      }
-    }
-    return this.args.options.endpoint;
+    return (
+      (this.selectedLocation?.node.attrs.source as string | undefined) ??
+      this.args.options.endpoint
+    );
   }
 
   get label() {
@@ -110,7 +98,7 @@ export default class LocationEditComponent extends Component<Args> {
     );
     result.options = result.options.map((option) => ({
       label: option.label,
-      value: this.wrapInLocation(unwrap(option.value)),
+      value: unwrap(option.value),
     }));
     return result;
   });
@@ -122,13 +110,5 @@ export default class LocationEditComponent extends Component<Args> {
   @action
   updateLocationOption(locationOption: CodeListOption | CodeListOption[]) {
     this.selectedLocationOption = locationOption;
-  }
-
-  wrapInLocation(value: string) {
-    return `
-      <span property="https://data.vlaanderen.be/ns/mobiliteit#plaatsbepaling">
-        ${value}
-      </span>
-    `;
   }
 }
