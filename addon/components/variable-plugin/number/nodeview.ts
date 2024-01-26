@@ -61,8 +61,8 @@ export default class NumberNodeviewComponent extends Component<Args> {
     return this.args.node;
   }
 
-  get number(): number | null | undefined {
-    return getParsedRDFAAttribute(this.node.attrs, EXT('content'))?.object;
+  get number(): string | null | undefined {
+    return getParsedRDFAAttribute(this.node.attrs as RdfaAttrs, EXT('content'))?.object;
   }
 
   get formattedNumber() {
