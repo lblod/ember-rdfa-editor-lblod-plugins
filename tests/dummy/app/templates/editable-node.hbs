@@ -30,6 +30,7 @@
               @controller={{this.rdfaEditor}}
               @options={{this.structureConfig}}
             />
+            <this.InsertStructure @controller={{this.rdfaEditor}}/>
           {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
           {{#if this.activeNode}}

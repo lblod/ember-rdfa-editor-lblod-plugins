@@ -75,11 +75,17 @@ import {
   STRUCTURE_NODES,
   STRUCTURE_SPECS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
+import {
+  structure,
+  structureView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import InsertStructureComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/insert';
 
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
+  InsertStructure = InsertStructureComponent;
 
   @tracked rdfaEditor?: SayController;
   @service declare intl: IntlService;
@@ -112,6 +118,7 @@ export default class EditableBlockController extends Controller {
       block_rdfa,
       link: link(this.linkOptions),
       ...STRUCTURE_NODES,
+      structure,
     },
     marks: {
       inline_rdfa,
@@ -160,6 +167,7 @@ export default class EditableBlockController extends Controller {
     return {
       link: linkView(this.linkOptions)(controller),
       image: imageView(controller),
+      structure: structureView(controller),
     };
   };
 
