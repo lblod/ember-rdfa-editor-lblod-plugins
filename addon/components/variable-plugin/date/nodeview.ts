@@ -3,6 +3,7 @@ import {
   DecorationSource,
   NodeSelection,
   PNode,
+  RdfaAttrs,
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
@@ -13,6 +14,8 @@ import {
   formatDate,
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
+import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
   getPos: () => number | undefined;
@@ -48,7 +51,10 @@ export default class DateNodeviewComponent extends Component<Args> {
   }
 
   get humanReadableDate() {
-    const value = this.args.node.attrs.value as string;
+    const value = getParsedRDFAAttribute(
+      this.args.node.attrs as RdfaAttrs,
+      EXT('content'),
+    )?.object;
     const format = this.args.node.attrs.format as string;
     if (value) {
       if (validateDateFormat(format).type === 'ok') {
@@ -65,5 +71,12 @@ export default class DateNodeviewComponent extends Component<Args> {
             locale: this.documentLanguage,
           });
     }
+  }
+
+  get label() {
+    return getParsedRDFAAttribute(
+      this.args.node.attrs as RdfaAttrs,
+      EXT('label'),
+    )?.object;
   }
 }

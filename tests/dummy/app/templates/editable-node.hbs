@@ -5,9 +5,9 @@
   <:content>
     <EditorContainer
       @editorOptions={{hash
-        showRdfaHighlight="true"
-        showRdfaHover="true"
-        showPaper="true"
+        showRdfaHighlight='true'
+        showRdfaHover='true'
+        showPaper='true'
         showToolbarBottom=null
       }}
       @showRdfaBlocks={{this.showRdfaBlocks}}
@@ -29,6 +29,20 @@
             <ArticleStructurePlugin::ArticleStructureCard
               @controller={{this.rdfaEditor}}
               @options={{this.structureConfig}}
+            />
+            <VariablePlugin::InsertVariableCard
+              @controller={{this.controller}}
+              @variableTypes={{this.variableTypes}}
+            />
+            <VariablePlugin::Location::Edit @controller={{this.controller}} @options={{this.locationOptions}}/>
+            <VariablePlugin::Codelist::Edit @controller={{this.controller}} @options={{this.codelistOptions}}/>
+            <VariablePlugin::Date::Edit
+              @controller={{this.controller}}
+              @options={{this.dateOptions}}
+            />
+            <VariablePlugin::Address::Edit
+              @controller={{this.controller}}
+              @defaultMunicipality="Gent"
             />
           {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />

@@ -1,8 +1,10 @@
 import {
   ADRES,
+  DCT,
   EXT,
   GENERIEK,
   GEOSPARQL,
+  RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -10,8 +12,14 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { v4 as uuidv4 } from 'uuid';
-import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import {
+  DOMOutputSpec,
+  EditorState,
+  PNode,
+  ParseRule,
+} from '@lblod/ember-rdfa-editor';
+import {
+  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableInstance,
@@ -19,18 +27,20 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
 import {
   findChildWithRdfaAttribute,
+  hasParsedRDFaAttribute,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
-import {
-  contentSpan,
-  instanceSpan,
-  mappingSpan,
-  typeSpan,
-} from '../utils/dom-constructors';
+import { contentSpan } from '../utils/dom-constructors';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import {
+  getRdfaAttrs,
+  rdfaAttrSpec,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
+import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 export class Address {
   declare id?: string;
@@ -215,7 +225,44 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
   }
 };
 
-const parseDOM = [
+const parseDOM: ParseRule[] = [
+  {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node);
+      if (!attrs) {
+        return false;
+      }
+      const dataContainer = node.querySelector(
+        '[data-content-container="true"]',
+      );
+      if (
+        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        dataContainer &&
+        hasRdfaVariableType(attrs, 'address')
+      ) {
+        if (!attrs.subject) {
+          return false;
+        }
+        // Filter out properties with content predicate,
+        // as we handle this ourselves with the `value` attribute
+        attrs.properties = (attrs.properties as Property[]).filter((prop) => {
+          return !EXT('content').matches(prop.predicate);
+        });
+        const addressNode = [...dataContainer.children].find((el) =>
+          hasRDFaAttribute(el, 'property', EXT('content')),
+        );
+        if (!addressNode) {
+          return false;
+        }
+        return {
+          ...attrs,
+          value: parseAddressNode(addressNode),
+        };
+      }
+      return false;
+    },
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -234,12 +281,39 @@ const parseDOM = [
           return false;
         }
 
+        const properties = [
+          {
+            type: 'attribute',
+            predicate: RDF('type').full,
+            object: EXT('Mapping').full,
+          },
+          {
+            type: 'attribute',
+            predicate: EXT('instance').full,
+            object:
+              variableInstance ??
+              `http://data.lblod.info/variables/${uuidv4()}`,
+          },
+          {
+            type: 'attribute',
+            predicate: DCT('type').full,
+            object: 'address',
+          },
+        ];
+        if (label) {
+          properties.push({
+            type: 'attribute',
+            predicate: EXT('label').full,
+            object: label,
+          });
+        }
+
         return {
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
           value: parseAddressNode(addressNode),
+          subject: mappingResource,
+          rdfaNodeType: 'resource',
+          __rdfaId: uuidv4(),
+          properties,
         };
       }
 
@@ -251,7 +325,7 @@ const parseDOM = [
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
 
-  const { mappingResource, variableInstance, label, value } = node.attrs;
+  const { value } = node.attrs;
   let contentNode: DOMOutputSpec;
   if (value) {
     contentNode = constructAddressNode(value);
@@ -262,15 +336,11 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     );
     contentNode = contentSpan({}, placeholder);
   }
-  return mappingSpan(
-    mappingResource,
-    {
-      'data-label': label as string,
-    },
-    instanceSpan(variableInstance),
-    typeSpan('address'),
-    contentNode,
-  );
+  return renderRdfaAware({
+    renderable: node,
+    tag: 'span',
+    content: contentNode,
+  });
 };
 
 const emberNodeConfig: EmberNodeConfig = {
@@ -278,16 +348,14 @@ const emberNodeConfig: EmberNodeConfig = {
   component: AddressNodeviewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
-  content: 'inline*',
   atom: true,
+  editable: true,
   recreateUri: true,
   uriAttributes: ['variableInstance'],
   draggable: false,
   needsFFKludge: true,
   attrs: {
-    mappingResource: {},
-    variableInstance: {},
-    label: { default: null },
+    ...rdfaAttrSpec,
     value: {
       default: null,
     },

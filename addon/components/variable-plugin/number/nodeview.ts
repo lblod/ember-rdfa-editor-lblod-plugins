@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import {
   DecorationSource,
   PNode,
+  RdfaAttrs,
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
@@ -13,6 +14,9 @@ import { isBlank } from '@ember/utils';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 import { Velcro } from 'ember-velcro';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
   getPos: () => number | undefined;
@@ -27,7 +31,7 @@ type Args = {
 export default class NumberNodeviewComponent extends Component<Args> {
   Velcro = Velcro;
 
-  @localCopy('args.node.attrs.value', '') declare inputNumber: string;
+  @localCopy('number', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;
   @service declare intl: intlService;
@@ -57,9 +61,12 @@ export default class NumberNodeviewComponent extends Component<Args> {
     return this.args.node;
   }
 
-  get formattedNumber() {
-    const value = this.node.attrs.value as string;
+  get number(): string | null | undefined {
+    return getParsedRDFAAttribute(this.node.attrs as RdfaAttrs, EXT('content'))?.object;
+  }
 
+  get formattedNumber() {
+    const value = this.number;
     if (!isNumber(value)) {
       return value;
     }
@@ -80,6 +87,13 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
   get maxValue() {
     return this.node.attrs.maximumValue as number;
+  }
+
+  get label() {
+    return getParsedRDFAAttribute(
+      this.args.node.attrs as RdfaAttrs,
+      EXT('label'),
+    )?.object;
   }
 
   @action onInputNumberChange(event: InputEvent) {
@@ -125,7 +139,20 @@ export default class NumberNodeviewComponent extends Component<Args> {
   @action
   validateAndSave() {
     if (!this.errorMessage) {
-      this.args.updateAttribute('value', this.inputNumber);
+      const properties = this.node.attrs.properties as Property[];
+      const newProperties = properties.filter((prop: Property) => {
+        return !(
+          prop.type === 'attribute' && EXT('content').matches(prop.predicate)
+        );
+      });
+      if (this.inputNumber) {
+        newProperties.push({
+          type: 'attribute',
+          predicate: EXT('content').full,
+          object: this.inputNumber,
+        });
+      }
+      this.args.updateAttribute('properties', newProperties);
     }
   }
 }

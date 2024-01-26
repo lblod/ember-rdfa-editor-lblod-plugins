@@ -1,19 +1,19 @@
 import Component from '@glimmer/component';
-import {
-  NodeSelection,
-  SayController,
-  SayView,
-} from '@lblod/ember-rdfa-editor';
+import { NodeSelection, RdfaAttrs, SayView } from '@lblod/ember-rdfa-editor';
+import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-type Args = {
-  controller: SayController;
-};
+import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
-export default class VariableNodeViewComponent extends Component<Args> {
+export default class VariableNodeViewComponent extends Component<EmberNodeArgs> {
   @tracked innerView?: SayView;
 
+  get plugins() {
+    return [editableNodePlugin(this.args.getPos)];
+  }
   @action
   onClick() {
     if (this.innerView) {
@@ -35,5 +35,12 @@ export default class VariableNodeViewComponent extends Component<Args> {
   @action
   initEditor(view: SayView) {
     this.innerView = view;
+  }
+
+  get label() {
+    return getParsedRDFAAttribute(
+      this.args.node.attrs as RdfaAttrs,
+      EXT('label'),
+    )?.object;
   }
 }

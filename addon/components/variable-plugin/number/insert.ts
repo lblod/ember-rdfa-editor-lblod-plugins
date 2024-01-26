@@ -7,6 +7,11 @@ import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { modifier } from 'ember-modifier';
+import {
+  DCT,
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
   controller: SayController;
@@ -85,17 +90,37 @@ export default class NumberInsertComponent extends Component<Args> {
     if (this.numberVariableError !== '') return;
 
     const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
+    const subject = mappingResource;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
     const defaultLabel = this.intl.t('variable.number.label', {
       locale: this.documentLanguage,
     });
+    const label = this.label ?? defaultLabel;
+    const variableId = uuidv4();
 
     const node = this.schema.nodes.number.create({
-      label: this.label ?? defaultLabel,
-      value: null,
-      mappingResource,
-      variableInstance,
+      subject,
+      rdfaNodeType: 'resource',
+      __rdfaId: variableId,
+      properties: [
+        {
+          type: 'attribute',
+          predicate: RDF('type').full,
+          object: EXT('Mapping').full,
+        },
+        {
+          type: 'attribute',
+          predicate: EXT('instance').full,
+          object: variableInstance,
+        },
+        {
+          type: 'attribute',
+          predicate: EXT('label').full,
+          object: label,
+        },
+        { type: 'attribute', predicate: DCT('type').full, object: 'number' },
+      ],
       ...(isNumber(this.minimumValue) && {
         minimumValue: Number(this.minimumValue),
       }),
