@@ -1,11 +1,13 @@
 import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
 import {
-  ELI,
   EXT,
   SAY,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { getStructureHeaderAttrs } from '../utils/structure';
+import {
+  getNumberDocSpecFromNode,
+  getNumberAttributesFromNode,
+  getStructureHeaderAttrs,
+} from '../utils/structure';
 
 const TAG_TO_LEVEL = new Map([
   ['h1', 1],
@@ -28,7 +30,13 @@ export const structure_header: NodeSpec = {
       default: SAY('heading').prefixed,
     },
     number: {
-      default: '1',
+      default: 1,
+    },
+    numberDisplayStyle: {
+      default: 'decimal', // decimal, roman
+    },
+    startNumber: {
+      default: null,
     },
     level: {
       default: 1,
@@ -41,16 +49,11 @@ export const structure_header: NodeSpec = {
   toDOM(node) {
     return [
       `h${node.attrs.level as number}`,
-      { property: node.attrs.property as string },
-      [
-        'span',
-        {
-          property: ELI('number').prefixed,
-          datatype: XSD('string').prefixed,
-          contenteditable: false,
-        },
-        node.attrs.number,
-      ],
+      {
+        property: node.attrs.property as string,
+        ...getNumberAttributesFromNode(node),
+      },
+      getNumberDocSpecFromNode(node),
       ['span', { contenteditable: false }, '. '],
       [
         'span',
@@ -67,8 +70,12 @@ export const structure_header: NodeSpec = {
       getAttrs(element: HTMLElement) {
         const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
         const headerAttrs = getStructureHeaderAttrs(element);
+
         if (headerAttrs) {
-          return { level, ...headerAttrs };
+          return {
+            level,
+            ...headerAttrs,
+          };
         }
 
         return false;
