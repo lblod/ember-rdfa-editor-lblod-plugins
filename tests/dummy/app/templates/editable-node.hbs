@@ -30,6 +30,13 @@
               @controller={{this.rdfaEditor}}
               @options={{this.structureConfig}}
             />
+            {{#if this.activeNode}}
+              <this.SnippetInsert
+                @controller={{this.rdfaEditor}}
+                @config={{this.config.snippet}}
+                @node={{this.activeNode}}
+              />
+            {{/if}}
             <VariablePlugin::InsertVariableCard
               @controller={{this.controller}}
               @variableTypes={{this.variableTypes}}
@@ -43,13 +50,6 @@
             <VariablePlugin::Address::Edit
               @controller={{this.controller}}
               @defaultMunicipality="Gent"
-            />
-          {{/if}}
-          {{#if this.activeNode}}
-            <this.SnippetInsert
-              @controller={{this.rdfaEditor}}
-              @config={{this.config.snippet}}
-              @node={{this.activeNode}}
             />
           {{/if}}
           <Plugins::Link::LinkEditor @controller={{this.rdfaEditor}} />
