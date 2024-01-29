@@ -40,7 +40,6 @@ const parseDOM = [
     tag: 'span',
     getAttrs(node: HTMLElement) {
       const attrs = getRdfaAttrs(node);
-      console.log('attrs', attrs);
       if (!attrs) {
         return false;
       }
