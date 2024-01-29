@@ -5,6 +5,8 @@ import {
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import {
+  getRdfaContentElement,
+  hasRdfaContentChild,
   renderRdfaAware,
   sharedRdfaNodeSpec,
 } from '@lblod/ember-rdfa-editor/core/schema';
@@ -12,9 +14,14 @@ import {
   BESLUIT,
   ELI,
   PROV,
+  RDF,
   SKOS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  hasBacklink,
+  hasParsedRDFaAttribute,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -50,6 +57,21 @@ export const besluit_title: NodeSpec = {
     });
   },
   parseDOM: [
+    {
+      tag: 'h1,h2,h3,h4,h5',
+      getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, ELI('title')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return rdfaAttrs;
+        }
+        return false;
+      },
+      contentElement: getRdfaContentElement,
+    },
+    // Compatibility with pre-RDFa-aware HTML
     {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
@@ -93,6 +115,21 @@ export const description: NodeSpec = {
     {
       tag: 'div,p',
       getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, ELI('description')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return rdfaAttrs;
+        }
+        return false;
+      },
+      contentElement: getRdfaContentElement,
+    },
+    // Compatibility with pre-RDFa-aware HTML
+    {
+      tag: 'div,p',
+      getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('description'))) {
           return getRdfaAttrs(element);
         }
@@ -129,6 +166,21 @@ export const motivering: NodeSpec = {
     });
   },
   parseDOM: [
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, BESLUIT('motivering')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return rdfaAttrs;
+        }
+        return false;
+      },
+      contentElement: getRdfaContentElement,
+    },
+    // Compatibility with pre-RDFa-aware HTML
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
@@ -172,6 +224,22 @@ export const article_container: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, PROV('value')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return rdfaAttrs;
+        }
+        return false;
+      },
+      context: 'besluit/',
+      contentElement: getRdfaContentElement,
+    },
+    // Compatibility with pre-RDFa-aware HTML
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', PROV('value'))) {
           return getRdfaAttrs(element);
         }
@@ -207,6 +275,22 @@ export const besluit_article: NodeSpec = {
     });
   },
   parseDOM: [
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, ELI('has_part')) &&
+          hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), BESLUIT('Artikel')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return rdfaAttrs;
+        }
+        return false;
+      },
+      contentElement: getRdfaContentElement,
+    },
+    // Compatibility with pre-RDFa-aware HTML
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
@@ -364,6 +448,22 @@ export const besluit_article_content: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, PROV('value')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return getRdfaAttrs(element);
+        }
+        return false;
+      },
+      contentElement: getRdfaContentElement,
+      context: 'besluit_article/',
+    },
+    // Compatibility with pre-RDFa-aware HTML
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', PROV('value'))) {
           return getRdfaAttrs(element);
         }
@@ -401,6 +501,25 @@ export const besluit: NodeSpec = {
     });
   },
   parseDOM: [
+    {
+      tag: 'div',
+      getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, PROV('generated')) &&
+          hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), BESLUIT('Besluit')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return {
+            typeof: element.getAttribute('typeof'),
+            ...rdfaAttrs,
+          };
+        }
+        return false;
+      },
+      contentElement: getRdfaContentElement,
+    },
+    // Compatibility with pre-RDFa-aware HTML
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
@@ -445,6 +564,21 @@ export const language_node: NodeSpec = {
     return ['span', node.attrs];
   },
   parseDOM: [
+    {
+      tag: 'span',
+      getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element);
+        if (
+          hasBacklink(rdfaAttrs, ELI('language')) &&
+          hasParsedRDFaAttribute(rdfaAttrs, RDF('text'), SKOS('Concept')) &&
+          hasRdfaContentChild(element)
+        ) {
+          return getRdfaAttrs(element);
+        }
+        return false;
+      },
+    },
+    // Compatibility with pre-RDFa-aware HTML
     {
       tag: 'span',
       getAttrs(element: HTMLElement) {
