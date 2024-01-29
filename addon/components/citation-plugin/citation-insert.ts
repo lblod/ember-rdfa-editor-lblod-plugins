@@ -107,6 +107,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
   insertLegalDocumentCitation(legalDocument: LegalDocument) {
     const type = legalDocument.legislationType?.label || '';
     const uri = legalDocument.uri;
+    const url = legalDocument.meta?.publicationLink ?? uri;
     const title = legalDocument.title ?? '';
     this.controller.withTransaction(
       (tr: Transaction) =>
@@ -115,7 +116,11 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
             new Slice(
               Fragment.fromArray([
                 this.controller.schema.text(`${type} `),
-                citedText(this.controller.schema, title, uri),
+                citedText(this.controller.schema, {
+                  title,
+                  uri,
+                  url,
+                }),
               ]),
               0,
               0,
@@ -139,7 +144,11 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
       (tr: Transaction) =>
         tr.replaceWith(from, to, [
           this.controller.schema.text(`${type} `),
-          citedText(this.controller.schema, title, uri),
+          citedText(this.controller.schema, {
+            title,
+            uri,
+            url: uri,
+          }),
         ]),
       { view: this.controller.mainEditorView },
     );

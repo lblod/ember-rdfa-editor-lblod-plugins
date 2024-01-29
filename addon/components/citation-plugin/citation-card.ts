@@ -206,6 +206,7 @@ export default class CitationCardComponent extends Component<Args> {
   @action
   insertLegalDocumentCitation(legalDocument: LegalDocument): void {
     const uri = legalDocument.uri;
+    const url = legalDocument.meta?.publicationLink ?? uri;
     const title = legalDocument.title ?? '';
     const { from, to } = unwrap(this.activeDecoration);
     this.controller.withTransaction(
@@ -214,7 +215,11 @@ export default class CitationCardComponent extends Component<Args> {
           .replaceRangeWith(
             from,
             to,
-            citedText(this.controller.schema, title, uri),
+            citedText(this.controller.schema, {
+              title,
+              uri,
+              url,
+            }),
           )
           .scrollIntoView(),
       { view: this.controller.mainEditorView },
@@ -236,7 +241,11 @@ export default class CitationCardComponent extends Component<Args> {
           .replaceRangeWith(
             from,
             to,
-            citedText(this.controller.schema, title, uri),
+            citedText(this.controller.schema, {
+              title,
+              uri,
+              url: uri,
+            }),
           )
           .scrollIntoView(),
       { view: this.controller.mainEditorView },

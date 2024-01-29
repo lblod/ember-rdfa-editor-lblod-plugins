@@ -6,13 +6,16 @@ import { fetchVlaamseCodexLegalDocuments } from '@lblod/ember-rdfa-editor-lblod-
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { fetchPublicDecisions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/public-decisions';
 
+type LegalDocumentMeta = {
+  publicationLink?: string | null;
+};
 interface LegalDocumentArgs {
   uri: string;
   legislationTypeUri: Option<string>;
   title: string | null;
   publicationDate: string | null;
   documentDate: string | null;
-  meta?: Record<string, unknown> | null;
+  meta?: LegalDocumentMeta | null;
 }
 
 export class LegalDocument {
@@ -21,7 +24,7 @@ export class LegalDocument {
   title: string | null;
   publicationDate: string | null;
   documentDate: string | null;
-  meta: Record<string, unknown> | null;
+  meta: LegalDocumentMeta | null;
 
   constructor({
     uri,
