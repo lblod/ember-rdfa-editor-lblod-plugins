@@ -30,8 +30,8 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
     return this.args.node;
   }
 
-  get isResourceNode() {
-    return isResourceNode(this.node.value);
+  get showInsert() {
+    return this.assignedSnippetListsIds.length > 0;
   }
 
   get snippetListIdsProperty(): AttributeProperty[] | undefined {
