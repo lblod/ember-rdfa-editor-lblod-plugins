@@ -97,10 +97,15 @@ import DateInsertVariableComponent from 'dummy/components/variable-plugin/date/i
 import CodelistInsertComponent from 'dummy/components/variable-plugin/codelist/insert';
 import LocationInsertComponent from 'dummy/components/variable-plugin/location/insert';
 import VariablePluginAddressInsertVariableComponent from 'dummy/components/variable-plugin/address/insert-variable';
+import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
+import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
+
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
+  SnippetInsert = SnippetInsertRdfaComponent;
+  SnippetListSelect = SnippetListSelectRdfaComponent;
 
   @tracked rdfaEditor?: SayController;
   @service declare intl: IntlService;
@@ -221,6 +226,15 @@ export default class EditableBlockController extends Controller {
       },
     ];
   }
+
+  get config() {
+    return {
+      snippet: {
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+      },
+    };
+  }
+
   @tracked plugins: PluginConfig = [
     firefoxCursorFix(),
     chromeHacksPlugin(),
