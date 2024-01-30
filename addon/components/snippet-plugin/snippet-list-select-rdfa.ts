@@ -35,7 +35,7 @@ export default class SnippetListSelectRdfaComponent extends Component<Args> {
   }
 
   get currentResource() {
-    return this.node.value.attrs.resource as string | undefined;
+    return this.node.value.attrs.subject as string | undefined;
   }
 
   get isResourceNode() {
