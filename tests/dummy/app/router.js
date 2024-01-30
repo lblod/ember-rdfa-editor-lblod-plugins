@@ -10,4 +10,6 @@ Router.map(function () {
   this.route('besluit-sample', { path: '/' });
   this.route('regulatory-statement-sample');
   this.route('editable-node');
+  this.route('editable-nodes-besluit');
+  this.route('editable-nodes-regulatory-statement');
 });

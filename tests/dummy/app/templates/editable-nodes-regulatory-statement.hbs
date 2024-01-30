@@ -8,13 +8,13 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa=true
+          showRdfa=false
+          editRdfa=true
           showRdfaHighlight=true
           showRdfaHover=true
           showPaper=true
           showToolbarBottom=null
         }}
-        @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
           {{#if this.controller}}
@@ -48,7 +48,6 @@
             <Tb.Group>
               <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
               <TableOfContentsPlugin::ToolbarButton @controller={{this.controller}}/>
-              <Plugins::RdfaBlockRender::RdfaBlocksToggle @controller={{this.controller}}/>
             </Tb.Group>
           </Toolbar>
           {{/if}}
@@ -98,6 +97,19 @@
               @config={{this.config.snippet}}
               @assignedSnippetListsIds={{this.config.assignedSnippetListsIds}}
             />
+            <AuHr/>
+            <Plugins::Link::LinkEditor @controller={{this.controller}} />
+            {{#if this.activeNode}}
+              <this.RdfaEditor
+                @node={{this.activeNode}}
+                @controller={{this.controller}}
+              />
+              <this.DebugInfo @node={{this.activeNode}} />
+              <this.AttributeEditor
+                @node={{this.activeNode}}
+                @controller={{this.controller}}
+              />
+            {{/if}}
           </Sidebar>
           {{/if}}
         </:aside>
