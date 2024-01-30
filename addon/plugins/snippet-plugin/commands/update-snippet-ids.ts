@@ -37,7 +37,7 @@ const updateSnippetIds = ({
           resource,
           property: {
             type: 'attribute',
-            predicate: SNIPPET_LIST_RDFA_PREDICATE,
+            predicate: SNIPPET_LIST_RDFA_PREDICATE.prefixed,
             object: JSON.stringify(getSnippetUriFromId(snippetId)),
           },
           transaction,

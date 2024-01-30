@@ -44,7 +44,12 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
 
     const doc = this.controller.mainEditorState.doc;
 
+    if (this.node.pos < 0) {
+      return undefined;
+    }
+
     const pos = doc.resolve(this.node.pos);
+
     let parentNode = findParentNodeClosestToPos(pos, (node) =>
       isResourceNode(node),
     );

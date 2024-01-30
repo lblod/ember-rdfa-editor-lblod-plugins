@@ -2,8 +2,9 @@ import { PNode } from '@lblod/ember-rdfa-editor';
 import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { getProperties } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
 import { getSnippetIdFromUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
-export const SNIPPET_LIST_RDFA_PREDICATE = 'say:allowedSnippetList';
+export const SNIPPET_LIST_RDFA_PREDICATE = SAY('allowedSnippetList');
 
 export const getSnippetListIdsProperties = (
   node: PNode,
@@ -16,7 +17,8 @@ export const getSnippetListIdsProperties = (
 
   return properties.filter(
     (property): property is AttributeProperty =>
-      property.predicate === SNIPPET_LIST_RDFA_PREDICATE &&
+      (property.predicate === SNIPPET_LIST_RDFA_PREDICATE.prefixed ||
+        property.predicate === SNIPPET_LIST_RDFA_PREDICATE.full) &&
       property.type === 'attribute',
   );
 };
