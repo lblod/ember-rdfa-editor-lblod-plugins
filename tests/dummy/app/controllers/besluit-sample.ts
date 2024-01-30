@@ -2,6 +2,9 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+
 import {
   NodeType,
   NodeViewConstructor,
@@ -15,7 +18,6 @@ import {
   strong,
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
-
 import {
   block_rdfa,
   docWithConfig,
@@ -35,7 +37,6 @@ import {
 import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
-
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
 import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 import {
@@ -44,15 +45,24 @@ import {
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
-import { service } from '@ember/service';
+import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
+import {
+  createInvisiblesPlugin,
+  hardBreak,
+  heading as headingInvisible,
+  paragraph as paragraphInvisible,
+} from '@lblod/ember-rdfa-editor/plugins/invisibles';
+import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
+import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
+import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
+import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
+
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   besluitNodes,
   structureSpecs,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
-import IntlService from 'ember-intl/services/intl';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   citationPlugin,
@@ -68,14 +78,6 @@ import {
   insertMotivation,
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
-
-import {
-  createInvisiblesPlugin,
-  hardBreak,
-  heading as headingInvisible,
-  paragraph as paragraphInvisible,
-} from '@lblod/ember-rdfa-editor/plugins/invisibles';
-
 import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
 import {
   codelist,
@@ -89,10 +91,6 @@ import {
   address,
   addressView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
-import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
-import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
-import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
-import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
 import {
   date,
   dateView,
