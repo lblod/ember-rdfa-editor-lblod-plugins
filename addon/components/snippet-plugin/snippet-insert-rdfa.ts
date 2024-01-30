@@ -57,7 +57,7 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
     while (parentNode) {
       const properties = getSnippetListIdsProperties(parentNode.node);
 
-      if (properties) {
+      if (properties && properties.length > 0) {
         return properties;
       }
 
