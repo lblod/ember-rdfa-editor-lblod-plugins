@@ -1,6 +1,10 @@
-import { PNode } from '@lblod/ember-rdfa-editor';
+import { Attrs } from 'prosemirror-model';
 import { AttributeProperty } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import type { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  isRdfaAttrs,
+  RdfaAttrs,
+  RdfaResourceAttrs,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { Option } from './option';
 
 export class Resource {
@@ -40,14 +44,18 @@ export function hasRDFaAttribute(
 }
 
 export function hasParsedRDFaAttribute(
-  rdfaAttrs: RdfaAttrs | false,
+  rdfaAttrs: Attrs | false,
   predicate: Resource,
   object: Resource | string,
 ) {
-  if (!rdfaAttrs || rdfaAttrs.rdfaNodeType !== 'resource') {
+  if (
+    !rdfaAttrs ||
+    !isRdfaAttrs(rdfaAttrs) ||
+    rdfaAttrs.rdfaNodeType !== 'resource'
+  ) {
     return false;
   }
-  return rdfaAttrs.properties.some((prop) => {
+  return (rdfaAttrs as RdfaResourceAttrs).properties.some((prop) => {
     return (
       prop.type === 'attribute' &&
       predicate.matches(prop.predicate) &&
@@ -57,14 +65,25 @@ export function hasParsedRDFaAttribute(
     );
   });
 }
-export function getParsedRDFAAttribute(
-  rdfaAttrs: RdfaAttrs,
-  predicate: Resource,
-) {
-  return (rdfaAttrs.rdfaNodeType === 'resource' &&
+
+export function getParsedRDFAAttribute(rdfaAttrs: Attrs, predicate: Resource) {
+  return (isRdfaAttrs(rdfaAttrs) &&
+    rdfaAttrs.rdfaNodeType === 'resource' &&
     rdfaAttrs.properties.find(
       (prop) => prop.type === 'attribute' && predicate.matches(prop.predicate),
     )) as Option<AttributeProperty>;
+}
+
+export function getParsedRDFAAttributeList(
+  rdfaAttrs: Attrs,
+  predicate: Resource,
+) {
+  return ((isRdfaAttrs(rdfaAttrs) &&
+    rdfaAttrs.rdfaNodeType === 'resource' &&
+    rdfaAttrs.properties.filter(
+      (prop) => prop.type === 'attribute' && predicate.matches(prop.predicate),
+    )) ||
+    []) as AttributeProperty[];
 }
 
 export function hasBacklink(rdfaAttrs: RdfaAttrs | false, predicate: Resource) {
@@ -83,18 +102,6 @@ export function findChildWithRdfaAttribute(
     const result = child.getAttribute(attr)?.split(' ');
     return result?.includes(value.full) || result?.includes(value.prefixed);
   });
-}
-
-export function pnodeHasRdfaAttribute(
-  node: PNode,
-  attr: string,
-  value: Resource,
-) {
-  const result = (node.attrs[attr] as string | null)?.split(' ');
-  if (result) {
-    return result.includes(value.full) || result.includes(value.prefixed);
-  }
-  return false;
 }
 
 export function expandPrefixedString(

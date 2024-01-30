@@ -203,8 +203,7 @@ const parseDOM = [
 
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
-  const value = getParsedRDFAAttribute(node.attrs as RdfaAttrs, EXT('content'))
-    ?.object;
+  const value = getParsedRDFAAttribute(node.attrs, EXT('content'))?.object;
   const { onlyDate, format, custom, customAllowed } = node.attrs;
   let humanReadableDate: string;
   if (value) {

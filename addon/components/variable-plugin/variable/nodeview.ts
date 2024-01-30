@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { NodeSelection, RdfaAttrs, SayView } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, SayView } from '@lblod/ember-rdfa-editor';
 import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -38,9 +38,6 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
   }
 
   get label() {
-    return getParsedRDFAAttribute(
-      this.args.node.attrs as RdfaAttrs,
-      EXT('label'),
-    )?.object;
+    return getParsedRDFAAttribute(this.args.node.attrs, EXT('label'))?.object;
   }
 }

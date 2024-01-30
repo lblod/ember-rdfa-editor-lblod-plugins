@@ -34,10 +34,7 @@ import { v4 as uuidv4 } from 'uuid';
 import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import {
-  RdfaAttrs,
-  renderRdfaAware,
-} from '@lblod/ember-rdfa-editor/core/schema';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const parseDOM: ParseRule[] = [
   {
@@ -140,8 +137,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
   const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getParsedRDFAAttribute(node.attrs as RdfaAttrs, EXT('content'))
-    ?.object;
+  const value = getParsedRDFAAttribute(node.attrs, EXT('content'))?.object;
 
   let humanReadableContent: string;
 

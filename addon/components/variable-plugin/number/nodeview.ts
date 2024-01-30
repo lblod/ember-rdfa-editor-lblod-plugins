@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import {
   DecorationSource,
   PNode,
-  RdfaAttrs,
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
@@ -62,7 +61,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get number(): string | null | undefined {
-    return getParsedRDFAAttribute(this.node.attrs as RdfaAttrs, EXT('content'))?.object;
+    return getParsedRDFAAttribute(this.node.attrs, EXT('content'))?.object;
   }
 
   get formattedNumber() {
@@ -90,10 +89,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get label() {
-    return getParsedRDFAAttribute(
-      this.args.node.attrs as RdfaAttrs,
-      EXT('label'),
-    )?.object;
+    return getParsedRDFAAttribute(this.args.node.attrs, EXT('label'))?.object;
   }
 
   @action onInputNumberChange(event: InputEvent) {

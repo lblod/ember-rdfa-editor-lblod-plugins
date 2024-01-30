@@ -1,11 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import {
-  RdfaAttrs,
-  SayController,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
@@ -72,7 +68,7 @@ export default class DateEditComponent extends Component<Args> {
   get documentDate(): Option<Date> {
     if (this.selectedDateNode) {
       const dateVal = getParsedRDFAAttribute(
-        this.selectedDateNode.attrs as RdfaAttrs,
+        this.selectedDateNode.attrs,
         EXT('content'),
       )?.object as Option<string>;
       if (dateVal) {

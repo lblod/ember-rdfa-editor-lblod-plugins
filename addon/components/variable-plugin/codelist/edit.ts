@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { RdfaAttrs, SayController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   CodeListOption,
   fetchCodeListOptions,
@@ -51,10 +51,8 @@ export default class CodelistEditComponent extends Component<Args> {
   get source() {
     if (this.selectedCodelist.value) {
       const { node } = this.selectedCodelist.value;
-      const source = getParsedRDFAAttribute(
-        node.attrs as RdfaAttrs,
-        DCT('source'),
-      )?.object as Option<string>;
+      const source = getParsedRDFAAttribute(node.attrs, DCT('source'))
+        ?.object as Option<string>;
       if (source) {
         return source;
       }
@@ -65,10 +63,8 @@ export default class CodelistEditComponent extends Component<Args> {
   get codelistUri() {
     if (this.selectedCodelist.value) {
       const { node } = this.selectedCodelist.value;
-      const codelistUri = getParsedRDFAAttribute(
-        node.attrs as RdfaAttrs,
-        EXT('codelist'),
-      )?.object as Option<string>;
+      const codelistUri = getParsedRDFAAttribute(node.attrs, EXT('codelist'))
+        ?.object as Option<string>;
       if (codelistUri) {
         return codelistUri;
       }
