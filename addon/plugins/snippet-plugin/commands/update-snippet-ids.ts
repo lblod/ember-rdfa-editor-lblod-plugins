@@ -38,7 +38,7 @@ const updateSnippetIds = ({
           property: {
             type: 'attribute',
             predicate: SNIPPET_LIST_RDFA_PREDICATE.prefixed,
-            object: JSON.stringify(getSnippetUriFromId(snippetId)),
+            object: getSnippetUriFromId(snippetId),
           },
           transaction,
         })(newState, (newTransaction) => {

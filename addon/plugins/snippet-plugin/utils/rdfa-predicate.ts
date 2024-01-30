@@ -39,14 +39,8 @@ export const getAssignedSnippetListsIdsFromProperties = (
   }
 
   const snippetListIds = snippetListUris
-    .map((uri) => {
-      try {
-        return getSnippetIdFromUri(JSON.parse(uri));
-      } catch (e) {
-        return undefined;
-      }
-    })
+    .map(getSnippetIdFromUri)
     .filter((id) => id !== undefined);
 
-  return snippetListIds as string[];
+  return snippetListIds;
 };
