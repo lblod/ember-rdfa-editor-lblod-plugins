@@ -3,7 +3,7 @@ import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-proc
 import { getProperties } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
 import { getSnippetIdFromUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
-export const SNIPPET_LIST_RDFA_PREDICATE = 'say:snippetListIds';
+export const SNIPPET_LIST_RDFA_PREDICATE = 'say:allowedSnippetList';
 
 export const getSnippetListIdsProperties = (
   node: PNode,
