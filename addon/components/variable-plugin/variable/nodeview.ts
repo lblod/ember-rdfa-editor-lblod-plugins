@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export default class VariableNodeViewComponent extends Component<EmberNodeArgs> {
@@ -38,6 +38,6 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
   }
 
   get label() {
-    return getParsedRDFAAttribute(this.args.node.attrs, EXT('label'))?.object;
+    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }

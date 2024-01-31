@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/_private/types';
 
 import { isResourceNode } from '@lblod/ember-rdfa-editor/utils/node-utils';
-import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 
 import SayController from '@lblod/ember-rdfa-editor/addon/core/say-controller';
 
@@ -42,7 +42,7 @@ export default class SnippetListSelectRdfaComponent extends Component<Args> {
     return isResourceNode(this.node.value);
   }
 
-  get snippetListIdsProperties(): AttributeProperty[] | undefined {
+  get snippetListIdsProperties(): OutgoingTriple[] {
     return getSnippetListIdsProperties(this.node.value);
   }
 

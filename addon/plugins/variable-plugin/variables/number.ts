@@ -12,8 +12,8 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
-  getParsedRDFAAttribute,
-  hasParsedRDFaAttribute,
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -45,7 +45,7 @@ const parseDOM: ParseRule[] = [
         return false;
       }
       if (
-        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'number')
       ) {
@@ -137,7 +137,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
   const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getParsedRDFAAttribute(node.attrs, EXT('content'))?.object;
+  const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
 
   let humanReadableContent: string;
 

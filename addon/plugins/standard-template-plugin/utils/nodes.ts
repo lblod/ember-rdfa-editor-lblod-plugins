@@ -19,7 +19,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   hasBacklink,
-  hasParsedRDFaAttribute,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { StructureSpec } from '../../article-structure-plugin';
@@ -281,7 +281,7 @@ export const besluit_article: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, ELI('has_part')) &&
-          hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), BESLUIT('Artikel')) &&
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel')) &&
           hasRdfaContentChild(element)
         ) {
           return rdfaAttrs;
@@ -507,7 +507,7 @@ export const besluit: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, PROV('generated')) &&
-          hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), BESLUIT('Besluit')) &&
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Besluit')) &&
           hasRdfaContentChild(element)
         ) {
           return {
@@ -570,7 +570,7 @@ export const language_node: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, ELI('language')) &&
-          hasParsedRDFaAttribute(rdfaAttrs, RDF('text'), SKOS('Concept')) &&
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('text'), SKOS('Concept')) &&
           hasRdfaContentChild(element)
         ) {
           return getRdfaAttrs(element);

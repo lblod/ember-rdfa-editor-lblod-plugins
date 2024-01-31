@@ -10,7 +10,7 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  hasParsedRDFaAttribute,
+  hasOutgoingNamedNodeTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -70,7 +70,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.contexts.some((type) =>
-          hasParsedRDFaAttribute(node, RDF('type'), HACKY_LOOKUP[type]),
+          hasOutgoingNamedNodeTriple(node, RDF('type'), HACKY_LOOKUP[type]),
         );
       }).length;
     const containsDisabledTypes =
@@ -81,7 +81,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.disabledInContexts.some((type) =>
-          hasParsedRDFaAttribute(node, RDF('type'), HACKY_LOOKUP[type]),
+          hasOutgoingNamedNodeTriple(node, RDF('type'), HACKY_LOOKUP[type]),
         );
       }).length;
 

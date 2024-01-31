@@ -1,4 +1,5 @@
 import { NodeSpec, PNode, RdfaAttrs, Schema } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   ELI,
   EXT,
@@ -62,7 +63,7 @@ export function constructStructureHeader({
     rdfaNodeType: 'literal',
     backlinks: [
       {
-        subject: backlinkResource,
+        subject: sayDataFactory.literalNode(backlinkResource),
         predicate: headingProperty,
       },
     ],
@@ -72,7 +73,7 @@ export function constructStructureHeader({
     rdfaNodeType: 'literal',
     backlinks: [
       {
-        subject: backlinkResource,
+        subject: sayDataFactory.literalNode(backlinkResource),
         predicate: EXT('title').prefixed,
       },
     ],
@@ -82,7 +83,7 @@ export function constructStructureHeader({
     rdfaNodeType: 'literal',
     backlinks: [
       {
-        subject: backlinkResource,
+        subject: sayDataFactory.literalNode(backlinkResource),
         predicate: ELI('number').prefixed,
       },
     ],

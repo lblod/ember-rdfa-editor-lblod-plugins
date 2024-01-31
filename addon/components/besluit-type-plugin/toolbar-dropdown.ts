@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import fetchBesluitTypes, {
@@ -13,7 +14,7 @@ import { trackedFunction } from 'ember-resources/util/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { getParsedRDFAAttributeList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 declare module 'ember__owner' {
   export default interface Owner {
@@ -106,15 +107,14 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       );
       return;
     }
-    const besluitTypes = getParsedRDFAAttributeList(
-      besluit.node.attrs,
-      RDF('type'),
-    );
-    const besluitTypeRelevant = besluitTypes.find((type) =>
-      type.object.includes(
-        'https://data.vlaanderen.be/id/concept/BesluitType/',
-      ),
-    )?.object;
+    const besluitTypes = getOutgoingTripleList(besluit.node.attrs, RDF('type'));
+    const besluitTypeRelevant = besluitTypes.find(
+      (type) =>
+        type.object.termType === 'NamedNode' &&
+        type.object.value.includes(
+          'https://data.vlaanderen.be/id/concept/BesluitType/',
+        ),
+    )?.object.value;
 
     if (besluitTypeRelevant) {
       this.previousBesluitType = besluitTypeRelevant;
@@ -219,9 +219,8 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
           removeProperty({
             resource,
             property: {
-              type: 'attribute',
               predicate: RDF('type').prefixed,
-              object: this.previousBesluitType,
+              object: sayDataFactory.namedNode(this.previousBesluitType),
             },
           }),
           { view: this.controller.mainEditorView },
@@ -231,9 +230,8 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
         addProperty({
           resource,
           property: {
-            type: 'attribute',
             predicate: RDF('type').prefixed,
-            object: this.besluitType.uri,
+            object: sayDataFactory.namedNode(this.besluitType.uri),
           },
         }),
         { view: this.controller.mainEditorView },

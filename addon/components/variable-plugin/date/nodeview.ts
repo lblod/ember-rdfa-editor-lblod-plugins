@@ -13,7 +13,7 @@ import {
   formatDate,
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
-import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
@@ -50,8 +50,8 @@ export default class DateNodeviewComponent extends Component<Args> {
   }
 
   get humanReadableDate() {
-    const value = getParsedRDFAAttribute(this.args.node.attrs, EXT('content'))
-      ?.object;
+    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
+      ?.object.value;
     const format = this.args.node.attrs.format as string;
     if (value) {
       if (validateDateFormat(format).type === 'ok') {
@@ -71,6 +71,6 @@ export default class DateNodeviewComponent extends Component<Args> {
   }
 
   get label() {
-    return getParsedRDFAAttribute(this.args.node.attrs, EXT('label'))?.object;
+    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }

@@ -1,5 +1,5 @@
 import { Attrs } from 'prosemirror-model';
-import { AttributeProperty } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   isRdfaAttrs,
   RdfaAttrs,
@@ -43,7 +43,7 @@ export function hasRDFaAttribute(
   return false;
 }
 
-export function hasParsedRDFaAttribute(
+export function hasOutgoingNamedNodeTriple(
   rdfaAttrs: Attrs | false,
   predicate: Resource,
   object: Resource | string,
@@ -57,33 +57,32 @@ export function hasParsedRDFaAttribute(
   }
   return (rdfaAttrs as RdfaResourceAttrs).properties.some((prop) => {
     return (
-      prop.type === 'attribute' &&
+      prop.object.termType === 'NamedNode' &&
       predicate.matches(prop.predicate) &&
       (typeof object === 'string'
-        ? prop.object === object
-        : object.matches(prop.object))
+        ? prop.object.value === object
+        : object.matches(prop.object.value))
     );
   });
 }
 
-export function getParsedRDFAAttribute(rdfaAttrs: Attrs, predicate: Resource) {
+export function getOutgoingTriple(rdfaAttrs: Attrs, predicate: Resource) {
   return (isRdfaAttrs(rdfaAttrs) &&
     rdfaAttrs.rdfaNodeType === 'resource' &&
-    rdfaAttrs.properties.find(
-      (prop) => prop.type === 'attribute' && predicate.matches(prop.predicate),
-    )) as Option<AttributeProperty>;
+    rdfaAttrs.properties.find((prop) =>
+      predicate.matches(prop.predicate),
+    )) as Option<OutgoingTriple>;
 }
 
-export function getParsedRDFAAttributeList(
-  rdfaAttrs: Attrs,
-  predicate: Resource,
-) {
-  return ((isRdfaAttrs(rdfaAttrs) &&
-    rdfaAttrs.rdfaNodeType === 'resource' &&
-    rdfaAttrs.properties.filter(
-      (prop) => prop.type === 'attribute' && predicate.matches(prop.predicate),
-    )) ||
-    []) as AttributeProperty[];
+export function getOutgoingTripleList(rdfaAttrs: Attrs, predicate: Resource) {
+  return (
+    (isRdfaAttrs(rdfaAttrs) &&
+      rdfaAttrs.rdfaNodeType === 'resource' &&
+      rdfaAttrs.properties.filter((prop) =>
+        predicate.matches(prop.predicate),
+      )) ||
+    []
+  );
 }
 
 export function hasBacklink(rdfaAttrs: RdfaAttrs | false, predicate: Resource) {

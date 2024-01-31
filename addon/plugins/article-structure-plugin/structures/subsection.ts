@@ -6,6 +6,7 @@ import {
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { RdfaAttrs } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   ELI,
   EXT,
@@ -52,24 +53,20 @@ export const subsectionSpec: StructureSpec = {
       resource,
       properties: [
         {
-          type: 'external',
           predicate: ELI('number').prefixed,
-          object: { type: 'literal', rdfaId: numberRdfaId },
+          object: sayDataFactory.literalNode(numberRdfaId),
         },
         {
-          type: 'external',
           predicate: SAY('heading').prefixed,
-          object: { type: 'literal', rdfaId: headingRdfaId },
+          object: sayDataFactory.literalNode(headingRdfaId),
         },
         {
-          type: 'external',
           predicate: EXT('title').prefixed,
-          object: { type: 'literal', rdfaId: titleRdfaId },
+          object: sayDataFactory.literalNode(titleRdfaId),
         },
         {
-          type: 'external',
           predicate: SAY('body').prefixed,
-          object: { type: 'literal', rdfaId: bodyRdfaId },
+          object: sayDataFactory.literalNode(bodyRdfaId),
         },
       ],
       backlinks: [],

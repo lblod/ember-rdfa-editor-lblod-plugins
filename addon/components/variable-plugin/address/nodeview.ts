@@ -5,7 +5,7 @@ import IntlService from 'ember-intl/services/intl';
 
 import { NodeSelection, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/address';
-import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
@@ -42,7 +42,7 @@ export default class AddressNodeviewComponent extends Component<Args> {
   }
 
   get label() {
-    return getParsedRDFAAttribute(this.node.attrs, EXT('label'))?.object;
+    return getOutgoingTriple(this.node.attrs, EXT('label'))?.object.value;
   }
 
   @action
