@@ -40,7 +40,7 @@ export const sectionSpec: StructureSpec = {
     const headingRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
-    const resource = `http://data.lblod.info/sections/${resourceUuid}`;
+    const subject = `http://data.lblod.info/sections/${resourceUuid}`;
     const titleText = translationWithDocLang(
       PLACEHOLDERS.title,
       intl?.t(PLACEHOLDERS.title) || '',
@@ -48,7 +48,7 @@ export const sectionSpec: StructureSpec = {
     const sectionAttrs: RdfaAttrs = {
       __rdfaId: resourceUuid,
       rdfaNodeType: 'resource',
-      resource,
+      subject,
       properties: [
         {
           predicate: ELI('number').prefixed,
@@ -74,7 +74,7 @@ export const sectionSpec: StructureSpec = {
       rdfaNodeType: 'literal',
       backlinks: [
         {
-          subject: sayDataFactory.literalNode(resource),
+          subject: sayDataFactory.literalNode(subject),
           predicate: SAY('body').prefixed,
         },
       ],
@@ -88,7 +88,7 @@ export const sectionSpec: StructureSpec = {
         titleText,
         headingRdfaId,
         numberRdfaId,
-        backlinkResource: resource,
+        backlinkResource: subject,
       }),
       schema.node(
         `section_body`,
@@ -113,7 +113,7 @@ export const sectionSpec: StructureSpec = {
         type: content ? 'text' : 'node',
         rdfaId: bodyRdfaId,
       },
-      newResource: resource,
+      newResource: subject,
     };
   },
   updateNumber: {

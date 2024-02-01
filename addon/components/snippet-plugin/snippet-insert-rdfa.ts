@@ -3,13 +3,13 @@ import Component from '@glimmer/component';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/_private/types';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
 import {
   getAssignedSnippetListsIdsFromProperties,
   getSnippetListIdsProperties,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 interface Args {
   controller: SayController;

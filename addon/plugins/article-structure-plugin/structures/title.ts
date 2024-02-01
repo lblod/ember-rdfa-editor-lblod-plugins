@@ -40,7 +40,6 @@ export const titleSpec: StructureSpec = {
     const headingRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
-    const resource = `http://data.lblod.info/titles/${__rdfaId}`;
     const subject = `http://data.lblod.info/titles/${__rdfaId}`;
     const titleText = translationWithDocLang(
       PLACEHOLDERS.heading,
@@ -49,7 +48,6 @@ export const titleSpec: StructureSpec = {
     const titleAttrs: RdfaAttrs = {
       __rdfaId,
       rdfaNodeType: 'resource',
-      resource,
       subject,
       properties: [
         {

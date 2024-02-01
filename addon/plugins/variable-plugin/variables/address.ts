@@ -240,17 +240,14 @@ const parseDOM: ParseRule[] = [
         dataContainer &&
         hasRdfaVariableType(attrs, 'address')
       ) {
-        if (!attrs.subject) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
         // Filter out properties with content predicate,
         // as we handle this ourselves with the `value` attribute
-        attrs.properties =
-          attrs.rdfaNodeType !== 'resource'
-            ? []
-            : attrs.properties.filter((prop) => {
-                return !EXT('content').matches(prop.predicate);
-              });
+        attrs.properties = attrs.properties.filter((prop) => {
+          return !EXT('content').matches(prop.predicate);
+        });
         const addressNode = [...dataContainer.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         );

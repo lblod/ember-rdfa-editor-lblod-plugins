@@ -42,7 +42,7 @@ export const subsectionSpec: StructureSpec = {
     const headingRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
-    const resource = `http://data.lblod.info/subsections/${resourceUuid}`;
+    const subject = `http://data.lblod.info/subsections/${resourceUuid}`;
     const titleText = translationWithDocLang(
       PLACEHOLDERS.title,
       intl?.t(PLACEHOLDERS.title) || '',
@@ -50,7 +50,7 @@ export const subsectionSpec: StructureSpec = {
     const sectionAttrs: RdfaAttrs = {
       __rdfaId: resourceUuid,
       rdfaNodeType: 'resource',
-      resource,
+      subject,
       properties: [
         {
           predicate: ELI('number').prefixed,
@@ -80,7 +80,7 @@ export const subsectionSpec: StructureSpec = {
         titleText,
         headingRdfaId,
         numberRdfaId,
-        backlinkResource: resource,
+        backlinkResource: subject,
       }),
       schema.node(
         `subsection_body`,
@@ -105,7 +105,7 @@ export const subsectionSpec: StructureSpec = {
         type: content ? 'text' : 'node',
         rdfaId: bodyRdfaId,
       },
-      newResource: resource,
+      newResource: subject,
     };
   },
   updateNumber: {

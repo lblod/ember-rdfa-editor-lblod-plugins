@@ -281,7 +281,11 @@ export const besluit_article: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, ELI('has_part')) &&
-          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel')) &&
+          hasOutgoingNamedNodeTriple(
+            rdfaAttrs,
+            RDF('type'),
+            BESLUIT('Artikel'),
+          ) &&
           hasRdfaContentChild(element)
         ) {
           return rdfaAttrs;
@@ -411,7 +415,7 @@ export const besluit_article_header: NodeSpec = {
         );
         if (numberNode) {
           return {
-            ...getRdfaAttrs(numberNode),
+            ...getRdfaAttrs(numberNode as HTMLElement),
             number: numberNode.textContent,
           };
         }
@@ -507,7 +511,11 @@ export const besluit: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, PROV('generated')) &&
-          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Besluit')) &&
+          hasOutgoingNamedNodeTriple(
+            rdfaAttrs,
+            RDF('type'),
+            BESLUIT('Besluit'),
+          ) &&
           hasRdfaContentChild(element)
         ) {
           return {

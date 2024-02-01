@@ -44,11 +44,11 @@ export const articleParagraphSpec: StructureSpec = {
     const paragraphRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
-    const resource = `http://data.lblod.info/paragraphs/${paragraphRdfaId}`;
+    const subject = `http://data.lblod.info/paragraphs/${paragraphRdfaId}`;
     const paragraphAttrs: RdfaAttrs = {
       __rdfaId: paragraphRdfaId,
       rdfaNodeType: 'resource',
-      resource,
+      subject,
       properties: [
         {
           predicate: ELI('number').prefixed,
@@ -67,7 +67,7 @@ export const articleParagraphSpec: StructureSpec = {
       backlinks: [
         {
           predicate: ELI('number').prefixed,
-          subject: sayDataFactory.literalNode(resource),
+          subject: sayDataFactory.literalNode(subject),
         },
       ],
     };
@@ -77,7 +77,7 @@ export const articleParagraphSpec: StructureSpec = {
       backlinks: [
         {
           predicate: SAY('body').prefixed,
-          subject: sayDataFactory.literalNode(resource),
+          subject: sayDataFactory.literalNode(subject),
         },
       ],
     };
@@ -109,7 +109,7 @@ export const articleParagraphSpec: StructureSpec = {
     return {
       node,
       selectionConfig: { rdfaId: bodyRdfaId, type: 'node' },
-      newResource: resource,
+      newResource: subject,
     };
   },
   updateNumber: {

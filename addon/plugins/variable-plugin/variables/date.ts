@@ -67,8 +67,7 @@ const parseDOM = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'date')
       ) {
-        const mappingResource = attrs.subject;
-        if (!mappingResource) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
 
@@ -268,8 +267,11 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     const humanReadableDate = value
       ? formatDate(new Date(value), format)
       : onlyDate
-      ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
-      : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
+        ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
+        : t(
+            'date-plugin.insert.datetime',
+            TRANSLATION_FALLBACKS.insertDateTime,
+          );
 
     return humanReadableDate;
   },

@@ -42,10 +42,9 @@ const parseDOM = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'text')
       ) {
-        if (!attrs.subject) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
-        console.log('parse text-var');
         return attrs;
       }
 

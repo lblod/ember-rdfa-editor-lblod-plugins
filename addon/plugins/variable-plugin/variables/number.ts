@@ -49,7 +49,7 @@ const parseDOM: ParseRule[] = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'number')
       ) {
-        if (!attrs.subject) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
         const writtenNumber =

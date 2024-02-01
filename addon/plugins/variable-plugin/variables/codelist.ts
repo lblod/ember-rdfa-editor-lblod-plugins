@@ -48,7 +48,7 @@ const parseDOM = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'codelist')
       ) {
-        if (!attrs.subject) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
         const selectionStyle = node.dataset.selectionStyle ?? null;
