@@ -38,7 +38,7 @@ const insertStructure = (
     const containerAttrs = insertionRange.containerNode.attrs;
     if (dispatch && isRdfaAttrs(containerAttrs)) {
       const incoming = containerAttrs.backlinks;
-      const resource = incoming?.find((backlink) =>
+      const subject = incoming?.find((backlink) =>
         SAY('body').matches(backlink.predicate),
       )?.subject;
       const {
@@ -68,10 +68,10 @@ const insertStructure = (
       transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, schema, structureSpec);
 
-      if (resource) {
+      if (subject) {
         const newState = state.apply(transaction);
         addProperty({
-          resource: resource.value,
+          resource: subject.value,
           property: {
             predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
               .prefixed,

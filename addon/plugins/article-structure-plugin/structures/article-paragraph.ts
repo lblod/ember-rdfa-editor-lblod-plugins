@@ -248,7 +248,7 @@ export const article_paragraph: NodeSpec = {
           numberSpan
         ) {
           return {
-            resource: element.getAttribute('resource'),
+            subject: element.getAttribute('resource'),
             number: numberSpan.textContent,
           };
         }

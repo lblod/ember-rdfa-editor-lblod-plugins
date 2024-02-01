@@ -142,8 +142,8 @@ const parseDOM = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'date') {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
+        const mappingSubject = node.getAttribute('subject');
+        if (!mappingSubject) {
           return false;
         }
         const onlyDate = !![...node.children].find((el) =>
@@ -189,7 +189,7 @@ const parseDOM = [
           custom: dateNode?.dataset.custom === 'true',
           customAllowed: dateNode?.dataset.customAllowed !== 'false',
           rdfaNodeType: 'resource',
-          subject: mappingResource,
+          subject: mappingSubject,
           __rdfaId: uuidv4(),
           properties,
         };

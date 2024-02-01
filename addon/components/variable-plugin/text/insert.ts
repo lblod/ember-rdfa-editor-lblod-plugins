@@ -38,7 +38,7 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
+    const mappingSubject = `http://data.lblod.info/mappings/${uuidv4()}`;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
     const variableId = uuidv4();
 
@@ -49,8 +49,7 @@ export default class TextVariableInsertComponent extends Component<Args> {
     const label = this.label ?? placeholder;
     const node = this.schema.nodes.text_variable.create(
       {
-        resource: mappingResource,
-        subject: mappingResource,
+        subject: mappingSubject,
         rdfaNodeType: 'resource',
         __rdfaId: variableId,
         properties: [

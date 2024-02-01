@@ -70,8 +70,8 @@ const parseDOM: ParseRule[] = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'number') {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
+        const mappingSubject = node.getAttribute('subject');
+        if (!mappingSubject) {
           return false;
         }
         const variableInstance = parseVariableInstance(node);
@@ -121,7 +121,7 @@ const parseDOM: ParseRule[] = [
           writtenNumber,
           minimumValue,
           maximumValue,
-          subject: mappingResource,
+          subject: mappingSubject,
           rdfaNodeType: 'resource',
           __rdfaId: uuidv4(),
           properties,

@@ -60,16 +60,15 @@ const parseDOM = [
         node.querySelector(CONTENT_SELECTOR) &&
         parseVariableType(node) === 'text'
       ) {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
+        const mappingSubject = node.getAttribute('subject');
+        if (!mappingSubject) {
           return false;
         }
         const variableInstance = parseVariableInstance(node);
         const label = parseLabel(node);
         return {
           __rdfaId: uuidv4(),
-          subject: mappingResource,
-          resource: mappingResource,
+          subject: mappingSubject,
           rdfaNodeType: 'resource',
           properties: [
             {
