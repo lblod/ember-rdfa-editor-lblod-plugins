@@ -1,4 +1,5 @@
 import { SayController, NodeSelection } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   DCT,
   EXT,
@@ -21,24 +22,20 @@ export function replaceSelectionWithAddress(
         __rdfaId: uuidv4(),
         properties: [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: variableInstance,
+            object: sayDataFactory.namedNode(variableInstance),
           },
           {
-            type: 'attribute',
             predicate: DCT('type').full,
-            object: 'address',
+            object: sayDataFactory.namedNode('address'),
           },
           {
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label || ''),
           },
         ],
       }),

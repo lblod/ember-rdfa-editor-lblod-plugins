@@ -19,6 +19,7 @@ import {
   getRdfaAttrs,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   hasRdfaVariableType,
   isVariable,
@@ -88,46 +89,41 @@ const parseDOM = [
 
         const properties = [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object:
+            object: sayDataFactory.namedNode(
               variableInstance ??
-              `http://data.lblod.info/variables/${uuidv4()}`,
+                `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
           },
           {
-            type: 'attribute',
             predicate: DCT('type').full,
-            object: 'codelist',
+            object: sayDataFactory.namedNode('codelist'),
           },
           {
-            type: 'content',
             predicate: EXT('content').full,
+            object: sayDataFactory.contentLiteral(),
           },
         ];
         if (label) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label),
           });
         }
         if (codelistResource) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('codelist').full,
-            object: codelistResource,
+            object: sayDataFactory.namedNode(codelistResource),
           });
         }
         if (source) {
           properties.push({
-            type: 'attribute',
             predicate: DCT('source').full,
-            object: source,
+            object: sayDataFactory.namedNode(source),
           });
         }
         return {

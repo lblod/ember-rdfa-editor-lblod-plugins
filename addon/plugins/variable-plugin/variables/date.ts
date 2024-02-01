@@ -3,6 +3,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   DCT,
   EXT,
@@ -102,22 +103,24 @@ const parseDOM = [
         const content = node.getAttribute('content');
         const properties = [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: `http://data.lblod.info/variables/${uuidv4()}`,
+            object: sayDataFactory.namedNode(
+              `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
           },
-          { type: 'attribute', predicate: DCT('type').full, object: 'date' },
+          {
+            predicate: DCT('type').full,
+            object: sayDataFactory.namedNode('date'),
+          },
         ];
         if (content) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('content').full,
-            object: content,
+            object: sayDataFactory.namedNode(content),
           });
         }
         return {
@@ -157,29 +160,30 @@ const parseDOM = [
         const label = parseLabel(node);
         const properties = [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: `http://data.lblod.info/variables/${uuidv4()}`,
+            object: sayDataFactory.namedNode(
+              `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
           },
-          { type: 'attribute', predicate: DCT('type').full, object: 'date' },
+          {
+            predicate: DCT('type').full,
+            object: sayDataFactory.namedNode('date'),
+          },
         ];
         if (label) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label),
           });
         }
         if (value) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('content').full,
-            object: value,
+            object: sayDataFactory.namedNode(value),
           });
         }
         return {
@@ -267,11 +271,8 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     const humanReadableDate = value
       ? formatDate(new Date(value), format)
       : onlyDate
-        ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
-        : t(
-            'date-plugin.insert.datetime',
-            TRANSLATION_FALLBACKS.insertDateTime,
-          );
+      ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
+      : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
 
     return humanReadableDate;
   },

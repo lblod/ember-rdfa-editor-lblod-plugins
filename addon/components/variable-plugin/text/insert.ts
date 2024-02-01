@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import type { SayController } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -54,24 +55,24 @@ export default class TextVariableInsertComponent extends Component<Args> {
         __rdfaId: variableId,
         properties: [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: variableInstance,
+            object: sayDataFactory.namedNode(variableInstance),
           },
           {
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label),
           },
-          { type: 'attribute', predicate: DCT('type').full, object: 'text' },
           {
-            type: 'content',
+            predicate: DCT('type').full,
+            object: sayDataFactory.namedNode('text'),
+          },
+          {
             predicate: EXT('content').full,
+            object: sayDataFactory.contentLiteral(),
           },
         ],
       },

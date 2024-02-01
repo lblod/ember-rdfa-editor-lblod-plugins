@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   CodeList,
   fetchCodeListsByPublisher,
@@ -105,38 +106,32 @@ export default class CodelistInsertComponent extends Component<Args> {
         __rdfaId: variableId,
         properties: [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: variableInstance,
+            object: sayDataFactory.namedNode(variableInstance),
           },
           {
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label),
           },
           {
-            type: 'attribute',
             predicate: EXT('codelist').full,
-            object: codelistResource,
+            object: sayDataFactory.namedNode(codelistResource || ''),
           },
           {
-            type: 'attribute',
             predicate: DCT('source').full,
-            object: source,
+            object: sayDataFactory.namedNode(source),
           },
           {
-            type: 'attribute',
             predicate: DCT('type').full,
-            object: 'codelist',
+            object: sayDataFactory.namedNode('codelist'),
           },
           {
-            type: 'content',
             predicate: EXT('content').full,
+            object: sayDataFactory.contentLiteral(),
           },
         ],
       },

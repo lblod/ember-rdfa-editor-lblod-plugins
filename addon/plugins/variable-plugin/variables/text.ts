@@ -26,6 +26,7 @@ import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/co
 import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -72,26 +73,27 @@ const parseDOM = [
           rdfaNodeType: 'resource',
           properties: [
             {
-              type: 'attribute',
               predicate: RDF('type').full,
-              object: EXT('Mapping').full,
+              object: sayDataFactory.namedNode(EXT('Mapping').full),
             },
             {
-              type: 'attribute',
               predicate: EXT('instance').full,
-              object:
+              object: sayDataFactory.namedNode(
                 variableInstance ??
-                `http://data.lblod.info/variables/${uuidv4()}`,
+                  `http://data.lblod.info/variables/${uuidv4()}`,
+              ),
             },
             {
-              type: 'attribute',
               predicate: EXT('label').full,
-              object: label,
+              object: sayDataFactory.namedNode(label || ''),
             },
-            { type: 'attribute', predicate: DCT('type').full, object: 'text' },
             {
-              type: 'content',
+              predicate: DCT('type').full,
+              object: sayDataFactory.namedNode('text'),
+            },
+            {
               predicate: EXT('content').full,
+              object: sayDataFactory.contentLiteral(),
             },
           ],
         };
