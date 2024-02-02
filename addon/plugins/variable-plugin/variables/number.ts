@@ -12,8 +12,8 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
-  getParsedRDFAAttribute,
-  hasParsedRDFaAttribute,
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -34,22 +34,18 @@ import { v4 as uuidv4 } from 'uuid';
 import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import {
-  RdfaAttrs,
-  renderRdfaAware,
-} from '@lblod/ember-rdfa-editor/core/schema';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const parseDOM: ParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
       const attrs = getRdfaAttrs(node);
-      console.log('attrs', attrs);
       if (!attrs) {
         return false;
       }
       if (
-        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'number')
       ) {
@@ -141,8 +137,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
   const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getParsedRDFAAttribute(node.attrs as RdfaAttrs, EXT('content'))
-    ?.object;
+  const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
 
   let humanReadableContent: string;
 

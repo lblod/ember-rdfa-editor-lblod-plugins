@@ -3,7 +3,7 @@ import {
   EXT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  getParsedRDFAAttribute,
+  getOutgoingTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
@@ -18,9 +18,9 @@ export function parseVariableType(variableNode: HTMLElement) {
     ?.getAttribute('content');
 }
 export function getRdfaVariableType(rdfaAttrs: RdfaAttrs): string | null {
-  const attr = getParsedRDFAAttribute(rdfaAttrs, DCT('type'));
-  if (attr && attr.type === 'attribute') {
-    return attr.object;
+  const attr = getOutgoingTriple(rdfaAttrs, DCT('type'));
+  if (attr && attr.object.value) {
+    return attr.object.value;
   }
   return null;
 }

@@ -1,6 +1,11 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
+import applyDevTools from 'prosemirror-dev-tools';
+import { inject as service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import { getOwner } from '@ember/application';
+
 import {
   em,
   strikethrough,
@@ -18,7 +23,6 @@ import {
   repaired_block,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
-import applyDevTools from 'prosemirror-dev-tools';
 import { code } from '@lblod/ember-rdfa-editor/plugins/code/marks/code';
 import {
   tableKeymap,
@@ -45,8 +49,6 @@ import {
   linkPasteHandler,
   linkView,
 } from '@lblod/ember-rdfa-editor/plugins/link';
-import { inject as service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
 import {
   createInvisiblesPlugin,
   hardBreak,
@@ -78,7 +80,6 @@ import {
 import { inputRules, PluginConfig, Schema } from '@lblod/ember-rdfa-editor';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
-import { getOwner } from '@ember/application';
 import {
   editableNodePlugin,
   getActiveEditableNode,
@@ -86,17 +87,18 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+
 import {
   STRUCTURE_NODES,
   STRUCTURE_SPECS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
-import NumberInsertComponent from 'dummy/components/variable-plugin/number/insert';
-import DateInsertVariableComponent from 'dummy/components/variable-plugin/date/insert-variable';
-import CodelistInsertComponent from 'dummy/components/variable-plugin/codelist/insert';
-import LocationInsertComponent from 'dummy/components/variable-plugin/location/insert';
-import VariablePluginAddressInsertVariableComponent from 'dummy/components/variable-plugin/address/insert-variable';
+import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/insert';
+import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
+import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
+import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
+import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
 import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 

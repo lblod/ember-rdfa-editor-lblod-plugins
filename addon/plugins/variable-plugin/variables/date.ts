@@ -10,8 +10,8 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  getParsedRDFAAttribute,
-  hasParsedRDFaAttribute,
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -63,7 +63,7 @@ const parseDOM = [
         return false;
       }
       if (
-        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'date')
       ) {
@@ -203,8 +203,7 @@ const parseDOM = [
 
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
-  const value = getParsedRDFAAttribute(node.attrs as RdfaAttrs, EXT('content'))
-    ?.object;
+  const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
   const { onlyDate, format, custom, customAllowed } = node.attrs;
   let humanReadableDate: string;
   if (value) {
@@ -262,10 +261,8 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   },
   outlineText: (node: PNode, state: EditorState) => {
     const t = getTranslationFunction(state);
-    const value = getParsedRDFAAttribute(
-      node.attrs as RdfaAttrs,
-      EXT('content'),
-    )?.object;
+    const value = getOutgoingTriple(node.attrs as RdfaAttrs, EXT('content'))
+      ?.object.value;
     const { onlyDate, format } = node.attrs;
 
     const humanReadableDate = value

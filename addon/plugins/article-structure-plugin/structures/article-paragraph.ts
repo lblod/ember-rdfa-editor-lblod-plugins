@@ -7,13 +7,14 @@ import {
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   ELI,
   RDF,
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  hasParsedRDFaAttribute,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
@@ -50,14 +51,12 @@ export const articleParagraphSpec: StructureSpec = {
       resource,
       properties: [
         {
-          type: 'external',
           predicate: ELI('number').prefixed,
-          object: { type: 'literal', rdfaId: numberRdfaId },
+          object: sayDataFactory.literalNode(numberRdfaId),
         },
         {
-          type: 'external',
           predicate: SAY('body').prefixed,
-          object: { type: 'literal', rdfaId: bodyRdfaId },
+          object: sayDataFactory.literalNode(bodyRdfaId),
         },
       ],
       backlinks: [],
@@ -68,7 +67,7 @@ export const articleParagraphSpec: StructureSpec = {
       backlinks: [
         {
           predicate: ELI('number').prefixed,
-          subject: resource,
+          subject: sayDataFactory.literalNode(resource),
         },
       ],
     };
@@ -78,7 +77,7 @@ export const articleParagraphSpec: StructureSpec = {
       backlinks: [
         {
           predicate: SAY('body').prefixed,
-          subject: resource,
+          subject: sayDataFactory.literalNode(resource),
         },
       ],
     };
@@ -180,7 +179,11 @@ export const article_paragraph: NodeSpec = {
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
-          hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), SAY('Paragraph')) &&
+          hasOutgoingNamedNodeTriple(
+            rdfaAttrs,
+            RDF('type'),
+            SAY('Paragraph'),
+          ) &&
           hasRdfaContentChild(element)
         ) {
           return rdfaAttrs;

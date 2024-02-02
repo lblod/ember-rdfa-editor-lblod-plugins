@@ -4,7 +4,7 @@ import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/_private/types';
-import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
 import {
   getAssignedSnippetListsIdsFromProperties,
@@ -34,11 +34,11 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
     return this.assignedSnippetListsIds.length > 0;
   }
 
-  get snippetListIdsProperty(): AttributeProperty[] | undefined {
+  get snippetListIdsProperty(): OutgoingTriple[] | undefined {
     const activeNode = this.node.value;
     const activeNodeSnippetListIds = getSnippetListIdsProperties(activeNode);
 
-    if (activeNodeSnippetListIds && activeNodeSnippetListIds.length > 0) {
+    if (activeNodeSnippetListIds.length > 0) {
       return activeNodeSnippetListIds;
     }
 
@@ -57,7 +57,7 @@ export default class SnippetInsertRdfaComponent extends Component<Args> {
     while (parentNode) {
       const properties = getSnippetListIdsProperties(parentNode.node);
 
-      if (properties && properties.length > 0) {
+      if (properties.length > 0) {
         return properties;
       }
 

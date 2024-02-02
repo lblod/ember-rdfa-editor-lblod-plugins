@@ -5,9 +5,12 @@ import StandardTemplate from '@lblod/ember-rdfa-editor-lblod-plugins/models/temp
 import { insertHtml } from '@lblod/ember-rdfa-editor/commands/insert-html-command';
 import instantiateUuids from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/instantiate-uuids';
 import { PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
-import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  pnodeHasRdfaAttribute,
+  BESLUIT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  hasOutgoingNamedNodeTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -67,7 +70,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.contexts.some((type) =>
-          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type]),
+          hasOutgoingNamedNodeTriple(node, RDF('type'), HACKY_LOOKUP[type]),
         );
       }).length;
     const containsDisabledTypes =
@@ -78,7 +81,7 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.disabledInContexts.some((type) =>
-          pnodeHasRdfaAttribute(node, 'typeof', HACKY_LOOKUP[type]),
+          hasOutgoingNamedNodeTriple(node, RDF('type'), HACKY_LOOKUP[type]),
         );
       }).length;
 
@@ -111,6 +114,9 @@ export default class TemplateProviderComponent extends Component<Args> {
         instantiateUuids(template.body),
         insertRange.from,
         insertRange.to,
+        undefined,
+        false,
+        true,
       ),
       { view: this.controller.mainEditorView },
     );

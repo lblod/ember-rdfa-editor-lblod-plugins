@@ -24,7 +24,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
-import { hasParsedRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
@@ -38,7 +38,7 @@ const parseDOM = [
         return false;
       }
       if (
-        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'text')
       ) {

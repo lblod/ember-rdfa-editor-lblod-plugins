@@ -1,5 +1,5 @@
 import {
-  hasParsedRDFaAttribute,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -40,12 +40,11 @@ const parseDOM = [
     tag: 'span',
     getAttrs(node: HTMLElement) {
       const attrs = getRdfaAttrs(node);
-      console.log('attrs', attrs);
       if (!attrs) {
         return false;
       }
       if (
-        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'codelist')
       ) {

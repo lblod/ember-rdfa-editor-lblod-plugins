@@ -1,9 +1,10 @@
-import { PNode } from '@lblod/ember-rdfa-editor';
+import { Attrs } from 'prosemirror-model';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
-  AttributeProperty,
-  Property,
-} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import type { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+  isRdfaAttrs,
+  RdfaAttrs,
+  RdfaResourceAttrs,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { Option } from './option';
 
 export class Resource {
@@ -42,31 +43,46 @@ export function hasRDFaAttribute(
   return false;
 }
 
-export function hasParsedRDFaAttribute(
-  rdfaAttrs: RdfaAttrs | false,
+export function hasOutgoingNamedNodeTriple(
+  rdfaAttrs: Attrs | false,
   predicate: Resource,
   object: Resource | string,
 ) {
-  if (!rdfaAttrs || rdfaAttrs.rdfaNodeType !== 'resource') {
+  if (
+    !rdfaAttrs ||
+    !isRdfaAttrs(rdfaAttrs) ||
+    rdfaAttrs.rdfaNodeType !== 'resource'
+  ) {
     return false;
   }
-  return rdfaAttrs.properties.some((prop) => {
+  return (rdfaAttrs as RdfaResourceAttrs).properties.some((prop) => {
     return (
-      prop.type === 'attribute' &&
+      prop.object.termType === 'NamedNode' &&
       predicate.matches(prop.predicate) &&
       (typeof object === 'string'
-        ? prop.object === object
-        : object.matches(prop.object))
+        ? prop.object.value === object
+        : object.matches(prop.object.value))
     );
   });
 }
-export function getParsedRDFAAttribute(
-  rdfaAttrs: RdfaAttrs,
-  predicate: Resource,
-) {
-  return (rdfaAttrs.properties as Property[]).find(
-    (prop) => prop.type === 'attribute' && predicate.matches(prop.predicate),
-  ) as Option<AttributeProperty>;
+
+export function getOutgoingTriple(rdfaAttrs: Attrs, predicate: Resource) {
+  return (isRdfaAttrs(rdfaAttrs) &&
+    rdfaAttrs.rdfaNodeType === 'resource' &&
+    rdfaAttrs.properties.find((prop) =>
+      predicate.matches(prop.predicate),
+    )) as Option<OutgoingTriple>;
+}
+
+export function getOutgoingTripleList(rdfaAttrs: Attrs, predicate: Resource) {
+  return (
+    (isRdfaAttrs(rdfaAttrs) &&
+      rdfaAttrs.rdfaNodeType === 'resource' &&
+      rdfaAttrs.properties.filter((prop) =>
+        predicate.matches(prop.predicate),
+      )) ||
+    []
+  );
 }
 
 export function hasBacklink(rdfaAttrs: RdfaAttrs | false, predicate: Resource) {
@@ -85,18 +101,6 @@ export function findChildWithRdfaAttribute(
     const result = child.getAttribute(attr)?.split(' ');
     return result?.includes(value.full) || result?.includes(value.prefixed);
   });
-}
-
-export function pnodeHasRdfaAttribute(
-  node: PNode,
-  attr: string,
-  value: Resource,
-) {
-  const result = (node.attrs[attr] as string | null)?.split(' ');
-  if (result) {
-    return result.includes(value.full) || result.includes(value.prefixed);
-  }
-  return false;
 }
 
 export function expandPrefixedString(

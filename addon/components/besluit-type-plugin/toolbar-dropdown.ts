@@ -1,11 +1,9 @@
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import {
-  addType,
-  removeType,
-} from '@lblod/ember-rdfa-editor/commands/type-commands';
+import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import fetchBesluitTypes, {
@@ -15,6 +13,8 @@ import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 import { trackedFunction } from 'ember-resources/util/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
+import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 declare module 'ember__owner' {
   export default interface Owner {
@@ -101,11 +101,21 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       this.controller.mainEditorState.selection,
       this.controller.schema.nodes['besluit'],
     );
-    const besluitTypeof = besluit?.node.attrs.typeof as string;
-    const besluitTypesUris = besluitTypeof.split(' ');
-    const besluitTypeRelevant = besluitTypesUris.find((type) =>
-      type.includes('https://data.vlaanderen.be/id/concept/BesluitType/'),
-    );
+    if (!besluit) {
+      console.warn(
+        `We have a besluit URI (${this.currentBesluitURI}), but can't find a besluit ancestor`,
+      );
+      return;
+    }
+    const besluitTypes = getOutgoingTripleList(besluit.node.attrs, RDF('type'));
+    const besluitTypeRelevant = besluitTypes.find(
+      (type) =>
+        type.object.termType === 'NamedNode' &&
+        type.object.value.includes(
+          'https://data.vlaanderen.be/id/concept/BesluitType/',
+        ),
+    )?.object.value;
+
     if (besluitTypeRelevant) {
       this.previousBesluitType = besluitTypeRelevant;
       const besluitType = this.findBesluitTypeByURI(besluitTypeRelevant);
@@ -197,16 +207,33 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   insert() {
-    if (this.besluitType && this.currentBesluitRange) {
+    const resource =
+      (this.currentBesluitRange &&
+        'node' in this.currentBesluitRange &&
+        (this.currentBesluitRange.node.attrs.resource as string)) ||
+      undefined;
+    if (this.besluitType && resource) {
       this.cardExpanded = false;
       if (this.previousBesluitType) {
         this.controller.doCommand(
-          removeType(this.currentBesluitRange.from, this.previousBesluitType),
+          removeProperty({
+            resource,
+            property: {
+              predicate: RDF('type').prefixed,
+              object: sayDataFactory.namedNode(this.previousBesluitType),
+            },
+          }),
           { view: this.controller.mainEditorView },
         );
       }
       this.controller.doCommand(
-        addType(this.currentBesluitRange.from, this.besluitType.uri),
+        addProperty({
+          resource,
+          property: {
+            predicate: RDF('type').prefixed,
+            object: sayDataFactory.namedNode(this.besluitType.uri),
+          },
+        }),
         { view: this.controller.mainEditorView },
       );
     }

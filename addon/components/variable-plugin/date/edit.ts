@@ -1,12 +1,9 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import {
-  RdfaAttrs,
-  SayController,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -28,8 +25,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { Velcro } from 'ember-velcro';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { getParsedRDFAAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
   controller: SayController;
@@ -71,10 +68,10 @@ export default class DateEditComponent extends Component<Args> {
 
   get documentDate(): Option<Date> {
     if (this.selectedDateNode) {
-      const dateVal = getParsedRDFAAttribute(
-        this.selectedDateNode.attrs as RdfaAttrs,
+      const dateVal = getOutgoingTriple(
+        this.selectedDateNode.attrs,
         EXT('content'),
-      )?.object as Option<string>;
+      )?.object.value as Option<string>;
       if (dateVal) {
         return new Date(dateVal);
       }
@@ -201,16 +198,16 @@ export default class DateEditComponent extends Component<Args> {
         if (!node) {
           return tr;
         }
-        const properties = node.attrs.properties as Property[];
+        const properties = node.attrs.properties as OutgoingTriple[];
         const newProperties = properties.filter((prop) => {
           return !(
-            prop.type === 'attribute' && EXT('content').matches(prop.predicate)
+            prop.object.termType === 'NamedNode' &&
+            EXT('content').matches(prop.predicate)
           );
         });
         newProperties.push({
-          type: 'attribute',
           predicate: EXT('content').full,
-          object: date.toISOString(),
+          object: sayDataFactory.namedNode(date.toISOString()),
         });
         return tr.setNodeAttribute(pos, 'properties', newProperties);
       });

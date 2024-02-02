@@ -1,3 +1,4 @@
+import IntlService from 'ember-intl/services/intl';
 import {
   Command,
   Fragment,
@@ -10,13 +11,13 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   SpecConstructorResult,
   StructureSpec,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import IntlService from 'ember-intl/services/intl';
-import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import recalculateStructureNumbers from './recalculate-structure-numbers';
 
 const wrapStructureContent = (
   structureSpec: StructureSpec,
@@ -78,13 +79,9 @@ const wrapStructureContent = (
         addProperty({
           resource: outer,
           property: {
-            type: 'external',
             predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
               .prefixed,
-            object: {
-              type: 'resource',
-              resource: inner,
-            },
+            object: sayDataFactory.resourceNode(inner),
           },
           transaction,
         })(newState, (newTransaction) => {
@@ -96,13 +93,9 @@ const wrapStructureContent = (
         removeProperty({
           resource: outer,
           property: {
-            type: 'external',
             predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
               .prefixed,
-            object: {
-              type: 'resource',
-              resource: inner,
-            },
+            object: sayDataFactory.resourceNode(inner),
           },
           transaction,
         })(newState, (newTransaction) => {

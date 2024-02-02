@@ -20,7 +20,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   hasBacklink,
-  hasParsedRDFaAttribute,
+  hasOutgoingNamedNodeTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -62,7 +62,7 @@ export function constructStructureNodeSpec(config: {
         preserveWhitespace: false,
         getAttrs(element: HTMLElement) {
           const rdfaAttrs = getRdfaAttrs(element);
-          if (hasParsedRDFaAttribute(rdfaAttrs, RDF('type'), type)) {
+          if (hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type)) {
             return rdfaAttrs;
           }
           return false;

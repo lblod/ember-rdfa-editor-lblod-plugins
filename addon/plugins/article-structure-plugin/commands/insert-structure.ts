@@ -6,13 +6,14 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { addProperty } from '@lblod/ember-rdfa-editor/commands';
+import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import recalculateStructureNumbers from './recalculate-structure-numbers';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import wrapStructureContent from './wrap-structure-content';
 import IntlService from 'ember-intl/services/intl';
 import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-insertion-range';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { Backlink } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 const insertStructure = (
   structureSpec: StructureSpec,
@@ -34,11 +35,10 @@ const insertStructure = (
     if (!insertionRange) {
       return false;
     }
-    if (dispatch) {
-      const backlinks = insertionRange.containerNode.attrs?.backlinks as
-        | Backlink[]
-        | undefined;
-      const resource = backlinks?.find((backlink) =>
+    const containerAttrs = insertionRange.containerNode.attrs;
+    if (dispatch && isRdfaAttrs(containerAttrs)) {
+      const incoming = containerAttrs.backlinks;
+      const resource = incoming?.find((backlink) =>
         SAY('body').matches(backlink.predicate),
       )?.subject;
       const {
@@ -71,15 +71,11 @@ const insertStructure = (
       if (resource) {
         const newState = state.apply(transaction);
         addProperty({
-          resource,
+          resource: resource.value,
           property: {
-            type: 'external',
             predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
               .prefixed,
-            object: {
-              type: 'resource',
-              resource: newResource,
-            },
+            object: sayDataFactory.resourceNode(newResource),
           },
           transaction,
         })(newState, (newTransaction) => {

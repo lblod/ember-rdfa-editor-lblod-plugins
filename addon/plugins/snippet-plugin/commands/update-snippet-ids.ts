@@ -1,6 +1,7 @@
 import { Command } from '@lblod/ember-rdfa-editor';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
-import { AttributeProperty } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
@@ -10,7 +11,7 @@ const updateSnippetIds = ({
   newSnippetIds,
 }: {
   resource: string;
-  oldSnippetProperties: AttributeProperty[];
+  oldSnippetProperties: OutgoingTriple[];
   newSnippetIds: string[];
 }): Command => {
   return (state, dispatch) => {
@@ -36,9 +37,8 @@ const updateSnippetIds = ({
         addProperty({
           resource,
           property: {
-            type: 'attribute',
             predicate: SNIPPET_LIST_RDFA_PREDICATE.prefixed,
-            object: getSnippetUriFromId(snippetId),
+            object: sayDataFactory.namedNode(getSnippetUriFromId(snippetId)),
           },
           transaction,
         })(newState, (newTransaction) => {

@@ -38,7 +38,10 @@ import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
+import {
+  inline_rdfa,
+  inlineRdfaView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import {
   tableKeymap,
   tableNodes,
@@ -56,6 +59,13 @@ import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
 import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
+import {
+  editableNodePlugin,
+  getActiveEditableNode,
+} from '@lblod/ember-rdfa-editor/plugins/_private/editable-node';
+import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
+import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
+import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
 
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
@@ -98,6 +108,10 @@ import {
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 
 export default class BesluitSampleController extends Controller {
+  DebugInfo = DebugInfo;
+  AttributeEditor = AttributeEditor;
+  RdfaEditor = RdfaEditor;
+
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
   @tracked controller?: SayController;
@@ -192,11 +206,11 @@ export default class BesluitSampleController extends Controller {
 
         hard_break,
         block_rdfa,
+        inline_rdfa,
         invisible_rdfa,
         link: link(this.config.link),
       },
       marks: {
-        inline_rdfa,
         em,
         strong,
         underline,
@@ -275,6 +289,13 @@ export default class BesluitSampleController extends Controller {
     };
   }
 
+  get activeNode() {
+    if (this.controller) {
+      return getActiveEditableNode(this.controller.activeEditorState);
+    }
+    return;
+  }
+
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController,
@@ -287,6 +308,7 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
       address: addressView(controller),
+      inline_rdfa: inlineRdfaView(controller),
     };
   };
   @tracked plugins: Plugin[] = [
@@ -301,6 +323,7 @@ export default class BesluitSampleController extends Controller {
     createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
       shouldShowInvisibles: false,
     }),
+    editableNodePlugin(),
   ];
 
   @action

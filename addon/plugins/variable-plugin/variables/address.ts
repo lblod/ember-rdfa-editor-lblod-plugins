@@ -27,7 +27,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
 import {
   findChildWithRdfaAttribute,
-  hasParsedRDFaAttribute,
+  hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
@@ -40,7 +40,6 @@ import {
   rdfaAttrSpec,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
-import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 export class Address {
   declare id?: string;
@@ -237,7 +236,7 @@ const parseDOM: ParseRule[] = [
         '[data-content-container="true"]',
       );
       if (
-        hasParsedRDFaAttribute(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         dataContainer &&
         hasRdfaVariableType(attrs, 'address')
       ) {
@@ -246,9 +245,12 @@ const parseDOM: ParseRule[] = [
         }
         // Filter out properties with content predicate,
         // as we handle this ourselves with the `value` attribute
-        attrs.properties = (attrs.properties as Property[]).filter((prop) => {
-          return !EXT('content').matches(prop.predicate);
-        });
+        attrs.properties =
+          attrs.rdfaNodeType !== 'resource'
+            ? []
+            : attrs.properties.filter((prop) => {
+                return !EXT('content').matches(prop.predicate);
+              });
         const addressNode = [...dataContainer.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         );

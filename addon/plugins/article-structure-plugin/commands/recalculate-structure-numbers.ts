@@ -1,6 +1,6 @@
 import { PNode, Schema, Transaction } from '@lblod/ember-rdfa-editor';
-import { Property } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { findNodeByRdfaId } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import type { Resource } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { StructureSpec } from '..';
@@ -8,28 +8,26 @@ import { StructureSpec } from '..';
 function updateNumber(
   transaction: Transaction,
   schema: Schema,
-  node: PNode,
+  { attrs }: PNode,
   number: string,
   numberPredicate?: Resource,
 ) {
-  const properties = node.attrs?.properties as Property[] | undefined;
-  const numberProp =
-    properties &&
-    properties.find((prop) =>
+  if (isRdfaAttrs(attrs) && attrs.rdfaNodeType === 'resource') {
+    const properties = attrs.properties;
+    const numberProp = properties.find((prop) =>
       (numberPredicate ?? ELI('number')).matches(prop.predicate),
     );
-  const numberRdfaId =
-    numberProp?.type === 'external' &&
-    numberProp.object.type === 'literal' &&
-    numberProp.object.rdfaId;
-  const numberNode =
-    numberRdfaId && findNodeByRdfaId(transaction.doc, numberRdfaId);
-  if (numberNode) {
-    transaction.replaceWith(
-      numberNode.pos + 1,
-      numberNode.pos + numberNode.value.nodeSize - 1,
-      schema.text(number),
-    );
+    const numberRdfaId =
+      numberProp?.object.termType === 'LiteralNode' && numberProp.object.value;
+    const numberNode =
+      numberRdfaId && findNodeByRdfaId(transaction.doc, numberRdfaId);
+    if (numberNode) {
+      transaction.replaceWith(
+        numberNode.pos + 1,
+        numberNode.pos + numberNode.value.nodeSize - 1,
+        schema.text(number),
+      );
+    }
   }
 }
 
