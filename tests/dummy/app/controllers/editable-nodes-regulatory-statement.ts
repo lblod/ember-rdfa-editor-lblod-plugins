@@ -124,7 +124,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     nodes: {
       doc: docWithConfig({
         content:
-          'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
+          'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
       }),
       paragraph,
       document_title,
