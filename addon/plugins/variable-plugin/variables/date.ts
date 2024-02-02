@@ -3,6 +3,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   DCT,
   EXT,
@@ -67,8 +68,7 @@ const parseDOM = [
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'date')
       ) {
-        const mappingResource = attrs.subject;
-        if (!mappingResource) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
 
@@ -103,22 +103,24 @@ const parseDOM = [
         const content = node.getAttribute('content');
         const properties = [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: `http://data.lblod.info/variables/${uuidv4()}`,
+            object: sayDataFactory.namedNode(
+              `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
           },
-          { type: 'attribute', predicate: DCT('type').full, object: 'date' },
+          {
+            predicate: DCT('type').full,
+            object: sayDataFactory.namedNode('date'),
+          },
         ];
         if (content) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('content').full,
-            object: content,
+            object: sayDataFactory.namedNode(content),
           });
         }
         return {
@@ -143,8 +145,8 @@ const parseDOM = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'date') {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
+        const mappingSubject = node.getAttribute('subject');
+        if (!mappingSubject) {
           return false;
         }
         const onlyDate = !![...node.children].find((el) =>
@@ -158,29 +160,30 @@ const parseDOM = [
         const label = parseLabel(node);
         const properties = [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object: `http://data.lblod.info/variables/${uuidv4()}`,
+            object: sayDataFactory.namedNode(
+              `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
           },
-          { type: 'attribute', predicate: DCT('type').full, object: 'date' },
+          {
+            predicate: DCT('type').full,
+            object: sayDataFactory.namedNode('date'),
+          },
         ];
         if (label) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label),
           });
         }
         if (value) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('content').full,
-            object: value,
+            object: sayDataFactory.namedNode(value),
           });
         }
         return {
@@ -190,7 +193,7 @@ const parseDOM = [
           custom: dateNode?.dataset.custom === 'true',
           customAllowed: dateNode?.dataset.customAllowed !== 'false',
           rdfaNodeType: 'resource',
-          subject: mappingResource,
+          subject: mappingSubject,
           __rdfaId: uuidv4(),
           properties,
         };

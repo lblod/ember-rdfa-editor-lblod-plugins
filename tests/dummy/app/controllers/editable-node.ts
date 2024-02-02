@@ -114,7 +114,7 @@ export default class EditableBlockController extends Controller {
   schema = new Schema({
     nodes: {
       doc: docWithConfig({
-        content: '((chapter|block)+|(title|block)+|(article|block)+)',
+        content: '((block|chapter)+|(block|title)+|(block|article)+)',
         defaultLanguage: 'nl-BE',
       }),
       paragraph,

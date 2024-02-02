@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   DCT,
   EXT,
@@ -46,21 +47,21 @@ export default class DateInsertComponent extends Component<Args> {
       __rdfaId: variableId,
       properties: [
         {
-          type: 'attribute',
           predicate: RDF('type').full,
-          object: EXT('Mapping').full,
+          object: sayDataFactory.namedNode(EXT('Mapping').full),
         },
         {
-          type: 'attribute',
           predicate: EXT('instance').full,
-          object: variableInstance,
+          object: sayDataFactory.namedNode(variableInstance),
         },
         {
-          type: 'attribute',
           predicate: EXT('label').full,
-          object: label,
+          object: sayDataFactory.namedNode(label),
         },
-        { type: 'attribute', predicate: DCT('type').full, object: 'date' },
+        {
+          predicate: DCT('type').full,
+          object: sayDataFactory.namedNode('date'),
+        },
       ],
       backlinks: [],
     });

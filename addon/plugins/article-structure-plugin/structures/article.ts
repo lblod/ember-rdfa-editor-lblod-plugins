@@ -40,7 +40,7 @@ export const articleSpec: StructureSpec = {
     const headingRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
-    const resource = `http://data.lblod.info/articles/${articleUuid}`;
+    const subject = `http://data.lblod.info/articles/${articleUuid}`;
     const titleText = translationWithDocLang(
       PLACEHOLDERS.title,
       intl?.t(PLACEHOLDERS.title) || '',
@@ -48,7 +48,7 @@ export const articleSpec: StructureSpec = {
     const articleAttrs: RdfaAttrs = {
       __rdfaId: articleUuid,
       rdfaNodeType: 'resource',
-      resource,
+      subject,
       properties: [
         {
           predicate: ELI('number').prefixed,
@@ -74,7 +74,7 @@ export const articleSpec: StructureSpec = {
       rdfaNodeType: 'literal',
       backlinks: [
         {
-          subject: sayDataFactory.resourceNode(resource),
+          subject: sayDataFactory.literalNode(subject),
           predicate: SAY('body').prefixed,
         },
       ],
@@ -82,7 +82,7 @@ export const articleSpec: StructureSpec = {
     const node = schema.node(`article`, articleAttrs, [
       constructStructureHeader({
         schema,
-        backlinkResource: resource,
+        backlinkResource: subject,
         titleRdfaId,
         titleText,
         headingRdfaId,
@@ -113,7 +113,7 @@ export const articleSpec: StructureSpec = {
         type: content ? 'text' : 'node',
         rdfaId: bodyRdfaId,
       },
-      newResource: resource,
+      newResource: subject,
     };
   },
   updateNumber: {

@@ -118,12 +118,12 @@ function findInsertionContainer(
   const { $from } = selection;
   let container: ContainerNode | null = null;
   const resourceHierarchy: string[] = [];
-  // Loop from current depth to top looking for a container and resource URIs
+  // Loop from current depth to top looking for a container and subject URIs
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);
-    const resource = currentAncestor.attrs?.resource as string | undefined;
-    if (resource) {
-      resourceHierarchy.unshift(resource);
+    const subject = currentAncestor.attrs?.subject as string | undefined;
+    if (subject) {
+      resourceHierarchy.unshift(subject);
     }
     if (!container) {
       const pos = currentDepth > 0 ? $from.before(currentDepth) : -1;
@@ -224,7 +224,7 @@ function findUpdatedRelationships({
     'attrs' in contentToWrap
       ? contentToWrap.attrs
       : contentToWrap.firstChild?.attrs
-  )?.resource as string;
+  )?.subject as string;
 
   const toCreate: [string, string][] = [];
   const toRemove: [string, string][] = [];

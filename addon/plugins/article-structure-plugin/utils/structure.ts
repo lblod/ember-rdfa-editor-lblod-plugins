@@ -39,10 +39,13 @@ export function constructStructureNodeSpec(config: {
     isolating: true,
     attrs: {
       ...rdfaAttrSpec,
+      rdfaNodeType: {
+        default: 'resource',
+      },
       typeof: {
         default: type.prefixed,
       },
-      resource: {},
+      subject: {},
     },
     allowSplitByTable: config.allowSplitByTable,
     toDOM(node) {

@@ -18,6 +18,7 @@ import {
   PNode,
   ParseRule,
 } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   hasRdfaVariableType,
   isVariable,
@@ -240,17 +241,14 @@ const parseDOM: ParseRule[] = [
         dataContainer &&
         hasRdfaVariableType(attrs, 'address')
       ) {
-        if (!attrs.subject) {
+        if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
         // Filter out properties with content predicate,
         // as we handle this ourselves with the `value` attribute
-        attrs.properties =
-          attrs.rdfaNodeType !== 'resource'
-            ? []
-            : attrs.properties.filter((prop) => {
-                return !EXT('content').matches(prop.predicate);
-              });
+        attrs.properties = attrs.properties.filter((prop) => {
+          return !EXT('content').matches(prop.predicate);
+        });
         const addressNode = [...dataContainer.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         );
@@ -285,28 +283,25 @@ const parseDOM: ParseRule[] = [
 
         const properties = [
           {
-            type: 'attribute',
             predicate: RDF('type').full,
-            object: EXT('Mapping').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
           },
           {
-            type: 'attribute',
             predicate: EXT('instance').full,
-            object:
+            object: sayDataFactory.namedNode(
               variableInstance ??
-              `http://data.lblod.info/variables/${uuidv4()}`,
+                `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
           },
           {
-            type: 'attribute',
             predicate: DCT('type').full,
-            object: 'address',
+            object: sayDataFactory.namedNode('address'),
           },
         ];
         if (label) {
           properties.push({
-            type: 'attribute',
             predicate: EXT('label').full,
-            object: label,
+            object: sayDataFactory.namedNode(label),
           });
         }
 

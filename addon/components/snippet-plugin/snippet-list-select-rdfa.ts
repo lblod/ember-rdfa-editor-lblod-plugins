@@ -1,12 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/addon/utils/_private/types';
-
 import { isResourceNode } from '@lblod/ember-rdfa-editor/utils/node-utils';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
-
-import SayController from '@lblod/ember-rdfa-editor/addon/core/say-controller';
 
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
@@ -14,6 +9,9 @@ import {
   getSnippetListIdsProperties,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { updateSnippetIds } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
+import { SayController } from '@lblod/ember-rdfa-editor';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 interface Args {
   controller: SayController;

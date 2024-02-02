@@ -1,5 +1,5 @@
 import { PNode } from '@lblod/ember-rdfa-editor';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { getSnippetIdFromUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';

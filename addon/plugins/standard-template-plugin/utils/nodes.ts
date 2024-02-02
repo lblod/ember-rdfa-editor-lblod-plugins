@@ -76,7 +76,11 @@ export const besluit_title: NodeSpec = {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('title'))) {
-          return getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element);
+          return {
+            ...rdfaAttrs,
+            subject: element.getAttribute('resource'),
+          };
         }
         return false;
       },
@@ -261,7 +265,7 @@ export const besluit_article: NodeSpec = {
     typeof: {
       default: BESLUIT('Artikel').prefixed,
     },
-    resource: {},
+    subject: {},
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -281,7 +285,11 @@ export const besluit_article: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, ELI('has_part')) &&
-          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel')) &&
+          hasOutgoingNamedNodeTriple(
+            rdfaAttrs,
+            RDF('type'),
+            BESLUIT('Artikel'),
+          ) &&
           hasRdfaContentChild(element)
         ) {
           return rdfaAttrs;
@@ -321,11 +329,11 @@ export const besluitArticleStructure: StructureSpec = {
     const translationWithDocLang = getTranslationFunction(state);
     const numberConverted = number?.toString() ?? '1';
     const articleRdfaId = uuid();
-    const resource = `http://data.lblod.info/articles/${articleRdfaId}`;
+    const subject = `http://data.lblod.info/articles/${articleRdfaId}`;
     const node = schema.node(
       `besluit_article`,
       {
-        resource,
+        subject,
         __rdfaId: articleRdfaId,
       },
       [
@@ -354,7 +362,7 @@ export const besluitArticleStructure: StructureSpec = {
 
     return {
       node,
-      newResource: resource,
+      newResource: subject,
       selectionConfig: {
         type: content ? 'text' : 'node',
         rdfaId: articleRdfaId,
@@ -411,7 +419,7 @@ export const besluit_article_header: NodeSpec = {
         );
         if (numberNode) {
           return {
-            ...getRdfaAttrs(numberNode),
+            ...getRdfaAttrs(numberNode as HTMLElement),
             number: numberNode.textContent,
           };
         }
@@ -487,7 +495,7 @@ export const besluit: NodeSpec = {
     typeof: {
       default: 'besluit:Besluit ext:BesluitNieuweStijl',
     },
-    resource: {},
+    subject: {},
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -507,7 +515,11 @@ export const besluit: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, PROV('generated')) &&
-          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Besluit')) &&
+          hasOutgoingNamedNodeTriple(
+            rdfaAttrs,
+            RDF('type'),
+            BESLUIT('Besluit'),
+          ) &&
           hasRdfaContentChild(element)
         ) {
           return {
@@ -556,7 +568,7 @@ export const language_node: NodeSpec = {
     typeof: {
       default: 'skos:Concept',
     },
-    resource: {
+    subject: {
       default: 'http://publications.europa.eu/resource/authority/language/NLD',
     },
   },
@@ -570,8 +582,7 @@ export const language_node: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element);
         if (
           hasBacklink(rdfaAttrs, ELI('language')) &&
-          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('text'), SKOS('Concept')) &&
-          hasRdfaContentChild(element)
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), SKOS('Concept'))
         ) {
           return getRdfaAttrs(element);
         }

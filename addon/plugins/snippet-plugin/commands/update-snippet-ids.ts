@@ -1,9 +1,9 @@
 import { Command } from '@lblod/ember-rdfa-editor';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/addon/core/rdfa-processor';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 const updateSnippetIds = ({
   resource,
