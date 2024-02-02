@@ -15,7 +15,6 @@
           <tr>
             <td class="selectColumn">
               <AuCheckbox
-                @identifier={{snippetList.label}}
                 @onChange={{fn this.onChange snippetList.id}}
                 @checked={{in-array @assignedSnippetListsIds snippetList.id}}
               />
