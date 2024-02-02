@@ -63,11 +63,11 @@ export default class DateInsertVariableComponent extends Component<Args> {
         },
         {
           predicate: EXT('label').full,
-          object: sayDataFactory.namedNode(label),
+          object: sayDataFactory.literal(label),
         },
         {
           predicate: DCT('type').full,
-          object: sayDataFactory.namedNode('date'),
+          object: sayDataFactory.literal('date'),
         },
       ],
       backlinks: [],

@@ -64,11 +64,11 @@ export default class TextVariableInsertComponent extends Component<Args> {
           },
           {
             predicate: EXT('label').full,
-            object: sayDataFactory.namedNode(label),
+            object: sayDataFactory.literal(label),
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('text'),
+            object: sayDataFactory.literal('text'),
           },
           {
             predicate: EXT('content').full,

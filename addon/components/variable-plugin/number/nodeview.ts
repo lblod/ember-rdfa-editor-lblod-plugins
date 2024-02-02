@@ -89,8 +89,8 @@ export default class NumberNodeviewComponent extends Component<Args> {
     return this.node.attrs.maximumValue as number;
   }
 
-  get label() {
-    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object;
+  get label(): string | undefined {
+    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 
   @action onInputNumberChange(event: InputEvent) {
@@ -147,7 +147,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
       if (this.inputNumber) {
         newProperties.push({
           predicate: EXT('content').full,
-          object: sayDataFactory.namedNode(this.inputNumber),
+          object: sayDataFactory.literal(this.inputNumber),
         });
       }
       this.args.updateAttribute('properties', newProperties);

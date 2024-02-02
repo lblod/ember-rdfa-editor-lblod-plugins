@@ -114,13 +114,13 @@ const parseDOM = [
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('date'),
+            object: sayDataFactory.literal('date'),
           },
         ];
         if (content) {
           properties.push({
             predicate: EXT('content').full,
-            object: sayDataFactory.namedNode(content),
+            object: sayDataFactory.literal(content),
           });
         }
         return {
@@ -171,19 +171,19 @@ const parseDOM = [
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('date'),
+            object: sayDataFactory.literal('date'),
           },
         ];
         if (label) {
           properties.push({
             predicate: EXT('label').full,
-            object: sayDataFactory.namedNode(label),
+            object: sayDataFactory.literal(label),
           });
         }
         if (value) {
           properties.push({
             predicate: EXT('content').full,
-            object: sayDataFactory.namedNode(value),
+            object: sayDataFactory.literal(value),
           });
         }
         return {

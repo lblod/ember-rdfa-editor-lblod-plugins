@@ -115,11 +115,11 @@ export default class NumberInsertComponent extends Component<Args> {
         },
         {
           predicate: EXT('label').full,
-          object: sayDataFactory.namedNode(label),
+          object: sayDataFactory.literal(label),
         },
         {
           predicate: DCT('type').full,
-          object: sayDataFactory.namedNode('number'),
+          object: sayDataFactory.literal('number'),
         },
       ],
       ...(isNumber(this.minimumValue) && {

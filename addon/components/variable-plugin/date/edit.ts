@@ -207,7 +207,7 @@ export default class DateEditComponent extends Component<Args> {
         });
         newProperties.push({
           predicate: EXT('content').full,
-          object: sayDataFactory.namedNode(date.toISOString()),
+          object: sayDataFactory.literal(date.toISOString()),
         });
         return tr.setNodeAttribute(pos, 'properties', newProperties);
       });

@@ -31,11 +31,11 @@ export function replaceSelectionWithAddress(
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('address'),
+            object: sayDataFactory.literal('address'),
           },
           {
             predicate: EXT('label').full,
-            object: sayDataFactory.namedNode(label || ''),
+            object: sayDataFactory.literal(label || ''),
           },
         ],
       }),
