@@ -45,6 +45,7 @@ export function constructStructureNodeSpec(config: {
       typeof: {
         default: type.prefixed,
       },
+      subject: {},
     },
     allowSplitByTable: config.allowSplitByTable,
     toDOM(node) {
