@@ -296,7 +296,6 @@ const parseDOM: ParseRule[] = [
           {
             predicate: DCT('type').full,
             object: sayDataFactory.namedNode('address'),
-
           },
         ];
         if (label) {

@@ -80,7 +80,7 @@ export const besluit_title: NodeSpec = {
           return {
             ...rdfaAttrs,
             subject: element.getAttribute('resource'),
-          }
+          };
         }
         return false;
       },
