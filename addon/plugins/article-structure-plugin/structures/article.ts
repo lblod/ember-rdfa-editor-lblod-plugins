@@ -74,7 +74,7 @@ export const articleSpec: StructureSpec = {
       rdfaNodeType: 'literal',
       backlinks: [
         {
-          subject: sayDataFactory.resourceNode(subject),
+          subject: sayDataFactory.literalNode(subject),
           predicate: SAY('body').prefixed,
         },
       ],
