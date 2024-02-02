@@ -39,6 +39,7 @@ export function constructStructureNodeSpec(config: {
     isolating: true,
     attrs: {
       ...rdfaAttrSpec,
+      rdfaNodeType: "resource",
       typeof: {
         default: type.prefixed,
       },
