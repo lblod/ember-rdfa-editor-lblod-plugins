@@ -10,6 +10,7 @@ interface Args {
   controller: SayController;
   config: SnippetPluginConfig;
   assignedSnippetListsIds: string[];
+  disabled?: boolean;
 }
 
 export default class SnippetInsertComponent extends Component<Args> {
@@ -61,5 +62,9 @@ export default class SnippetInsertComponent extends Component<Args> {
     this.controller.withTransaction((tr) =>
       tr.replaceSelection(this.createSliceFromElement(parsed)),
     );
+  }
+
+  get disabled() {
+    return this.args.disabled ?? false;
   }
 }
