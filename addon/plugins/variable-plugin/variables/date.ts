@@ -99,6 +99,7 @@ const parseDOM = [
         hasRDFaAttribute(node, 'datatype', XSD('dateTime'))
       ) {
         const onlyDate = hasRDFaAttribute(node, 'datatype', XSD('date'));
+        const datatype = onlyDate ? XSD('date') : XSD('dateTime');
         const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
         const content = node.getAttribute('content');
         const properties = [
@@ -120,7 +121,7 @@ const parseDOM = [
         if (content) {
           properties.push({
             predicate: EXT('content').full,
-            object: sayDataFactory.literal(content),
+            object: sayDataFactory.literal(content, datatype.namedNode),
           });
         }
         return {
@@ -140,18 +141,25 @@ const parseDOM = [
   },
   {
     /**
-     * Parses dates in the new (variable) format
+     * Parses dates in the 2nd (variable) format (pre-RDFa rework) e.g.
+     * <span resource="http://data.lblod.info/mappings/81190ceb-9ed0-4708-a344-99ba0bf039c5" typeof="ext:Mapping" class="date" data-label="datum">
+     *   <span property="dct:type" content="date"></span>
+     *   <span property="ext:content" datatype="xsd:date" data-format="dd/MM/yy" data-custom="false" data-custom-allowed="true" content="2024-02-12T23:00:00.000Z">
+     *     13/02/24
+     *   </span>
+     * </span>
      */
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'date') {
-        const mappingSubject = node.getAttribute('subject');
+        const mappingSubject = node.getAttribute('resource');
         if (!mappingSubject) {
           return false;
         }
         const onlyDate = !![...node.children].find((el) =>
           hasRDFaAttribute(el, 'datatype', XSD('date')),
         );
+        const datatype = onlyDate ? XSD('date') : XSD('dateTime');
         const dateNode = [...node.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         ) as HTMLElement | undefined;
@@ -183,7 +191,7 @@ const parseDOM = [
         if (value) {
           properties.push({
             predicate: EXT('content').full,
-            object: sayDataFactory.literal(value),
+            object: sayDataFactory.literal(value, datatype.namedNode),
           });
         }
         return {
@@ -207,6 +215,8 @@ const parseDOM = [
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
   const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
+  // TODO Could remove the custom 'onlyDate' attr and instead use the datatype of the outgoing
+  // content triple.
   const { onlyDate, format, custom, customAllowed } = node.attrs;
   let humanReadableDate: string;
   if (value) {

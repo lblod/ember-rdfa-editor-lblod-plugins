@@ -5,15 +5,21 @@ import {
   RdfaAttrs,
   RdfaResourceAttrs,
 } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  sayDataFactory,
+  type SayNamedNode,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { Option } from './option';
 
 export class Resource {
   full: string;
   prefixed: string;
+  namedNode: SayNamedNode;
 
   constructor(full: string, prefixed: string) {
     this.full = full;
     this.prefixed = prefixed;
+    this.namedNode = sayDataFactory.namedNode(full);
   }
 
   toString() {

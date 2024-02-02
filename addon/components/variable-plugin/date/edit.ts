@@ -24,7 +24,10 @@ import {
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { Velcro } from 'ember-velcro';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  EXT,
+  XSD,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -201,13 +204,17 @@ export default class DateEditComponent extends Component<Args> {
         const properties = node.attrs.properties as OutgoingTriple[];
         const newProperties = properties.filter((prop) => {
           return !(
-            prop.object.termType === 'NamedNode' &&
+            prop.object.termType === 'Literal' &&
             EXT('content').matches(prop.predicate)
           );
         });
+        const datatype = this.onlyDate ? XSD('date') : XSD('dateTime');
         newProperties.push({
           predicate: EXT('content').full,
-          object: sayDataFactory.literal(date.toISOString()),
+          object: sayDataFactory.literal(
+            date.toISOString(),
+            datatype.namedNode,
+          ),
         });
         return tr.setNodeAttribute(pos, 'properties', newProperties);
       });
