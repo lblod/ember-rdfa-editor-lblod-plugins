@@ -4,6 +4,7 @@ import {
   getRdfaAttrs,
   rdfaAttrSpec,
   renderRdfaAware,
+  getRdfaContentElement,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
@@ -190,6 +191,7 @@ export const article_paragraph: NodeSpec = {
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
     // Older structures (without an explicit 'content' element) don't have a separate element
     // around the paragraph number, so we manually create that to use as a content element
