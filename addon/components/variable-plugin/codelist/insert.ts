@@ -127,7 +127,7 @@ export default class CodelistInsertComponent extends Component<Args> {
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('codelist'),
+            object: sayDataFactory.literal('codelist'),
           },
           {
             predicate: EXT('content').full,
