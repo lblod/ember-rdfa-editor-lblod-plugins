@@ -71,7 +71,10 @@ const parseDOM: ParseRule[] = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'number') {
-        const mappingSubject = node.getAttribute('subject');
+        const mappingSubject =
+          node.getAttribute('subject') ||
+          node.getAttribute('resource') ||
+          node.getAttribute('about');
         if (!mappingSubject) {
           return false;
         }
