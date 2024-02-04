@@ -129,7 +129,7 @@ export const article_paragraph_number: NodeSpec = {
   inline: false,
   editable: false,
   toDOM(node) {
-    return ['span', node.attrs, 0];
+    return ['span', { class: 'article-paragraph-number', ...node.attrs }, 0];
   },
   parseDOM: [
     {
