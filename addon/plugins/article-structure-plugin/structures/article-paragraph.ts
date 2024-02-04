@@ -111,7 +111,7 @@ export const articleParagraphSpec: StructureSpec = {
 
 export const article_paragraph_body = constructStructureBodyNodeSpec({
   tag: 'span',
-  content: 'block*',
+  content: 'block+',
   context: 'article_paragraph/',
 });
 
