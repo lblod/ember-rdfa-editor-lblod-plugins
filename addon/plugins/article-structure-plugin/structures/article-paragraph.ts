@@ -18,12 +18,7 @@ import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { constructStructureBodyNodeSpec } from '../utils/structure';
-
-const PLACEHOLDERS = {
-  body: 'article-structure-plugin.placeholder.paragraph.body',
-};
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
@@ -39,9 +34,8 @@ export const articleParagraphSpec: StructureSpec = {
   continuous: false,
   noUnwrap: true,
   relationshipPredicate: SAY('hasParagraph'),
-  constructor: ({ schema, number, intl, state }) => {
+  constructor: ({ schema, number }) => {
     const numberConverted = number?.toString() ?? '1';
-    const translationWithDocLang = getTranslationFunction(state);
     const paragraphRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
