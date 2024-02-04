@@ -95,21 +95,12 @@ export const articleParagraphSpec: StructureSpec = {
       schema.node(
         'article_paragraph_body',
         bodyAttrs,
-        schema.node(
-          'paragraph',
-          {},
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.body,
-              intl?.t(PLACEHOLDERS.body) || '',
-            ),
-          }),
-        ),
+        schema.node('paragraph', {}),
       ),
     ]);
     return {
       node,
-      selectionConfig: { rdfaId: bodyRdfaId, type: 'node' },
+      selectionConfig: { rdfaId: bodyRdfaId, type: 'text' },
       newResource: subject,
     };
   },
