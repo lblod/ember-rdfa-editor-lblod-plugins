@@ -101,7 +101,7 @@ const parseDOM = [
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('codelist'),
+            object: sayDataFactory.literal('codelist'),
           },
           {
             predicate: EXT('content').full,
@@ -111,7 +111,7 @@ const parseDOM = [
         if (label) {
           properties.push({
             predicate: EXT('label').full,
-            object: sayDataFactory.namedNode(label),
+            object: sayDataFactory.literal(label),
           });
         }
         if (codelistResource) {

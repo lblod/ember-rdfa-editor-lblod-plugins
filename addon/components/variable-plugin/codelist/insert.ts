@@ -115,7 +115,7 @@ export default class CodelistInsertComponent extends Component<Args> {
           },
           {
             predicate: EXT('label').full,
-            object: sayDataFactory.namedNode(label),
+            object: sayDataFactory.literal(label),
           },
           {
             predicate: EXT('codelist').full,

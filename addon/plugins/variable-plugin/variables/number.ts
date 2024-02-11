@@ -99,19 +99,19 @@ const parseDOM: ParseRule[] = [
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.namedNode('number'),
+            object: sayDataFactory.literal('number'),
           },
         ];
         if (label) {
           properties.push({
             predicate: EXT('label').full,
-            object: sayDataFactory.namedNode(label),
+            object: sayDataFactory.literal(label),
           });
         }
         if (value) {
           properties.push({
             predicate: EXT('content').full,
-            object: sayDataFactory.namedNode(value),
+            object: sayDataFactory.literal(value),
           });
         }
         return {

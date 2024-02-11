@@ -10,6 +10,7 @@ import {
   DCT,
   EXT,
   RDF,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
@@ -63,11 +64,11 @@ export default class DateInsertVariableComponent extends Component<Args> {
         },
         {
           predicate: EXT('label').full,
-          object: sayDataFactory.namedNode(label),
+          object: sayDataFactory.literal(label),
         },
         {
           predicate: DCT('type').full,
-          object: sayDataFactory.namedNode('date'),
+          object: sayDataFactory.literal('date', XSD('date').namedNode),
         },
       ],
       backlinks: [],
