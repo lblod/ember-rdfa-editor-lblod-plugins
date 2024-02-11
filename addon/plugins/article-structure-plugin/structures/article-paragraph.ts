@@ -4,6 +4,7 @@ import {
   getRdfaAttrs,
   rdfaAttrSpec,
   renderRdfaAware,
+  getRdfaContentElement,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { StructureSpec } from '..';
 import { v4 as uuid } from 'uuid';
@@ -17,12 +18,7 @@ import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { constructStructureBodyNodeSpec } from '../utils/structure';
-
-const PLACEHOLDERS = {
-  body: 'article-structure-plugin.placeholder.paragraph.body',
-};
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
@@ -38,9 +34,8 @@ export const articleParagraphSpec: StructureSpec = {
   continuous: false,
   noUnwrap: true,
   relationshipPredicate: SAY('hasParagraph'),
-  constructor: ({ schema, number, intl, state }) => {
+  constructor: ({ schema, number }) => {
     const numberConverted = number?.toString() ?? '1';
-    const translationWithDocLang = getTranslationFunction(state);
     const paragraphRdfaId = uuid();
     const numberRdfaId = uuid();
     const bodyRdfaId = uuid();
@@ -94,21 +89,12 @@ export const articleParagraphSpec: StructureSpec = {
       schema.node(
         'article_paragraph_body',
         bodyAttrs,
-        schema.node(
-          'paragraph',
-          {},
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.body,
-              intl?.t(PLACEHOLDERS.body) || '',
-            ),
-          }),
-        ),
+        schema.node('paragraph', {}),
       ),
     ]);
     return {
       node,
-      selectionConfig: { rdfaId: bodyRdfaId, type: 'node' },
+      selectionConfig: { rdfaId: bodyRdfaId, type: 'text' },
       newResource: subject,
     };
   },
@@ -119,7 +105,7 @@ export const articleParagraphSpec: StructureSpec = {
 
 export const article_paragraph_body = constructStructureBodyNodeSpec({
   tag: 'span',
-  content: 'block*',
+  content: 'block+',
   context: 'article_paragraph/',
 });
 
@@ -128,7 +114,7 @@ export const article_paragraph_number: NodeSpec = {
   inline: false,
   editable: false,
   toDOM(node) {
-    return ['span', node.attrs, 0];
+    return ['span', { class: 'article-paragraph-number', ...node.attrs }, 0];
   },
   parseDOM: [
     {
@@ -190,6 +176,7 @@ export const article_paragraph: NodeSpec = {
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
     // Older structures (without an explicit 'content' element) don't have a separate element
     // around the paragraph number, so we manually create that to use as a content element

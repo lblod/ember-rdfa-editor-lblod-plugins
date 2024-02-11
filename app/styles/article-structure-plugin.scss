@@ -1,7 +1,7 @@
-[typeof="say:Paragraph"] {
+[typeof='say:Paragraph'] {
   display: flex;
 
-  > [data-content-container="true"] {
+  > [data-content-container='true'] {
     display: flex;
     // align-items: flex-start;
 
@@ -10,7 +10,101 @@
     }
   }
 
-  [property="eli:number"], [contenteditable="false"], [property="say:body"] {
+  [property='eli:number'],
+  [contenteditable='false'],
+  [property='say:body'] {
     margin-top: 0;
   }
+}
+
+.rdfa-editing .say-editable {
+  outline: 0.1rem solid var(--au-gray-300);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 0;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border-radius: 0;
+  background-color: white;
+  [property='say:body'] {
+    outline: 0;
+  }
+  &[typeof='say:Title'],
+  &[typeof='say:Chapter'],
+  &[typeof='say:Section'],
+  &[typeof='say:Subsection'],
+  &[typeof='say:Article'] {
+    background-color: var(--au-gray-200);
+    cursor: pointer;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    [property='say:heading'] {
+      background-color: var(--au-gray-100);
+      margin-bottom: 0;
+      padding-left: 1em;
+      cursor: auto;
+    }
+    span[property='say:heading'] {
+      width: 100%;
+      display: inline-block;
+    }
+    [property='say:body'] {
+      cursor: auto;
+      padding-left: 0.5em;
+    }
+  }
+  &[typeof='say:Article'] [property='say:heading'] {
+    font-weight: bold;
+  }
+  &.say-active {
+    outline: 0.2rem solid var(--au-blue-500);
+  }
+  &.ProseMirror-selectednode {
+    background-color: var(--au-blue-200);
+  }
+}
+[typeof='say:Paragraph'] > [data-content-container='true'] {
+  background-color: var(--au-gray-200);
+  cursor: pointer;
+  width: 100%;
+  margin: 0;
+  .article-header-number {
+    display: inline-block;
+    width: auto;
+  }
+  > span {
+    display: inline-block;
+    width: 2em;
+  }
+  .say-active {
+    outline: 0;
+  }
+  [property='say:body'] {
+    background-color: white;
+    cursor: auto;
+    padding-left: 0.5em;
+    width: 100%;
+  }
+}
+.say-editable[typeof='say:Paragraph'] {
+  padding: 0 !important;
+  margin: 0;
+  margin-bottom: 0.5em;
+  .say-editable[property='say:body'] {
+    padding: 0.5em;
+    margin: 0;
+  }
+}
+.rdfa-annotations [property] {
+  border-bottom-style: none !important;
+}
+.rdfa-annotations [typeof] {
+  border-bottom-style: none !important;
 }

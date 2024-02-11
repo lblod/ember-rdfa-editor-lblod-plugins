@@ -61,7 +61,10 @@ const parseDOM = [
         node.querySelector(CONTENT_SELECTOR) &&
         parseVariableType(node) === 'text'
       ) {
-        const mappingSubject = node.getAttribute('subject');
+        const mappingSubject =
+          node.getAttribute('subject') ||
+          node.getAttribute('resource') ||
+          node.getAttribute('about');
         if (!mappingSubject) {
           return false;
         }

@@ -152,7 +152,10 @@ const parseDOM = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'date') {
-        const mappingSubject = node.getAttribute('resource');
+        const mappingSubject =
+          node.getAttribute('subject') ??
+          node.getAttribute('resource') ??
+          node.getAttribute('about');
         if (!mappingSubject) {
           return false;
         }
