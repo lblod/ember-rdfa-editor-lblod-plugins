@@ -65,6 +65,22 @@ export function constructStructureNodeSpec(config: {
         preserveWhitespace: false,
         getAttrs(element: HTMLElement) {
           const rdfaAttrs = getRdfaAttrs(element);
+          if (
+            hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type) &&
+            hasRdfaContentChild(element)
+          ) {
+            return rdfaAttrs;
+          }
+          return false;
+        },
+        contentElement: getRdfaContentElement,
+      },
+      // Backwards compatibility
+      {
+        tag: 'div',
+        preserveWhitespace: false,
+        getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element);
           if (hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type)) {
             return rdfaAttrs;
           }

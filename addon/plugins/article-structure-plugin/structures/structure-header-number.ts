@@ -5,7 +5,10 @@ import {
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasBacklink } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  hasBacklink,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export const structure_header_number: NodeSpec = {
   attrs: rdfaAttrSpec,
@@ -35,6 +38,19 @@ export const structure_header_number: NodeSpec = {
         return false;
       },
       contentElement: getRdfaContentElement,
+    },
+    // Backwards compatibility
+    {
+      tag: 'span',
+      getAttrs(node: HTMLElement) {
+        if (hasRDFaAttribute(node, 'property', ELI('number'))) {
+          return {
+            rdfaNodeType: 'literal',
+            property: ELI('number').prefixed,
+          };
+        }
+        return false;
+      },
     },
   ],
 };
