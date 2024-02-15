@@ -185,7 +185,9 @@ export const article_paragraph: NodeSpec = {
       context: 'article/article_body/',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element);
-        if (rdfaAttrs) {
+        if (
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), SAY('Paragraph'))
+        ) {
           return rdfaAttrs;
         }
         return false;
