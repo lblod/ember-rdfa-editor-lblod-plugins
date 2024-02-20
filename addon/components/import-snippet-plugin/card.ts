@@ -10,6 +10,11 @@ import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 type Args = {
   controller: SayController;
 };
+
+type InsertRange = {
+  from: number;
+  to: number;
+};
 export default class ImportSnippetPluginCard extends Component<Args> {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
 
@@ -21,7 +26,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
     return this.importRdfaSnippet.snippetsForType('roadsign');
   }
 
-  get insertRange() {
+  get insertRange(): InsertRange {
     const { selection } = this.controller.mainEditorState;
     const besluit = findParentNodeOfType(this.controller.schema.nodes.besluit)(
       selection,

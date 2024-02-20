@@ -1,5 +1,4 @@
-import { NodeSpec } from 'prosemirror-model';
-import { getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import { NodeSpec, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaContentElement,
   renderRdfaAware,
