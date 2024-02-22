@@ -1,7 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController, Selection, Transaction } from '@lblod/ember-rdfa-editor';
+import {
+  SayController,
+  Selection,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { service } from '@ember/service';

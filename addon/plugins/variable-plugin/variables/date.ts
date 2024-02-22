@@ -284,8 +284,11 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     const humanReadableDate = value
       ? formatDate(new Date(value), format)
       : onlyDate
-      ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
-      : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
+        ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
+        : t(
+            'date-plugin.insert.datetime',
+            TRANSLATION_FALLBACKS.insertDateTime,
+          );
 
     return humanReadableDate;
   },
