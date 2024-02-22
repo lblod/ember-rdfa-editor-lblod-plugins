@@ -134,8 +134,8 @@ devDependencies:
     specifier: 4.3.3
     version: 4.3.3
   '@lblod/ember-rdfa-editor':
-    specifier: github:lblod/ember-rdfa-editor#e993e5a686a2c420ef3e59d9c83bc5e1219af842
-    version: github.com/lblod/ember-rdfa-editor/e993e5a686a2c420ef3e59d9c83bc5e1219af842(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
+    specifier: github:lblod/ember-rdfa-editor#ca0212716a9cbd6154e4ba076a8cff9d51e770be
+    version: github.com/lblod/ember-rdfa-editor/ca0212716a9cbd6154e4ba076a8cff9d51e770be(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
   '@rdfjs/types':
     specifier: ^1.1.0
     version: 1.1.0
@@ -17352,12 +17352,13 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
 
-  github.com/lblod/ember-rdfa-editor/e993e5a686a2c420ef3e59d9c83bc5e1219af842(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
-    resolution: {tarball: https://codeload.github.com/lblod/ember-rdfa-editor/tar.gz/e993e5a686a2c420ef3e59d9c83bc5e1219af842}
-    id: github.com/lblod/ember-rdfa-editor/e993e5a686a2c420ef3e59d9c83bc5e1219af842
+  github.com/lblod/ember-rdfa-editor/ca0212716a9cbd6154e4ba076a8cff9d51e770be(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
+    resolution: {tarball: https://codeload.github.com/lblod/ember-rdfa-editor/tar.gz/ca0212716a9cbd6154e4ba076a8cff9d51e770be}
+    id: github.com/lblod/ember-rdfa-editor/ca0212716a9cbd6154e4ba076a8cff9d51e770be
     name: '@lblod/ember-rdfa-editor'
     version: 10.0.0-next.1
     engines: {node: 16.* || 18.* || >= 20}
+    prepare: true
     requiresBuild: true
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^2.15.0
@@ -17381,7 +17382,7 @@ packages:
       '@glimmer/tracking': 1.1.2
       '@glint/template': 1.1.0
       '@graphy/memory.dataset.fast': 4.3.3
-      '@guardian/prosemirror-invisibles': github.com/lblod/prosemirror-invisibles/133dcb12871f9174ba8fe7dfc517e52496b14bc4(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)
+      '@guardian/prosemirror-invisibles': github.com/lblod/prosemirror-invisibles/9032fe872c36d7fbc44ef69511c6ce3bfdb19713(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)
       '@lblod/marawa': 0.8.0-beta.6
       codemirror: 6.0.1(@lezer/common@1.2.1)
       common-tags: 1.8.2
@@ -17431,9 +17432,9 @@ packages:
       - webpack
     dev: true
 
-  github.com/lblod/prosemirror-invisibles/133dcb12871f9174ba8fe7dfc517e52496b14bc4(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1):
-    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-invisibles/tar.gz/133dcb12871f9174ba8fe7dfc517e52496b14bc4}
-    id: github.com/lblod/prosemirror-invisibles/133dcb12871f9174ba8fe7dfc517e52496b14bc4
+  github.com/lblod/prosemirror-invisibles/9032fe872c36d7fbc44ef69511c6ce3bfdb19713(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1):
+    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-invisibles/tar.gz/9032fe872c36d7fbc44ef69511c6ce3bfdb19713}
+    id: github.com/lblod/prosemirror-invisibles/9032fe872c36d7fbc44ef69511c6ce3bfdb19713
     name: '@guardian/prosemirror-invisibles'
     version: 3.0.3
     prepare: true
