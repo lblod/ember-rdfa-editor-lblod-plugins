@@ -134,8 +134,8 @@ devDependencies:
     specifier: 4.3.3
     version: 4.3.3
   '@lblod/ember-rdfa-editor':
-    specifier: github:lblod/ember-rdfa-editor#18de4a29ff6c7b2007732591b01d5c2563d8da76
-    version: github.com/lblod/ember-rdfa-editor/18de4a29ff6c7b2007732591b01d5c2563d8da76(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
+    specifier: github:lblod/ember-rdfa-editor#fc09343c2d4cb8575856e92731f8c55d457e143b
+    version: github.com/lblod/ember-rdfa-editor/fc09343c2d4cb8575856e92731f8c55d457e143b(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
   '@rdfjs/types':
     specifier: ^1.1.0
     version: 1.1.0
@@ -17352,9 +17352,9 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
 
-  github.com/lblod/ember-rdfa-editor/18de4a29ff6c7b2007732591b01d5c2563d8da76(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
-    resolution: {tarball: https://codeload.github.com/lblod/ember-rdfa-editor/tar.gz/18de4a29ff6c7b2007732591b01d5c2563d8da76}
-    id: github.com/lblod/ember-rdfa-editor/18de4a29ff6c7b2007732591b01d5c2563d8da76
+  github.com/lblod/ember-rdfa-editor/fc09343c2d4cb8575856e92731f8c55d457e143b(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
+    resolution: {tarball: https://codeload.github.com/lblod/ember-rdfa-editor/tar.gz/fc09343c2d4cb8575856e92731f8c55d457e143b}
+    id: github.com/lblod/ember-rdfa-editor/fc09343c2d4cb8575856e92731f8c55d457e143b
     name: '@lblod/ember-rdfa-editor'
     version: 10.0.0-next.1
     engines: {node: 16.* || 18.* || >= 20}
@@ -17382,7 +17382,7 @@ packages:
       '@glimmer/tracking': 1.1.2
       '@glint/template': 1.1.0
       '@graphy/memory.dataset.fast': 4.3.3
-      '@guardian/prosemirror-invisibles': github.com/lblod/prosemirror-invisibles/9032fe872c36d7fbc44ef69511c6ce3bfdb19713(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)
+      '@guardian/prosemirror-invisibles': github.com/lblod/prosemirror-invisibles/8bea0374be1295f8f32b1b6d66ba119dfc712124(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)
       '@lblod/marawa': 0.8.0-beta.6
       codemirror: 6.0.1(@lezer/common@1.2.1)
       common-tags: 1.8.2
@@ -17415,7 +17415,7 @@ packages:
       prosemirror-schema-basic: 1.2.2
       prosemirror-schema-list: 1.3.0
       prosemirror-state: 1.4.3
-      prosemirror-tables: github.com/lblod/prosemirror-tables/e20c45609978a46089fccc13a181971ef540fc9d
+      prosemirror-tables: github.com/lblod/prosemirror-tables/d997c41b53a3f35233904a1f0bb1727c1fd01993
       prosemirror-transform: 1.8.0
       prosemirror-view: 1.33.1
       rdf-data-factory: 1.1.2
@@ -17432,9 +17432,9 @@ packages:
       - webpack
     dev: true
 
-  github.com/lblod/prosemirror-invisibles/9032fe872c36d7fbc44ef69511c6ce3bfdb19713(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1):
-    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-invisibles/tar.gz/9032fe872c36d7fbc44ef69511c6ce3bfdb19713}
-    id: github.com/lblod/prosemirror-invisibles/9032fe872c36d7fbc44ef69511c6ce3bfdb19713
+  github.com/lblod/prosemirror-invisibles/8bea0374be1295f8f32b1b6d66ba119dfc712124(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1):
+    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-invisibles/tar.gz/8bea0374be1295f8f32b1b6d66ba119dfc712124}
+    id: github.com/lblod/prosemirror-invisibles/8bea0374be1295f8f32b1b6d66ba119dfc712124
     name: '@guardian/prosemirror-invisibles'
     version: 3.0.3
     prepare: true
@@ -17449,8 +17449,8 @@ packages:
       prosemirror-view: 1.33.1
     dev: true
 
-  github.com/lblod/prosemirror-tables/e20c45609978a46089fccc13a181971ef540fc9d:
-    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-tables/tar.gz/e20c45609978a46089fccc13a181971ef540fc9d}
+  github.com/lblod/prosemirror-tables/d997c41b53a3f35233904a1f0bb1727c1fd01993:
+    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-tables/tar.gz/d997c41b53a3f35233904a1f0bb1727c1fd01993}
     name: prosemirror-tables
     version: 1.3.5
     prepare: true
