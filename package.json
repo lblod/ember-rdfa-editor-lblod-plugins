@@ -27,6 +27,7 @@
     "test:ember-compatibility": "ember try:each",
     "release": "release-it",
     "prepack": "ember ts:precompile",
+    "prepare": "workaround-broken-npm-prepack-behavior prepack",
     "postpack": "ember ts:clean"
   },
   "dependencies": {
@@ -147,7 +148,8 @@
     "sass": "^1.49.7",
     "sinon": "^17.0.1",
     "typescript": "~5.2.2",
-    "webpack": "^5.74.0"
+    "webpack": "^5.74.0",
+    "workaround-broken-npm-prepack-behavior": "github:cspotcode/workaround-broken-npm-prepack-behavior#1a7adbbb8a527784daf97edad6ba42d6e96611f6"
   },
   "peerDependencies": {
     "@appuniversum/ember-appuniversum": "^2.15.0",

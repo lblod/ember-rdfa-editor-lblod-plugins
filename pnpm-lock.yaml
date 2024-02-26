@@ -355,6 +355,9 @@ devDependencies:
   webpack:
     specifier: ^5.74.0
     version: 5.90.3
+  workaround-broken-npm-prepack-behavior:
+    specifier: github:cspotcode/workaround-broken-npm-prepack-behavior#1a7adbbb8a527784daf97edad6ba42d6e96611f6
+    version: github.com/cspotcode/workaround-broken-npm-prepack-behavior/1a7adbbb8a527784daf97edad6ba42d6e96611f6
 
 packages:
 
@@ -17352,13 +17355,19 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
 
+  github.com/cspotcode/workaround-broken-npm-prepack-behavior/1a7adbbb8a527784daf97edad6ba42d6e96611f6:
+    resolution: {tarball: https://codeload.github.com/cspotcode/workaround-broken-npm-prepack-behavior/tar.gz/1a7adbbb8a527784daf97edad6ba42d6e96611f6}
+    name: workaround-broken-npm-prepack-behavior
+    version: 0.0.1
+    hasBin: true
+    dev: true
+
   github.com/lblod/ember-rdfa-editor/fc09343c2d4cb8575856e92731f8c55d457e143b(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
     resolution: {tarball: https://codeload.github.com/lblod/ember-rdfa-editor/tar.gz/fc09343c2d4cb8575856e92731f8c55d457e143b}
     id: github.com/lblod/ember-rdfa-editor/fc09343c2d4cb8575856e92731f8c55d457e143b
     name: '@lblod/ember-rdfa-editor'
     version: 10.0.0-next.1
     engines: {node: 16.* || 18.* || >= 20}
-    prepare: true
     requiresBuild: true
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^2.15.0
