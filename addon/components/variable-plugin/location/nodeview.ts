@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { NodeSelection, SayView } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, ProsePlugin, SayView } from '@lblod/ember-rdfa-editor';
 import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -9,7 +9,7 @@ import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 export default class LocationNodeViewComponent extends Component<EmberNodeArgs> {
   @tracked innerView?: SayView;
 
-  get plugins() {
+  get plugins(): ProsePlugin[] {
     return [editableNodePlugin(this.args.getPos)];
   }
   @action

@@ -1,7 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
+import {
+  SayController,
+  Selection,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { service } from '@ember/service';
@@ -54,7 +58,7 @@ export default class DateEditComponent extends Component<Args> {
     return this.args.controller;
   }
 
-  get selection() {
+  get selection(): Selection {
     return this.controller.activeEditorState.selection;
   }
 

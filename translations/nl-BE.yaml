@@ -290,14 +290,13 @@ snippet-plugin:
         list: Lijst
 
 template-comments-plugin:
-  long-title: Toelichtings- of voorbeeldbepaling
+  title: Toelichting
   insert:
-    title: Toelichtings- of voorbeeldbepaling invoegen
+    title: Toelichting invoegen
   edit:
-    remove: Verwijder Toelichtings- of voorbeeldbepaling
-    move-down: Toelichtings- of voorbeeldbepaling naar onder
-    move-up: Toelichtings- of voorbeeldbepaling naar boven
-  heading: toelichtingsbepaling
+    remove: Verwijder toelichting
+    move-down: Toelichting naar onder verplaatsen
+    move-up: Toelichting naar boven verplaatsen
 
 pagination:
   next: Volgende pagina

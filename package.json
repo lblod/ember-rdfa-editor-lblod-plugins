@@ -27,6 +27,7 @@
     "test:ember-compatibility": "ember try:each",
     "release": "release-it",
     "prepack": "ember ts:precompile",
+    "prepare": "workaround-broken-npm-prepack-behavior prepack",
     "postpack": "ember ts:clean"
   },
   "dependencies": {
@@ -72,7 +73,9 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@glint/template": "1.1.0",
-    "@lblod/ember-rdfa-editor": "10.0.0-next.1",
+    "@graphy/content.ttl.write": "^4.3.7",
+    "@graphy/memory.dataset.fast": "4.3.3",
+    "@lblod/ember-rdfa-editor": "github:lblod/ember-rdfa-editor#fc09343c2d4cb8575856e92731f8c55d457e143b",
     "@rdfjs/types": "^1.1.0",
     "@release-it/keep-a-changelog": "^3.1.0",
     "@tsconfig/ember": "^3.0.0",
@@ -87,6 +90,7 @@
     "@types/ember__engine": "^4.0.4",
     "@types/ember__error": "^4.0.1",
     "@types/ember__object": "^4.0.5",
+    "@types/ember__owner": "^4.0.9",
     "@types/ember__polyfills": "^4.0.1",
     "@types/ember__routing": "^4.0.12",
     "@types/ember__runloop": "^4.0.2",
@@ -100,6 +104,7 @@
     "@types/rdfjs__data-model": "^2.0.1",
     "@types/rdfjs__dataset": "^2.0.0",
     "@types/rsvp": "^4.0.4",
+    "@types/sinon": "^17.0.3",
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
@@ -141,14 +146,16 @@
     "qunit-dom": "^2.0.0",
     "release-it": "^15.5.0",
     "sass": "^1.49.7",
+    "sinon": "^17.0.1",
     "typescript": "~5.2.2",
-    "webpack": "^5.74.0"
+    "webpack": "^5.74.0",
+    "workaround-broken-npm-prepack-behavior": "github:cspotcode/workaround-broken-npm-prepack-behavior#1a7adbbb8a527784daf97edad6ba42d6e96611f6"
   },
   "peerDependencies": {
     "@appuniversum/ember-appuniversum": "^2.15.0",
     "@ember/string": "3.x",
     "@glint/template": "^1.1.0",
-    "@lblod/ember-rdfa-editor": "10.0.0-next.1",
+    "@lblod/ember-rdfa-editor": "github:lblod/ember-rdfa-editor#fc09343c2d4cb8575856e92731f8c55d457e143b",
     "ember-concurrency": "^2.3.7 || ^3.1.0",
     "ember-intl": "^5.7.2 || ^6.1.0",
     "ember-modifier": "^3.2.7",
