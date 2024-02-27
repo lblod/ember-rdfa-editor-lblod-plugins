@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   CodeList,
@@ -144,7 +144,14 @@ export default class CodelistInsertComponent extends Component<Args> {
 
     this.controller.withTransaction(
       (tr) => {
-        return tr.replaceSelectionWith(node);
+        tr.replaceSelectionWith(node);
+        if (tr.selection.$anchor.nodeBefore) {
+          const resolvedPos = tr.doc.resolve(
+            tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
+          );
+          tr.setSelection(new NodeSelection(resolvedPos));
+        }
+        return tr;
       },
       { view: this.controller.mainEditorView },
     );

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import type { SayController } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, type SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
@@ -83,7 +83,14 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
     this.controller.withTransaction(
       (tr) => {
-        return tr.replaceSelectionWith(node);
+        tr.replaceSelectionWith(node);
+        if (tr.selection.$anchor.nodeBefore) {
+          const resolvedPos = tr.doc.resolve(
+            tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
+          );
+          tr.setSelection(new NodeSelection(resolvedPos));
+        }
+        return tr;
       },
       { view: this.controller.mainEditorView },
     );

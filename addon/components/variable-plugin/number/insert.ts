@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { v4 as uuidv4 } from 'uuid';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { service } from '@ember/service';
@@ -136,7 +136,14 @@ export default class NumberInsertComponent extends Component<Args> {
 
     this.controller.withTransaction(
       (tr) => {
-        return tr.replaceSelectionWith(node);
+        tr.replaceSelectionWith(node);
+        if (tr.selection.$anchor.nodeBefore) {
+          const resolvedPos = tr.doc.resolve(
+            tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
+          );
+          tr.setSelection(new NodeSelection(resolvedPos));
+        }
+        return tr;
       },
       { view: this.controller.mainEditorView },
     );
