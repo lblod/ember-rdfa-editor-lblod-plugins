@@ -1,4 +1,5 @@
 import {
+  Attrs,
   NodeSpec,
   NodeType,
   PNode,
@@ -23,6 +24,9 @@ import {
   hasOutgoingNamedNodeTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { romanize, romanToInt } from './romanize';
 
 export function constructStructureNodeSpec(config: {
   type: Resource;
@@ -161,16 +165,19 @@ const TAG_TO_LEVEL = new Map([
 ]);
 
 export type StructureHeaderType = 'structure_header' | 'article_header';
+
 type StructureHeaderArgs = {
   type: StructureHeaderType;
   outlineText: (node: PNode) => string;
   includeLevel: boolean;
+  numberDisplayStyle?: 'decimal' | 'roman';
 };
 
 export function constructStructureHeaderNodeSpec({
   type,
   outlineText,
   includeLevel,
+  numberDisplayStyle = 'decimal',
 }: StructureHeaderArgs): NodeSpec {
   return {
     content: 'text* structure_header_number text* structure_header_title',
@@ -186,7 +193,13 @@ export function constructStructureHeaderNodeSpec({
         default: SAY('heading').prefixed,
       },
       number: {
-        default: '1',
+        default: 1,
+      },
+      numberDisplayStyle: {
+        default: numberDisplayStyle,
+      },
+      startNumber: {
+        default: null,
       },
       ...(includeLevel
         ? {
@@ -205,7 +218,7 @@ export function constructStructureHeaderNodeSpec({
         rdfaContainerTag: 'span',
         contentContainerTag: 'span',
         attrs: {
-          ...attrs,
+          ...enhanceAttributesWithNumberAttributes(attrs),
           ...(includeLevel ? { level: level as number } : {}),
         },
         content: 0,
@@ -221,12 +234,16 @@ export function constructStructureHeaderNodeSpec({
         getAttrs(element: HTMLElement) {
           const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
           const rdfaAttrs = getRdfaAttrs(element);
+
           if (hasBacklink(rdfaAttrs, SAY('heading'))) {
             const titleChild = element.querySelector(`
               span[property~='${EXT('title').prefixed}'],
               span[property~='${EXT('title').full}']`);
+
+            const numberAttributes = getNodeNumberAttrsFromElement(element);
+
             if (titleChild) {
-              return { level, ...rdfaAttrs };
+              return { level, ...rdfaAttrs, ...numberAttributes };
             }
           }
 
@@ -254,52 +271,6 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
   return;
 }
 
-export function romanize(num: number) {
-  if (isNaN(num)) throw new Error('Provided number is NaN');
-  const digits = String(+num).split('');
-  const key = [
-    '',
-    'C',
-    'CC',
-    'CCC',
-    'CD',
-    'D',
-    'DC',
-    'DCC',
-    'DCCC',
-    'CM',
-    '',
-    'X',
-    'XX',
-    'XXX',
-    'XL',
-    'L',
-    'LX',
-    'LXX',
-    'LXXX',
-    'XC',
-    '',
-    'I',
-    'II',
-    'III',
-    'IV',
-    'V',
-    'VI',
-    'VII',
-    'VIII',
-    'IX',
-  ];
-  let roman = '';
-  let i = 3;
-  while (i--) {
-    const digit = digits.pop();
-    if (digit) {
-      roman = (key[Number(digit) + i * 10] || '') + roman;
-    }
-  }
-  return Array(+digits.join('') + 1).join('M') + roman;
-}
-
 export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
   return (
     node.childCount === 1 &&
@@ -307,3 +278,89 @@ export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
     node.firstChild.firstChild?.type === schema.nodes['placeholder']
   );
 }
+
+export const enhanceAttributesWithNumberAttributes = (attrs: Attrs) => {
+  const { startNumber, numberDisplayStyle, number, ...remainingAttrs } = attrs;
+
+  return {
+    ['data-number']: number ? `${number}` : null,
+    ['data-start-number']: startNumber ? `${startNumber}` : null,
+    ['data-number-display-style']: numberDisplayStyle as string,
+    number: number as string,
+    ...remainingAttrs,
+  };
+};
+
+const getNodeNumberAttrsFromElement = (element: Element) => {
+  const number = element.getAttribute('data-number');
+  const startNumber = element.getAttribute('data-start-number');
+  const numberDisplayStyle = element.getAttribute('data-number-display-style');
+
+  return {
+    numberDisplayStyle: numberDisplayStyle ?? 'decimal',
+    startNumber: startNumber ? parseInt(startNumber, 10) : null,
+    number: number ? parseInt(number, 10) : 1,
+  };
+};
+
+const maybeNumber = (number: string | number | null | undefined) => {
+  if (typeof number === 'string' && number.length > 0) {
+    return parseInt(number, 10);
+  }
+
+  if (typeof number === 'number') {
+    return number;
+  }
+
+  return null;
+};
+
+type NumberUtilsProps = {
+  // Offset for the position of the node where the starting number is stored.
+  // For structures with `structure_header` it will usually be +1,
+  // for `articleParagraph` it is 0.
+  offset?: number;
+  convertNumber?: (number: number) => string;
+};
+
+export const getNumberUtils = ({
+  offset = 0,
+  convertNumber = romanize,
+}: NumberUtilsProps): Pick<
+  StructureSpec,
+  | 'setStartNumber'
+  | 'getStartNumber'
+  | 'getNumber'
+  | 'setNumber'
+  | 'numberConfig'
+> => ({
+  numberConfig: {
+    convertNumber,
+  },
+  setNumber: ({ number, pos, transaction }) =>
+    transaction.setNodeAttribute(pos + offset, 'number', number),
+  getNumber: ({ pos, transaction }) => {
+    const node = unwrap(transaction.doc.nodeAt(pos + offset));
+
+    const number = maybeNumber(node.attrs.number);
+
+    if (number !== null) {
+      return number;
+    }
+
+    return null;
+  },
+  getStartNumber: ({ pos, transaction }) => {
+    const node = unwrap(transaction.doc.nodeAt(pos + offset));
+
+    const startNumber = maybeNumber(node.attrs.startNumber);
+
+    if (startNumber !== null) {
+      return startNumber;
+    }
+
+    return null;
+  },
+  setStartNumber: ({ number, pos, transaction }) =>
+    transaction.setNodeAttribute(pos + offset, 'startNumber', number),
+});

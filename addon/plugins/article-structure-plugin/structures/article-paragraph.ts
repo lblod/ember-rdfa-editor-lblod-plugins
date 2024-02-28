@@ -18,7 +18,10 @@ import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { constructStructureBodyNodeSpec } from '../utils/structure';
+import {
+  constructStructureBodyNodeSpec,
+  getNumberUtils,
+} from '../utils/structure';
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
@@ -98,9 +101,10 @@ export const articleParagraphSpec: StructureSpec = {
       newResource: subject,
     };
   },
-  updateNumber: {
+  ...getNumberUtils({
+    offset: 0,
     convertNumber: (number) => number.toString(),
-  },
+  }),
 };
 
 export const article_paragraph_body = constructStructureBodyNodeSpec({
@@ -142,7 +146,13 @@ export const article_paragraph: NodeSpec = {
       default: SAY('Paragraph').prefixed,
     },
     number: {
-      default: '1',
+      default: 1,
+    },
+    numberDisplayStyle: {
+      default: 'decimal',
+    },
+    startNumber: {
+      default: null,
     },
   },
   toDOM(node) {
