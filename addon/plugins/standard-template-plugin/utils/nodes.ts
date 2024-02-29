@@ -1,9 +1,4 @@
-import {
-  getRdfaAttrs,
-  NodeSpec,
-  rdfaAttrSpec,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaContentElement,
   hasRdfaContentChild,

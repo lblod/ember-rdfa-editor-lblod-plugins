@@ -26,7 +26,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { romanize, romanToInt } from './romanize';
+import { romanize } from './romanize';
 
 export function constructStructureNodeSpec(config: {
   type: Resource;
