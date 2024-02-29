@@ -16,6 +16,7 @@ import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 export type CodelistInsertOptions = {
   publisher?: string;
@@ -141,20 +142,9 @@ export default class CodelistInsertComponent extends Component<Args> {
     );
 
     this.label = undefined;
-
-    this.controller.withTransaction(
-      (tr) => {
-        tr.replaceSelectionWith(node);
-        if (tr.selection.$anchor.nodeBefore) {
-          const resolvedPos = tr.doc.resolve(
-            tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
-          );
-          tr.setSelection(new NodeSelection(resolvedPos));
-        }
-        return tr;
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 
   @action

@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 export type LocationInsertOptions = {
   endpoint: string;
@@ -63,19 +64,8 @@ export default class LocationInsertComponent extends Component<Args> {
     );
 
     this.label = undefined;
-
-    this.controller.withTransaction(
-      (tr) => {
-        tr.replaceSelectionWith(node);
-        if (tr.selection.$anchor.nodeBefore) {
-          const resolvedPos = tr.doc.resolve(
-            tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
-          );
-          tr.setSelection(new NodeSelection(resolvedPos));
-        }
-        return tr;
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

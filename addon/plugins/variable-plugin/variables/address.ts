@@ -351,6 +351,7 @@ const emberNodeConfig: EmberNodeConfig = {
   uriAttributes: ['variableInstance'],
   draggable: false,
   needsFFKludge: true,
+  selectable: true,
   attrs: {
     ...rdfaAttrSpec,
     value: {

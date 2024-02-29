@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import { v4 as uuidv4 } from 'uuid';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { service } from '@ember/service';
@@ -13,6 +13,7 @@ import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 type Args = {
   controller: SayController;
@@ -134,18 +135,8 @@ export default class NumberInsertComponent extends Component<Args> {
     this.minimumValue = '';
     this.maximumValue = '';
 
-    this.controller.withTransaction(
-      (tr) => {
-        tr.replaceSelectionWith(node);
-        if (tr.selection.$anchor.nodeBefore) {
-          const resolvedPos = tr.doc.resolve(
-            tr.selection.anchor - tr.selection.$anchor.nodeBefore?.nodeSize,
-          );
-          tr.setSelection(new NodeSelection(resolvedPos));
-        }
-        return tr;
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

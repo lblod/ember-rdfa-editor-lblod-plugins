@@ -79,6 +79,7 @@ const emberNodeConfig: EmberNodeConfig = {
   content: 'inline*',
   atom: true,
   recreateUri: true,
+  selectable: true,
   uriAttributes: ['variableInstance'],
   draggable: false,
   needsFFKludge: true,
