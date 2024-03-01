@@ -54,6 +54,14 @@ export default function recalculateStructureNumbers(
     structureSpecs.length,
   ).fill(null);
 
+  /**
+   * Recording all calls to `updateNumber` in an array to run them all
+   * _after_ we've run all the `setNumber` calls.
+   *
+   * This is necessary because `updateNumber` calls can change positions of the nodes
+   * in the document, and the calls to `setNumber` are dependent on the correct position
+   * before the change.
+   */
   const updateNumberCalls: UpdateNumberProps[] = [];
 
   doc.descendants((node, pos, parent) => {
