@@ -37,57 +37,6 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   @action
-  setStructureStartNumber() {
-    if (this.startNumber) {
-      this.controller.doCommand(
-        setStructureStartNumber(this.structureTypes, this.startNumber),
-      );
-
-      this.startNumber = null;
-    }
-  }
-
-  @action
-  resetStructureStartNumber() {
-    this.controller.doCommand(
-      setStructureStartNumber(this.structureTypes, null),
-    );
-
-    this.startNumber = null;
-  }
-
-  get structureNumber() {
-    if (this.structure && this.currentStructureType) {
-      return this.currentStructureType.getNumber({
-        pos: this.structure.pos,
-        transaction: this.controller.mainEditorState.tr,
-      });
-    }
-
-    return;
-  }
-
-  get structureStartNumber() {
-    if (this.structure && this.currentStructureType) {
-      return this.currentStructureType.getStartNumber({
-        pos: this.structure.pos,
-        transaction: this.controller.mainEditorState.tr,
-      });
-    }
-
-    return;
-  }
-
-  get startNumberInputValue() {
-    return this.startNumber ?? this.structureNumber ?? '';
-  }
-
-  onStartNumberChange = (event: InputEvent) => {
-    const target = event.target as HTMLInputElement;
-    this.startNumber = parseInt(target.value);
-  };
-
-  @action
   removeStructure(withContent: boolean) {
     if (this.structure && this.currentStructureType) {
       if (withContent || this.currentStructureType.noUnwrap) {
