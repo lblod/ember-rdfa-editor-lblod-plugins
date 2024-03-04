@@ -1,9 +1,4 @@
-import {
-  getRdfaAttrs,
-  NodeSpec,
-  rdfaAttrSpec,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaContentElement,
   hasRdfaContentChild,
@@ -26,6 +21,7 @@ import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { getNumberUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 
 export const besluit_title: NodeSpec = {
   content: 'paragraph+',
@@ -369,10 +365,9 @@ export const besluitArticleStructure: StructureSpec = {
       },
     };
   },
-  updateNumber: function ({ number, pos, transaction }): Transaction {
-    transaction.setNodeAttribute(pos + 1, 'number', number.toString());
-    return transaction;
-  },
+  ...getNumberUtils({
+    offset: 1,
+  }),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return unwrap(node.lastChild).content;

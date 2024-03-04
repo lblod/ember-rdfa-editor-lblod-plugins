@@ -5,6 +5,7 @@ import {
   moveSelectedStructure,
   removeStructure,
   unwrapStructure,
+  setStructureStartNumber,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { ArticleStructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
@@ -20,6 +21,7 @@ type Args = {
 export default class EditorPluginsStructureCardComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked removeStructureContent = false;
+  @tracked startNumber: number | null = null;
 
   get controller() {
     return this.args.controller;
@@ -62,6 +64,65 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   setRemoveStructureContent(value: boolean) {
     this.removeStructureContent = value;
   }
+
+  @action
+  setStructureStartNumber() {
+    if (this.startNumber && this.structure && this.currentStructureType) {
+      this.controller.doCommand(
+        setStructureStartNumber(
+          this.structure,
+          this.structureTypes,
+          this.startNumber,
+        ),
+        { view: this.controller.mainEditorView },
+      );
+
+      this.startNumber = null;
+    }
+  }
+
+  @action
+  resetStructureStartNumber() {
+    if (this.structure) {
+      this.controller.doCommand(
+        setStructureStartNumber(this.structure, this.structureTypes, null),
+        { view: this.controller.mainEditorView },
+      );
+
+      this.startNumber = null;
+    }
+  }
+
+  get structureNumber() {
+    if (this.structure && this.currentStructureType) {
+      return this.currentStructureType.getNumber({
+        pos: this.structure.pos,
+        transaction: this.controller.mainEditorState.tr,
+      });
+    }
+
+    return;
+  }
+
+  get structureStartNumber() {
+    if (this.structure && this.currentStructureType) {
+      return this.currentStructureType.getStartNumber({
+        pos: this.structure.pos,
+        transaction: this.controller.mainEditorState.tr,
+      });
+    }
+
+    return;
+  }
+
+  get startNumberInputValue() {
+    return this.startNumber ?? this.structureNumber ?? '';
+  }
+
+  onStartNumberChange = (event: InputEvent) => {
+    const target = event.target as HTMLInputElement;
+    this.startNumber = parseInt(target.value);
+  };
 
   get structureTypes() {
     return this.args.options;

@@ -2,7 +2,7 @@ import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
-  romanize,
+  getNumberUtils,
 } from '../utils/structure';
 import { constructStructureHeader } from './structure-header';
 import { v4 as uuid } from 'uuid';
@@ -15,6 +15,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
 
 const PLACEHOLDERS = {
   heading: 'article-structure-plugin.placeholder.generic.heading',
@@ -116,9 +117,10 @@ export const titleSpec: StructureSpec = {
       newResource: subject,
     };
   },
-  updateNumber: {
-    convertNumber: romanize,
-  },
+  ...getNumberUtils({
+    offset: 1,
+    convertNumber: (number) => number.toString(),
+  }),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;

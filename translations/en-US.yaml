@@ -22,6 +22,10 @@ article-structure-plugin:
     chapter: Move chapter down
     section: Move section down
     subsection: Move subsection down
+  start-number:
+    start-number: Start number
+    set: Set start number
+    reset: Reset
   title:
     structure-card: Structure Card
   remove:
