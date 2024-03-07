@@ -3,7 +3,7 @@ import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
-  romanize,
+  getNumberUtils,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
@@ -15,6 +15,7 @@ import {
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { constructStructureHeader } from './structure-header';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.chapter.heading',
@@ -79,6 +80,7 @@ export const chapterSpec: StructureSpec = {
         },
       ],
     };
+
     const node = schema.node(`chapter`, chapterAttrs, [
       constructStructureHeader({
         schema,
@@ -116,9 +118,7 @@ export const chapterSpec: StructureSpec = {
       newResource: chapterSubject,
     };
   },
-  updateNumber: {
-    convertNumber: romanize,
-  },
+  ...getNumberUtils({ offset: 1, convertNumber: romanize }),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;

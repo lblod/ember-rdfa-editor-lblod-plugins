@@ -4,6 +4,7 @@ import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
   constructStructureHeaderNodeSpec,
+  getNumberUtils,
 } from '../utils/structure';
 import { constructStructureHeader } from './structure-header';
 import { v4 as uuid } from 'uuid';
@@ -116,9 +117,10 @@ export const articleSpec: StructureSpec = {
       newResource: subject,
     };
   },
-  updateNumber: {
+  ...getNumberUtils({
+    offset: 1,
     convertNumber: (number) => number.toString(),
-  },
+  }),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
