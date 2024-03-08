@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
@@ -10,6 +10,7 @@ import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 type Args = {
   controller: SayController;
@@ -65,13 +66,8 @@ export default class DateInsertComponent extends Component<Args> {
       ],
       backlinks: [],
     });
-    console.log(node);
-
-    this.controller.withTransaction(
-      (tr: Transaction) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

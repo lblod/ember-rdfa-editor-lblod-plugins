@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   CodeList,
@@ -16,6 +16,7 @@ import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 export type CodelistInsertOptions = {
   publisher?: string;
@@ -141,13 +142,9 @@ export default class CodelistInsertComponent extends Component<Args> {
     );
 
     this.label = undefined;
-
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 
   @action
