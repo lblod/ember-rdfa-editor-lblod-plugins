@@ -42,6 +42,7 @@ import {
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 
+const rdfaAware = true;
 export class Address {
   declare id?: string;
   declare street: string;
@@ -229,7 +230,7 @@ const parseDOM: ParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
-      const attrs = getRdfaAttrs(node);
+      const attrs = getRdfaAttrs(node, {rdfaAware});
       if (!attrs) {
         return false;
       }

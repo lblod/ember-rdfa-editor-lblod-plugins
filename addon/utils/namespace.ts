@@ -1,4 +1,4 @@
-import { Attrs } from 'prosemirror-model';
+import { Attrs } from '@lblod/ember-rdfa-editor';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   isRdfaAttrs,

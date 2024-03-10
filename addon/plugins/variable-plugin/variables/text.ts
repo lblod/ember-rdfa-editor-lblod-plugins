@@ -30,11 +30,12 @@ import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
+const rdfaAware = true;
 const parseDOM = [
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
-      const attrs = getRdfaAttrs(node);
+      const attrs = getRdfaAttrs(node, { rdfaAware });
       if (!attrs) {
         return false;
       }

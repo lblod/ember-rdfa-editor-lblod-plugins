@@ -37,11 +37,12 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
+const rdfaAware = true;
 const parseDOM: ParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
-      const attrs = getRdfaAttrs(node);
+      const attrs = getRdfaAttrs(node, { rdfaAware });
       if (!attrs) {
         return false;
       }

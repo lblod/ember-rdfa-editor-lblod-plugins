@@ -16,12 +16,6 @@ import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
-declare module 'ember__owner' {
-  export default interface Owner {
-    resolveRegistration(name: string): unknown;
-  }
-}
-
 type Args = {
   controller: SayController;
   options: BesluitTypePluginOptions;

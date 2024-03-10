@@ -19,6 +19,7 @@ import {
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { constructStructureBodyNodeSpec } from '../utils/structure';
+const rdfaAware = true;
 
 export const articleParagraphSpec: StructureSpec = {
   name: 'article_paragraph',
@@ -163,7 +164,7 @@ export const article_paragraph: NodeSpec = {
       tag: 'div',
       context: 'article/article_body/',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasOutgoingNamedNodeTriple(
             rdfaAttrs,
@@ -184,7 +185,7 @@ export const article_paragraph: NodeSpec = {
       tag: 'div',
       context: 'article/article_body/',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), SAY('Paragraph'))
         ) {

@@ -19,26 +19,25 @@ import {
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
-  block_rdfa,
+  blockRdfaWithConfig,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
+  invisibleRdfaWithConfig,
   paragraph,
-  repaired_block,
+  repairedBlockWithConfig,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import {
-  bullet_list,
-  list_item,
-  ordered_list,
+  bulletListWithConfig,
+  listItemWithConfig,
+  orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 import {
   tableKeymap,
   tableNodes,
@@ -96,6 +95,7 @@ import {
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
+import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 
 export default class BesluitSampleController extends Controller {
   @service declare importRdfaSnippet: importRdfaSnippet;
@@ -165,11 +165,11 @@ export default class BesluitSampleController extends Controller {
         doc: docWithConfig(),
         paragraph,
 
-        repaired_block,
+        repaired_block: repairedBlockWithConfig(),
 
-        list_item,
-        ordered_list,
-        bullet_list,
+        list_item: listItemWithConfig(),
+        ordered_list: orderedListWithConfig(),
+        bullet_list: bulletListWithConfig(),
         placeholder,
         ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
         date: date(this.dateOptions),
@@ -180,7 +180,7 @@ export default class BesluitSampleController extends Controller {
         address,
         ...besluitNodes,
         roadsign_regulation,
-        heading,
+        heading: headingWithConfig(),
         blockquote,
 
         horizontal_rule,
@@ -191,8 +191,8 @@ export default class BesluitSampleController extends Controller {
         image,
 
         hard_break,
-        block_rdfa,
-        invisible_rdfa,
+        block_rdfa: blockRdfaWithConfig(),
+        invisible_rdfa: invisibleRdfaWithConfig(),
         link: link(this.config.link),
       },
       marks: {

@@ -27,6 +27,7 @@ import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
+const rdfaAware = true;
 export const besluit_title: NodeSpec = {
   content: 'paragraph+',
   inline: false,
@@ -60,7 +61,7 @@ export const besluit_title: NodeSpec = {
     {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, ELI('title')) &&
           hasRdfaContentChild(element)
@@ -76,7 +77,7 @@ export const besluit_title: NodeSpec = {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('title'))) {
-          const rdfaAttrs = getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           return {
             ...rdfaAttrs,
             subject: element.getAttribute('resource'),
@@ -119,7 +120,7 @@ export const description: NodeSpec = {
     {
       tag: 'div,p',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, ELI('description')) &&
           hasRdfaContentChild(element)
@@ -135,7 +136,7 @@ export const description: NodeSpec = {
       tag: 'div,p',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', ELI('description'))) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -173,7 +174,7 @@ export const motivering: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, BESLUIT('motivering')) &&
           hasRdfaContentChild(element)
@@ -189,7 +190,7 @@ export const motivering: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -228,7 +229,7 @@ export const article_container: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, PROV('value')) &&
           hasRdfaContentChild(element)
@@ -245,7 +246,7 @@ export const article_container: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -282,7 +283,7 @@ export const besluit_article: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, ELI('has_part')) &&
           hasOutgoingNamedNodeTriple(
@@ -306,7 +307,7 @@ export const besluit_article: NodeSpec = {
           hasRDFaAttribute(element, 'property', ELI('has_part')) &&
           hasRDFaAttribute(element, 'typeof', BESLUIT('Artikel'))
         ) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -419,7 +420,7 @@ export const besluit_article_header: NodeSpec = {
         );
         if (numberNode) {
           return {
-            ...getRdfaAttrs(numberNode as HTMLElement),
+            ...getRdfaAttrs(numberNode as HTMLElement, { rdfaAware }),
             number: numberNode.textContent,
           };
         }
@@ -456,12 +457,12 @@ export const besluit_article_content: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, PROV('value')) &&
           hasRdfaContentChild(element)
         ) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -473,7 +474,7 @@ export const besluit_article_content: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -512,7 +513,7 @@ export const besluit: NodeSpec = {
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, PROV('generated')) &&
           hasOutgoingNamedNodeTriple(
@@ -541,7 +542,7 @@ export const besluit: NodeSpec = {
         ) {
           return {
             typeof: element.getAttribute('typeof'),
-            ...getRdfaAttrs(element),
+            ...getRdfaAttrs(element, { rdfaAware }),
           };
         }
         return false;
@@ -579,12 +580,12 @@ export const language_node: NodeSpec = {
     {
       tag: 'span',
       getAttrs(element: HTMLElement) {
-        const rdfaAttrs = getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, ELI('language')) &&
           hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), SKOS('Concept'))
         ) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
@@ -597,7 +598,7 @@ export const language_node: NodeSpec = {
           hasRDFaAttribute(element, 'property', ELI('language')) &&
           hasRDFaAttribute(element, 'typeof', SKOS('Concept'))
         ) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },

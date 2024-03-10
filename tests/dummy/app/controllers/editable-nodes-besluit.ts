@@ -19,28 +19,36 @@ import {
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
+  blockRdfaWithConfig,
   block_rdfa,
   docWithConfig,
   hard_break,
   horizontal_rule,
   invisible_rdfa,
   paragraph,
+  repairedBlockWithConfig,
   repaired_block,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import {
+  bulletListWithConfig,
   bullet_list,
+  listItemWithConfig,
   list_item,
+  orderedListWithConfig,
   ordered_list,
 } from '@lblod/ember-rdfa-editor/plugins/list';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import {
+  heading,
+  headingWithConfig,
+} from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
 import {
-  inline_rdfa,
-  inlineRdfaView,
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
 } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import {
   tableKeymap,
@@ -179,13 +187,17 @@ export default class BesluitSampleController extends Controller {
         doc: docWithConfig(),
         paragraph,
 
-        repaired_block,
+        repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
-        list_item,
-        ordered_list,
-        bullet_list,
+        list_item: listItemWithConfig({ rdfaAware: true }),
+        ordered_list: orderedListWithConfig({ rdfaAware: true }),
+        bullet_list: bulletListWithConfig({ rdfaAware: true }),
         placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+        ...tableNodes({
+          tableGroup: 'block',
+          cellContent: 'block+',
+          rdfaAware: true,
+        }),
         date: date(this.dateOptions),
         text_variable,
         number,
@@ -194,7 +206,7 @@ export default class BesluitSampleController extends Controller {
         address,
         ...besluitNodes,
         roadsign_regulation,
-        heading,
+        heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
 
         horizontal_rule,
@@ -205,9 +217,8 @@ export default class BesluitSampleController extends Controller {
         image,
 
         hard_break,
-        block_rdfa,
-        inline_rdfa,
-        invisible_rdfa,
+        block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
+        inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
         link: link(this.config.link),
       },
       marks: {
@@ -285,6 +296,7 @@ export default class BesluitSampleController extends Controller {
       },
       link: {
         interactive: true,
+        rdfaAware: true,
       },
     };
   }
@@ -308,7 +320,7 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
       address: addressView(controller),
-      inline_rdfa: inlineRdfaView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
   @tracked plugins: Plugin[] = [

@@ -24,6 +24,7 @@ import {
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
+const rdfaAware = true;
 export function constructStructureNodeSpec(config: {
   type: Resource;
   content: string;
@@ -64,7 +65,7 @@ export function constructStructureNodeSpec(config: {
         tag: 'div',
         preserveWhitespace: false,
         getAttrs(element: HTMLElement) {
-          const rdfaAttrs = getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (
             hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type) &&
             hasRdfaContentChild(element)
@@ -80,7 +81,7 @@ export function constructStructureNodeSpec(config: {
         tag: 'div',
         preserveWhitespace: false,
         getAttrs(element: HTMLElement) {
-          const rdfaAttrs = getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type)) {
             return rdfaAttrs;
           }
@@ -105,7 +106,7 @@ export function constructStructureBodyNodeSpec(config: {
     editable: true,
     isolating: true,
     allowSplitByTable: config.allowSplitByTable,
-    attrs: rdfaAttrSpec,
+    attrs: rdfaAttrSpec({ rdfaAware }),
     toDOM(node) {
       return renderRdfaAware({
         renderable: node,
@@ -124,7 +125,7 @@ export function constructStructureBodyNodeSpec(config: {
         tag,
         context,
         getAttrs(element: HTMLElement) {
-          const rdfaAttrs = getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (
             hasBacklink(rdfaAttrs, SAY('body')) &&
             hasRdfaContentChild(element)
@@ -140,7 +141,7 @@ export function constructStructureBodyNodeSpec(config: {
         tag,
         context,
         getAttrs(element: HTMLElement) {
-          const rdfaAttrs = getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (hasBacklink(rdfaAttrs, SAY('body'))) {
             return rdfaAttrs;
           }
@@ -220,7 +221,7 @@ export function constructStructureHeaderNodeSpec({
         priority: 60,
         getAttrs(element: HTMLElement) {
           const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
-          const rdfaAttrs = getRdfaAttrs(element);
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (hasBacklink(rdfaAttrs, SAY('heading'))) {
             const titleChild = element.querySelector(`
               span[property~='${EXT('title').prefixed}'],
