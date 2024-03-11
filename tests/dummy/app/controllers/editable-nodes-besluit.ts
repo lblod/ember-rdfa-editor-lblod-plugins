@@ -175,7 +175,7 @@ export default class BesluitSampleController extends Controller {
   get schema() {
     return new Schema({
       nodes: {
-        doc: docWithConfig(),
+        doc: docWithConfig({ rdfaAware: true }),
         paragraph,
 
         repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
