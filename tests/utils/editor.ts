@@ -5,6 +5,7 @@ import {
   docWithConfig,
   hard_break,
   horizontal_rule,
+  invisibleRdfaWithConfig,
   paragraph,
   repairedBlockWithConfig,
   text,
@@ -125,7 +126,7 @@ export const SAMPLE_SCHEMA = new Schema({
           )[0] as HTMLElement,
       },
     ]),
-    invisible_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
+    invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
     link: link({ interactive: true }),
   },
   marks: {
