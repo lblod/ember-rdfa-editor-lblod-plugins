@@ -230,7 +230,7 @@ const parseDOM: ParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
-      const attrs = getRdfaAttrs(node, {rdfaAware});
+      const attrs = getRdfaAttrs(node, { rdfaAware });
       if (!attrs) {
         return false;
       }

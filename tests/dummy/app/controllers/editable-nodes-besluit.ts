@@ -20,29 +20,20 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
   blockRdfaWithConfig,
-  block_rdfa,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
   paragraph,
   repairedBlockWithConfig,
-  repaired_block,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import {
   bulletListWithConfig,
-  bullet_list,
   listItemWithConfig,
-  list_item,
   orderedListWithConfig,
-  ordered_list,
 } from '@lblod/ember-rdfa-editor/plugins/list';
-import {
-  heading,
-  headingWithConfig,
-} from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
