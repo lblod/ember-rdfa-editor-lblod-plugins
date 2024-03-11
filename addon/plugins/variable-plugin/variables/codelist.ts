@@ -168,7 +168,7 @@ const emberNodeConfig: EmberNodeConfig = {
   draggable: false,
   needsFFKludge: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     selectionStyle: {
       default: null,
     },

@@ -131,7 +131,7 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM,
   parseDOM,

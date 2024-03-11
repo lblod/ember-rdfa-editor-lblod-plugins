@@ -39,7 +39,7 @@ export function constructStructureNodeSpec(config: {
     editable: true,
     isolating: true,
     attrs: {
-      ...rdfaAttrSpec,
+      ...rdfaAttrSpec({ rdfaAware }),
       rdfaNodeType: {
         default: 'resource',
       },
@@ -182,7 +182,7 @@ export function constructStructureHeaderNodeSpec({
     selectable: false,
     allowSplitByTable: false,
     attrs: {
-      ...rdfaAttrSpec,
+      ...rdfaAttrSpec({ rdfaAware }),
       property: {
         default: SAY('heading').prefixed,
       },

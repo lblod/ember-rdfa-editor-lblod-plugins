@@ -1,9 +1,4 @@
-import {
-  NodeSpec,
-  getRdfaAttrs,
-  rdfaAttrSpec,
-  rdfaAttrs,
-} from '@lblod/ember-rdfa-editor';
+import { NodeSpec, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 

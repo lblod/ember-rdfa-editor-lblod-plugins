@@ -177,7 +177,7 @@ const emberNodeConfig: EmberNodeConfig = {
   draggable: false,
   needsFFKludge: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     writtenNumber: { default: false },
     minimumValue: { default: null },
     maximumValue: { default: null },

@@ -36,7 +36,7 @@ export const besluit_title: NodeSpec = {
   ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     property: {
       default: 'eli:title',
     },
@@ -97,7 +97,7 @@ export const description: NodeSpec = {
   ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     property: {
       default: 'eli:description',
     },
@@ -151,7 +151,7 @@ export const motivering: NodeSpec = {
   ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     property: {
       default: 'besluit:motivering',
     },
@@ -206,7 +206,7 @@ export const article_container: NodeSpec = {
   ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     property: {
       default: 'prov:value',
     },
@@ -262,7 +262,7 @@ export const besluit_article: NodeSpec = {
   ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     typeof: {
       default: BESLUIT('Artikel').prefixed,
     },
@@ -387,7 +387,7 @@ export const besluit_article_header: NodeSpec = {
   isLeaf: true,
   ...sharedRdfaNodeSpec,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     number: {
       default: '1',
     },
@@ -437,7 +437,7 @@ export const besluit_article_content: NodeSpec = {
   ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     datatype: {
       default: 'xsd:string',
     },
@@ -492,7 +492,7 @@ export const besluit: NodeSpec = {
   editable: true,
   canSplit: false,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     typeof: {
       default: 'besluit:Besluit ext:BesluitNieuweStijl',
     },
@@ -559,7 +559,7 @@ export const language_node: NodeSpec = {
   inline: false,
   atom: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     style: {
       default: 'style="display:none;"',
     },

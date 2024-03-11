@@ -138,7 +138,7 @@ export const article_paragraph: NodeSpec = {
   editable: true,
   defining: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     typeof: {
       default: SAY('Paragraph').prefixed,
     },
