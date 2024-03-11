@@ -68,10 +68,13 @@
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <SnippetPlugin::SnippetInsert
-                @controller={{this.controller}}
-                @config={{this.config.snippet}}
-              />
+              {{#if this.activeNode}}
+                <this.SnippetInsert
+                  @controller={{this.controller}}
+                  @config={{this.config.snippet}}
+                  @node={{this.activeNode}}
+                />
+              {{/if}}
               <TemplateCommentsPlugin::Insert
                 @controller={{this.controller}}
               />
@@ -93,11 +96,6 @@
               @controller={{this.controller}}
             />
             <AuHr/>
-            <SnippetPlugin::SnippetListSelect
-              @config={{this.config.snippet}}
-              @assignedSnippetListsIds={{this.config.assignedSnippetListsIds}}
-            />
-            <AuHr/>
             <Plugins::Link::LinkEditor @controller={{this.controller}} />
             {{#if this.activeNode}}
               <this.RdfaEditor
@@ -108,6 +106,11 @@
               <this.AttributeEditor
                 @node={{this.activeNode}}
                 @controller={{this.controller}}
+              />
+              <this.SnippetListSelect
+                @node={{this.activeNode}}
+                @controller={{this.controller}}
+                @config={{this.config.snippet}}
               />
             {{/if}}
           </Sidebar>

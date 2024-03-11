@@ -176,6 +176,7 @@ const emberNodeConfig: EmberNodeConfig = {
   editable: true,
   draggable: false,
   needsFFKludge: true,
+  selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
     writtenNumber: { default: false },

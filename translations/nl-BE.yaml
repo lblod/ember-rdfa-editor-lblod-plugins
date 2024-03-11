@@ -22,6 +22,10 @@ article-structure-plugin:
     section: Afdeling naar beneden verplaatsen
     subsection: Onderafdeling naar beneden verplaatsen
     default: Structuur naar beneden verplaatsen
+  start-number:
+    start-number: Startnummer
+    set: Startnummer instellen
+    reset: Resetten
   title:
     structure-card: Structuur card
   remove:
@@ -290,14 +294,13 @@ snippet-plugin:
         list: Lijst
 
 template-comments-plugin:
-  long-title: Toelichtings- of voorbeeldbepaling
+  title: Toelichting
   insert:
-    title: Toelichtings- of voorbeeldbepaling invoegen
+    title: Toelichting invoegen
   edit:
-    remove: Verwijder Toelichtings- of voorbeeldbepaling
-    move-down: Toelichtings- of voorbeeldbepaling naar onder
-    move-up: Toelichtings- of voorbeeldbepaling naar boven
-  heading: toelichtingsbepaling
+    remove: Verwijder toelichting
+    move-down: Toelichting naar onder verplaatsen
+    move-up: Toelichting naar boven verplaatsen
 
 pagination:
   next: Volgende pagina

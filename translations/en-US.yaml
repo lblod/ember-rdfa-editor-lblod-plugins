@@ -22,6 +22,10 @@ article-structure-plugin:
     chapter: Move chapter down
     section: Move section down
     subsection: Move subsection down
+  start-number:
+    start-number: Start number
+    set: Set start number
+    reset: Reset
   title:
     structure-card: Structure Card
   remove:
@@ -286,14 +290,13 @@ snippet-plugin:
         list: List
 
 template-comments-plugin:
-  long-title: Template comment or example
+  title: Template comment
   insert:
-    title: Add template comment or example
+    title: Add template comment
   edit:
-    remove: Remove template comment or example
-    move-up: Move comment up
-    move-down: Move comment down
-  heading: comment or example
+    remove: Remove template comment
+    move-up: Move template comment up
+    move-down: Move template comment down
 
 pagination:
   next: Next page

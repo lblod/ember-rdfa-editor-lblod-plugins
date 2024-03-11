@@ -1,5 +1,23 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 16.1.0
+
+### Minor Changes
+
+- [#377](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/377) [`c383236`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c38323626745e55671bcbc2afc01d91b17911dd3) Thanks [@elpoelma](https://github.com/elpoelma)! - - Addition of the `say-template-comment` class to the static version of template comments.
+
+  - Addition of some extra styles to the `say-template-comment` class.
+
+- [#378](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/378) [`7b53e51`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7b53e514aac79286267da1f7f32b7179fea3fb7d) Thanks [@elpoelma](https://github.com/elpoelma)! - Add helper function to help with locale selection and add translation note to readme
+
+- [#376](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/376) [`301b4b3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/301b4b3a9288ce53f7be4117e95526bf73be1534) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4650: Allows to set a "start number" for a structure.
+
+### Patch Changes
+
+- [#377](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/377) [`c383236`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c38323626745e55671bcbc2afc01d91b17911dd3) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove `@import "ember-appuniversum"` statements from plugin sass modules in order to prevent style overrding.
+
+- [`4ddf16c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4ddf16c91959d77fda1cd7b033f7ca18d2857b70) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix template-comment padding
+
 ## 16.0.1
 
 ### Patch Changes

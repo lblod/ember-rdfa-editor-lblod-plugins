@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import type { SayController } from '@lblod/ember-rdfa-editor';
+import { type SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
@@ -11,6 +11,7 @@ import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 type Args = {
   controller: SayController;
@@ -81,11 +82,8 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
     this.label = undefined;
 
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

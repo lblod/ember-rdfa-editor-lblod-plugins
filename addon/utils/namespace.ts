@@ -1,4 +1,3 @@
-import { Attrs } from '@lblod/ember-rdfa-editor';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   isRdfaAttrs,
@@ -10,6 +9,7 @@ import {
   type SayNamedNode,
 } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { Option } from './option';
+import { Attrs } from '@lblod/ember-rdfa-editor';
 
 export class Resource {
   full: string;

@@ -16,7 +16,7 @@ export default class TemplateCommentsPluginTemplateCommentComponent extends Comp
 
   get translation() {
     return {
-      title: this.intl.t('template-comments-plugin.long-title', {
+      title: this.intl.t('template-comments-plugin.title', {
         locale: this.documentLanguage,
       }),
     };
