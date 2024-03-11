@@ -17,14 +17,11 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
   blockRdfaWithConfig,
-  block_rdfa,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
   paragraph,
   repairedBlockWithConfig,
-  repaired_block,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
@@ -36,17 +33,11 @@ import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import {
   bulletListWithConfig,
-  bullet_list,
   listItemWithConfig,
-  list_item,
   orderedListWithConfig,
-  ordered_list,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import {
-  heading,
-  headingWithConfig,
-} from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
@@ -109,8 +100,6 @@ import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-edit
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 import { sharedRdfaNodeSpec } from '@lblod/ember-rdfa-editor/core/schema';
 
-const SNIPPET_LISTS_IDS_DOCUMENT_ATTRIBUTE = 'data-snippet-list-ids';
-
 export default class RegulatoryStatementSampleController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -134,9 +123,6 @@ export default class RegulatoryStatementSampleController extends Controller {
         ...docWithConfig({
           content:
             'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
-          extraAttributes: {
-            [SNIPPET_LISTS_IDS_DOCUMENT_ATTRIBUTE]: { default: null },
-          },
           rdfaAware: true,
         }),
         ...sharedRdfaNodeSpec,
