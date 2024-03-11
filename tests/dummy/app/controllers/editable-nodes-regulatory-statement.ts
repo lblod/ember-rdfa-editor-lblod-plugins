@@ -270,6 +270,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       } as CitationPluginConfig,
       link: {
         interactive: true,
+        rdfaAware: true,
       },
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',

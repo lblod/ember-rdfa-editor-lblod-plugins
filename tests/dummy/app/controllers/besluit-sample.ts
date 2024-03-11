@@ -271,6 +271,7 @@ export default class BesluitSampleController extends Controller {
       },
       link: {
         interactive: true,
+        rdfaAware: true,
       },
     };
   }
