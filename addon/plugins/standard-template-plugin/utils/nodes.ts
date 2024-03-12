@@ -324,7 +324,6 @@ export const besluitArticleStructure: StructureSpec = {
   limitTo: 'besluit',
   constructor: ({ schema, number, content, intl, state }) => {
     const translationWithDocLang = getTranslationFunction(state);
-    const numberConverted = number?.toString() ?? '1';
     const articleRdfaId = uuid();
     const subject = `http://data.lblod.info/articles/${articleRdfaId}`;
     const node = schema.node(
@@ -335,7 +334,7 @@ export const besluitArticleStructure: StructureSpec = {
       },
       [
         schema.node('besluit_article_header', {
-          number: numberConverted,
+          number: number ?? 1,
         }),
         schema.node(
           `besluit_article_content`,
@@ -384,7 +383,7 @@ export const besluit_article_header: NodeSpec = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
     number: {
-      default: '1',
+      default: 1,
     },
   },
   toDOM(node) {
@@ -400,7 +399,7 @@ export const besluit_article_header: NodeSpec = {
           ...attrs,
           class: 'say-inline-rdfa',
         },
-        content: (number as string) ?? '1',
+        content: (number as number).toString() ?? '1',
       }),
     ];
   },
@@ -414,9 +413,12 @@ export const besluit_article_header: NodeSpec = {
            span[property~='${ELI('number').full}']`,
         );
         if (numberNode) {
+          const number = numberNode.textContent
+            ? parseInt(numberNode.textContent, 10)
+            : 1;
           return {
             ...getRdfaAttrs(numberNode as HTMLElement, { rdfaAware }),
-            number: numberNode.textContent,
+            number,
           };
         }
         return false;
