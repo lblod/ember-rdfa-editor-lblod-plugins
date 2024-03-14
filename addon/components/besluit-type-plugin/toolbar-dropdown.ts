@@ -5,7 +5,6 @@ import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
-import { getRdfaAttribute } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
@@ -77,7 +76,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   get currentBesluitURI() {
     if (this.currentBesluitRange) {
       const node = unwrap(this.doc.nodeAt(this.currentBesluitRange.from));
-      return getRdfaAttribute(node, 'resource').pop();
+      return node.attrs['subject'] as string | undefined;
     }
     return;
   }
@@ -204,7 +203,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     const resource =
       (this.currentBesluitRange &&
         'node' in this.currentBesluitRange &&
-        (this.currentBesluitRange.node.attrs.resource as string)) ||
+        (this.currentBesluitRange.node.attrs.subject as string)) ||
       undefined;
     if (this.besluitType && resource) {
       this.cardExpanded = false;
@@ -213,7 +212,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
           removeProperty({
             resource,
             property: {
-              predicate: RDF('type').prefixed,
+              predicate: RDF('type').full,
               object: sayDataFactory.namedNode(this.previousBesluitType),
             },
           }),
@@ -224,7 +223,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
         addProperty({
           resource,
           property: {
-            predicate: RDF('type').prefixed,
+            predicate: RDF('type').full,
             object: sayDataFactory.namedNode(this.besluitType.uri),
           },
         }),
