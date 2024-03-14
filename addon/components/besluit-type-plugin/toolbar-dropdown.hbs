@@ -10,12 +10,17 @@
         @iconAlignment='left'
         class='au-c-pill--link besluit-toolbar-pill'
         {{on 'click' this.toggleCard}}
+        title={{t 'besluit-type-plugin.insert-dt'}}
       >
         {{t 'besluit-type-plugin.error-short'}}
       </AuPill>
     {{else}}
       {{#if this.besluit.label}}
-        <AuPill @skin='link' {{on 'click' this.toggleCard}}>
+        <AuPill
+          @skin='link'
+          {{on 'click' this.toggleCard}}
+          title={{t 'besluit-type-plugin.insert-dt'}}
+        >
           {{t 'besluit-type-plugin.dt'}}:
           {{this.besluit.label}}
         </AuPill>
@@ -25,6 +30,7 @@
           @iconAlignment='left'
           @skin='link'
           {{on 'click' this.toggleCard}}
+          title={{t 'besluit-type-plugin.insert-dt'}}
         >
           {{t 'besluit-type-plugin.insert-dt'}}
         </AuPill>
