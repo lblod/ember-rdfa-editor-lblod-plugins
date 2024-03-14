@@ -1,4 +1,4 @@
-import { getRdfaAttrs, NodeSpec, rdfaAttrs } from '@lblod/ember-rdfa-editor';
+import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   DCT,
   EXT,
@@ -10,11 +10,12 @@ import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/n
 const CONTENT_SELECTOR = `div[property~='${
   DCT('description').full
 }'],div[property~='${DCT('description').prefixed}']`;
+const rdfaAware = false;
 export const roadsign_regulation: NodeSpec = {
   content: 'block+',
   group: 'block',
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec({ rdfaAware }),
     resourceUri: {},
     measureUri: {},
     zonality: {},
@@ -96,7 +97,7 @@ export const roadsign_regulation: NodeSpec = {
             measureUri,
             zonality,
             temporal,
-            ...getRdfaAttrs(node),
+            ...getRdfaAttrs(node, { rdfaAware }),
           };
         }
         return false;

@@ -9,8 +9,9 @@ import {
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
+const rdfaAware = true;
 export const structure_header_number: NodeSpec = {
-  attrs: rdfaAttrSpec,
+  attrs: rdfaAttrSpec({ rdfaAware }),
   content: 'text*',
   inline: true,
   editable: true,
@@ -30,7 +31,7 @@ export const structure_header_number: NodeSpec = {
     {
       tag: 'span',
       getAttrs(node: HTMLElement) {
-        const attrs = getRdfaAttrs(node);
+        const attrs = getRdfaAttrs(node, { rdfaAware });
         if (hasBacklink(attrs, ELI('number'))) {
           return attrs;
         }

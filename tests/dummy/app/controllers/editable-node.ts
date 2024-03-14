@@ -15,12 +15,12 @@ import {
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
-  block_rdfa,
+  blockRdfaWithConfig,
   docWithConfig,
   hard_break,
   horizontal_rule,
   paragraph,
-  repaired_block,
+  repairedBlockWithConfig,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { code } from '@lblod/ember-rdfa-editor/plugins/code/marks/code';
@@ -31,18 +31,14 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { image, imageView } from '@lblod/ember-rdfa-editor/plugins/image';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import {
-  bullet_list,
-  list_item,
-  ordered_list,
+  bulletListWithConfig,
+  listItemWithConfig,
+  orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import {
-  inline_rdfa,
-  inlineRdfaView,
-} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import SayController from '@lblod/ember-rdfa-editor/core/say-controller';
 import {
   link,
@@ -101,6 +97,10 @@ import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
 import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
+import {
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
@@ -116,17 +116,18 @@ export default class EditableBlockController extends Controller {
       doc: docWithConfig({
         content: '((block|chapter)+|(block|title)+|(block|article)+)',
         defaultLanguage: 'nl-BE',
+        rdfaAware: true,
       }),
       paragraph,
 
-      repaired_block,
+      repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
-      list_item,
-      ordered_list,
-      bullet_list,
+      list_item: listItemWithConfig({ rdfaAware: true }),
+      ordered_list: orderedListWithConfig({ rdfaAware: true }),
+      bullet_list: bulletListWithConfig({ rdfaAware: true }),
       placeholder,
       ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
-      heading,
+      heading: headingWithConfig({ rdfaAware: true }),
       blockquote,
       text_variable,
       number,
@@ -143,8 +144,8 @@ export default class EditableBlockController extends Controller {
       image,
 
       hard_break,
-      block_rdfa,
-      inline_rdfa,
+      block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
+      inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.linkOptions),
       ...STRUCTURE_NODES,
     },
@@ -164,6 +165,7 @@ export default class EditableBlockController extends Controller {
   get linkOptions() {
     return {
       interactive: true,
+      rdfaAware: true,
     };
   }
   get codelistOptions() {
@@ -261,7 +263,7 @@ export default class EditableBlockController extends Controller {
     return {
       link: linkView(this.linkOptions)(controller),
       image: imageView(controller),
-      inline_rdfa: inlineRdfaView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       number: numberView(controller),
       text_variable: textVariableView(controller),
       date: dateView(this.dateOptions)(controller),
