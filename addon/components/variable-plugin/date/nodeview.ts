@@ -13,6 +13,8 @@ import {
   formatDate,
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
   getPos: () => number | undefined;
@@ -48,7 +50,8 @@ export default class DateNodeviewComponent extends Component<Args> {
   }
 
   get humanReadableDate() {
-    const value = this.args.node.attrs.value as string;
+    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
+      ?.object.value;
     const format = this.args.node.attrs.format as string;
     if (value) {
       if (validateDateFormat(format).type === 'ok') {
@@ -65,5 +68,9 @@ export default class DateNodeviewComponent extends Component<Args> {
             locale: this.documentLanguage,
           });
     }
+  }
+
+  get label() {
+    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }

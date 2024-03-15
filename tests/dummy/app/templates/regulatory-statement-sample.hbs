@@ -1,5 +1,5 @@
 {{!-- template-lint-disable no-bare-strings  --}}
-{{page-title "Dummy - Regulatory Statements"}}
+{{page-title "LBLOD Plugins - Regulatory Statements"}}
 <div {{did-insert this.setPrefixes}}>
   <DummyContainer>
     <:header>
@@ -8,10 +8,10 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa='true'
-          showRdfaHighlight='true'
-          showRdfaHover='true'
-          showPaper='true'
+          showRdfa=true
+          showRdfaHighlight=true
+          showRdfaHover=true
+          showPaper=true
           showToolbarBottom=null
         }}
         @showRdfaBlocks={{this.controller.showRdfaBlocks}}

@@ -1,12 +1,14 @@
-FROM madnificent/ember:4.12.1-node_18 as builder
+FROM node:20-slim AS builder
 
 LABEL maintainer="info@redpencil.io"
 
+RUN corepack enable
+RUN corepack prepare pnpm@latest-8 --activate
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm i --frozen-lockfile
 COPY . .
-RUN ember build -prod
+RUN pnpm build
 
 FROM semtech/static-file-service:0.2.0
 COPY --from=builder /app/dist /data

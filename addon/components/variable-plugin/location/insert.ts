@@ -5,6 +5,7 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 export type LocationInsertOptions = {
   endpoint: string;
@@ -63,12 +64,8 @@ export default class LocationInsertComponent extends Component<Args> {
     );
 
     this.label = undefined;
-
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

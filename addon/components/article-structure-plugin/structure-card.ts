@@ -37,10 +37,44 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   @action
+  removeStructure(withContent: boolean) {
+    if (this.structure && this.currentStructureType) {
+      if (withContent || this.currentStructureType.noUnwrap) {
+        this.controller.doCommand(
+          removeStructure(this.structure, this.structureTypes),
+          { view: this.controller.mainEditorView },
+        );
+      } else {
+        this.controller.doCommand(
+          unwrapStructure(
+            {
+              ...this.structure,
+              type: this.currentStructureType,
+            },
+            this.structureTypes,
+          ),
+          { view: this.controller.mainEditorView },
+        );
+      }
+    }
+    this.controller.focus();
+  }
+
+  @action
+  setRemoveStructureContent(value: boolean) {
+    this.removeStructureContent = value;
+  }
+
+  @action
   setStructureStartNumber() {
-    if (this.startNumber) {
+    if (this.startNumber && this.structure && this.currentStructureType) {
       this.controller.doCommand(
-        setStructureStartNumber(this.structureTypes, this.startNumber),
+        setStructureStartNumber(
+          this.structure,
+          this.structureTypes,
+          this.startNumber,
+        ),
+        { view: this.controller.mainEditorView },
       );
 
       this.startNumber = null;
@@ -49,11 +83,14 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
 
   @action
   resetStructureStartNumber() {
-    this.controller.doCommand(
-      setStructureStartNumber(this.structureTypes, null),
-    );
+    if (this.structure) {
+      this.controller.doCommand(
+        setStructureStartNumber(this.structure, this.structureTypes, null),
+        { view: this.controller.mainEditorView },
+      );
 
-    this.startNumber = null;
+      this.startNumber = null;
+    }
   }
 
   get structureNumber() {
@@ -86,35 +123,6 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
     const target = event.target as HTMLInputElement;
     this.startNumber = parseInt(target.value);
   };
-
-  @action
-  removeStructure(withContent: boolean) {
-    if (this.structure && this.currentStructureType) {
-      if (withContent || this.currentStructureType.noUnwrap) {
-        this.controller.doCommand(
-          removeStructure(this.structure, this.structureTypes),
-          { view: this.controller.mainEditorView },
-        );
-      } else {
-        this.controller.doCommand(
-          unwrapStructure(
-            {
-              ...this.structure,
-              type: this.currentStructureType,
-            },
-            this.structureTypes,
-          ),
-          { view: this.controller.mainEditorView },
-        );
-      }
-    }
-    this.controller.focus();
-  }
-
-  @action
-  setRemoveStructureContent(value: boolean) {
-    this.removeStructureContent = value;
-  }
 
   get structureTypes() {
     return this.args.options;

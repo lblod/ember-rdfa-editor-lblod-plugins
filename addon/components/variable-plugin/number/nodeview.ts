@@ -10,9 +10,13 @@ import { service } from '@ember/service';
 import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
 import { isBlank } from '@ember/utils';
+import { Velcro } from 'ember-velcro';
+import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
-import { Velcro } from 'ember-velcro';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
   getPos: () => number | undefined;
@@ -27,7 +31,7 @@ type Args = {
 export default class NumberNodeviewComponent extends Component<Args> {
   Velcro = Velcro;
 
-  @localCopy('args.node.attrs.value', '') declare inputNumber: string;
+  @localCopy('number', '') declare inputNumber: string;
   @localCopy('args.node.attrs.writtenNumber', false)
   declare writtenNumber: boolean;
   @service declare intl: intlService;
@@ -57,9 +61,12 @@ export default class NumberNodeviewComponent extends Component<Args> {
     return this.args.node;
   }
 
-  get formattedNumber() {
-    const value = this.node.attrs.value as string;
+  get number(): string | null | undefined {
+    return getOutgoingTriple(this.node.attrs, EXT('content'))?.object.value;
+  }
 
+  get formattedNumber() {
+    const value = this.number;
     if (!isNumber(value)) {
       return value;
     }
@@ -80,6 +87,10 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
   get maxValue() {
     return this.node.attrs.maximumValue as number;
+  }
+
+  get label(): string | undefined {
+    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 
   @action onInputNumberChange(event: InputEvent) {
@@ -125,7 +136,21 @@ export default class NumberNodeviewComponent extends Component<Args> {
   @action
   validateAndSave() {
     if (!this.errorMessage) {
-      this.args.updateAttribute('value', this.inputNumber);
+      const attrs = this.node.attrs;
+      const properties =
+        isRdfaAttrs(attrs) && attrs.rdfaNodeType === 'resource'
+          ? attrs.properties
+          : [];
+      const newProperties = properties.filter((prop) => {
+        return !EXT('content').matches(prop.predicate);
+      });
+      if (this.inputNumber) {
+        newProperties.push({
+          predicate: EXT('content').full,
+          object: sayDataFactory.literal(this.inputNumber),
+        });
+      }
+      this.args.updateAttribute('properties', newProperties);
     }
   }
 }

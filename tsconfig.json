@@ -22,9 +22,6 @@
     "baseUrl": ".",
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
     "paths": {
       "dummy/tests/*": [
         "tests/*"

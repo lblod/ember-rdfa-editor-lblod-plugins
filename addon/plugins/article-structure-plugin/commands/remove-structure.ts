@@ -11,7 +11,7 @@ const removeStructure = (
       const { pos, node } = structure;
       const transaction = state.tr;
       transaction.replace(pos, pos + node.nodeSize);
-      recalculateStructureNumbers(transaction, ...options);
+      recalculateStructureNumbers(transaction, state.schema, ...options);
       dispatch(transaction);
     }
     return true;

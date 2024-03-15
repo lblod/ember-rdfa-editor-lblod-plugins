@@ -30,7 +30,7 @@ const unwrapStructure = (
     if (dispatch) {
       const transaction = state.tr;
       transaction.replaceWith(pos, pos + node.nodeSize, contentToUnwrap);
-      recalculateStructureNumbers(transaction, ...options);
+      recalculateStructureNumbers(transaction, state.schema, ...options);
       dispatch(transaction);
     }
     return true;

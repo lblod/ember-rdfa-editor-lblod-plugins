@@ -11,6 +11,7 @@ import {
 import TableOfContentsComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/table-of-contents-plugin/ember-nodes/table-of-contents';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const emberNodeConfig: (
   config: TableOfContentsConfig,
@@ -31,10 +32,10 @@ export const emberNodeConfig: (
 
       const { config } = node.attrs;
       const entries = extractOutline({
-        node: state.doc,
+        node: unwrap(state).doc,
         pos: -1,
         config: config as TableOfContentsConfig,
-        state,
+        state: unwrap(state),
       });
 
       const title = t('table-of-contents-plugin.title', 'Inhoudstafel');

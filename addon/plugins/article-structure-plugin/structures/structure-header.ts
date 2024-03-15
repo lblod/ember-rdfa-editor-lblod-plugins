@@ -1,87 +1,101 @@
-import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { NodeSpec, PNode, RdfaAttrs, Schema } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
+  ELI,
   EXT,
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  getNumberDocSpecFromNode,
-  getNumberAttributesFromNode,
-  getStructureHeaderAttrs,
+  constructStructureHeaderNodeSpec,
+  StructureHeaderType,
 } from '../utils/structure';
 
-const TAG_TO_LEVEL = new Map([
-  ['h1', 1],
-  ['h2', 2],
-  ['h3', 3],
-  ['h4', 4],
-  ['h5', 5],
-  ['h6', 6],
-]);
-
-export const structure_header: NodeSpec = {
-  content: 'text*|placeholder',
-  inline: false,
-  defining: true,
-  isolating: true,
-  selectable: false,
-  allowSplitByTable: false,
-  attrs: {
-    property: {
-      default: SAY('heading').prefixed,
-    },
-    number: {
-      default: 1,
-    },
-    numberDisplayStyle: {
-      default: 'decimal', // decimal, roman
-    },
-    startNumber: {
-      default: null,
-    },
-    level: {
-      default: 1,
-    },
-  },
+export const structure_header: NodeSpec = constructStructureHeaderNodeSpec({
+  type: 'structure_header',
+  includeLevel: true,
   outlineText: (node: PNode) => {
     const { number } = node.attrs;
     return `${number as string}. ${node.textContent}`;
   },
-  toDOM(node) {
-    return [
-      `h${node.attrs.level as number}`,
-      {
-        property: node.attrs.property as string,
-        ...getNumberAttributesFromNode(node),
-      },
-      getNumberDocSpecFromNode(node),
-      ['span', { contenteditable: false }, '. '],
-      [
-        'span',
-        {
-          property: EXT('title').prefixed,
-        },
-        0,
-      ],
-    ];
+});
+
+const headerNodes = (
+  schema: Schema,
+): Record<
+  StructureHeaderType,
+  { beforeNumberNodes?: PNode[]; afterNumberNodes: PNode[] }
+> => ({
+  structure_header: { afterNumberNodes: [schema.text('. ')] },
+  article_header: {
+    beforeNumberNodes: [schema.text('Artikel ')],
+    afterNumberNodes: [schema.text(': ')],
   },
-  parseDOM: [
-    {
-      tag: 'h1,h2,h3,h4,h5,h6,span',
-      getAttrs(element: HTMLElement) {
-        const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
-        const headerAttrs = getStructureHeaderAttrs(element);
+});
 
-        if (headerAttrs) {
-          return {
-            level,
-            ...headerAttrs,
-          };
-        }
-
-        return false;
-      },
-      contentElement: `span[property~='${EXT('title').prefixed}'],
-                       span[property~='${EXT('title').full}']`,
-    },
-  ],
+type ConstructArgs = {
+  schema: Schema;
+  backlinkResource: string;
+  titleRdfaId: string;
+  titleText: string;
+  headingRdfaId: string;
+  headingProperty?: string;
+  numberRdfaId: string;
+  number: string;
+  level?: number;
+  headerType?: StructureHeaderType;
 };
+export function constructStructureHeader({
+  schema,
+  backlinkResource,
+  titleRdfaId,
+  titleText,
+  headingRdfaId,
+  headingProperty = SAY('heading').prefixed,
+  numberRdfaId,
+  number,
+  level,
+  headerType = 'structure_header',
+}: ConstructArgs) {
+  const { beforeNumberNodes = [], afterNumberNodes } =
+    headerNodes(schema)[headerType];
+  const headingAttrs: RdfaAttrs = {
+    __rdfaId: headingRdfaId,
+    rdfaNodeType: 'literal',
+    backlinks: [
+      {
+        subject: sayDataFactory.literalNode(backlinkResource),
+        predicate: headingProperty,
+      },
+    ],
+  };
+  const titleAttrs: RdfaAttrs = {
+    __rdfaId: titleRdfaId,
+    rdfaNodeType: 'literal',
+    backlinks: [
+      {
+        subject: sayDataFactory.literalNode(backlinkResource),
+        predicate: EXT('title').prefixed,
+      },
+    ],
+  };
+  const numberAttrs: RdfaAttrs = {
+    __rdfaId: numberRdfaId,
+    rdfaNodeType: 'literal',
+    backlinks: [
+      {
+        subject: sayDataFactory.literalNode(backlinkResource),
+        predicate: ELI('number').prefixed,
+      },
+    ],
+  };
+  return schema.node(headerType, { level, ...headingAttrs }, [
+    ...beforeNumberNodes,
+    schema.node('structure_header_number', numberAttrs, schema.text(number)),
+    ...afterNumberNodes,
+    schema.node(
+      'structure_header_title',
+      titleAttrs,
+      schema.node('placeholder', { placeholderText: titleText }),
+    ),
+  ]);
+}

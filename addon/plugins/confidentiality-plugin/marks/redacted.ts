@@ -1,4 +1,4 @@
-import { MarkSpec } from 'prosemirror-model';
+import { MarkSpec } from '@lblod/ember-rdfa-editor';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 

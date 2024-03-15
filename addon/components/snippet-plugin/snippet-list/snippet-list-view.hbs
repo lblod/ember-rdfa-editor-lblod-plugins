@@ -14,8 +14,7 @@
         {{#each @snippetLists as |snippetList|}}
           <tr>
             <td class="selectColumn">
-              <AuControlCheckbox
-                @identifier={{snippetList.label}}
+              <AuCheckbox
                 @onChange={{fn this.onChange snippetList.id}}
                 @checked={{in-array @assignedSnippetListsIds snippetList.id}}
               />

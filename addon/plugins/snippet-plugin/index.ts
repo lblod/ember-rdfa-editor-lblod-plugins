@@ -34,13 +34,18 @@ interface SnippetListArgs {
 
 const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
 
+export const getSnippetUriFromId = (id: string) => `${snippetListBase}${id}`;
+
+export const getSnippetIdFromUri = (uri: string) =>
+  uri.replace(snippetListBase, '');
+
 export class SnippetList {
   id: string | null;
   label: string | null;
   createdOn: string | null;
 
   constructor({ id, label, createdOn }: SnippetListArgs) {
-    this.id = id?.replace(snippetListBase, '') ?? null;
+    this.id = id ? getSnippetIdFromUri(id) : null;
     this.label = label;
     this.createdOn = dateValue(createdOn ?? undefined);
   }

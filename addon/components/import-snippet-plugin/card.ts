@@ -2,13 +2,18 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { SayController } from '@lblod/ember-rdfa-editor/index';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { RdfaSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 
 type Args = {
   controller: SayController;
+};
+
+type InsertRange = {
+  from: number;
+  to: number;
 };
 export default class ImportSnippetPluginCard extends Component<Args> {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
@@ -21,7 +26,7 @@ export default class ImportSnippetPluginCard extends Component<Args> {
     return this.importRdfaSnippet.snippetsForType('roadsign');
   }
 
-  get insertRange() {
+  get insertRange(): InsertRange {
     const { selection } = this.controller.mainEditorState;
     const besluit = findParentNodeOfType(this.controller.schema.nodes.besluit)(
       selection,
