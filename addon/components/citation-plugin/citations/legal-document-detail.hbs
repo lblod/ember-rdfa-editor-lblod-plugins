@@ -47,7 +47,7 @@
         </div>
       {{else}}
         {{#if this.error}}
-          <CitationPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
+          <Common::Search::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
         {{else}}
           <CitationPlugin::Citations::ArticleList
             @insertArticleCitation={{fn @insertArticleCitation @legalDocument}}

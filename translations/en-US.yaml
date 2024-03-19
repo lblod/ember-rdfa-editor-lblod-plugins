@@ -1,3 +1,11 @@
+common:
+  search:
+    loading: Loading…
+    no-results: No results found
+    error-title: Error while loading results
+    error-intro: 'An error occurred while loading results'
+    error-outro: In case this problem keeps occurring, please contact
+
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph
@@ -103,12 +111,6 @@ citaten-plugin:
     lookup-publicatie-short: Publicatie
     publicatie-non-available: Full content not public
     publicatie-non-available-short: Not public
-  alert:
-    loading: Loading…
-    no-results: No results found
-    error-title: Error while loading results
-    error-intro: 'An error occured while loading results from the Flemish Codex:'
-    error-outro: In case this problem keeps occuring, please contact
 
 besluit-type-plugin:
   dt: 'Decision type'
@@ -267,12 +269,6 @@ snippet-plugin:
       title: Filter on
       label: Snippet name
       placeholder: Type something...
-    alert:
-      loading: Loading…
-      no-results: No results found
-      error-title: Error while loading results
-      error-intro: 'An error occurred while loading results'
-      error-outro: In case this problem keeps occurring, please contact
   snippet-list:
     open-modal: Manage snippet lists
     modal:

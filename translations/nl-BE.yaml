@@ -1,3 +1,11 @@
+common:
+  search:
+    loading: Laden…
+    no-results: Geen resultaten gevonden
+    error-title: Probleem bij het laden
+    error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
+    error-outro: Moest dit probleem aanhouden, neem contact op met
+
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
@@ -104,12 +112,6 @@ citaten-plugin:
     lookup-publicatie-short: Publicatie
     publicatie-non-available: Volledige inhoud niet publiek
     publicatie-non-available-short: Niet publiek
-  alert:
-    loading: Laden…
-    no-results: Geen resultaten gevonden
-    error-title: Probleem bij het laden
-    error-intro: "Er heeft zich een fout voorgedaan bij het zoeken in de Vlaamse Codex:"
-    error-outro: Moest dit probleem aanhouden, neem contact op met
 
 
 besluit-type-plugin:
@@ -271,12 +273,6 @@ snippet-plugin:
       title: Filter op
       label: Fragmentnaam
       placeholder: Typ iets...
-    alert:
-      loading: Laden…
-      no-results: Geen resultaten gevonden
-      error-title: Probleem bij het laden
-      error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
-      error-outro: Moest dit probleem aanhouden, neem contact op met
   snippet-list:
     open-modal: Fragmentlijsten beheren
     modal:
