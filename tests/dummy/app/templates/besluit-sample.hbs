@@ -116,6 +116,10 @@
                 />
                 <VariablePlugin::Address::Insert @controller={{this.controller}}/>
                 <VariablePlugin::Date::Insert @controller={{this.controller}}/>
+                <WorshipPlugin::Insert
+                  @controller={{this.controller}}
+                  @config={{this.config.worship}}
+                />
               </Sidebar.Collapsible>
               <ArticleStructurePlugin::StructureCard
                 @controller={{this.controller}}

@@ -379,3 +379,19 @@ editor-plugins:
 
 confidentiality-plugin:
   redact: Redact
+
+worship-plugin:
+  insert:
+    title: Insert worship service
+  modal:
+    title: Choose a worship service
+    insert: Insert
+    search:
+      title: Filter on
+      placeholder: Type something...
+    fields:
+      name: Name
+    sort:
+      sort: Sort
+      asc: Sort ascending
+      desc: Sort descending
