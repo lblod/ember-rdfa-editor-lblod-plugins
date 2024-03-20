@@ -383,3 +383,19 @@ editor-plugins:
 
 confidentiality-plugin:
   redact: Redigeren
+
+worship-plugin:
+  insert:
+    title: Erediensten invoegen
+  modal:
+    title: Kies een erediensten
+    insert: Invoegen
+    search:
+      title: Filter op
+      placeholder: Typ iets...
+    fields:
+      name: Naam
+    sort:
+      sort: Sorteren
+      asc: Oplopend sorteren
+      desc: Aflopend sorteren

@@ -1,0 +1,29 @@
+<AuTable>
+  <:header>
+    <tr class='au-c-data-table__header-title'>
+      <th>
+        <WorshipPlugin::SortableTableHeader
+          @field='name'
+          @label={{t 'worship-plugin.modal.fields.name'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th />
+    </tr>
+  </:header>
+  <:body>
+    {{#each @services as |row|}}
+      <tr>
+        <td>{{row.name}}</td>
+        <td class='au-u-text-center'>
+          <AuButton
+            {{on 'click' (fn @insert row)}}
+          >
+            {{t 'worship-plugin.modal.insert'}}
+          </AuButton>
+        </td>
+      </tr>
+    {{/each}}
+  </:body>
+</AuTable>
