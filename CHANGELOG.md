@@ -1,5 +1,19 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 16.2.0
+
+### Minor Changes
+
+- [#386](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/386) [`83becf142951f09a3cef68a27ae1a23ed141a2ad`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/83becf142951f09a3cef68a27ae1a23ed141a2ad) Thanks [@elpoelma](https://github.com/elpoelma)! - Simplify label of template-comments from 'Toelichtings- en voorbeeldbepaling' to 'Toelichting'
+
+### Patch Changes
+
+- [#401](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/401) [`3a1cd544608a272a1c228b42c67fc44b6d856bc3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3a1cd544608a272a1c228b42c67fc44b6d856bc3) Thanks [@elpoelma](https://github.com/elpoelma)! - Add title attribute to table-of-contents toggle
+
+- [#402](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/402) [`cb204915559bfd3a61e6104ac4cbb80652c36f44`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cb204915559bfd3a61e6104ac4cbb80652c36f44) Thanks [@piemonkey](https://github.com/piemonkey)! - Widen support for ember-rdfa-editor to include upcoming v10
+
+- [#401](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/401) [`31415d8bccfa0525af047d9f126c18f8574a2413`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/31415d8bccfa0525af047d9f126c18f8574a2413) Thanks [@elpoelma](https://github.com/elpoelma)! - Add title attribute to decision-type selector
+
 ## 16.1.0
 
 ### Minor Changes
