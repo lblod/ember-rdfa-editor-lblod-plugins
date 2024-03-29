@@ -2,12 +2,15 @@ import { findParentNode } from '@curvenote/prosemirror-utils';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { Command, SayController } from '@lblod/ember-rdfa-editor';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 type Args = {
   controller: SayController;
 };
 
 export default class TemplateCommentsPluginInsertCardComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   get controller() {
     return this.args.controller;
   }

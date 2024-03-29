@@ -1,4 +1,5 @@
 import { action } from '@ember/object';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -13,6 +14,8 @@ interface Args {
 }
 
 export default class SnippetInsertComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   @tracked showModal = false;
 
   get controller() {

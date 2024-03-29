@@ -3,6 +3,13 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { CalendarIcon } from '@appuniversum/ember-appuniversum/components/icons/calendar';
+import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
+import { LinkExternalIcon } from '@appuniversum/ember-appuniversum/components/icons/link-external';
+import { SearchIcon } from '@appuniversum/ember-appuniversum/components/icons/search';
+import { HierarchicalBackIcon } from '@appuniversum/ember-appuniversum/components/icons/hierarchical-back';
+import { NavLeftIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-left';
+import { NavRightIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-right';
 
 import { LegalDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 import { fetchArticles } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
@@ -14,6 +21,14 @@ interface Args {
 }
 
 export default class LegalDocumentDetailComponent extends Component<Args> {
+  NavRightIcon = NavRightIcon;
+  NavLeftIcon = NavLeftIcon;
+  HierarchicalBackIcon = HierarchicalBackIcon;
+  SearchIcon = SearchIcon;
+  LinkExternalIcon = LinkExternalIcon;
+  PlusTextIcon = PlusTextIcon;
+  CalendarIcon = CalendarIcon;
+
   @tracked error: unknown;
   @tracked pageNumber = 0;
   @tracked pageSize = 5;

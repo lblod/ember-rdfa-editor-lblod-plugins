@@ -7,7 +7,7 @@
       <AuList @divider={{true}} class="au-u-padding-top-tiny au-u-padding-bottom-tiny" as |Item|>
         <Item>
           <AuButton
-            @icon="chevron-up"
+            @icon={{this.ChevronUpIcon}}
             @iconAlignment="left"
             @skin="link"
             @disabled={{not this.canMoveUp}}
@@ -17,7 +17,7 @@
         </Item>
         <Item>
           <AuButton
-            @icon="chevron-down"
+            @icon={{this.ChevronDownIcon}}
             @iconAlignment="left"
             @skin="link"
             @disabled={{not this.canMoveDown}}
@@ -30,7 +30,7 @@
             <HoverTooltip>
               <:hover as |hover|>
                 <AuButton
-                  @icon="bin"
+                  @icon={{this.BinIcon}}
                   @iconAlignment="left"
                   @skin="link"
                   @alert={{true}}
@@ -55,7 +55,7 @@
             <HoverTooltip>
               <:hover as |hover|>
                 <AuButton
-                  @icon="bin"
+                  @icon={{this.BinIcon}}
                   @iconAlignment="left"
                   @skin="link"
                   aria-describedby="remove-content-tooltip"

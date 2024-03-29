@@ -58,7 +58,7 @@
             @warning={{false}}
           >{{t 'citaten-plugin.search.term'}}</AuLabel>
           <AuNativeInput
-            @icon='search'
+            @icon={{this.SearchIcon}}
             @type='text'
             @width='block'
             @iconAlignment='right'
@@ -71,7 +71,7 @@
         <AuFormRow>
           <AuButton
             @skin='link'
-            @icon='search'
+            @icon={{this.SearchIcon}}
             @iconAlignment='left'
             {{on 'click' this.openSearchModal}}
           >{{t 'citaten-plugin.search.advanced'}}</AuButton>

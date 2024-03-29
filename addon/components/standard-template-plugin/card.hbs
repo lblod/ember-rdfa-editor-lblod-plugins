@@ -4,7 +4,7 @@
       <li class="au-c-list__item">
         <AuButton
           @skin="link"
-          @icon="add"
+          @icon={{this.AddIcon}}
           @iconAlignment="left"
           {{on "click" (fn provider.insert template)}}
         >

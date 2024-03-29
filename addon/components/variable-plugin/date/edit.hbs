@@ -26,7 +26,7 @@
                 <this.Velcro @placement="top" @offsetOptions={{hash mainAxis=10}} as |velcro|>
                   <AuBadge
                     @size="small"
-                    @icon="info-circle"
+                    @icon={{this.InfoCircleIcon}}
                     aria-describedby="date-plugin-time-info-tooltip"
                     {{velcro.hook}}
                     {{on "mouseenter" this.showTooltip }}
@@ -65,7 +65,7 @@
           </AuRadioGroup>
           {{#if (eq this.dateFormatType "custom")}}
             <AuFormRow @alignment="post">
-              <AuButton @skin="secondary" @icon="info-circle"
+              <AuButton @skin="secondary" @icon={{this.InfoCircleIcon}}
                 {{on 'click' this.toggleHelpModal}}>
               </AuButton>
               <AuNativeInput
@@ -75,7 +75,7 @@
               />
             </AuFormRow>
             {{#if this.humanError}}
-              <AuPill @skin="error" @icon="cross">{{this.humanError}}</AuPill>
+              <AuPill @skin="error" @icon={{this.CrossIcon}}>{{this.humanError}}</AuPill>
             {{/if}}
           {{/if}}
         </div>

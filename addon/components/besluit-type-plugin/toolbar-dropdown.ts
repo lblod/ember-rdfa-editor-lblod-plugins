@@ -15,6 +15,10 @@ import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 import { trackedFunction } from 'ember-resources/util/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
+import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
+import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
+import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
 
 declare module 'ember__owner' {
   export default interface Owner {
@@ -28,6 +32,10 @@ type Args = {
 };
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
+  CircleIcon = CircleXIcon;
+  MailIcon = MailIcon;
+  CrossIcon = CrossIcon;
+  AlertTriangleIcon = AlertTriangleIcon;
   /**
    * Actual besluit type selected
    * @property besluitType

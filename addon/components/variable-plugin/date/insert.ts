@@ -4,12 +4,15 @@ import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuidv4 } from 'uuid';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 type Args = {
   controller: SayController;
 };
 
 export default class DateInsertComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   @service declare intl: IntlService;
 
   get controller() {

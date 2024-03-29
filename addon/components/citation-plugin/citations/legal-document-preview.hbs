@@ -6,7 +6,7 @@
     <AuPill
       class="au-u-margin-top-small au-u-margin-bottom-small"
       @skin="border"
-      @icon="calendar"
+      @icon={{this.CalendarIcon}}
       @iconAlignment="left">
       {{@legalDocument.publicationDate}}
     </AuPill>
@@ -16,7 +16,7 @@
       <AuButtonGroup @inline={{false}}>
         <AuButton
           @skin="primary"
-          @icon="plus-text"
+          @icon={{this.PlusTextIcon}}
           @iconAlignment="left"
           {{on "click" @onCitationInsert}}>
           {{t "citaten-plugin.references.insert"}}
@@ -25,7 +25,7 @@
           {{#if this.hasPublicationLink}}
             <AuLinkExternal
               @skin="button"
-              @icon="link-external"
+              @icon={{this.LinkExternalIcon}}
               @iconAlignment="left"
               href={{@legalDocument.meta.publicationLink}}
               rel="noreferrer noopener">
@@ -34,7 +34,7 @@
           {{else}}
             <AuButton
               @skin='button'
-              @icon="link-external"
+              @icon={{this.LinkExternalIcon}}
               @iconAlignment="left"
               @disabled={{true}}
             >
@@ -44,7 +44,7 @@
         {{else}}
           <AuButton
             @skin="secondary"
-            @icon="manual"
+            @icon={{this.ManualIcon}}
             @iconAlignment="left"
             {{on "click" @onCitationDetails}}>
             {{t "citaten-plugin.references.details"}}
@@ -57,7 +57,7 @@
     <div class="au-u-flex au-u-flex--row au-u-flex--no-wrap au-u-flex--between au-u-margin-top-tiny">
       <AuButton
         @skin="link-secondary"
-        @icon="plus-text"
+        @icon={{this.PlusTextIcon}}
         @iconAlignment="left"
         class="au-u-h-functional"
         {{on "click" @onCitationInsert}}>
@@ -67,7 +67,7 @@
         {{#if this.hasPublicationLink}}
           <AuLinkExternal
             @skin="link"
-            @icon="link-external"
+            @icon={{this.LinkExternalIcon}}
             @iconAlignment="left"
             href={{@legalDocument.meta.publicationLink}}
             rel="noreferrer noopener"
@@ -87,7 +87,7 @@
       {{else}}
         <AuButton
           @skin="link"
-          @icon="manual"
+          @icon={{this.ManualIcon}}
           @iconAlignment="left"
           class="au-u-h-functional"
           {{on "click" @onCitationDetails}}>

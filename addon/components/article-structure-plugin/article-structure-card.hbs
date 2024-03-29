@@ -1,7 +1,7 @@
 <div>
   {{#each this.structureTypes as |structureType|}}
   <li class="au-c-list__item">
-    <AuButton @icon="add" @iconAlignment="left" @skin="link" @disabled={{not (this.canInsertStructure structureType)}}
+    <AuButton @icon={{this.AddIcon}} @iconAlignment="left" @skin="link" @disabled={{not (this.canInsertStructure structureType)}}
       {{on 'click' (fn this.insertStructure structureType)}}>
       {{t structureType.translations.insert}}
     </AuButton>

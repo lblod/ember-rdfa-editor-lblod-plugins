@@ -107,8 +107,10 @@ module.exports = {
         '@typescript-eslint/no-implied-eval': 'error',
         '@typescript-eslint/no-misused-promises': 'error',
         '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-        '@typescript-eslint/no-unsafe-assignment': 'error',
-        '@typescript-eslint/no-unsafe-call': 'error',
+        // For some reason, these cause eslint to error on imports from `.gts` files, even though TS
+        // is perfectly happy with them. We'll still get type errors from TS, so don't need these.
+        // '@typescript-eslint/no-unsafe-assignment': 'error',
+        // '@typescript-eslint/no-unsafe-call': 'error',
         '@typescript-eslint/no-unsafe-member-access': 'error',
         '@typescript-eslint/no-unsafe-return': 'error',
         '@typescript-eslint/prefer-regexp-exec': 'error',

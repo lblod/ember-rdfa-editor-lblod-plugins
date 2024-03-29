@@ -14,6 +14,8 @@ import { trackedReset } from 'tracked-toolbox';
 import { trackedTask } from 'ember-resources/util/ember-concurrency';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
+import { CheckIcon } from '@appuniversum/ember-appuniversum/components/icons/check';
 
 type Args = {
   controller: SayController;
@@ -68,7 +70,7 @@ export default class AddressEditComponent extends Component<Args> {
     ) {
       return {
         skin: 'success',
-        icon: 'check',
+        icon: CheckIcon,
         title: this.intl.t('editor-plugins.address.edit.success.address-found'),
         body: value.formatted,
       };
@@ -83,7 +85,7 @@ export default class AddressEditComponent extends Component<Args> {
       if (this.newAddress.error.alternativeAddress) {
         return {
           skin: 'warning',
-          icon: 'alert-triangle',
+          icon: AlertTriangleIcon,
           title: this.intl.t(
             'editor-plugins.address.edit.errors.address-not-found-short',
           ),
@@ -96,7 +98,7 @@ export default class AddressEditComponent extends Component<Args> {
 
       return {
         skin: 'warning',
-        icon: 'alert-triangle',
+        icon: AlertTriangleIcon,
         title: this.intl.t(error.translation, { status: error.status }),
         body: this.intl.t('editor-plugins.address.edit.errors.contact', {
           htmlSafe: true,

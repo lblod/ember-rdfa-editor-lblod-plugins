@@ -9,7 +9,7 @@
         <AuPill
           class="au-u-margin-top-small au-u-margin-bottom-small"
           @skin="border"
-          @icon="calendar"
+          @icon={{this.CalendarIcon}}
           @iconAlignment="left">
           {{@legalDocument.publicationDate}}
         </AuPill>
@@ -17,7 +17,7 @@
       <br/>
       <AuButton
         @skin="primary"
-        @icon="plus-text"
+        @icon={{this.PlusTextIcon}}
         @iconAlignment="left"
         class="au-u-margin-right"
         {{on "click" (fn @insertLegalDocumentCitation @legalDocument)}}>
@@ -25,7 +25,7 @@
       </AuButton>
       <AuLinkExternal
         @skin="primary"
-        @icon="link-external"
+        @icon={{this.LinkExternalIcon}}
         @iconAlignment="left"
         href={{@legalDocument.uri}}
         rel="noreferrer noopener">
@@ -39,7 +39,7 @@
         placeholder="{{t "citaten-plugin.search.article-placeholder"}}"
         type="text"
         @width="default"
-        @icon="search"
+        @icon={{this.SearchIcon}}
         @iconAlignment="right"
         value={{this.articleFilter}}
         {{on "input" (perform this.updateArticleFilter)}}
@@ -76,7 +76,7 @@
           <div class="au-c-pagination__list-item">
             <AuButton
               @skin="link"
-              @icon="hierarchical-back"
+              @icon={{this.HierarchicalBackIcon}}
               @iconAlignment="left"
               {{on "click" this.close}}>
               {{t "citaten-plugin.search.back"}}
@@ -96,7 +96,7 @@
               {{#unless this.isFirstPage}}
                 <AuButton
                   @skin="link"
-                  @icon="nav-left"
+                  @icon={{this.NavLeftIcon}}
                   @iconAlignment="left"
                   {{on "click" this.previousPage}}>
                   {{t "citaten-plugin.pagination.previous"}}
@@ -105,7 +105,7 @@
               {{#unless this.isLastPage}}
                 <AuButton
                   @skin="link"
-                  @icon="nav-right"
+                  @icon={{this.NavRightIcon}}
                   @iconAlignment="right"
                   {{on "click" this.nextPage}}>
                   {{t "citaten-plugin.pagination.next"}}

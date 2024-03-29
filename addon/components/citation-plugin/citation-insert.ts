@@ -17,6 +17,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
 import { LegalDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 interface Args {
   controller: SayController;
@@ -24,6 +25,8 @@ interface Args {
 }
 
 export default class EditorPluginsCitationInsertComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   @tracked showModal = false;
   @tracked legislationTypeUri = LEGISLATION_TYPES.decreet;
   @tracked text = '';

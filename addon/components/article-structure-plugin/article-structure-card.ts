@@ -8,12 +8,14 @@ import {
 import { action } from '@ember/object';
 import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 type Args = {
   controller: SayController;
   options: ArticleStructurePluginOptions;
 };
 export default class EditorPluginsArticleStructureCardComponent extends Component<Args> {
+  AddIcon = AddIcon;
   @service declare intl: IntlService;
 
   get structureTypes() {

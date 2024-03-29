@@ -6,7 +6,7 @@
     {{#if this.types.isError}}
       <AuPill
         @skin='error'
-        @icon='circle-x'
+        @icon={{this.CircleXIcon}}
         @iconAlignment='left'
         class='au-c-pill--link besluit-toolbar-pill'
         {{on 'click' this.toggleCard}}
@@ -26,7 +26,7 @@
         </AuPill>
       {{else}}
         <AuPill
-          @icon='alert-triangle'
+          @icon={{this.AlertTriangleIcon}}
           @iconAlignment='left'
           @skin='link'
           {{on 'click' this.toggleCard}}
@@ -51,14 +51,14 @@
           <AuAlert
             @title={{t 'besluit-type-plugin.error-title'}}
             @skin='error'
-            @icon='cross'
+            @icon={{this.CrossIcon}}
           >
             <p>
               {{t 'besluit-type-plugin.error-first-body'}}
               {{! template-lint-disable no-bare-strings  }}
               <AuLinkExternal
                 href='mailto:gelinktnotuleren@vlaanderen.be'
-                @icon='mail'
+                @icon={{this.MailIcon}}
                 @iconAlignment='left'
               >
                 GelinktNotuleren@vlaanderen.be

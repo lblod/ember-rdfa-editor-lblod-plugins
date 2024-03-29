@@ -13,7 +13,7 @@
       >
         <Item>
           <AuButton
-            @icon='chevron-up'
+            @icon={{this.ChevronUpIcon}}
             @iconAlignment='left'
             @skin='link'
             {{on 'click' this.moveUp}}
@@ -23,7 +23,7 @@
         </Item>
         <Item>
           <AuButton
-            @icon='chevron-down'
+            @icon={{this.ChevronDownIcon}}
             @iconAlignment='left'
             @skin='link'
             {{on 'click' this.moveDown}}
@@ -33,7 +33,7 @@
         </Item>
         <Item>
           <AuButton
-            @icon='bin'
+            @icon={{this.BinIcon}}
             @iconAlignment='left'
             @skin='link'
             @alert={{true}}
