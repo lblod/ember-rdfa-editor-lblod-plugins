@@ -22,7 +22,9 @@ export default class LegalDocumentDetailComponent extends Component<Args> {
   @tracked articleFilter = '';
   @tracked articleFilterAfterTimeout = '';
 
-  updateArticleFilter = restartableTask(async () => {
+  updateArticleFilter = restartableTask(async (event: InputEvent) => {
+    const target = event.target as HTMLInputElement;
+    this.articleFilter = target.value;
     await timeout(500);
     this.pageNumber = 0;
     this.articleFilterAfterTimeout = this.articleFilter;

@@ -7,7 +7,6 @@ import {
   ZONAL_URI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
-import { assert } from '@ember/debug';
 
 type Args = {
   measure: Measure;
@@ -33,20 +32,12 @@ export default class ExpandedMeasureComponent extends Component<Args> {
   }
 
   @action
-  changeZonality(event: InputEvent) {
-    assert(
-      'changeZonalityValue must be bound to an input element',
-      event.target instanceof HTMLInputElement,
-    );
-    this.zonalityValue = event.target.value;
+  changeZonality(zonality: string) {
+    this.zonalityValue = zonality;
   }
   @action
-  changeTemporality(event: InputEvent) {
-    assert(
-      'changeTemporality must be bound to an input element',
-      event.target instanceof HTMLInputElement,
-    );
-    this.temporalValue = event.target.value;
+  changeTemporality(temporality: string) {
+    this.temporalValue = temporality;
   }
   @action
   insert() {

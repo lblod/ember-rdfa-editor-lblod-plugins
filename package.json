@@ -120,7 +120,6 @@
     "ember-power-select": "6.0.0",
     "ember-qunit": "^6.0.0",
     "ember-resolver": "^11.0.1",
-    "ember-simple-auth": "4.2.2",
     "ember-source": "4.12.0",
     "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^5.11.2",
