@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 16.3.0
+
+### Minor Changes
+
+- [#406](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/406) [`d07eb52`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d07eb52f7be0c08ae5bb563d69020574f0931088) Thanks [@elpoelma](https://github.com/elpoelma)! - Drop support for `@lblod/ember-rdfa-editor` `10.x` range.
+  This support was initially introduce to support `10.x` alpha releases of the editor.
+  We managed to release the new editor version as a `9.x` minor release (and the `10.x` releases are thus obsolete).
+
 ## 16.2.0
 
 ### Minor Changes
