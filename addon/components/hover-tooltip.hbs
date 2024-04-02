@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <this.Velcro @placement={{this.placement}} as |velcro|>
   {{#let velcro.loop as |loop|}}
     {{yield (hash velcroHook=velcro.hook handleHover=(modifier this.hover)) to='hover' }}

@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 {{#if this.canInsertTitle}}
   <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon={{this.AlertTriangleIcon}} @title={{t "besluit-plugin.missing-title-warning"}}>
     <AuButton @iconAlignment="left" @skin="link-secondary" @disabled={{not this.canInsertTitle}} {{on 'click'

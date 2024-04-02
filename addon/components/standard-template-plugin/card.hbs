@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <StandardTemplatePlugin::TemplateProvider @controller={{@controller}} @templates={{@templates}} as |provider|>
   {{#if provider.hasApplicableTemplates}}
     {{#each provider.applicableTemplates as |template|}}

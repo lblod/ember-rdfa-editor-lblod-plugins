@@ -111,8 +111,8 @@ module.exports = {
         // is perfectly happy with them. We'll still get type errors from TS, so don't need these.
         // '@typescript-eslint/no-unsafe-assignment': 'error',
         // '@typescript-eslint/no-unsafe-call': 'error',
+        // '@typescript-eslint/no-unsafe-return': 'error',
         '@typescript-eslint/no-unsafe-member-access': 'error',
-        '@typescript-eslint/no-unsafe-return': 'error',
         '@typescript-eslint/prefer-regexp-exec': 'error',
         'require-await': 'off',
         '@typescript-eslint/require-await': 'error',
