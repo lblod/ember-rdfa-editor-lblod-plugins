@@ -3,10 +3,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
-import {
-  WorshipPluginConfig,
-  WorshipService,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/stub';
+import { WorshipPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin';
+import { WorshipService } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/utils/fetchWorshipServices';
 
 interface Args {
   controller: SayController;

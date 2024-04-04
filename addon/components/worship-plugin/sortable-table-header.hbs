@@ -4,7 +4,7 @@
     {{if this.order ' is-active'}}'
 >
   {{@label}}
-  {{#if (eq this.order 'desc')}}
+  {{#if (eq this.order 'DESC')}}
     <button
       type='button'
       {{on 'click' this.changeSort}}
@@ -13,7 +13,7 @@
       <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.asc'}}</span>
       <AuIcon @icon='nav-up' />
     </button>
-  {{else if (eq this.order 'asc')}}
+  {{else if (eq this.order 'ASC')}}
     <button
       type='button'
       {{on 'click' this.changeSort}}

@@ -275,7 +275,7 @@ export default class BesluitSampleController extends Controller {
         interactive: true,
       },
       worship: {
-        endpoint: '',
+        endpoint: 'https://data.lblod.info/sparql',
       },
     };
   }

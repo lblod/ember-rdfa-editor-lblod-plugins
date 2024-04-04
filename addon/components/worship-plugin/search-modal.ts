@@ -4,11 +4,12 @@ import { assert } from '@ember/debug';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { WorshipPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin';
 import {
   fetchWorshipServices,
-  WorshipPluginConfig,
+  SearchSort,
   WorshipService,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/stub';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/utils/fetchWorshipServices';
 
 interface Args {
   config: WorshipPluginConfig;
@@ -19,7 +20,7 @@ interface Args {
 
 export default class WorshipPluginSearchModalComponent extends Component<Args> {
   // Filtering
-  @tracked sort: string | false = false;
+  @tracked sort: SearchSort = false;
   @tracked inputSearchText: string | null = null;
 
   // Display
@@ -61,13 +62,14 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
 
     try {
       const queryResult = await fetchWorshipServices({
+        administrativeUnitURI: this.args.config.defaultAdministrativeUnitUri,
         config: this.args.config,
-        abortSignal: abortController.signal,
-        filter: {
-          name: this.inputSearchText ?? undefined,
-        },
-        sort: this.sort,
-        pagination: {
+        searchMeta: {
+          abortSignal: abortController.signal,
+          filter: {
+            label: this.inputSearchText ?? undefined,
+          },
+          sort: this.sort,
           page: this.pageNumber,
           pageSize: this.pageSize,
         },
@@ -90,7 +92,7 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
   ]);
 
   @action
-  setSort(sort: string | false) {
+  setSort(sort: SearchSort) {
     this.sort = sort;
   }
 

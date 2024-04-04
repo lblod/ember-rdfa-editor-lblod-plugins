@@ -3,7 +3,7 @@
     <tr class='au-c-data-table__header-title'>
       <th>
         <WorshipPlugin::SortableTableHeader
-          @field='name'
+          @field='label'
           @label={{t 'worship-plugin.modal.fields.name'}}
           @sort={{@sort}}
           @setSort={{@setSort}}
@@ -15,7 +15,7 @@
   <:body>
     {{#each @services as |row|}}
       <tr>
-        <td>{{row.name}}</td>
+        <td>{{row.label}}</td>
         <td class='au-u-text-center'>
           <AuButton
             {{on 'click' (fn @insert row)}}
