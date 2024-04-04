@@ -134,8 +134,8 @@ devDependencies:
     specifier: 4.3.3
     version: 4.3.3
   '@lblod/ember-rdfa-editor':
-    specifier: https://github.com/lblod/ember-rdfa-editor/raw/feat/rdfa-links-ui/lblod-ember-rdfa-editor-10.0.0-next.1.tgz
-    version: '@github.com/lblod/ember-rdfa-editor/raw/feat/rdfa-links-ui/lblod-ember-rdfa-editor-10.0.0-next.1.tgz(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)'
+    specifier: v10.0.0-next.1
+    version: 10.0.0-next.1(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
   '@rdfjs/types':
     specifier: ^1.1.0
     version: 1.1.0
@@ -2480,6 +2480,81 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@lblod/ember-rdfa-editor@10.0.0-next.1(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
+    resolution: {integrity: sha512-4oFq67MksVJRqG9HJkQFXi5jxSrPx2XpaZk5SZ8K0XQukSCl8fdnamsjAvZXokqw+atR09DViOkVHPwNRO0+gQ==}
+    engines: {node: 16.* || 18.* || >= 20}
+    peerDependencies:
+      '@appuniversum/ember-appuniversum': ^2.15.0
+      '@glint/template': ^1.1.0
+      ember-changeset: ^4.1.2
+      ember-cli-sass: ^11.0.1
+      ember-intl: ^5.7.2 || ^6.1.0
+      ember-modifier: ^3.2.7
+      ember-source: ^4.12.0
+    dependencies:
+      '@appuniversum/ember-appuniversum': 2.15.0(@glint/template@1.1.0)(ember-source@4.12.0)(webpack@5.90.3)
+      '@babel/core': 7.23.9
+      '@codemirror/lang-html': 6.4.8
+      '@codemirror/lang-xml': 6.0.2(@codemirror/view@6.24.1)
+      '@codemirror/state': 6.4.1
+      '@codemirror/view': 6.24.1
+      '@curvenote/prosemirror-utils': 1.0.5(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)
+      '@ember/optional-features': 2.1.0
+      '@ember/render-modifiers': 2.1.0(@babel/core@7.23.9)(@glint/template@1.1.0)(ember-source@4.12.0)
+      '@embroider/macros': 1.13.5(@glint/template@1.1.0)
+      '@glimmer/tracking': 1.1.2
+      '@glint/template': 1.1.0
+      '@graphy/memory.dataset.fast': 4.3.3
+      '@guardian/prosemirror-invisibles': github.com/lblod/prosemirror-invisibles/133dcb12871f9174ba8fe7dfc517e52496b14bc4(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)
+      '@lblod/marawa': 0.8.0-beta.6
+      codemirror: 6.0.1(@lezer/common@1.2.1)
+      common-tags: 1.8.2
+      crypto-browserify: 3.12.0
+      debug: 4.3.4
+      dompurify: 3.0.9
+      ember-auto-import: 2.6.3(@glint/template@1.1.0)(webpack@5.90.3)
+      ember-changeset: 4.1.2(@glint/template@1.1.0)(webpack@5.90.3)
+      ember-cli-babel: 8.2.0(@babel/core@7.23.9)
+      ember-cli-htmlbars: 6.3.0
+      ember-cli-sass: 11.0.1
+      ember-focus-trap: 1.0.2
+      ember-intl: 5.7.2(typescript@5.2.2)
+      ember-modifier: 3.2.7(@babel/core@7.23.9)
+      ember-source: 4.12.0(@babel/core@7.23.9)(@glimmer/component@1.1.2)(@glint/template@1.1.0)(webpack@5.90.3)
+      ember-truth-helpers: 3.1.1
+      ember-velcro: 2.1.3(ember-modifier@3.2.7)(ember-source@4.12.0)
+      handlebars: 4.7.8
+      handlebars-loader: 1.7.3(handlebars@4.7.8)
+      iter-tools: 7.5.3
+      linkifyjs: 4.1.3
+      mdn-polyfills: 5.20.0
+      process: 0.11.10
+      prosemirror-commands: 1.5.2
+      prosemirror-dropcursor: 1.8.1
+      prosemirror-history: 1.3.2
+      prosemirror-inputrules: 1.4.0
+      prosemirror-keymap: 1.2.2
+      prosemirror-model: 1.19.4
+      prosemirror-schema-basic: 1.2.2
+      prosemirror-schema-list: 1.3.0
+      prosemirror-state: 1.4.3
+      prosemirror-tables: github.com/lblod/prosemirror-tables/650528e4e2f072e169d4261f29c9f2d3ea46b107
+      prosemirror-transform: 1.8.0
+      prosemirror-view: 1.33.1
+      rdf-data-factory: 1.1.2
+      relative-to-absolute-iri: 1.0.7
+      stream-browserify: 3.0.0
+      tracked-built-ins: 3.3.0
+      tracked-toolbox: 2.0.0(@babel/core@7.23.9)(ember-source@4.12.0)
+      uuid: 9.0.1
+      xml-formatter: 3.6.2
+      yup: 1.3.3
+    transitivePeerDependencies:
+      - '@lezer/common'
+      - supports-color
+      - webpack
+    dev: true
 
   /@lblod/marawa@0.8.0-beta.6:
     resolution: {integrity: sha512-BW3yCpeQlk9EPnQAEQnM9uViA8RC5DkuoiaPJzbuhMcLvKHfI4cjc6dTg9i8qAijbL/xObmQ/Aexko2Xcj9ktw==}
@@ -17352,89 +17427,13 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
 
-  '@github.com/lblod/ember-rdfa-editor/raw/feat/rdfa-links-ui/lblod-ember-rdfa-editor-10.0.0-next.1.tgz(@appuniversum/ember-appuniversum@2.15.0)(@glint/template@1.1.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)':
-    resolution: {tarball: https://github.com/lblod/ember-rdfa-editor/raw/feat/rdfa-links-ui/lblod-ember-rdfa-editor-10.0.0-next.1.tgz}
-    id: '@github.com/lblod/ember-rdfa-editor/raw/feat/rdfa-links-ui/lblod-ember-rdfa-editor-10.0.0-next.1.tgz'
-    name: '@lblod/ember-rdfa-editor'
-    version: 10.0.0-next.1
-    engines: {node: 16.* || 18.* || >= 20}
-    peerDependencies:
-      '@appuniversum/ember-appuniversum': ^2.15.0
-      '@glint/template': ^1.1.0
-      ember-changeset: ^4.1.2
-      ember-cli-sass: ^11.0.1
-      ember-intl: ^5.7.2 || ^6.1.0
-      ember-modifier: ^3.2.7
-      ember-source: ^4.12.0
-    dependencies:
-      '@appuniversum/ember-appuniversum': 2.15.0(@glint/template@1.1.0)(ember-source@4.12.0)(webpack@5.90.3)
-      '@babel/core': 7.23.9
-      '@codemirror/lang-html': 6.4.8
-      '@codemirror/lang-xml': 6.0.2(@codemirror/view@6.24.1)
-      '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.24.1
-      '@curvenote/prosemirror-utils': 1.0.5(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)
-      '@ember/optional-features': 2.1.0
-      '@ember/render-modifiers': 2.1.0(@babel/core@7.23.9)(@glint/template@1.1.0)(ember-source@4.12.0)
-      '@embroider/macros': 1.13.5(@glint/template@1.1.0)
-      '@glimmer/tracking': 1.1.2
-      '@glint/template': 1.1.0
-      '@graphy/memory.dataset.fast': 4.3.3
-      '@guardian/prosemirror-invisibles': '@github.com/lblod/prosemirror-invisibles/raw/27dee045084c884bcd1b0f5db8de56a49f121e97/guardian-prosemirror-invisibles-3.0.3.tgz(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)'
-      '@lblod/marawa': 0.8.0-beta.6
-      codemirror: 6.0.1(@lezer/common@1.2.1)
-      common-tags: 1.8.2
-      crypto-browserify: 3.12.0
-      debug: 4.3.4
-      dompurify: 3.0.9
-      ember-auto-import: 2.6.3(@glint/template@1.1.0)(webpack@5.90.3)
-      ember-changeset: 4.1.2(@glint/template@1.1.0)(webpack@5.90.3)
-      ember-cli-babel: 8.2.0(@babel/core@7.23.9)
-      ember-cli-htmlbars: 6.3.0
-      ember-cli-sass: 11.0.1
-      ember-focus-trap: 1.0.2
-      ember-intl: 5.7.2(typescript@5.2.2)
-      ember-modifier: 3.2.7(@babel/core@7.23.9)
-      ember-source: 4.12.0(@babel/core@7.23.9)(@glimmer/component@1.1.2)(@glint/template@1.1.0)(webpack@5.90.3)
-      ember-truth-helpers: 3.1.1
-      ember-velcro: 2.1.3(ember-modifier@3.2.7)(ember-source@4.12.0)
-      handlebars: 4.7.8
-      handlebars-loader: 1.7.3(handlebars@4.7.8)
-      iter-tools: 7.5.3
-      linkifyjs: 4.1.3
-      mdn-polyfills: 5.20.0
-      process: 0.11.10
-      prosemirror-commands: 1.5.2
-      prosemirror-dropcursor: 1.8.1
-      prosemirror-history: 1.3.2
-      prosemirror-inputrules: 1.4.0
-      prosemirror-keymap: 1.2.2
-      prosemirror-model: 1.19.4
-      prosemirror-schema-basic: 1.2.2
-      prosemirror-schema-list: 1.3.0
-      prosemirror-state: 1.4.3
-      prosemirror-tables: '@github.com/lblod/prosemirror-tables/raw/c719a9e31999b0a629d1b281461f5a058623c084/prosemirror-tables-1.3.5.tgz'
-      prosemirror-transform: 1.8.0
-      prosemirror-view: 1.33.1
-      rdf-data-factory: 1.1.2
-      relative-to-absolute-iri: 1.0.7
-      stream-browserify: 3.0.0
-      tracked-built-ins: 3.3.0
-      tracked-toolbox: 2.0.0(@babel/core@7.23.9)(ember-source@4.12.0)
-      uuid: 9.0.1
-      xml-formatter: 3.6.2
-      yup: 1.3.3
-    transitivePeerDependencies:
-      - '@lezer/common'
-      - supports-color
-      - webpack
-    dev: true
-
-  '@github.com/lblod/prosemirror-invisibles/raw/27dee045084c884bcd1b0f5db8de56a49f121e97/guardian-prosemirror-invisibles-3.0.3.tgz(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1)':
-    resolution: {tarball: https://github.com/lblod/prosemirror-invisibles/raw/27dee045084c884bcd1b0f5db8de56a49f121e97/guardian-prosemirror-invisibles-3.0.3.tgz}
-    id: '@github.com/lblod/prosemirror-invisibles/raw/27dee045084c884bcd1b0f5db8de56a49f121e97/guardian-prosemirror-invisibles-3.0.3.tgz'
+  github.com/lblod/prosemirror-invisibles/133dcb12871f9174ba8fe7dfc517e52496b14bc4(prosemirror-model@1.19.4)(prosemirror-state@1.4.3)(prosemirror-view@1.33.1):
+    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-invisibles/tar.gz/133dcb12871f9174ba8fe7dfc517e52496b14bc4}
+    id: github.com/lblod/prosemirror-invisibles/133dcb12871f9174ba8fe7dfc517e52496b14bc4
     name: '@guardian/prosemirror-invisibles'
     version: 3.0.3
+    prepare: true
+    requiresBuild: true
     peerDependencies:
       prosemirror-model: ^1.18.2
       prosemirror-state: ^1.4.2
@@ -17445,10 +17444,10 @@ packages:
       prosemirror-view: 1.33.1
     dev: true
 
-  '@github.com/lblod/prosemirror-tables/raw/c719a9e31999b0a629d1b281461f5a058623c084/prosemirror-tables-1.3.5.tgz':
-    resolution: {tarball: https://github.com/lblod/prosemirror-tables/raw/c719a9e31999b0a629d1b281461f5a058623c084/prosemirror-tables-1.3.5.tgz}
-    name: prosemirror-tables
-    version: 1.3.5
+  github.com/lblod/prosemirror-tables/650528e4e2f072e169d4261f29c9f2d3ea46b107:
+    resolution: {tarball: https://codeload.github.com/lblod/prosemirror-tables/tar.gz/650528e4e2f072e169d4261f29c9f2d3ea46b107}
+    name: '@say-editor/prosemirror-tables'
+    version: 0.2.0
     dependencies:
       prosemirror-keymap: 1.2.2
       prosemirror-model: 1.19.4
