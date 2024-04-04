@@ -187,7 +187,6 @@ export default class BesluitSampleController extends Controller {
         ...tableNodes({
           tableGroup: 'block',
           cellContent: 'block+',
-          rdfaAware: true,
         }),
         date: date(this.dateOptions),
         text_variable,

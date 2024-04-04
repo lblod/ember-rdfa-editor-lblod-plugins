@@ -143,7 +143,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       ...tableNodes({
         tableGroup: 'block',
         cellContent: 'block+',
-        rdfaAware: true,
       }),
       address,
       date: date(this.dateOptions),
