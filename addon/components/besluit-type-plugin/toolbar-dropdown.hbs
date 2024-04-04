@@ -1,86 +1,101 @@
-<div {{did-update this.updateBesluitTypes @controller.mainEditorState}} 
-     {{did-update this.updateBesluitTypes this.types.value}}>
-{{#if this.showCard}}
-  {{#if this.types.isError}}
-    <AuPill
-      @skin="error"
-      @icon="circle-x"
-      @iconAlignment="left"
-      class="au-c-pill--link besluit-toolbar-pill"
-      {{on "click" this.toggleCard}}>
-      {{t "besluit-type-plugin.error-short"}}
-    </AuPill>
-  {{else}}
-    {{#if this.besluit.label}}
+<div
+  {{did-update this.updateBesluitTypes @controller.mainEditorState}}
+  {{did-update this.updateBesluitTypes this.types.value}}
+>
+  {{#if this.showCard}}
+    {{#if this.types.isError}}
       <AuPill
-        @skin="link"
-        {{on "click" this.toggleCard}}>
-        {{t "besluit-type-plugin.dt"}}: {{this.besluit.label}}
+        @skin='error'
+        @icon='circle-x'
+        @iconAlignment='left'
+        class='au-c-pill--link besluit-toolbar-pill'
+        {{on 'click' this.toggleCard}}
+        title={{t 'besluit-type-plugin.insert-dt'}}
+      >
+        {{t 'besluit-type-plugin.error-short'}}
       </AuPill>
     {{else}}
-      <AuPill
-        @icon="alert-triangle"
-        @iconAlignment="left"
-        @skin="link"
-        {{on "click" this.toggleCard}}>
-        {{t "besluit-type-plugin.insert-dt"}}
-      </AuPill>
+      {{#if this.besluit.label}}
+        <AuPill
+          @skin='link'
+          {{on 'click' this.toggleCard}}
+          title={{t 'besluit-type-plugin.insert-dt'}}
+        >
+          {{t 'besluit-type-plugin.dt'}}:
+          {{this.besluit.label}}
+        </AuPill>
+      {{else}}
+        <AuPill
+          @icon='alert-triangle'
+          @iconAlignment='left'
+          @skin='link'
+          {{on 'click' this.toggleCard}}
+          title={{t 'besluit-type-plugin.insert-dt'}}
+        >
+          {{t 'besluit-type-plugin.insert-dt'}}
+        </AuPill>
+      {{/if}}
     {{/if}}
   {{/if}}
-{{/if}}
-{{#if this.cardExpanded}}
-  <AuModal
-    @title={{t "besluit-type-plugin.insert-dt"}}
-    @closeModal={{this.toggleCard}}
-    @modalOpen={{true}}
-    @size='default'
-    class="au-c-modal--overflow"
-    as |Modal|>
-    <Modal.Body>
-      {{#if this.types.isError}}
-        <AuAlert
-          @title={{t "besluit-type-plugin.error-title"}}
-          @skin="error"
-          @icon="cross">
-          <p>
-            {{t "besluit-type-plugin.error-first-body"}}
-{{!-- template-lint-disable no-bare-strings  --}}
-            <AuLinkExternal
-              href="mailto:gelinktnotuleren@vlaanderen.be"
-              @icon="mail"
-              @iconAlignment="left">
-              GelinktNotuleren@vlaanderen.be
-            </AuLinkExternal>
-{{!-- template-lint-enable no-bare-strings  --}}
-            {{t "besluit-type-plugin.error-rest-body"}}
-          </p>
-        </AuAlert>
-      {{else}}
-        <BesluitTypePlugin::BesluitTypeSelect
-          @besluitTypes={{this.types.value}}
-          @onchange={{this.updateBesluitType}}
-          @selected={{this.besluit}}
-          @showWarningWhenEmpty={{false}}/>
-        {{#if this.besluit.subTypes.length}}
-          <AuHr @size="large"/>
+  {{#if this.cardExpanded}}
+    <AuModal
+      @title={{t 'besluit-type-plugin.insert-dt'}}
+      @closeModal={{this.toggleCard}}
+      @modalOpen={{true}}
+      @size='default'
+      class='au-c-modal--overflow'
+      as |Modal|
+    >
+      <Modal.Body>
+        {{#if this.types.isError}}
+          <AuAlert
+            @title={{t 'besluit-type-plugin.error-title'}}
+            @skin='error'
+            @icon='cross'
+          >
+            <p>
+              {{t 'besluit-type-plugin.error-first-body'}}
+              {{! template-lint-disable no-bare-strings  }}
+              <AuLinkExternal
+                href='mailto:gelinktnotuleren@vlaanderen.be'
+                @icon='mail'
+                @iconAlignment='left'
+              >
+                GelinktNotuleren@vlaanderen.be
+              </AuLinkExternal>
+              {{! template-lint-enable no-bare-strings  }}
+              {{t 'besluit-type-plugin.error-rest-body'}}
+            </p>
+          </AuAlert>
+        {{else}}
           <BesluitTypePlugin::BesluitTypeSelect
-            @besluitTypes={{this.besluit.subTypes}}
-            @onchange={{this.updateBesluitSubType}}
-            @selected={{this.subBesluit}}
-            @showWarningWhenEmpty={{true}}
-            class="au-u-padding-left au-u-padding-right"/>
+            @besluitTypes={{this.types.value}}
+            @onchange={{this.updateBesluitType}}
+            @selected={{this.besluit}}
+            @showWarningWhenEmpty={{false}}
+          />
+          {{#if this.besluit.subTypes.length}}
+            <AuHr @size='large' />
+            <BesluitTypePlugin::BesluitTypeSelect
+              @besluitTypes={{this.besluit.subTypes}}
+              @onchange={{this.updateBesluitSubType}}
+              @selected={{this.subBesluit}}
+              @showWarningWhenEmpty={{true}}
+              class='au-u-padding-left au-u-padding-right'
+            />
+          {{/if}}
+          {{#if this.subBesluit.subTypes.length}}
+            <AuHr @size='large' />
+            <BesluitTypePlugin::BesluitTypeSelect
+              @besluitTypes={{this.subBesluit.subTypes}}
+              @onchange={{this.updateBesluitSubSubType}}
+              @selected={{this.subSubBesluit}}
+              @showWarningWhenEmpty={{true}}
+              class='au-u-padding-left au-u-padding-right'
+            />
+          {{/if}}
         {{/if}}
-        {{#if this.subBesluit.subTypes.length}}
-          <AuHr @size="large"/>
-          <BesluitTypePlugin::BesluitTypeSelect
-            @besluitTypes={{this.subBesluit.subTypes}}
-            @onchange={{this.updateBesluitSubSubType}}
-            @selected={{this.subSubBesluit}}
-            @showWarningWhenEmpty={{true}}
-            class="au-u-padding-left au-u-padding-right"/>
-        {{/if}}
-      {{/if}}
-    </Modal.Body>
-  </AuModal>
-{{/if}}
+      </Modal.Body>
+    </AuModal>
+  {{/if}}
 </div>
