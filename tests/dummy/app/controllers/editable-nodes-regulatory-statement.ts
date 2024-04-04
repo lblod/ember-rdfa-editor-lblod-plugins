@@ -16,13 +16,12 @@ import {
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
-  block_rdfa,
+  blockRdfaWithConfig,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
   paragraph,
-  repaired_block,
+  repairedBlockWithConfig,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
@@ -33,18 +32,18 @@ import {
 import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import {
-  bullet_list,
-  list_item,
-  ordered_list,
+  bulletListWithConfig,
+  listItemWithConfig,
+  orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import {
-  inline_rdfa,
-  inlineRdfaView,
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
 } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
 import {
@@ -99,10 +98,9 @@ import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
+import { sharedRdfaNodeSpec } from '@lblod/ember-rdfa-editor/core/schema';
 import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
-
-const SNIPPET_LISTS_IDS_DOCUMENT_ATTRIBUTE = 'data-snippet-list-ids';
 
 export default class RegulatoryStatementSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -125,30 +123,34 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   schema = new Schema({
     nodes: {
-      doc: docWithConfig({
-        content:
-          'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
-        extraAttributes: {
-          [SNIPPET_LISTS_IDS_DOCUMENT_ATTRIBUTE]: { default: null },
-        },
-      }),
+      doc: {
+        ...docWithConfig({
+          content:
+            'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+          rdfaAware: true,
+        }),
+        ...sharedRdfaNodeSpec,
+      },
       paragraph,
       document_title,
-      repaired_block,
+      repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
-      list_item,
-      ordered_list,
-      bullet_list,
+      list_item: listItemWithConfig({ rdfaAware: true }),
+      ordered_list: orderedListWithConfig({ rdfaAware: true }),
+      bullet_list: bulletListWithConfig({ rdfaAware: true }),
       templateComment,
       placeholder,
-      ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+      ...tableNodes({
+        tableGroup: 'block',
+        cellContent: 'block+',
+      }),
       address,
       date: date(this.dateOptions),
       text_variable,
       number,
       codelist,
       ...STRUCTURE_NODES,
-      heading,
+      heading: headingWithConfig({ rdfaAware: true }),
       blockquote,
 
       horizontal_rule,
@@ -158,11 +160,11 @@ export default class RegulatoryStatementSampleController extends Controller {
 
       image,
 
-      inline_rdfa,
+      inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       hard_break,
-      block_rdfa,
+      block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
       table_of_contents: table_of_contents(this.config.tableOfContents),
-      invisible_rdfa,
+      invisible_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
     },
     marks: {
@@ -267,6 +269,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       } as CitationPluginConfig,
       link: {
         interactive: true,
+        rdfaAware: true,
       },
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
@@ -296,7 +299,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       text_variable: textVariableView(controller),
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
-      inline_rdfa: inlineRdfaView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
   @tracked plugins: Plugin[] = [

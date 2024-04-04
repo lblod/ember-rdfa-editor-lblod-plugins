@@ -6,8 +6,9 @@ import {
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasBacklink } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
+const rdfaAware = true;
 export const structure_header_title: NodeSpec = {
-  attrs: rdfaAttrSpec,
+  attrs: rdfaAttrSpec({ rdfaAware }),
   content: 'placeholder|text*',
   inline: true,
   editable: true,
@@ -25,7 +26,7 @@ export const structure_header_title: NodeSpec = {
       tag: 'span',
       context: 'structure_header/|article_header/',
       getAttrs(node: HTMLElement) {
-        const attrs = getRdfaAttrs(node);
+        const attrs = getRdfaAttrs(node, { rdfaAware });
         if (hasBacklink(attrs, EXT('title'))) {
           return attrs;
         }

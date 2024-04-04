@@ -54,12 +54,13 @@ export type DateOptions = {
   formats: DateFormat[];
   allowCustomFormat: boolean;
 };
+const rdfaAware = true;
 
 const parseDOM = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
-      const attrs = getRdfaAttrs(node);
+      const attrs = getRdfaAttrs(node, { rdfaAware });
       if (!attrs) {
         return false;
       }
@@ -198,7 +199,7 @@ const parseDOM = [
           });
         }
         return {
-          ...getRdfaAttrs(node),
+          ...getRdfaAttrs(node, { rdfaAware }),
           onlyDate,
           format: format,
           custom: dateNode?.dataset.custom === 'true',
@@ -273,7 +274,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     customAllowed: {
       default: options.allowCustomFormat,
     },
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   outlineText: (node: PNode, state: EditorState) => {
     const t = getTranslationFunction(state);

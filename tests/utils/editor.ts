@@ -1,20 +1,20 @@
 import sinon from 'sinon';
 import type Owner from '@ember/owner';
 import {
-  block_rdfa,
+  blockRdfaWithConfig,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
+  invisibleRdfaWithConfig,
   paragraph,
-  repaired_block,
+  repairedBlockWithConfig,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
-  bullet_list,
+  bulletListWithConfig,
   bullet_list_input_rule,
-  list_item,
-  ordered_list,
+  listItemWithConfig,
+  orderedListWithConfig,
   ordered_list_input_rule,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
@@ -23,7 +23,7 @@ import {
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
@@ -51,7 +51,6 @@ import {
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/_private/editable-node';
 import SayEditor from '@lblod/ember-rdfa-editor/core/say-editor';
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { link } from '@lblod/ember-rdfa-editor/nodes/link';
 
 import { table_of_contents } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
@@ -67,19 +66,21 @@ import {
 import { templateComment } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
+import { inlineRdfaWithConfig } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 
 export const SAMPLE_SCHEMA = new Schema({
   nodes: {
     doc: docWithConfig({
       content:
         'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+      rdfaAware: true,
     }),
     paragraph,
     document_title,
-    repaired_block,
-    list_item,
-    ordered_list,
-    bullet_list,
+    repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
+    list_item: listItemWithConfig({ rdfaAware: true }),
+    ordered_list: orderedListWithConfig({ rdfaAware: true }),
+    bullet_list: bulletListWithConfig({ rdfaAware: true }),
     templateComment,
     placeholder,
     ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
@@ -104,15 +105,15 @@ export const SAMPLE_SCHEMA = new Schema({
     codelist,
     address,
     ...STRUCTURE_NODES,
-    heading,
+    heading: headingWithConfig({ rdfaAware: true }),
     blockquote,
     horizontal_rule,
     code_block,
     text,
     image,
     hard_break,
-    block_rdfa,
-    inline_rdfa,
+    block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
+    inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
     table_of_contents: table_of_contents([
       {
         nodeHierarchy: [
@@ -125,7 +126,7 @@ export const SAMPLE_SCHEMA = new Schema({
           )[0] as HTMLElement,
       },
     ]),
-    invisible_rdfa,
+    invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
     link: link({ interactive: true }),
   },
   marks: {

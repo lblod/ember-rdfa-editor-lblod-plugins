@@ -35,12 +35,13 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
+const rdfaAware = true;
 
 const parseDOM = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
-      const attrs = getRdfaAttrs(node);
+      const attrs = getRdfaAttrs(node, { rdfaAware });
       if (!attrs) {
         return false;
       }
@@ -168,7 +169,7 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   selectable: true,
   attrs: {
-    ...rdfaAttrSpec,
+    ...rdfaAttrSpec({ rdfaAware }),
     selectionStyle: {
       default: null,
     },
