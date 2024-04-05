@@ -1,3 +1,4 @@
+import RSVP from 'rsvp';
 import {
   type BindingObject,
   executeCountQuery,
@@ -81,31 +82,25 @@ export async function fetchWorshipServices({
     }
   `;
 
-  const totalCount = await executeCountQuery({
+  const totalCountPromise = executeCountQuery({
     endpoint,
     query: countQuery,
     abortSignal,
   });
 
-  if (totalCount === 0) {
-    return { totalCount, results: [] };
-  }
-
-  const queryResult = await executeQuery<BindingObject<WorshipService>>({
+  const resultsPromise = executeQuery<BindingObject<WorshipService>>({
     endpoint,
     query,
     abortSignal,
-  });
-
-  const results: WorshipService[] = queryResult.results.bindings.map(
-    (binding) => ({
+  }).then((queryResult) =>
+    queryResult.results.bindings.map<WorshipService>((binding) => ({
       uri: binding.uri.value,
       label: binding.label.value,
-    }),
+    })),
   );
 
-  return {
-    results,
-    totalCount,
-  };
+  return RSVP.hash({
+    results: resultsPromise,
+    totalCount: totalCountPromise,
+  });
 }

@@ -74,11 +74,23 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
           pageSize: this.pageSize,
         },
       });
+      this.error = undefined;
+
+      // Reset to first page if there are no results for this one e.g. when changing search
+      if (
+        this.pageNumber !== 0 &&
+        this.pageNumber * this.pageSize >= queryResult.totalCount
+      ) {
+        this.pageNumber = 0;
+      }
 
       return queryResult;
     } catch (error) {
       this.error = error;
-      return [];
+      return {
+        results: [],
+        totalCount: 0,
+      };
     } finally {
       abortController.abort();
     }
