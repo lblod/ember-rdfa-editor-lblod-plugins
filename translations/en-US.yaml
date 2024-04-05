@@ -389,8 +389,11 @@ worship-plugin:
     search:
       title: Filter on
       placeholder: Type something...
+      search: search
+      no results: nothing found
     fields:
       name: Name
+      admin-unit: Administrative Unit
     sort:
       sort: Sort
       asc: Sort ascending

@@ -1,4 +1,9 @@
+export type AdministrativeUnit = {
+  uri: string;
+  label: string;
+};
+
 export type WorshipPluginConfig = {
   endpoint: string;
-  defaultAdministrativeUnitUri?: string;
+  defaultAdministrativeUnit?: AdministrativeUnit;
 };

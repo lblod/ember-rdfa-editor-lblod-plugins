@@ -10,6 +10,7 @@ import {
   SearchSort,
   WorshipService,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/utils/fetchWorshipServices';
+import { AdministrativeUnit } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin';
 
 interface Args {
   config: WorshipPluginConfig;
@@ -22,6 +23,8 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
   // Filtering
   @tracked sort: SearchSort = false;
   @tracked inputSearchText: string | null = null;
+  @tracked administrativeUnit: AdministrativeUnit | undefined =
+    this.args.config.defaultAdministrativeUnit;
 
   // Display
   @tracked error: unknown;
@@ -50,6 +53,11 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
   }
 
   @action
+  setAdministrativeUnit(unit: AdministrativeUnit) {
+    this.administrativeUnit = unit;
+  }
+
+  @action
   async closeModal() {
     await this.servicesResource.cancel();
     this.args.closeModal();
@@ -62,7 +70,7 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
 
     try {
       const queryResult = await fetchWorshipServices({
-        administrativeUnitURI: this.args.config.defaultAdministrativeUnitUri,
+        administrativeUnitURI: this.administrativeUnit?.uri,
         config: this.args.config,
         searchMeta: {
           abortSignal: abortController.signal,
@@ -98,6 +106,7 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
 
   servicesResource = trackedTask(this, this.search, () => [
     this.inputSearchText,
+    this.administrativeUnit,
     this.pageNumber,
     this.pageSize,
     this.sort,

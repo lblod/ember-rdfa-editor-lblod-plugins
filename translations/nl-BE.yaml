@@ -393,8 +393,11 @@ worship-plugin:
     search:
       title: Filter op
       placeholder: Typ iets...
+      search: zoeken
+      no results: niets gevonden
     fields:
       name: Naam
+      admin-unit: Bestuurseenheid
     sort:
       sort: Sorteren
       asc: Oplopend sorteren
