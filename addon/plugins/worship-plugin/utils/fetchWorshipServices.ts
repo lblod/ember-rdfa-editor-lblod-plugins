@@ -3,6 +3,7 @@ import {
   type BindingObject,
   executeCountQuery,
   executeQuery,
+  sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { WorshipPluginConfig } from '../';
 
@@ -50,7 +51,9 @@ export async function fetchWorshipServices({
     : Object.entries(filter)
         .map(([field, search]) =>
           search?.length > 0
-            ? `FILTER(CONTAINS(LCASE(?${field}), LCASE("${search}")))`
+            ? `FILTER(CONTAINS(LCASE(?${field}), LCASE(${sparqlEscapeString(
+                search,
+              )})))`
             : undefined,
         )
         .filter(Boolean)

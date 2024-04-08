@@ -18,6 +18,9 @@ interface QueryConfig {
   abortSignal?: AbortSignal;
 }
 
+export const sparqlEscapeString = (value: string) =>
+  '"""' + value.replace(/[\\"]/g, (match) => '\\' + match) + '"""';
+
 export async function executeQuery<Binding = Record<string, RDF.Term>>({
   query,
   endpoint,

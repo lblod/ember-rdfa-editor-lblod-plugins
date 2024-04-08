@@ -1,6 +1,7 @@
 import {
   type BindingObject,
   executeQuery,
+  sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { AdministrativeUnit, WorshipPluginConfig } from '../';
 
@@ -25,7 +26,7 @@ export async function fetchAdministrativeUnits({
 }: FetchAdministrativeUnitsArgs): Promise<AdministrativeUnit[]> {
   const filterQuery = !search
     ? ''
-    : `FILTER(CONTAINS(LCASE(?label), LCASE("${search}")))`;
+    : `FILTER(CONTAINS(LCASE(?label), LCASE(${sparqlEscapeString(search)})))`;
 
   const query = `
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
