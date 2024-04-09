@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { WorshipPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin';
 import { WorshipService } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/utils/fetchWorshipServices';
+import { insertWorshipService } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/utils/insertWorshipService';
 
 interface Args {
   controller: SayController;
@@ -31,7 +32,7 @@ export default class WorshipPluginInsertComponent extends Component<Args> {
 
   @action
   onInsert(service: WorshipService) {
-    console.log('Inserting!', service);
+    insertWorshipService(this.controller, service);
     this.closeModal();
   }
 }
