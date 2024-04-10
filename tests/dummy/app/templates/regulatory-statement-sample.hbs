@@ -77,6 +77,10 @@
                 @controller={{this.controller}}
               />
               <VariablePlugin::Address::Insert @controller={{this.controller}}/>
+              <WorshipPlugin::Insert
+                @controller={{this.controller}}
+                @config={{this.config.worship}}
+              />
             </Sidebar.Collapsible>
             <VariablePlugin::InsertVariableCard
               @controller={{this.controller}}
