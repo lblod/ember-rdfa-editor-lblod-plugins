@@ -1,5 +1,19 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 17.0.0
+
+### Major Changes
+
+- [#407](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/407) [`f2a7660`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f2a7660d32c6c54016c0547cd71e25ae239168a8) Thanks [@piemonkey](https://github.com/piemonkey)! - BREAKING: Update ember-appuniversum dependency to 3.4.1 in order to support the use of inline svg components for e.g. embeddable
+
+### Minor Changes
+
+- [#407](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/407) [`d4b8814`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d4b8814df14a5f66354ce3948db898c928a658a7) Thanks [@piemonkey](https://github.com/piemonkey)! - Modernise typescript configuration
+
+### Patch Changes
+
+- [#407](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/407) [`f7d257b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f7d257bbc03e7b7f9375ade79a08f9e103e0c3df) Thanks [@piemonkey](https://github.com/piemonkey)! - Update deprecated use of AppUniversum
+
 ## 16.4.0
 
 ### Minor Changes
