@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 16.4.0
+
+### Minor Changes
+
+- [#404](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/404) [`9382c7f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9382c7f3e1c0e9495e2d9a7c21a58505653693b4) Thanks [@piemonkey](https://github.com/piemonkey)! - Add plugin to handle inserting worship services (erediensten)
+
 ## 16.3.0
 
 ### Minor Changes
