@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 {{#if this.isVisible}}
   <div
     class="au-c-alert {{this.skin}} {{this.size}}"
@@ -19,7 +20,7 @@
         data-test-alert-close
         {{on "click" this.closeAlert}}
       >
-        <AuIcon @icon="cross" @size="large" />
+        <AuIcon @icon={{this.CrossIcon}} @size="large" />
         {{!-- template-lint-disable no-bare-strings --}}
         <span class="au-u-hidden-visually">Sluit alert</span>
       </button>

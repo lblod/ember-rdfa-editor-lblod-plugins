@@ -1,5 +1,6 @@
+{{! @glint-nocheck: not typesafe yet }}
 {{#if this.canInsertTitle}}
-  <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon="alert-triangle" @title={{t "besluit-plugin.missing-title-warning"}}>
+  <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon={{this.AlertTriangleIcon}} @title={{t "besluit-plugin.missing-title-warning"}}>
     <AuButton @iconAlignment="left" @skin="link-secondary" @disabled={{not this.canInsertTitle}} {{on 'click'
       this.insertTitle}}>
       {{t "besluit-plugin.insert.decision-title"}}
@@ -7,7 +8,7 @@
   </AuAlert>
 {{/if}}
 {{#if this.canInsertMotivation}}
-  <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon="alert-triangle" @title={{t "besluit-plugin.missing-motivation-warning"}}>
+  <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon={{this.AlertTriangleIcon}} @title={{t "besluit-plugin.missing-motivation-warning"}}>
     <AuButton @iconAlignment="left" @skin="link-secondary" @disabled={{not this.canInsertMotivation}} {{on 'click'
       this.insertMotivation}}>
       {{t "besluit-plugin.insert.motivation"}}
@@ -15,7 +16,7 @@
   </AuAlert>
 {{/if}}
 {{#if this.missingArticleBlock}}
-  <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon="alert-triangle" @title={{t "besluit-plugin.missing-article-block-warning"}}>
+  <AuAlert class="say-validation-alert" @skin="warning" @closable={{false}} @icon={{this.AlertTriangleIcon}} @title={{t "besluit-plugin.missing-article-block-warning"}}>
     <AuButton @iconAlignment="left" @skin="link-secondary" @disabled={{not this.missingArticleBlock}} {{on 'click'
       this.insertArticleBlock}}>
       {{t "besluit-plugin.insert.article-block"}}

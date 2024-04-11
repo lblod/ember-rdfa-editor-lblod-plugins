@@ -1,9 +1,10 @@
-<AuPill @icon="pencil" @iconAlignment="right" class="variable" {{on 'click' this.onClick}}>
-  <EmberNode::EmbeddedEditor 
-    @controller={{@controller}} 
-    @node={{@node}} 
-    @view={{@view}} 
-    @getPos={{@getPos}} 
+{{! @glint-nocheck: not typesafe yet }}
+<AuPill @icon={{this.PencilIcon}} @iconAlignment="right" class="variable" {{on 'click' this.onClick}}>
+  <EmberNode::EmbeddedEditor
+    @controller={{@controller}}
+    @node={{@node}}
+    @view={{@view}}
+    @getPos={{@getPos}}
     @selected={{@selected}}
     @initEditor={{this.initEditor}}
     @nodeViews={{@nodeViews}}

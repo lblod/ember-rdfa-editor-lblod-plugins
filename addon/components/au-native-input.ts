@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { ComponentLike } from '@glint/template';
 
 interface Args {
   width?: 'block';
@@ -7,7 +8,7 @@ interface Args {
   warning?: boolean;
   disabled?: boolean;
   type?: string;
-  icon?: string;
+  icon?: ComponentLike;
 }
 
 export default class AuNativeInput extends Component<Args> {

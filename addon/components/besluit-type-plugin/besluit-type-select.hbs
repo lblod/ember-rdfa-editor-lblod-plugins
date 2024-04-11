@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <div ...attributes>
   <PowerSelect
     @renderInPlace={{true}}
@@ -16,7 +17,7 @@
   {{#if @showWarningWhenEmpty}}
     {{#unless @selected}}
       <AuAlert
-        @icon="alert-triangle"
+        @icon={{this.AlertTriangleIcon}}
         @title={{t "besluit-type-plugin.alert-title"}}
         @skin="warning"
         @size="small"

@@ -14,15 +14,16 @@ steps:
     group: check
     commands:
       - npm run lint:hbs
+  check-types:
+    image: danlynn/ember-cli:4.8.0
+    group: check
+    commands:
+      - npm run lint:types
   test:
     image: danlynn/ember-cli:4.8.0
     group: check
     commands:
       - ember test
-  precompile:
-    image: danlynn/ember-cli:4.8.0
-    commands:
-      - ember ts:precompile
 
 
   release:

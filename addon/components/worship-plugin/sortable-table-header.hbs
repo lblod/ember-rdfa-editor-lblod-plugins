@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 {{!-- Based on au-data-table-th-sortable from ember-appuniversum and using the same classes --}}
 <span
   class='au-c-data-table__header-title au-c-data-table__header-title--sortable
@@ -11,7 +12,7 @@
       class='au-c-data-table__sort'
     >
       <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.asc'}}</span>
-      <AuIcon @icon='nav-up' />
+      <AuIcon @icon={{this.NavUpIcon}} />
     </button>
   {{else if (eq this.order 'ASC')}}
     <button
@@ -20,7 +21,7 @@
       class='au-c-data-table__sort'
     >
       <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.desc'}}</span>
-      <AuIcon @icon='nav-down' />
+      <AuIcon @icon={{this.NavDownIcon}} />
     </button>
   {{else}}
     <button
@@ -29,7 +30,7 @@
       class='au-c-data-table__sort'
     >
       <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.sort'}}</span>
-      <AuIcon @icon='nav-up-down' />
+      <AuIcon @icon={{this.NavUpDownIcon}} />
     </button>
   {{/if}}
 </span>

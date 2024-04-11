@@ -10,12 +10,19 @@ import {
   findContentMatchPosLeft,
   findContentMatchPosRight,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-contentmatch';
+import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-up';
+import { ChevronDownIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-down';
+import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 
 type Args = {
   controller: SayController;
 };
 
 export default class TemplateCommentsPluginEditCardComponent extends Component<Args> {
+  BinIcon = BinIcon;
+  ChevronDownIcon = ChevronDownIcon;
+  ChevronUpIcon = ChevronUpIcon;
+
   get controller() {
     return this.args.controller;
   }

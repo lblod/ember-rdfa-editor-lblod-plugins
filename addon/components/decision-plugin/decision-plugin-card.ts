@@ -8,6 +8,7 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { VALIDATION_KEY } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 
 type Args = {
   controller: SayController;
@@ -17,6 +18,8 @@ type Args = {
  * @deprecated
  */
 export default class DecisionPluginCard extends Component<Args> {
+  AlertTriangleIcon = AlertTriangleIcon;
+
   @service declare intl: IntlService;
 
   get controller() {

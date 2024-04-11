@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <AuDataTable @isLoading={{@isLoading}} @noDataMessage="No data" as |table|>
   <table.content as |c|>
     <c.header>
@@ -27,9 +28,9 @@
                 <div class="au-o-grid au-o-grid--tiny">
                 {{#each row.signs as |sign|}}
                   <div class="au-o-grid__item au-u-1-3">
-                    <img 
-                      src={{sign.image}} 
-                      alt={{t "editor-plugins.roadsign-regulation.table.content.image.alt" code=sign.code}} 
+                    <img
+                      src={{sign.image}}
+                      alt={{t "editor-plugins.roadsign-regulation.table.content.image.alt" code=sign.code}}
                       class="au-c-data-table__image" />
                   </div>
                 {{/each}}
@@ -53,9 +54,9 @@
               </td>
               <td>
                 {{#if (eq this.selected row.uri)}}
-                <AuIcon @icon="nav-up" @ariaHidden={{true}} class="au-c-data-table__clickable-row-icon" />
+                <AuIcon @icon={{this.NavUpIcon}} @ariaHidden={{true}} class="au-c-data-table__clickable-row-icon" />
                 {{else}}
-                <AuIcon @icon="nav-down" @ariaHidden={{true}} class="au-c-data-table__clickable-row-icon" />
+                <AuIcon @icon={{this.NavDownIcon}} @ariaHidden={{true}} class="au-c-data-table__clickable-row-icon" />
                 {{/if}}
               </td>
             </tr>

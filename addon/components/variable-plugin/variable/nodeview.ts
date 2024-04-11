@@ -6,12 +6,15 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 type Args = {
   controller: SayController;
 };
 
 export default class VariableNodeViewComponent extends Component<Args> {
+  PencilIcon = PencilIcon;
+
   @tracked innerView?: SayView;
 
   @action

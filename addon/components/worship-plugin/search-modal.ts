@@ -23,6 +23,8 @@ export default class WorshipPluginSearchModalComponent extends Component<Args> {
   // Filtering
   @tracked sort: SearchSort = false;
   @tracked inputSearchText: string | null = null;
+  // We're deliberately using the arg to set the initial value
+  // eslint-disable-next-line ember/no-tracked-properties-from-args
   @tracked administrativeUnit: AdministrativeUnit | undefined =
     this.args.config.defaultAdministrativeUnit;
 

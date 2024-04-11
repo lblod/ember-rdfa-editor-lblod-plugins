@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 import { replaceSelectionWithAddress } from './utils';
 
@@ -11,6 +12,8 @@ type Args = {
 };
 
 export default class InsertAddressComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   @service declare intl: IntlService;
 
   get controller() {

@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <AuHeading @level='3' @skin='4'>
   {{t 'snippet-plugin.snippet-list.modal.subtitle'}}
 </AuHeading>
@@ -14,8 +15,8 @@
         {{#each @snippetLists as |snippetList|}}
           <tr>
             <td class="selectColumn">
-              <AuControlCheckbox
-                @identifier={{snippetList.label}}
+              <AuCheckbox
+                id={{snippetList.label}}
                 @onChange={{fn this.onChange snippetList.id}}
                 @checked={{in-array @assignedSnippetListsIds snippetList.id}}
               />

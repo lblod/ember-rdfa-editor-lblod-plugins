@@ -1,6 +1,7 @@
+{{! @glint-nocheck: not typesafe yet }}
 <Toolbar::Button
   @title={{t 'generic-rdfa-variable.menu.insert'}}
-  @icon='html-plus'
+  @icon={{this.HtmlPlusIcon}}
   {{on 'click' this.showModal}}
   @disabled={{not this.canInsert}}
 />
