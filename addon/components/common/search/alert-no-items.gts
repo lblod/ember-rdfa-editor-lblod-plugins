@@ -4,11 +4,14 @@ import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cro
 
 <template>
   <AuAlert
-    @title={{t 'snippet-plugin.modal.alert.no-results'}}
+    @title={{t 'common.search.no-results'}}
     @skin='warning'
     @icon={{CrossIcon}}
+    {{! @glint-expect-error: not typesafe yet }}
+    @size={{if @fullSize undefined 'small'}}
     @closable={{false}}
-    class='au-u-margin au-u-margin-top-none'
+    {{! @glint-expect-error: not typesafe yet }}
+    class={{unless @fullSize 'au-u-margin-small'}}
     {{! @glint-expect-error: not typesafe yet }}
     ...attributes
   />

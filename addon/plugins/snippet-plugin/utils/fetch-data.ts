@@ -1,14 +1,12 @@
 import {
   executeCountQuery,
   executeQuery,
+  sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { Snippet, SnippetList } from '../index';
 
 type Filter = { name?: string; assignedSnippetListIds?: string[] };
 type Pagination = { pageNumber: number; pageSize: number };
-
-const sparqlEscapeString = (value: string) =>
-  '"""' + value.replace(/[\\"]/g, (match) => '\\' + match) + '"""';
 
 const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
   return `

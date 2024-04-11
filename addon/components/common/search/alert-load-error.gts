@@ -6,19 +6,21 @@ import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail
 
 <template>
   <AuAlert
-    @title={{t 'snippet-plugin.modal.alert.error-title'}}
+    @title={{t 'common.search.error-title'}}
     @skin='error'
     @icon={{AlertTriangleIcon}}
     @closable={{false}}
-    class='au-u-margin au-u-margin-top-none'
+    {{! @glint-expect-error: not typesafe yet }}
+    @size={{if @fullSize undefined 'small'}}
+    class='au-u-margin'
     {{! @glint-expect-error: not typesafe yet }}
     ...attributes
   >
-    <p>{{t 'snippet-plugin.modal.alert.error-intro'}}</p>
+    <p>{{t 'common.search.error-intro'}}</p>
     {{! @glint-expect-error: not typesafe yet }}
-    <code class='au-u-error snippet-modal--error-code'>{{@error}}</code>
+    <code class='au-u-error error-code'>{{@error}}</code>
     <p>
-      {{t 'snippet-plugin.modal.alert.error-outro'}}
+      {{t 'common.search.error-outro'}}
       <AuLinkExternal
         href='mailto:gelinktnotuleren@vlaanderen.be'
         @icon={{MailIcon}}

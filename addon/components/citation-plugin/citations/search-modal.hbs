@@ -1,5 +1,6 @@
 {{! @glint-nocheck: not typesafe yet }}
 <AuModal
+  class="citaten-modal"
   @modalOpen={{@open}}
   @closeModal={{fn this.closeModal this.legislationTypeUri this.text}}
   @title={{t 'citaten-plugin.card.title'}}
@@ -198,14 +199,11 @@
         <mc.content>
           {{#if this.legalDocumentResource.isRunning}}
             <div class='au-u-margin'>
-              <AuLoader @padding='large' />
-              <span class='au-u-hidden-visually'>{{t
-                  'citaten-plugin.alert.loading'
-                }}</span>
+              <Common::Search::Loading />
             </div>
           {{else}}
             {{#if this.error}}
-              <CitationPlugin::Helpers::AlertLoadError
+              <Common::Search::AlertLoadError
                 @fullSize={{true}}
                 @error={{this.error}}
                 class='au-u-margin'
@@ -223,7 +221,7 @@
                   />
                 </div>
               {{else}}
-                <CitationPlugin::Helpers::AlertNoItems
+                <Common::Search::AlertNoItems
                   @fullSize={{true}}
                   class='au-u-margin'
                 />
