@@ -1,5 +1,8 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { NavUpIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-up';
+import { NavDownIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-down';
+import { NavUpDownIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-up-down';
 import {
   SearchSort,
   WorshipService,
@@ -13,6 +16,10 @@ interface Args {
 }
 
 export default class SnippetInsertComponent extends Component<Args> {
+  NavUpIcon = NavUpIcon;
+  NavDownIcon = NavDownIcon;
+  NavUpDownIcon = NavUpDownIcon;
+
   get order() {
     if (this.args.sort) {
       const [sortedField, order] = this.args.sort;

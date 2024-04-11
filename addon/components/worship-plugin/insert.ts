@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { WorshipPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin';
@@ -13,6 +14,8 @@ interface Args {
 }
 
 export default class WorshipPluginInsertComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   @tracked showModal = false;
 
   get controller() {
