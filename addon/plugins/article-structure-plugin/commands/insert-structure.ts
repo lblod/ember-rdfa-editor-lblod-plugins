@@ -1,8 +1,10 @@
 import {
   Command,
+  EditorState,
   Fragment,
   NodeSelection,
   TextSelection,
+  Transaction,
 } from '@lblod/ember-rdfa-editor';
 import { getNodeByRdfaId } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { addProperty } from '@lblod/ember-rdfa-editor/commands';
@@ -14,6 +16,54 @@ import wrapStructureContent from './wrap-structure-content';
 import IntlService from 'ember-intl/services/intl';
 import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-insertion-range';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+
+const addPropertyToContainer = ({
+  state,
+  transaction,
+  structureSpec,
+  insertionRange,
+  newResource,
+}: {
+  state: EditorState;
+  transaction: Transaction;
+  structureSpec: StructureSpec;
+  insertionRange: Exclude<ReturnType<typeof findInsertionRange>, null>;
+  newResource: string;
+}) => {
+  if (!insertionRange) {
+    return transaction;
+  }
+
+  const containerAttrs = insertionRange.containerNode.attrs;
+
+  if (!isRdfaAttrs(containerAttrs)) {
+    return transaction;
+  }
+
+  const incoming = containerAttrs.backlinks;
+  const subject = incoming?.find((backlink) =>
+    SAY('body').matches(backlink.predicate),
+  )?.subject;
+
+  if (!subject) {
+    return transaction;
+  }
+
+  const newState = state.apply(transaction);
+  addProperty({
+    resource: subject.value,
+    property: {
+      predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
+        .prefixed,
+      object: sayDataFactory.resourceNode(newResource),
+    },
+    transaction,
+  })(newState, (newTransaction) => {
+    transaction = newTransaction;
+  });
+
+  return transaction;
+};
 
 const insertStructure = (
   structureSpec: StructureSpec,
@@ -35,12 +85,7 @@ const insertStructure = (
     if (!insertionRange) {
       return false;
     }
-    const containerAttrs = insertionRange.containerNode.attrs;
-    if (dispatch && isRdfaAttrs(containerAttrs)) {
-      const incoming = containerAttrs.backlinks;
-      const subject = incoming?.find((backlink) =>
-        SAY('body').matches(backlink.predicate),
-      )?.subject;
+    if (dispatch) {
       const {
         node: newStructureNode,
         selectionConfig,
@@ -67,21 +112,13 @@ const insertStructure = (
 
       transaction.scrollIntoView();
       recalculateStructureNumbers(transaction, schema, structureSpec);
-
-      if (subject) {
-        const newState = state.apply(transaction);
-        addProperty({
-          resource: subject.value,
-          property: {
-            predicate: (structureSpec.relationshipPredicate ?? SAY('hasPart'))
-              .prefixed,
-            object: sayDataFactory.resourceNode(newResource),
-          },
-          transaction,
-        })(newState, (newTransaction) => {
-          transaction = newTransaction;
-        });
-      }
+      transaction = addPropertyToContainer({
+        state,
+        transaction,
+        structureSpec,
+        insertionRange,
+        newResource,
+      });
 
       dispatch(transaction);
     }
