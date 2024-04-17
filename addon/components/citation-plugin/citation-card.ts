@@ -31,6 +31,7 @@ import {
   LegalDocument,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 import { cleanCaches } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cache';
+import { SearchIcon } from '@appuniversum/ember-appuniversum/components/icons/search';
 
 interface Args {
   controller: SayController;
@@ -40,6 +41,8 @@ interface Args {
 
 /* A component card that will only show up when certain keywords are typed */
 export default class CitationCardComponent extends Component<Args> {
+  SearchIcon = SearchIcon;
+
   @tracked pageNumber = 0;
   @tracked pageSize = 5;
   @tracked totalSize = 0;

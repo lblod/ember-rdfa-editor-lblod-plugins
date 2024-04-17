@@ -34,6 +34,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { InfoCircleIcon } from '@appuniversum/ember-appuniversum/components/icons/info-circle';
+import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 
 type Args = {
   controller: SayController;
@@ -41,6 +43,8 @@ type Args = {
 };
 const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
 export default class DateEditComponent extends Component<Args> {
+  CrossIcon = CrossIcon;
+  InfoCircleIcon = InfoCircleIcon;
   Velcro = Velcro;
 
   @service

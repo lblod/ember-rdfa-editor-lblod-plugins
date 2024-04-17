@@ -11,12 +11,15 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 type Args = {
   controller: SayController;
 };
 
 export default class DateInsertComponent extends Component<Args> {
+  AddIcon = AddIcon;
+
   @service declare intl: IntlService;
 
   get controller() {

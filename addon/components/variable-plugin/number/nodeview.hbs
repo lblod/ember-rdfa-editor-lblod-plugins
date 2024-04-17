@@ -1,9 +1,10 @@
+{{! @glint-nocheck: not typesafe yet }}
 <this.Velcro
   @placement='bottom-start'
   @offsetOptions={{hash mainAxis=3}} as |velcro|
 >
   <AuPill
-    @icon='pencil'
+    @icon={{this.PencilIcon}}
     @iconAlignment='right'
     class='variable atomic'
     {{velcro.hook}}

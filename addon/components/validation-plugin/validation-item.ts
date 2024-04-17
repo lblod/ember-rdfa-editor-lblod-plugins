@@ -3,6 +3,9 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import { ValidationResult } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { InfoCircleIcon } from '@appuniversum/ember-appuniversum/components/icons/info-circle';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
+import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 
 interface Args {
   icon?: string;
@@ -39,13 +42,13 @@ export default class ValidationItem extends Component<Args> {
   get icon() {
     switch (this.result.severity) {
       case 'info':
-        return 'info-circle';
+        return InfoCircleIcon;
       case 'warning':
-        return 'alert-triangle';
+        return AlertTriangleIcon;
       case 'violation':
-        return 'cross';
+        return CrossIcon;
       default:
-        return 'info-circle';
+        return InfoCircleIcon;
     }
   }
 

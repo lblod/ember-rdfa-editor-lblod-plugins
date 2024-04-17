@@ -273,6 +273,9 @@ export default class BesluitSampleController extends Controller {
         interactive: true,
         rdfaAware: true,
       },
+      worship: {
+        endpoint: 'https://data.lblod.info/sparql',
+      },
     };
   }
 

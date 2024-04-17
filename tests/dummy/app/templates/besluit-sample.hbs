@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 {{! template-lint-disable no-bare-strings  }}
 {{page-title 'LBLOD Plugins - Besluit'}}
 <div {{did-insert this.setPrefixes}}>
@@ -116,6 +117,10 @@
                 />
                 <VariablePlugin::Address::Insert @controller={{this.controller}}/>
                 <VariablePlugin::Date::Insert @controller={{this.controller}}/>
+                <WorshipPlugin::Insert
+                  @controller={{this.controller}}
+                  @config={{this.config.worship}}
+                />
               </Sidebar.Collapsible>
               <ArticleStructurePlugin::StructureCard
                 @controller={{this.controller}}

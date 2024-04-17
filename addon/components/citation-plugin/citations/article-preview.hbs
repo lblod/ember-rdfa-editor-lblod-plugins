@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <div class="au-u-margin" ...attributes>
   <AuHeading @level="3" @skin="5" class="au-u-margin-bottom-small">
   {{@article.number}} ({{@article.dateInForce}} - {{if @article.dateNoLongerInForce @article.dateNoLongerInForce "…"}})
@@ -7,7 +8,7 @@
   </p>
   <AuButton
     @skin="primary"
-    @icon="plus-text"
+    @icon={{this.PlusTextIcon}}
     @iconAlignment="left"
     class="au-u-margin-top-small"
     {{on "click" @insertArticleCitation}}>

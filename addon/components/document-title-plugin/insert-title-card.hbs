@@ -1,5 +1,12 @@
+{{! @glint-nocheck: not typesafe yet }}
 <li class="au-c-list__item">
-  <AuButton @icon="add" @iconAlignment="left" @skin="link" {{on 'click' this.insertTitle}} @disabled={{not this.canInsertTitle}}>
+  <AuButton
+    @icon={{this.AddIcon}}
+    @iconAlignment="left"
+    @skin="link"
+    {{on 'click' this.insertTitle}}
+    @disabled={{not this.canInsertTitle}}
+  >
     {{t "document-title-plugin.insert-title"}}
   </AuButton>
 </li>

@@ -1,4 +1,5 @@
-<AuPill @icon="pencil" @iconAlignment="right" class="variable atomic" {{on 'click' this.onClick}}>
+{{! @glint-nocheck: not typesafe yet }}
+<AuPill @icon={{this.PencilIcon}} @iconAlignment="right" class="variable atomic" {{on 'click' this.onClick}}>
 
   {{this.humanReadableDate}}
   {{#if this.label}}

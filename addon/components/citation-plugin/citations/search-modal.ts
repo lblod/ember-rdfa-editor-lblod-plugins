@@ -23,6 +23,7 @@ import {
   fetchLegalDocuments,
   LegalDocument,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
+import { SearchIcon } from '@appuniversum/ember-appuniversum/components/icons/search';
 
 function getISODate(date: Option<Date>): string | null {
   if (date) {
@@ -51,6 +52,8 @@ interface Args {
 }
 
 export default class EditorPluginsCitationsSearchModalComponent extends Component<Args> {
+  SearchIcon = SearchIcon;
+
   @service declare intl: IntlService;
   // Vlaamse Codex currently doesn't contain captions and content of legal document
   // @tracked isEnabledSearchCaption = false

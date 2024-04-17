@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { NavLeftIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-left';
+import { NavRightIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-right';
 
 type Args = {
   count: number;
@@ -8,6 +10,9 @@ type Args = {
   goToPage: (n: number) => void;
 };
 export default class RoadsignsPagination extends Component<Args> {
+  NavRightIcon = NavRightIcon;
+  NavLeftIcon = NavLeftIcon;
+
   @tracked actualPageStart = 0;
   @tracked actualPageEnd = 10;
 

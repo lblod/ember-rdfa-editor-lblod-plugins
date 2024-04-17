@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 /**
  * Card displaying a hint of the Date plugin
@@ -26,6 +27,8 @@ type Args = {
 };
 
 export default class RoadsignRegulationCard extends Component<Args> {
+  AddIcon = AddIcon;
+
   @tracked modalOpen = false;
 
   @action

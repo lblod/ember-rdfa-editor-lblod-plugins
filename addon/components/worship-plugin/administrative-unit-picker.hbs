@@ -1,0 +1,16 @@
+{{! @glint-nocheck: not typesafe yet }}
+<PowerSelect
+  @loadingMessage={{t 'common.search.loading'}}
+  @searchMessage={{t 'worship-plugin.modal.search.search'}}
+  @noMatchesMessage={{t 'worship-plugin.modal.search.no-results'}}
+  @placeholderMessage={{t 'worship-plugin.modal.fields.admin-unit'}}
+  @allowClear={{true}}
+  @renderInPlace={{true}}
+  @searchEnabled={{true}}
+  @search={{perform this.searchUnits}}
+  @selected={{@selectedUnit}}
+  @onChange={{@onSelectUnit}}
+  ...attributes
+  as |unit|>
+  {{unit.label}}
+</PowerSelect>

@@ -3,10 +3,12 @@ import { NodeSelection, ProsePlugin, SayView } from '@lblod/ember-rdfa-editor';
 import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-
+import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
 export default class LocationNodeViewComponent extends Component<EmberNodeArgs> {
+  PencilIcon = PencilIcon;
+
   @tracked innerView?: SayView;
 
   get plugins(): ProsePlugin[] {

@@ -15,6 +15,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 type Args = {
   getPos: () => number | undefined;
@@ -27,6 +28,8 @@ type Args = {
 };
 
 export default class DateNodeviewComponent extends Component<Args> {
+  PencilIcon = PencilIcon;
+
   @service declare intl: IntlService;
 
   get controller() {

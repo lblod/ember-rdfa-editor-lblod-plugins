@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <AuModal
   @modalOpen={{@open}}
   @closeModal={{this.closeModal}}
@@ -39,14 +40,11 @@
         <div class='au-u-padding-top snippet-modal--list-container'>
           {{#if this.snippetListResource.isRunning}}
             <div class='au-u-margin'>
-              <AuLoader @padding='large' />
-              <span class='au-u-hidden-visually'>
-                {{t 'snippet-plugin.modal.alert.loading'}}
-              </span>
+              <Common::Search::Loading />
             </div>
           {{else}}
             {{#if this.error}}
-              <SnippetPlugin::Helpers::AlertLoadError @error={{this.error}} />
+              <Common::Search::AlertLoadError @error={{this.error}} class="au-u-margin-top-none" />
             {{else}}
               {{#if this.snippetListResource.value.length}}
                 <SnippetPlugin::SnippetList::SnippetListView
@@ -55,7 +53,7 @@
                   @onChange={{this.onChange}}
                 />
               {{else}}
-                <SnippetPlugin::Helpers::AlertNoItems />
+                <Common::Search::AlertNoItems />
               {{/if}}
             {{/if}}
           {{/if}}

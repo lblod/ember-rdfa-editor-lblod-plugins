@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <div class="citaten--main-container au-u-flex au-u-flex--column au-u-flex--between">
   <div class="citaten--container-content">
     {{! Heading with title and actions }}
@@ -9,7 +10,7 @@
         <AuPill
           class="au-u-margin-top-small au-u-margin-bottom-small"
           @skin="border"
-          @icon="calendar"
+          @icon={{this.CalendarIcon}}
           @iconAlignment="left">
           {{@legalDocument.publicationDate}}
         </AuPill>
@@ -17,7 +18,7 @@
       <br/>
       <AuButton
         @skin="primary"
-        @icon="plus-text"
+        @icon={{this.PlusTextIcon}}
         @iconAlignment="left"
         class="au-u-margin-right"
         {{on "click" (fn @insertLegalDocumentCitation @legalDocument)}}>
@@ -25,7 +26,7 @@
       </AuButton>
       <AuLinkExternal
         @skin="primary"
-        @icon="link-external"
+        @icon={{this.LinkExternalIcon}}
         @iconAlignment="left"
         href={{@legalDocument.uri}}
         rel="noreferrer noopener">
@@ -34,9 +35,16 @@
       {{! Search field }}
       <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}}
                @required={{false}} @error={{false}} @warning={{false}}>{{t "citaten-plugin.search.article"}}</AuLabel>
-      <AuInput id="searchCodex" placeholder="{{t "citaten-plugin.search.article-placeholder"}}" @type="text"
-               @width="default" @icon="search" @iconAlignment="right" @value={{this.articleFilter}} {{on "input"
-                                                                                                         (perform this.updateArticleFilter)}}/>
+      <AuInput
+        id="searchCodex"
+        placeholder="{{t "citaten-plugin.search.article-placeholder"}}"
+        type="text"
+        @width="default"
+        @icon={{this.SearchIcon}}
+        @iconAlignment="right"
+        value={{this.articleFilter}}
+        {{on "input" (perform this.updateArticleFilter)}}
+      />
     </div>
     {{! Search results }}
     <div>
@@ -47,7 +55,7 @@
         </div>
       {{else}}
         {{#if this.error}}
-          <CitationPlugin::Helpers::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
+          <Common::Search::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
         {{else}}
           <CitationPlugin::Citations::ArticleList
             @insertArticleCitation={{fn @insertArticleCitation @legalDocument}}
@@ -69,7 +77,7 @@
           <div class="au-c-pagination__list-item">
             <AuButton
               @skin="link"
-              @icon="hierarchical-back"
+              @icon={{this.HierarchicalBackIcon}}
               @iconAlignment="left"
               {{on "click" this.close}}>
               {{t "citaten-plugin.search.back"}}
@@ -89,7 +97,7 @@
               {{#unless this.isFirstPage}}
                 <AuButton
                   @skin="link"
-                  @icon="nav-left"
+                  @icon={{this.NavLeftIcon}}
                   @iconAlignment="left"
                   {{on "click" this.previousPage}}>
                   {{t "citaten-plugin.pagination.previous"}}
@@ -98,7 +106,7 @@
               {{#unless this.isLastPage}}
                 <AuButton
                   @skin="link"
-                  @icon="nav-right"
+                  @icon={{this.NavRightIcon}}
                   @iconAlignment="right"
                   {{on "click" this.nextPage}}>
                   {{t "citaten-plugin.pagination.next"}}

@@ -14,6 +14,10 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
+import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
+import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
+import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
 
 type Args = {
   controller: SayController;
@@ -21,6 +25,10 @@ type Args = {
 };
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
+  CircleIcon = CircleXIcon;
+  MailIcon = MailIcon;
+  CrossIcon = CrossIcon;
+  AlertTriangleIcon = AlertTriangleIcon;
   /**
    * Actual besluit type selected
    * @property besluitType

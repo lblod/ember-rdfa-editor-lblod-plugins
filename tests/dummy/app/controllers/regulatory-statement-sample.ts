@@ -188,28 +188,34 @@ export default class RegulatoryStatementSampleController extends Controller {
     return [
       {
         label: 'text',
+        // @ts-expect-error Unclear why these types don't agree
         component: TextVariableInsertComponent,
       },
       {
         label: 'number',
+        // @ts-expect-error Unclear why these types don't agree
         component: NumberInsertComponent,
       },
       {
         label: 'date',
+        // @ts-expect-error Unclear why these types don't agree
         component: DateInsertVariableComponent,
       },
       {
         label: 'location',
+        // @ts-expect-error Unclear why these types don't agree
         component: LocationInsertComponent,
         options: this.locationOptions,
       },
       {
         label: 'codelist',
+        // @ts-expect-error Unclear why these types don't agree
         component: CodelistInsertComponent,
         options: this.codelistOptions,
       },
       {
         label: 'address',
+        // @ts-expect-error Unclear why these types don't agree
         component: VariablePluginAddressInsertVariableComponent,
       },
     ];
@@ -245,6 +251,9 @@ export default class RegulatoryStatementSampleController extends Controller {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       },
       assignedSnippetListsIds: [],
+      worship: {
+        endpoint: 'https://data.lblod.info/sparql',
+      },
     };
   }
 

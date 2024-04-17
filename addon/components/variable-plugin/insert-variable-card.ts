@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { type ComponentLike } from '@glint/template';
 import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { hasGroups } from '@lblod/ember-rdfa-editor/utils/node-utils';
 import { service } from '@ember/service';
@@ -8,7 +9,7 @@ import IntlService from 'ember-intl/services/intl';
 
 export type VariableConfig = {
   label: string;
-  component: typeof Component;
+  component: ComponentLike;
   options?: unknown;
 };
 

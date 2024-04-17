@@ -1,58 +1,11 @@
+// This is the config for running glint in watch mode
 {
+  "extends": "./tsconfig.main.json",
   "compilerOptions": {
-    "target": "es2021",
-    "module": "es2020",
-    "allowJs": true,
-    "checkJs": false,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noEmitOnError": false,
-    "noEmit": true,
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "baseUrl": ".",
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
-    "paths": {
-      "dummy/tests/*": [
-        "tests/*"
-      ],
-      "dummy/*": [
-        "tests/dummy/app/*",
-        "app/*"
-      ],
-      "@lblod/ember-rdfa-editor-lblod-plugins": [
-        "addon"
-      ],
-      "@lblod/ember-rdfa-editor-lblod-plugins/*": [
-        "addon/*"
-      ],
-      "@lblod/ember-rdfa-editor-lblod-plugins/test-support": [
-        "addon-test-support"
-      ],
-      "@lblod/ember-rdfa-editor-lblod-plugins/test-support/*": [
-        "addon-test-support/*"
-      ],
-      "*": [
-        "types/*"
-      ]
-    }
+    "rootDir": ".",
   },
-  "include": [
-    "app/**/*",
-    "addon/**/*",
-    "tests/**/*",
-    "types/**/*",
-    "test-support/**/*",
-    "addon-test-support/**/*"
-  ]
+  "glint": {
+    "environment": ["ember-loose", "ember-template-imports"],
+    "checkStandaloneTemplates": false
+  }
 }

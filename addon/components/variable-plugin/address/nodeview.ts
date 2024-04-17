@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 import { NodeSelection, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/address';
@@ -15,6 +16,8 @@ type Args = {
 };
 
 export default class AddressNodeviewComponent extends Component<Args> {
+  PencilIcon = PencilIcon;
+
   @service declare intl: IntlService;
 
   get controller() {

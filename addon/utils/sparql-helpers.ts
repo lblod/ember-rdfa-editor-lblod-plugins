@@ -1,6 +1,11 @@
 import * as RDF from '@rdfjs/types';
 import { optionMapOr } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
+export type BindingObject<Obj extends Record<string, string>> = Record<
+  keyof Obj,
+  { value: string }
+>;
+
 export interface QueryResult<Binding = Record<string, RDF.Term>> {
   results: {
     bindings: Binding[];
@@ -12,6 +17,9 @@ interface QueryConfig {
   endpoint: string;
   abortSignal?: AbortSignal;
 }
+
+export const sparqlEscapeString = (value: string) =>
+  '"""' + value.replace(/[\\"]/g, (match) => '\\' + match) + '"""';
 
 export async function executeQuery<Binding = Record<string, RDF.Term>>({
   query,

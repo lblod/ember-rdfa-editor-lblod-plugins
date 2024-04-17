@@ -12,6 +12,9 @@ import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-up';
+import { ChevronDownIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-down';
+import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 
 type Args = {
   controller: SayController;
@@ -19,6 +22,9 @@ type Args = {
 };
 
 export default class EditorPluginsStructureCardComponent extends Component<Args> {
+  BinIcon = BinIcon;
+  ChevronDownIcon = ChevronDownIcon;
+  ChevronUpIcon = ChevronUpIcon;
   @service declare intl: IntlService;
   @tracked removeStructureContent = false;
   @tracked startNumber: number | null = null;
