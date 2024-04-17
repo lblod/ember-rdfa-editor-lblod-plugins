@@ -1,9 +1,5 @@
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import {
-  isRdfaAttrs,
-  RdfaAttrs,
-  RdfaResourceAttrs,
-} from '@lblod/ember-rdfa-editor/core/schema';
+import { isRdfaAttrs, RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import {
   sayDataFactory,
   type SayNamedNode,
@@ -61,7 +57,7 @@ export function hasOutgoingNamedNodeTriple(
   ) {
     return false;
   }
-  return (rdfaAttrs as RdfaResourceAttrs).properties.some((prop) => {
+  return rdfaAttrs.properties.some((prop) => {
     return (
       prop.object.termType === 'NamedNode' &&
       predicate.matches(prop.predicate) &&
