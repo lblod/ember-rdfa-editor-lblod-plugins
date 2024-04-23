@@ -91,12 +91,32 @@ import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
-import { inlineRdfaWithConfig } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import { inlineRdfaWithConfig, inlineRdfaWithConfigView } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
+import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
+import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
+import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
+import { CitationPluginConfig, citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import { editableNodePlugin, getActiveEditableNode } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 
 export default class RegulatoryStatementSampleController extends Controller {
+  SnippetInsert = SnippetInsertRdfaComponent;
+  SnippetListSelect = SnippetListSelectRdfaComponent;
+  DebugInfo = DebugInfo;
+  AttributeEditor = AttributeEditor;
+  RdfaEditor = RdfaEditor;
+  @tracked editableNodes = false;
+
+  @action
+  toggleEditableNodes() {
+    this.editableNodes = !this.editableNodes;
+  }
+
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
   @tracked controller?: SayController;
+  @tracked citationPlugin = citationPlugin(this.config.citation);
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -114,26 +134,33 @@ export default class RegulatoryStatementSampleController extends Controller {
       }),
       paragraph,
       document_title,
+
       repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
       list_item: listItemWithConfig({ rdfaAware: true }),
       ordered_list: orderedListWithConfig({ rdfaAware: true }),
       bullet_list: bulletListWithConfig({ rdfaAware: true }),
       templateComment,
       placeholder,
-      ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+      ...tableNodes({
+        tableGroup: 'block',
+        cellContent: 'block+',
+      }),
+      address,
       date: date(this.dateOptions),
       text_variable,
       number,
       location,
       codelist,
-      address,
       ...STRUCTURE_NODES,
       heading: headingWithConfig({ rdfaAware: true }),
       blockquote,
+
       horizontal_rule,
       code_block,
+
       text,
       image,
+
       hard_break,
       block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
       table_of_contents: table_of_contents(this.config.tableOfContents),
@@ -248,7 +275,22 @@ export default class RegulatoryStatementSampleController extends Controller {
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
+      citation: {
+        type: 'nodes',
+        activeInNodeTypes(schema: Schema) {
+          return new Set([schema.nodes.doc]);
+        },
+        endpoint: '/codex/sparql',
+      } as CitationPluginConfig,
     };
+  }
+
+  get activeNode() {
+    console.log('Get active Node: ', getActiveEditableNode(this.controller.activeEditorState))
+    if (this.controller) {
+      return getActiveEditableNode(this.controller.activeEditorState);
+    }
+    return;
   }
 
   @tracked rdfaEditor?: SayController;
@@ -267,6 +309,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
       address: addressView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
   @tracked plugins: Plugin[] = [
@@ -280,6 +323,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       shouldShowInvisibles: false,
     }),
     emberApplication({ application: getOwner(this) }),
+    editableNodePlugin(),
   ];
 
   @action

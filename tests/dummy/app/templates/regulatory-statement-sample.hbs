@@ -10,12 +10,12 @@
       <EditorContainer
         @editorOptions={{hash
           showRdfa=true
+          editRdfa=this.editableNodes
           showRdfaHighlight=true
           showRdfaHover=true
           showPaper=true
           showToolbarBottom=null
         }}
-        @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
           {{#if this.controller}}
@@ -49,7 +49,14 @@
             <Tb.Group>
               <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
               <TableOfContentsPlugin::ToolbarButton @controller={{this.controller}}/>
-              <Plugins::RdfaBlockRender::RdfaBlocksToggle @controller={{this.controller}}/>
+              <div class="say-rdfa-toggle">
+                <AuToggleSwitch
+                  @checked={{this.editableNodes}}
+                  @onChange={{this.toggleEditableNodes}}
+                >
+                  Toggle editable nodes
+                </AuToggleSwitch>
+              </div>
             </Tb.Group>
           </Toolbar>
           {{/if}}
@@ -70,10 +77,13 @@
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <SnippetPlugin::SnippetInsert
-                @controller={{this.controller}}
-                @config={{this.config.snippet}}
-              />
+              {{#if this.activeNode}}
+                <this.SnippetInsert
+                  @controller={{this.controller}}
+                  @config={{this.config.snippet}}
+                  @node={{this.activeNode}}
+                />
+              {{/if}}
               <TemplateCommentsPlugin::Insert
                 @controller={{this.controller}}
               />
@@ -99,10 +109,24 @@
               @controller={{this.controller}}
             />
             <AuHr/>
-            <SnippetPlugin::SnippetListSelect
-              @config={{this.config.snippet}}
-              @assignedSnippetListsIds={{this.config.assignedSnippetListsIds}}
-            />
+            {{#if this.activeNode}}
+              <this.SnippetListSelect
+                @node={{this.activeNode}}
+                @controller={{this.controller}}
+                @config={{this.config.snippet}}
+              />
+              {{#if this.editableNodes}}
+                <this.RdfaEditor
+                  @node={{this.activeNode}}
+                  @controller={{this.controller}}
+                />
+                <this.DebugInfo @node={{this.activeNode}} />
+                <this.AttributeEditor
+                  @node={{this.activeNode}}
+                  @controller={{this.controller}}
+                />
+              {{/if}}
+            {{/if}}
           </Sidebar>
           {{/if}}
         </:aside>
