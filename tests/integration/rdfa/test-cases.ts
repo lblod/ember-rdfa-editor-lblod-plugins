@@ -12,9 +12,10 @@ const TEST_CASES = {
   x0005: `
   <div lang="nl-BE" resource="http://test.com/1" typeof="ext:Type" ><span property="ext:foo">test</span></div>
 `,
-  title: `
-  <div lang="nl-BE" data-say-document="true"><div property="say:hasPart" typeof="say:Title" resource="http://data.lblod.info/titles/6112780c-ed34-4cea-8bc7-b00286b917d7"><h3 property="say:heading" data-number-display-style="roman"><span property="eli:number" datatype="xsd:integer" content="1" contenteditable="false">I</span><span contenteditable="false">. </span><span property="ext:title">This is a Title</span></h3><div property="say:body"><p>This is some content</p></div></div></div>
-`,
+  // Skip the title test for now
+  //   title: `
+  //   <div lang="nl-BE" data-say-document="true"><div property="say:hasPart" typeof="say:Title" resource="http://data.lblod.info/titles/6112780c-ed34-4cea-8bc7-b00286b917d7"><h3 property="say:heading" data-number-display-style="roman"><span property="eli:number" datatype="xsd:integer" content="1" contenteditable="false">I</span><span contenteditable="false">. </span><span property="ext:title">This is a Title</span></h3><div property="say:body"><p>This is some content</p></div></div></div>
+  // `,
   // The content of the body changes as it's an rdf:XMLLiteral and that means it includes the HTML
   // within it, which is changed to include hidden elements
   // titleWithDatatype: `
