@@ -20,7 +20,7 @@ export const mappingSpan = (
 ) => {
   return span(
     {
-      subject: mapping,
+      resource: mapping,
       typeof: EXT('Mapping').prefixed,
       ...attributes,
     },
@@ -32,7 +32,7 @@ export const mappingSpan = (
  * Constructs a variable instance span based on a variable-instance resource.
  */
 export const instanceSpan = (variableInstance: string) => {
-  return span({ property: EXT('instance'), subject: variableInstance });
+  return span({ property: EXT('instance'), resource: variableInstance });
 };
 
 /**
@@ -48,7 +48,7 @@ export const typeSpan = (variableType: string) => {
 export const sourceSpan = (variableSource: string) => {
   return span({
     property: DCT('source').prefixed,
-    subject: variableSource,
+    resource: variableSource,
   });
 };
 
