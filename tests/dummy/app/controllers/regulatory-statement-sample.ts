@@ -91,14 +91,24 @@ import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
-import { inlineRdfaWithConfig, inlineRdfaWithConfigView } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import {
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
 import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
-import { CitationPluginConfig, citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-import { editableNodePlugin, getActiveEditableNode } from '@lblod/ember-rdfa-editor/plugins/editable-node';
+import {
+  CitationPluginConfig,
+  citationPlugin,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import {
+  editableNodePlugin,
+  getActiveEditableNode,
+} from '@lblod/ember-rdfa-editor/plugins/editable-node';
+import { ComponentLike } from '@glint/template';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -215,29 +225,30 @@ export default class RegulatoryStatementSampleController extends Controller {
     return [
       {
         label: 'text',
-        component: TextVariableInsertComponent,
+        component: TextVariableInsertComponent as unknown as ComponentLike,
       },
       {
         label: 'number',
-        component: NumberInsertComponent,
+        component: NumberInsertComponent as unknown as ComponentLike,
       },
       {
         label: 'date',
-        component: DateInsertVariableComponent,
+        component: DateInsertVariableComponent as unknown as ComponentLike,
       },
       {
         label: 'location',
-        component: LocationInsertComponent,
+        component: LocationInsertComponent as unknown as ComponentLike,
         options: this.locationOptions,
       },
       {
         label: 'codelist',
-        component: CodelistInsertComponent,
+        component: CodelistInsertComponent as unknown as ComponentLike,
         options: this.codelistOptions,
       },
       {
         label: 'address',
-        component: VariablePluginAddressInsertVariableComponent,
+        component:
+          VariablePluginAddressInsertVariableComponent as unknown as ComponentLike,
       },
     ];
   }
@@ -286,7 +297,6 @@ export default class RegulatoryStatementSampleController extends Controller {
   }
 
   get activeNode() {
-    console.log('Get active Node: ', getActiveEditableNode(this.controller.activeEditorState))
     if (this.controller) {
       return getActiveEditableNode(this.controller.activeEditorState);
     }
