@@ -330,6 +330,7 @@ export const besluitArticleStructure: StructureSpec = {
       `besluit_article`,
       {
         subject,
+        rdfaNodeType: 'resource',
         __rdfaId: articleRdfaId,
       },
       [
