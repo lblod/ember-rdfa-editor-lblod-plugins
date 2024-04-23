@@ -71,12 +71,6 @@ export const description: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'eli:description',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -94,25 +88,12 @@ export const description: NodeSpec = {
       tag: 'div,p',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, ELI('description')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, ELI('description'))) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div,p',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', ELI('description'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
     },
   ],
 };
