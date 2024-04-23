@@ -106,12 +106,6 @@ export const motivering: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'besluit:motivering',
-    },
-    lang: {
-      default: 'nl',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -129,25 +123,12 @@ export const motivering: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, BESLUIT('motivering')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, BESLUIT('motivering'))) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
     },
   ],
 };
