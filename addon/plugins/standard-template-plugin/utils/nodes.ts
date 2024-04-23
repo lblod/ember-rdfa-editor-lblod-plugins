@@ -333,9 +333,6 @@ export const besluit_article_content: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -353,27 +350,13 @@ export const besluit_article_content: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, PROV('value')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, PROV('value'))) {
           return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
       contentElement: getRdfaContentElement,
       context: 'besluit_article/',
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
-      context: 'besluit_article//',
     },
   ],
 };
