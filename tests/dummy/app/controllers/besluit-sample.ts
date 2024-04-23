@@ -95,9 +95,29 @@ import {
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
-import { inlineRdfaWithConfig } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import {
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import {
+  editableNodePlugin,
+  getActiveEditableNode,
+} from '@lblod/ember-rdfa-editor/plugins/editable-node';
+import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
+import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
+import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
 
 export default class BesluitSampleController extends Controller {
+  DebugInfo = DebugInfo;
+  AttributeEditor = AttributeEditor;
+  RdfaEditor = RdfaEditor;
+  @tracked editableNodes = false;
+
+  @action
+  toggleEditableNodes() {
+    this.editableNodes = !this.editableNodes;
+  }
+
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
   @tracked controller?: SayController;
@@ -171,7 +191,10 @@ export default class BesluitSampleController extends Controller {
         ordered_list: orderedListWithConfig({ rdfaAware: true }),
         bullet_list: bulletListWithConfig({ rdfaAware: true }),
         placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+        ...tableNodes({
+          tableGroup: 'block',
+          cellContent: 'block+',
+        }),
         date: date(this.dateOptions),
         text_variable,
         number,
@@ -279,6 +302,13 @@ export default class BesluitSampleController extends Controller {
     };
   }
 
+  get activeNode() {
+    if (this.controller) {
+      return getActiveEditableNode(this.controller.activeEditorState);
+    }
+    return;
+  }
+
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController,
@@ -291,6 +321,7 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
       address: addressView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
   @tracked plugins: Plugin[] = [
@@ -305,6 +336,7 @@ export default class BesluitSampleController extends Controller {
     createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
       shouldShowInvisibles: false,
     }),
+    editableNodePlugin(),
   ];
 
   @action

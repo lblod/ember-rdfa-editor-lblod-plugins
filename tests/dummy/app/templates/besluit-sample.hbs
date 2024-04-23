@@ -10,12 +10,12 @@
       <EditorContainer
         @editorOptions={{hash
           showRdfa=true
+          editRdfa=this.editableNodes
           showRdfaHighlight=true
           showRdfaHover=true
           showPaper=true
           showToolbarBottom=null
         }}
-        @showRdfaBlocks={{this.controller.showRdfaBlocks}}
       >
         <:top>
           {{#if this.controller}}
@@ -55,9 +55,14 @@
                   @controller={{this.controller}}
                   @options={{this.config.besluitType}}
                 />
-                <Plugins::RdfaBlockRender::RdfaBlocksToggle
-                  @controller={{this.controller}}
-                />
+                <div class="say-rdfa-toggle">
+                  <AuToggleSwitch
+                    @checked={{this.editableNodes}}
+                    @onChange={{this.toggleEditableNodes}}
+                  >
+                    Toggle editable nodes
+                  </AuToggleSwitch>
+                </div>
               </Tb.Group>
             </Toolbar>
           {{/if}}
@@ -139,6 +144,17 @@
               <VariablePlugin::Codelist::Edit @controller={{this.controller}} @options={{this.codelistOptions}}/>
               <VariablePlugin::Date::Edit @controller={{this.controller}} @options={{this.dateOptions}}/>
               <VariablePlugin::Location::Edit @controller={{this.controller}} @options={{this.locationOptions}}/>
+              {{#if (and this.activeNode this.editableNodes)}}
+                <this.RdfaEditor
+                  @node={{this.activeNode}}
+                  @controller={{this.controller}}
+                />
+                <this.DebugInfo @node={{this.activeNode}} />
+                <this.AttributeEditor
+                  @node={{this.activeNode}}
+                  @controller={{this.controller}}
+                />
+              {{/if}}
             </Sidebar>
           {{/if}}
         </:aside>
