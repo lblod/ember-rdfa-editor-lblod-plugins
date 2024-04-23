@@ -142,12 +142,6 @@ export const article_container: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'prov:value',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -165,27 +159,13 @@ export const article_container: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, PROV('value')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, PROV('value'))) {
           return rdfaAttrs;
         }
         return false;
       },
       context: 'besluit/',
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
-      context: 'besluit/',
     },
   ],
 };
