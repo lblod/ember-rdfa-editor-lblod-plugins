@@ -178,10 +178,6 @@ export const besluit_article: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    typeof: {
-      default: BESLUIT('Artikel').prefixed,
-    },
-    subject: {},
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -201,31 +197,13 @@ export const besluit_article: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, ELI('has_part')) &&
-          hasOutgoingNamedNodeTriple(
-            rdfaAttrs,
-            RDF('type'),
-            BESLUIT('Artikel'),
-          ) &&
-          hasRdfaContentChild(element)
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel'))
         ) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', ELI('has_part')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Artikel'))
-        ) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
     },
   ],
 };
