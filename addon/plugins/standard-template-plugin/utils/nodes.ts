@@ -33,12 +33,6 @@ export const besluit_title: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'eli:title',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -58,29 +52,12 @@ export const besluit_title: NodeSpec = {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, ELI('title')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, ELI('title'))) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'h1,h2,h3,h4,h5',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', ELI('title'))) {
-          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-          return {
-            ...rdfaAttrs,
-            subject: element.getAttribute('resource'),
-          };
-        }
-        return false;
-      },
     },
   ],
 };
