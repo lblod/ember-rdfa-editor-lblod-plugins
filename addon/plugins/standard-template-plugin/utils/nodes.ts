@@ -491,10 +491,6 @@ export const besluit: NodeSpec = {
   canSplit: false,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    typeof: {
-      default: 'besluit:Besluit ext:BesluitNieuweStijl',
-    },
-    subject: {},
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -514,37 +510,15 @@ export const besluit: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, PROV('generated')) &&
-          hasOutgoingNamedNodeTriple(
-            rdfaAttrs,
-            RDF('type'),
-            BESLUIT('Besluit'),
-          ) &&
-          hasRdfaContentChild(element)
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Besluit'))
         ) {
           return {
-            typeof: element.getAttribute('typeof'),
             ...rdfaAttrs,
           };
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', PROV('generated')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
-        ) {
-          return {
-            typeof: element.getAttribute('typeof'),
-            ...getRdfaAttrs(element, { rdfaAware }),
-          };
-        }
-        return false;
-      },
     },
   ],
 };
