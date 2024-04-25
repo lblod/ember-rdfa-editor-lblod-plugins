@@ -1,12 +1,10 @@
 import Component from '@glimmer/component';
 import {
   DecorationSource,
-  NodeSelection,
   PNode,
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
-import { action } from '@ember/object';
 import IntlService from 'ember-intl/services/intl';
 import { service } from '@ember/service';
 import {
@@ -38,18 +36,6 @@ export default class DateNodeviewComponent extends Component<Args> {
 
   get documentLanguage() {
     return this.controller.documentLanguage;
-  }
-
-  @action
-  onClick() {
-    const tr = this.args.controller.activeEditorState.tr;
-    tr.setSelection(
-      NodeSelection.create(
-        this.args.controller.activeEditorState.doc,
-        this.args.getPos() as number,
-      ),
-    );
-    this.args.controller.activeEditorView.dispatch(tr);
   }
 
   get humanReadableDate() {
