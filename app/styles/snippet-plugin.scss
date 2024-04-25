@@ -57,6 +57,8 @@
 
   &--button {
     border-left: 1px solid var(--au-gray-200);
+    display: flex;
+    align-items: center;
   }
 
   &--editor-overlay {
