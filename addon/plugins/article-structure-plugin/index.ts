@@ -39,7 +39,7 @@ export type StructureSpec = {
   }) => SpecConstructorResult;
   numberConfig: {
     numberPredicate?: Resource;
-    convertNumber: (number: number) => string;
+    convertNumber?: (number: number) => string;
   };
   setNumber: (args: {
     number: number;
