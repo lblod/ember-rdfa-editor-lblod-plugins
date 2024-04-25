@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
+import { task } from 'ember-concurrency';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
@@ -97,6 +98,8 @@ export default class RegulatoryStatementSampleController extends Controller {
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
   @tracked controller?: SayController;
+  @tracked assignedSnippetListsIds: string[] =
+    localStorage.getItem('ASSIGNED_SNIPPET_LISTS_IDS')?.split(',') ?? [];
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -248,12 +251,19 @@ export default class RegulatoryStatementSampleController extends Controller {
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       },
-      assignedSnippetListsIds: [],
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
     };
   }
+
+  setDocumentContainerSnippetLists = task(async (snippetIds: string[]) => {
+    await new Promise<void>((resolve) => {
+      localStorage.setItem('ASSIGNED_SNIPPET_LISTS_IDS', snippetIds.join(','));
+      this.assignedSnippetListsIds = snippetIds;
+      resolve();
+    });
+  });
 
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (

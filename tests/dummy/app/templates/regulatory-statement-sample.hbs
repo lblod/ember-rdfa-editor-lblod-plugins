@@ -73,6 +73,7 @@
               <SnippetPlugin::SnippetInsert
                 @controller={{this.controller}}
                 @config={{this.config.snippet}}
+                @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
               />
               <TemplateCommentsPlugin::Insert
                 @controller={{this.controller}}
@@ -101,7 +102,8 @@
             <AuHr/>
             <SnippetPlugin::SnippetListSelect
               @config={{this.config.snippet}}
-              @assignedSnippetListsIds={{this.config.assignedSnippetListsIds}}
+              @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
+              @onSaveSnippetListIds={{this.setDocumentContainerSnippetLists}}
             />
           </Sidebar>
           {{/if}}
