@@ -292,6 +292,8 @@ export const besluit_article_header: NodeSpec = {
       renderRdfaAware({
         renderable: node,
         tag: 'span',
+        rdfaContainerTag: 'span',
+        contentContainerTag: 'span',
         attrs: {
           ...attrs,
           class: 'say-inline-rdfa',
