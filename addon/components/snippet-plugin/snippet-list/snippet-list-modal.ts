@@ -1,12 +1,14 @@
 import Component from '@glimmer/component';
-import { assert } from '@ember/debug';
 import { action } from '@ember/object';
 import { restartableTask, Task, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
 import { tracked } from '@glimmer/tracking';
 
-import { fetchSnippetLists } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
+import {
+  fetchSnippetLists,
+  OrderBy,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
 
 import {
   SnippetPluginConfig,
@@ -22,7 +24,10 @@ interface Args {
 
 export default class SnippetListModalComponent extends Component<Args> {
   // Filtering
-  @tracked inputSearchText: string | null = null;
+  @tracked nameFilterText: string | null = null;
+
+  // Sorting
+  @tracked sort: OrderBy = null;
 
   // Display
   @tracked error: unknown;
@@ -33,20 +38,6 @@ export default class SnippetListModalComponent extends Component<Args> {
 
   get config() {
     return this.args.config;
-  }
-
-  get searchText() {
-    return this.inputSearchText;
-  }
-
-  @action
-  setInputSearchText(event: InputEvent) {
-    assert(
-      'inputSearchText must be bound to an input element',
-      event.target instanceof HTMLInputElement,
-    );
-
-    this.inputSearchText = event.target.value;
   }
 
   @action
@@ -72,8 +63,9 @@ export default class SnippetListModalComponent extends Component<Args> {
         endpoint: this.args.config.endpoint,
         abortSignal: abortController.signal,
         filter: {
-          name: this.inputSearchText ?? undefined,
+          name: this.nameFilterText ?? undefined,
         },
+        orderBy: this.sort,
       });
 
       return queryResult.results;
@@ -88,7 +80,7 @@ export default class SnippetListModalComponent extends Component<Args> {
   snippetListResource = trackedTask<SnippetList[]>(
     this,
     this.snippetListSearch,
-    () => [this.inputSearchText],
+    () => [this.nameFilterText, this.sort],
   );
 
   @action
