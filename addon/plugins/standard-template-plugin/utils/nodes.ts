@@ -1,7 +1,6 @@
 import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaContentElement,
-  hasRdfaContentChild,
   renderRdfaAware,
   sharedRdfaNodeSpec,
 } from '@lblod/ember-rdfa-editor/core/schema';
