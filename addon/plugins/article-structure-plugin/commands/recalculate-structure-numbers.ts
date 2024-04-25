@@ -72,7 +72,7 @@ export default function recalculateStructureNumbers(
           contexts[i] = parent;
         }
 
-        const startNumber = spec.getStartNumber({ pos, transaction });
+        const startNumber = spec.getStartNumber?.({ pos, transaction });
 
         if (startNumber) {
           indices[i] = startNumber;

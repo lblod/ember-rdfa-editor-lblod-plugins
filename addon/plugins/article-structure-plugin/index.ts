@@ -47,12 +47,12 @@ export type StructureSpec = {
     transaction: Transaction;
   }) => Transaction;
   getNumber: (args: { pos: number; transaction: Transaction }) => number | null;
-  setStartNumber: (args: {
+  setStartNumber?: (args: {
     number: number | null;
     pos: number;
     transaction: Transaction;
   }) => Transaction;
-  getStartNumber: (args: {
+  getStartNumber?: (args: {
     pos: number;
     transaction: Transaction;
   }) => number | null;
