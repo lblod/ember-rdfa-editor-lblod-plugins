@@ -6,6 +6,13 @@ import {
 import { Snippet, SnippetList } from '../index';
 
 type Filter = { name?: string; assignedSnippetListIds?: string[] };
+export type OrderBy =
+  | 'label'
+  | 'created-on'
+  | '-label'
+  | '-created-on'
+  | ''
+  | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
 const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
@@ -107,10 +114,28 @@ const buildSnippetFetchQuery = ({
       `;
 };
 
+// This can be more generic, but for now it's fine
+const buildOrderByString = (orderBy: OrderBy) => {
+  switch (orderBy) {
+    case 'label':
+      return 'ASC(LCASE(?label))';
+    case '-label':
+      return 'DESC(LCASE(?label))';
+    case 'created-on':
+      return 'ASC(?createdOn)';
+    case '-created-on':
+      return 'DESC(?createdOn)';
+    default:
+      return 'DESC(?createdOn)';
+  }
+};
+
 const buildSnippetListFetchQuery = ({
   filter: { name },
+  orderBy,
 }: {
   filter: Filter;
+  orderBy: OrderBy;
 }) => {
   return `
         PREFIX pav: <http://purl.org/pav/>
@@ -127,7 +152,7 @@ const buildSnippetListFetchQuery = ({
               : ''
           }
         }
-        ORDER BY DESC(?createdOn)
+        ORDER BY ${buildOrderByString(orderBy)}
         `;
 };
 
@@ -182,10 +207,12 @@ export const fetchSnippetLists = async ({
   endpoint,
   abortSignal,
   filter,
+  orderBy,
 }: {
   endpoint: string;
   abortSignal: AbortSignal;
   filter: Filter;
+  orderBy: OrderBy;
 }) => {
   const totalCount = await executeCountQuery({
     endpoint,
@@ -203,7 +230,7 @@ export const fetchSnippetLists = async ({
     createdOn: { value: string };
   }>({
     endpoint,
-    query: buildSnippetListFetchQuery({ filter }),
+    query: buildSnippetListFetchQuery({ filter, orderBy }),
     abortSignal,
   });
 

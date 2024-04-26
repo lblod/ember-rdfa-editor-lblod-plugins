@@ -9,53 +9,19 @@
 >
   <modal.Body>
     <AuMainContainer class='snippet-modal--main-container' as |mc|>
-      <mc.sidebar>
-        <div class='au-c-sidebar'>
-          <div class='au-c-sidebar__content au-u-padding'>
-            <AuHeading @level='3' @skin='4' class='au-u-padding-bottom-small'>
-              {{t 'snippet-plugin.snippet-list.modal.search.title'}}
-            </AuHeading>
-            <AuLabel
-              class='au-margin-bottom-small'
-              for='searchTerm'
-              @inline={{false}}
-              @required={{false}}
-              @error={{false}}
-              @warning={{false}}
-            >
-              {{t 'snippet-plugin.snippet-list.modal.search.label'}}
-            </AuLabel>
-            <AuNativeInput
-              @type='text'
-              @width='block'
-              id='searchTerm'
-              value={{this.searchText}}
-              placeholder={{t 'snippet-plugin.snippet-list.modal.search.placeholder'}}
-              {{on 'input' this.setInputSearchText}}
-            />
-          </div>
-        </div>
-      </mc.sidebar>
       <mc.content @scroll={{true}}>
-        <div class='au-u-padding-top snippet-modal--list-container'>
-          {{#if this.snippetListResource.isRunning}}
-            <div class='au-u-margin'>
-              <Common::Search::Loading />
-            </div>
+        <div class='snippet-modal--list-container'>
+          {{#if this.error}}
+            <Common::Search::AlertLoadError @error={{this.error}} class="au-u-margin-top-none" />
           {{else}}
-            {{#if this.error}}
-              <Common::Search::AlertLoadError @error={{this.error}} class="au-u-margin-top-none" />
-            {{else}}
-              {{#if this.snippetListResource.value.length}}
-                <SnippetPlugin::SnippetList::SnippetListView
-                  @snippetLists={{this.snippetListResource.value}}
-                  @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
-                  @onChange={{this.onChange}}
-                />
-              {{else}}
-                <Common::Search::AlertNoItems />
-              {{/if}}
-            {{/if}}
+            <SnippetPlugin::SnippetList::SnippetListView
+              @snippetLists={{this.snippetListResource.value}}
+              @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
+              @listNameFilter={{this.nameFilterText}}
+              @sort={{this.sort}}
+              @onChange={{this.onChange}}
+              @isLoading={{this.snippetListResource.isRunning}}
+            />
           {{/if}}
         </div>
         <AuToolbar @border='top' @size='large' @nowrap={{true}} @reverse={{true}}>
