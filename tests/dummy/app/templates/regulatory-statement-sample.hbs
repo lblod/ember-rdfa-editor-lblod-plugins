@@ -19,46 +19,49 @@
       >
         <:top>
           {{#if this.controller}}
-          <Toolbar as |Tb|>
-            <Tb.Group>
-              <Toolbar::History @controller={{this.controller}}/>
-            </Tb.Group>
-            <Tb.Group>
-              <Toolbar::Styling @controller={{this.controller}}/>
-            </Tb.Group>
-            <Tb.Group>
-              <ConfidentialityPlugin::Toolbar @controller={{this.controller}} />
-            </Tb.Group>
-            <Tb.Group>
-              <Toolbar::List @controller={{this.controller}}/>
-              <Plugins::Indentation::IndentationMenu
-                @controller={{this.controller}}
-              />
-            </Tb.Group>
-            <Tb.Group>
-              <Plugins::Link::LinkMenu @controller={{this.controller}}/>
-              <GenericRdfaVariable::InsertMenu @controller={{this.controller}}/>
-            </Tb.Group>
-            <Tb.Group>
-              <Plugins::Table::TableMenu @controller={{this.controller}}/>
-            </Tb.Group>
-            <Tb.Group>
-              <Plugins::Heading::HeadingMenu @controller={{this.controller}}/>
-            </Tb.Group>
-            <Tb.Spacer/>
-            <Tb.Group>
-              <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
-              <TableOfContentsPlugin::ToolbarButton @controller={{this.controller}}/>
-              <div class="say-rdfa-toggle">
-                <AuToggleSwitch
-                  @checked={{this.editableNodes}}
-                  @onChange={{this.toggleEditableNodes}}
-                >
-                  Toggle editable nodes
-                </AuToggleSwitch>
-              </div>
-            </Tb.Group>
-          </Toolbar>
+            <ResponsiveToolbar>
+              <:main as |Tb|>
+                <Tb.Group>
+                  <Toolbar::History @controller={{this.controller}}/>
+                </Tb.Group>
+                <Tb.Group>
+                  <Toolbar::Styling @controller={{this.controller}}/>
+                </Tb.Group>
+                <Tb.Group>
+                  <ConfidentialityPlugin::Toolbar @controller={{this.controller}} />
+                </Tb.Group>
+                <Tb.Group>
+                  <Toolbar::List @controller={{this.controller}}/>
+                  <Plugins::Indentation::IndentationMenu
+                    @controller={{this.controller}}
+                  />
+                </Tb.Group>
+                <Tb.Group>
+                  <Plugins::Link::LinkMenu @controller={{this.controller}}/>
+                  <GenericRdfaVariable::InsertMenu @controller={{this.controller}}/>
+                </Tb.Group>
+                <Tb.Group>
+                  <Plugins::Table::TableMenu @controller={{this.controller}}/>
+                </Tb.Group>
+                <Tb.Group>
+                  <Plugins::Heading::HeadingMenu @controller={{this.controller}}/>
+                </Tb.Group>
+                <Tb.Spacer/>
+                <Tb.Group>
+                  <Plugins::Formatting::FormattingToggle @controller={{this.controller}}/>
+                  <TableOfContentsPlugin::ToolbarButton @controller={{this.controller}}/>
+                  <div class="say-rdfa-toggle">
+                    <AuToggleSwitch
+                      @checked={{this.editableNodes}}
+                      @onChange={{this.toggleEditableNodes}}
+                    >
+                      Toggle editable nodes
+                    </AuToggleSwitch>
+                  </div>
+                </Tb.Group>
+                <Plugins::HtmlEditor::Menu @controller={{this.controller}} />
+              </:main>
+            </ResponsiveToolbar>
           {{/if}}
         </:top>
         <:default>
