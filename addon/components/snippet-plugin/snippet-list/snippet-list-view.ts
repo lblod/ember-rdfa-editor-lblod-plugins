@@ -30,7 +30,19 @@ export default class SnippetListViewComponent extends Component<Args> {
   }
 
   @action
-  onClickRow(snippetList: SnippetList) {
+  onClickRow(snippetList: SnippetList, event: Event) {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+
+    const target = event.target;
+
+    // Only trigger the action when clicking on a td or tr element
+    // This is to prevent the action from being triggered when clicking on a checkbox
+    if (target.tagName !== 'TD' && target.tagName !== 'TR') {
+      return;
+    }
+
     const snippetListId = snippetList.id;
 
     if (!snippetListId) {
