@@ -284,6 +284,7 @@ snippet-plugin:
       table:
         select: Select
         list: List
+        created: Created
 
 template-comments-plugin:
   title: Template comment

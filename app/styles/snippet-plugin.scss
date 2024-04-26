@@ -17,6 +17,15 @@
   &--list-container {
     overflow: auto;
     flex-grow: 1;
+
+    .snippet-list-table-select-column {
+      width: 100px;
+      text-align: center;
+    }
+
+    .snippet-list-table-created-column {
+      width: 200px;
+    }
   }
 
   .error-code {
