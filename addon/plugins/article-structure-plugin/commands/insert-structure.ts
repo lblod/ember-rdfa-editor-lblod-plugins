@@ -78,7 +78,10 @@ const insertStructure = (
 ): Command => {
   return (state, dispatch) => {
     const { schema, selection, doc } = state;
-    if (wrapStructureContent(structureSpec, intl)(state, dispatch)) {
+    if (
+      !content &&
+      wrapStructureContent(structureSpec, intl)(state, dispatch)
+    ) {
       return true;
     }
     const insertionRange = findInsertionRange({

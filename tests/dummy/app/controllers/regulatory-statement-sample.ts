@@ -282,7 +282,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       },
-      assignedSnippetListsIds: [],
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },

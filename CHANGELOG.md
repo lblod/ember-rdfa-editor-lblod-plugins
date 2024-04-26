@@ -1,5 +1,18 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 17.1.0
+
+### Minor Changes
+
+- [#411](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/411) [`aca238e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/aca238ecc541f069b5df5c80a00481c6540b584f) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4811: Only show the titles of the snippets
+
+  In the snippet insert modal: only show the titles of the snippets
+
+- [#412](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/412) [`4ee0e95`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4ee0e95c71d0cedce1f867058721ef3ea7d13f35) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4816: Add sorting for snippet lists
+
+  - Use `AuDataTable`
+  - Add sorting for snippet lists
+
 ## 17.0.0
 
 ### Major Changes
