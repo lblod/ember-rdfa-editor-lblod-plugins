@@ -6,19 +6,9 @@
   <div
     class='snippet-preview--article au-u-padding au-u-padding-right-large rdfa-annotations rdfa-annotations-highlight rdfa-annotations-hover'
   >
-    <h3 class='snippet-preview--title au-u-margin-bottom'>
+    <h3 class='snippet-preview--title'>
       {{@snippet.title}}
     </h3>
-    <div class="snippet-preview--editor-container">
-      <div class="say-container__main">
-        <div class="say-editor">
-          <div class="say-editor__inner say-content">
-            {{this.snippet.content}}
-          </div>
-        </div>
-      </div>
-      <div class="snippet-preview--editor-overlay"></div>
-    </div>
   </div>
   <div class='snippet-preview--button au-u-padding-small'>
     <AuButton @skin='naked' {{on 'click' this.onInsert}}>

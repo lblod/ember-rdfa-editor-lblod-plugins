@@ -288,6 +288,7 @@ snippet-plugin:
       table:
         select: Selecteer
         list: Lijst
+        created: Aangemaakt op
 
 template-comments-plugin:
   title: Toelichting
