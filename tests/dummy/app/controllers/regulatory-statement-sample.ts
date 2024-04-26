@@ -109,6 +109,10 @@ import {
   getActiveEditableNode,
 } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { ComponentLike } from '@glint/template';
+import {
+  snippetPlaceholder,
+  snippetPlaceholderView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -177,6 +181,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
+      snippet_placeholder: snippetPlaceholder,
     },
     marks: {
       em,
@@ -319,6 +324,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment: templateCommentView(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
+      snippet_placeholder: snippetPlaceholderView(controller),
     };
   };
   @tracked plugins: Plugin[] = [
