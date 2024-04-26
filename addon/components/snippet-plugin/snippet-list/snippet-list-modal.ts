@@ -52,6 +52,8 @@ export default class SnippetListModalComponent extends Component<Signature> {
   saveAndClose() {
     this.args.onSaveSnippetListIds(this.assignedSnippetListsIds);
     this.args.closeModal();
+    // Clear selection for next time
+    this.assignedSnippetListsIds = [];
   }
 
   snippetListSearch = restartableTask(async () => {
