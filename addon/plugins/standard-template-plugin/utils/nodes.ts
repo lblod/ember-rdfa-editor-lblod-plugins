@@ -1,7 +1,6 @@
 import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaContentElement,
-  hasRdfaContentChild,
   renderRdfaAware,
   sharedRdfaNodeSpec,
 } from '@lblod/ember-rdfa-editor/core/schema';
@@ -33,12 +32,6 @@ export const besluit_title: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'eli:title',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -58,29 +51,12 @@ export const besluit_title: NodeSpec = {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, ELI('title')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, ELI('title'))) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'h1,h2,h3,h4,h5',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', ELI('title'))) {
-          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-          return {
-            ...rdfaAttrs,
-            subject: element.getAttribute('resource'),
-          };
-        }
-        return false;
-      },
     },
   ],
 };
@@ -94,12 +70,6 @@ export const description: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'eli:description',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -117,25 +87,12 @@ export const description: NodeSpec = {
       tag: 'div,p',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, ELI('description')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, ELI('description'))) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div,p',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', ELI('description'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
     },
   ],
 };
@@ -148,12 +105,6 @@ export const motivering: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'besluit:motivering',
-    },
-    lang: {
-      default: 'nl',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -171,25 +122,12 @@ export const motivering: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, BESLUIT('motivering')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, BESLUIT('motivering'))) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
     },
   ],
 };
@@ -203,12 +141,6 @@ export const article_container: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    property: {
-      default: 'prov:value',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -226,27 +158,13 @@ export const article_container: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, PROV('value')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, PROV('value'))) {
           return rdfaAttrs;
         }
         return false;
       },
       context: 'besluit/',
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
-      context: 'besluit/',
     },
   ],
 };
@@ -259,10 +177,6 @@ export const besluit_article: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    typeof: {
-      default: BESLUIT('Artikel').prefixed,
-    },
-    subject: {},
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -282,31 +196,13 @@ export const besluit_article: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, ELI('has_part')) &&
-          hasOutgoingNamedNodeTriple(
-            rdfaAttrs,
-            RDF('type'),
-            BESLUIT('Artikel'),
-          ) &&
-          hasRdfaContentChild(element)
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel'))
         ) {
           return rdfaAttrs;
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', ELI('has_part')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Artikel'))
-        ) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
     },
   ],
 };
@@ -436,9 +332,6 @@ export const besluit_article_content: NodeSpec = {
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    datatype: {
-      default: 'xsd:string',
-    },
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -456,27 +349,13 @@ export const besluit_article_content: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
-        if (
-          hasBacklink(rdfaAttrs, PROV('value')) &&
-          hasRdfaContentChild(element)
-        ) {
+        if (hasBacklink(rdfaAttrs, PROV('value'))) {
           return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
       contentElement: getRdfaContentElement,
       context: 'besluit_article/',
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element, { rdfaAware });
-        }
-        return false;
-      },
-      context: 'besluit_article//',
     },
   ],
 };
@@ -491,10 +370,6 @@ export const besluit: NodeSpec = {
   canSplit: false,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    typeof: {
-      default: 'besluit:Besluit ext:BesluitNieuweStijl',
-    },
-    subject: {},
   },
   toDOM(node) {
     return renderRdfaAware({
@@ -514,37 +389,15 @@ export const besluit: NodeSpec = {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
           hasBacklink(rdfaAttrs, PROV('generated')) &&
-          hasOutgoingNamedNodeTriple(
-            rdfaAttrs,
-            RDF('type'),
-            BESLUIT('Besluit'),
-          ) &&
-          hasRdfaContentChild(element)
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Besluit'))
         ) {
           return {
-            typeof: element.getAttribute('typeof'),
             ...rdfaAttrs,
           };
         }
         return false;
       },
       contentElement: getRdfaContentElement,
-    },
-    // Compatibility with pre-RDFa-aware HTML
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        if (
-          hasRDFaAttribute(element, 'property', PROV('generated')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
-        ) {
-          return {
-            typeof: element.getAttribute('typeof'),
-            ...getRdfaAttrs(element, { rdfaAware }),
-          };
-        }
-        return false;
-      },
     },
   ],
 };
