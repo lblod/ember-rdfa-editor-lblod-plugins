@@ -3,7 +3,6 @@ import {
   getRdfaContentElement,
   RdfaAttrs,
   renderRdfaAware,
-  sharedRdfaNodeSpec,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import {
   BESLUIT,
@@ -24,14 +23,14 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { maybeNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import SayNodeSpec from '@lblod/ember-rdfa-editor/core/say-node-spec';
 
 const rdfaAware = true;
-export const besluit_title: NodeSpec = {
+export const besluit_title: SayNodeSpec = {
   content: 'paragraph+',
   inline: false,
   defining: true,
   canSplit: false,
-  ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
@@ -64,12 +63,11 @@ export const besluit_title: NodeSpec = {
   ],
 };
 
-export const description: NodeSpec = {
+export const description: SayNodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
   canSplit: false,
-  ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
@@ -100,11 +98,10 @@ export const description: NodeSpec = {
   ],
 };
 
-export const motivering: NodeSpec = {
+export const motivering: SayNodeSpec = {
   content: 'block+',
   inline: false,
   canSplit: false,
-  ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
@@ -135,12 +132,11 @@ export const motivering: NodeSpec = {
   ],
 };
 
-export const article_container: NodeSpec = {
+export const article_container: SayNodeSpec = {
   group: 'block',
   content: '(block|besluit_article)+',
   inline: false,
   canSplit: false,
-  ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
@@ -172,11 +168,10 @@ export const article_container: NodeSpec = {
   ],
 };
 
-export const besluit_article: NodeSpec = {
+export const besluit_article: SayNodeSpec = {
   content:
     'besluit_article_header{1}(language_node*)besluit_article_content{1}',
   inline: false,
-  ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
@@ -313,10 +308,9 @@ export const besluitArticleStructure: StructureSpec = {
 };
 
 // TODO Fix this representation so it works well with RDFa editing tools.
-export const besluit_article_header: NodeSpec = {
+export const besluit_article_header: SayNodeSpec = {
   inline: false,
   isLeaf: true,
-  ...sharedRdfaNodeSpec,
   attrs: {
     number: {
       default: 1,
@@ -358,11 +352,10 @@ export const besluit_article_header: NodeSpec = {
   ],
 };
 
-export const besluit_article_content: NodeSpec = {
+export const besluit_article_content: SayNodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
-  ...sharedRdfaNodeSpec,
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
@@ -394,13 +387,13 @@ export const besluit_article_content: NodeSpec = {
   ],
 };
 
-export const besluit: NodeSpec = {
+export const besluit: SayNodeSpec = {
   group: 'block',
   content: 'block*besluit_title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
-  ...sharedRdfaNodeSpec,
   editable: true,
+  isolating: true,
   canSplit: false,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
