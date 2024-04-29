@@ -291,7 +291,7 @@ export const enhanceAttributesWithNumberAttributes = (attrs: Attrs) => {
   };
 };
 
-const getNodeNumberAttrsFromElement = (element: Element) => {
+export const getNodeNumberAttrsFromElement = (element: Element) => {
   const number = element.getAttribute('data-number');
   const startNumber = element.getAttribute('data-start-number');
   const numberDisplayStyle = element.getAttribute('data-number-display-style');
@@ -303,7 +303,7 @@ const getNodeNumberAttrsFromElement = (element: Element) => {
   };
 };
 
-const maybeNumber = (number: string | number | null | undefined) => {
+export const maybeNumber = (number: string | number | null | undefined) => {
   if (typeof number === 'string' && number.length > 0) {
     return parseInt(number, 10);
   }

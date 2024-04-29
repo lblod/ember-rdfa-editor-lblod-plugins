@@ -72,7 +72,7 @@ export default function recalculateStructureNumbers(
           contexts[i] = parent;
         }
 
-        const startNumber = spec.getStartNumber({ pos, transaction });
+        const startNumber = spec.getStartNumber?.({ pos, transaction });
 
         if (startNumber) {
           indices[i] = startNumber;
@@ -80,7 +80,7 @@ export default function recalculateStructureNumbers(
 
         spec.setNumber({ transaction, pos, number: indices[i] });
 
-        if ('convertNumber' in spec.numberConfig) {
+        if (spec.numberConfig.convertNumber) {
           updateNumberCalls.push({
             transaction,
             schema,

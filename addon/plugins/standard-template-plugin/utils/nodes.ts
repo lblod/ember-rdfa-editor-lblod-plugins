@@ -1,6 +1,7 @@
 import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
   getRdfaContentElement,
+  RdfaAttrs,
   renderRdfaAware,
   sharedRdfaNodeSpec,
 } from '@lblod/ember-rdfa-editor/core/schema';
@@ -10,6 +11,7 @@ import {
   PROV,
   RDF,
   SKOS,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   hasBacklink,
@@ -20,7 +22,8 @@ import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { getNumberUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { maybeNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 const rdfaAware = true;
 export const besluit_title: NodeSpec = {
@@ -194,11 +197,17 @@ export const besluit_article: NodeSpec = {
       tag: 'div',
       getAttrs(element: HTMLElement) {
         const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+
         if (
-          hasBacklink(rdfaAttrs, ELI('has_part')) &&
+          rdfaAttrs &&
+          rdfaAttrs.rdfaNodeType === 'resource' &&
           hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel'))
         ) {
-          return rdfaAttrs;
+          // Filter out properties we handle ourselves (like the article number)
+          const filteredProperties = rdfaAttrs.properties.filter(
+            (prop) => !ELI('number').matches(prop.predicate),
+          );
+          return { ...rdfaAttrs, properties: filteredProperties };
         }
         return false;
       },
@@ -218,40 +227,60 @@ export const besluitArticleStructure: StructureSpec = {
     remove: 'article-structure-plugin.remove.article',
   },
   limitTo: 'besluit',
+  relationshipPredicate: ELI('has_part'),
   constructor: ({ schema, number, content, intl, state }) => {
     const translationWithDocLang = getTranslationFunction(state);
     const articleRdfaId = uuid();
+    const bodyRdfaId = uuid();
     const subject = `http://data.lblod.info/articles/${articleRdfaId}`;
-    const node = schema.node(
-      `besluit_article`,
-      {
-        subject,
-        rdfaNodeType: 'resource',
-        __rdfaId: articleRdfaId,
-      },
-      [
-        schema.node('besluit_article_header', {
-          number: number ?? 1,
-        }),
-        schema.node(
-          `besluit_article_content`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  'article-structure-plugin.placeholder.article.body',
-                  intl?.t(
-                    'article-structure-plugin.placeholder.article.body',
-                  ) || '',
-                ),
-              }),
-            ),
-        ),
+
+    const articleAttrs: RdfaAttrs = {
+      __rdfaId: articleRdfaId,
+      rdfaNodeType: 'resource',
+      subject,
+      properties: [
+        {
+          predicate: RDF('type').prefixed,
+          object: sayDataFactory.namedNode(BESLUIT('Artikel').full),
+        },
+        {
+          predicate: PROV('value').prefixed,
+          object: sayDataFactory.literalNode(bodyRdfaId),
+        },
       ],
-    );
+      backlinks: [],
+    };
+    const bodyAttrs: RdfaAttrs = {
+      __rdfaId: bodyRdfaId,
+      rdfaNodeType: 'literal',
+      backlinks: [
+        {
+          subject: sayDataFactory.literalNode(subject),
+          predicate: PROV('value').prefixed,
+        },
+      ],
+    };
+    const node = schema.node(`besluit_article`, articleAttrs, [
+      schema.node('besluit_article_header', {
+        number: number ?? 1,
+      }),
+      schema.node(
+        `besluit_article_content`,
+        bodyAttrs,
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                'article-structure-plugin.placeholder.article.body',
+                intl?.t('article-structure-plugin.placeholder.article.body') ||
+                  '',
+              ),
+            }),
+          ),
+      ),
+    ]);
 
     return {
       node,
@@ -262,9 +291,20 @@ export const besluitArticleStructure: StructureSpec = {
       },
     };
   },
-  ...getNumberUtils({
-    offset: 1,
-  }),
+  setNumber: ({ number, pos, transaction }) =>
+    transaction.setNodeAttribute(pos + 1, 'number', number),
+  getNumber: ({ pos, transaction }) => {
+    const node = unwrap(transaction.doc.nodeAt(pos + 1));
+
+    const number = maybeNumber(node.attrs.number);
+
+    if (number !== null) {
+      return number;
+    }
+
+    return null;
+  },
+  numberConfig: {},
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return unwrap(node.lastChild).content;
@@ -278,26 +318,21 @@ export const besluit_article_header: NodeSpec = {
   isLeaf: true,
   ...sharedRdfaNodeSpec,
   attrs: {
-    ...rdfaAttrSpec({ rdfaAware }),
     number: {
       default: 1,
     },
   },
   toDOM(node) {
-    const { number, ...attrs } = node.attrs;
+    const { number } = node.attrs;
     return [
       'div',
       { contenteditable: false },
       'Artikel ',
-      renderRdfaAware({
-        renderable: node,
-        tag: 'span',
-        attrs: {
-          ...attrs,
-          class: 'say-inline-rdfa',
-        },
-        content: (number as number).toString() ?? '1',
-      }),
+      [
+        'span',
+        { property: ELI('number').prefixed, datatype: XSD('integer').prefixed },
+        (number as number).toString() ?? '1',
+      ],
     ];
   },
   parseDOM: [
@@ -314,7 +349,6 @@ export const besluit_article_header: NodeSpec = {
             ? parseInt(numberNode.textContent, 10)
             : 1;
           return {
-            ...getRdfaAttrs(numberNode as HTMLElement, { rdfaAware }),
             number,
           };
         }
