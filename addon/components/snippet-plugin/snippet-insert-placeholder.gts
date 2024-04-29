@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
-import { not } from 'ember-truth-helpers';
+import not from 'ember-truth-helpers/helpers/not';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { type NodeType, type SayController } from '@lblod/ember-rdfa-editor';
