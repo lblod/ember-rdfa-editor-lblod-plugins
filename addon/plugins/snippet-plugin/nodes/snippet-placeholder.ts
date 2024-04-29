@@ -18,7 +18,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { SNIPPET_LIST_RDFA_PREDICATE } from '../utils/rdfa-predicate';
+import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
 export function createSnippetPlaceholder(listIds: string[], schema: Schema) {
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
@@ -33,7 +34,7 @@ export function createSnippetPlaceholder(listIds: string[], schema: Schema) {
       },
       ...listIds.map((listId) => ({
         predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-        object: sayDataFactory.namedNode(listId),
+        object: sayDataFactory.namedNode(getSnippetUriFromId(listId)),
       })),
     ],
   });
