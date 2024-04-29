@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 17.1.1
+
+### Patch Changes
+
+- [#415](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/415) [`dff79133f9072cb1a817ed73588ffe8dea315479`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/dff79133f9072cb1a817ed73588ffe8dea315479) Thanks [@elpoelma](https://github.com/elpoelma)! - When passing a `content` argument to the `insertStructure` command, do not run the `wrapStructureContent` command
+
+- [#416](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/416) [`4b40cafe3aee7846e44f0a5be7c5330ced28736e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4b40cafe3aee7846e44f0a5be7c5330ced28736e) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4816: Fix selecting snippet list when pressing on a checkbox
+
 ## 17.1.0
 
 ### Minor Changes
