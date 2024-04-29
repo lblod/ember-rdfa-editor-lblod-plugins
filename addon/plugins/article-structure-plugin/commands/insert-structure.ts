@@ -15,7 +15,10 @@ import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/ar
 import wrapStructureContent from './wrap-structure-content';
 import IntlService from 'ember-intl/services/intl';
 import { findInsertionRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-insertion-range';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  PROV,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const addPropertyToContainer = ({
   state,
@@ -41,8 +44,11 @@ const addPropertyToContainer = ({
   }
 
   const incoming = containerAttrs.backlinks;
-  const subject = incoming?.find((backlink) =>
-    SAY('body').matches(backlink.predicate),
+  // Also add PROV('value') to the check in order to support decision articles
+  const subject = incoming?.find(
+    (backlink) =>
+      SAY('body').matches(backlink.predicate) ||
+      PROV('value').matches(backlink.predicate),
   )?.subject;
 
   if (!subject) {

@@ -13,6 +13,9 @@ const setStructureStartNumber = (
     const currentStructureSpec = unwrap(
       options.find((spec) => spec.name === structure.node.type.name),
     );
+    if (!currentStructureSpec.setStartNumber) {
+      return false;
+    }
 
     if (dispatch) {
       const transaction = state.tr;
