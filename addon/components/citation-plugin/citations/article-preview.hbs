@@ -1,17 +1,21 @@
 {{! @glint-nocheck: not typesafe yet }}
-<div class="au-u-margin" ...attributes>
-  <AuHeading @level="3" @skin="5" class="au-u-margin-bottom-small">
-  {{@article.number}} ({{@article.dateInForce}} - {{if @article.dateNoLongerInForce @article.dateNoLongerInForce "…"}})
+<div class='au-u-margin' ...attributes>
+  <AuHeading @level='3' @skin='5' class='au-u-margin-bottom-small'>
+    {{@article.number}}
+    ({{@article.dateInForce}}
+    -
+    {{if @article.dateNoLongerInForce @article.dateNoLongerInForce '…'}})
   </AuHeading>
   <p>
     {{this.content}}
   </p>
   <AuButton
-    @skin="primary"
+    @skin='primary'
     @icon={{this.PlusTextIcon}}
-    @iconAlignment="left"
-    class="au-u-margin-top-small"
-    {{on "click" @insertArticleCitation}}>
-    {{t "citaten-plugin.references.refer-article"}}
+    @iconAlignment='left'
+    class='au-u-margin-top-small'
+    {{on 'click' @insertArticleCitation}}
+  >
+    {{t 'citaten-plugin.references.refer-article'}}
   </AuButton>
 </div>

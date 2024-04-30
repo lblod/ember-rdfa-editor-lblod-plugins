@@ -1,8 +1,8 @@
 {{! @glint-nocheck: not typesafe yet }}
-{{!-- Based on au-data-table-th-sortable from ember-appuniversum and using the same classes --}}
+{{! Based on au-data-table-th-sortable from ember-appuniversum and using the same classes }}
 <span
   class='au-c-data-table__header-title au-c-data-table__header-title--sortable
-    {{if this.order ' is-active'}}'
+    {{if this.order " is-active"}}'
 >
   {{@label}}
   {{#if (eq this.order 'DESC')}}
@@ -11,7 +11,9 @@
       {{on 'click' this.changeSort}}
       class='au-c-data-table__sort'
     >
-      <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.asc'}}</span>
+      <span class='au-u-hidden-visually'>{{t
+          'worship-plugin.modal.sort.asc'
+        }}</span>
       <AuIcon @icon={{this.NavUpIcon}} />
     </button>
   {{else if (eq this.order 'ASC')}}
@@ -20,7 +22,9 @@
       {{on 'click' this.changeSort}}
       class='au-c-data-table__sort'
     >
-      <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.desc'}}</span>
+      <span class='au-u-hidden-visually'>{{t
+          'worship-plugin.modal.sort.desc'
+        }}</span>
       <AuIcon @icon={{this.NavDownIcon}} />
     </button>
   {{else}}
@@ -29,7 +33,9 @@
       {{on 'click' this.changeSort}}
       class='au-c-data-table__sort'
     >
-      <span class='au-u-hidden-visually'>{{t 'worship-plugin.modal.sort.sort'}}</span>
+      <span class='au-u-hidden-visually'>{{t
+          'worship-plugin.modal.sort.sort'
+        }}</span>
       <AuIcon @icon={{this.NavUpDownIcon}} />
     </button>
   {{/if}}

@@ -3,17 +3,18 @@
   <AuDatePicker
     @onChange={{this.onChangeDate}}
     @value={{this.date}}
-    @label={{t "date-plugin.card.label"}}
-    @localization={{this.datePickerLocalization}}/>
+    @label={{t 'date-plugin.card.label'}}
+    @localization={{this.datePickerLocalization}}
+  />
 </AuFormRow>
 {{yield}}
 {{#unless @onlyDate}}
   <AuFormRow>
     <AuTimePicker
-      @hoursLabel={{t "date-plugin.card.hours"}}
-      @minutesLabel={{t "date-plugin.card.minutes"}}
-      @secondsLabel={{t "date-plugin.card.seconds"}}
-      @nowLabel={{t "date-plugin.card.now"}}
+      @hoursLabel={{t 'date-plugin.card.hours'}}
+      @minutesLabel={{t 'date-plugin.card.minutes'}}
+      @secondsLabel={{t 'date-plugin.card.seconds'}}
+      @nowLabel={{t 'date-plugin.card.now'}}
       @hours={{this.hours}}
       @minutes={{this.minutes}}
       @seconds={{this.seconds}}

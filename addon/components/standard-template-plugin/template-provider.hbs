@@ -1,8 +1,10 @@
 {{! @glint-nocheck: not typesafe yet }}
 <div>
-{{yield (hash
-          applicableTemplates=this.applicableTemplates
-          hasApplicableTemplates=this.hasApplicableTemplates
-          insert=this.insert
-        )}}
+  {{yield
+    (hash
+      applicableTemplates=this.applicableTemplates
+      hasApplicableTemplates=this.hasApplicableTemplates
+      insert=this.insert
+    )
+  }}
 </div>

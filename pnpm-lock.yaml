@@ -319,6 +319,9 @@ devDependencies:
   ember-template-lint:
     specifier: ^5.11.2
     version: 5.13.0
+  ember-template-lint-plugin-prettier:
+    specifier: ^5.0.0
+    version: 5.0.0(ember-template-lint@5.13.0)(prettier@3.2.5)
   ember-try:
     specifier: ^2.0.0
     version: 2.0.0
@@ -3177,6 +3180,14 @@ packages:
       '@pnpm/config.env-replace': 1.1.0
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
+    dev: true
+
+  /@prettier/sync@0.2.1(prettier@3.2.5):
+    resolution: {integrity: sha512-7ls1R6//+GPYD9vof1XaL5psViv83CwpdwlS8oUkWldYgbPhzZ3WgxIQMWqGyBmWPmoBfQg8C7jj7KI/ZuDHhQ==}
+    peerDependencies:
+      prettier: ^3.0.0
+    dependencies:
+      prettier: 3.2.5
     dev: true
 
   /@rdfjs/data-model@1.3.4:
@@ -8775,6 +8786,19 @@ packages:
       validate-peer-dependencies: 1.2.0
     transitivePeerDependencies:
       - supports-color
+
+  /ember-template-lint-plugin-prettier@5.0.0(ember-template-lint@5.13.0)(prettier@3.2.5):
+    resolution: {integrity: sha512-aXUYM4yuIdPZ80+AsAU8QBwGSJJ/aAkRsNcQ5vI5HmXiBjzHlDc/ZhmP6iVcYuCmoA/3iKcssMAYwIDbuby4pg==}
+    engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      ember-template-lint: '>= 4.0.0'
+      prettier: '>= 3.0.0'
+    dependencies:
+      '@prettier/sync': 0.2.1(prettier@3.2.5)
+      ember-template-lint: 5.13.0
+      prettier: 3.2.5
+      prettier-linter-helpers: 1.0.0
+    dev: true
 
   /ember-template-lint@5.13.0:
     resolution: {integrity: sha512-AYxz9S9fVZfHPmTsymc7NwsD7FVmDUZyfC+KYpxDlK0wic7JSQx2FNQNqQSBFRLOuzn7VQ0/+1pX6DGqKDGswg==}

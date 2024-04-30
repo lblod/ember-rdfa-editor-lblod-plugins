@@ -1,12 +1,15 @@
 {{! @glint-nocheck: not typesafe yet }}
 {{#if this.shouldShow}}
-  <AuCard @shadow={{true}} @size="small" as |Card|>
+  <AuCard @shadow={{true}} @size='small' as |Card|>
     <Card.header>
-      <AuHeading @level="2" @skin="4">{{@title}}</AuHeading>
+      <AuHeading @level='2' @skin='4'>{{@title}}</AuHeading>
     </Card.header>
     <Card.content>
       {{#each this.results as |result|}}
-        <ValidationPlugin::ValidationItem @controller={{@controller}} @result={{result}}/>
+        <ValidationPlugin::ValidationItem
+          @controller={{@controller}}
+          @result={{result}}
+        />
       {{/each}}
     </Card.content>
   </AuCard>
