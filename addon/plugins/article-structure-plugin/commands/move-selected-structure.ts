@@ -15,6 +15,7 @@ import IntlService from 'ember-intl/services/intl';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+
 const moveSelectedStructure = (
   options: ArticleStructurePluginOptions,
   direction: 'up' | 'down',
@@ -77,7 +78,7 @@ const moveSelectedStructure = (
         : TextSelection.create(transaction.doc, newSelectionPos);
       transaction.setSelection(newSelection);
       transaction.scrollIntoView();
-      recalculateStructureNumbers(transaction, currentStructureSpec);
+      recalculateStructureNumbers(transaction, schema, currentStructureSpec);
       dispatch(transaction);
     }
     return true;

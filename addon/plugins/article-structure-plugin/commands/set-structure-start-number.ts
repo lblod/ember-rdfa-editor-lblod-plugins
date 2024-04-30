@@ -1,38 +1,32 @@
-import { Command } from '@lblod/ember-rdfa-editor';
+import { Command, PNode } from '@lblod/ember-rdfa-editor';
 
-import { findAncestorOfType } from '../utils/structure';
 import type { ArticleStructurePluginOptions } from '..';
 import recalculateStructureNumbers from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands/recalculate-structure-numbers';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const setStructureStartNumber = (
+  structure: { pos: number; node: PNode },
   options: ArticleStructurePluginOptions,
   startNumber: number | null,
 ): Command => {
   return (state, dispatch) => {
-    const { selection, schema } = state;
-
-    const structureSpecs = options.map((type) => schema.nodes[type.name]);
-    const currentStructure = findAncestorOfType(selection, ...structureSpecs);
-
-    if (!currentStructure || currentStructure.pos === -1) {
+    const currentStructureSpec = unwrap(
+      options.find((spec) => spec.name === structure.node.type.name),
+    );
+    if (!currentStructureSpec.setStartNumber) {
       return false;
     }
-
-    const currentStructureSpec = unwrap(
-      options.find((spec) => spec.name === currentStructure.node.type.name),
-    );
 
     if (dispatch) {
       const transaction = state.tr;
 
       currentStructureSpec.setStartNumber({
         number: startNumber,
-        pos: currentStructure.pos,
+        pos: structure.pos,
         transaction,
       });
 
-      recalculateStructureNumbers(transaction, ...options);
+      recalculateStructureNumbers(transaction, state.schema, ...options);
 
       dispatch(transaction);
     }

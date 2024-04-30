@@ -8,10 +8,13 @@
     @selected={{@selected}}
     @initEditor={{this.initEditor}}
     @nodeViews={{@nodeViews}}
+    @plugins={{this.plugins}}
+    @decorations={{@decorations}}
+    @contentDecorations={{@contentDecorations}}
   />
-  {{#if @node.attrs.label}}
+  {{#if this.label}}
     <span class="label">
-      ({{@node.attrs.label}})
+      ({{this.label}})
     </span>
   {{/if}}
 </AuPill>

@@ -6,8 +6,18 @@ import {
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
+import type { Resource } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 export type SpecName = string;
+
+export type SpecConstructorResult = {
+  node: PNode;
+  selectionConfig: {
+    rdfaId: string;
+    type: 'node' | 'text';
+  };
+  newResource: string;
+};
 
 export type StructureSpec = {
   name: SpecName;
@@ -26,25 +36,23 @@ export type StructureSpec = {
     intl?: IntlService;
     content?: PNode | Fragment;
     state?: EditorState;
-  }) => {
-    node: PNode;
-    selectionConfig: {
-      relativePos: number;
-      type: 'node' | 'text';
-    };
+  }) => SpecConstructorResult;
+  numberConfig: {
+    numberPredicate?: Resource;
+    convertNumber?: (number: number) => string;
   };
-  updateNumber: (args: {
+  setNumber: (args: {
     number: number;
     pos: number;
     transaction: Transaction;
   }) => Transaction;
   getNumber: (args: { pos: number; transaction: Transaction }) => number | null;
-  setStartNumber: (args: {
+  setStartNumber?: (args: {
     number: number | null;
     pos: number;
     transaction: Transaction;
   }) => Transaction;
-  getStartNumber: (args: {
+  getStartNumber?: (args: {
     pos: number;
     transaction: Transaction;
   }) => number | null;
@@ -52,6 +60,7 @@ export type StructureSpec = {
   continuous: boolean;
   limitTo?: string;
   noUnwrap?: boolean;
+  relationshipPredicate?: Resource;
 };
 
 export type ArticleStructurePluginOptions = StructureSpec[];

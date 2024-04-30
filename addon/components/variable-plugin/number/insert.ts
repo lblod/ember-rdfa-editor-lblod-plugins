@@ -7,6 +7,13 @@ import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { modifier } from 'ember-modifier';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  DCT,
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 type Args = {
   controller: SayController;
@@ -85,17 +92,37 @@ export default class NumberInsertComponent extends Component<Args> {
     if (this.numberVariableError !== '') return;
 
     const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
+    const subject = mappingResource;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
     const defaultLabel = this.intl.t('variable.number.label', {
       locale: this.documentLanguage,
     });
+    const label = this.label ?? defaultLabel;
+    const variableId = uuidv4();
 
     const node = this.schema.nodes.number.create({
-      label: this.label ?? defaultLabel,
-      value: null,
-      mappingResource,
-      variableInstance,
+      subject,
+      rdfaNodeType: 'resource',
+      __rdfaId: variableId,
+      properties: [
+        {
+          predicate: RDF('type').full,
+          object: sayDataFactory.namedNode(EXT('Mapping').full),
+        },
+        {
+          predicate: EXT('instance').full,
+          object: sayDataFactory.namedNode(variableInstance),
+        },
+        {
+          predicate: EXT('label').full,
+          object: sayDataFactory.literal(label),
+        },
+        {
+          predicate: DCT('type').full,
+          object: sayDataFactory.literal('number'),
+        },
+      ],
       ...(isNumber(this.minimumValue) && {
         minimumValue: Number(this.minimumValue),
       }),
@@ -108,11 +135,8 @@ export default class NumberInsertComponent extends Component<Args> {
     this.minimumValue = '';
     this.maximumValue = '';
 
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 }

@@ -1,15 +1,16 @@
-import { NodeSpec, PNode } from '@lblod/ember-rdfa-editor';
+import { PNode, RdfaAttrs } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
   constructStructureNodeSpec,
-  getNumberDocSpecFromNode,
-  getNumberAttributesFromNode,
+  constructStructureHeaderNodeSpec,
   getNumberUtils,
-  getStructureHeaderAttrs,
 } from '../utils/structure';
+import { constructStructureHeader } from './structure-header';
 import { v4 as uuid } from 'uuid';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
+  ELI,
   EXT,
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -33,50 +34,93 @@ export const articleSpec: StructureSpec = {
   },
   continuous: true,
   constructor: ({ schema, number, content, intl, state }) => {
+    const numberConverted = number?.toString() ?? '1';
     const translationWithDocLang = getTranslationFunction(state);
-    const node = schema.node(
-      `article`,
-      { resource: `http://data.lblod.info/articles/${uuid()}` },
-      [
-        schema.node(
-          'article_header',
-          { level: 4, number: number ?? 1 },
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.title,
-              intl?.t(PLACEHOLDERS.title) || '',
-            ),
-          }),
-        ),
-        schema.node(
-          `article_body`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  PLACEHOLDERS.body,
-                  intl?.t(PLACEHOLDERS.body) || '',
-                ),
-              }),
-            ),
-        ),
-      ],
+    const articleUuid = uuid();
+    const titleRdfaId = uuid();
+    const headingRdfaId = uuid();
+    const numberRdfaId = uuid();
+    const bodyRdfaId = uuid();
+    const subject = `http://data.lblod.info/articles/${articleUuid}`;
+    const titleText = translationWithDocLang(
+      PLACEHOLDERS.title,
+      intl?.t(PLACEHOLDERS.title) || '',
     );
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 5, type: 'text' }
-      : { relativePos: 6, type: 'node' };
+    const articleAttrs: RdfaAttrs = {
+      __rdfaId: articleUuid,
+      rdfaNodeType: 'resource',
+      subject,
+      properties: [
+        {
+          predicate: ELI('number').prefixed,
+          object: sayDataFactory.literalNode(numberRdfaId),
+        },
+        {
+          predicate: SAY('heading').prefixed,
+          object: sayDataFactory.literalNode(headingRdfaId),
+        },
+        {
+          predicate: EXT('title').prefixed,
+          object: sayDataFactory.literalNode(titleRdfaId),
+        },
+        {
+          predicate: SAY('body').prefixed,
+          object: sayDataFactory.literalNode(bodyRdfaId),
+        },
+      ],
+      backlinks: [],
+    };
+    const bodyAttrs: RdfaAttrs = {
+      __rdfaId: bodyRdfaId,
+      rdfaNodeType: 'literal',
+      backlinks: [
+        {
+          subject: sayDataFactory.literalNode(subject),
+          predicate: SAY('body').prefixed,
+        },
+      ],
+    };
+    const node = schema.node(`article`, articleAttrs, [
+      constructStructureHeader({
+        schema,
+        backlinkResource: subject,
+        titleRdfaId,
+        titleText,
+        headingRdfaId,
+        numberRdfaId,
+        number: numberConverted,
+        headerType: 'article_header',
+      }),
+      schema.node(
+        `article_body`,
+        bodyAttrs,
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                PLACEHOLDERS.body,
+                intl?.t(PLACEHOLDERS.body) || '',
+              ),
+            }),
+          ),
+      ),
+    ]);
+
     return {
       node,
-      selectionConfig,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: bodyRdfaId,
+      },
+      newResource: subject,
     };
   },
-  ...getNumberUtils(1),
+  ...getNumberUtils({
+    offset: 1,
+    convertNumber: (number) => number.toString(),
+  }),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
@@ -88,67 +132,16 @@ export const article = constructStructureNodeSpec({
   content: 'article_header article_body',
 });
 
-export const article_header: NodeSpec = {
-  content: 'text*|placeholder',
-  inline: false,
-  isolating: true,
-  defining: true,
-  attrs: {
-    number: {
-      default: 1,
-    },
-    numberDisplayStyle: {
-      default: 'decimal', // decimal, roman
-    },
-    startNumber: {
-      default: null,
-    },
-    property: {
-      default: SAY('heading').prefixed,
-    },
-  },
-  allowSplitByTable: false,
+export const article_header = constructStructureHeaderNodeSpec({
+  type: 'article_header',
+  includeLevel: false,
   outlineText: (node: PNode) => {
     const { number } = node.attrs;
     return `Artikel ${number as string}: ${node.textContent}`;
   },
-  toDOM(node) {
-    return [
-      'div',
-      {
-        property: node.attrs.property as string,
-        ...getNumberAttributesFromNode(node),
-      },
-      'Artikel ',
-      getNumberDocSpecFromNode(node),
-      ['span', { contenteditable: false }, ': '],
-      [
-        'span',
-        {
-          property: EXT('title').prefixed,
-        },
-        0,
-      ],
-    ];
-  },
-  parseDOM: [
-    {
-      tag: 'div',
-      getAttrs(element: HTMLElement) {
-        const headerAttrs = getStructureHeaderAttrs(element);
-
-        if (headerAttrs) {
-          return headerAttrs;
-        }
-
-        return false;
-      },
-      contentElement: `span[property~='${EXT('title').prefixed}'],
-                       span[property~='${EXT('title').full}']`,
-    },
-  ],
-};
+});
 
 export const article_body = constructStructureBodyNodeSpec({
   content: '(block|article_paragraph)+',
+  context: 'article//',
 });

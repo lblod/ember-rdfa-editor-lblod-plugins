@@ -1,30 +1,59 @@
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  DCT,
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { v4 as uuidv4 } from 'uuid';
-import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import {
+  DOMOutputSpec,
+  getRdfaAttrs,
+  PNode,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
+import {
+  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableInstance,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
-import {
-  contentSpan,
-  instanceSpan,
-  typeSpan,
-  mappingSpan,
-} from '../utils/dom-constructors';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
+import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
-
+const rdfaAware = true;
 const parseDOM = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs) {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
+        node.querySelector('[data-content-container="true"]') &&
+        hasRdfaVariableType(attrs, 'text')
+      ) {
+        if (attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+        return attrs;
+      }
+
+      return false;
+    },
+    contentElement: '[data-content-container="true"]',
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -33,17 +62,44 @@ const parseDOM = [
         node.querySelector(CONTENT_SELECTOR) &&
         parseVariableType(node) === 'text'
       ) {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
+        const mappingSubject =
+          node.getAttribute('subject') ||
+          node.getAttribute('resource') ||
+          node.getAttribute('about');
+        if (!mappingSubject) {
           return false;
         }
         const variableInstance = parseVariableInstance(node);
         const label = parseLabel(node);
         return {
-          variableInstance:
-            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
-          mappingResource,
-          label,
+          __rdfaId: uuidv4(),
+          subject: mappingSubject,
+          rdfaNodeType: 'resource',
+          properties: [
+            {
+              predicate: RDF('type').full,
+              object: sayDataFactory.namedNode(EXT('Mapping').full),
+            },
+            {
+              predicate: EXT('instance').full,
+              object: sayDataFactory.namedNode(
+                variableInstance ??
+                  `http://data.lblod.info/variables/${uuidv4()}`,
+              ),
+            },
+            {
+              predicate: EXT('label').full,
+              object: sayDataFactory.literal(label || ''),
+            },
+            {
+              predicate: DCT('type').full,
+              object: sayDataFactory.literal('text'),
+            },
+            {
+              predicate: EXT('content').full,
+              object: sayDataFactory.contentLiteral(),
+            },
+          ],
         };
       }
 
@@ -54,16 +110,12 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const { mappingResource, variableInstance, label } = node.attrs;
-  return mappingSpan(
-    mappingResource,
-    {
-      'data-label': label as string,
-    },
-    instanceSpan(variableInstance),
-    typeSpan('text'),
-    contentSpan({}, 0),
-  );
+  return renderRdfaAware({
+    renderable: node,
+    tag: 'span',
+    attrs: node.attrs,
+    content: 0,
+  });
 };
 
 const emberNodeConfig: EmberNodeConfig = {
@@ -77,10 +129,10 @@ const emberNodeConfig: EmberNodeConfig = {
   uriAttributes: ['variableInstance'],
   draggable: false,
   needsFFKludge: true,
+  editable: true,
+  selectable: true,
   attrs: {
-    mappingResource: {},
-    variableInstance: {},
-    label: { default: null },
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM,
   parseDOM,

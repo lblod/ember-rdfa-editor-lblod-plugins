@@ -1,171 +1,212 @@
-import { getRdfaAttrs, NodeSpec, rdfaAttrs } from '@lblod/ember-rdfa-editor';
+import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  getRdfaContentElement,
+  RdfaAttrs,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import {
   BESLUIT,
   ELI,
   PROV,
+  RDF,
   SKOS,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  hasBacklink,
+  hasOutgoingNamedNodeTriple,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { StructureSpec } from '../../article-structure-plugin';
 import { v4 as uuid } from 'uuid';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import {
-  getNumberAttributeFromElement,
-  getNumberAttributesFromNode,
-  getNumberDocSpecFromNode,
-  getNumberUtils,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { maybeNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import SayNodeSpec from '@lblod/ember-rdfa-editor/core/say-node-spec';
 
-export const besluit_title: NodeSpec = {
+const rdfaAware = true;
+export const besluit_title: SayNodeSpec = {
   content: 'paragraph+',
   inline: false,
   defining: true,
   canSplit: false,
+  editable: true,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'eli:title',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['h4', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'h4',
+      rdfaContainerTag: 'span',
+      contentContainerTag: 'span',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'h1,h2,h3,h4,h5',
       getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', ELI('title'))) {
-          return getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+        if (hasBacklink(rdfaAttrs, ELI('title'))) {
+          return rdfaAttrs;
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
   ],
 };
 
-export const description: NodeSpec = {
+export const description: SayNodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
   canSplit: false,
+  editable: true,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'eli:description',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['div', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'div',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'div,p',
       getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', ELI('description'))) {
-          return getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+        if (hasBacklink(rdfaAttrs, ELI('description'))) {
+          return rdfaAttrs;
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
   ],
 };
 
-export const motivering: NodeSpec = {
+export const motivering: SayNodeSpec = {
   content: 'block+',
   inline: false,
   canSplit: false,
+  editable: true,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'besluit:motivering',
-    },
-    lang: {
-      default: 'nl',
-    },
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['div', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'div',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', BESLUIT('motivering'))) {
-          return getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+        if (hasBacklink(rdfaAttrs, BESLUIT('motivering'))) {
+          return rdfaAttrs;
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
   ],
 };
 
-export const article_container: NodeSpec = {
+export const article_container: SayNodeSpec = {
   group: 'block',
   content: '(block|besluit_article)+',
   inline: false,
   canSplit: false,
+  editable: true,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'prov:value',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['div', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'div',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+        if (hasBacklink(rdfaAttrs, PROV('value'))) {
+          return rdfaAttrs;
         }
         return false;
       },
       context: 'besluit/',
+      contentElement: getRdfaContentElement,
     },
   ],
 };
 
-export const besluit_article: NodeSpec = {
+export const besluit_article: SayNodeSpec = {
   content:
     'besluit_article_header{1}(language_node*)besluit_article_content{1}',
   inline: false,
+  editable: true,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'eli:has_part',
-    },
-    typeof: {
-      default: 'besluit:Artikel',
-    },
-    resource: {},
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['div', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'div',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+
         if (
-          hasRDFaAttribute(element, 'property', ELI('has_part')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Artikel'))
+          rdfaAttrs &&
+          rdfaAttrs.rdfaNodeType === 'resource' &&
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Artikel'))
         ) {
-          return getRdfaAttrs(element);
+          // Filter out properties we handle ourselves (like the article number)
+          const filteredProperties = rdfaAttrs.properties.filter(
+            (prop) => !ELI('number').matches(prop.predicate),
+          );
+          return { ...rdfaAttrs, properties: filteredProperties };
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
   ],
 };
@@ -181,48 +222,84 @@ export const besluitArticleStructure: StructureSpec = {
     remove: 'article-structure-plugin.remove.article',
   },
   limitTo: 'besluit',
+  relationshipPredicate: ELI('has_part'),
   constructor: ({ schema, number, content, intl, state }) => {
     const translationWithDocLang = getTranslationFunction(state);
-    const node = schema.node(
-      `besluit_article`,
-      {
-        resource: `http://data.lblod.info/articles/${uuid()}`,
-      },
-      [
-        schema.node('besluit_article_header', {
-          number: number ?? 1,
-        }),
-        schema.node(
-          `besluit_article_content`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  'article-structure-plugin.placeholder.article.body',
-                  intl?.t(
-                    'article-structure-plugin.placeholder.article.body',
-                  ) || '',
-                ),
-              }),
-            ),
-        ),
+    const articleRdfaId = uuid();
+    const bodyRdfaId = uuid();
+    const subject = `http://data.lblod.info/articles/${articleRdfaId}`;
+
+    const articleAttrs: RdfaAttrs = {
+      __rdfaId: articleRdfaId,
+      rdfaNodeType: 'resource',
+      subject,
+      properties: [
+        {
+          predicate: RDF('type').prefixed,
+          object: sayDataFactory.namedNode(BESLUIT('Artikel').full),
+        },
+        {
+          predicate: PROV('value').prefixed,
+          object: sayDataFactory.literalNode(bodyRdfaId),
+        },
       ],
-    );
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 3, type: 'text' }
-      : { relativePos: 4, type: 'node' };
+      backlinks: [],
+    };
+    const bodyAttrs: RdfaAttrs = {
+      __rdfaId: bodyRdfaId,
+      rdfaNodeType: 'literal',
+      backlinks: [
+        {
+          subject: sayDataFactory.literalNode(subject),
+          predicate: PROV('value').prefixed,
+        },
+      ],
+    };
+    const node = schema.node(`besluit_article`, articleAttrs, [
+      schema.node('besluit_article_header', {
+        number: number ?? 1,
+      }),
+      schema.node(
+        `besluit_article_content`,
+        bodyAttrs,
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                'article-structure-plugin.placeholder.article.body',
+                intl?.t('article-structure-plugin.placeholder.article.body') ||
+                  '',
+              ),
+            }),
+          ),
+      ),
+    ]);
+
     return {
       node,
-      selectionConfig,
+      newResource: subject,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: articleRdfaId,
+      },
     };
   },
-  ...getNumberUtils(1),
+  setNumber: ({ number, pos, transaction }) =>
+    transaction.setNodeAttribute(pos + 1, 'number', number),
+  getNumber: ({ pos, transaction }) => {
+    const node = unwrap(transaction.doc.nodeAt(pos + 1));
+
+    const number = maybeNumber(node.attrs.number);
+
+    if (number !== null) {
+      return number;
+    }
+
+    return null;
+  },
+  numberConfig: {},
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return unwrap(node.lastChild).content;
@@ -230,135 +307,137 @@ export const besluitArticleStructure: StructureSpec = {
   continuous: false,
 };
 
-export const besluit_article_header: NodeSpec = {
+// TODO Fix this representation so it works well with RDFa editing tools.
+export const besluit_article_header: SayNodeSpec = {
   inline: false,
-  selectable: false,
+  isLeaf: true,
   attrs: {
-    ...rdfaAttrs,
     number: {
       default: 1,
     },
-    numberDisplayStyle: {
-      default: 'decimal', // decimal, roman
-    },
-    startNumber: {
-      default: null,
-    },
   },
   toDOM(node) {
-    const toplevelAttrs = { ...node.attrs };
-    delete toplevelAttrs.number;
-    delete toplevelAttrs.datatype;
+    const { number } = node.attrs;
     return [
       'div',
-      {
-        ...toplevelAttrs,
-        contenteditable: false,
-        ...getNumberAttributesFromNode(node),
-      },
+      { contenteditable: false },
       'Artikel ',
-      getNumberDocSpecFromNode(node),
+      [
+        'span',
+        { property: ELI('number').prefixed, datatype: XSD('integer').prefixed },
+        (number as number).toString() ?? '1',
+      ],
     ];
   },
   parseDOM: [
     {
       tag: 'p,div',
+      context: 'besluit_article/',
       getAttrs(element: HTMLElement) {
-        const numberElement = element.querySelector(
+        const numberNode = element.querySelector(
           `span[property~='${ELI('number').prefixed}'],
            span[property~='${ELI('number').full}']`,
         );
-
-        const numberAttributes =
-          numberElement &&
-          getNumberAttributeFromElement(element, numberElement);
-
-        if (numberAttributes) {
+        if (numberNode) {
+          const number = numberNode.textContent
+            ? parseInt(numberNode.textContent, 10)
+            : 1;
           return {
-            ...getRdfaAttrs(element),
-            ...numberAttributes,
+            number,
           };
         }
-
         return false;
       },
     },
   ],
 };
 
-export const besluit_article_content: NodeSpec = {
+export const besluit_article_content: SayNodeSpec = {
   group: 'block',
   content: 'block+',
   inline: false,
+  editable: true,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'prov:value',
-    },
-    datatype: {
-      default: 'xsd:string',
-    },
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['div', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'div',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
-        if (hasRDFaAttribute(element, 'property', PROV('value'))) {
-          return getRdfaAttrs(element);
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+        if (hasBacklink(rdfaAttrs, PROV('value'))) {
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },
-      context: 'besluit_article//',
+      contentElement: getRdfaContentElement,
+      context: 'besluit_article/',
     },
   ],
 };
 
-export const besluit: NodeSpec = {
+export const besluit: SayNodeSpec = {
   group: 'block',
   content: 'block*besluit_title?block*description?block*motivering?block*',
   inline: false,
   defining: true,
+  editable: true,
   isolating: true,
   canSplit: false,
   attrs: {
-    ...rdfaAttrs,
-    property: {
-      default: 'prov:generated',
-    },
-    typeof: {
-      default: 'besluit:Besluit ext:BesluitNieuweStijl',
-    },
-    resource: {},
+    ...rdfaAttrSpec({ rdfaAware }),
   },
   toDOM(node) {
-    return ['div', node.attrs, 0];
+    return renderRdfaAware({
+      renderable: node,
+      tag: 'div',
+      attrs: {
+        ...node.attrs,
+        class: 'say-editable',
+      },
+      content: 0,
+    });
   },
   parseDOM: [
     {
       tag: 'div',
       getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
         if (
-          hasRDFaAttribute(element, 'property', PROV('generated')) &&
-          hasRDFaAttribute(element, 'typeof', BESLUIT('Besluit'))
+          hasBacklink(rdfaAttrs, PROV('generated')) &&
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), BESLUIT('Besluit'))
         ) {
-          return getRdfaAttrs(element);
+          return {
+            ...rdfaAttrs,
+          };
         }
         return false;
       },
+      contentElement: getRdfaContentElement,
     },
   ],
 };
 
+// TODO this can most likely be removed as language can just be a property rather than needing a
+// separate hidden node
 export const language_node: NodeSpec = {
   group: 'block',
   content: '',
   inline: false,
   atom: true,
   attrs: {
-    ...rdfaAttrs,
+    ...rdfaAttrSpec({ rdfaAware }),
     style: {
       default: 'style="display:none;"',
     },
@@ -368,7 +447,7 @@ export const language_node: NodeSpec = {
     typeof: {
       default: 'skos:Concept',
     },
-    resource: {
+    subject: {
       default: 'http://publications.europa.eu/resource/authority/language/NLD',
     },
   },
@@ -379,11 +458,25 @@ export const language_node: NodeSpec = {
     {
       tag: 'span',
       getAttrs(element: HTMLElement) {
+        const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+        if (
+          hasBacklink(rdfaAttrs, ELI('language')) &&
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), SKOS('Concept'))
+        ) {
+          return getRdfaAttrs(element, { rdfaAware });
+        }
+        return false;
+      },
+    },
+    // Compatibility with pre-RDFa-aware HTML
+    {
+      tag: 'span',
+      getAttrs(element: HTMLElement) {
         if (
           hasRDFaAttribute(element, 'property', ELI('language')) &&
           hasRDFaAttribute(element, 'typeof', SKOS('Concept'))
         ) {
-          return getRdfaAttrs(element);
+          return getRdfaAttrs(element, { rdfaAware });
         }
         return false;
       },

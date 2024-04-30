@@ -1,29 +1,34 @@
 import {
-  DOMOutputSpec,
+  Attrs,
   NodeSpec,
   NodeType,
   PNode,
+  rdfaAttrSpec,
   Schema,
   Selection,
 } from '@lblod/ember-rdfa-editor';
+import {
+  getRdfaAttrs,
+  getRdfaContentElement,
+  hasRdfaContentChild,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import {
-  ELI,
+  EXT,
   RDF,
   SAY,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
-  hasRDFaAttribute,
+  hasBacklink,
+  hasOutgoingNamedNodeTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { StructureSpec } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
-import {
-  romanize,
-  romanToInt,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { romanize } from './romanize';
 
+const rdfaAware = true;
 export function constructStructureNodeSpec(config: {
   type: Resource;
   content: string;
@@ -35,37 +40,54 @@ export function constructStructureNodeSpec(config: {
     group,
     content,
     inline: false,
+    editable: true,
+    isolating: true,
     attrs: {
-      property: {
-        default: SAY('hasPart').prefixed,
+      ...rdfaAttrSpec({ rdfaAware }),
+      rdfaNodeType: {
+        default: 'resource',
       },
       typeof: {
         default: type.prefixed,
       },
-      resource: {},
+      subject: {},
     },
     allowSplitByTable: config.allowSplitByTable,
     toDOM(node) {
-      return [
-        'div',
-        {
-          property: node.attrs.property as string,
-          typeof: node.attrs.typeof as string,
-          resource: node.attrs.resource as string,
+      return renderRdfaAware({
+        renderable: node,
+        tag: 'div',
+        attrs: {
+          ...node.attrs,
+          class: 'say-editable',
         },
-        0,
-      ];
+        content: 0,
+      });
     },
     parseDOM: [
       {
         tag: 'div',
+        preserveWhitespace: false,
         getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (
-            hasRDFaAttribute(element, 'property', SAY('hasPart')) &&
-            hasRDFaAttribute(element, 'typeof', type) &&
-            element.getAttribute('resource')
+            hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type) &&
+            hasRdfaContentChild(element)
           ) {
-            return { resource: element.getAttribute('resource') };
+            return rdfaAttrs;
+          }
+          return false;
+        },
+        contentElement: getRdfaContentElement,
+      },
+      // Backwards compatibility
+      {
+        tag: 'div',
+        preserveWhitespace: false,
+        getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+          if (hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), type)) {
+            return rdfaAttrs;
           }
           return false;
         },
@@ -76,37 +98,158 @@ export function constructStructureNodeSpec(config: {
 
 export function constructStructureBodyNodeSpec(config: {
   content: string;
+  context: string;
   allowSplitByTable?: boolean;
+  tag?: string;
 }): NodeSpec {
-  const { content } = config;
+  const { content, context, tag = 'div' } = config;
   return {
     content,
     inline: false,
     defining: true,
+    editable: true,
     isolating: true,
     allowSplitByTable: config.allowSplitByTable,
-    toDOM() {
-      return [
-        'div',
-        {
+    attrs: rdfaAttrSpec({ rdfaAware }),
+    toDOM(node) {
+      return renderRdfaAware({
+        renderable: node,
+        tag,
+        attrs: {
+          ...node.attrs,
+          class: 'say-editable',
           property: SAY('body').prefixed,
           datatype: RDF('XMLLiteral').prefixed,
         },
-        0,
-      ];
+        content: 0,
+      });
     },
     parseDOM: [
       {
-        tag: 'div',
+        tag,
+        context,
         getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
           if (
-            hasRDFaAttribute(element, 'property', SAY('body')) &&
-            hasRDFaAttribute(element, 'datatype', RDF('XMLLiteral'))
+            hasBacklink(rdfaAttrs, SAY('body')) &&
+            hasRdfaContentChild(element)
           ) {
-            return {};
+            return rdfaAttrs;
           }
           return false;
         },
+        contentElement: getRdfaContentElement,
+      },
+      // Backwards compatibility with old versions, without explicit content nodes
+      {
+        tag,
+        context,
+        getAttrs(element: HTMLElement) {
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+          if (hasBacklink(rdfaAttrs, SAY('body'))) {
+            return rdfaAttrs;
+          }
+          return false;
+        },
+      },
+    ],
+  };
+}
+
+const TAG_TO_LEVEL = new Map([
+  ['h1', 1],
+  ['h2', 2],
+  ['h3', 3],
+  ['h4', 4],
+  ['h5', 5],
+  ['h6', 6],
+]);
+
+export type StructureHeaderType = 'structure_header' | 'article_header';
+
+type StructureHeaderArgs = {
+  type: StructureHeaderType;
+  outlineText: (node: PNode) => string;
+  includeLevel: boolean;
+  numberDisplayStyle?: 'decimal' | 'roman';
+};
+
+export function constructStructureHeaderNodeSpec({
+  type,
+  outlineText,
+  includeLevel,
+  numberDisplayStyle = 'decimal',
+}: StructureHeaderArgs): NodeSpec {
+  return {
+    content: 'text* structure_header_number text* structure_header_title',
+    inline: false,
+    defining: true,
+    isolating: true,
+    editable: true,
+    selectable: false,
+    allowSplitByTable: false,
+    attrs: {
+      ...rdfaAttrSpec({ rdfaAware }),
+      property: {
+        default: SAY('heading').prefixed,
+      },
+      number: {
+        default: 1,
+      },
+      numberDisplayStyle: {
+        default: numberDisplayStyle,
+      },
+      startNumber: {
+        default: null,
+      },
+      ...(includeLevel
+        ? {
+            level: {
+              default: 1,
+            },
+          }
+        : {}),
+    },
+    outlineText,
+    toDOM(node) {
+      const { level, ...attrs } = node.attrs;
+      return renderRdfaAware({
+        renderable: node,
+        tag: includeLevel ? `h${level as number}` : 'span',
+        rdfaContainerTag: 'span',
+        contentContainerTag: 'span',
+        attrs: {
+          ...enhanceAttributesWithNumberAttributes(attrs),
+          ...(includeLevel ? { level: level as number } : {}),
+        },
+        content: 0,
+      });
+    },
+    parseDOM: [
+      {
+        tag: `h1,h2,h3,h4,h5,h6,span${type === 'article_header' ? ',div' : ''}`,
+        context: type === 'article_header' ? 'article/' : undefined,
+        // Need to have higher priority than default (50) as otherwise seems to get parsed as a
+        // generic header
+        priority: 60,
+        getAttrs(element: HTMLElement) {
+          const level = TAG_TO_LEVEL.get(element.tagName.toLowerCase()) ?? 6;
+          const rdfaAttrs = getRdfaAttrs(element, { rdfaAware });
+          if (hasBacklink(rdfaAttrs, SAY('heading'))) {
+            const titleChild = element.querySelector(`
+              span[property~='${EXT('title').prefixed}'],
+              span[property~='${EXT('title').full}']`);
+
+            const numberAttributes = getNodeNumberAttrsFromElement(element);
+
+            if (titleChild) {
+              return { level, ...rdfaAttrs, ...numberAttributes };
+            }
+          }
+
+          return false;
+        },
+        contentElement: getRdfaContentElement,
       },
     ],
   };
@@ -128,61 +271,6 @@ export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
   return;
 }
 
-export function getNumberAttributeFromElement(
-  containerElement: Element,
-  numberElement: Element,
-): {
-  number: number;
-  numberDisplayStyle: string;
-  startNumber: number | null;
-} {
-  // Storing the number in the content attribute was not introduced straight away,
-  // so we need to check for both the content attribute and the textContent.
-  const contentAttribute = numberElement.getAttribute('content');
-
-  // If the content attribute is present, we can assume it is the correct number.
-  if (contentAttribute) {
-    return {
-      number: parseInt(contentAttribute, 10),
-      ...getNodeNumberAttrsFromElement(containerElement),
-    };
-  }
-
-  const textContentNumber = numberElement.textContent;
-
-  if (!textContentNumber) {
-    return { number: 1, ...getNodeNumberAttrsFromElement(containerElement) };
-  }
-
-  // If the textContent is a number, we can assume it is the correct number.
-  if (/^[0-9]+$/.exec(textContentNumber)) {
-    return {
-      number: parseInt(textContentNumber, 10),
-      ...getNodeNumberAttrsFromElement(containerElement),
-    };
-  }
-
-  // Otherwise, we assume it is a roman number.
-  return {
-    number: romanToInt(textContentNumber),
-    ...getNodeNumberAttrsFromElement(containerElement),
-    numberDisplayStyle: 'roman',
-  };
-}
-
-export function getStructureHeaderAttrs(element: HTMLElement) {
-  const numberElement = element.querySelector(
-    `[property~="${ELI('number').prefixed}"],
-     [property~="${ELI('number').full}"]`,
-  );
-
-  if (hasRDFaAttribute(element, 'property', SAY('heading')) && numberElement) {
-    return getNumberAttributeFromElement(element, numberElement);
-  }
-
-  return false;
-}
-
 export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
   return (
     node.childCount === 1 &&
@@ -191,57 +279,72 @@ export function containsOnlyPlaceholder(schema: Schema, node: PNode) {
   );
 }
 
-export const getNumberAttributesFromNode = (node: PNode) => ({
-  ['data-start-number']: node.attrs.startNumber
-    ? `${node.attrs.startNumber}`
-    : null,
-  ['data-number-display-style']: node.attrs.numberDisplayStyle as string,
-});
+export const enhanceAttributesWithNumberAttributes = (attrs: Attrs) => {
+  const { startNumber, numberDisplayStyle, number, ...remainingAttrs } = attrs;
 
-export const getNumberDocSpecFromNode = (node: PNode): DOMOutputSpec => [
-  'span',
-  {
-    property: ELI('number').prefixed,
-    datatype: XSD('integer').prefixed,
-    content: node.attrs.number as string,
-    contenteditable: false,
-  },
-  node.attrs.numberDisplayStyle === 'roman'
-    ? romanize(node.attrs.number ?? '1')
-    : `${node.attrs.number ?? '1'}`,
-];
+  return {
+    ['data-number']: number ? `${number}` : null,
+    ['data-start-number']: startNumber ? `${startNumber}` : null,
+    ['data-number-display-style']: numberDisplayStyle as string,
+    number: number as string,
+    ...remainingAttrs,
+  };
+};
 
-const getNodeNumberAttrsFromElement = (element: Element) => {
+export const getNodeNumberAttrsFromElement = (element: Element) => {
+  const number = element.getAttribute('data-number');
   const startNumber = element.getAttribute('data-start-number');
   const numberDisplayStyle = element.getAttribute('data-number-display-style');
 
   return {
     numberDisplayStyle: numberDisplayStyle ?? 'decimal',
     startNumber: startNumber ? parseInt(startNumber, 10) : null,
+    number: number ? parseInt(number, 10) : 1,
   };
 };
 
-export const getNumberUtils = (
+export const maybeNumber = (number: string | number | null | undefined) => {
+  if (typeof number === 'string' && number.length > 0) {
+    return parseInt(number, 10);
+  }
+
+  if (typeof number === 'number') {
+    return number;
+  }
+
+  return null;
+};
+
+type NumberUtilsProps = {
   // Offset for the position of the node where the starting number is stored.
   // For structures with `structure_header` it will usually be +1,
   // for `articleParagraph` it is 0.
+  offset?: number;
+  convertNumber?: (number: number) => string;
+};
+
+export const getNumberUtils = ({
   offset = 0,
-): Pick<
+  convertNumber = romanize,
+}: NumberUtilsProps): Pick<
   StructureSpec,
-  'setStartNumber' | 'getStartNumber' | 'getNumber' | 'updateNumber'
+  | 'setStartNumber'
+  | 'getStartNumber'
+  | 'getNumber'
+  | 'setNumber'
+  | 'numberConfig'
 > => ({
-  updateNumber: ({ number, pos, transaction }) => {
-    return transaction.setNodeAttribute(pos + offset, 'number', number);
+  numberConfig: {
+    convertNumber,
   },
+  setNumber: ({ number, pos, transaction }) =>
+    transaction.setNodeAttribute(pos + offset, 'number', number),
   getNumber: ({ pos, transaction }) => {
     const node = unwrap(transaction.doc.nodeAt(pos + offset));
-    const number = node.attrs.number as string | number | undefined | null;
 
-    if (typeof number === 'string' && number.length > 0) {
-      return parseInt(number, 10);
-    }
+    const number = maybeNumber(node.attrs.number);
 
-    if (typeof number === 'number') {
+    if (number !== null) {
       return number;
     }
 
@@ -249,17 +352,10 @@ export const getNumberUtils = (
   },
   getStartNumber: ({ pos, transaction }) => {
     const node = unwrap(transaction.doc.nodeAt(pos + offset));
-    const startNumber = node.attrs.startNumber as
-      | string
-      | number
-      | undefined
-      | null;
 
-    if (typeof startNumber === 'string' && startNumber.length > 0) {
-      return parseInt(startNumber, 10);
-    }
+    const startNumber = maybeNumber(node.attrs.startNumber);
 
-    if (typeof startNumber === 'number') {
+    if (startNumber !== null) {
       return startNumber;
     }
 

@@ -43,57 +43,6 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   @action
-  setStructureStartNumber() {
-    if (this.startNumber) {
-      this.controller.doCommand(
-        setStructureStartNumber(this.structureTypes, this.startNumber),
-      );
-
-      this.startNumber = null;
-    }
-  }
-
-  @action
-  resetStructureStartNumber() {
-    this.controller.doCommand(
-      setStructureStartNumber(this.structureTypes, null),
-    );
-
-    this.startNumber = null;
-  }
-
-  get structureNumber() {
-    if (this.structure && this.currentStructureType) {
-      return this.currentStructureType.getNumber({
-        pos: this.structure.pos,
-        transaction: this.controller.mainEditorState.tr,
-      });
-    }
-
-    return;
-  }
-
-  get structureStartNumber() {
-    if (this.structure && this.currentStructureType) {
-      return this.currentStructureType.getStartNumber({
-        pos: this.structure.pos,
-        transaction: this.controller.mainEditorState.tr,
-      });
-    }
-
-    return;
-  }
-
-  get startNumberInputValue() {
-    return this.startNumber ?? this.structureNumber ?? '';
-  }
-
-  onStartNumberChange = (event: InputEvent) => {
-    const target = event.target as HTMLInputElement;
-    this.startNumber = parseInt(target.value);
-  };
-
-  @action
   removeStructure(withContent: boolean) {
     if (this.structure && this.currentStructureType) {
       if (withContent || this.currentStructureType.noUnwrap) {
@@ -121,6 +70,65 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   setRemoveStructureContent(value: boolean) {
     this.removeStructureContent = value;
   }
+
+  @action
+  setStructureStartNumber() {
+    if (this.startNumber && this.structure && this.currentStructureType) {
+      this.controller.doCommand(
+        setStructureStartNumber(
+          this.structure,
+          this.structureTypes,
+          this.startNumber,
+        ),
+        { view: this.controller.mainEditorView },
+      );
+
+      this.startNumber = null;
+    }
+  }
+
+  @action
+  resetStructureStartNumber() {
+    if (this.structure) {
+      this.controller.doCommand(
+        setStructureStartNumber(this.structure, this.structureTypes, null),
+        { view: this.controller.mainEditorView },
+      );
+
+      this.startNumber = null;
+    }
+  }
+
+  get structureNumber() {
+    if (this.structure && this.currentStructureType) {
+      return this.currentStructureType.getNumber({
+        pos: this.structure.pos,
+        transaction: this.controller.mainEditorState.tr,
+      });
+    }
+
+    return;
+  }
+
+  get structureStartNumber() {
+    if (this.structure && this.currentStructureType?.getStartNumber) {
+      return this.currentStructureType.getStartNumber({
+        pos: this.structure.pos,
+        transaction: this.controller.mainEditorState.tr,
+      });
+    }
+
+    return;
+  }
+
+  get startNumberInputValue() {
+    return this.startNumber ?? this.structureNumber ?? '';
+  }
+
+  onStartNumberChange = (event: InputEvent) => {
+    const target = event.target as HTMLInputElement;
+    this.startNumber = parseInt(target.value);
+  };
 
   get structureTypes() {
     return this.args.options;

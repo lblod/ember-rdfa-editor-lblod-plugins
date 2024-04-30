@@ -10,6 +10,12 @@ import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'ember-resources/util/function';
 import { trackedReset } from 'tracked-toolbox';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  DCT,
+  EXT,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 export type CodelistEditOptions = {
   endpoint: string;
 };
@@ -43,16 +49,27 @@ export default class CodelistEditComponent extends Component<Args> {
   });
 
   get source() {
-    return (
-      (this.selectedCodelist.value?.node.attrs.source as string | undefined) ??
-      this.args.options.endpoint
-    );
+    if (this.selectedCodelist.value) {
+      const { node } = this.selectedCodelist.value;
+      const source = getOutgoingTriple(node.attrs, DCT('source'))?.object
+        .value as Option<string>;
+      if (source) {
+        return source;
+      }
+    }
+    return this.args.options.endpoint;
   }
 
   get codelistUri() {
-    return this.selectedCodelist.value?.node.attrs.codelistResource as
-      | string
-      | undefined;
+    if (this.selectedCodelist.value) {
+      const { node } = this.selectedCodelist.value;
+      const codelistUri = getOutgoingTriple(node.attrs, EXT('codelist'))?.object
+        .value as Option<string>;
+      if (codelistUri) {
+        return codelistUri;
+      }
+    }
+    return;
   }
 
   get showCard() {

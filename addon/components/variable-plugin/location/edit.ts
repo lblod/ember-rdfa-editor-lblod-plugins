@@ -98,7 +98,7 @@ export default class LocationEditComponent extends Component<Args> {
     );
     result.options = result.options.map((option) => ({
       label: option.label,
-      value: this.wrapInLocation(unwrap(option.value)),
+      value: unwrap(option.value),
     }));
     return result;
   });
@@ -110,13 +110,5 @@ export default class LocationEditComponent extends Component<Args> {
   @action
   updateLocationOption(locationOption: CodeListOption | CodeListOption[]) {
     this.selectedLocationOption = locationOption;
-  }
-
-  wrapInLocation(value: string) {
-    return `
-      <span property="https://data.vlaanderen.be/ns/mobiliteit#plaatsbepaling">
-        ${value}
-      </span>
-    `;
   }
 }

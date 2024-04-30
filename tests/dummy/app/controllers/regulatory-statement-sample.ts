@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { task } from 'ember-concurrency';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
@@ -12,13 +11,13 @@ import {
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import {
-  block_rdfa,
+  blockRdfaWithConfig,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
+  invisibleRdfaWithConfig,
   paragraph,
-  repaired_block,
+  repairedBlockWithConfig,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import {
@@ -42,16 +41,15 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import IntlService from 'ember-intl/services/intl';
 import {
-  bullet_list,
-  list_item,
-  ordered_list,
+  bulletListWithConfig,
+  listItemWithConfig,
+  orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 import {
   createInvisiblesPlugin,
   hardBreak,
@@ -93,13 +91,42 @@ import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
+import {
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
+import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
+import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
+import SnippetListSelectRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select-rdfa';
+import {
+  CitationPluginConfig,
+  citationPlugin,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
+import {
+  editableNodePlugin,
+  getActiveEditableNode,
+} from '@lblod/ember-rdfa-editor/plugins/editable-node';
+import { ComponentLike } from '@glint/template';
 
 export default class RegulatoryStatementSampleController extends Controller {
+  SnippetInsert = SnippetInsertRdfaComponent;
+  SnippetListSelect = SnippetListSelectRdfaComponent;
+  DebugInfo = DebugInfo;
+  AttributeEditor = AttributeEditor;
+  RdfaEditor = RdfaEditor;
+  @tracked editableNodes = false;
+
+  @action
+  toggleEditableNodes() {
+    this.editableNodes = !this.editableNodes;
+  }
+
   @service declare importRdfaSnippet: ImportRdfaSnippet;
   @service declare intl: IntlService;
   @tracked controller?: SayController;
-  @tracked assignedSnippetListsIds: string[] =
-    localStorage.getItem('ASSIGNED_SNIPPET_LISTS_IDS')?.split(',') ?? [];
+  @tracked citationPlugin = citationPlugin(this.config.citation);
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -112,38 +139,46 @@ export default class RegulatoryStatementSampleController extends Controller {
     nodes: {
       doc: docWithConfig({
         content:
-          'table_of_contents? document_title? ((chapter|block)+|(title|block)+|(article|block)+)',
+          'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+        rdfaAware: true,
       }),
       paragraph,
       document_title,
-      repaired_block,
-      list_item,
-      ordered_list,
-      bullet_list,
+
+      repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
+      list_item: listItemWithConfig({ rdfaAware: true }),
+      ordered_list: orderedListWithConfig({ rdfaAware: true }),
+      bullet_list: bulletListWithConfig({ rdfaAware: true }),
       templateComment,
       placeholder,
-      ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+      ...tableNodes({
+        tableGroup: 'block',
+        cellContent: 'block+',
+      }),
+      address,
       date: date(this.dateOptions),
       text_variable,
       number,
       location,
       codelist,
-      address,
       ...STRUCTURE_NODES,
-      heading,
+      heading: headingWithConfig({ rdfaAware: true }),
       blockquote,
+
       horizontal_rule,
       code_block,
+
       text,
       image,
+
       hard_break,
-      block_rdfa,
+      block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
       table_of_contents: table_of_contents(this.config.tableOfContents),
-      invisible_rdfa,
+      invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
+      inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
     },
     marks: {
-      inline_rdfa,
       em,
       strong,
       underline,
@@ -190,35 +225,30 @@ export default class RegulatoryStatementSampleController extends Controller {
     return [
       {
         label: 'text',
-        // @ts-expect-error Unclear why these types don't agree
-        component: TextVariableInsertComponent,
+        component: TextVariableInsertComponent as unknown as ComponentLike,
       },
       {
         label: 'number',
-        // @ts-expect-error Unclear why these types don't agree
-        component: NumberInsertComponent,
+        component: NumberInsertComponent as unknown as ComponentLike,
       },
       {
         label: 'date',
-        // @ts-expect-error Unclear why these types don't agree
-        component: DateInsertVariableComponent,
+        component: DateInsertVariableComponent as unknown as ComponentLike,
       },
       {
         label: 'location',
-        // @ts-expect-error Unclear why these types don't agree
-        component: LocationInsertComponent,
+        component: LocationInsertComponent as unknown as ComponentLike,
         options: this.locationOptions,
       },
       {
         label: 'codelist',
-        // @ts-expect-error Unclear why these types don't agree
-        component: CodelistInsertComponent,
+        component: CodelistInsertComponent as unknown as ComponentLike,
         options: this.codelistOptions,
       },
       {
         label: 'address',
-        // @ts-expect-error Unclear why these types don't agree
-        component: VariablePluginAddressInsertVariableComponent,
+        component:
+          VariablePluginAddressInsertVariableComponent as unknown as ComponentLike,
       },
     ];
   }
@@ -247,6 +277,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       structures: STRUCTURE_SPECS,
       link: {
         interactive: true,
+        rdfaAware: true,
       },
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
@@ -254,16 +285,22 @@ export default class RegulatoryStatementSampleController extends Controller {
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
+      citation: {
+        type: 'nodes',
+        activeInNodeTypes(schema: Schema) {
+          return new Set([schema.nodes.doc]);
+        },
+        endpoint: '/codex/sparql',
+      } as CitationPluginConfig,
     };
   }
 
-  setDocumentContainerSnippetLists = task(async (snippetIds: string[]) => {
-    await new Promise<void>((resolve) => {
-      localStorage.setItem('ASSIGNED_SNIPPET_LISTS_IDS', snippetIds.join(','));
-      this.assignedSnippetListsIds = snippetIds;
-      resolve();
-    });
-  });
+  get activeNode() {
+    if (this.controller) {
+      return getActiveEditableNode(this.controller.activeEditorState);
+    }
+    return;
+  }
 
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
@@ -281,6 +318,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
       address: addressView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
   @tracked plugins: Plugin[] = [
@@ -294,6 +332,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       shouldShowInvisibles: false,
     }),
     emberApplication({ application: getOwner(this) }),
+    editableNodePlugin(),
   ];
 
   @action

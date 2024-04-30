@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   CodeList,
   fetchCodeListsByPublisher,
@@ -10,6 +11,12 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'ember-resources/util/function';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  DCT,
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 
 export type CodelistInsertOptions = {
   publisher?: string;
@@ -83,19 +90,51 @@ export default class CodelistInsertComponent extends Component<Args> {
   insert() {
     const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+    const codelistResource = this.selectedCodelist?.uri;
+    const label =
+      this.label ??
+      this.selectedCodelist?.label ??
+      this.intl.t('variable.codelist.label', {
+        locale: this.documentLanguage,
+      });
+    const source = this.endpoint;
+    const variableId = uuidv4();
     const node = this.schema.nodes.codelist.create(
       {
-        mappingResource,
-        variableInstance,
-        codelistResource: this.selectedCodelist?.uri,
-        label:
-          this.label ??
-          this.selectedCodelist?.label ??
-          this.intl.t('variable.codelist.label', {
-            locale: this.documentLanguage,
-          }),
-        source: this.endpoint,
         selectionStyle: this.selectedStyleValue,
+        subject: mappingResource,
+        rdfaNodeType: 'resource',
+        __rdfaId: variableId,
+        properties: [
+          {
+            predicate: RDF('type').full,
+            object: sayDataFactory.namedNode(EXT('Mapping').full),
+          },
+          {
+            predicate: EXT('instance').full,
+            object: sayDataFactory.namedNode(variableInstance),
+          },
+          {
+            predicate: EXT('label').full,
+            object: sayDataFactory.literal(label),
+          },
+          {
+            predicate: EXT('codelist').full,
+            object: sayDataFactory.namedNode(codelistResource || ''),
+          },
+          {
+            predicate: DCT('source').full,
+            object: sayDataFactory.namedNode(source),
+          },
+          {
+            predicate: DCT('type').full,
+            object: sayDataFactory.literal('codelist'),
+          },
+          {
+            predicate: EXT('content').full,
+            object: sayDataFactory.contentLiteral(),
+          },
+        ],
       },
       this.schema.node('placeholder', {
         placeholderText: this.selectedCodelist?.label,
@@ -103,13 +142,9 @@ export default class CodelistInsertComponent extends Component<Args> {
     );
 
     this.label = undefined;
-
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
+      view: this.controller.mainEditorView,
+    });
   }
 
   @action

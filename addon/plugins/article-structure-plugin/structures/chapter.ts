@@ -1,3 +1,4 @@
+import { RdfaAttrs } from '@lblod/ember-rdfa-editor';
 import { StructureSpec } from '..';
 import {
   constructStructureBodyNodeSpec,
@@ -5,9 +6,16 @@ import {
   getNumberUtils,
 } from '../utils/structure';
 import { v4 as uuid } from 'uuid';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  ELI,
+  EXT,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { constructStructureHeader } from './structure-header';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
 
 const PLACEHOLDERS = {
   title: 'article-structure-plugin.placeholder.chapter.heading',
@@ -26,50 +34,91 @@ export const chapterSpec: StructureSpec = {
     removeWithContent: 'article-structure-plugin.remove-with-content.chapter',
   },
   constructor: ({ schema, number, content, intl, state }) => {
+    const numberConverted = romanize(number ?? 1);
     const translationWithDocLang = getTranslationFunction(state);
-    const node = schema.node(
-      `chapter`,
-      { resource: `http://data.lblod.info/chapters/${uuid()}` },
-      [
-        schema.node(
-          'structure_header',
-          { level: 4, number: number ?? 1, numberDisplayStyle: 'roman' },
-          schema.node('placeholder', {
-            placeholderText: translationWithDocLang(
-              PLACEHOLDERS.title,
-              intl?.t(PLACEHOLDERS.title) || '',
-            ),
-          }),
-        ),
-        schema.node(
-          `chapter_body`,
-          {},
-          content ??
-            schema.node(
-              'paragraph',
-              {},
-              schema.node('placeholder', {
-                placeholderText: translationWithDocLang(
-                  PLACEHOLDERS.body,
-                  intl?.t(PLACEHOLDERS.body) || '',
-                ),
-              }),
-            ),
-        ),
-      ],
+    const titleText = translationWithDocLang(
+      PLACEHOLDERS.title,
+      intl?.t(PLACEHOLDERS.title) || '',
     );
-    const selectionConfig: {
-      relativePos: number;
-      type: 'text' | 'node';
-    } = content
-      ? { relativePos: 5, type: 'text' }
-      : { relativePos: 6, type: 'node' };
+    const chapterUuid = uuid();
+    const headingRdfaId = uuid();
+    const titleRdfaId = uuid();
+    const numberRdfaId = uuid();
+    const bodyRdfaId = uuid();
+    const chapterSubject = `http://data.lblod.info/chapters/${chapterUuid}`;
+    const chapterAttrs: RdfaAttrs = {
+      __rdfaId: chapterUuid,
+      rdfaNodeType: 'resource',
+      subject: chapterSubject,
+      properties: [
+        {
+          predicate: ELI('number').prefixed,
+          object: sayDataFactory.literalNode(numberRdfaId),
+        },
+        {
+          predicate: SAY('heading').prefixed,
+          object: sayDataFactory.literalNode(headingRdfaId),
+        },
+        {
+          predicate: EXT('title').prefixed,
+          object: sayDataFactory.literalNode(titleRdfaId),
+        },
+        {
+          predicate: SAY('body').prefixed,
+          object: sayDataFactory.literalNode(bodyRdfaId),
+        },
+      ],
+      backlinks: [],
+    };
+    const bodyAttrs: RdfaAttrs = {
+      __rdfaId: bodyRdfaId,
+      rdfaNodeType: 'literal',
+      backlinks: [
+        {
+          subject: sayDataFactory.literalNode(chapterSubject),
+          predicate: SAY('body').prefixed,
+        },
+      ],
+    };
+
+    const node = schema.node(`chapter`, chapterAttrs, [
+      constructStructureHeader({
+        schema,
+        titleRdfaId,
+        titleText,
+        headingRdfaId,
+        backlinkResource: chapterSubject,
+        numberRdfaId,
+        number: numberConverted,
+        level: 4,
+      }),
+      schema.node(
+        `chapter_body`,
+        bodyAttrs,
+        content ??
+          schema.node(
+            'paragraph',
+            {},
+            schema.node('placeholder', {
+              placeholderText: translationWithDocLang(
+                PLACEHOLDERS.body,
+                intl?.t(PLACEHOLDERS.body) || '',
+              ),
+            }),
+          ),
+      ),
+    ]);
+
     return {
       node,
-      selectionConfig,
+      selectionConfig: {
+        type: content ? 'text' : 'node',
+        rdfaId: bodyRdfaId,
+      },
+      newResource: chapterSubject,
     };
   },
-  ...getNumberUtils(1),
+  ...getNumberUtils({ offset: 1, convertNumber: romanize }),
   content: ({ pos, state }) => {
     const node = unwrap(state.doc.nodeAt(pos));
     return node.child(1).content;
@@ -83,4 +132,5 @@ export const chapter = constructStructureNodeSpec({
 
 export const chapter_body = constructStructureBodyNodeSpec({
   content: '(section|block)+|(article|block)+',
+  context: 'chapter/',
 });

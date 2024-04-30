@@ -2,9 +2,9 @@
 <AuPill @icon={{this.PencilIcon}} @iconAlignment="right" class="variable atomic" {{on 'click' this.onClick}}>
 
   {{this.humanReadableDate}}
-  {{#if @node.attrs.label}}
+  {{#if this.label}}
     <span class="label">
-      ({{@node.attrs.label}})
+      ({{this.label}})
     </span>
   {{/if}}
 </AuPill>

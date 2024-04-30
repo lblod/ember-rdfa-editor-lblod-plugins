@@ -4,13 +4,20 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { ProseParser, SayController, Slice } from '@lblod/ember-rdfa-editor';
+import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
+import {
+  ProseParser,
+  SayController,
+  Slice,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Args {
   controller: SayController;
   config: SnippetPluginConfig;
   assignedSnippetListsIds: string[];
+  disabled?: boolean;
 }
 
 export default class SnippetInsertComponent extends Component<Args> {
@@ -54,15 +61,26 @@ export default class SnippetInsertComponent extends Component<Args> {
     const documentDiv = parsed.querySelector('div[data-say-document="true"]');
 
     this.closeModal();
+    const parser = ProseParser.fromSchema(this.controller.schema);
 
     if (documentDiv) {
-      return this.controller.withTransaction((tr) =>
-        tr.replaceSelection(this.createSliceFromElement(documentDiv)),
-      );
+      return this.controller.withTransaction((tr: Transaction) => {
+        return tr.replaceSelectionWith(
+          htmlToDoc(content, {
+            schema: this.controller.schema,
+            parser,
+            editorView: this.controller.mainEditorView,
+          }),
+        );
+      });
     }
 
     this.controller.withTransaction((tr) =>
       tr.replaceSelection(this.createSliceFromElement(parsed)),
     );
+  }
+
+  get disabled() {
+    return this.args.disabled ?? false;
   }
 }

@@ -14,7 +14,11 @@ import {
   CitationPlugin,
   CitationPluginEmberComponentConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
-import { SayController, Transaction } from '@lblod/ember-rdfa-editor';
+import {
+  DecorationSet,
+  SayController,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { citedText } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cited-text';
 import {
   LEGISLATION_TYPE_CONCEPTS,
@@ -80,7 +84,7 @@ export default class CitationCardComponent extends Component<Args> {
     return this.args.config;
   }
 
-  get decorations() {
+  get decorations(): DecorationSet | undefined {
     return this.plugin.getState(this.controller.mainEditorState)?.highlights;
   }
 

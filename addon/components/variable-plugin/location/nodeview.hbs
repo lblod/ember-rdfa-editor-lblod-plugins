@@ -1,9 +1,19 @@
 {{! @glint-nocheck: not typesafe yet }}
-<VariablePlugin::Variable::Nodeview 
-  @controller={{@controller}} 
-  @node={{@node}} 
-  @view={{@view}} 
-  @getPos={{@getPos}} 
-  @selected={{@selected}}
-  @nodeViews={{this.nodeViews}}
-/>
+<AuPill @icon={{this.PencilIcon}} @iconAlignment="right" class="variable" {{on 'click' this.onClick}}>
+  <EmberNode::EmbeddedEditor
+    @controller={{@controller}}
+    @node={{@node}}
+    @view={{@view}}
+    @getPos={{@getPos}}
+    @selected={{@selected}}
+    @initEditor={{this.initEditor}}
+    @plugins={{this.plugins}}
+    @decorations={{@decorations}}
+    @contentDecorations={{@contentDecorations}}
+  />
+  {{#if this.label}}
+    <span class="label">
+      ({{this.label}})
+    </span>
+  {{/if}}
+</AuPill>

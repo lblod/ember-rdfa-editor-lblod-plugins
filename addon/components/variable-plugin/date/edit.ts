@@ -1,8 +1,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import {
+  SayController,
+  Selection,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -23,6 +28,12 @@ import {
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { Velcro } from 'ember-velcro';
+import {
+  EXT,
+  XSD,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { InfoCircleIcon } from '@appuniversum/ember-appuniversum/components/icons/info-circle';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 
@@ -51,7 +62,7 @@ export default class DateEditComponent extends Component<Args> {
     return this.args.controller;
   }
 
-  get selection() {
+  get selection(): Selection {
     return this.controller.activeEditorState.selection;
   }
 
@@ -67,11 +78,16 @@ export default class DateEditComponent extends Component<Args> {
   }
 
   get documentDate(): Option<Date> {
-    const dateVal = this.selectedDateNode?.attrs.value as Option<string>;
-    if (dateVal) {
-      return new Date(dateVal);
+    if (this.selectedDateNode) {
+      const dateVal = getOutgoingTriple(
+        this.selectedDateNode.attrs,
+        EXT('content'),
+      )?.object.value as Option<string>;
+      if (dateVal) {
+        return new Date(dateVal);
+      }
     }
-    return null;
+    return;
   }
 
   get documentDatePos(): Option<number> {
@@ -188,8 +204,27 @@ export default class DateEditComponent extends Component<Args> {
   changeDate(date: Date) {
     const pos = this.documentDatePos;
     if (pos) {
-      this.controller.withTransaction((tr) => {
-        return tr.setNodeAttribute(pos, 'value', date.toISOString());
+      this.controller.withTransaction((tr: Transaction) => {
+        const node = tr.doc.nodeAt(pos);
+        if (!node) {
+          return tr;
+        }
+        const properties = node.attrs.properties as OutgoingTriple[];
+        const newProperties = properties.filter((prop) => {
+          return !(
+            prop.object.termType === 'Literal' &&
+            EXT('content').matches(prop.predicate)
+          );
+        });
+        const datatype = this.onlyDate ? XSD('date') : XSD('dateTime');
+        newProperties.push({
+          predicate: EXT('content').full,
+          object: sayDataFactory.literal(
+            date.toISOString(),
+            datatype.namedNode,
+          ),
+        });
+        return tr.setNodeAttribute(pos, 'properties', newProperties);
       });
     }
   }

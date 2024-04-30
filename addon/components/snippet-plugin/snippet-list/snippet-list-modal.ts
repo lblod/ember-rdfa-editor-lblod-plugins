@@ -14,6 +14,7 @@ import {
   SnippetPluginConfig,
   SnippetList,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { trackedReset } from 'tracked-toolbox';
 
 interface Args {
   config: SnippetPluginConfig;
@@ -32,9 +33,8 @@ export default class SnippetListModalComponent extends Component<Args> {
   // Display
   @tracked error: unknown;
 
-  @tracked assignedSnippetListsIds: string[] = [
-    ...this.args.assignedSnippetListsIds,
-  ];
+  @trackedReset('args.assignedSnippetListsIds')
+  assignedSnippetListsIds: string[] = [...this.args.assignedSnippetListsIds];
 
   get config() {
     return this.args.config;

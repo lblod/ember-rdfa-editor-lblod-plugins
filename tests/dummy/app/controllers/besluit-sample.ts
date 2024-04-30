@@ -2,6 +2,9 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+
 import {
   NodeType,
   NodeViewConstructor,
@@ -15,44 +18,50 @@ import {
   strong,
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
-
 import {
-  block_rdfa,
+  blockRdfaWithConfig,
   docWithConfig,
   hard_break,
   horizontal_rule,
-  invisible_rdfa,
+  invisibleRdfaWithConfig,
   paragraph,
-  repaired_block,
+  repairedBlockWithConfig,
   text,
 } from '@lblod/ember-rdfa-editor/nodes';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
 import {
-  bullet_list,
-  list_item,
-  ordered_list,
+  bulletListWithConfig,
+  listItemWithConfig,
+  orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
+import { headingWithConfig } from '@lblod/ember-rdfa-editor/plugins/heading';
 import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
-
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
-import { inline_rdfa } from '@lblod/ember-rdfa-editor/marks';
 import {
   tableKeymap,
   tableNodes,
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
-import { service } from '@ember/service';
+import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
+import {
+  createInvisiblesPlugin,
+  hardBreak,
+  heading as headingInvisible,
+  paragraph as paragraphInvisible,
+} from '@lblod/ember-rdfa-editor/plugins/invisibles';
+import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
+import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
+import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
+import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
+
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   besluitNodes,
   structureSpecs,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import sampleData from '@lblod/ember-rdfa-editor/config/sample-data';
-import IntlService from 'ember-intl/services/intl';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   citationPlugin,
@@ -68,14 +77,6 @@ import {
   insertMotivation,
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
-
-import {
-  createInvisiblesPlugin,
-  hardBreak,
-  heading as headingInvisible,
-  paragraph as paragraphInvisible,
-} from '@lblod/ember-rdfa-editor/plugins/invisibles';
-
 import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
 import {
   codelist,
@@ -89,17 +90,34 @@ import {
   address,
   addressView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
-import { linkPasteHandler } from '@lblod/ember-rdfa-editor/plugins/link';
-import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
-import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
-import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
 import {
   date,
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
+import {
+  inlineRdfaWithConfig,
+  inlineRdfaWithConfigView,
+} from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import {
+  editableNodePlugin,
+  getActiveEditableNode,
+} from '@lblod/ember-rdfa-editor/plugins/editable-node';
+import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
+import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
+import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
 
 export default class BesluitSampleController extends Controller {
+  DebugInfo = DebugInfo;
+  AttributeEditor = AttributeEditor;
+  RdfaEditor = RdfaEditor;
+  @tracked editableNodes = false;
+
+  @action
+  toggleEditableNodes() {
+    this.editableNodes = !this.editableNodes;
+  }
+
   @service declare importRdfaSnippet: importRdfaSnippet;
   @service declare intl: IntlService;
   @tracked controller?: SayController;
@@ -164,16 +182,19 @@ export default class BesluitSampleController extends Controller {
   get schema() {
     return new Schema({
       nodes: {
-        doc: docWithConfig(),
+        doc: docWithConfig({ rdfaAware: true }),
         paragraph,
 
-        repaired_block,
+        repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
-        list_item,
-        ordered_list,
-        bullet_list,
+        list_item: listItemWithConfig({ rdfaAware: true }),
+        ordered_list: orderedListWithConfig({ rdfaAware: true }),
+        bullet_list: bulletListWithConfig({ rdfaAware: true }),
         placeholder,
-        ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
+        ...tableNodes({
+          tableGroup: 'block',
+          cellContent: 'block+',
+        }),
         date: date(this.dateOptions),
         text_variable,
         number,
@@ -182,7 +203,7 @@ export default class BesluitSampleController extends Controller {
         address,
         ...besluitNodes,
         roadsign_regulation,
-        heading,
+        heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
 
         horizontal_rule,
@@ -193,12 +214,12 @@ export default class BesluitSampleController extends Controller {
         image,
 
         hard_break,
-        block_rdfa,
-        invisible_rdfa,
+        block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
+        invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
+        inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
         link: link(this.config.link),
       },
       marks: {
-        inline_rdfa,
         em,
         strong,
         underline,
@@ -273,11 +294,19 @@ export default class BesluitSampleController extends Controller {
       },
       link: {
         interactive: true,
+        rdfaAware: true,
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
     };
+  }
+
+  get activeNode() {
+    if (this.controller) {
+      return getActiveEditableNode(this.controller.activeEditorState);
+    }
+    return;
   }
 
   @tracked rdfaEditor?: SayController;
@@ -292,6 +321,7 @@ export default class BesluitSampleController extends Controller {
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
       address: addressView(controller),
+      inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
   @tracked plugins: Plugin[] = [
@@ -306,6 +336,7 @@ export default class BesluitSampleController extends Controller {
     createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
       shouldShowInvisibles: false,
     }),
+    editableNodePlugin(),
   ];
 
   @action

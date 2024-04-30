@@ -7,9 +7,16 @@ import { hasGroups } from '@lblod/ember-rdfa-editor/utils/node-utils';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
+type VariableComponentArgs = {
+  Args: {
+    Named: {
+      controller: SayController;
+    };
+  };
+};
 export type VariableConfig = {
   label: string;
-  component: ComponentLike;
+  component: ComponentLike<VariableComponentArgs>;
   options?: unknown;
 };
 
