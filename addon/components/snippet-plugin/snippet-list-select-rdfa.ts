@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { task } from 'ember-concurrency';
 
 import { isResourceNode } from '@lblod/ember-rdfa-editor/utils/node-utils';
 
@@ -50,7 +49,7 @@ export default class SnippetListSelectRdfaComponent extends Component<Args> {
     );
   }
 
-  saveChanges = task(async (snippetIds: string[]) => {
+  saveChanges = (snippetIds: string[]) => {
     if (this.currentResource) {
       this.args.controller?.doCommand(
         updateSnippetIds({
@@ -63,7 +62,5 @@ export default class SnippetListSelectRdfaComponent extends Component<Args> {
         },
       );
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 0));
-  });
+  };
 }

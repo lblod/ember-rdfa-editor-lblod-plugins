@@ -266,6 +266,10 @@ generic-rdfa-variable:
 snippet-plugin:
   insert:
     title: Fragment invoegen
+    placeholder: Plaatshouder voor fragment invoegen
+  placeholder:
+    title: Fragment hier invoegen
+    text: Selecteer dit en voeg het gewenste fragment in
   modal:
     title: Kies een fragment
     select: Selecteer

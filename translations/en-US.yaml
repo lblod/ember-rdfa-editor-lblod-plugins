@@ -262,6 +262,10 @@ generic-rdfa-variable:
 snippet-plugin:
   insert:
     title: Insert snippet
+    placeholder: Insert snippet placeholder
+  placeholder:
+    title: Insert snippet here
+    text: Select this then insert the desired snippet
   modal:
     title: Choose a snippet
     select: Select

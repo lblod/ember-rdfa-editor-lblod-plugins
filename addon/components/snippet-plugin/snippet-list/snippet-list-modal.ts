@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { restartableTask, Task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
 import { tracked } from '@glimmer/tracking';
@@ -16,14 +16,17 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { trackedReset } from 'tracked-toolbox';
 
-interface Args {
-  config: SnippetPluginConfig;
-  onSaveSnippetListIds: Task<Promise<void>, [snippetIds: string[]]>;
-  assignedSnippetListsIds: string[];
-  closeModal: () => void;
+interface Signature {
+  Args: {
+    config: SnippetPluginConfig;
+    onSaveSnippetListIds: (listIds: string[]) => void;
+    assignedSnippetListsIds: string[];
+    closeModal: () => void;
+    open: boolean;
+  };
 }
 
-export default class SnippetListModalComponent extends Component<Args> {
+export default class SnippetListModalComponent extends Component<Signature> {
   // Filtering
   @tracked nameFilterText: string | null = null;
 
@@ -46,11 +49,11 @@ export default class SnippetListModalComponent extends Component<Args> {
   }
 
   @action
-  async saveAndClose() {
-    await this.snippetListResource.cancel();
-
-    await this.args.onSaveSnippetListIds.perform(this.assignedSnippetListsIds);
+  saveAndClose() {
+    this.args.onSaveSnippetListIds(this.assignedSnippetListsIds);
     this.args.closeModal();
+    // Clear selection for next time
+    this.assignedSnippetListsIds = [];
   }
 
   snippetListSearch = restartableTask(async () => {

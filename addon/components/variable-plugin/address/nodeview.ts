@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
-import { NodeSelection, PNode, SayController } from '@lblod/ember-rdfa-editor';
+import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/address';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -46,17 +45,5 @@ export default class AddressNodeviewComponent extends Component<Args> {
 
   get label() {
     return getOutgoingTriple(this.node.attrs, EXT('label'))?.object.value;
-  }
-
-  @action
-  selectThisNode() {
-    const tr = this.args.controller.activeEditorState.tr;
-    tr.setSelection(
-      NodeSelection.create(
-        this.args.controller.activeEditorState.doc,
-        this.args.getPos() as number,
-      ),
-    );
-    this.args.controller.activeEditorView.dispatch(tr);
   }
 }

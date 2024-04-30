@@ -3,7 +3,7 @@
   @icon={{this.PencilIcon}}
   @iconAlignment='right'
   class='variable atomic'
-  {{on 'click' this.selectThisNode}}
+  {{on 'click' @selectNode}}
 >
   {{#if this.address}}
     {{this.address.formatted}}
