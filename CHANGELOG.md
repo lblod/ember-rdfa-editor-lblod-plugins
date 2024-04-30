@@ -1,5 +1,49 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 18.0.0
+
+### Major Changes
+
+- [#420](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/420) [`8cfa3eb042960f64bfef611f7cf27bdf981a9453`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8cfa3eb042960f64bfef611f7cf27bdf981a9453) Thanks [@dkozickis](https://github.com/dkozickis)! - ### RDFa aware editing
+
+  This release adapts plugins
+  to [RDFa (RDF in Attributes)](https://github.com/lblod/ember-rdfa-editor/blob/9c32a9dea0da13df4092c39d9a092ba0803a3f42/README.md#experimental-a-new-approach-to-handle-rdfa-in-documents)
+  aware editing, based on the changes in `ember-rdfa-editor`
+  version [9.6.0](https://github.com/lblod/ember-rdfa-editor/releases/tag/v9.6.0)
+
+  #### N.B. This release is not compatible with `ember-rdfa-editor` configurations that don't use ` rdfaAware` features, see [editor documentation](https://github.com/lblod/ember-rdfa-editor/blob/9c32a9dea0da13df4092c39d9a092ba0803a3f42/README.md#experimental-a-new-approach-to-handle-rdfa-in-documents) for more.
+
+  #### Changes
+
+  - Plugins now use RDFa aware specs when rendering to HTML, and they also expect RDFa aware specs when parsing from HTML.
+  - Introduces RDFa aware version of `snippet-plugin`, that allows to record allowed snippet list IDs on a resource node level in the document.
+
+### Minor Changes
+
+- [#357](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/357) [`6b3b926db2e30a133ac399bf1f079e161a910f23`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6b3b926db2e30a133ac399bf1f079e161a910f23) Thanks [@piemonkey](https://github.com/piemonkey)! - - Addition of the `say-template-comment` class to the static version of template comments.
+
+  - Addition of some extra styles to the `say-template-comment` class.
+
+- [#369](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/369) [`8eb536dfc8985cc079b169182b0aab0ccb7e8727`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8eb536dfc8985cc079b169182b0aab0ccb7e8727) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4650: Snippet selection placeholder in template
+
+- [#357](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/357) [`8ca4edf3a3d57d21a32bbcb634a6250d87e3487a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8ca4edf3a3d57d21a32bbcb634a6250d87e3487a) Thanks [@piemonkey](https://github.com/piemonkey)! - Add helper function to help with locale selection and add translation note to readme
+
+- [#392](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/392) [`d23e0bb9c8a76172e635124c0ce267c7070b4155`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d23e0bb9c8a76172e635124c0ce267c7070b4155) Thanks [@elpoelma](https://github.com/elpoelma)! - Ensure that variables are node-selected/focused after insertion
+
+### Patch Changes
+
+- [#357](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/357) [`6b3b926db2e30a133ac399bf1f079e161a910f23`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6b3b926db2e30a133ac399bf1f079e161a910f23) Thanks [@piemonkey](https://github.com/piemonkey)! - Remove `@import "ember-appuniversum"` statements from plugin sass modules in order to prevent style overrding.
+
+- [#381](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/381) [`45913e187eaa1d5f575b225b279657372bba539f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/45913e187eaa1d5f575b225b279657372bba539f) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4650: Fix behavior of "Insert snippet" button
+
+- [#413](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/413) [`36de6ef2b2c79f1c9864fb53046d269b4eb46836`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/36de6ef2b2c79f1c9864fb53046d269b4eb46836) Thanks [@elpoelma](https://github.com/elpoelma)! - article-structure-plugin: Make `setStartNumber` and `getStartNumber` properties optional
+
+- [#417](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/417) [`d0e97c9cef007ff964b0f4ab3dfa225d5a563e1d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d0e97c9cef007ff964b0f4ab3dfa225d5a563e1d) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4818: Add missing translations for date picker
+
+- [#357](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/357) [`48858e8136ad10854600a729e4f493fc02f10b9c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/48858e8136ad10854600a729e4f493fc02f10b9c) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix template-comment padding
+
+- [#408](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/408) [`fbe611679fca23b899b7f0b83e9bc5ca67f4945b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/fbe611679fca23b899b7f0b83e9bc5ca67f4945b) Thanks [@dkozickis](https://github.com/dkozickis)! - Allow to insert structure even if insertion range does not have RDFA attributes.
+
 ## 17.1.1
 
 ### Patch Changes
