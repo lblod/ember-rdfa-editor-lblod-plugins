@@ -111,7 +111,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   }
 
   get structureStartNumber() {
-    if (this.structure && this.currentStructureType) {
+    if (this.structure && this.currentStructureType?.getStartNumber) {
       return this.currentStructureType.getStartNumber({
         pos: this.structure.pos,
         transaction: this.controller.mainEditorState.tr,

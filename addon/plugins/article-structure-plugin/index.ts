@@ -39,7 +39,7 @@ export type StructureSpec = {
   }) => SpecConstructorResult;
   numberConfig: {
     numberPredicate?: Resource;
-    convertNumber: (number: number) => string;
+    convertNumber?: (number: number) => string;
   };
   setNumber: (args: {
     number: number;
@@ -47,12 +47,12 @@ export type StructureSpec = {
     transaction: Transaction;
   }) => Transaction;
   getNumber: (args: { pos: number; transaction: Transaction }) => number | null;
-  setStartNumber: (args: {
+  setStartNumber?: (args: {
     number: number | null;
     pos: number;
     transaction: Transaction;
   }) => Transaction;
-  getStartNumber: (args: {
+  getStartNumber?: (args: {
     pos: number;
     transaction: Transaction;
   }) => number | null;

@@ -4,6 +4,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 /**
  * Card displaying a hint of the Date plugin
@@ -54,12 +56,18 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const selection = this.controller.mainEditorState.selection;
     const besluitNode = findParentNode((node) => {
       if (node.type === this.schema.nodes['besluit']) {
-        const rdfTypes = (node.attrs['typeof'] as string | undefined)?.split(
-          ' ',
+        const properties = node.attrs.properties as OutgoingTriple[];
+        const decisionHasAcceptedType = Boolean(
+          properties.find((property) => {
+            const { predicate, object } = property;
+            return (
+              RDF('type').matches(predicate) &&
+              object.termType === 'NamedNode' &&
+              acceptedTypes.includes(object.value)
+            );
+          }),
         );
-        if (rdfTypes?.some((t) => acceptedTypes.includes(t))) {
-          return true;
-        }
+        return decisionHasAcceptedType;
       }
       return false;
     })(selection);
