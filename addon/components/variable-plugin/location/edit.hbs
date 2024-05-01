@@ -1,9 +1,17 @@
 {{! @glint-nocheck: not typesafe yet }}
 {{#if this.showCard}}
-  <AuCard @flex={{true}} @divided={{true}} @isOpenInitially={{true}} @expandable={{true}} @shadow={{true}} @size="small" as |c|>
+  <AuCard
+    @flex={{true}}
+    @divided={{true}}
+    @isOpenInitially={{true}}
+    @expandable={{true}}
+    @shadow={{true}}
+    @size='small'
+    as |c|
+  >
     <c.header>
-      <AuHeading @level="3" @skin="6">
-        {{t "variable-plugin.enter-variable-value"}}
+      <AuHeading @level='3' @skin='6'>
+        {{t 'variable-plugin.enter-variable-value'}}
       </AuHeading>
     </c.header>
     <c.content>
@@ -12,29 +20,34 @@
       </AuLabel>
       {{#if this.multiSelect}}
         <PowerSelectMultiple
-          id="location-select"
+          id='location-select'
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.locationOptions.value.options}}
           @selected={{this.selectedLocationOption}}
-          @onChange={{this.updateLocationOption}} as |option|
+          @onChange={{this.updateLocationOption}}
+          as |option|
         >
           {{option.label}}
         </PowerSelectMultiple>
       {{else}}
         <PowerSelect
-          id="location-select"
+          id='location-select'
           @allowClear={{false}}
           @searchEnabled={{false}}
           @options={{this.locationOptions.value.options}}
           @selected={{this.selectedLocationOption}}
-          @onChange={{this.updateLocationOption}} as |option|
+          @onChange={{this.updateLocationOption}}
+          as |option|
         >
           {{option.label}}
         </PowerSelect>
       {{/if}}
-      <AuButton {{on 'click' this.insert}} @disabled={{not this.selectedLocationOption}}>
-        {{t "editor-plugins.utils.insert"}}
+      <AuButton
+        {{on 'click' this.insert}}
+        @disabled={{not this.selectedLocationOption}}
+      >
+        {{t 'editor-plugins.utils.insert'}}
       </AuButton>
     </c.content>
   </AuCard>

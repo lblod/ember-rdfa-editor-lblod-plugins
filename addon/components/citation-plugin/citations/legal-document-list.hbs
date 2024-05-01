@@ -1,15 +1,19 @@
 {{#if @legalDocuments.length}}
-  <AuList @direction="vertical" @divider={{true}} as |Item|>
+  <AuList @direction='vertical' @divider={{true}} as |Item|>
     {{#each @legalDocuments as |legalDocument|}}
-      <Item class="au-u-padding-left-small au-u-padding-right-small">
+      <Item class='au-u-padding-left-small au-u-padding-right-small'>
         <CitationPlugin::Citations::LegalDocumentPreview
           @legalDocument={{legalDocument}}
           @onCitationInsert={{fn @onCitationInsert legalDocument}}
           @onCitationDetails={{fn @onCitationDetails legalDocument}}
-          @fullSize={{@fullSize}} />
+          @fullSize={{@fullSize}}
+        />
       </Item>
     {{/each}}
   </AuList>
 {{else}}
-  <Common::Search::AlertNoItems @fullSize={{@fullSize}} class={{if @fullSize "au-u-margin"}}/>
+  <Common::Search::AlertNoItems
+    @fullSize={{@fullSize}}
+    class={{if @fullSize 'au-u-margin'}}
+  />
 {{/if}}

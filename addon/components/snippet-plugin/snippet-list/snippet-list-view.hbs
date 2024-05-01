@@ -1,11 +1,13 @@
 {{! @glint-nocheck: not typesafe yet }}
-<div class="say-snippet-lists-table">
-  {{#let (t "snippet-plugin.snippet-list.modal.table.list")
-         (t "snippet-plugin.snippet-list.modal.table.created")
-         (t "snippet-plugin.snippet-list.modal.table.select")
-         (t 'snippet-plugin.snippet-list.modal.subtitle')
-         (t 'snippet-plugin.snippet-list.modal.search.label')
-  as |list created select subtitle search|}}
+<div class='say-snippet-lists-table'>
+  {{#let
+    (t 'snippet-plugin.snippet-list.modal.table.list')
+    (t 'snippet-plugin.snippet-list.modal.table.created')
+    (t 'snippet-plugin.snippet-list.modal.table.select')
+    (t 'snippet-plugin.snippet-list.modal.subtitle')
+    (t 'snippet-plugin.snippet-list.modal.search.label')
+    as |list created select subtitle search|
+  }}
     <AuDataTable
       @content={{this.snippetLists}}
       @isLoading={{@isLoading}}
@@ -16,32 +18,36 @@
     >
       <t.menu as |menu|>
         <menu.general>
-          <AuToolbar class="au-o-box" as |Group|>
+          <AuToolbar class='au-o-box' as |Group|>
             <Group />
-            <Group class="au-c-toolbar__group--center">
-              <AuDataTableTextSearch @wait={{500}} @filter={{@listNameFilter}} @placeholder={{search}} />
+            <Group class='au-c-toolbar__group--center'>
+              <AuDataTableTextSearch
+                @wait={{500}}
+                @filter={{@listNameFilter}}
+                @placeholder={{search}}
+              />
             </Group>
           </AuToolbar>
         </menu.general>
       </t.menu>
       <t.content as |c|>
         <c.header>
-          <th class="snippet-list-table-select-column">{{select}}</th>
+          <th class='snippet-list-table-select-column'>{{select}}</th>
           <AuDataTableThSortable
-            @field="label"
+            @field='label'
             @label={{list}}
             @currentSorting={{@sort}}
-            @class="data-table__header-title"
+            @class='data-table__header-title'
           />
           <AuDataTableThSortable
-            @field="createdOn"
+            @field='createdOn'
             @label={{created}}
             @currentSorting={{@sort}}
-            @class="data-table__header-title snippet-list-table-created-column"
+            @class='data-table__header-title snippet-list-table-created-column'
           />
         </c.header>
         <c.body as |row|>
-          <td class="snippet-list-table-select-column">
+          <td class='snippet-list-table-select-column'>
             <AuCheckbox
               id={{row.label}}
               @onChange={{fn this.onChange row.id}}
@@ -49,7 +55,7 @@
             />
           </td>
           <td>{{row.label}}</td>
-          <td class="snippet-list-table-created-column">{{row.createdOn}}</td>
+          <td class='snippet-list-table-created-column'>{{row.createdOn}}</td>
         </c.body>
       </t.content>
     </AuDataTable>

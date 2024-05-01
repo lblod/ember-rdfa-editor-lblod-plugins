@@ -25,7 +25,9 @@
     color: var(--vl-picton-120);
     border-radius: 0.3rem;
     background-color: rgba(#16465b, 0.15);
-    transition: border 0.1s ease-in-out, background-color 0.1s ease-in-out;
+    transition:
+      border 0.1s ease-in-out,
+      background-color 0.1s ease-in-out;
 
     &:hover,
     &:focus,
@@ -104,13 +106,13 @@
   }
 
   .au-c-help-text {
-    grid-column: span 3
+    grid-column: span 3;
   }
 }
 
 // show tooltips above everything else
 .say-tooltip {
- z-index: 3;
+  z-index: 3;
 }
 
 .say-number-tooltip {

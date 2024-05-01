@@ -1,28 +1,28 @@
 {{! @glint-nocheck: not typesafe yet }}
 {{#if this.isVisible}}
   <div
-    class="au-c-alert {{this.skin}} {{this.size}}"
-    role="alert"
+    class='au-c-alert {{this.skin}} {{this.size}}'
+    role='alert'
     data-test-alert
     ...attributes
   >
-    <AuLoader/>
-    <div class="au-c-alert__content">
+    <AuLoader />
+    <div class='au-c-alert__content'>
       {{#if @title}}
-        <p class="au-c-alert__title" data-test-alert-title>{{@title}}</p>
+        <p class='au-c-alert__title' data-test-alert-title>{{@title}}</p>
       {{/if}}
-      <div class="au-c-alert__message" data-test-alert-message>{{yield}}</div>
+      <div class='au-c-alert__message' data-test-alert-message>{{yield}}</div>
     </div>
     {{#if @closable}}
       <button
-        class="au-c-alert__close"
-        type="button"
+        class='au-c-alert__close'
+        type='button'
         data-test-alert-close
-        {{on "click" this.closeAlert}}
+        {{on 'click' this.closeAlert}}
       >
-        <AuIcon @icon={{this.CrossIcon}} @size="large" />
-        {{!-- template-lint-disable no-bare-strings --}}
-        <span class="au-u-hidden-visually">Sluit alert</span>
+        <AuIcon @icon={{this.CrossIcon}} @size='large' />
+        {{! template-lint-disable no-bare-strings }}
+        <span class='au-u-hidden-visually'>Sluit alert</span>
       </button>
     {{/if}}
   </div>

@@ -36,7 +36,7 @@
 }
 
 .citaten--container-header {
-  border-bottom: .1rem solid var(--au-gray-200);
+  border-bottom: 0.1rem solid var(--au-gray-200);
 }
 
 .citaten--container-content {
@@ -49,20 +49,20 @@
 
 // Start: Styling the highlight when detecting search term inside the editor
 @mixin hints($before, $after) {
-  .rdfa-annotations.show-rdfa-blocks [data-editor-highlight=true] {
+  .rdfa-annotations.show-rdfa-blocks [data-editor-highlight='true'] {
     &:before {
-      content: "#{$before}";
+      content: '#{$before}';
     }
 
-    &:not([contenteditable=""]):after {
-      content: "#{$after}";
+    &:not([contenteditable='']):after {
+      content: '#{$after}';
     }
   }
 }
 
 .rdfa-annotations {
   &.show-rdfa-blocks {
-    [data-editor-highlight=true] {
+    [data-editor-highlight='true'] {
       position: relative;
       border: 1px solid var(--au-gray-200);
       display: block !important; // Override inline styles
@@ -115,8 +115,8 @@
     }
   }
 
-  [data-editor-highlight=true] {
-    &:not([contenteditable=""]) {
+  [data-editor-highlight='true'] {
+    &:not([contenteditable='']) {
       background-color: var(--au-gray-100);
       border-bottom: 0.2rem dotted var(--au-gray-300);
       padding-bottom: 0.2rem;
@@ -133,14 +133,15 @@
   }
 }
 
-@include hints("Selecteer de juiste optie", "Actie nodig");
+@include hints('Selecteer de juiste optie', 'Actie nodig');
 
-[data--language=en], [lang=en] {
-  @include hints("Select the correct option", "Action required");
+[data--language='en'],
+[lang='en'] {
+  @include hints('Select the correct option', 'Action required');
 }
 
 .rdfa-annotations-hover:not(.show-rdfa-blocks) {
-  [data-editor-highlight="true"] {
+  [data-editor-highlight='true'] {
     &:not(ol):not(ul):not(li):not(span) {
       position: relative;
 
@@ -158,7 +159,9 @@
       &:before {
         @include au-font-size(1.2rem, 1.2);
         position: absolute;
-        transition: opacity $au-easing 0.5s, left $au-easing 0.2s;
+        transition:
+          opacity $au-easing 0.5s,
+          left $au-easing 0.2s;
         right: calc(100% + #{$au-unit-large});
         opacity: 0;
         display: block;
@@ -179,13 +182,14 @@
         border-right: 1px dashed var(--au-gray-300);
         border-top: 1px dashed var(--au-gray-300);
         z-index: var(--au-z-index-gamma);
-        background: var(--au-white) linear-gradient(
+        background: var(--au-white)
+          linear-gradient(
             to right,
             $au-white,
             $au-white calc(100% - #{$au-unit + $au-unit-tiny}),
             transparent calc(100% - #{$au-unit + $au-unit-tiny}),
             transparent 100%
-        );
+          );
       }
     }
   }
@@ -197,7 +201,6 @@
       }
     }
   }
-
 }
 
 // End: Styling the highlight when detecting search term inside the editor

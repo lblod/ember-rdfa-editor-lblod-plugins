@@ -1,14 +1,21 @@
 {{! @glint-nocheck: not typesafe yet }}
-<div class="citaten--decision-list-item {{if @fullSize "au-u-padding-small"}}" ...attributes>
-  <p class="citaten--decision-title {{if @fullSize "au-u-h6 au-u-medium" "au-u-h-functional"}}">
+<div
+  class='citaten--decision-list-item {{if @fullSize "au-u-padding-small"}}'
+  ...attributes
+>
+  <p
+    class='citaten--decision-title
+      {{if @fullSize "au-u-h6 au-u-medium" "au-u-h-functional"}}'
+  >
     {{if @fullSize (capitalize @legalDocument.fullTitle) @legalDocument.title}}
   </p>
   {{#if (and @fullSize @legalDocument.publicationDate)}}
     <AuPill
-      class="au-u-margin-top-small au-u-margin-bottom-small"
-      @skin="border"
+      class='au-u-margin-top-small au-u-margin-bottom-small'
+      @skin='border'
       @icon={{this.CalendarIcon}}
-      @iconAlignment="left">
+      @iconAlignment='left'
+    >
       {{@legalDocument.publicationDate}}
     </AuPill>
   {{/if}}
@@ -16,83 +23,86 @@
     <div>
       <AuButtonGroup @inline={{false}}>
         <AuButton
-          @skin="primary"
+          @skin='primary'
           @icon={{this.PlusTextIcon}}
-          @iconAlignment="left"
-          {{on "click" @onCitationInsert}}>
-          {{t "citaten-plugin.references.insert"}}
+          @iconAlignment='left'
+          {{on 'click' @onCitationInsert}}
+        >
+          {{t 'citaten-plugin.references.insert'}}
         </AuButton>
         {{#if this.isBesluit}}
           {{#if this.hasPublicationLink}}
             <AuLinkExternal
-              @skin="button"
+              @skin='button'
               @icon={{this.LinkExternalIcon}}
-              @iconAlignment="left"
+              @iconAlignment='left'
               href={{@legalDocument.meta.publicationLink}}
-              rel="noreferrer noopener">
-              {{t "citaten-plugin.references.lookup-publicatie"}}
+              rel='noreferrer noopener'
+            >
+              {{t 'citaten-plugin.references.lookup-publicatie'}}
             </AuLinkExternal>
           {{else}}
             <AuButton
               @skin='button'
               @icon={{this.LinkExternalIcon}}
-              @iconAlignment="left"
+              @iconAlignment='left'
               @disabled={{true}}
             >
-              {{t "citaten-plugin.references.publicatie-non-available"}}
+              {{t 'citaten-plugin.references.publicatie-non-available'}}
             </AuButton>
           {{/if}}
         {{else}}
           <AuButton
-            @skin="secondary"
+            @skin='secondary'
             @icon={{this.ManualIcon}}
-            @iconAlignment="left"
-            {{on "click" @onCitationDetails}}>
-            {{t "citaten-plugin.references.details"}}
+            @iconAlignment='left'
+            {{on 'click' @onCitationDetails}}
+          >
+            {{t 'citaten-plugin.references.details'}}
           </AuButton>
         {{/if}}
 
       </AuButtonGroup>
     </div>
   {{else}}
-    <div class="au-u-flex au-u-flex--row au-u-flex--no-wrap au-u-flex--between au-u-margin-top-tiny">
+    <div
+      class='au-u-flex au-u-flex--row au-u-flex--no-wrap au-u-flex--between au-u-margin-top-tiny'
+    >
       <AuButton
-        @skin="link-secondary"
+        @skin='link-secondary'
         @icon={{this.PlusTextIcon}}
-        @iconAlignment="left"
-        class="au-u-h-functional"
-        {{on "click" @onCitationInsert}}>
-        {{t "citaten-plugin.references.insert"}}
+        @iconAlignment='left'
+        class='au-u-h-functional'
+        {{on 'click' @onCitationInsert}}
+      >
+        {{t 'citaten-plugin.references.insert'}}
       </AuButton>
       {{#if this.isBesluit}}
         {{#if this.hasPublicationLink}}
           <AuLinkExternal
-            @skin="link"
+            @skin='link'
             @icon={{this.LinkExternalIcon}}
-            @iconAlignment="left"
+            @iconAlignment='left'
             href={{@legalDocument.meta.publicationLink}}
-            rel="noreferrer noopener"
-            class="au-u-h-functional"
+            rel='noreferrer noopener'
+            class='au-u-h-functional'
           >
-            {{t "citaten-plugin.references.lookup-publicatie-short"}}
+            {{t 'citaten-plugin.references.lookup-publicatie-short'}}
           </AuLinkExternal>
         {{else}}
-          <AuButton
-            @skin='link'
-            @disabled={{true}}
-            class="au-u-h-functional"
-          >
-            {{t "citaten-plugin.references.publicatie-non-available-short"}}
+          <AuButton @skin='link' @disabled={{true}} class='au-u-h-functional'>
+            {{t 'citaten-plugin.references.publicatie-non-available-short'}}
           </AuButton>
         {{/if}}
       {{else}}
         <AuButton
-          @skin="link"
+          @skin='link'
           @icon={{this.ManualIcon}}
-          @iconAlignment="left"
-          class="au-u-h-functional"
-          {{on "click" @onCitationDetails}}>
-          {{t "citaten-plugin.references.details"}}
+          @iconAlignment='left'
+          class='au-u-h-functional'
+          {{on 'click' @onCitationDetails}}
+        >
+          {{t 'citaten-plugin.references.details'}}
         </AuButton>
       {{/if}}
     </div>
