@@ -70,7 +70,11 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.contexts.some((type) =>
-          hasOutgoingNamedNodeTriple(node, RDF('type'), HACKY_LOOKUP[type]),
+          hasOutgoingNamedNodeTriple(
+            node.attrs,
+            RDF('type'),
+            HACKY_LOOKUP[type],
+          ),
         );
       }).length;
     const containsDisabledTypes =
@@ -81,7 +85,11 @@ export default class TemplateProviderComponent extends Component<Args> {
         }) ||
       findAncestors($from, (node) => {
         return template.disabledInContexts.some((type) =>
-          hasOutgoingNamedNodeTriple(node, RDF('type'), HACKY_LOOKUP[type]),
+          hasOutgoingNamedNodeTriple(
+            node.attrs,
+            RDF('type'),
+            HACKY_LOOKUP[type],
+          ),
         );
       }).length;
 
