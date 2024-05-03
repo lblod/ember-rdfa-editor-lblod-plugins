@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 18.1.0
+
+### Minor Changes
+
+- [#419](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/419) [`05c46c06c426141b73420c240834cdaf7e52a095`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/05c46c06c426141b73420c240834cdaf7e52a095) Thanks [@piemonkey](https://github.com/piemonkey)! - Add Snippet Placeholder component to signal the intended location for snippets to be inserted
+
+### Patch Changes
+
+- [`e2cdeff70e8364b643d10355fa9de55c5a078ede`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e2cdeff70e8364b643d10355fa9de55c5a078ede) Thanks [@abeforgit](https://github.com/abeforgit)! - Fix template node lookup
+
+  The template card could not determine it was already in a decision node, due to the attribute comparison function being passed the node instead of the node's attrs
+
 ## 18.0.0
 
 ### Major Changes
