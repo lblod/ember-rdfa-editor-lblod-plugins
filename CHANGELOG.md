@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 18.1.1
+
+### Patch Changes
+
+- [`974469d3f16d045be14b6111cc1be9c251971609`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/974469d3f16d045be14b6111cc1be9c251971609) Thanks [@abeforgit](https://github.com/abeforgit)! - Fix peerdeps to avoid broken combo
+
+  Version 9.8.0 of the editor removes a helper that's used in the number variable nodeview. We restrict the peerdep here so we avoid a broken combination of plugins + editor
+
 ## 18.1.0
 
 ### Minor Changes
