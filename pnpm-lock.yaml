@@ -149,8 +149,8 @@ devDependencies:
     specifier: 4.3.3
     version: 4.3.3
   '@lblod/ember-rdfa-editor':
-    specifier: 9.7.1-dev.67f7224891c720868d2e8ef0e92ce46d76959257
-    version: 9.7.1-dev.67f7224891c720868d2e8ef0e92ce46d76959257(@appuniversum/ember-appuniversum@3.4.1)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
+    specifier: ^9.8.0
+    version: 9.9.0(@appuniversum/ember-appuniversum@3.4.1)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
   '@rdfjs/types':
     specifier: ^1.1.0
     version: 1.1.0
@@ -2792,8 +2792,8 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@lblod/ember-rdfa-editor@9.7.1-dev.67f7224891c720868d2e8ef0e92ce46d76959257(@appuniversum/ember-appuniversum@3.4.1)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
-    resolution: {integrity: sha512-PRKSju6sgYr0iWVmQTpH9XbkJ8Jx365s6KcrZubtSAKkchSdCX2L4qXWR7qzDFXN34wdGpdwISoHN9VR0N54Yg==}
+  /@lblod/ember-rdfa-editor@9.9.0(@appuniversum/ember-appuniversum@3.4.1)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
+    resolution: {integrity: sha512-BY8zxQHFSRXOKvMCE+YOMumEzFJJVwbernmeRaBNPuiwCIpmMptu7ajYTDbyUb0J6VSvwoDRZRa2RoiVAJQntQ==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^2.15.0 || ^3.0.0
