@@ -27,6 +27,7 @@ type Args = {
   view: SayView;
   selected: boolean;
   contentDecorations?: DecorationSource;
+  selectNode: () => void;
 };
 
 export default class NumberNodeviewComponent extends Component<Args> {

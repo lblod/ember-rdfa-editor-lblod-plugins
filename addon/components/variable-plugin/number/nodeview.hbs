@@ -8,7 +8,7 @@
     @iconAlignment='right'
     class='variable atomic'
     {{velcro.hook}}
-    {{select-node-on-click @controller @getPos}}
+    {{on "click" @selectNode}}
   >
     {{#if this.formattedNumber}}
       {{this.formattedNumber}}
