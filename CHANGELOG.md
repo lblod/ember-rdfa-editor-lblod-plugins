@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 19.0.0
+
+### Major Changes
+
+- [`b9f7f56a469a18adbd75951e5ddd2a2f1cda7e45`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b9f7f56a469a18adbd75951e5ddd2a2f1cda7e45) Thanks [@abeforgit](https://github.com/abeforgit)! - Use the selectNode argument instead of the helper
+
+  The select-on-click helper was removed in 9.8.0 of the editor, and was arguably never really public API.
+
+  This uses the replacement, a selectNode argument all ember-nodes receive.
+
+  This is breaking cause it restricts the peerdep to at least 9.8.0.
+
 ## 18.1.1
 
 ### Patch Changes
