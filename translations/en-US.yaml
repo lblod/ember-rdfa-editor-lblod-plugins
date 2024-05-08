@@ -403,3 +403,14 @@ worship-plugin:
       sort: Sort
       asc: Sort ascending
       desc: Sort descending
+
+lmb-plugin:
+  insert:
+    title: Insert mandatee from LMB service
+  modal:
+    title: Choose a mandatee
+    insert: Insert
+    search:
+      title: Filter on
+    fields:
+      name: Name

@@ -299,6 +299,9 @@ export default class BesluitSampleController extends Controller {
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
+      lmb: {
+        endpoint: 'https://data.lblod.info/sparql',
+      },
     };
   }
 
