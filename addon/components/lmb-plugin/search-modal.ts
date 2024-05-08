@@ -41,8 +41,31 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   }
 
   fetchData = restartableTask(async () => {
+    const endpoint = this.args.config.endpoint;
+    const queryResponse = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        query: `
+          PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#> 
+          PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+          PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
+          PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+          PREFIX persoon: <http://data.vlaanderen.be/ns/persoon#>
+          SELECT * WHERE { 
+              ?mandatee a mandaat:Mandataris;
+                  mandaat:isBestuurlijkeAliasVan ?person.
+              ?person foaf:familyName ?lastName;
+                  persoon:gebruikteVoornaam ?firstName.
+          }
+        `
+      })
+    });
+    const queryJson = await queryResponse.json();
     //TODO: Use real data
-    const mandatees = mockResponse.results.bindings.map(Mandatee.fromBinding)
+    const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding)
     return mandatees;
   })
 
