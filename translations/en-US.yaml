@@ -115,13 +115,24 @@ citaten-plugin:
 besluit-type-plugin:
   dt: 'Decision type'
   insert-dt: 'Select a decision type'
-  search-message: 'Typ to search'
+  search-message: 'Type to search'
   no-matches-message: 'No results'
   alert-title: 'Attention'
   alert-body: 'You must select a subtype in order to save the decision type'
   error-short: 'Error fetching decision types'
   error-title: 'Error'
   error-first-body: 'An error occured while fetching the decision types. Try again later. If this problem persists, please contact'
+  error-rest-body: '. For more specific details about this problem, inspect the browser console.'
+
+besluit-topic-plugin:
+  dt: 'Decision topic'
+  insert-dt: 'Select a decision topic'
+  search-message: 'Type to search'
+  no-matches-message: 'No results'
+  alert-title: 'Attention'
+  error-short: 'Error fetching decision topics'
+  error-title: 'Error'
+  error-first-body: 'An error occured while fetching the decision topics. Try again later. If this problem persists, please contact'
   error-rest-body: '. For more specific details about this problem, inspect the browser console.'
 
 besluit-plugin:
