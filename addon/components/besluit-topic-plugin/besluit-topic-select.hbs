@@ -1,6 +1,6 @@
 {{! @glint-nocheck: not typesafe yet }}
 <div ...attributes>
-  <PowerSelect
+  <PowerSelectMultiple
     @renderInPlace={{true}}
     @searchEnabled={{true}}
     @searchMessage={{t 'besluit-topic-plugin.search-message'}}
@@ -12,7 +12,7 @@
     as |besluitTopic|
   >
     {{besluitTopic.label}}
-  </PowerSelect>
+  </PowerSelectMultiple>
   <p class='au-u-muted au-u-margin-tiny au-u-margin-bottom-small'>
     {{@selected.definition}}
   </p>

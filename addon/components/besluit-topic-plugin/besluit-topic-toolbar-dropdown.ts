@@ -1,9 +1,7 @@
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -19,14 +17,16 @@ import {
   getCurrentBesluitRange,
   getCurrentBesluitURI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import {
+  updateBesluitTopicResource,
+  ELI_SUBJECT,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/commands/update-besluit-topic-resource';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
   controller: SayController;
   options: BesluitTopicPluginOptions;
 };
-
-const ELI_SUBJECT = 'is_about';
 
 export default class BesluitTopicToolbarDropdownComponent extends Component<Args> {
   MailIcon = MailIcon;
@@ -36,13 +36,13 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   /**
    * Actual besluit topic selected
    */
-  @tracked besluitTopic?: BesluitTopic;
-  @tracked previousBesluitTopic?: string;
+  @tracked besluitTopicSelected?: BesluitTopic[];
+  @tracked previousBesluitTopics?: string[];
 
   /**
    * used to update selections since the other vars don't seem to work in octane
    */
-  @tracked besluit?: BesluitTopic;
+  @tracked besluitTopics?: BesluitTopic[];
 
   @tracked cardExpanded = false;
 
@@ -62,13 +62,13 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
     return result.topics;
   });
 
-  findBesluitTopicByURI(
-    uri: string,
+  findBesluitTopicsByUris(
+    uris: string[],
     topics = this.topics.value,
-  ): BesluitTopic | undefined {
-    if (!uri || !topics) return;
+  ): BesluitTopic[] | undefined {
+    if (!uris.length || !topics) return;
 
-    return topics.find((besluitTopic) => besluitTopic.uri === uri);
+    return topics.filter((besluitTopic) => uris.includes(besluitTopic.uri));
   }
 
   @action
@@ -91,26 +91,33 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
       return;
     }
 
-    const besluitTopics = getOutgoingTripleList(
+    const outgoingBesluitTopics = getOutgoingTripleList(
       besluit.node.attrs,
       ELI(ELI_SUBJECT),
     );
 
-    const besluitTopicRelevant = besluitTopics.find(
+    const besluitTopicsRelevant = outgoingBesluitTopics.filter(
       (topic) =>
         topic.object.termType === 'NamedNode' &&
         topic.object.value.includes(
           'https://data.vlaanderen.be/id/concept/BesluitThema/',
         ),
-    )?.object.value;
+    );
 
-    if (besluitTopicRelevant) {
-      this.previousBesluitTopic = besluitTopicRelevant;
-      this.besluit = this.findBesluitTopicByURI(besluitTopicRelevant);
+    const outgoingUris = besluitTopicsRelevant.map(
+      (topic) => topic.object.value,
+    );
+
+    const besluitTopics = this.findBesluitTopicsByUris(outgoingUris);
+
+    if (besluitTopicsRelevant && besluitTopics) {
+      this.previousBesluitTopics = outgoingUris;
+
+      this.besluitTopics = besluitTopics;
       this.cardExpanded = false;
     } else {
       this.cardExpanded = true;
-      this.besluit = undefined;
+      this.besluitTopics = undefined;
     }
   }
 
@@ -119,9 +126,9 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   }
 
   @action
-  upsertBesluitTopic(selected: BesluitTopic) {
-    this.besluit = selected;
-    this.besluitTopic = selected;
+  upsertBesluitTopic(selected: BesluitTopic[]) {
+    this.besluitTopics = selected;
+    this.besluitTopicSelected = selected;
 
     this.insert();
   }
@@ -135,31 +142,22 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
         (currentBesluitRange.node.attrs.subject as string)) ||
       undefined;
 
-    if (this.besluitTopic && resource) {
+    if (this.besluitTopicSelected && resource) {
       this.cardExpanded = false;
 
-      if (this.previousBesluitTopic) {
-        this.controller.doCommand(
-          removeProperty({
-            resource,
-            property: {
-              predicate: ELI(ELI_SUBJECT).prefixed,
-              object: sayDataFactory.namedNode(this.previousBesluitTopic),
-            },
-          }),
-          { view: this.controller.mainEditorView },
-        );
-      }
-
       this.controller.doCommand(
-        addProperty({
+        updateBesluitTopicResource({
           resource,
-          property: {
-            predicate: ELI(ELI_SUBJECT).prefixed,
-            object: sayDataFactory.namedNode(this.besluitTopic.uri),
-          },
+          previousTopics: this.previousBesluitTopics,
+          newTopics: this.besluitTopicSelected,
         }),
-        { view: this.controller.mainEditorView },
+        {
+          view: this.args.controller.mainEditorView,
+        },
+      );
+
+      this.previousBesluitTopics = this.besluitTopicSelected.map(
+        (topic) => topic.uri,
       );
     }
   }

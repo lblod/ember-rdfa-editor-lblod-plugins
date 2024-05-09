@@ -16,14 +16,18 @@
         {{t 'besluit-topic-plugin.error-short'}}
       </AuPill>
     {{else}}
-      {{#if this.besluit.label}}
+      {{#if this.besluitTopics.length}}
         <AuPill
           @skin='link'
           {{on 'click' this.toggleCard}}
           title={{t 'besluit-topic-plugin.insert-dt'}}
         >
           {{t 'besluit-topic-plugin.dt'}}:
-          {{this.besluit.label}}
+          {{#if (gt this.besluitTopics.length 1)}}
+            {{t 'besluit-topic-plugin.selected' num=this.besluitTopics.length}}
+          {{else}}
+            {{this.besluitTopics.[0].label}}
+          {{/if}}
         </AuPill>
       {{else}}
         <AuPill
@@ -72,7 +76,7 @@
           <BesluitTopicPlugin::BesluitTopicSelect
             @besluitTopics={{this.topics.value}}
             @onchange={{this.upsertBesluitTopic}}
-            @selected={{this.besluit}}
+            @selected={{this.besluitTopics}}
           />
         {{/if}}
       </Modal.Body>

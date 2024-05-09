@@ -127,6 +127,7 @@ besluit-type-plugin:
 besluit-topic-plugin:
   dt: 'Decision topic'
   insert-dt: 'Select a decision topic'
+  selected: '{num} selected'
   search-message: 'Type to search'
   no-matches-message: 'No results'
   alert-title: 'Attention'
