@@ -1,65 +1,89 @@
 {{! @glint-nocheck: not typesafe yet }}
 {{#if this.showCard}}
-  <AuCard @flex={{true}} @divided={{true}} @shadow={{true}} @size="small" as |c|>
+  <AuCard
+    @flex={{true}}
+    @divided={{true}}
+    @shadow={{true}}
+    @size='small'
+    as |c|
+  >
     <c.content>
-      <form class="au-c-form">
+      <form class='au-c-form'>
         <AuLabel for='municipality-select'>
-          {{t "editor-plugins.address.edit.municipality.label"}}*
+          {{t 'editor-plugins.address.edit.municipality.label'}}*
         </AuLabel>
         <PowerSelect
-          id="municipality-select"
-          @loadingMessage={{t "editor-plugins.utils.loading"}}
-          @searchMessage={{t "editor-plugins.address.edit.municipality.search-message"}}
-          @noMatchesMessage={{t "editor-plugins.address.edit.municipality.no-results"}}
-          @placeholder={{t "editor-plugins.address.edit.municipality.placeholder"}}
+          id='municipality-select'
+          @loadingMessage={{t 'editor-plugins.utils.loading'}}
+          @searchMessage={{t
+            'editor-plugins.address.edit.municipality.search-message'
+          }}
+          @noMatchesMessage={{t
+            'editor-plugins.address.edit.municipality.no-results'
+          }}
+          @placeholder={{t
+            'editor-plugins.address.edit.municipality.placeholder'
+          }}
           @allowClear={{true}}
           @renderInPlace={{true}}
           @searchEnabled={{true}}
           @search={{perform this.searchMunicipality}}
           @selected={{this.newMunicipality}}
-          @onChange={{this.selectMunicipality}} as |municipality|>
+          @onChange={{this.selectMunicipality}}
+          as |municipality|
+        >
           {{municipality}}
         </PowerSelect>
         <AuLabel for='streetname-select'>
-          {{t "editor-plugins.address.edit.street.label"}}*
+          {{t 'editor-plugins.address.edit.street.label'}}*
         </AuLabel>
         <PowerSelect
-          id="streetname-select"
-          @loadingMessage={{t "editor-plugins.utils.loading"}}
-          @searchMessage={{t "editor-plugins.address.edit.street.search-message"}}
-          @noMatchesMessage={{t "editor-plugins.address.edit.street.no-results"}}
-          @placeholder={{t "editor-plugins.address.edit.street.placeholder"}}
+          id='streetname-select'
+          @loadingMessage={{t 'editor-plugins.utils.loading'}}
+          @searchMessage={{t
+            'editor-plugins.address.edit.street.search-message'
+          }}
+          @noMatchesMessage={{t
+            'editor-plugins.address.edit.street.no-results'
+          }}
+          @placeholder={{t 'editor-plugins.address.edit.street.placeholder'}}
           @allowClear={{true}}
           @renderInPlace={{true}}
           @searchEnabled={{true}}
           @search={{perform this.searchStreet}}
           @selected={{this.newStreetName}}
           @disabled={{not this.canUpdateStreet}}
-          @onChange={{this.selectStreet}} as |street|>
+          @onChange={{this.selectStreet}}
+          as |street|
+        >
           {{street}}
         </PowerSelect>
-        <div class="au-o-grid au-o-grid--tiny">
-          <div class="au-o-grid__item au-u-1-2@medium">
-            <AuLabel for="housenumber-select">
-              {{t "editor-plugins.address.edit.housenumber.label"}}
+        <div class='au-o-grid au-o-grid--tiny'>
+          <div class='au-o-grid__item au-u-1-2@medium'>
+            <AuLabel for='housenumber-select'>
+              {{t 'editor-plugins.address.edit.housenumber.label'}}
             </AuLabel>
             <AuNativeInput
-              id="housenumber-select"
-              placeholder={{t "editor-plugins.address.edit.housenumber.placeholder"}}
-              @width="block"
+              id='housenumber-select'
+              placeholder={{t
+                'editor-plugins.address.edit.housenumber.placeholder'
+              }}
+              @width='block'
               value={{this.newHousenumber}}
               @disabled={{not this.canUpdateHousenumber}}
               {{on 'input' this.updateHousenumber}}
             />
           </div>
-          <div class="au-o-grid__item au-u-1-2@medium">
-            <AuLabel for="busnumber-select">
-              {{t "editor-plugins.address.edit.busnumber.label"}}
+          <div class='au-o-grid__item au-u-1-2@medium'>
+            <AuLabel for='busnumber-select'>
+              {{t 'editor-plugins.address.edit.busnumber.label'}}
             </AuLabel>
             <AuNativeInput
-              id="busnumber-select"
-              placeholder={{t "editor-plugins.address.edit.busnumber.placeholder"}}
-              @width="block"
+              id='busnumber-select'
+              placeholder={{t
+                'editor-plugins.address.edit.busnumber.placeholder'
+              }}
+              @width='block'
               value={{this.newBusnumber}}
               @disabled={{not this.canUpdateBusnumber}}
               {{on 'input' this.updateBusnumber}}
@@ -68,17 +92,26 @@
         </div>
 
         {{#if this.newAddress.isRunning}}
-          <LoadingAlert @title={{t "editor-plugins.address.edit.loading"}} @size="small" @skin="info"/>
+          <LoadingAlert
+            @title={{t 'editor-plugins.address.edit.loading'}}
+            @size='small'
+            @skin='info'
+          />
         {{/if}}
         {{#if this.message}}
-          <AuAlert @skin={{this.message.skin}} @icon={{this.message.icon}} @title={{this.message.title}}>
+          <AuAlert
+            @skin={{this.message.skin}}
+            @icon={{this.message.icon}}
+            @title={{this.message.title}}
+          >
             {{this.message.body}}
           </AuAlert>
         {{/if}}
         <AuButton
           {{on 'click' this.updateAddressVariable}}
-          @disabled={{not this.canUpdateAddressVariable}}>
-          {{t "editor-plugins.utils.insert"}}
+          @disabled={{not this.canUpdateAddressVariable}}
+        >
+          {{t 'editor-plugins.utils.insert'}}
         </AuButton>
 
       </form>

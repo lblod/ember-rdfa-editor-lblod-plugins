@@ -1,13 +1,17 @@
 {{#if @articles.length}}
-  <AuList @direction="vertical" @divider={{true}} as |Item|>
+  <AuList @direction='vertical' @divider={{true}} as |Item|>
     {{#each @articles as |article|}}
       <Item>
         <CitationPlugin::Citations::ArticlePreview
           @insertArticleCitation={{fn @insertArticleCitation article}}
-          @article={{article}} />
+          @article={{article}}
+        />
       </Item>
     {{/each}}
   </AuList>
 {{else}}
-  <Common::Search::AlertNoItems @fullSize={{@fullSize}} class={{if @fullSize "au-u-margin"}}/>
+  <Common::Search::AlertNoItems
+    @fullSize={{@fullSize}}
+    class={{if @fullSize 'au-u-margin'}}
+  />
 {{/if}}

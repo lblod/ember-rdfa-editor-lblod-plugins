@@ -1,13 +1,17 @@
 {{! @glint-nocheck: not typesafe yet }}
-<StandardTemplatePlugin::TemplateProvider @controller={{@controller}} @templates={{@templates}} as |provider|>
+<StandardTemplatePlugin::TemplateProvider
+  @controller={{@controller}}
+  @templates={{@templates}}
+  as |provider|
+>
   {{#if provider.hasApplicableTemplates}}
     {{#each provider.applicableTemplates as |template|}}
-      <li class="au-c-list__item">
+      <li class='au-c-list__item'>
         <AuButton
-          @skin="link"
+          @skin='link'
           @icon={{this.AddIcon}}
-          @iconAlignment="left"
-          {{on "click" (fn provider.insert template)}}
+          @iconAlignment='left'
+          {{on 'click' (fn provider.insert template)}}
         >
           {{template.title}}
         </AuButton>

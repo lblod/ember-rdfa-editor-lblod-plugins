@@ -1,13 +1,18 @@
 {{! @glint-nocheck: not typesafe yet }}
-<li class="au-c-list__item">
+<li class='au-c-list__item'>
   <AuButton
-    @skin="link"
+    @skin='link'
     @icon={{this.AddIcon}}
-    @iconAlignment="left"
+    @iconAlignment='left'
     @disabled={{not this.showCard}}
-    {{on "click" this.openModal}}
+    {{on 'click' this.openModal}}
   >
-    {{t "editor-plugins.roadsign-regulation.card.insert-measure"}}
+    {{t 'editor-plugins.roadsign-regulation.card.insert-measure'}}
   </AuButton>
 </li>
-<RoadsignRegulationPlugin::RoadsignsModal @modalOpen={{this.modalOpen}} @closeModal={{this.closeModal}} @controller={{@controller}} @options={{@options}}/>
+<RoadsignRegulationPlugin::RoadsignsModal
+  @modalOpen={{this.modalOpen}}
+  @closeModal={{this.closeModal}}
+  @controller={{@controller}}
+  @options={{@options}}
+/>

@@ -23,28 +23,17 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "paths": {
-      "dummy/tests/*": [
-        "tests/*"
-      ],
-      "dummy/*": [
-        "tests/dummy/app/*",
-        "app/*"
-      ],
-      "@lblod/ember-rdfa-editor-lblod-plugins": [
-        "addon"
-      ],
-      "@lblod/ember-rdfa-editor-lblod-plugins/*": [
-        "addon/*"
-      ],
+      "dummy/tests/*": ["tests/*"],
+      "dummy/*": ["tests/dummy/app/*", "app/*"],
+      "@lblod/ember-rdfa-editor-lblod-plugins": ["addon"],
+      "@lblod/ember-rdfa-editor-lblod-plugins/*": ["addon/*"],
       "@lblod/ember-rdfa-editor-lblod-plugins/test-support": [
         "addon-test-support"
       ],
       "@lblod/ember-rdfa-editor-lblod-plugins/test-support/*": [
         "addon-test-support/*"
       ],
-      "*": [
-        "types/*"
-      ]
+      "*": ["types/*"]
     }
   },
   "include": [

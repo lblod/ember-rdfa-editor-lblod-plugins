@@ -28,7 +28,9 @@
                   <Toolbar::Styling @controller={{this.controller}} />
                 </Tb.Group>
                 <Tb.Group>
-                  <ConfidentialityPlugin::Toolbar @controller={{this.controller}} />
+                  <ConfidentialityPlugin::Toolbar
+                    @controller={{this.controller}}
+                  />
                 </Tb.Group>
                 <Tb.Group>
                   <Toolbar::List @controller={{this.controller}} />
@@ -55,7 +57,7 @@
                     @controller={{this.controller}}
                     @options={{this.config.besluitType}}
                   />
-                  <div class="say-rdfa-toggle">
+                  <div class='say-rdfa-toggle'>
                     <AuToggleSwitch
                       @checked={{this.editableNodes}}
                       @onChange={{this.toggleEditableNodes}}
@@ -122,8 +124,10 @@
                   @controller={{this.controller}}
                   @templates={{this.standardTemplates}}
                 />
-                <VariablePlugin::Address::Insert @controller={{this.controller}}/>
-                <VariablePlugin::Date::Insert @controller={{this.controller}}/>
+                <VariablePlugin::Address::Insert
+                  @controller={{this.controller}}
+                />
+                <VariablePlugin::Date::Insert @controller={{this.controller}} />
                 <WorshipPlugin::Insert
                   @controller={{this.controller}}
                   @config={{this.config.worship}}
@@ -142,10 +146,22 @@
                 @config={{this.config.citation}}
               />
               <ImportSnippetPlugin::Card @controller={{this.controller}} />
-              <VariablePlugin::Address::Edit @controller={{this.controller}} @defaultMunicipality="Gent"/>
-              <VariablePlugin::Codelist::Edit @controller={{this.controller}} @options={{this.codelistOptions}}/>
-              <VariablePlugin::Date::Edit @controller={{this.controller}} @options={{this.dateOptions}}/>
-              <VariablePlugin::Location::Edit @controller={{this.controller}} @options={{this.locationOptions}}/>
+              <VariablePlugin::Address::Edit
+                @controller={{this.controller}}
+                @defaultMunicipality='Gent'
+              />
+              <VariablePlugin::Codelist::Edit
+                @controller={{this.controller}}
+                @options={{this.codelistOptions}}
+              />
+              <VariablePlugin::Date::Edit
+                @controller={{this.controller}}
+                @options={{this.dateOptions}}
+              />
+              <VariablePlugin::Location::Edit
+                @controller={{this.controller}}
+                @options={{this.locationOptions}}
+              />
               {{#if (and this.activeNode this.editableNodes)}}
                 <this.RdfaEditor
                   @node={{this.activeNode}}
