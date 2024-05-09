@@ -64,18 +64,17 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       })
     });
     const queryJson = await queryResponse.json();
-    //TODO: Use real data
     const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding)
     return mandatees;
   })
 
   search = restartableTask(async () => {
-    // TODO: This does rerun the fetchData more than once when it's not needed
+    // Can't do what I want, so if the user modifies the filter before resolving the query will run again
     if(!this.fetchData.lastComplete) {
       await this.fetchData.perform();
     }
 
-    await this.fetchData;
+    
 
     let mandatees = this.fetchData.lastComplete?.value;
     
@@ -85,12 +84,12 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
 
 
     if(this.sort) {
-      //TODO: Solve stupid typescript errors
+      const [key, sortingDirection] = this.sort;
       mandatees = mandatees?.toSorted((a: Mandatee,b: Mandatee) => {
-        if(a[this.sort[0]] > b[this.sort[0]]) {
-          return this.sort[1] === 'ASC' ? 1 : -1;
+        if(a[key] > b[key]) {
+          return sortingDirection === 'ASC' ? 1 : -1;
         } else {
-          return this.sort[1] === 'ASC' ? -1 : 1;
+          return sortingDirection === 'ASC' ? -1 : 1;
         }
       })
     }
