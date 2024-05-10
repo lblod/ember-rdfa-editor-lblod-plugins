@@ -1,7 +1,7 @@
 {{! @glint-nocheck: not typesafe yet }}
 <div
   {{did-update this.updateBesluitTopic @controller.mainEditorState}}
-  {{did-update this.updateBesluitTopic this.types.value}}
+  {{did-update this.updateBesluitTopic this.topics.value}}
 >
   {{#if this.showCard}}
     {{#if this.topics.isError}}
@@ -16,17 +16,20 @@
         {{t 'besluit-topic-plugin.error-short'}}
       </AuPill>
     {{else}}
-      {{#if this.besluitTopics.length}}
+      {{#if this.besluitTopicsSelected.length}}
         <AuPill
           @skin='link'
           {{on 'click' this.toggleCard}}
           title={{t 'besluit-topic-plugin.insert-dt'}}
         >
           {{t 'besluit-topic-plugin.dt'}}:
-          {{#if (gt this.besluitTopics.length 1)}}
-            {{t 'besluit-topic-plugin.selected' num=this.besluitTopics.length}}
+          {{#if (gt this.besluitTopicsSelected.length 1)}}
+            {{t
+              'besluit-topic-plugin.selected'
+              num=this.besluitTopicsSelected.length
+            }}
           {{else}}
-            {{get this.besluitTopics '0.label'}}
+            {{get this.besluitTopicsSelected '0.label'}}
           {{/if}}
         </AuPill>
       {{else}}
@@ -76,7 +79,7 @@
           <BesluitTopicPlugin::BesluitTopicSelect
             @besluitTopics={{this.topics.value}}
             @onchange={{this.upsertBesluitTopic}}
-            @selected={{this.besluitTopics}}
+            @selected={{this.besluitTopicsSelected}}
           />
         {{/if}}
       </Modal.Body>

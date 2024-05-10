@@ -27,7 +27,7 @@ export const updateBesluitTopicResource = ({
           removeProperty({
             resource,
             property: {
-              predicate: ELI(ELI_SUBJECT).prefixed,
+              predicate: ELI(ELI_SUBJECT).full,
               object: sayDataFactory.namedNode(uri),
             },
             transaction,
@@ -43,7 +43,7 @@ export const updateBesluitTopicResource = ({
         addProperty({
           resource,
           property: {
-            predicate: ELI(ELI_SUBJECT).prefixed,
+            predicate: ELI(ELI_SUBJECT).full,
             object: sayDataFactory.namedNode(besluitTopic.uri),
           },
           transaction,

@@ -36,13 +36,8 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   /**
    * Actual besluit topic selected
    */
-  @tracked besluitTopicSelected?: BesluitTopic[];
+  @tracked besluitTopicsSelected?: BesluitTopic[];
   @tracked previousBesluitTopics?: string[];
-
-  /**
-   * used to update selections since the other vars don't seem to work in octane
-   */
-  @tracked besluitTopics?: BesluitTopic[];
 
   @tracked cardExpanded = false;
 
@@ -113,11 +108,11 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
     if (besluitTopicsRelevant && besluitTopics) {
       this.previousBesluitTopics = outgoingUris;
 
-      this.besluitTopics = besluitTopics;
+      this.besluitTopicsSelected = besluitTopics;
       this.cardExpanded = false;
     } else {
       this.cardExpanded = true;
-      this.besluitTopics = undefined;
+      this.besluitTopicsSelected = undefined;
     }
   }
 
@@ -127,8 +122,7 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
 
   @action
   upsertBesluitTopic(selected: BesluitTopic[]) {
-    this.besluitTopics = selected;
-    this.besluitTopicSelected = selected;
+    this.besluitTopicsSelected = selected;
 
     this.insert();
   }
@@ -142,22 +136,18 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
         (currentBesluitRange.node.attrs.subject as string)) ||
       undefined;
 
-    if (this.besluitTopicSelected && resource) {
+    if (this.besluitTopicsSelected && resource) {
       this.cardExpanded = false;
 
       this.controller.doCommand(
         updateBesluitTopicResource({
           resource,
           previousTopics: this.previousBesluitTopics,
-          newTopics: this.besluitTopicSelected,
+          newTopics: this.besluitTopicsSelected,
         }),
         {
           view: this.args.controller.mainEditorView,
         },
-      );
-
-      this.previousBesluitTopics = this.besluitTopicSelected.map(
-        (topic) => topic.uri,
       );
     }
   }
