@@ -414,3 +414,6 @@ lmb-plugin:
       title: Filter on
     fields:
       name: Name
+      status: Status
+      fractie: Fractie
+      role: Role

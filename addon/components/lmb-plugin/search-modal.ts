@@ -49,17 +49,31 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       },
       body: JSON.stringify({
         query: `
-          PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#> 
-          PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
-          PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
-          PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-          PREFIX persoon: <http://data.vlaanderen.be/ns/persoon#>
-          SELECT * WHERE { 
-              ?mandatee a mandaat:Mandataris;
-                  mandaat:isBestuurlijkeAliasVan ?person.
-              ?person foaf:familyName ?lastName;
-                  persoon:gebruikteVoornaam ?firstName.
-          }
+        PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#> 
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+        PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+        PREFIX persoon: <http://data.vlaanderen.be/ns/persoon#>
+        PREFIX org: <http://www.w3.org/ns/org#>
+        PREFIX regorg: <https://www.w3.org/ns/regorg#>
+        SELECT DISTINCT ?mandatee ?person ?firstName ?lastName ?statusLabel ?fractieLabel ?roleLabel WHERE { 
+            ?mandatee a mandaat:Mandataris;
+              org:holds ?mandaat;
+              mandaat:status ?status;
+              mandaat:isBestuurlijkeAliasVan ?person;
+              org:hasMembership ?membership.
+            ?person foaf:familyName ?lastName;
+              persoon:gebruikteVoornaam ?firstName.
+            ?status skos:prefLabel ?statusLabel.
+            ?membership org:organisation ?fractie.
+            ?fractie regorg:legalName ?fractieLabel.
+            ?mandaat org:role ?role.
+            ?role skos:prefLabel ?roleLabel.
+            OPTIONAL  {
+              ?mandatee mandaat:einde ?endDate
+            }
+            filter (!bound(?endDate) || ?endDate > now()).
+        }        
         `
       })
     });

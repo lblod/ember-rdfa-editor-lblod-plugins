@@ -9,6 +9,30 @@
           @setSort={{@setSort}}
         />
       </th>
+      <th>
+        <WorshipPlugin::SortableTableHeader
+          @field='status'
+          @label={{t 'lmb-plugin.modal.fields.status'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th>
+        <WorshipPlugin::SortableTableHeader
+          @field='fractie'
+          @label={{t 'lmb-plugin.modal.fields.fractie'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th>
+        <WorshipPlugin::SortableTableHeader
+          @field='role'
+          @label={{t 'lmb-plugin.modal.fields.role'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
       <th />
     </tr>
   </:header>
@@ -17,7 +41,10 @@
       {{#if @services.value.totalCount}}
         {{#each @services.value.results as |row|}}
           <tr>
-            <td>{{row.firstName}} {{row.lastName}}</td>
+            <td>{{row.fullName}}</td>
+            <td>{{row.status}}</td>
+            <td>{{row.fractie}}</td>
+            <td>{{row.role}}</td>
             <td class='au-u-text-center'>
               <AuButton
                 {{on 'click' (fn @insert row)}}

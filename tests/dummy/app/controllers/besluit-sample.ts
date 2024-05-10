@@ -300,7 +300,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'https://data.lblod.info/sparql',
       },
       lmb: {
-        endpoint: 'http://localhost:8123/query',
+        endpoint: 'http://localhost/lmb-proxy/query',
       },
     };
   }
