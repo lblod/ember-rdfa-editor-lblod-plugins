@@ -6,7 +6,6 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
-import { mockResponse } from './mock-response';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 type SearchSort = [keyof Mandatee, 'ASC' | 'DESC'] | false;
 
