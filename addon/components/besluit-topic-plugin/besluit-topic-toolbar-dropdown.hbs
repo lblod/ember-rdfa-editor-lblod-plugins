@@ -83,6 +83,11 @@
           />
         {{/if}}
       </Modal.Body>
+      <Modal.Footer>
+        <AuButton {{on 'click' this.toggleCard}}>{{t
+            'besluit-topic-plugin.close-modal'
+          }}</AuButton>
+      </Modal.Footer>
     </AuModal>
   {{/if}}
 </div>

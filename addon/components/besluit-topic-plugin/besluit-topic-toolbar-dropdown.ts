@@ -109,9 +109,7 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
       this.previousBesluitTopics = outgoingUris;
 
       this.besluitTopicsSelected = besluitTopics;
-      this.cardExpanded = false;
     } else {
-      this.cardExpanded = true;
       this.besluitTopicsSelected = undefined;
     }
   }
@@ -124,10 +122,6 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   upsertBesluitTopic(selected: BesluitTopic[]) {
     this.besluitTopicsSelected = selected;
 
-    this.insert();
-  }
-
-  insert() {
     const currentBesluitRange = getCurrentBesluitRange(this.controller);
 
     const resource =
@@ -137,8 +131,6 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
       undefined;
 
     if (this.besluitTopicsSelected && resource) {
-      this.cardExpanded = false;
-
       this.controller.doCommand(
         updateBesluitTopicResource({
           resource,
