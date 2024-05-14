@@ -1,4 +1,3 @@
-import { tracked } from '@glimmer/tracking';
 import { IBindings } from 'fetch-sparql-endpoint';
 import { unwrap } from '../utils/option';
 

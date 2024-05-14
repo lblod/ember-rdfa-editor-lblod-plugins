@@ -2,11 +2,12 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
+import { IBindings } from 'fetch-sparql-endpoint';
 type SearchSort = [keyof Mandatee, 'ASC' | 'DESC'] | false;
 
 interface Args {
@@ -14,6 +15,12 @@ interface Args {
   open: boolean;
   closeModal: () => void;
   onInsert: () => void;
+}
+
+interface SparqlResponse {
+  results: {
+    bindings: IBindings[];
+  };
 }
 
 export default class LmbPluginSearchModalComponent extends Component<Args> {
@@ -74,7 +81,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
         `,
       }),
     });
-    const queryJson = await queryResponse.json();
+    const queryJson: SparqlResponse = await queryResponse.json();
     const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding);
     return mandatees;
   });
@@ -85,7 +92,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       await this.fetchData.perform();
     }
 
-    let mandatees = this.fetchData.lastComplete?.value;
+    let mandatees: Mandatee[] = this.fetchData.lastComplete?.value;
 
     if (this.inputSearchText) {
       mandatees = mandatees?.filter((mandatee: Mandatee) =>
