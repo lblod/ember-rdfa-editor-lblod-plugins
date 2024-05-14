@@ -31,5 +31,8 @@ export const GEOSPARQL = namespace(
   'http://www.opengis.net/ont/geosparql#',
   'geosparql',
 );
-export const MANDAAT = namespace('http://data.vlaanderen.be/ns/mandaat#', 'mandaat')
-export const FOAF = namespace('http://xmlns.com/foaf/0.1/', 'foaf')
+export const MANDAAT = namespace(
+  'http://data.vlaanderen.be/ns/mandaat#',
+  'mandaat',
+);
+export const FOAF = namespace('http://xmlns.com/foaf/0.1/', 'foaf');

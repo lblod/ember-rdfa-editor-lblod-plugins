@@ -17,7 +17,6 @@ interface Args {
 }
 
 export default class LmbPluginSearchModalComponent extends Component<Args> {
-
   // Display
   @tracked error: unknown;
   @tracked inputSearchText: string | null = null;
@@ -27,7 +26,6 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   @tracked pageNumber = 0;
   @tracked pageSize = 20;
   @tracked totalCount = 0;
-
 
   get config() {
     return this.args.config;
@@ -44,7 +42,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     const queryResponse = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         query: `
@@ -73,54 +71,56 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
             }
             filter (!bound(?endDate) || ?endDate > now()).
         }        
-        `
-      })
+        `,
+      }),
     });
     const queryJson = await queryResponse.json();
-    const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding)
+    const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding);
     return mandatees;
-  })
+  });
 
   search = restartableTask(async () => {
     // Can't do what I want, so if the user modifies the filter before resolving the query will run again
-    if(!this.fetchData.lastComplete) {
+    if (!this.fetchData.lastComplete) {
       await this.fetchData.perform();
     }
 
-    
-
     let mandatees = this.fetchData.lastComplete?.value;
-    
-    if(this.inputSearchText) {
-      mandatees = mandatees?.filter((mandatee: Mandatee) => mandatee.fullName.includes(this.inputSearchText as string));
+
+    if (this.inputSearchText) {
+      mandatees = mandatees?.filter((mandatee: Mandatee) =>
+        mandatee.fullName.includes(this.inputSearchText as string),
+      );
     }
 
-
-    if(this.sort) {
+    if (this.sort) {
       const [key, sortingDirection] = this.sort;
-      mandatees = mandatees?.toSorted((a: Mandatee,b: Mandatee) => {
-        if(a[key] > b[key]) {
+      mandatees = mandatees?.toSorted((a: Mandatee, b: Mandatee) => {
+        if (a[key] > b[key]) {
           return sortingDirection === 'ASC' ? 1 : -1;
         } else {
           return sortingDirection === 'ASC' ? -1 : 1;
         }
-      })
+      });
     }
 
-    const totalCount = mandatees?.length
+    const totalCount = mandatees?.length;
 
-    mandatees = mandatees?.slice(this.pageSize * this.pageNumber, (this.pageSize * (this.pageNumber + 1)))
+    mandatees = mandatees?.slice(
+      this.pageSize * this.pageNumber,
+      this.pageSize * (this.pageNumber + 1),
+    );
     return {
       results: mandatees,
-      totalCount
-    }
+      totalCount,
+    };
   });
 
   servicesResource = trackedTask(this, this.search, () => [
-    this.inputSearchText, 
-    this.sort, 
+    this.inputSearchText,
+    this.sort,
     this.pageNumber,
-    this.pageSize
+    this.pageSize,
   ]);
 
   @action
