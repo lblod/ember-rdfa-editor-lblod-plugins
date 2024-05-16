@@ -86,7 +86,7 @@
   .say-active {
     outline: 0;
   }
-  [property='say:body'] {
+  [property='say:body'], [property='https://say.data.gift/ns/body'] {
     background-color: white;
     cursor: auto;
     padding-left: 0.5em;
@@ -97,7 +97,7 @@
   padding: 0 !important;
   margin: 0;
   margin-bottom: 0.5em;
-  .say-editable[property='say:body'], .say-editable[property='say:body'] {
+  .say-editable[property='say:body'], .say-editable[property='https://say.data.gift/ns/body'] {
     padding: 0.5em;
     margin: 0;
   }
