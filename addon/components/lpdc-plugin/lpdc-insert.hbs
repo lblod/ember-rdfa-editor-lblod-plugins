@@ -1,0 +1,19 @@
+{{! @glint-nocheck: not typesafe yet }}
+<li class='au-c-list__item'>
+  <AuButton
+    @icon={{this.AddIcon}}
+    @iconAlignment='left'
+    @skin='link'
+    {{on 'click' this.openModal}}
+    @disabled={{this.isButtonDisabled}}
+  >
+    {{t 'lpdc-plugin.insert.title'}}
+  </AuButton>
+</li>
+
+<LpdcPlugin::LpdcModal
+  @open={{this.showModal}}
+  @closeModal={{this.closeModal}}
+  @config={{@config}}
+  @onLpdcInsert={{this.onLpdcInsert}}
+/>

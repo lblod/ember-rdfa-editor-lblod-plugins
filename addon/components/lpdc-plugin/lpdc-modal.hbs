@@ -1,0 +1,44 @@
+{{! @glint-nocheck: not typesafe yet }}
+<AuModal
+  @modalOpen={{@open}}
+  @closeModal={{this.closeModal}}
+  @title={{t 'lpdc-plugin.modal.title'}}
+  @size='large'
+  @padding='none'
+  as |modal|
+>
+  <modal.Body>
+    <AuMainContainer class='snippet-modal--main-container' as |mc|>
+      <mc.content @scroll={{true}}>
+        <div class='snippet-modal--list-container'>
+          {{#if this.error}}
+            <Common::Search::AlertLoadError
+              @error={{this.error}}
+              class='au-u-margin-top-none'
+            />
+          {{else}}
+            <LpdcPlugin::LpdcTableView
+              @lpdc={{this.lpdcResource.value}}
+              @isLoading={{this.lpdcResource.isRunning}}
+              @onLpdcInsert={{@onLpdcInsert}}
+              @nameFilter={{this.searchText}}
+              @pageNumber={{this.pageNumber}}
+            />
+          {{/if}}
+        </div>
+        <AuToolbar
+          @border='top'
+          @size='large'
+          @nowrap={{true}}
+          @reverse={{true}}
+        >
+          <AuButtonGroup>
+            <AuButton @skin='secondary' {{on 'click' this.closeModal}}>
+              {{t 'lpdc-plugin.modal.close'}}
+            </AuButton>
+          </AuButtonGroup>
+        </AuToolbar>
+      </mc.content>
+    </AuMainContainer>
+  </modal.Body>
+</AuModal>

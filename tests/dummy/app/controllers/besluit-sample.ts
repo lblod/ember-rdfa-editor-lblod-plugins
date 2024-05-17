@@ -271,7 +271,7 @@ export default class BesluitSampleController extends Controller {
       citation: {
         type: 'nodes',
         activeInNodeTypes(schema: Schema): Set<NodeType> {
-          return new Set<NodeType>([schema.nodes.motivering]);
+          return new Set<NodeType>([schema.nodes.doc]);
         },
         endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
         decisionsEndpoint:
@@ -306,6 +306,9 @@ export default class BesluitSampleController extends Controller {
       },
       lmb: {
         endpoint: 'http://localhost/vendor-proxy/query',
+      },
+      lpdc: {
+        endpoint: 'http://localhost/lpdc-service',
       },
     };
   }
