@@ -35,3 +35,4 @@ export const GEOSPARQL = namespace(
   'http://www.opengis.net/ont/geosparql#',
   'geosparql',
 );
+export const LOCN = namespace('http://www.w3.org/ns/locn#', 'locn');

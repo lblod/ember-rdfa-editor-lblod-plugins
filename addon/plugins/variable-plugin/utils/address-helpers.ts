@@ -93,9 +93,9 @@ export class AddressError extends Error {
 }
 
 const LOC_GEOPUNT_ENDPOINT = `https://geo.api.vlaanderen.be/geolocation/v4/Location`;
-const BASISREGISTER_ADRESMATCH =
-  'https://api.basisregisters.vlaanderen.be/v2/adresmatch';
-const BASISREGISTER_ADRES = `https://basisregisters.vlaanderen.be/api/v2/adressen`;
+const BASISREGISTER = 'https://api.basisregisters.vlaanderen.be/v2';
+const BASISREGISTER_ADRESMATCH = `${BASISREGISTER}/adresmatch`;
+const BASISREGISTER_ADRES = `${BASISREGISTER}/adressen`;
 
 export const replaceAccents = (string: string) =>
   string.normalize('NFD').replace(/([\u0300-\u036f])/g, '');
