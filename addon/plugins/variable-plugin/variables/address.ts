@@ -1,5 +1,5 @@
 import {
-  ADRES,
+  ADRES_TYPO,
   DCT,
   EXT,
   GENERIEK,
@@ -98,7 +98,7 @@ export class Address {
 const constructLocationNode = (gml: string) => {
   return span(
     {
-      property: ADRES('positie').full,
+      property: ADRES_TYPO('positie').full,
       typeof: GENERIEK('GeografischePositie').full,
     },
     span({
@@ -115,7 +115,7 @@ const constructAddressNode = (address: Address) => {
         ' ',
         span(
           {
-            property: ADRES('huisnummer').full,
+            property: ADRES_TYPO('huisnummer').full,
           },
           address.housenumber,
         ),
@@ -126,17 +126,17 @@ const constructAddressNode = (address: Address) => {
         ' bus ',
         span(
           {
-            property: ADRES('busnummer').full,
+            property: ADRES_TYPO('busnummer').full,
           },
           address.busnumber,
         ),
       ]
     : [];
   return contentSpan(
-    { resource: address.id, typeof: ADRES('Adres').full },
+    { resource: address.id, typeof: ADRES_TYPO('Adres').full },
     span(
       {
-        property: ADRES('heeftStraatnaam').full,
+        property: ADRES_TYPO('heeftStraatnaam').full,
       },
       address.street,
     ),
@@ -145,12 +145,12 @@ const constructAddressNode = (address: Address) => {
     ', ',
     span(
       {
-        property: ADRES('heeftPostinfo').full,
-        typeof: ADRES('Postinfo').full,
+        property: ADRES_TYPO('heeftPostinfo').full,
+        typeof: ADRES_TYPO('Postinfo').full,
       },
       span(
         {
-          property: ADRES('postcode').full,
+          property: ADRES_TYPO('postcode').full,
         },
         address.zipcode,
       ),
@@ -158,7 +158,7 @@ const constructAddressNode = (address: Address) => {
     ' ',
     span(
       {
-        property: ADRES('gemeentenaam').full,
+        property: ADRES_TYPO('gemeentenaam').full,
       },
       address.municipality,
     ),
@@ -171,37 +171,37 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
   const street = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('heeftStraatnaam'),
+    ADRES_TYPO('heeftStraatnaam'),
   )?.textContent;
   const housenumber = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('huisnummer'),
+    ADRES_TYPO('huisnummer'),
   )?.textContent;
   const busnumber = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('busnummer'),
+    ADRES_TYPO('busnummer'),
   )?.textContent;
   const postInfoNode = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('heeftPostinfo'),
+    ADRES_TYPO('heeftPostinfo'),
   );
   const zipcode =
     postInfoNode &&
-    findChildWithRdfaAttribute(postInfoNode, 'property', ADRES('postcode'))
+    findChildWithRdfaAttribute(postInfoNode, 'property', ADRES_TYPO('postcode'))
       ?.textContent;
   const municipality = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('gemeentenaam'),
+    ADRES_TYPO('gemeentenaam'),
   )?.textContent;
 
   const locationNode = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('positie'),
+    ADRES_TYPO('positie'),
   );
   const gml =
     locationNode &&
