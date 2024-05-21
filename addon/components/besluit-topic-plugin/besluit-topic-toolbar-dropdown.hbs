@@ -1,0 +1,93 @@
+{{! @glint-nocheck: not typesafe yet }}
+<div
+  {{did-update this.updateBesluitTopic @controller.mainEditorState}}
+  {{did-update this.updateBesluitTopic this.topics.value}}
+>
+  {{#if this.showCard}}
+    {{#if this.topics.isError}}
+      <AuPill
+        @skin='error'
+        @icon={{this.CircleXIcon}}
+        @iconAlignment='left'
+        class='au-c-pill--link besluit-toolbar-pill'
+        {{on 'click' this.toggleCard}}
+        title={{t 'besluit-topic-plugin.insert-dt'}}
+      >
+        {{t 'besluit-topic-plugin.error-short'}}
+      </AuPill>
+    {{else}}
+      {{#if this.besluitTopicsSelected.length}}
+        <AuPill
+          @skin='link'
+          {{on 'click' this.toggleCard}}
+          title={{t 'besluit-topic-plugin.insert-dt'}}
+        >
+          {{t 'besluit-topic-plugin.dt'}}:
+          {{#if (gt this.besluitTopicsSelected.length 1)}}
+            {{t
+              'besluit-topic-plugin.selected'
+              num=this.besluitTopicsSelected.length
+            }}
+          {{else}}
+            {{get this.besluitTopicsSelected '0.label'}}
+          {{/if}}
+        </AuPill>
+      {{else}}
+        <AuPill
+          @icon={{this.AlertTriangleIcon}}
+          @iconAlignment='left'
+          @skin='link'
+          {{on 'click' this.toggleCard}}
+          title={{t 'besluit-topic-plugin.insert-dt'}}
+        >
+          {{t 'besluit-topic-plugin.insert-dt'}}
+        </AuPill>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+  {{#if this.cardExpanded}}
+    <AuModal
+      @title={{t 'besluit-topic-plugin.insert-dt'}}
+      @closeModal={{this.toggleCard}}
+      @modalOpen={{true}}
+      @size='default'
+      class='au-c-modal--overflow'
+      as |Modal|
+    >
+      <Modal.Body>
+        {{#if this.topics.isError}}
+          <AuAlert
+            @title={{t 'besluit-topic-plugin.error-title'}}
+            @skin='error'
+            @icon={{this.CrossIcon}}
+          >
+            <p>
+              {{t 'besluit-topic-plugin.error-first-body'}}
+              {{! template-lint-disable no-bare-strings  }}
+              <AuLinkExternal
+                href='mailto:gelinktnotuleren@vlaanderen.be'
+                @icon={{this.MailIcon}}
+                @iconAlignment='left'
+              >
+                GelinktNotuleren@vlaanderen.be
+              </AuLinkExternal>
+              {{! template-lint-enable no-bare-strings  }}
+              {{t 'besluit-topic-plugin.error-rest-body'}}
+            </p>
+          </AuAlert>
+        {{else}}
+          <BesluitTopicPlugin::BesluitTopicSelect
+            @besluitTopics={{this.topics.value}}
+            @onchange={{this.upsertBesluitTopic}}
+            @selected={{this.besluitTopicsSelected}}
+          />
+        {{/if}}
+      </Modal.Body>
+      <Modal.Footer>
+        <AuButton {{on 'click' this.toggleCard}}>{{t
+            'besluit-topic-plugin.close-modal'
+          }}</AuButton>
+      </Modal.Footer>
+    </AuModal>
+  {{/if}}
+</div>
