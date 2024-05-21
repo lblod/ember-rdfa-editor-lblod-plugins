@@ -59,7 +59,7 @@ const emberNodeConfig: EmberNodeConfig = {
       tag: 'div',
       attrs: {
         ...node.attrs,
-        class: 'say-snippet-placeholder' 
+        class: 'say-snippet-placeholder',
       },
       content: [
         'text',
