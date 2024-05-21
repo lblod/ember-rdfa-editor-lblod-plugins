@@ -59,10 +59,10 @@ const emberNodeConfig: EmberNodeConfig = {
       tag: 'div',
       attrs: {
         ...node.attrs,
+        class: 'say-snippet-placeholder' 
       },
       content: [
-        'span',
-        { class: 'mark-highlight-manual' },
+        'text',
         t(
           'snippet-plugin.insert.placeholder',
           'Plaatshouder voor fragment invoegen',
