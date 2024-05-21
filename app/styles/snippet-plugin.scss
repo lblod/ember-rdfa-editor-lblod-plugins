@@ -97,7 +97,7 @@
   background-color: var(--au-blue-200);
 }
 
-.say-snippet-placeholder {
+.say-snippet-placeholder-node {
   background-color: var(--au-orange-200);
   padding: 2rem;
 
@@ -106,11 +106,12 @@
   }
 }
 
-div[typeof='besluitpublicatie:Documentonderdeel'] .say-snippet-placeholder {
+div[typeof='besluitpublicatie:Documentonderdeel']
+  .say-snippet-placeholder-node {
   background-color: var(--au-gray-300);
 }
 
 .rdfa-annotations
-  [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder {
+  [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
   padding-bottom: 2rem;
 }
