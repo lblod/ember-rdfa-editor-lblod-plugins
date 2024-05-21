@@ -1,0 +1,19 @@
+{{! @glint-nocheck: not typesafe yet }}
+<div ...attributes>
+  <PowerSelectMultiple
+    @renderInPlace={{true}}
+    @searchEnabled={{true}}
+    @searchMessage={{t 'besluit-topic-plugin.search-message'}}
+    @noMatchesMessage={{t 'besluit-topic-plugin.no-matches-message'}}
+    @search={{this.search}}
+    @options={{this.besluitTopics}}
+    @selected={{@selected}}
+    @onChange={{@onchange}}
+    as |besluitTopic|
+  >
+    {{besluitTopic.label}}
+  </PowerSelectMultiple>
+  <p class='au-u-muted au-u-margin-tiny au-u-margin-bottom-small'>
+    {{@selected.definition}}
+  </p>
+</div>
