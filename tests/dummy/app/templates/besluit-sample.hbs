@@ -57,6 +57,10 @@
                     @controller={{this.controller}}
                     @options={{this.config.besluitType}}
                   />
+                  <BesluitTopicPlugin::BesluitTopicToolbarDropdown
+                    @controller={{this.controller}}
+                    @options={{this.config.besluitTopic}}
+                  />
                   <div class='say-rdfa-toggle'>
                     <AuToggleSwitch
                       @checked={{this.editableNodes}}
