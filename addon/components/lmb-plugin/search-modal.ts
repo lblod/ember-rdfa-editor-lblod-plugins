@@ -92,8 +92,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       await this.fetchData.perform();
     }
 
-    if(!this.fetchData.lastComplete?.value) return;
-    let mandatees: Mandatee[] = [...this.fetchData.lastComplete?.value]
+    if (!this.fetchData.lastComplete?.value) return;
+    let mandatees: Mandatee[] = [...this.fetchData.lastComplete.value];
 
     if (this.inputSearchText) {
       mandatees = mandatees?.filter((mandatee: Mandatee) =>
