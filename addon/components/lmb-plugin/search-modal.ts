@@ -92,7 +92,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       await this.fetchData.perform();
     }
 
-    let mandatees: Mandatee[] = this.fetchData.lastComplete?.value;
+    if(!this.fetchData.lastComplete?.value) return;
+    let mandatees: Mandatee[] = [...this.fetchData.lastComplete?.value]
 
     if (this.inputSearchText) {
       mandatees = mandatees?.filter((mandatee: Mandatee) =>
@@ -102,7 +103,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
 
     if (this.sort) {
       const [key, sortingDirection] = this.sort;
-      mandatees = mandatees?.toSorted((a: Mandatee, b: Mandatee) => {
+      mandatees = mandatees.sort((a: Mandatee, b: Mandatee) => {
         if (a[key] > b[key]) {
           return sortingDirection === 'ASC' ? 1 : -1;
         } else {
