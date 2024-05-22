@@ -1,21 +1,20 @@
 import Component from '@glimmer/component';
 import { ComponentLike } from '@glint/template';
 
-interface Args {
-  width?: 'block';
-  iconAlignment?: 'left' | 'right';
-  error?: boolean;
-  warning?: boolean;
-  disabled?: boolean;
-  type?: string;
-  icon?: ComponentLike;
+interface Signature {
+  Args: {
+    width?: 'block';
+    iconAlignment?: 'left' | 'right';
+    error?: boolean;
+    warning?: boolean;
+    disabled?: boolean;
+    type?: string;
+    icon?: ComponentLike;
+  };
+  Element: HTMLInputElement;
 }
 
-export default class AuNativeInput extends Component<Args> {
-  constructor(owner: unknown, args: Args) {
-    super(owner, args);
-  }
-
+export default class AuNativeInput extends Component<Signature> {
   get width() {
     if (this.args.width == 'block') return 'au-c-input--block';
     else return '';

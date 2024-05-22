@@ -28,7 +28,7 @@ export default class InsertAddressComponent extends Component<Args> {
   insertAddress() {
     replaceSelectionWithAddress(
       this.controller,
-      this.intl.t('variable.address.label', {
+      this.intl.t('location-plugin.default-label', {
         locale: this.documentLanguage,
       }),
     );

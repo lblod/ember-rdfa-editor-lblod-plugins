@@ -1,4 +1,5 @@
 common:
+  insert: Voeg in
   search:
     loading: Laden…
     no-results: Geen resultaten gevonden
@@ -252,15 +253,6 @@ variable-plugin:
     maximum-placeholder: maximumwaarde
     to: tot
 
-address-plugin:
-  insert:
-    address: Adres invoegen
-  button:
-    insert: Adres invoegen
-    back: Terug
-  search:
-    cta: Zoekterm
-    no-match: Geen resultaten
 dummy:
   validation-card:
     title: Documentvalidatie
@@ -416,3 +408,8 @@ worship-plugin:
       sort: Sorteren
       asc: Oplopend sorteren
       desc: Aflopend sorteren
+
+location-plugin:
+  label: Label
+  labelPlaceholder: Type iets...
+  default-label: locatie
