@@ -67,9 +67,11 @@ import {
   numberView,
   textVariableView,
   text_variable,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import {
   address,
   addressView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/address';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
   templateComment,

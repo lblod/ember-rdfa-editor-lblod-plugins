@@ -28,7 +28,7 @@ import {
   parseVariableInstance,
   parseVariableSource,
   parseVariableType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';

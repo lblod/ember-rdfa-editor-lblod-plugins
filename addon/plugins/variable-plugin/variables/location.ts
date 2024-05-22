@@ -12,14 +12,14 @@ import {
   parseVariableInstance,
   parseVariableSource,
   parseVariableType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import {
-  contentSpan,
   instanceSpan,
   mappingSpan,
   sourceSpan,
   typeSpan,
 } from '../utils/dom-constructors';
+import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import LocationNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/nodeview';
 import type { ComponentLike } from '@glint/template';
 

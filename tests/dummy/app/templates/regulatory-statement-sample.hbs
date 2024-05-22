@@ -103,9 +103,7 @@
                 <TemplateCommentsPlugin::Insert
                   @controller={{this.controller}}
                 />
-                <VariablePlugin::Address::Insert
-                  @controller={{this.controller}}
-                />
+                <LocationPlugin::Insert @controller={{this.controller}} />
                 <WorshipPlugin::Insert
                   @controller={{this.controller}}
                   @config={{this.config.worship}}
@@ -123,7 +121,7 @@
                 @controller={{this.controller}}
                 @options={{this.config.structures}}
               />
-              <VariablePlugin::Address::Edit
+              <LocationPlugin::Edit
                 @controller={{this.controller}}
                 @defaultMunicipality='Gent'
               />

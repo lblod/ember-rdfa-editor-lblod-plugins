@@ -87,9 +87,11 @@ import {
   numberView,
   codelistView,
   locationView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import {
   address,
   addressView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/address';
 import {
   date,
   dateView,

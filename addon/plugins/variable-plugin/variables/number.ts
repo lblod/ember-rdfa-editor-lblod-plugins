@@ -29,7 +29,7 @@ import {
   parseLabel,
   parseVariableInstance,
   parseVariableType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import { v4 as uuidv4 } from 'uuid';
 import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
 import type { ComponentLike } from '@glint/template';
