@@ -2,7 +2,7 @@
 {
   "extends": "./tsconfig.main.json",
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "."
   },
   "glint": {
     "environment": ["ember-loose", "ember-template-imports"],

@@ -3,7 +3,7 @@ common:
     loading: Laden…
     no-results: Geen resultaten gevonden
     error-title: Probleem bij het laden
-    error-intro: "Er is een fout opgetreden tijdens het laden van de resultaten:"
+    error-intro: 'Er is een fout opgetreden tijdens het laden van de resultaten:'
     error-outro: Moest dit probleem aanhouden, neem contact op met
 
 article-structure-plugin:
@@ -73,7 +73,6 @@ article-structure-plugin:
     paragraph:
       body: Voeg inhoud paragraaf in
 
-
 citaten-plugin:
   card:
     title: Voeg citeeropschrift toe
@@ -87,11 +86,11 @@ citaten-plugin:
     type: Type van document
     placeholder: Typ om te zoeken
     date-document: Filter op datum document
-    date-document-from: "Filter document op datum vanaf:"
-    date-document-to: "Filter document op datum tot:"
+    date-document-from: 'Filter document op datum vanaf:'
+    date-document-to: 'Filter document op datum tot:'
     date-publication: Filter op datum staatsblad
-    date-publication-from: "Filter publication op datum vanaf:"
-    date-publication-to: "Filter publicatie op datum tot:"
+    date-publication-from: 'Filter publication op datum vanaf:'
+    date-publication-to: 'Filter publicatie op datum tot:'
     from: van
     to: tot
     article: Zoek artikel
@@ -113,19 +112,30 @@ citaten-plugin:
     publicatie-non-available: Volledige inhoud niet publiek
     publicatie-non-available-short: Niet publiek
 
-
 besluit-type-plugin:
-  dt: "Besluittype"
-  insert-dt: "Selecteer een besluittype"
-  search-message: "Typ om te zoeken"
-  no-matches-message: "Geen resultaten"
-  alert-title: "Pas op"
-  alert-body: "U moet een subtype selecteren opdat het besluittype kan worden opgeslagen"
-  error-short: "Fout bij ophalen besluittypes"
-  error-title: "Fout"
-  error-first-body: "Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer"
-  error-rest-body: ". Voor meer specifieke details, controleer de console in de browser."
+  dt: 'Besluittype'
+  insert-dt: 'Selecteer een besluittype'
+  selected: '{num} geselecteerd'
+  search-message: 'Typ om te zoeken'
+  no-matches-message: 'Geen resultaten'
+  alert-title: 'Pas op'
+  alert-body: 'U moet een subtype selecteren opdat het besluittype kan worden opgeslagen'
+  error-short: 'Fout bij ophalen besluittypes'
+  error-title: 'Fout'
+  error-first-body: 'Er was een probleem bij het ophalen van de besluittypes. Probeer later opnieuw. Bij blijvende problemen, contacteer'
+  error-rest-body: '. Voor meer specifieke details, controleer de console in de browser.'
 
+besluit-topic-plugin:
+  dt: 'Besluitonderwerp'
+  insert-dt: 'Selecteer een besluitonderwerp'
+  search-message: 'Typ om te zoeken'
+  no-matches-message: 'Geen resultaten'
+  alert-title: 'Opgelet'
+  error-short: 'Fout bij ophalen besluitonderwerpen'
+  error-title: 'Error'
+  error-first-body: 'Er was een probleem bij het ophalen van de besluitonderwerpen. Probeer later opnieuw. Bij blijvende problemen, contacteer'
+  error-rest-body: '. Voor meer specifieke details, controleer de console in de browser.'
+  close-modal: OK
 
 besluit-plugin:
   missing-title-warning: Dit besluit heeft geen titel.
@@ -147,18 +157,17 @@ besluit-plugin:
     legal-context: Juridische context
     factual-context: Feitelijke context en argumentatie
 
-
 date-plugin:
   help:
-    title: "Datumformaat help"
+    title: 'Datumformaat help'
     first-line: "Indien u een eigen datumnotatie wilt gebruiken, kunt u deze korte handleiding volgen. Datumnotaties kunnen bestaan uit zowel speciale karakters/symbolen die verschillende delen van een datum voorstellen, en platte tekst die tussen aanhalingstekens ('') dient geplaatst te worden."
-    examples: "Voorbeelden:"
-    name: "Naam"
-    symbol: "Symbool/karakters"
-    result: "Resultaat"
-    detailed-info: "Naast deze voorbeelden, bestaan er nog vele andere karakters/symbolen die u kan gebruiken. Meer informatie vindt u op: "
-    docs-link: "documentatie van de date-fns library"
-    date-examples: "Via deze symbolen/karakters kan u verschillende soorten datumnotaties crëeren, hieronder een paar voorbeelden:"
+    examples: 'Voorbeelden:'
+    name: 'Naam'
+    symbol: 'Symbool/karakters'
+    result: 'Resultaat'
+    detailed-info: 'Naast deze voorbeelden, bestaan er nog vele andere karakters/symbolen die u kan gebruiken. Meer informatie vindt u op: '
+    docs-link: 'documentatie van de date-fns library'
+    date-examples: 'Via deze symbolen/karakters kan u verschillende soorten datumnotaties crëeren, hieronder een paar voorbeelden:'
     date-format: Datumnotatie
     short-weekday-title: Verkorte versie van een weekdag
     short-weekday-content: Maa, Din, Woe, ..., Zon
@@ -170,30 +179,30 @@ date-plugin:
     long-month-content: Januari, Februari, ..., December
     long-year: Jaar
   insert:
-    date: "Datum invoegen"
-    datetime: "Datum en tijd invoegen"
+    date: 'Datum invoegen'
+    datetime: 'Datum en tijd invoegen'
   card:
-    title: "Datum"
-    insert-date: "Datum invoegen"
-    insert-datetime: "Datum en tijd invoegen"
-    include-time: "Inclusief tijd"
-    info-custom-time: "Bij zelfgekozen formaten tonen we automatisch de tijdskeuze indien het formaat tijdsgerelateerde elementen bevat"
-    custom-date: "Ander formaat"
-    label: "Selecteer datum"
-    hours: "Uren"
-    minutes: "Minuten"
-    seconds: "Seconden"
-    now: "Nu"
+    title: 'Datum'
+    insert-date: 'Datum invoegen'
+    insert-datetime: 'Datum en tijd invoegen'
+    include-time: 'Inclusief tijd'
+    info-custom-time: 'Bij zelfgekozen formaten tonen we automatisch de tijdskeuze indien het formaat tijdsgerelateerde elementen bevat'
+    custom-date: 'Ander formaat'
+    label: 'Selecteer datum'
+    hours: 'Uren'
+    minutes: 'Minuten'
+    seconds: 'Seconden'
+    now: 'Nu'
   validation:
-    character: "Ongeldig teken"
-    character-suggestion: "Om letterlijke tekens in te voeren, omringt u ze met aanhalingstekens. Bijv."
-    use-yyyy: "Gebruik yyyy in de plaats van YYYY"
-    use-yy: "Gebruik yy in de plaats van YY"
-    use-d: "Gebruik d in de plaats van D"
-    use-dd: "Gebruik dd in de plaats van D"
-    required: "Dit veld mag niet leeg zijn"
-    fractions: "Fracties van seconden, zoals S en T, zijn niet ondersteund."
-    unknown: "Ongeldig formaat"
+    character: 'Ongeldig teken'
+    character-suggestion: 'Om letterlijke tekens in te voeren, omringt u ze met aanhalingstekens. Bijv.'
+    use-yyyy: 'Gebruik yyyy in de plaats van YYYY'
+    use-yy: 'Gebruik yy in de plaats van YY'
+    use-d: 'Gebruik d in de plaats van D'
+    use-dd: 'Gebruik dd in de plaats van D'
+    required: 'Dit veld mag niet leeg zijn'
+    fractions: 'Fracties van seconden, zoals S en T, zijn niet ondersteund.'
+    unknown: 'Ongeldig formaat'
 
 document-title-plugin:
   document-title-placeholder: Geef document-titel op
@@ -312,9 +321,9 @@ pagination:
 editor-plugins:
   roadsign-regulation:
     expanded-measure:
-      insert-measure: "Voeg maatregel in:"
+      insert-measure: 'Voeg maatregel in:'
       select-zonality:
-        label: "Selecteer zonale geldigheid:"
+        label: 'Selecteer zonale geldigheid:'
         zonal: Zonaal
         non-zonal: Niet zonaal
       varying-signalisation:
@@ -380,8 +389,8 @@ editor-plugins:
       errors:
         address-not-found: We konden het adres niet terugvinden.
         address-not-found-short: Adres niet gevonden
-        alternative-address: "Geef een ander adres op of ga verder met het volgende adres: {address}"
-        http-error: "Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}."
+        alternative-address: 'Geef een ander adres op of ga verder met het volgende adres: {address}'
+        http-error: 'Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}.'
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Voeg adres in

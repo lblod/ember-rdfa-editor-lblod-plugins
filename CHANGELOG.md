@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 19.1.0
+
+### Minor Changes
+
+- [#426](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/426) [`cb28e40ae4a8b1bf1d2d792788a10986db77aec2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cb28e40ae4a8b1bf1d2d792788a10986db77aec2) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4692: Create a `besluit-topic` (decision topic) plugin
+
+### Patch Changes
+
+- [#425](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/425) [`69da05460e79b8cb4a5601d9d5f4eae3026c4da3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/69da05460e79b8cb4a5601d9d5f4eae3026c4da3) Thanks [@dkozickis](https://github.com/dkozickis)! - Apply Prettier to the codebase
+
 ## 19.0.0
 
 ### Major Changes

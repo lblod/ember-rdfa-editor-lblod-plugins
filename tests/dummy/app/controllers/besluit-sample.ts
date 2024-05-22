@@ -285,6 +285,9 @@ export default class BesluitSampleController extends Controller {
         classificatieUri:
           'http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001',
       },
+      besluitTopic: {
+        endpoint: 'https://data.vlaanderen.be/sparql',
+      },
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
         zonalLocationCodelistUri:

@@ -1,14 +1,15 @@
 {{! @glint-nocheck: not typesafe yet }}
 <this.Velcro
   @placement='bottom-start'
-  @offsetOptions={{hash mainAxis=3}} as |velcro|
+  @offsetOptions={{hash mainAxis=3}}
+  as |velcro|
 >
   <AuPill
     @icon={{this.PencilIcon}}
     @iconAlignment='right'
     class='variable atomic'
     {{velcro.hook}}
-    {{on "click" @selectNode}}
+    {{on 'click' @selectNode}}
   >
     {{#if this.formattedNumber}}
       {{this.formattedNumber}}
@@ -30,7 +31,8 @@
         @shadow={{true}}
         @size='small'
         id='number-input-tooltip'
-        @standOut={{true}} as |card|
+        @standOut={{true}}
+        as |card|
       >
         <card.content>
           <AuNativeInput

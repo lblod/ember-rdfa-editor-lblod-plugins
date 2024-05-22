@@ -1,115 +1,137 @@
 {{! @glint-nocheck: not typesafe yet }}
-<div class="citaten--main-container au-u-flex au-u-flex--column au-u-flex--between">
-  <div class="citaten--container-content">
+<div
+  class='citaten--main-container au-u-flex au-u-flex--column au-u-flex--between'
+>
+  <div class='citaten--container-content'>
     {{! Heading with title and actions }}
-    <div class="citaten--container-header au-u-background-gray-100 au-o-box">
-      <AuHeading @level="2" @skin="4">
+    <div class='citaten--container-header au-u-background-gray-100 au-o-box'>
+      <AuHeading @level='2' @skin='4'>
         {{capitalize @legalDocument.fullTitle}}
       </AuHeading>
       {{#if @legalDocument.publicationDate}}
         <AuPill
-          class="au-u-margin-top-small au-u-margin-bottom-small"
-          @skin="border"
+          class='au-u-margin-top-small au-u-margin-bottom-small'
+          @skin='border'
           @icon={{this.CalendarIcon}}
-          @iconAlignment="left">
+          @iconAlignment='left'
+        >
           {{@legalDocument.publicationDate}}
         </AuPill>
       {{/if}}
-      <br/>
+      <br />
       <AuButton
-        @skin="primary"
+        @skin='primary'
         @icon={{this.PlusTextIcon}}
-        @iconAlignment="left"
-        class="au-u-margin-right"
-        {{on "click" (fn @insertLegalDocumentCitation @legalDocument)}}>
-        {{t "citaten-plugin.references.refer-whole"}}
+        @iconAlignment='left'
+        class='au-u-margin-right'
+        {{on 'click' (fn @insertLegalDocumentCitation @legalDocument)}}
+      >
+        {{t 'citaten-plugin.references.refer-whole'}}
       </AuButton>
       <AuLinkExternal
-        @skin="primary"
+        @skin='primary'
         @icon={{this.LinkExternalIcon}}
-        @iconAlignment="left"
+        @iconAlignment='left'
         href={{@legalDocument.uri}}
-        rel="noreferrer noopener">
-        {{t "citaten-plugin.references.lookup-codex"}}
+        rel='noreferrer noopener'
+      >
+        {{t 'citaten-plugin.references.lookup-codex'}}
       </AuLinkExternal>
       {{! Search field }}
-      <AuLabel class="au-u-margin-top-small au-margin-bottom-small" for="searchCodex" @inline={{true}}
-               @required={{false}} @error={{false}} @warning={{false}}>{{t "citaten-plugin.search.article"}}</AuLabel>
+      <AuLabel
+        class='au-u-margin-top-small au-margin-bottom-small'
+        for='searchCodex'
+        @inline={{true}}
+        @required={{false}}
+        @error={{false}}
+        @warning={{false}}
+      >{{t 'citaten-plugin.search.article'}}</AuLabel>
       <AuInput
-        id="searchCodex"
-        placeholder="{{t "citaten-plugin.search.article-placeholder"}}"
-        type="text"
-        @width="default"
+        id='searchCodex'
+        placeholder='{{t "citaten-plugin.search.article-placeholder"}}'
+        type='text'
+        @width='default'
         @icon={{this.SearchIcon}}
-        @iconAlignment="right"
+        @iconAlignment='right'
         value={{this.articleFilter}}
-        {{on "input" (perform this.updateArticleFilter)}}
+        {{on 'input' (perform this.updateArticleFilter)}}
       />
     </div>
     {{! Search results }}
     <div>
       {{#if this.articleResource.isRunning}}
-        <div class="au-o-box">
-          <AuLoader @padding="large"/>
-          <span class="au-u-hidden-visually">{{t "citaten-plugin.alert.loading"}}</span>
+        <div class='au-o-box'>
+          <AuLoader @padding='large' />
+          <span class='au-u-hidden-visually'>{{t
+              'citaten-plugin.alert.loading'
+            }}</span>
         </div>
       {{else}}
         {{#if this.error}}
-          <Common::Search::AlertLoadError @fullSize={{true}} @error={{this.error}} class="au-o-box"/>
+          <Common::Search::AlertLoadError
+            @fullSize={{true}}
+            @error={{this.error}}
+            class='au-o-box'
+          />
         {{else}}
           <CitationPlugin::Citations::ArticleList
             @insertArticleCitation={{fn @insertArticleCitation @legalDocument}}
             @articles={{this.articleResource.value}}
-            @fullSize={{true}}/>
+            @fullSize={{true}}
+          />
         {{/if}}
       {{/if}}
     </div>
   </div>
   {{! Footer }}
   <div>
-    <div class="citaten--container-footer au-u-background-gray-100">
-      <AuToolbar
-        @border="top"
-        @size="large"
-        @nowrap={{true}}>
-        <div class="au-c-pagination">
+    <div class='citaten--container-footer au-u-background-gray-100'>
+      <AuToolbar @border='top' @size='large' @nowrap={{true}}>
+        <div class='au-c-pagination'>
           {{! Always shown, back to main dialog }}
-          <div class="au-c-pagination__list-item">
+          <div class='au-c-pagination__list-item'>
             <AuButton
-              @skin="link"
+              @skin='link'
               @icon={{this.HierarchicalBackIcon}}
-              @iconAlignment="left"
-              {{on "click" this.close}}>
-              {{t "citaten-plugin.search.back"}}
+              @iconAlignment='left'
+              {{on 'click' this.close}}
+            >
+              {{t 'citaten-plugin.search.back'}}
             </AuButton>
           </div>
           {{! Pagination of articles }}
           {{#if this.articleResource.value.length}}
             <p>
-              <span class="au-u-hidden-visually">{{t "citaten-plugin.search.results"}}</span>
+              <span class='au-u-hidden-visually'>{{t
+                  'citaten-plugin.search.results'
+                }}</span>
               <strong>
-                {{this.rangeStart}} - {{this.rangeEnd}}
+                {{this.rangeStart}}
+                -
+                {{this.rangeEnd}}
               </strong>
-              {{t "citaten-plugin.pagination.of"}}
+              {{t 'citaten-plugin.pagination.of'}}
               {{this.totalCount}}
             </p>
-            <div class="au-c-pagination__list-item">
+            <div class='au-c-pagination__list-item'>
               {{#unless this.isFirstPage}}
                 <AuButton
-                  @skin="link"
+                  @skin='link'
                   @icon={{this.NavLeftIcon}}
-                  @iconAlignment="left"
-                  {{on "click" this.previousPage}}>
-                  {{t "citaten-plugin.pagination.previous"}}
+                  @iconAlignment='left'
+                  {{on 'click' this.previousPage}}
+                >
+                  {{t 'citaten-plugin.pagination.previous'}}
                 </AuButton>
               {{/unless}}
               {{#unless this.isLastPage}}
                 <AuButton
-                  @skin="link"
+                  @skin='link'
                   @icon={{this.NavRightIcon}}
-                  @iconAlignment="right"
-                  {{on "click" this.nextPage}}>
-                  {{t "citaten-plugin.pagination.next"}}
+                  @iconAlignment='right'
+                  {{on 'click' this.nextPage}}
+                >
+                  {{t 'citaten-plugin.pagination.next'}}
                 </AuButton>
               {{/unless}}
             </div>

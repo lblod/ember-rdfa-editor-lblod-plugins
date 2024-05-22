@@ -1,7 +1,9 @@
-
 {{! @glint-nocheck: not typesafe yet }}
 <AuFormRow>
-  <VariablePlugin::Utils::LabelInput @label={{this.label}} @updateLabel={{this.updateLabel}}/>
+  <VariablePlugin::Utils::LabelInput
+    @label={{this.label}}
+    @updateLabel={{this.updateLabel}}
+  />
 </AuFormRow>
 <div class='say-number-settings'>
   <AuFormRow>
@@ -16,7 +18,7 @@
         {{this.minimumInput}}
         placeholder={{t 'variable-plugin.number.minimum-placeholder'}}
         @width='block'
-        @type="number"
+        @type='number'
       />
     {{/let}}
   </AuFormRow>
@@ -33,7 +35,7 @@
         {{this.maximumInput}}
         placeholder={{t 'variable-plugin.number.maximum-placeholder'}}
         @width='block'
-        @type="number"
+        @type='number'
       />
     {{/let}}
   </AuFormRow>
@@ -43,8 +45,6 @@
     </AuHelpText>
   {{/if}}
 </div>
-<AuButton
-  {{on 'click' this.insert}}
-  @disabled={{this.numberVariableError}}>
+<AuButton {{on 'click' this.insert}} @disabled={{this.numberVariableError}}>
   {{t 'variable-plugin.button'}}
 </AuButton>

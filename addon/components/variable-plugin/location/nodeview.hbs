@@ -1,5 +1,10 @@
 {{! @glint-nocheck: not typesafe yet }}
-<AuPill @icon={{this.PencilIcon}} @iconAlignment="right" class="variable" {{on 'click' this.onClick}}>
+<AuPill
+  @icon={{this.PencilIcon}}
+  @iconAlignment='right'
+  class='variable'
+  {{on 'click' this.onClick}}
+>
   <EmberNode::EmbeddedEditor
     @controller={{@controller}}
     @node={{@node}}
@@ -12,7 +17,7 @@
     @contentDecorations={{@contentDecorations}}
   />
   {{#if this.label}}
-    <span class="label">
+    <span class='label'>
       ({{this.label}})
     </span>
   {{/if}}

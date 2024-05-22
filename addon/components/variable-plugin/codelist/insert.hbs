@@ -20,14 +20,11 @@
   {{style.label}}
 </PowerSelect>
 <AuFormRow>
-  <VariablePlugin::Utils::LabelInput 
+  <VariablePlugin::Utils::LabelInput
     @label={{this.label}}
     @updateLabel={{this.updateLabel}}
   />
 </AuFormRow>
-<AuButton
-  {{on 'click' this.insert}}
-  @disabled={{not this.selectedCodelist}}
->
+<AuButton {{on 'click' this.insert}} @disabled={{not this.selectedCodelist}}>
   {{t 'variable-plugin.button'}}
 </AuButton>
