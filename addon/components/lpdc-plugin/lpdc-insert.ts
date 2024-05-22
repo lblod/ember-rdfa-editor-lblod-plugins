@@ -45,11 +45,6 @@ export default class LpdcPluginsInsertComponent extends Component<Args> {
 
   @action
   onLpdcInsert(lpdc: LPDC) {
-    const rdfaId = uuidv4();
-
-    const uri = lpdc.uri;
-    const name = lpdc.name;
-
     const currentBesluitRange = getCurrentBesluitRange(this.controller);
 
     const resource =
@@ -62,12 +57,16 @@ export default class LpdcPluginsInsertComponent extends Component<Args> {
       throw new Error('No besluit found in selection');
     }
 
+    const rdfaId = uuidv4();
+    const uri = lpdc.uri;
+    const name = lpdc.name;
+
     this.controller.withTransaction(
       (tr) => {
         const node = this.controller.schema.node(
           'inline_rdfa',
           {
-            rdfaNodeType: 'literal',
+            rdfaNodeType: 'resource',
             __rdfaId: rdfaId,
             subject: uri,
           },

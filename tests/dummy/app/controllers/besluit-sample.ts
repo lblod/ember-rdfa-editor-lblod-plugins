@@ -308,7 +308,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'http://localhost/vendor-proxy/query',
       },
       lpdc: {
-        endpoint: 'http://localhost/lpdc-service',
+        endpoint: 'https://dev.gelinkt-notuleren.lblod.info/lpdc-service',
       },
     };
   }

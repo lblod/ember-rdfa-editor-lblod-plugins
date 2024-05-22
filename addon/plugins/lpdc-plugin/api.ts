@@ -6,7 +6,8 @@ type LPDCInstance = {
   id: string; // UUID
   '@id': string; // URI
   naam: {
-    nl: string;
+    nl?: string;
+    en?: string;
   };
   linkedConcept: string; // URI of linked concept
   linkedConceptId: string; // UUID of linked concept
@@ -81,10 +82,15 @@ export const fetchLpdcs = async ({
   const resultJson = (await results.json()) as FetchResults;
 
   return {
-    lpdc: (resultJson.hydraMember ?? []).map((lpdc) => ({
-      uri: lpdc['@id'],
-      name: lpdc.naam.nl,
-    })),
+    lpdc: (resultJson.hydraMember ?? [])
+      .filter(
+        (lpdc): lpdc is LPDCInstance & { naam: { nl: string; en: string } } =>
+          Boolean(lpdc.naam?.nl || lpdc.naam?.en),
+      )
+      .map((lpdc) => ({
+        uri: lpdc['@id'],
+        name: lpdc.naam.nl ?? lpdc.naam.en,
+      })),
     pageIndex: resultJson.hydraPageIndex,
     meta: {
       count: resultJson.hydraTotalItems,
