@@ -45,22 +45,26 @@
     h4,
     h5,
     h6,
-    [property='say:heading'] {
+    [property='say:heading'], [property='https://say.data.gift/ns/heading']
+    {
       background-color: var(--au-gray-100);
       margin-bottom: 0;
       padding-left: 1em;
       cursor: auto;
     }
-    span[property='say:heading'] {
+    span[property='say:heading'], span[property='https://say.data.gift/ns/heading']
+    {
       width: 100%;
       display: inline-block;
     }
-    [property='say:body'] {
+    [property='say:body'], [property='https://say.data.gift/ns/body']
+    {
       cursor: auto;
       padding-left: 0.5em;
     }
   }
-  &[typeof='say:Article'] [property='say:heading'] {
+  &[typeof='say:Article'] [property='say:heading'], &[typeof='say:Article'] [property='https://say.data.gift/ns/heading']
+  {
     font-weight: bold;
   }
   &.say-active {
@@ -86,7 +90,8 @@
   .say-active {
     outline: 0;
   }
-  [property='say:body'] {
+  [property='say:body'], [property='https://say.data.gift/ns/body']
+  {
     background-color: white;
     cursor: auto;
     padding-left: 0.5em;
@@ -97,7 +102,8 @@
   padding: 0 !important;
   margin: 0;
   margin-bottom: 0.5em;
-  .say-editable[property='say:body'] {
+  .say-editable[property='say:body'], .say-editable[property='https://say.data.gift/ns/body']
+  {
     padding: 0.5em;
     margin: 0;
   }
