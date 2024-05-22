@@ -96,3 +96,22 @@
 .ProseMirror-selectednode > .say-snippet-placeholder {
   background-color: var(--au-blue-200);
 }
+
+.say-snippet-placeholder-node {
+  background-color: var(--au-orange-200);
+  padding: 2rem;
+
+  div {
+    font-weight: var(--au-medium);
+  }
+}
+
+div[typeof='besluitpublicatie:Documentonderdeel']
+  .say-snippet-placeholder-node {
+  background-color: var(--au-gray-300);
+}
+
+.rdfa-annotations
+  [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
+  padding-bottom: 2rem;
+}
