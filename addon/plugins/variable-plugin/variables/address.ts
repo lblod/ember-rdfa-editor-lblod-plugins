@@ -1,9 +1,11 @@
 import {
   ADRES,
+  ADRES_TYPO,
   DCT,
   EXT,
   GENERIEK,
   GEOSPARQL,
+  LOCN,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -41,70 +43,26 @@ import {
   rdfaAttrSpec,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  Address,
+  constructLambert72WKTString,
+  type Lambert72Coordinates,
+  parseLambert72GMLString,
+  parseLambert72WKTString,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 
 const rdfaAware = true;
-export class Address {
-  declare id?: string;
-  declare street: string;
-  declare zipcode: string;
-  declare municipality: string;
-  declare housenumber?: string;
-  declare busnumber?: string;
-  declare gml: string;
-  constructor(
-    args: Pick<
-      Address,
-      | 'street'
-      | 'housenumber'
-      | 'zipcode'
-      | 'municipality'
-      | 'id'
-      | 'busnumber'
-      | 'gml'
-    >,
-  ) {
-    Object.assign(this, args);
-  }
 
-  get formatted() {
-    if (this.housenumber && this.busnumber) {
-      return `${this.street} ${this.housenumber} bus ${this.busnumber}, ${this.zipcode} ${this.municipality}`;
-    } else if (this.housenumber) {
-      return `${this.street} ${this.housenumber}, ${this.zipcode} ${this.municipality}`;
-    } else {
-      return `${this.street}, ${this.zipcode} ${this.municipality}`;
-    }
-  }
-
-  sameAs(
-    other?: Pick<
-      Address,
-      'street' | 'housenumber' | 'busnumber' | 'municipality'
-    > | null,
-  ) {
-    return (
-      this.street === other?.street &&
-      this.housenumber === other?.housenumber &&
-      this.busnumber === other?.busnumber &&
-      this.municipality === other?.municipality
-    );
-  }
-
-  get hasHouseNumber() {
-    return !!this.housenumber;
-  }
-}
-
-const constructLocationNode = (gml: string) => {
+const constructLocationNode = (location: Lambert72Coordinates) => {
   return span(
     {
       property: ADRES('positie').full,
       typeof: GENERIEK('GeografischePositie').full,
     },
     span({
-      property: GEOSPARQL('asGML').full,
-      datatype: GEOSPARQL('gmlLiteral').full,
-      content: gml,
+      property: GEOSPARQL('asWKT').full,
+      datatype: GEOSPARQL('wktLiteral').full,
+      content: constructLambert72WKTString(location),
     }),
   );
 };
@@ -115,7 +73,7 @@ const constructAddressNode = (address: Address) => {
         ' ',
         span(
           {
-            property: ADRES('huisnummer').full,
+            property: ADRES('Adresvoorstelling.huisnummer').full,
           },
           address.housenumber,
         ),
@@ -126,82 +84,91 @@ const constructAddressNode = (address: Address) => {
         ' bus ',
         span(
           {
-            property: ADRES('busnummer').full,
+            property: ADRES('Adresvoorstelling.busnummer').full,
           },
           address.busnumber,
         ),
       ]
     : [];
+  const idNode = address.id
+    ? [
+        span({
+          property: ADRES('verwijstNaar').full,
+          content: address.id,
+        }),
+      ]
+    : [];
   return contentSpan(
-    { resource: address.id, typeof: ADRES('Adres').full },
+    { resource: address.id, typeof: LOCN('Adres').full },
     span(
       {
-        property: ADRES('heeftStraatnaam').full,
-      },
-      address.street,
-    ),
-    ...housenumberNode,
-    ...busnumberNode,
-    ', ',
-    span(
-      {
-        property: ADRES('heeftPostinfo').full,
-        typeof: ADRES('Postinfo').full,
+        property: DCT('spatial').full,
       },
       span(
         {
-          property: ADRES('postcode').full,
+          property: LOCN('thoroughfare').full,
         },
-        address.zipcode,
+        address.street,
       ),
+      ...housenumberNode,
+      ...busnumberNode,
+    ),
+    ', ',
+    span(
+      {
+        property: LOCN('postcode').full,
+      },
+      address.zipcode,
     ),
     ' ',
     span(
       {
         property: ADRES('gemeentenaam').full,
+        language: 'nl',
       },
       address.municipality,
     ),
-    constructLocationNode(address.gml),
+    ...idNode,
+    constructLocationNode(address.location),
   );
 };
 
-const parseAddressNode = (addressNode: Element): Address | undefined => {
+const parseOldAddressNode = (addressNode: Element): Address | undefined => {
   const id = addressNode.getAttribute('resource');
   const street = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('heeftStraatnaam'),
+    ADRES_TYPO('heeftStraatnaam'),
   )?.textContent;
   const housenumber = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('huisnummer'),
+    ADRES_TYPO('huisnummer'),
   )?.textContent;
   const busnumber = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('busnummer'),
+    ADRES_TYPO('busnummer'),
   )?.textContent;
   const postInfoNode = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('heeftPostinfo'),
+    ADRES_TYPO('heeftPostinfo'),
   );
   const zipcode =
     postInfoNode &&
-    findChildWithRdfaAttribute(postInfoNode, 'property', ADRES('postcode'))
+    findChildWithRdfaAttribute(postInfoNode, 'property', ADRES_TYPO('postcode'))
       ?.textContent;
   const municipality = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('gemeentenaam'),
+    ADRES_TYPO('gemeentenaam'),
   )?.textContent;
 
   const locationNode = findChildWithRdfaAttribute(
     addressNode,
     'property',
-    ADRES('positie'),
+    ADRES_TYPO('positie'),
   );
   const gml =
     locationNode &&
@@ -219,7 +186,75 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
       zipcode,
       municipality,
       busnumber: busnumber ?? undefined,
-      gml,
+      location: parseLambert72GMLString(gml),
+    });
+  } else {
+    return;
+  }
+};
+
+const parseAddressNode = (addressNode: Element): Address | undefined => {
+  const id = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    ADRES('verwijstNaar'),
+  )?.getAttribute('content');
+  const spatialNode = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    DCT('spatial'),
+  );
+  const street =
+    spatialNode &&
+    findChildWithRdfaAttribute(spatialNode, 'property', LOCN('thoroughfare'))
+      ?.textContent;
+  const housenumber =
+    spatialNode &&
+    findChildWithRdfaAttribute(
+      spatialNode,
+      'property',
+      ADRES('Adresvoorstelling.huisnummer'),
+    )?.textContent;
+  const busnumber =
+    spatialNode &&
+    findChildWithRdfaAttribute(
+      spatialNode,
+      'property',
+      ADRES('Adresvoorstelling.busnummer'),
+    )?.textContent;
+  const zipcode = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    LOCN('postcode'),
+  )?.textContent;
+  const municipality = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    ADRES('gemeentenaam'),
+  )?.textContent;
+
+  const locationNode = findChildWithRdfaAttribute(
+    addressNode,
+    'property',
+    ADRES('positie'),
+  );
+  const wkt =
+    locationNode &&
+    findChildWithRdfaAttribute(
+      locationNode,
+      'property',
+      GEOSPARQL('asWKT'),
+    )?.getAttribute('content');
+
+  if (street && municipality && zipcode && wkt) {
+    return new Address({
+      id: id ?? undefined,
+      street,
+      housenumber: housenumber ?? undefined,
+      zipcode,
+      municipality,
+      busnumber: busnumber ?? undefined,
+      location: parseLambert72WKTString(wkt),
     });
   } else {
     return;
@@ -256,9 +291,10 @@ const parseDOM: ParseRule[] = [
         if (!addressNode) {
           return false;
         }
+        const address = parseAddressNode(addressNode);
         return {
           ...attrs,
-          value: parseAddressNode(addressNode),
+          value: address ?? parseOldAddressNode(addressNode),
         };
       }
       return false;

@@ -21,7 +21,11 @@ export const MOBILITEIT = namespace(
   'mobiliteit',
 );
 
-export const ADRES = namespace('https://data.vlaanderen.be/ns/adres/', 'adres');
+export const ADRES_TYPO = namespace(
+  'https://data.vlaanderen.be/ns/adres/',
+  'adres',
+);
+export const ADRES = namespace('https://data.vlaanderen.be/ns/adres#', 'adres');
 export const GENERIEK = namespace(
   'https://data.vlaanderen.be/ns/generiek/#',
   'generiek',
@@ -31,3 +35,4 @@ export const GEOSPARQL = namespace(
   'http://www.opengis.net/ont/geosparql#',
   'geosparql',
 );
+export const LOCN = namespace('http://www.w3.org/ns/locn#', 'locn');

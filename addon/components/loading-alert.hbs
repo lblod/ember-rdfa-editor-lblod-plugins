@@ -6,7 +6,9 @@
     data-test-alert
     ...attributes
   >
-    <AuLoader />
+    <AuLoader @hideMessage={{true}}>
+      {{t 'common.search.loading'}}
+    </AuLoader>
     <div class='au-c-alert__content'>
       {{#if @title}}
         <p class='au-c-alert__title' data-test-alert-title>{{@title}}</p>
