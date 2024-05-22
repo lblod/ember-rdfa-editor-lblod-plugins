@@ -83,14 +83,11 @@ export const fetchLpdcs = async ({
 
   return {
     lpdc: (resultJson.hydraMember ?? [])
-      .filter(
-        (lpdc): lpdc is LPDCInstance & { naam: { nl: string; en: string } } =>
-          Boolean(lpdc.naam?.nl || lpdc.naam?.en),
-      )
       .map((lpdc) => ({
         uri: lpdc['@id'],
         name: lpdc.naam.nl ?? lpdc.naam.en,
-      })),
+      }))
+      .filter((lpdc): lpdc is LPDC => lpdc.name !== undefined),
     pageIndex: resultJson.hydraPageIndex,
     meta: {
       count: resultJson.hydraTotalItems,
