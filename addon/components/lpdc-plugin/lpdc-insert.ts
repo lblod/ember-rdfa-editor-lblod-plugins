@@ -83,7 +83,7 @@ export default class LpdcPluginsInsertComponent extends Component<Args> {
         resource,
         property: {
           predicate: SRO('bekrachtigt').full,
-          object: sayDataFactory.literalNode(rdfaId),
+          object: sayDataFactory.resourceNode(uri),
         },
       }),
     );
