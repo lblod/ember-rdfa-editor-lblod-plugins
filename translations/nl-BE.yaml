@@ -5,6 +5,10 @@ common:
     error-title: Probleem bij het laden
     error-intro: 'Er is een fout opgetreden tijdens het laden van de resultaten:'
     error-outro: Moest dit probleem aanhouden, neem contact op met
+  sort:
+    sort: Sorteren
+    asc: Oplopend sorteren
+    desc: Aflopend sorteren
 
 article-structure-plugin:
   insert:
@@ -412,7 +416,18 @@ worship-plugin:
     fields:
       name: Naam
       admin-unit: Bestuurseenheid
-    sort:
-      sort: Sorteren
-      asc: Oplopend sorteren
-      desc: Aflopend sorteren
+    
+
+lmb-plugin:
+  insert:
+    title: Mandataris van LMB invoegen
+  modal:
+    title: Kies een mandataris
+    insert: Invoegen
+    search:
+      title: Filter op
+    fields:
+      name: Naam
+      status: Status
+      fractie: Fractie
+      role: Role
