@@ -409,6 +409,10 @@ worship-plugin:
       desc: Sort descending
 
 location-plugin:
+  modal:
+    insert: Insert location
+    edit: Edit location
+    confirm: Set location
   label: Label
   labelPlaceholder: Type something...
   default-label: location
