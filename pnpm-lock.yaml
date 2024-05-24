@@ -104,8 +104,8 @@ dependencies:
 
 devDependencies:
   '@appuniversum/ember-appuniversum':
-    specifier: 3.4.1
-    version: 3.4.1(@ember/test-helpers@2.9.4)(@glint/environment-ember-loose@1.4.0)(@glint/template@1.4.0)(ember-source@4.12.0)(tracked-built-ins@3.3.0)(webpack@5.90.3)
+    specifier: 3.4.2
+    version: 3.4.2(@ember/test-helpers@2.9.4)(@glint/environment-ember-loose@1.4.0)(@glint/template@1.4.0)(ember-source@4.12.0)(tracked-built-ins@3.3.0)(webpack@5.90.3)
   '@changesets/changelog-github':
     specifier: ^0.4.8
     version: 0.4.8
@@ -150,7 +150,7 @@ devDependencies:
     version: 4.3.3
   '@lblod/ember-rdfa-editor':
     specifier: ^9.8.0
-    version: 9.9.0(@appuniversum/ember-appuniversum@3.4.1)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
+    version: 9.9.0(@appuniversum/ember-appuniversum@3.4.2)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3)
   '@rdfjs/types':
     specifier: ^1.1.0
     version: 1.1.0
@@ -394,8 +394,8 @@ packages:
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.22
 
-  /@appuniversum/ember-appuniversum@3.4.1(@ember/test-helpers@2.9.4)(@glint/environment-ember-loose@1.4.0)(@glint/template@1.4.0)(ember-source@4.12.0)(tracked-built-ins@3.3.0)(webpack@5.90.3):
-    resolution: {integrity: sha512-XOj2aAEW0M3TGle4xq8fgMpOySZUcRayiEkGs5JzN7Pv+kxHODSC1zWXoxjlSH2tvFK5l7uHAtaMPcCILwj8xQ==}
+  /@appuniversum/ember-appuniversum@3.4.2(@ember/test-helpers@2.9.4)(@glint/environment-ember-loose@1.4.0)(@glint/template@1.4.0)(ember-source@4.12.0)(tracked-built-ins@3.3.0)(webpack@5.90.3):
+    resolution: {integrity: sha512-GsMbEhk5KucUwiLLTY8dP7q++7kE8vKSWvqVkrz9FilBuPTGUn6vAkfx9904eyGRKYfmutVRbVUZQQOn4nagrA==}
     engines: {node: '>= 18'}
     peerDependencies:
       ember-source: ^4.12.0 || ^5.0.0
@@ -416,7 +416,7 @@ packages:
       ember-focus-trap: 1.1.0(ember-source@4.12.0)
       ember-modifier: 4.1.0(ember-source@4.12.0)
       ember-source: 4.12.0(@babel/core@7.23.9)(@glimmer/component@1.1.2)(@glint/template@1.4.0)(webpack@5.90.3)
-      ember-template-imports: 3.4.2
+      ember-template-imports: 4.1.1
       ember-test-selectors: 6.0.0
       ember-truth-helpers: 3.1.1
       inputmask: 5.0.9-beta.62
@@ -2792,7 +2792,7 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@lblod/ember-rdfa-editor@9.9.0(@appuniversum/ember-appuniversum@3.4.1)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
+  /@lblod/ember-rdfa-editor@9.9.0(@appuniversum/ember-appuniversum@3.4.2)(@glint/template@1.4.0)(@lezer/common@1.2.1)(ember-changeset@4.1.2)(ember-cli-sass@11.0.1)(ember-intl@5.7.2)(ember-modifier@3.2.7)(ember-source@4.12.0)(webpack@5.90.3):
     resolution: {integrity: sha512-BY8zxQHFSRXOKvMCE+YOMumEzFJJVwbernmeRaBNPuiwCIpmMptu7ajYTDbyUb0J6VSvwoDRZRa2RoiVAJQntQ==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
@@ -2804,7 +2804,7 @@ packages:
       ember-modifier: ^3.2.7
       ember-source: ^4.12.0
     dependencies:
-      '@appuniversum/ember-appuniversum': 3.4.1(@ember/test-helpers@2.9.4)(@glint/environment-ember-loose@1.4.0)(@glint/template@1.4.0)(ember-source@4.12.0)(tracked-built-ins@3.3.0)(webpack@5.90.3)
+      '@appuniversum/ember-appuniversum': 3.4.2(@ember/test-helpers@2.9.4)(@glint/environment-ember-loose@1.4.0)(@glint/template@1.4.0)(ember-source@4.12.0)(tracked-built-ins@3.3.0)(webpack@5.90.3)
       '@babel/core': 7.23.9
       '@codemirror/commands': 6.3.3
       '@codemirror/lang-html': 6.4.8
@@ -8766,6 +8766,17 @@ packages:
       validate-peer-dependencies: 1.2.0
     transitivePeerDependencies:
       - supports-color
+
+  /ember-template-imports@4.1.1:
+    resolution: {integrity: sha512-mnbL3hjo/Ctg7rkBtuYkBRJUn5bDYRQCEZQxmNozRnfoEp2RLSbT6SFJRAFDYXT2OrY+8i821S4kPL1i0QuGIw==}
+    engines: {node: 16.* || >= 18}
+    dependencies:
+      broccoli-stew: 3.0.0
+      content-tag: 2.0.1
+      ember-cli-version-checker: 5.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /ember-template-lint@5.13.0:
     resolution: {integrity: sha512-AYxz9S9fVZfHPmTsymc7NwsD7FVmDUZyfC+KYpxDlK0wic7JSQx2FNQNqQSBFRLOuzn7VQ0/+1pX6DGqKDGswg==}

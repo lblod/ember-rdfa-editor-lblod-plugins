@@ -410,6 +410,10 @@ worship-plugin:
       desc: Aflopend sorteren
 
 location-plugin:
+  modal:
+    insert: locatie invoegen
+    edit: Bewerk locatie
+    confirm: Ingestelde locatie
   label: Label
   labelPlaceholder: Type iets...
   default-label: locatie
