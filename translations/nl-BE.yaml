@@ -1,4 +1,5 @@
 common:
+  insert: Voeg in
   search:
     loading: Laden…
     no-results: Geen resultaten gevonden
@@ -256,15 +257,6 @@ variable-plugin:
     maximum-placeholder: maximumwaarde
     to: tot
 
-address-plugin:
-  insert:
-    address: Adres invoegen
-  button:
-    insert: Adres invoegen
-    back: Terug
-  search:
-    cta: Zoekterm
-    no-match: Geen resultaten
 dummy:
   validation-card:
     title: Documentvalidatie
@@ -415,8 +407,7 @@ worship-plugin:
       no results: niets gevonden
     fields:
       name: Naam
-      admin-unit: Bestuurseenheid
-    
+      admin-unit: Bestuurseenheid  
 
 lmb-plugin:
   insert:
@@ -431,3 +422,13 @@ lmb-plugin:
       status: Status
       fractie: Fractie
       role: Rol
+
+location-plugin:
+  modal:
+    insert: locatie invoegen
+    edit: Bewerk locatie
+    confirm: Ingestelde locatie
+  label: Label
+  labelPlaceholder: Type iets...
+  default-label: locatie
+

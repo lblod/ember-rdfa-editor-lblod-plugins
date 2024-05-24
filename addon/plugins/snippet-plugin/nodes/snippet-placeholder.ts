@@ -57,10 +57,12 @@ const emberNodeConfig: EmberNodeConfig = {
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
-      attrs: node.attrs,
+      attrs: {
+        ...node.attrs,
+        class: 'say-snippet-placeholder-node',
+      },
       content: [
-        'div',
-        {},
+        'text',
         t(
           'snippet-plugin.insert.placeholder',
           'Plaatshouder voor fragment invoegen',
