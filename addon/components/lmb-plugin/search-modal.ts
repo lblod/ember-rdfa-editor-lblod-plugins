@@ -97,15 +97,17 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
 
     if (this.inputSearchText) {
       mandatees = mandatees?.filter((mandatee: Mandatee) =>
-        mandatee.fullName.toLowerCase().includes(this.inputSearchText?.toLowerCase() as string),
+        mandatee.fullName
+          .toLowerCase()
+          .includes(this.inputSearchText?.toLowerCase() as string),
       );
     }
 
     if (this.sort) {
       const [key, sortingDirection] = this.sort;
       mandatees = mandatees.sort((a: Mandatee, b: Mandatee) => {
-        if(key === 'fullName') {
-          if(a.lastName === b.lastName) {
+        if (key === 'fullName') {
+          if (a.lastName === b.lastName) {
             if (a.firstName > b.firstName) {
               return sortingDirection === 'ASC' ? 1 : -1;
             } else {
@@ -118,7 +120,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
               return sortingDirection === 'ASC' ? -1 : 1;
             }
           }
-        }else if (a[key] > b[key]) {
+        } else if (a[key] > b[key]) {
           return sortingDirection === 'ASC' ? 1 : -1;
         } else {
           return sortingDirection === 'ASC' ? -1 : 1;

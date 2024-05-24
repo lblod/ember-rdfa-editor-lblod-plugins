@@ -407,7 +407,6 @@ worship-plugin:
     fields:
       name: Name
       admin-unit: Administrative Unit
-    
 
 lmb-plugin:
   insert:

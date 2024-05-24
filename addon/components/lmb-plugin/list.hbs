@@ -46,9 +46,7 @@
             <td>{{row.fractie}}</td>
             <td>{{row.role}}</td>
             <td class='au-u-text-center'>
-              <AuButton
-                {{on 'click' (fn @insert row)}}
-              >
+              <AuButton {{on 'click' (fn @insert row)}}>
                 {{t 'lmb-plugin.modal.insert'}}
               </AuButton>
             </td>

@@ -407,7 +407,7 @@ worship-plugin:
       no results: niets gevonden
     fields:
       name: Naam
-      admin-unit: Bestuurseenheid  
+      admin-unit: Bestuurseenheid
 
 lmb-plugin:
   insert:
@@ -431,4 +431,3 @@ location-plugin:
   label: Label
   labelPlaceholder: Type iets...
   default-label: locatie
-

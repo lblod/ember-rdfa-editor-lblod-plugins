@@ -11,9 +11,7 @@
       {{on 'click' this.changeSort}}
       class='au-c-data-table__sort'
     >
-      <span class='au-u-hidden-visually'>{{t
-          'common.sort.asc'
-        }}</span>
+      <span class='au-u-hidden-visually'>{{t 'common.sort.asc'}}</span>
       <AuIcon @icon={{this.NavUpIcon}} />
     </button>
   {{else if (eq this.order 'ASC')}}
@@ -22,9 +20,7 @@
       {{on 'click' this.changeSort}}
       class='au-c-data-table__sort'
     >
-      <span class='au-u-hidden-visually'>{{t
-          'common.sort.desc'
-        }}</span>
+      <span class='au-u-hidden-visually'>{{t 'common.sort.desc'}}</span>
       <AuIcon @icon={{this.NavDownIcon}} />
     </button>
   {{else}}
@@ -33,9 +29,7 @@
       {{on 'click' this.changeSort}}
       class='au-c-data-table__sort'
     >
-      <span class='au-u-hidden-visually'>{{t
-          'common.sort.sort'
-        }}</span>
+      <span class='au-u-hidden-visually'>{{t 'common.sort.sort'}}</span>
       <AuIcon @icon={{this.NavUpDownIcon}} />
     </button>
   {{/if}}

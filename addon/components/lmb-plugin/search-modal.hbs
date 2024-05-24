@@ -9,17 +9,18 @@
   as |modal|
 >
   <modal.Body>
-    <AuMainContainer @scroll={{true}} class='worship-modal--main-container' as |mc|>
+    <AuMainContainer
+      @scroll={{true}}
+      class='worship-modal--main-container'
+      as |mc|
+    >
       <mc.sidebar>
         <div class='au-c-sidebar'>
           <div class='au-c-sidebar__content au-u-padding'>
             <AuHeading @level='3' @skin='4' class='au-u-padding-bottom-small'>
               {{t 'lmb-plugin.modal.search.title'}}
             </AuHeading>
-            <AuLabel
-              class='au-margin-bottom-small'
-              for='searchTerm'
-            >
+            <AuLabel class='au-margin-bottom-small' for='searchTerm'>
               {{t 'worship-plugin.modal.fields.name'}}
             </AuLabel>
             <AuNativeInput
@@ -46,7 +47,9 @@
         {{#if this.servicesResource.value.totalCount}}
           {{#let
             (pagination
-              page=this.pageNumber pageSize=this.pageSize count=this.servicesResource.value.totalCount
+              page=this.pageNumber
+              pageSize=this.pageSize
+              count=this.servicesResource.value.totalCount
             )
             as |pg|
           }}
@@ -61,7 +64,7 @@
             />
           {{/let}}
         {{/if}}
-      
+
       </mc.content>
     </AuMainContainer>
   </modal.Body>
