@@ -48,14 +48,14 @@ import {
 import {
   Address,
   constructLambert72WKTString,
-  type Lambert72Coordinates,
+  type GeoPos,
   parseLambert72GMLString,
   parseLambert72WKTString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 
 const rdfaAware = true;
 
-const constructLocationNode = (location: Lambert72Coordinates) => {
+const constructLocationNode = (location: GeoPos) => {
   return span(
     {
       property: ADRES('positie').full,

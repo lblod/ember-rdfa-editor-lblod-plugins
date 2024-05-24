@@ -1,3 +1,4 @@
+import proj4 from 'proj4';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 type GeoCoordinate = {
@@ -83,7 +84,8 @@ type AddressDetailResult = {
   busnummer: string;
   adresPositie: {
     geometrie: {
-      gml: string; // coordinates in Lambert72
+      /** GML encoded coordinates using Lambert72 CRS */
+      gml: string;
     };
   };
 };
@@ -95,7 +97,7 @@ export class Address {
   declare municipality: string;
   declare housenumber?: string;
   declare busnumber?: string;
-  declare location: Lambert72Coordinates;
+  declare location: GeoPos;
   constructor(
     args: Pick<
       Address,
@@ -244,8 +246,14 @@ export async function resolveStreet(info: StreetInfo) {
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
         location: {
-          x: streetinfo.Location.X_Lambert72,
-          y: streetinfo.Location.Y_Lambert72,
+          global: {
+            lng: streetinfo.Location.Lon_WGS84,
+            lat: streetinfo.Location.Lat_WGS84,
+          },
+          lambert: {
+            x: streetinfo.Location.X_Lambert72,
+            y: streetinfo.Location.Y_Lambert72,
+          },
         },
       });
     } else {
@@ -335,20 +343,50 @@ export async function searchAddress(
   }
 }
 
+// This definition taken from the OGP Geomatics Committee reference DB: https://epsg.io/31370
+const CRS_LAMBERT_72 =
+  '+proj=lcc +lat_0=90 +lon_0=4.36748666666667 +lat_1=51.1666672333333 +lat_2=49.8333339 +x_0=150000.013 +y_0=5400088.438 +ellps=intl +towgs84=-106.8686,52.2978,-103.7239,-0.3366,0.457,-1.8422,-1.2747 +units=m +no_defs +type=crs';
+const CRS_WGS84 = 'WGS84';
+export function convertLambertCoordsToWGS84(lambert: Lambert72Coordinates) {
+  const [lng, lat] = proj4(CRS_LAMBERT_72, CRS_WGS84, [lambert.x, lambert.y]);
+  return { lat, lng };
+}
+export function convertWGS84CoordsToLambert(wgs84: globalCoordinates) {
+  const [x, y] = proj4(CRS_WGS84, CRS_LAMBERT_72, [wgs84.lng, wgs84.lat]);
+  return { x, y };
+}
+
+/** Representation of a location in the `WGS84` (globally applicable) Coordinate Reference System */
+export type globalCoordinates = {
+  lat: number;
+  lng: number;
+};
 /** Representation of a location in the `BD72 / Belgian Lambert 72` Coordinate Reference System */
 export type Lambert72Coordinates = {
   x: number;
   y: number;
 };
 
-export function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
+/**
+ * Geographical position in both reference systems used in this plugin.
+ * Most mapping software assumes coordinates use the WGS84 CRS. The OSLO RDFa model as well as some
+ * of the APIs we use, use the Belgium-specific Lambert 72 CRS. To avoid the difficulties in
+ * supporting map positions and tiles following this CRS, we convert instead to WGS84, or use it
+ * directly when returned from an API.
+ */
+export type GeoPos = {
+  global: globalCoordinates;
+  lambert: Lambert72Coordinates;
+};
+
+export function constructLambert72GMLString({ lambert: { x, y } }: GeoPos) {
   return `<gml:Point srsName="https://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
 }
 /**
  * Use a regex to parse a simple point as a GML string and return the coordinates.
  * Throws an error if the format or CRS are not recognised
  */
-export function parseLambert72GMLString(gml: string): Lambert72Coordinates {
+export function parseLambert72GMLString(gml: string): GeoPos {
   // Parsers for GML exist in other libraries, but mostly within much larger projects (e.g.
   // openlayers) in a way that is hard to extract due to the potential complexity of the geometries
   // which can be represented. Since we handle only simple points, it's much less complex to just
@@ -363,20 +401,23 @@ export function parseLambert72GMLString(gml: string): Lambert72Coordinates {
       message: 'An error occured when querying the address register',
     });
   }
-  return { x: Number(x), y: Number(y) };
+  const lambert = { x: Number(x), y: Number(y) };
+  const global = convertLambertCoordsToWGS84(lambert);
+
+  return { global, lambert };
 }
 /**
  * Construct a string to represent a geolocation, using the Lambert 72 reference system according to
  * [the GeoSPARQL spec]{@link https://docs.ogc.org/is/22-047r1/22-047r1.html#10-8-1-%C2%A0-well-known-text}
  */
-export function constructLambert72WKTString({ x, y }: Lambert72Coordinates) {
+export function constructLambert72WKTString({ lambert: { x, y } }: GeoPos) {
   return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
 }
 /**
  * Use a regex to parse a simple point as a WKT string and return the coordinates.
  * Throws an error if the format or CRS are not recognised
  */
-export function parseLambert72WKTString(gml: string): Lambert72Coordinates {
+export function parseLambert72WKTString(gml: string): GeoPos {
   // Parsers for WKT exist in other libraries, but either within much larger projects (e.g.
   // openlayers) in a way that is hard to extract due to the potential complexity of the geometries
   // which can be represented or within untyped libraries (e.g. wicket). Since we handle only simple
@@ -391,5 +432,8 @@ export function parseLambert72WKTString(gml: string): Lambert72Coordinates {
       message: 'An error occured when querying the address register',
     });
   }
-  return { x: Number(x), y: Number(y) };
+  const lambert = { x: Number(x), y: Number(y) };
+  const global = convertLambertCoordsToWGS84(lambert);
+
+  return { global, lambert };
 }
