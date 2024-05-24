@@ -6,6 +6,10 @@ common:
     error-title: Error while loading results
     error-intro: 'An error occurred while loading results'
     error-outro: In case this problem keeps occurring, please contact
+  sort:
+    sort: Sort
+    asc: Sort ascending
+    desc: Sort descending
 
 article-structure-plugin:
   insert:
@@ -403,10 +407,20 @@ worship-plugin:
     fields:
       name: Name
       admin-unit: Administrative Unit
-    sort:
-      sort: Sort
-      asc: Sort ascending
-      desc: Sort descending
+
+lmb-plugin:
+  insert:
+    title: Insert mandatee from LMB service
+  modal:
+    title: Choose a mandatee
+    insert: Insert
+    search:
+      title: Filter on
+    fields:
+      name: Name
+      status: Status
+      fractie: Fractie
+      role: Role
 
 location-plugin:
   modal:

@@ -1,0 +1,58 @@
+<AuTable>
+  <:header>
+    <tr class='au-c-data-table__header-title'>
+      <th>
+        <Common::Sort::SortableTableHeader
+          @field='fullName'
+          @label={{t 'lmb-plugin.modal.fields.name'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th>
+        <Common::Sort::SortableTableHeader
+          @field='status'
+          @label={{t 'lmb-plugin.modal.fields.status'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th>
+        <Common::Sort::SortableTableHeader
+          @field='fractie'
+          @label={{t 'lmb-plugin.modal.fields.fractie'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th>
+        <Common::Sort::SortableTableHeader
+          @field='role'
+          @label={{t 'lmb-plugin.modal.fields.role'}}
+          @sort={{@sort}}
+          @setSort={{@setSort}}
+        />
+      </th>
+      <th />
+    </tr>
+  </:header>
+  <:body>
+    {{#unless (or @services.isRunning @error)}}
+      {{#if @services.value.totalCount}}
+        {{#each @services.value.results as |row|}}
+          <tr>
+            <td>{{row.fullName}}</td>
+            <td>{{row.status}}</td>
+            <td>{{row.fractie}}</td>
+            <td>{{row.role}}</td>
+            <td class='au-u-text-center'>
+              <AuButton {{on 'click' (fn @insert row)}}>
+                {{t 'lmb-plugin.modal.insert'}}
+              </AuButton>
+            </td>
+          </tr>
+        {{/each}}
+      {{/if}}
+    {{/unless}}
+  </:body>
+</AuTable>

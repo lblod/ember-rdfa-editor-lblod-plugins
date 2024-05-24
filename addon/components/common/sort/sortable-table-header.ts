@@ -3,19 +3,16 @@ import Component from '@glimmer/component';
 import { NavUpIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-up';
 import { NavDownIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-down';
 import { NavUpDownIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-up-down';
-import {
-  SearchSort,
-  WorshipService,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin/utils/fetchWorshipServices';
 
+type SearchSort = [string, 'ASC' | 'DESC'] | false;
 interface Args {
   label: string;
-  field: keyof WorshipService;
+  field: string;
   sort: SearchSort;
   setSort: (sort: SearchSort) => void;
 }
 
-export default class SnippetInsertComponent extends Component<Args> {
+export default class SortableTableHeaderComponent extends Component<Args> {
   NavUpIcon = NavUpIcon;
   NavDownIcon = NavDownIcon;
   NavUpDownIcon = NavUpDownIcon;
