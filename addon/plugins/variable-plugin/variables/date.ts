@@ -26,7 +26,7 @@ import {
   isVariable,
   parseLabel,
   parseVariableType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/attribute-parsers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { formatDate, validateDateFormat } from '../utils/date-helpers';

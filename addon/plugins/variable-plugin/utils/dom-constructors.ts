@@ -1,13 +1,10 @@
 // This file contains helper functions used to create DOMOutputSpec objects
-
+import { Attrs, DOMOutputSpec } from '@lblod/ember-rdfa-editor';
 import {
   DCT,
   EXT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
-
-type Attributes = Record<string, unknown>;
-type Children = unknown[];
 
 /**
  * Constructs a variable mapping span based on a mapping resource.
@@ -15,8 +12,8 @@ type Children = unknown[];
  */
 export const mappingSpan = (
   mapping: string,
-  attributes: Attributes,
-  ...children: Children
+  attributes: Attrs,
+  ...children: (DOMOutputSpec | 0)[]
 ) => {
   return span(
     {
@@ -50,17 +47,4 @@ export const sourceSpan = (variableSource: string) => {
     property: DCT('source').prefixed,
     resource: variableSource,
   });
-};
-
-/**
- * Constructs a variable content span. Accepts optional additional attributes and a series of children.
- */
-export const contentSpan = (attributes: Attributes, ...children: Children) => {
-  return span(
-    {
-      property: EXT('content').prefixed,
-      ...attributes,
-    },
-    ...children,
-  );
 };

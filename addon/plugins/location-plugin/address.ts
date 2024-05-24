@@ -37,7 +37,7 @@ import {
   contentSpan,
   span,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
-import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/nodeview';
+import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import {
@@ -51,7 +51,7 @@ import {
   type Lambert72Coordinates,
   parseLambert72GMLString,
   parseLambert72WKTString,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 
 const rdfaAware = true;
 

@@ -1,4 +1,5 @@
 common:
+  insert: Insert
   search:
     loading: Loading…
     no-results: No results found
@@ -251,16 +252,6 @@ table-of-contents-plugin:
   title: Table of Contents
   toggle: Show Table of Contents
 
-address-plugin:
-  insert:
-    address: Insert address
-  button:
-    insert: Insert address
-    back: Back
-  search:
-    cta: 'Type to search'
-    no-match: 'No results'
-
 dummy:
   validation-card:
     title: Document Validation
@@ -416,3 +407,8 @@ worship-plugin:
       sort: Sort
       asc: Sort ascending
       desc: Sort descending
+
+location-plugin:
+  label: Label
+  labelPlaceholder: Type something...
+  default-label: location

@@ -128,9 +128,7 @@
                   @controller={{this.controller}}
                   @templates={{this.standardTemplates}}
                 />
-                <VariablePlugin::Address::Insert
-                  @controller={{this.controller}}
-                />
+                <LocationPlugin::Insert @controller={{this.controller}} />
                 <VariablePlugin::Date::Insert @controller={{this.controller}} />
                 <WorshipPlugin::Insert
                   @controller={{this.controller}}
@@ -150,7 +148,7 @@
                 @config={{this.config.citation}}
               />
               <ImportSnippetPlugin::Card @controller={{this.controller}} />
-              <VariablePlugin::Address::Edit
+              <LocationPlugin::Edit
                 @controller={{this.controller}}
                 @defaultMunicipality='Gent'
               />
