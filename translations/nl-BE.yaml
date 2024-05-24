@@ -430,4 +430,4 @@ lmb-plugin:
       name: Naam
       status: Status
       fractie: Fractie
-      role: Role
+      role: Rol
