@@ -25,7 +25,7 @@ interface Signature {
   Element: HTMLLIElement;
 }
 
-export default class InsertAddressComponent extends Component<Signature> {
+export default class LocationPluginInsertComponent extends Component<Signature> {
   @service declare intl: IntlService;
   @tracked modalOpen = false;
   @tracked addressToInsert?: Address;
@@ -127,7 +127,6 @@ export default class InsertAddressComponent extends Component<Signature> {
     >
       <modal.Body>
         <Edit
-          @controller={{@controller}}
           @selectedAddressVariable={{this.selectedAddressVariable}}
           @setAddressToInsert={{this.setAddressToInsert}}
           @setIsLoading={{this.setIsLoading}}

@@ -17,7 +17,6 @@ import AuAlert, {
 } from '@appuniversum/ember-appuniversum/components/au-alert';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CheckIcon } from '@appuniversum/ember-appuniversum/components/icons/check';
-import { SayController } from '@lblod/ember-rdfa-editor';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-native-input';
 import {
@@ -37,19 +36,18 @@ interface Message {
 }
 
 type Args = {
-  controller: SayController;
   defaultMunicipality?: string;
   selectedAddressVariable: ResolvedPNode | null;
   setAddressToInsert: (address: Address | undefined) => void;
   setIsLoading?: (isLoading: boolean) => void;
 };
 
-export default class AddressEditComponent extends Component<Args> {
+export default class LocationPluginEditComponent extends Component<Args> {
   @service declare intl: IntlService;
 
   @trackedReset({
     memo: 'currentAddress',
-    update(component: AddressEditComponent) {
+    update(component: LocationPluginEditComponent) {
       const { currentMunicipality } = component;
       return currentMunicipality
         ? currentMunicipality
@@ -60,7 +58,7 @@ export default class AddressEditComponent extends Component<Args> {
 
   @trackedReset({
     memo: 'currentAddress',
-    update(component: AddressEditComponent) {
+    update(component: LocationPluginEditComponent) {
       return component.currentStreetName;
     },
   })
@@ -68,7 +66,7 @@ export default class AddressEditComponent extends Component<Args> {
 
   @trackedReset({
     memo: 'currentAddress',
-    update(component: AddressEditComponent) {
+    update(component: LocationPluginEditComponent) {
       return component.currentHousenumber;
     },
   })
@@ -76,7 +74,7 @@ export default class AddressEditComponent extends Component<Args> {
 
   @trackedReset({
     memo: 'currentAddress',
-    update(component: AddressEditComponent) {
+    update(component: LocationPluginEditComponent) {
       return component.currentBusnumber;
     },
   })
@@ -188,6 +186,16 @@ export default class AddressEditComponent extends Component<Args> {
   resolveAddressTask = restartableTask(async () => {
     const { newStreetName, newMunicipality, newHousenumber, newBusnumber } =
       this;
+    if (
+      this.currentAddress &&
+      newStreetName === this.currentAddress.street &&
+      newMunicipality === this.currentAddress.municipality &&
+      newHousenumber === this.currentAddress.housenumber &&
+      newBusnumber === this.currentAddress.busnumber
+    ) {
+      // No need to re-search, nothing has changed
+      return;
+    }
     if (newMunicipality && newStreetName) {
       this.args.setIsLoading?.(true);
       this.args.setAddressToInsert(undefined);
@@ -222,6 +230,11 @@ export default class AddressEditComponent extends Component<Args> {
             return address;
           }
         }
+      } catch (err) {
+        if (err instanceof AddressError && err.alternativeAddress) {
+          this.args.setAddressToInsert(err.alternativeAddress);
+        }
+        throw err;
       } finally {
         this.args.setIsLoading?.(false);
       }
@@ -265,10 +278,6 @@ export default class AddressEditComponent extends Component<Args> {
   @action
   updateBusnumber(event: InputEvent) {
     this.newBusnumber = (event.target as HTMLInputElement).value;
-  }
-
-  get controller() {
-    return this.args.controller;
   }
 
   searchMunicipality = restartableTask(async (term: string) => {
