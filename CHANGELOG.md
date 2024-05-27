@@ -1,5 +1,27 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 19.2.0
+
+### Minor Changes
+
+- [#427](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/427) [`0de131824462d4297190bc25f8916a70b358e46a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0de131824462d4297190bc25f8916a70b358e46a) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Added lmb-plugin to add LMB mandatees to the document
+
+- [#429](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/429) [`db575dea5da9b71c645c5ed5e091a307bb075ba4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/db575dea5da9b71c645c5ed5e091a307bb075ba4) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4693: Insert LPDC
+
+- [#431](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/431) [`f3bfdd1caff44d4011fb0aaf7edeef5da7510a35`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f3bfdd1caff44d4011fb0aaf7edeef5da7510a35) Thanks [@piemonkey](https://github.com/piemonkey)! - Add location plugin
+
+- [#430](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/430) [`e9a92cbf8548bb782c819c95bce44486ce9633eb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e9a92cbf8548bb782c819c95bce44486ce9633eb) Thanks [@piemonkey](https://github.com/piemonkey)! - Use OSLO model for addresses in variable-plugin
+
+- [#432](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/432) [`81f82bee3cc2f269f9a92031167000697d72365d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/81f82bee3cc2f269f9a92031167000697d72365d) Thanks [@piemonkey](https://github.com/piemonkey)! - Move location-plugin address search to a modal
+
+### Patch Changes
+
+- [#428](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/428) [`c21ac34b0fd304ad9126243f9b693d4ce6107c4b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c21ac34b0fd304ad9126243f9b693d4ce6107c4b) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Styling fixes
+
+- [#430](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/430) [`b19acda5b1b31bfb289c0f0c0a16e43712ca376f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b19acda5b1b31bfb289c0f0c0a16e43712ca376f) Thanks [@piemonkey](https://github.com/piemonkey)! - Change format for geodata used by the address plugin to WKT instead of GML to match the OSLO spec
+
+- [#430](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/430) [`def6922e0037dbea6857fc309ac4fdae07fffca6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/def6922e0037dbea6857fc309ac4fdae07fffca6) Thanks [@piemonkey](https://github.com/piemonkey)! - Correct typo in adres: prefix
+
 ## 19.1.0
 
 ### Minor Changes
