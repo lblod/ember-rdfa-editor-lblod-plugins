@@ -431,3 +431,16 @@ location-plugin:
   label: Label
   labelPlaceholder: Type iets...
   default-label: locatie
+
+lpdc-plugin:
+  insert:
+    title: LPDC invoegen
+  modal:
+    title: LPDC invoegen
+    insert: Invoegen
+    close: Sluiten
+  table:
+    header:
+      name: Naam
+  search:
+    placeholder: LPDC-naam/beschrijving

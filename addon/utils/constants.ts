@@ -41,3 +41,7 @@ export const MANDAAT = namespace(
 );
 export const FOAF = namespace('http://xmlns.com/foaf/0.1/', 'foaf');
 export const LOCN = namespace('http://www.w3.org/ns/locn#', 'locn');
+export const SRO = namespace(
+  'https://data.vlaanderen.be/ns/slimmeraadpleegomgeving#',
+  'sro',
+);

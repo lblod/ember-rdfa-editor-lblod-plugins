@@ -307,6 +307,10 @@ export default class BesluitSampleController extends Controller {
       lmb: {
         endpoint: 'http://localhost/vendor-proxy/query',
       },
+      lpdc: {
+        // Needs to point at the same port as the ember app
+        endpoint: 'http://localhost/lpdc-service',
+      },
     };
   }
 

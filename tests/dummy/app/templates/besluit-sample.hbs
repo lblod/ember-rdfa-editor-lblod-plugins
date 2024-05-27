@@ -141,6 +141,10 @@
                   @controller={{this.controller}}
                   @config={{this.config.lmb}}
                 />
+                <LpdcPlugin::LpdcInsert
+                  @controller={{this.controller}}
+                  @config={{this.config.lpdc}}
+                />
               </Sidebar.Collapsible>
               <ArticleStructurePlugin::StructureCard
                 @controller={{this.controller}}
@@ -167,17 +171,15 @@
                 @controller={{this.controller}}
                 @options={{this.locationOptions}}
               />
-              {{#if (and this.activeNode this.editableNodes)}}
-                <this.RdfaEditor
-                  @node={{this.activeNode}}
-                  @controller={{this.controller}}
-                />
-                <this.DebugInfo @node={{this.activeNode}} />
-                <this.AttributeEditor
-                  @node={{this.activeNode}}
-                  @controller={{this.controller}}
-                />
-              {{/if}}
+              <this.RdfaEditor
+                @node={{this.activeNode}}
+                @controller={{this.controller}}
+              />
+              <this.DebugInfo @node={{this.activeNode}} />
+              <this.AttributeEditor
+                @node={{this.activeNode}}
+                @controller={{this.controller}}
+              />
             </Sidebar>
           {{/if}}
         </:aside>

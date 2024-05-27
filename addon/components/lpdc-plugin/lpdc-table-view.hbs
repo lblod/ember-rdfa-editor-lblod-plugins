@@ -1,0 +1,53 @@
+{{! @glint-nocheck: not typesafe yet }}
+<div class='say-snippet-lists-table'>
+  {{#let
+    (t 'lpdc-plugin.table.header.name')
+    (t 'lpdc-plugin.search.placeholder')
+    (t 'lpdc-plugin.modal.insert')
+    as |name search insert|
+  }}
+    <AuDataTable
+      @content={{this.lpdc}}
+      @isLoading={{@isLoading}}
+      @noDataMessage={{t 'common.search.no-results'}}
+      @sort={{@sort}}
+      @page={{@pageNumber}}
+      @size={{25}}
+      as |t|
+    >
+      <t.menu as |menu|>
+        <menu.general>
+          <AuToolbar class='au-o-box' as |Group|>
+            <Group />
+            <Group class='au-c-toolbar__group--center'>
+              <AuDataTableTextSearch
+                @wait={{500}}
+                @filter={{@nameFilter}}
+                @placeholder={{search}}
+              />
+            </Group>
+          </AuToolbar>
+        </menu.general>
+      </t.menu>
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable
+            @field='name'
+            @label={{name}}
+            @currentSorting={{@sort}}
+            @class='data-table__header-title'
+          />
+          <th class='snippet-list-table-select-column'>{{insert}}</th>
+        </c.header>
+        <c.body as |row|>
+          <td>{{row.name}}</td>
+          <td class='snippet-list-table-select-column'>
+            <AuButton {{on 'click' (fn @onLpdcInsert row)}}>
+              {{insert}}
+            </AuButton>
+          </td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  {{/let}}
+</div>

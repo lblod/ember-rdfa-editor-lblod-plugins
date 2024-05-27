@@ -430,3 +430,16 @@ location-plugin:
   label: Label
   labelPlaceholder: Type something...
   default-label: location
+
+lpdc-plugin:
+  insert:
+    title: Insert LPDC
+  modal:
+    title: Insert LPDC
+    insert: Insert
+    close: Close
+  table:
+    header:
+      name: Name
+  search:
+    placeholder: LPDC Name/Description
