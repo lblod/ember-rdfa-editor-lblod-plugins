@@ -119,7 +119,10 @@ export default class LocationPluginEditComponent extends Component<Args> {
       return {
         skin: 'warning',
         icon: AlertTriangleIcon,
-        title: this.intl.t(error.translation, { status: error.status }),
+        title: this.intl.t(error.translation, {
+          status: error.status,
+          coords: error.coords,
+        }),
         body: this.intl.t('editor-plugins.address.edit.errors.contact', {
           htmlSafe: true,
           email: 'gelinktnotuleren@vlaanderen.be',
@@ -198,7 +201,6 @@ export default class LocationPluginEditComponent extends Component<Args> {
     }
     if (newMunicipality && newStreetName) {
       this.args.setIsLoading?.(true);
-      this.args.setAddressToInsert(undefined);
       try {
         if (
           this.currentAddress?.sameAs({
@@ -208,7 +210,6 @@ export default class LocationPluginEditComponent extends Component<Args> {
             housenumber: newHousenumber,
           })
         ) {
-          this.args.setAddressToInsert(this.currentAddress);
           return this.currentAddress;
         } else {
           await timeout(200);
@@ -233,6 +234,8 @@ export default class LocationPluginEditComponent extends Component<Args> {
       } catch (err) {
         if (err instanceof AddressError && err.alternativeAddress) {
           this.args.setAddressToInsert(err.alternativeAddress);
+        } else {
+          this.args.setAddressToInsert(undefined);
         }
         throw err;
       } finally {

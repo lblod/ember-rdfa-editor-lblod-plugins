@@ -16,6 +16,7 @@ import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { replaceSelectionWithAddress } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
 import Edit from './edit';
+import LocationMap from './map';
 
 interface Signature {
   Args: {
@@ -126,6 +127,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       as |modal|
     >
       <modal.Body>
+        <LocationMap @address={{this.addressToInsert}} />
         <Edit
           @selectedAddressVariable={{this.selectedAddressVariable}}
           @setAddressToInsert={{this.setAddressToInsert}}

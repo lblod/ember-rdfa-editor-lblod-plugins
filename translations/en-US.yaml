@@ -386,6 +386,7 @@ editor-plugins:
         address-not-found-short: Address not found
         alternative-address: 'Provide another input or proceed with the following address: {address}'
         http-error: 'Something went wrong while resolving this address, status code: {status}.'
+        projection-error: 'Unable to convert location coordinates: {coords}'
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Insert address

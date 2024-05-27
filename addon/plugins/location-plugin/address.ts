@@ -64,7 +64,7 @@ const constructLocationNode = (location: GeoPos) => {
     span({
       property: GEOSPARQL('asWKT').full,
       datatype: GEOSPARQL('wktLiteral').full,
-      content: constructLambert72WKTString(location),
+      content: constructLambert72WKTString(location.lambert),
     }),
   );
 };

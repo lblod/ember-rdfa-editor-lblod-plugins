@@ -1,6 +1,20 @@
-import proj4 from 'proj4';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import memoize from '@lblod/ember-rdfa-editor-lblod-plugins/utils/memoize';
 
+type Identificator = {
+  id: string;
+  naamruimte: string;
+  objectId: string;
+  versieId: string;
+};
+type GeographicalName = {
+  spelling: string;
+  taal: string;
+};
+type DetailLink = {
+  objectId: string;
+  detail: string;
+};
 type GeoCoordinate = {
   Lat_WGS84: number;
   Lon_WGS84: number;
@@ -34,11 +48,11 @@ type StreetSearchResult = {
   adresMatches: [
     {
       gemeente: {
-        gemeentenaam: { geografischeNaam: { spelling: string } };
+        gemeentenaam: { geografischeNaam: GeographicalName };
       };
       straatnaam?: {
         straatnaam: {
-          geografischeNaam: { spelling: string };
+          geografischeNaam: GeographicalName;
         };
       };
     },
@@ -47,10 +61,11 @@ type StreetSearchResult = {
 
 type AddressSearchResult = {
   adressen: {
-    identificator: {
-      id: string;
-    };
+    identificator: Identificator;
     detail: string;
+    huisnummer?: string;
+    volledigAdres: GeographicalName;
+    adresStatus: string;
   }[];
 };
 
@@ -58,35 +73,30 @@ type AddressSearchResult = {
  * {@link https://docs.basisregisters.vlaanderen.be/docs/api-documentation.html#operation/GetAddressV2}
  */
 type AddressDetailResult = {
-  identificator: {
-    id: string;
-  };
-  gemeente: {
+  identificator: Identificator;
+  gemeente: DetailLink & {
     gemeentenaam: {
-      geografischeNaam: {
-        spelling: string;
-        taal: string;
-      };
+      geografischeNaam: GeographicalName;
     };
   };
-  postinfo: {
-    objectId: string;
-  };
-  straatnaam: {
+  postinfo: DetailLink;
+  straatnaam: DetailLink & {
     straatnaam: {
-      geografischeNaam: {
-        spelling: string;
-        taal: string;
-      };
+      geografischeNaam: GeographicalName;
     };
   };
   huisnummer: string;
-  busnummer: string;
+  busnummer?: string;
+  volledigAdres: GeographicalName;
+  officieelToegekend: boolean;
   adresPositie: {
     geometrie: {
+      type: 'Point' | string;
       /** GML encoded coordinates using Lambert72 CRS */
       gml: string;
     };
+    positieGeometrieMethode: string;
+    positieSpecificatie: string;
   };
 };
 
@@ -145,19 +155,22 @@ export class Address {
 export class AddressError extends Error {
   translation: string;
   status?: number;
+  coords?: string;
   alternativeAddress?: Address;
   constructor({
     message,
     translation,
     status,
+    coords,
     alternativeAddress,
   }: Pick<
     AddressError,
-    'message' | 'translation' | 'status' | 'alternativeAddress'
+    'message' | 'translation' | 'status' | 'alternativeAddress' | 'coords'
   >) {
     super(message);
     this.translation = translation;
     this.status = status;
+    this.coords = coords;
     this.alternativeAddress = alternativeAddress;
   }
 }
@@ -284,6 +297,9 @@ export async function resolveAddress(info: AddressInfo) {
     const response = await fetch(addressDetailURL);
     if (response.ok) {
       const result = (await response.json()) as AddressDetailResult;
+      const { lambert } = parseLambert72GMLString(
+        result.adresPositie.geometrie.gml,
+      );
       return new Address({
         street: result.straatnaam.straatnaam.geografischeNaam.spelling,
         housenumber: result.huisnummer,
@@ -291,7 +307,10 @@ export async function resolveAddress(info: AddressInfo) {
         zipcode: result.postinfo.objectId,
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
         id: result.identificator.id,
-        location: parseLambert72GMLString(result.adresPositie.geometrie.gml),
+        location: {
+          lambert,
+          global: await convertLambertCoordsToWGS84(lambert),
+        },
       });
     } else {
       throw new AddressError({
@@ -343,21 +362,49 @@ export async function searchAddress(
   }
 }
 
-// This definition taken from the OGP Geomatics Committee reference DB: https://epsg.io/31370
-const CRS_LAMBERT_72 =
-  '+proj=lcc +lat_0=90 +lon_0=4.36748666666667 +lat_1=51.1666672333333 +lat_2=49.8333339 +x_0=150000.013 +y_0=5400088.438 +ellps=intl +towgs84=-106.8686,52.2978,-103.7239,-0.3366,0.457,-1.8422,-1.2747 +units=m +no_defs +type=crs';
-const CRS_WGS84 = 'WGS84';
-export function convertLambertCoordsToWGS84(lambert: Lambert72Coordinates) {
-  const [lng, lat] = proj4(CRS_LAMBERT_72, CRS_WGS84, [lambert.x, lambert.y]);
-  return { lat, lng };
-}
-export function convertWGS84CoordsToLambert(wgs84: globalCoordinates) {
-  const [x, y] = proj4(CRS_WGS84, CRS_LAMBERT_72, [wgs84.lng, wgs84.lat]);
-  return { x, y };
-}
+/**
+ * Use the epsg.io API to convert between CRSs. We could use a library such as proj4js to convert
+ * locally, but the results do not agree with those given by this API or the proj (C++) library.
+ * This is likely a problem with the WKT2 representation of the Lambert72 projection on epsg.io, but
+ * while that is investigated, just use the API...
+ */
+export const convertLambertCoordsToWGS84 = memoize(
+  async (lambert: Lambert72Coordinates): Promise<GlobalCoordinates> => {
+    const res = await fetch(
+      `https://epsg.io/trans?x=${lambert.x}&y=${lambert.y}&z=0&s_srs=31370&t_srs=4326`,
+    );
+    if (!res.ok) {
+      throw new AddressError({
+        translation: 'editor-plugins.address.edit.errors.projection-error',
+        message: `Unable to convert location coordinates: ${JSON.stringify(lambert)}`,
+        coords: JSON.stringify(lambert),
+      });
+    }
+    const { x: lng, y: lat } = await res.json();
+    return { lat: Number(lat), lng: Number(lng) };
+  },
+);
+/**
+ * Use the epsg.io API to convert between CRSs. We could use a library such as proj4js to convert
+ * locally, but the results do not agree with those given by this API or the proj (C++) library.
+ * This is likely a problem with the WKT2 representation of the Lambert72 projection on epsg.io, but
+ * while that is investigated, just use the API...
+ */
+export const convertWGS84CoordsToLambert = memoize(
+  async (wgs84: GlobalCoordinates): Promise<Lambert72Coordinates> => {
+    const res = await fetch(
+      `https://epsg.io/trans?x=${wgs84.lng}&y=${wgs84.lat}&z=0&s_srs=4326&t_srs=31370`,
+    );
+    if (!res.ok) {
+      throw new Error('Unable to convert');
+    }
+    const { x: lng, y: lat } = await res.json();
+    return { y: Number(lat), x: Number(lng) };
+  },
+);
 
 /** Representation of a location in the `WGS84` (globally applicable) Coordinate Reference System */
-export type globalCoordinates = {
+export type GlobalCoordinates = {
   lat: number;
   lng: number;
 };
@@ -375,11 +422,11 @@ export type Lambert72Coordinates = {
  * directly when returned from an API.
  */
 export type GeoPos = {
-  global: globalCoordinates;
+  global?: GlobalCoordinates;
   lambert: Lambert72Coordinates;
 };
 
-export function constructLambert72GMLString({ lambert: { x, y } }: GeoPos) {
+export function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
   return `<gml:Point srsName="https://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
 }
 /**
@@ -402,15 +449,14 @@ export function parseLambert72GMLString(gml: string): GeoPos {
     });
   }
   const lambert = { x: Number(x), y: Number(y) };
-  const global = convertLambertCoordsToWGS84(lambert);
 
-  return { global, lambert };
+  return { lambert };
 }
 /**
  * Construct a string to represent a geolocation, using the Lambert 72 reference system according to
  * [the GeoSPARQL spec]{@link https://docs.ogc.org/is/22-047r1/22-047r1.html#10-8-1-%C2%A0-well-known-text}
  */
-export function constructLambert72WKTString({ lambert: { x, y } }: GeoPos) {
+export function constructLambert72WKTString({ x, y }: Lambert72Coordinates) {
   return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
 }
 /**
@@ -433,7 +479,6 @@ export function parseLambert72WKTString(gml: string): GeoPos {
     });
   }
   const lambert = { x: Number(x), y: Number(y) };
-  const global = convertLambertCoordsToWGS84(lambert);
 
-  return { global, lambert };
+  return { lambert };
 }

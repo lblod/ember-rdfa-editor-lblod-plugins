@@ -388,6 +388,7 @@ editor-plugins:
         address-not-found-short: Adres niet gevonden
         alternative-address: 'Geef een ander adres op of ga verder met het volgende adres: {address}'
         http-error: 'Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}.'
+        projection-error: 'Kan locatiecoördinaten niet converteren: {coords}'
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Voeg adres in
