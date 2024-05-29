@@ -68,17 +68,6 @@ import {
   CitationPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
-  validation,
-  ValidationReport,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
-import {
-  insertArticleContainer,
-  insertDescription,
-  insertMotivation,
-  insertTitle,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
-import { atLeastOneArticleContainer } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/validation-rules';
-import {
   codelist,
   number,
   text_variable,
@@ -126,53 +115,6 @@ export default class BesluitSampleController extends Controller {
   @tracked citationPlugin = citationPlugin(
     this.config.citation as CitationPluginConfig,
   );
-  @tracked validationPlugin = validation((schema: Schema) => ({
-    shapes: [
-      atLeastOneArticleContainer(schema),
-      {
-        name: 'exactly-one-title',
-        focusNodeType: schema.nodes.besluit,
-        path: ['besluit_title'],
-        message: 'Document must contain exactly one title block.',
-        constraints: {
-          minCount: 1,
-          maxCount: 1,
-        },
-      },
-      {
-        name: 'exactly-one-description',
-        focusNodeType: schema.nodes.besluit,
-        path: ['description'],
-        message: 'Document must contain exactly one description block.',
-        constraints: {
-          minCount: 1,
-          maxCount: 1,
-        },
-      },
-      {
-        name: 'max-one-motivation',
-        focusNodeType: schema.nodes.besluit,
-        path: ['motivering'],
-        message: 'Document may not contain more than one motivation block.',
-        constraints: {
-          maxCount: 1,
-        },
-      },
-    ],
-  }));
-
-  get report(): ValidationReport {
-    if (!this.controller) {
-      return { conforms: true };
-    }
-    const validationState = this.validationPlugin.getState(
-      this.controller.mainEditorState,
-    );
-    if (!validationState) {
-      return { conforms: true };
-    }
-    return validationState.report;
-  }
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -344,7 +286,6 @@ export default class BesluitSampleController extends Controller {
     tableKeymap,
     linkPasteHandler(this.schema.nodes.link),
     this.citationPlugin,
-    this.validationPlugin,
     createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
       shouldShowInvisibles: false,
     }),
@@ -380,74 +321,6 @@ export default class BesluitSampleController extends Controller {
     controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
-  }
-
-  get canInsertDescription() {
-    return this.controller?.checkCommand(
-      insertDescription({
-        placeholderText: 'Geef korte beschrijving op',
-        validateShapes: new Set(['exactly-one-description']),
-      }),
-    );
-  }
-
-  @action
-  insertDescription() {
-    this.controller?.doCommand(
-      insertDescription({ placeholderText: 'Geef korte beschrijving op' }),
-    );
-    this.controller?.focus();
-  }
-
-  get canInsertTitle() {
-    return this.controller?.checkCommand(
-      insertTitle({
-        placeholderText: 'Geef titel besluit op',
-        validateShapes: new Set(['exactly-one-title']),
-      }),
-    );
-  }
-
-  @action
-  insertTitle() {
-    this.controller?.doCommand(
-      insertTitle({
-        placeholderText: 'Geef titel besluit op',
-        validateShapes: new Set(['exactly-one-title']),
-      }),
-    );
-    this.controller?.focus();
-  }
-
-  get canInsertMotivation() {
-    return this.controller?.checkCommand(
-      insertMotivation({
-        intl: this.intl,
-        validateShapes: new Set(['max-one-motivation']),
-      }),
-    );
-  }
-
-  @action
-  insertMotivation() {
-    this.controller?.doCommand(
-      insertMotivation({
-        intl: this.intl,
-      }),
-    );
-    this.controller?.focus();
-  }
-
-  get canInsertContainer() {
-    return this.controller?.checkCommand(
-      insertArticleContainer({ intl: this.intl }),
-    );
-  }
-
-  @action
-  insertArticleContainer() {
-    this.controller?.doCommand(insertArticleContainer({ intl: this.intl }));
-    this.controller?.focus();
   }
 
   get standardTemplates() {
