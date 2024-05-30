@@ -1,0 +1,16 @@
+<div class='say-structure' {{did-update this.onAttrsUpdate this.titleAttr}}>
+  <div class='say-structure__header' contenteditable='false'>
+
+    <h4>Chapter I.</h4>
+    <this.ProseMirrorEditor
+      @schema={{this.titleSchema}}
+      @inline={{true}}
+      @content={{this.titleContent}}
+      @onUpdate={{this.onTitleUpdate}}
+      class='say-structure__title'
+    />
+  </div>
+  <div class='say-structure__content {{if this.isEmpty "say-empty" ""}}'>
+    {{yield}}
+  </div>
+</div>

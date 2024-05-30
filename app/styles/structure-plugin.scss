@@ -1,0 +1,53 @@
+.say-structure {
+  border: 0.1rem solid var(--au-gray-300);
+  border-radius: var(--au-radius);
+
+  display: flex;
+  flex-direction: column;
+  white-space: normal;
+}
+.say-structure__header {
+  background-color: var(--au-gray-200);
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  h4 {
+    margin: 0;
+  }
+  .say-structure__title {
+    flex-grow: 1;
+  }
+  [contenteditable] {
+    border: none;
+    font-size: var(--au-h4);
+    flex-grow: 1;
+    &:focus {
+      outline: none;
+    }
+    padding: 0;
+    white-space: break-spaces;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  padding: var(--au-small);
+}
+.say-structure__content {
+  [data-slot] {
+    white-space: break-spaces;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+  padding: var(--au-small);
+}
+
+.say-structure__content.say-empty {
+  [data-ember-node-content] {
+    p::before {
+      color: var(--au-gray-400);
+      content: 'Fill in content...';
+      float: left;
+      height: 0;
+      pointer-events: none;
+    }
+  }
+}

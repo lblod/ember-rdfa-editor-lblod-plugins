@@ -16,6 +16,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   BESLUIT,
+  PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
@@ -24,9 +25,6 @@ type Args = {
   controller: SayController;
 };
 
-/**
- * @deprecated
- */
 export default class DecisionPluginCard extends Component<Args> {
   AlertTriangleIcon = AlertTriangleIcon;
 
@@ -90,19 +88,12 @@ export default class DecisionPluginCard extends Component<Args> {
   }
 
   get missingArticleBlock() {
-    const state = VALIDATION_KEY.getState(this.controller.activeEditorState);
-    if (state) {
-      let missingArticleBlock = false;
-      const results = state.report.results;
-      if (!results) return false;
-      for (const result of results) {
-        if (result.sourceShape.name === 'at-least-one-article-container') {
-          missingArticleBlock = true;
-        }
-      }
-      return missingArticleBlock;
-    } else {
-      return false;
-    }
+    return (
+      this.decisionNodeLocation &&
+      !getOutgoingTriple(
+        this.decisionNodeLocation.node.attrs,
+        PROV('value')
+      )
+    );
   }
 }

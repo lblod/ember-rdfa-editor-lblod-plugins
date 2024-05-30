@@ -15,6 +15,7 @@ import { v4 as uuid } from 'uuid';
 import { addProperty } from '@lblod/ember-rdfa-editor/commands';
 import {
   addPropertyToNode,
+  findRdfaIdsInSelection,
   transactionCombinator,
 } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
 

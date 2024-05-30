@@ -1,0 +1,13 @@
+{{#if @inline}}
+  <span
+    {{did-insert this.handleInit}}
+    {{did-update this.onContentUpdate @content}}
+    ...attributes
+  />
+{{else}}
+  <div
+    {{did-insert this.handleInit}}
+    {{did-update this.onContentUpdate @content}}
+    ...attributes
+  />
+{{/if}}
