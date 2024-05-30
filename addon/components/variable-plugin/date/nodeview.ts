@@ -60,6 +60,9 @@ export default class DateNodeviewComponent extends Component<Args> {
   }
 
   get label() {
+    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
+      ?.object.value;
+    if(value) return ''
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }
