@@ -80,6 +80,7 @@ import {
   structureView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import InsertStructureComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/insert';
+import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin';
 
 export default class EditableBlockController extends Controller {
   DebugInfo = DebugInfo;
@@ -87,7 +88,7 @@ export default class EditableBlockController extends Controller {
   RdfaEditor = RdfaEditor;
   InsertStructure = InsertStructureComponent;
 
-  @tracked rdfaEditor?: SayController;
+  @tracked controller?: SayController;
   @service declare intl: IntlService;
   schema = new Schema({
     nodes: {
@@ -130,6 +131,7 @@ export default class EditableBlockController extends Controller {
       subscript,
       superscript,
       highlight,
+      redacted,
       color,
     },
   });
@@ -138,6 +140,9 @@ export default class EditableBlockController extends Controller {
     return {
       interactive: true,
     };
+  }
+  get shouldShowTableMenu() {
+    return this.controller?.activeEditorState.schema['table_cell'];
   }
 
   @tracked plugins: PluginConfig = [
@@ -156,7 +161,7 @@ export default class EditableBlockController extends Controller {
     inputRules({
       rules: [
         bullet_list_input_rule(this.schema.nodes.bullet_list),
-        ordered_list_input_rule(this.schema.nodes.ordered_list),
+        ordered_list_input_rule(this.schema.nodes['ordered_list']),
       ],
     }),
     emberApplication({ application: getOwner(this) }),
@@ -172,22 +177,22 @@ export default class EditableBlockController extends Controller {
   };
 
   get activeNode() {
-    if (this.rdfaEditor) {
-      return getActiveEditableNode(this.rdfaEditor.activeEditorState);
+    if (this.controller) {
+      return getActiveEditableNode(this.controller.activeEditorState);
     }
     return;
   }
 
   get showRdfaBlocks() {
-    return this.rdfaEditor?.showRdfaBlocks;
+    return this.controller?.showRdfaBlocks;
   }
 
   @action
-  rdfaEditorInit(rdfaEditor: SayController) {
+  rdfaEditorInit(controller: SayController) {
     const presetContent = localStorage.getItem('EDITOR_CONTENT') ?? '';
-    this.rdfaEditor = rdfaEditor;
-    this.rdfaEditor.initialize(presetContent);
-    applyDevTools(rdfaEditor.mainEditorView);
+    this.controller = controller;
+    this.controller.initialize(presetContent);
+    applyDevTools(controller.mainEditorView);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
   }

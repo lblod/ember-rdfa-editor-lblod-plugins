@@ -1,17 +1,13 @@
-<div class='say-structure' {{did-update this.onAttrsUpdate this.titleAttr}} {{on "focus" this.focusInner}}>
+<div
+  class='say-structure'
+  {{did-update this.onAttrsUpdate this.titleAttr}}
+  {{on 'focus' this.focusInner}}
+>
   <div class='say-structure__header' contenteditable='false'>
 
     <h4>Chapter I.</h4>
-    <this.ProseMirrorEditor
-      @schema={{this.titleSchema}}
-      @inline={{true}}
-      @content={{this.titleContent}}
-      @onInit={{this.onInitInnerEditor}}
-      @onUpdate={{this.onTitleUpdate}}
-      @onFocus={{this.onInnerEditorFocus}}
-      @getPos={{@getPos}}
-      @outerView={{@view}}
-      @controller={{@controller}}
+    <div
+      {{did-insert this.initializeNestedEditor}}
       class='say-structure__title'
     />
   </div>

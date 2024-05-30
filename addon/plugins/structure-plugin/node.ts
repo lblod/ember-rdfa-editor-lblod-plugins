@@ -24,13 +24,10 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       title: {
         default: 'title',
       },
-      __title: {
-        default: 'title',
-      }
     },
     serialize(node: PNode) {
       const parser = new DOMParser();
-      const html = parser.parseFromString(node.attrs.__title, 'text/html');
+      const html = parser.parseFromString(node.attrs.title, 'text/html');
 
       return [
         'div',
@@ -48,7 +45,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           if (hasRDFaAttribute(element, 'typeof', EXT('Structure'))) {
             const titleElement = element.firstElementChild;
             if (!titleElement) return false;
-            return { title: titleElement.innerHTML, __title: titleElement.innerHTML };
+            return { title: titleElement.innerHTML };
           }
           return false;
         },
