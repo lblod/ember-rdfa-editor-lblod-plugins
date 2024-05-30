@@ -44,7 +44,7 @@ export default class AddressNodeviewComponent extends Component<Args> {
   }
 
   get label() {
-    if(this.address) return ''
+    if (this.address) return '';
     return getOutgoingTriple(this.node.attrs, EXT('label'))?.object.value;
   }
 }

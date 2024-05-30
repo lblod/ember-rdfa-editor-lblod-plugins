@@ -38,8 +38,8 @@ export default class LocationNodeViewComponent extends Component<EmberNodeArgs> 
   }
 
   get label() {
-    if(this.innerView?.state.doc.firstChild?.type.name !== 'placeholder') {
-      return ''
+    if (this.innerView?.state.doc.firstChild?.type.name !== 'placeholder') {
+      return '';
     }
     return this.args.node.attrs.label as string;
   }

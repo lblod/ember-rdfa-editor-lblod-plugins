@@ -93,9 +93,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get label(): string | undefined {
-    if(this.inputNumber) {
-      return ''
-    }
+    if (this.inputNumber) return '';
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 
