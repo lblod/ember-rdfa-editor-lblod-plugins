@@ -1,7 +1,9 @@
 import {
   DOMSerializer,
   EditorState,
+  NodeSelection,
   ProseParser,
+  SayController,
   SayView,
   Schema,
   Transaction,
@@ -12,10 +14,13 @@ import Component from '@glimmer/component';
 type Args = {
   onInit?(view: SayView): void;
   onUpdate?(content: string): void;
-  onFocus?(): void;
+  onFocus?(view: SayView): void;
+  getPos(): number;
   schema: Schema;
   content?: string;
   inline?: boolean;
+  controller: SayController;
+  outerView: SayView;
 };
 
 export default class ProseMirrorEditor extends Component<Args> {
@@ -25,6 +30,9 @@ export default class ProseMirrorEditor extends Component<Args> {
   constructor(owner: unknown, args: Args) {
     super(owner, args);
     this.initialContent = this.args.content || '';
+  }
+  get outerView(): SayView {
+    return this.args.outerView;
   }
   @action
   handleInit(target: HTMLElement) {
@@ -38,14 +46,36 @@ export default class ProseMirrorEditor extends Component<Args> {
         domParser: parser,
         dispatchTransaction: this.dispatch,
         handleDOMEvents: {
+
+          mousedown: () => {
+            // Kludge to prevent issues due to the fact that the whole
+            // footnote is node-selected (and thus DOM-selected) when
+            // the parent editor is focused.
+
+            if (this.outerView.hasFocus()) this.view?.focus();
+          },
           focus: () => {
-            this.args.onFocus?.();
+
+            const pos = this.args.getPos();
+            if (pos !== undefined) {
+              const outerSelectionTr = this.outerView.state.tr;
+              const outerSelection = new NodeSelection(
+                this.outerView.state.doc.resolve(pos),
+              );
+              outerSelectionTr.setSelection(outerSelection);
+              this.outerView.dispatch(outerSelectionTr);
+            }
+
+            if (this.view) {
+              this.args.controller.setActiveView(this.view);
+              this.args.onFocus?.(this.view);
+            }
           },
         },
       },
     );
     if (this.args.content) {
-      this.view.setHtmlContent(this.args.content);
+      this.view.setHtmlContent(this.initialContent);
     }
     this.args.onInit?.(this.view);
   }
@@ -65,9 +95,12 @@ export default class ProseMirrorEditor extends Component<Args> {
   }
 
   dispatch = (tr: Transaction) => {
+    console.log("transaction", tr);
     if (this.view) {
       const newState = this.view.state.apply(tr);
+      console.log("newState", newState)
       this.view.updateState(newState);
+      console.log("htmlcontent", this.view.htmlContent)
       this.args.onUpdate?.(this.view.htmlContent);
     }
   };

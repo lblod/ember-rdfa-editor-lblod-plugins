@@ -24,7 +24,9 @@
     &:focus {
       outline: none;
     }
-    padding: 0;
+    * {
+    padding: 1em;
+    }
     white-space: break-spaces;
     word-break: break-all;
     word-wrap: break-word;
