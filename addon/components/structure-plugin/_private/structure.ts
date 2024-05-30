@@ -28,6 +28,7 @@ import {
 import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
 import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin';
+import NestedProsemirror from '@lblod/ember-rdfa-editor-lblod-plugins/utils/nested-prosemirror';
 
 export default class Structure extends Component<EmberNodeArgs> {
   ProseMirrorEditor = ProseMirrorEditor;
@@ -105,97 +106,19 @@ export default class Structure extends Component<EmberNodeArgs> {
   };
   @action
   initializeNestedEditor(target: HTMLElement) {
-    this.innerEditor = new NestedProsemirror(
+    this.innerEditor = new NestedProsemirror({
       target,
-      this.titleSchema,
-      this.args.view,
-      () => this.args.getPos(),
-      this.controller,
-      this.onInnerEditorFocus,
-      this.onTitleUpdate,
-      this.titleContent,
-    );
+      schema: this.titleSchema,
+      outerView: this.args.view,
+      getPos: () => this.args.getPos(),
+      controller: this.controller,
+      onFocus: this.onInnerEditorFocus,
+      onUpdateContent: this.onTitleUpdate,
+      initialContent: this.titleContent,
+    });
   }
   @action
   focusInner() {
     this.innerView?.focus();
-  }
-}
-class NestedProsemirror {
-  view: SayView;
-  outerView: SayView;
-  getPos: () => number | undefined;
-  controller: SayController;
-  onFocus: (view: SayView) => void;
-  onUpdateContent: (newContent: string) => void;
-  constructor(
-    target: HTMLElement,
-    schema: Schema,
-    outerView: SayView,
-    getPos: () => number | undefined,
-    controller: SayController,
-    onFocus: (view: SayView) => void,
-    onUpdateContent: (newContent: string) => void,
-    initialContent: string,
-  ) {
-    const state = EditorState.create({ schema });
-    const parser = ProseParser.fromSchema(schema);
-    this.outerView = outerView;
-    this.getPos = getPos;
-    this.controller = controller;
-    this.onFocus = onFocus;
-    this.onUpdateContent = onUpdateContent;
-
-    this.view = new SayView(
-      { mount: target },
-      {
-        state,
-        domParser: parser,
-        dispatchTransaction: this.dispatch,
-        handleDOMEvents: {
-          mousedown: () => {
-            // Kludge to prevent issues due to the fact that the whole
-            // footnote is node-selected (and thus DOM-selected) when
-            // the parent editor is focused.
-
-            if (this.outerView.hasFocus()) this.view?.focus();
-          },
-          focus: () => {
-
-            const pos = this.getPos();
-            if (pos !== undefined) {
-              const outerSelectionTr = this.outerView.state.tr;
-              const outerSelection = new NodeSelection(
-                this.outerView.state.doc.resolve(pos),
-              );
-              outerSelectionTr.setSelection(outerSelection);
-              this.outerView.dispatch(outerSelectionTr);
-            }
-
-            if (this.view) {
-              this.controller.setActiveView(this.view);
-              this.onFocus?.(this.view);
-            }
-          },
-        },
-      },
-    );
-    if (initialContent) {
-      this.view.setHtmlContent(initialContent);
-    }
-  }
-
-  dispatch = (tr: Transaction) => {
-    if (this.view) {
-      const newState = this.view.state.apply(tr);
-      this.view.updateState(newState);
-      this.onUpdateContent(this.view.htmlContent);
-    }
-  };
-  setHtmlContent(html: string) {
-    this.view.setHtmlContent(html);
-  }
-  get htmlContent() {
-    return this.view.htmlContent;
   }
 }
