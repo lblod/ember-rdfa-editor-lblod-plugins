@@ -1,13 +1,23 @@
 import type { ComponentLike } from '@glint/template';
-import { PNode } from '@lblod/ember-rdfa-editor';
+import { PNode, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/structure';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  EXT,
+  RDF,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  hasOutgoingNamedNodeTriple,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+const rdfaAware = true;
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
@@ -16,45 +26,52 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     inline: false,
     group: 'block',
     content: 'block+',
-    draggable: true,
+    draggable: false,
     selectable: true,
     isolating: true,
     atom: false,
+    editable: rdfaAware,
+
     attrs: {
+      ...rdfaAttrSpec({ rdfaAware }),
+
       title: {
         default: 'title',
       },
+      sayRenderAs: { default: 'structure' },
     },
     serialize(node: PNode) {
       const parser = new DOMParser();
       const html = parser.parseFromString(node.attrs.title, 'text/html');
 
-      return [
-        'div',
-        {
-          typeof: EXT('Structure').prefixed,
-        },
-        ['h3', {}, html.body.firstElementChild],
-        ['div', { property: EXT('content').prefixed }, 0],
-      ];
+      return renderRdfaAware({
+        renderable: node,
+        tag: 'div',
+        attrs: { 'data-say-render-as': 'structure' },
+        content: [
+          'div',
+          ['h3', {}, html.body.firstElementChild],
+          ['div', { 'data-say-structure-content': true }, 0],
+        ],
+      });
     },
     parseDOM: [
       {
         tag: 'div',
-        getAttrs(element: HTMLElement) {
-          if (hasRDFaAttribute(element, 'typeof', EXT('Structure'))) {
-            const titleElement = element.firstElementChild;
-            if (!titleElement) return false;
-            return { title: titleElement.innerHTML };
+        getAttrs(node: string | HTMLElement) {
+          if (typeof node === 'string') {
+            return false;
+          }
+          const attrs = getRdfaAttrs(node, { rdfaAware });
+          if (node.dataset.sayRenderAs === 'structure') {
+            return { ...attrs, title: 'test' };
           }
           return false;
         },
-        contentElement: `div[property~='${EXT('content').prefixed}'],
-        div[property~='${EXT('content').full}']`,
+        contentElement: `div[data-say-structure-content]`,
       },
     ],
   };
 };
-
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());

@@ -6,14 +6,23 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
 import IntlService from 'ember-intl/services/intl';
-import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  isNone,
+  unwrap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
 import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
 import { v4 as uuid } from 'uuid';
 import { findInsertionPosInNode } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-node';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
-import { addPropertyToNode, transactionCombinator } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { BESLUIT, PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  addPropertyToNode,
+  transactionCombinator,
+} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import {
+  BESLUIT,
+  PROV,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;
@@ -24,17 +33,13 @@ export default function insertArticleContainer({
   intl,
   decisionLocation,
 }: InsertArticleContainerArgs): Command {
-  return function(state: EditorState, dispatch?: (tr: Transaction) => void) {
+  return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { selection, schema } = state;
     const articleContainerId = uuid();
     const nodeToInsert = schema.node(
       'block_rdfa',
       { rdfaNodeType: 'literal', __rdfaId: articleContainerId },
-
-      besluitArticleStructure.constructor({
-        schema,
-        intl,
-      }).node,
+      schema.node('structure', {}, schema.node('paragraph')),
     );
 
     const tr = state.tr;
@@ -60,9 +65,8 @@ export default function insertArticleContainer({
         },
       }),
     ]);
-    if (dispatch) {
-      tr.setSelection(NodeSelection.create(tr.doc, insertionPos + 4));
-      dispatch(tr.scrollIntoView());
+    if (dispatch && result.every((ok) => ok)) {
+      dispatch(newTr.scrollIntoView());
     }
     return true;
   };

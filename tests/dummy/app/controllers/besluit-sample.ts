@@ -97,6 +97,11 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import {
+  structure,
+  structureView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -149,6 +154,7 @@ export default class BesluitSampleController extends Controller {
         roadsign_regulation,
         heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
+        structure,
 
         horizontal_rule,
         code_block,
@@ -262,11 +268,14 @@ export default class BesluitSampleController extends Controller {
     }
     return;
   }
+  get supportsTables() {
+    return this.controller?.activeEditorState.schema.nodes['table_cell'];
+  }
 
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController,
-  ) => Record<string, NodeViewConstructor> = (controller) => {
+  ) => Record<string, SayNodeViewConstructor> = (controller) => {
     return {
       text_variable: textVariableView(controller),
       number: numberView(controller),
@@ -276,7 +285,8 @@ export default class BesluitSampleController extends Controller {
       date: dateView(this.dateOptions)(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
-    };
+      structure: structureView(controller),
+    } satisfies Record<string, SayNodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [
     firefoxCursorFix(),

@@ -81,19 +81,24 @@ export default class DecisionPluginCard extends Component<Args> {
 
   @action
   insertArticleBlock() {
-    this.controller.doCommand(insertArticleContainer({ intl: this.intl }), {
-      view: this.controller.mainEditorView,
-    });
+    if (this.decisionNodeLocation) {
+      this.controller.doCommand(
+        insertArticleContainer({
+          intl: this.intl,
+          decisionLocation: this.decisionNodeLocation,
+        }),
+        {
+          view: this.controller.mainEditorView,
+        },
+      );
+    }
     this.focus();
   }
 
   get missingArticleBlock() {
     return (
       this.decisionNodeLocation &&
-      !getOutgoingTriple(
-        this.decisionNodeLocation.node.attrs,
-        PROV('value')
-      )
+      !getOutgoingTriple(this.decisionNodeLocation.node.attrs, PROV('value'))
     );
   }
 }
