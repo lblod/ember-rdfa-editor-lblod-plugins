@@ -121,19 +121,9 @@ export default function insertMotivation({
       ],
     );
     // how the offset between the insertion point and the point where the cursor should end up
-    const cursorOffset = 2;
-
-    const insertionPos = findInsertionPosInAncestorOfType(
-      selection,
-      schema.nodes.besluit,
-      nodeToInsert,
-    );
-    if (isNone(insertionPos)) {
-      return false;
-    }
     const tr = state.tr;
+    tr.replaceSelectionWith(nodeToInsert);
 
-    tr.replaceRangeWith(insertionPos, insertionPos, nodeToInsert);
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
       tr,
@@ -150,12 +140,12 @@ export default function insertMotivation({
       return false;
     }
     if (dispatch) {
-      const selectionPos = newTr.doc.resolve(insertionPos + cursorOffset);
+      // const selectionPos = newTr.doc.resolve(insertionPos + cursorOffset);
       // const targetPos = tr.doc.resolve(insertionPos + cursorOffset + 1);
       // TODO figure out why I cant just set a nodeSelection here
-      newTr.setSelection(
-        new NodeSelection(newTr.doc.resolve(selectionPos.posAtIndex(0))),
-      );
+      // newTr.setSelection(
+      //   new NodeSelection(newTr.doc.resolve(selectionPos.posAtIndex(0))),
+      // );
       dispatch(newTr);
     }
     return true;

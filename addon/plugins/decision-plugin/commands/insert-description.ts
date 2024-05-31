@@ -42,16 +42,8 @@ export default function insertDescription({
       ),
     );
     const tr = state.tr;
-    const insertionPos = findInsertionPosInNode(
-      selection.$from,
-      tr.doc.resolve(decisionLocation.pos),
-      nodeToInsert,
-    );
-    if (isNone(insertionPos)) {
-      return false;
-    }
 
-    tr.replaceRangeWith(insertionPos, insertionPos, nodeToInsert);
+    tr.replaceSelectionWith(nodeToInsert);
 
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
@@ -66,7 +58,7 @@ export default function insertDescription({
       }),
     ]);
     if (dispatch && result.every((ok) => ok)) {
-      newTr.setSelection(NodeSelection.create(newTr.doc, insertionPos + 2));
+      // newTr.setSelection(NodeSelection.create(newTr.doc, insertionPos + 2));
       dispatch(newTr.scrollIntoView());
     }
     return true;

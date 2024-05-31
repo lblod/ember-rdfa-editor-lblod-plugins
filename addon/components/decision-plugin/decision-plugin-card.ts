@@ -4,6 +4,7 @@ import {
   insertMotivation,
   insertArticleContainer,
   insertDescription,
+  insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
@@ -61,7 +62,20 @@ export default class DecisionPluginCard extends Component<Args> {
     );
   }
   @action
-  insertTitle() {}
+  insertTitle() {
+    if (this.decisionNodeLocation) {
+      this.controller.doCommand(
+        insertTitle({
+          placeholderText: this.intl.t(
+            'besluit-plugin.placeholder.decision-title',
+          ),
+          decisionLocation: this.decisionNodeLocation,
+        }),
+        { view: this.controller.mainEditorView },
+      );
+    }
+    this.focus();
+  }
   get canInsertDescription() {
     return (
       this.decisionNodeLocation &&

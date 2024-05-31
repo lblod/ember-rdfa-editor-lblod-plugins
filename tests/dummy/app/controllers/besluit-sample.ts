@@ -319,7 +319,7 @@ export default class BesluitSampleController extends Controller {
   @action
   async rdfaEditorInit(controller: SayController) {
     this.controller = controller;
-    applyDevTools(controller.mainEditorView);
+    // applyDevTools(controller.mainEditorView);
     await this.importRdfaSnippet.downloadSnippet({
       omitCredentials: 'true',
       source:

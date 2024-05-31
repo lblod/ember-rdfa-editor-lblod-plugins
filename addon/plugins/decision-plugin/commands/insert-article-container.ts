@@ -43,15 +43,7 @@ export default function insertArticleContainer({
     );
 
     const tr = state.tr;
-    const insertionPos = findInsertionPosInNode(
-      selection.$from,
-      tr.doc.resolve(decisionLocation.pos),
-      nodeToInsert,
-    );
-    if (isNone(insertionPos)) {
-      return false;
-    }
-    tr.replaceRangeWith(insertionPos, insertionPos, nodeToInsert);
+    tr.replaceSelectionWith(nodeToInsert);
 
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
