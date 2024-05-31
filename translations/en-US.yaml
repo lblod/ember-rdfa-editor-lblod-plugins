@@ -146,12 +146,14 @@ besluit-plugin:
   missing-title-warning: This decision is missing a title.
   missing-motivation-warning: This decision is missing a motivation block, a decision without this block will be harder to parse by our system.
   missing-article-block-warning: This decision is missing an article block, a decision without this block will be harder to parse by our system.
+  missing-description-warning: This decision is missing a description block, a decision without this block will be harder to parse by our system.
   insert:
     decision-title: Insert decision title
     motivation: Insert motivation
     article-block: Insert article block
   placeholder:
     decision-title: Insert decision title
+    decision-description: Insert description
     government-body: specify governing body
     legal-jurisdiction: Legal basis providing that body has jurisdiction.
     insert-legal-context: Insert juridische context

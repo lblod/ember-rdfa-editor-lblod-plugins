@@ -6,21 +6,33 @@ import {
 import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
 import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import { v4 as uuid } from 'uuid';
+import { findInsertionPosInNode } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-node';
+import {
+  addPropertyToNode,
+  transactionCombinator,
+} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import {
+  ELI,
+  PROV,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 interface InsertDescriptionArgs {
   placeholderText: string;
-  validateShapes?: Set<string>;
+  decisionLocation: NodeWithPos;
 }
 
 export default function insertDescription({
   placeholderText,
-  validateShapes,
+  decisionLocation,
 }: InsertDescriptionArgs) {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { selection, schema } = state;
+    const descriptionId = uuid();
     const nodeToInsert = schema.node(
-      'description',
-      {},
+      'block_rdfa',
+      { rdfaNodeType: 'literal', __rdfaId: descriptionId },
       schema.node(
         'paragraph',
         null,
@@ -29,23 +41,33 @@ export default function insertDescription({
         }),
       ),
     );
-    const insertionPos = findInsertionPosInAncestorOfType(
-      selection,
-      schema.nodes.besluit,
+    const tr = state.tr;
+    const insertionPos = findInsertionPosInNode(
+      selection.$from,
+      tr.doc.resolve(decisionLocation.pos),
       nodeToInsert,
     );
     if (isNone(insertionPos)) {
       return false;
     }
-    const tr = state.tr;
 
     tr.replaceRangeWith(insertionPos, insertionPos, nodeToInsert);
-    if (!transactionCompliesWithShapes(state, tr, validateShapes)) {
-      return false;
-    }
-    if (dispatch) {
-      tr.setSelection(NodeSelection.create(tr.doc, insertionPos + 2));
-      dispatch(tr.scrollIntoView());
+
+    const { transaction: newTr, result } = transactionCombinator<boolean>(
+      state,
+      tr,
+    )([
+      addPropertyToNode({
+        resource: decisionLocation.node.attrs.subject,
+        property: {
+          predicate: ELI('description').full,
+          object: { termType: 'LiteralNode', value: descriptionId },
+        },
+      }),
+    ]);
+    if (dispatch && result.every((ok) => ok)) {
+      newTr.setSelection(NodeSelection.create(newTr.doc, insertionPos + 2));
+      dispatch(newTr.scrollIntoView());
     }
     return true;
   };

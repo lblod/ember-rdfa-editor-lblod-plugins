@@ -17,6 +17,24 @@
     </AuButton>
   </AuAlert>
 {{/if}}
+{{#if this.canInsertDescription}}
+  <AuAlert
+    class='say-validation-alert'
+    @skin='warning'
+    @closable={{false}}
+    @icon={{this.AlertTriangleIcon}}
+    @title={{t 'besluit-plugin.missing-description-warning'}}
+  >
+    <AuButton
+      @iconAlignment='left'
+      @skin='link-secondary'
+      @disabled={{not this.canInsertDescription}}
+      {{on 'click' this.insertDescription}}
+    >
+      {{t 'besluit-plugin.insert.description'}}
+    </AuButton>
+  </AuAlert>
+{{/if}}
 {{#if this.canInsertMotivation}}
   <AuAlert
     class='say-validation-alert'
