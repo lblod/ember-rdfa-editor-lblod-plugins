@@ -1,24 +1,24 @@
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import AuButtonGroup from '@appuniversum/ember-appuniversum/components/au-button-group';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuList from '@appuniversum/ember-appuniversum/components/au-list';
-import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
-import AuButtonGroup from '@appuniversum/ember-appuniversum/components/au-button-group';
 import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
-import HoverTooltip from '@lblod/ember-rdfa-editor-lblod-plugins/components/hover-tooltip';
+import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
+import { ChevronDownIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-down';
+import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-up';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import Component from '@glimmer/component';
 import { NodeType, SayController, Schema } from '@lblod/ember-rdfa-editor';
+import HoverTooltip from '@lblod/ember-rdfa-editor-lblod-plugins/components/hover-tooltip';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import t from 'ember-intl/helpers/t';
-import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-up';
-import { ChevronDownIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-down';
-import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 
 import { fn } from '@ember/helper';
-import { not } from 'ember-truth-helpers';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { not } from 'ember-truth-helpers';
 interface Sig {
   Args: { controller: SayController };
 }
