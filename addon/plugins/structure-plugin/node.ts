@@ -11,12 +11,14 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { v4 as uuid } from 'uuid';
 const rdfaAware = true;
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
@@ -55,15 +57,40 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     },
     serialize(node: PNode) {
       const parser = new DOMParser();
-      const html = parser.parseFromString(node.attrs.title, 'text/html');
+      const tag = node.attrs.headerTag;
+      const structureName = node.attrs.structureName;
+      const number = node.attrs.number;
+
+      let headerSpec;
+      if (node.attrs.hasTitle) {
+        const html = parser.parseFromString(node.attrs.title, 'text/html');
+        if (html.body.firstElementChild) {
+          headerSpec = [
+            tag,
+            {},
+            `${structureName} ${number}.`,
+            html.body.firstElementChild,
+          ];
+        } else {
+          headerSpec = [tag, {}, `${structureName} ${number}.`];
+        }
+      } else {
+        headerSpec = [tag, {}, `${structureName} ${number}.`];
+      }
 
       return renderRdfaAware({
         renderable: node,
         tag: 'div',
-        attrs: { 'data-say-render-as': 'structure' },
+        attrs: {
+          'data-say-render-as': 'structure',
+          'data-say-has-title': node.attrs.hasTitle,
+          'data-say-structure-name': node.attrs.structureName,
+          'data-say-header-tag': node.attrs.headerTag,
+          'data-say-number': node.attrs.number,
+        },
         content: [
           'div',
-          ['h3', {}, html.body.firstElementChild],
+          headerSpec,
           ['div', { 'data-say-structure-content': true }, 0],
         ],
       });
@@ -77,7 +104,16 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           }
           const attrs = getRdfaAttrs(node, { rdfaAware });
           if (node.dataset.sayRenderAs === 'structure') {
-            return { ...attrs, title: 'test' };
+            return {
+              ...attrs,
+              hasTitle:
+                node.dataset.sayHasTitle &&
+                node.dataset.sayHasTitle !== 'false',
+              structureName: node.dataset.sayStructureName,
+              headerTag: node.dataset.sayHeaderTag,
+              number: node.dataset.sayNumber,
+              title: 'test',
+            };
           }
           return false;
         },
@@ -89,6 +125,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());
 export function buildArticleStructure(schema: Schema) {
+  const articleId = uuid();
+  const articleResource = `http://data.lblod.info/artikels/--ref-uuid4-${articleId}`;
+  const factory = new SayDataFactory();
   return schema.node(
     'structure',
     {
@@ -96,12 +135,13 @@ export function buildArticleStructure(schema: Schema) {
       properties: [
         {
           predicate: RDF('type').full,
-          object: { termType: 'NamedNode', value: BESLUIT('Artikel').full },
+          object: factory.namedNode(BESLUIT('Artikel').full),
         },
       ] satisfies OutgoingTriple[],
       hasTitle: false,
       structureName: 'Artikel',
       headerTag: 'h5',
+      subject: articleResource,
     },
     schema.node('paragraph'),
   );

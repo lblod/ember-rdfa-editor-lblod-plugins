@@ -138,6 +138,7 @@ export default class BesluitSampleController extends Controller {
       nodes: {
         doc: docWithConfig({ rdfaAware: true }),
         paragraph,
+        structure,
 
         repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
@@ -159,7 +160,6 @@ export default class BesluitSampleController extends Controller {
         roadsign_regulation,
         heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
-        structure,
 
         horizontal_rule,
         code_block,

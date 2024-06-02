@@ -1,6 +1,5 @@
 import {
   Command,
-  NodeSelection,
   PNode,
   ResolvedPos,
   TextSelection,
