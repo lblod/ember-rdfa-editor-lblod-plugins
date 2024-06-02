@@ -18,10 +18,10 @@ import {
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { on } from '@ember/modifier';
 
-type Args = {
-  controller: SayController;
-};
-export default class InsertStructureComponent extends Component<Args> {
+interface Sig {
+  Args: { controller: SayController };
+}
+export default class InsertStructureComponent extends Component<Sig> {
   get controller() {
     return this.args.controller;
   }
