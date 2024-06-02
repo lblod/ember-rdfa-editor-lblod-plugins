@@ -19,6 +19,9 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { not } from 'ember-truth-helpers';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
+import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/move-structure';
 interface Sig {
   Args: { controller: SayController };
 }
@@ -40,19 +43,39 @@ export default class StructureControlCardComponent extends Component<Sig> {
     return null;
   }
   get canMoveUp() {
-    return true;
+    return this.controller.checkCommand(moveStructure('up'));
   }
   get canMoveDown() {
-    return true;
+    return this.controller.checkCommand(moveStructure('down'));
   }
   @action
-  moveStructure() {}
+  moveStructure(direction: 'down' | 'up') {
+    this.controller.doCommand(moveStructure(direction));
+    this.controller.focus();
+  }
 
   get canRemoveStructure() {
-    return true;
+    return !!this.structure;
   }
   @action
-  removeStructure() {}
+  removeStructure(withContent: boolean) {
+    if (this.structure) {
+      const { pos, node } = this.structure;
+      if (withContent) {
+        this.controller.withTransaction((tr, state) => {
+          tr.replace(pos, pos + node.nodeSize);
+          return transactionCombinator<boolean>(state, tr)([recalculateNumbers])
+            .transaction;
+        });
+      } else {
+        this.controller.withTransaction((tr, state) => {
+          tr.replaceWith(pos, pos + node.nodeSize, node.content);
+          return transactionCombinator<boolean>(state, tr)([recalculateNumbers])
+            .transaction;
+        });
+      }
+    }
+  }
   <template>
     {{#if this.structure}}
       <AuCard

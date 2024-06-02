@@ -6,17 +6,10 @@ import {
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
-import {
-  TransactionResult,
-  transactionCombinator,
-} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import {
-  BESLUIT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { on } from '@ember/modifier';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 
 interface Sig {
   Args: { controller: SayController };
@@ -58,22 +51,4 @@ export default class InsertStructureComponent extends Component<Sig> {
       </AuButton>
     </li>
   </template>
-}
-function recalculateNumbers(state: EditorState): TransactionResult<boolean> {
-  const tr = state.tr;
-  const doc = tr.doc;
-  let counter = 0;
-  doc.descendants((node, pos) => {
-    if (
-      node.type.name === 'structure' &&
-      hasOutgoingNamedNodeTriple(node.attrs, RDF('type'), BESLUIT('Artikel'))
-    ) {
-      counter += 1;
-      if (counter !== Number(node.attrs.number)) {
-        tr.setNodeAttribute(pos, 'number', counter);
-      }
-    }
-    return true;
-  });
-  return { transaction: tr, result: true, initialState: state };
 }
