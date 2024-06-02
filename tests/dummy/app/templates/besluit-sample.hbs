@@ -43,7 +43,9 @@
                 </Tb.Group>
                 {{#if this.supportsTables}}
                   <Tb.Group>
-                    <Plugins::Table::TableMenu @controller={{this.controller}} />
+                    <Plugins::Table::TableMenu
+                      @controller={{this.controller}}
+                    />
                   </Tb.Group>
                 {{/if}}
                 <Tb.Group>
@@ -88,6 +90,9 @@
         <:aside>
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
+              <Sidebar.Collapsible @title='Structures'>
+                <this.InsertArticle @controller={{this.controller}} />
+              </Sidebar.Collapsible>
               <Sidebar.Collapsible @title='Insert'>
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}

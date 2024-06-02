@@ -1,15 +1,15 @@
 import type { ComponentLike } from '@glint/template';
-import { PNode, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  PNode,
+  Schema,
+  getRdfaAttrs,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
 import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/structure';
 import {
-  EXT,
+  BESLUIT,
   RDF,
-  SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import {
-  hasOutgoingNamedNodeTriple,
-  hasRDFaAttribute,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import {
@@ -24,7 +24,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     name: 'structure',
     component: Structure as unknown as ComponentLike,
     inline: false,
-    group: 'block',
+    group: 'block structure',
     content: 'block+',
     draggable: false,
     selectable: true,
@@ -35,9 +35,22 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
 
+      hasTitle: {
+        default: true,
+      },
       title: {
         default: 'title',
       },
+      number: {
+        default: 1,
+      },
+      structureName: {
+        default: 'Structure',
+      },
+      headerTag: {
+        default: 'h3',
+      },
+
       sayRenderAs: { default: 'structure' },
     },
     serialize(node: PNode) {
@@ -75,3 +88,21 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 };
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());
+export function buildArticleStructure(schema: Schema) {
+  return schema.node(
+    'structure',
+    {
+      rdfaNodeType: 'resource',
+      properties: [
+        {
+          predicate: RDF('type').full,
+          object: { termType: 'NamedNode', value: BESLUIT('Artikel').full },
+        },
+      ] satisfies OutgoingTriple[],
+      hasTitle: false,
+      structureName: 'Artikel',
+      headerTag: 'h5',
+    },
+    schema.node('paragraph'),
+  );
+}

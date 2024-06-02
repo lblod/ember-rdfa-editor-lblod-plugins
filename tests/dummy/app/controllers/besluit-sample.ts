@@ -103,10 +103,13 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
+import InsertStructureComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/insert';
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
+  InsertArticle = InsertStructureComponent;
+
   @tracked editableNodes = false;
 
   @action

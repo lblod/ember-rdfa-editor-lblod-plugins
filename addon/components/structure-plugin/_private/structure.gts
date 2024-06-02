@@ -1,22 +1,13 @@
-import {
-  EditorState,
-  NodeSelection,
-  ProseParser,
-  SayController,
-  SayView,
-  Schema,
-  SchemaSpec,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { PNode } from '@lblod/ember-rdfa-editor';
-import Component from '@glimmer/component';
-import { Args } from 'ember-modifier/-private/class/modifier';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import ProseMirrorEditor from '../../prosemirror-editor';
-import { text } from '@lblod/ember-rdfa-editor/nodes';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
-import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { tracked, cached } from '@glimmer/tracking';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { SayView, Schema } from '@lblod/ember-rdfa-editor';
+import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin';
+import NestedProsemirror from '@lblod/ember-rdfa-editor-lblod-plugins/utils/nested-prosemirror';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
+import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
 import {
   em,
   strikethrough,
@@ -25,14 +16,20 @@ import {
   superscript,
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
-import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
-import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
-import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin';
-import NestedProsemirror from '@lblod/ember-rdfa-editor-lblod-plugins/utils/nested-prosemirror';
+import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
+// eslint-disable-next-line ember/no-at-ember-render-modifiers
+import didInsert from '@ember/render-modifiers/modifiers/did-insert';
+// eslint-disable-next-line ember/no-at-ember-render-modifiers
+import didUpdate from '@ember/render-modifiers/modifiers/did-update';
+import { element } from 'ember-element-helper';
 
-export default class Structure extends Component<EmberNodeArgs> {
-  ProseMirrorEditor = ProseMirrorEditor;
-
+interface Sig {
+  Args: EmberNodeArgs;
+  Blocks: {
+    default: [];
+  };
+}
+export default class Structure extends Component<Sig> {
   titleSchema = new Schema({
     nodes: {
       text: {},
@@ -90,6 +87,18 @@ export default class Structure extends Component<EmberNodeArgs> {
   get titleAttr() {
     return this.node.attrs.title;
   }
+  get headerTag() {
+    return this.node.attrs.headerTag;
+  }
+  get number() {
+    return this.node.attrs.number;
+  }
+  get structureName() {
+    return this.node.attrs.structureName;
+  }
+  get hasTitle() {
+    return this.node.attrs.hasTitle;
+  }
 
   @action
   onAttrsUpdate() {
@@ -121,4 +130,30 @@ export default class Structure extends Component<EmberNodeArgs> {
   focusInner() {
     this.innerView?.focus();
   }
+  <template>
+    <div
+      class='say-structure'
+      {{didUpdate this.onAttrsUpdate this.titleAttr}}
+      {{on 'focus' this.focusInner}}
+    >
+      <div class='say-structure__header' contenteditable='false'>
+
+        {{#let (element this.headerTag) as |Tag|}}
+          <Tag>{{this.structureName}}
+            {{this.number}}.
+
+            {{#if this.hasTitle}}
+              <span
+                {{didInsert this.initializeNestedEditor}}
+                class='say-structure__title'
+              />
+            {{/if}}
+          </Tag>
+        {{/let}}
+      </div>
+      <div class='say-structure__content {{if this.isEmpty "say-empty" ""}}'>
+        {{yield}}
+      </div>
+    </div>
+  </template>
 }
