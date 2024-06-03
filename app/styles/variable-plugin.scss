@@ -52,6 +52,7 @@
 .ember-node {
   white-space: normal !important;
   .variable {
+    min-height: 30px;
     [contenteditable] {
       white-space: break-spaces;
       word-break: break-all;
