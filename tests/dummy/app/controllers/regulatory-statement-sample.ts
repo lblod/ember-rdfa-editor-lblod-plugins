@@ -59,6 +59,8 @@ import {
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
+  address,
+  addressView,
   codelist,
   codelistView,
   location,
@@ -68,10 +70,6 @@ import {
   textVariableView,
   text_variable,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
-import {
-  address,
-  addressView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/address';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
   templateComment,
