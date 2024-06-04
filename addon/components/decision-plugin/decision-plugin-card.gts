@@ -9,7 +9,6 @@ import {
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { VALIDATION_KEY } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import {
@@ -23,14 +22,20 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import { on } from '@ember/modifier';
+import { not } from 'ember-truth-helpers';
+import t from 'ember-intl/helpers/t';
+import { TemplateOnlyComponent } from '@ember/component/template-only';
 
-type Args = {
-  controller: SayController;
-};
+interface Sig {
+  Args: {
+    controller: SayController;
+  };
+}
 
-export default class DecisionPluginCard extends Component<Args> {
-  AlertTriangleIcon = AlertTriangleIcon;
-
+export default class DecisionPluginCard extends Component<Sig> {
   @service declare intl: IntlService;
 
   get controller() {
@@ -52,6 +57,7 @@ export default class DecisionPluginCard extends Component<Args> {
     );
   }
 
+  @action
   focus() {
     this.controller.focus();
   }
@@ -103,22 +109,6 @@ export default class DecisionPluginCard extends Component<Args> {
     this.focus();
   }
 
-  @action
-  insertMotivation() {
-    if (this.decisionNodeLocation) {
-      this.controller.doCommand(
-        insertMotivation({
-          intl: this.intl,
-          decisionLocation: this.decisionNodeLocation,
-        }),
-        {
-          view: this.controller.mainEditorView,
-        },
-      );
-    }
-    this.focus();
-  }
-
   get canInsertMotivation() {
     return (
       this.decisionNodeLocation &&
@@ -130,10 +120,10 @@ export default class DecisionPluginCard extends Component<Args> {
   }
 
   @action
-  insertArticleBlock() {
+  insertMotivation() {
     if (this.decisionNodeLocation) {
       this.controller.doCommand(
-        insertArticleContainer({
+        insertMotivation({
           intl: this.intl,
           decisionLocation: this.decisionNodeLocation,
         }),
@@ -151,4 +141,86 @@ export default class DecisionPluginCard extends Component<Args> {
       !getOutgoingTriple(this.decisionNodeLocation.node.attrs, PROV('value'))
     );
   }
+  @action
+  insertArticleBlock() {
+    if (this.decisionNodeLocation) {
+      this.controller.doCommand(
+        insertArticleContainer({
+          intl: this.intl,
+          decisionLocation: this.decisionNodeLocation,
+        }),
+        {
+          view: this.controller.mainEditorView,
+        },
+      );
+    }
+    this.focus();
+  }
+
+  <template>
+    {{#if this.canInsertTitle}}
+      <ValidationCard
+        @enabled={{this.canInsertTitle}}
+        @title={{t 'besluit-plugin.missing-title-warning'}}
+        @onClickFix={{this.insertTitle}}
+      >
+        {{t 'besluit-plugin.insert.decision-title'}}
+      </ValidationCard>
+    {{/if}}
+    {{#if this.canInsertDescription}}
+      <ValidationCard
+        @enabled={{this.canInsertDescription}}
+        @title={{t 'besluit-plugin.missing-description-warning'}}
+        @onClickFix={{this.insertDescription}}
+      >
+        {{t 'besluit-plugin.insert.description'}}
+      </ValidationCard>
+    {{/if}}
+    {{#if this.canInsertMotivation}}
+      <ValidationCard
+        @enabled={{this.canInsertMotivation}}
+        @title={{t 'besluit-plugin.missing-motivation-warning'}}
+        @onClickFix={{this.insertMotivation}}
+      >
+        {{t 'besluit-plugin.insert.motivation'}}
+      </ValidationCard>
+    {{/if}}
+    {{#if this.missingArticleBlock}}
+      <ValidationCard
+        @enabled={{this.missingArticleBlock}}
+        @title={{t 'besluit-plugin.missing-article-block-warning'}}
+        @onClickFix={{this.insertArticleBlock}}
+      >
+        {{t 'besluit-plugin.insert.article-block'}}
+      </ValidationCard>
+    {{/if}}
+  </template>
 }
+interface ValidationCardSig {
+  Args: {
+    enabled: boolean;
+    onClickFix: () => void;
+    title: string;
+  };
+  Blocks: {
+    default: [];
+  };
+}
+const ValidationCard: TemplateOnlyComponent<ValidationCardSig> = <template>
+  <AuAlert
+    class='say-validation-alert'
+    @skin='warning'
+    @closable={{false}}
+    @icon={{AlertTriangleIcon}}
+    @title={{@title}}
+  >
+    <AuButton
+      @iconAlignment='left'
+      @skin='link-secondary'
+      @disabled={{not @enabled}}
+      {{on 'click' @onClickFix}}
+    >
+      {{yield}}
+    </AuButton>
+  </AuAlert>
+</template>;
