@@ -1,28 +1,14 @@
-import {
-  Command,
-  EditorState,
-  NodeSelection,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
+import { Command, EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import {
-  isNone,
-  unwrap,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
-import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
 import { v4 as uuid } from 'uuid';
-import { findInsertionPosInNode } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-node';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import {
   addPropertyToNode,
   transactionCombinator,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import {
-  BESLUIT,
-  PROV,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { buildArticleStructure } from '../../structure-plugin/node';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;
@@ -30,21 +16,21 @@ interface InsertArticleContainerArgs {
 }
 
 export default function insertArticleContainer({
-  intl,
   decisionLocation,
 }: InsertArticleContainerArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
-    const { selection, schema } = state;
+    const { schema } = state;
     const articleContainerId = uuid();
     const nodeToInsert = schema.node(
       'block_rdfa',
       { rdfaNodeType: 'literal', __rdfaId: articleContainerId },
-      schema.node('structure', {}, schema.node('paragraph')),
+      buildArticleStructure(schema),
     );
 
     const tr = state.tr;
     tr.replaceSelectionWith(nodeToInsert);
 
+    const factory = new SayDataFactory();
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
       tr,
@@ -53,7 +39,7 @@ export default function insertArticleContainer({
         resource: decisionLocation.node.attrs.subject,
         property: {
           predicate: PROV('value').full,
-          object: { termType: 'LiteralNode', value: articleContainerId },
+          object: factory.literalNode(articleContainerId),
         },
       }),
     ]);

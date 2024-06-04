@@ -71,14 +71,6 @@ export default class InsertStructureComponent extends Component<Sig> {
         );
       }
     }
-    this.args.controller.withTransaction(
-      (tr: Transaction, state: EditorState) => {
-        return transactionCombinator(
-          state,
-          tr.replaceSelectionWith(structureNode),
-        )([recalculateNumbers]).transaction;
-      },
-    );
   }
 
   <template>

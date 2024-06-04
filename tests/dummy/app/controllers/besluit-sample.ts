@@ -1,5 +1,4 @@
 import Controller from '@ember/controller';
-import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
 import { service } from '@ember/service';
@@ -7,7 +6,6 @@ import IntlService from 'ember-intl/services/intl';
 
 import {
   NodeType,
-  NodeViewConstructor,
   Plugin,
   SayController,
   Schema,
@@ -142,9 +140,9 @@ export default class BesluitSampleController extends Controller {
 
         repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
-        list_item: listItemWithConfig({ rdfaAware: true }),
-        ordered_list: orderedListWithConfig({ rdfaAware: true }),
-        bullet_list: bulletListWithConfig({ rdfaAware: true }),
+        list_item: listItemWithConfig({}),
+        ordered_list: orderedListWithConfig({}),
+        bullet_list: bulletListWithConfig({}),
         placeholder,
         ...tableNodes({
           tableGroup: 'block',

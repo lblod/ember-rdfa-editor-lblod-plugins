@@ -1,23 +1,14 @@
-import {
-  Command,
-  EditorState,
-  NodeSelection,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
+import { Command, EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { IncomingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import { v4 as uuid } from 'uuid';
-import { addProperty } from '@lblod/ember-rdfa-editor/commands';
 import {
   addPropertyToNode,
-  findRdfaIdsInSelection,
   transactionCombinator,
 } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 interface InsertMotivationArgs {
   intl: IntlService;
@@ -30,7 +21,7 @@ export default function insertMotivation({
 }: InsertMotivationArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const translationWithDocLang = getTranslationFunction(state);
-    const { selection, schema } = state;
+    const { schema } = state;
     const decisionNode = decisionLocation;
     const motivationId = uuid();
     const nodeToInsert = schema.node(
@@ -123,6 +114,7 @@ export default function insertMotivation({
     // how the offset between the insertion point and the point where the cursor should end up
     const tr = state.tr;
     tr.replaceSelectionWith(nodeToInsert);
+    const factory = new SayDataFactory();
 
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
@@ -132,7 +124,7 @@ export default function insertMotivation({
         resource: decisionNode.node.attrs.subject,
         property: {
           predicate: BESLUIT('motivering').full,
-          object: { termType: 'LiteralNode', value: motivationId },
+          object: factory.literalNode(motivationId),
         },
       }),
     ]);

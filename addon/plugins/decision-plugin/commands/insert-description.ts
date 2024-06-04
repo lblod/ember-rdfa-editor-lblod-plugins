@@ -1,22 +1,12 @@
-import {
-  EditorState,
-  NodeSelection,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
-import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
+import { EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import { v4 as uuid } from 'uuid';
-import { findInsertionPosInNode } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-node';
 import {
   addPropertyToNode,
   transactionCombinator,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import {
-  ELI,
-  PROV,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 interface InsertDescriptionArgs {
   placeholderText: string;
@@ -28,7 +18,7 @@ export default function insertDescription({
   decisionLocation,
 }: InsertDescriptionArgs) {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
-    const { selection, schema } = state;
+    const { schema } = state;
     const descriptionId = uuid();
     const nodeToInsert = schema.node(
       'block_rdfa',
@@ -45,6 +35,7 @@ export default function insertDescription({
 
     tr.replaceSelectionWith(nodeToInsert);
 
+    const factory = new SayDataFactory();
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
       tr,
@@ -53,7 +44,7 @@ export default function insertDescription({
         resource: decisionLocation.node.attrs.subject,
         property: {
           predicate: ELI('description').full,
-          object: { termType: 'LiteralNode', value: descriptionId },
+          object: factory.literalNode(descriptionId),
         },
       }),
     ]);

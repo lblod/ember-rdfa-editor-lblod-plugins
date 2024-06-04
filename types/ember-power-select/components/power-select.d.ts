@@ -4,9 +4,9 @@ declare module 'ember-power-select/components/power-select' {
   import Component from '@glimmer/component';
   import { MatcherFn } from '../utils/group-utils';
   import {
-    Dropdown,
-    DropdownActions,
-  } from 'ember-basic-dropdown/addon/components/basic-dropdown';
+    type Dropdown,
+    type DropdownActions,
+  } from '@gavant/glint-template-types/types/ember-basic-dropdown/components/basic-dropdown';
 
   interface SelectActions extends DropdownActions {
     search: (term: string) => void;

@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { Schema } from 'prosemirror-model';
 import {
   em,
   strikethrough,
@@ -60,7 +59,7 @@ import {
   bullet_list_input_rule,
   ordered_list_input_rule,
 } from '@lblod/ember-rdfa-editor/plugins/list/input_rules';
-import { inputRules, PluginConfig } from '@lblod/ember-rdfa-editor';
+import { inputRules, PluginConfig, Schema } from '@lblod/ember-rdfa-editor';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { getOwner } from '@ember/application';
@@ -142,7 +141,7 @@ export default class EditableBlockController extends Controller {
     };
   }
   get shouldShowTableMenu() {
-    return this.controller?.activeEditorState.schema['table_cell'];
+    return this.controller?.activeEditorState.schema.nodes['table_cell'];
   }
 
   @tracked plugins: PluginConfig = [

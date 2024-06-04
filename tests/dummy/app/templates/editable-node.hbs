@@ -1,3 +1,4 @@
+{{! @glint-nocheck: not typesafe yet }}
 <DummyContainer>
   <:header>
     <DebugTools @controller={{this.controller}} />
@@ -38,9 +39,9 @@
                 <Plugins::Link::LinkMenu @controller={{this.controller}} />
               </Tb.Group>
               {{#if this.shouldShowTableMenu}}
-              <Tb.Group>
-                <Plugins::Table::TableMenu @controller={{this.controller}} />
-              </Tb.Group>
+                <Tb.Group>
+                  <Plugins::Table::TableMenu @controller={{this.controller}} />
+                </Tb.Group>
               {{/if}}
               <Tb.Group>
                 <Plugins::Heading::HeadingMenu
