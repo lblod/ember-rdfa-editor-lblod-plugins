@@ -21,11 +21,12 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
-export function createSnippetPlaceholder(listIds: string[], schema: Schema) {
+export function createSnippetPlaceholder(listIds: string[], listNames: string[], schema: Schema) {
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
 
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
+    listNames,
     subject: mappingResource,
     properties: [
       {
@@ -50,6 +51,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
+    listNames: { default: [] }
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {

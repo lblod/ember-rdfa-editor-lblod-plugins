@@ -35,8 +35,8 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
   }
 
   @action
-  insertPlaceholder(listIds: string[]) {
-    const node = createSnippetPlaceholder(listIds, this.args.controller.schema);
+  insertPlaceholder(listIds: string[], listNames: string[]) {
+    const node = createSnippetPlaceholder(listIds, listNames, this.args.controller.schema);
 
     this.args.controller.withTransaction(
       (tr) => {
@@ -56,6 +56,7 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
         {{on 'click' this.openModal}}
       >
         {{t 'snippet-plugin.insert.placeholder'}}
+        {{this.args.listNames}}
       </AuButton>
     </li>
     <SnippetListModal

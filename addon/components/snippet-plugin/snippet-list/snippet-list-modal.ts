@@ -52,7 +52,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
   saveAndClose() {
     const snippetListNames = this.snippetListResource.value?.filter((snippetList) => this.assignedSnippetListsIds.includes(snippetList.id))
     console.log(snippetListNames)
-    this.args.onSaveSnippetListIds(this.assignedSnippetListsIds);
+    this.args.onSaveSnippetListIds(this.assignedSnippetListsIds, snippetListNames);
     this.args.closeModal();
     // Clear selection for next time
     this.assignedSnippetListsIds = [];
