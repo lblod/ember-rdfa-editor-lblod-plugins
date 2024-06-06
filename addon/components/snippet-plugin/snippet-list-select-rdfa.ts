@@ -49,8 +49,11 @@ export default class SnippetListSelectRdfaComponent extends Component<Args> {
     );
   }
 
-  saveChanges = (snippetIds: string[]) => {
+  saveChanges = (snippetIds: string[], snippetNames: string[]) => {
     if (this.currentResource) {
+      this.controller.withTransaction((tr) => {
+        return tr.setNodeAttribute(this.node.pos, 'listNames', snippetNames);
+      });
       this.args.controller?.doCommand(
         updateSnippetIds({
           resource: this.currentResource,

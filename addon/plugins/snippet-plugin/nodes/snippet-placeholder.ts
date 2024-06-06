@@ -21,7 +21,11 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
-export function createSnippetPlaceholder(listIds: string[], listNames: string[], schema: Schema) {
+export function createSnippetPlaceholder(
+  listIds: string[],
+  listNames: string[],
+  schema: Schema,
+) {
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
 
   return schema.nodes.snippet_placeholder.create({
@@ -51,7 +55,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
-    listNames: { default: [] }
+    listNames: { default: [] },
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
@@ -62,6 +66,7 @@ const emberNodeConfig: EmberNodeConfig = {
       attrs: {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
+        'data-list-names': node.attrs.listNames.join(','),
       },
       content: [
         'text',
@@ -85,7 +90,10 @@ const emberNodeConfig: EmberNodeConfig = {
             EXT('SnippetPlaceholder'),
           )
         ) {
-          return rdfaAttrs;
+          return {
+            ...rdfaAttrs,
+            listNames: node.getAttribute('data-list-names')?.split(','),
+          };
         }
         return false;
       },
