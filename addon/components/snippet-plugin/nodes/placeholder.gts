@@ -4,13 +4,13 @@ import t from 'ember-intl/helpers/t';
 import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
 import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 
 interface Signature {
   Args: EmberNodeArgs;
 }
 
-import { service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
 // We don't have a way to type template only components without ember-source 5, so create an empty
 // class to allow for type checking
 // eslint-disable-next-line ember/no-empty-glimmer-component-classes
