@@ -66,7 +66,7 @@ const emberNodeConfig: EmberNodeConfig = {
       attrs: {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
-        'data-list-names': node.attrs.listNames.join(','),
+        'data-list-names': (node.attrs.listNames as string[]).join(','),
       },
       content: [
         'text',
