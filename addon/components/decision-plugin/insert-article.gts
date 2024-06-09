@@ -1,29 +1,29 @@
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import {
   EditorState,
   PNode,
   SayController,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { action } from '@ember/object';
-import Component from '@glimmer/component';
-import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
-import {
-  findNodeByRdfaId,
-  transactionCombinator,
-} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
-import { on } from '@ember/modifier';
+import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
 import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
-import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
-import {
-  getOutgoingTriple,
-  hasOutgoingNamedNodeTriple,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   BESLUIT,
   PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
+import {
+  findNodeByRdfaId,
+  transactionCombinator,
+} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import t from 'ember-intl/helpers/t';
 
 interface Sig {

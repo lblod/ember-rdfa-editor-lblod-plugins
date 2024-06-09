@@ -1,24 +1,12 @@
 import type { ComponentLike } from '@glint/template';
-import {
-  PNode,
-  Schema,
-  getRdfaAttrs,
-  rdfaAttrSpec,
-} from '@lblod/ember-rdfa-editor';
+import { PNode, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/structure';
-import {
-  BESLUIT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { v4 as uuid } from 'uuid';
 const rdfaAware = true;
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
@@ -158,26 +146,3 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 };
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());
-export function buildArticleStructure(schema: Schema) {
-  const articleId = uuid();
-  const articleResource = `http://data.lblod.info/artikels/--ref-uuid4-${articleId}`;
-  const factory = new SayDataFactory();
-  return schema.node(
-    'structure',
-    {
-      rdfaNodeType: 'resource',
-      properties: [
-        {
-          predicate: RDF('type').full,
-          object: factory.namedNode(BESLUIT('Artikel').full),
-        },
-      ] satisfies OutgoingTriple[],
-      hasTitle: true,
-      title: '',
-      structureName: 'Artikel',
-      headerTag: 'h5',
-      subject: articleResource,
-    },
-    schema.node('paragraph'),
-  );
-}
