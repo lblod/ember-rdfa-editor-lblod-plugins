@@ -67,15 +67,40 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
         if (html.body.firstElementChild) {
           headerSpec = [
             tag,
-            {},
-            `${structureName} ${number}.`,
-            html.body.firstElementChild,
+            { 'data-say-structure-header': true },
+            [
+              'span',
+              { 'data-say-structure-header-name': true },
+              `${structureName} `,
+            ],
+            ['span', { 'data-say-structure-header-number': true }, number],
+            [
+              'span',
+              { 'data-say-structure-header-content': true },
+              html.body.firstElementChild,
+            ],
           ];
         } else {
-          headerSpec = [tag, {}, `${structureName} ${number}.`];
+          headerSpec = [
+            tag,
+            [
+              'span',
+              { 'data-say-structure-header-name': true },
+              `${structureName} `,
+            ],
+            ['span', { 'data-say-structure-header-number': true }, number],
+          ];
         }
       } else {
-        headerSpec = [tag, {}, `${structureName} ${number}.`];
+        headerSpec = [
+          tag,
+          [
+            'span',
+            { 'data-say-structure-header-name': true },
+            `${structureName} `,
+          ],
+          ['span', { 'data-say-structure-header-number': true }, number],
+        ];
       }
 
       return renderRdfaAware({
@@ -104,15 +129,24 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           }
           const attrs = getRdfaAttrs(node, { rdfaAware });
           if (node.dataset.sayRenderAs === 'structure') {
+            const hasTitle =
+              node.dataset.sayHasTitle && node.dataset.sayHasTitle !== 'false';
+            // strict selector here to avoid false positives when structures are nested
+            // :scope refers to the element on which we call querySelector
+            const titleElement = node.querySelector(
+              ':scope > div > div > [data-say-structure-header] > [data-say-structure-header-content]',
+            );
+            let title: string | undefined = undefined;
+            if (titleElement) {
+              title = titleElement.innerHTML;
+            }
             return {
               ...attrs,
-              hasTitle:
-                node.dataset.sayHasTitle &&
-                node.dataset.sayHasTitle !== 'false',
+              hasTitle,
               structureName: node.dataset.sayStructureName,
               headerTag: node.dataset.sayHeaderTag,
               number: node.dataset.sayNumber,
-              title: 'test',
+              title,
             };
           }
           return false;
