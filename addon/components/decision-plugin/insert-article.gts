@@ -24,11 +24,12 @@ import {
   PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import t from 'ember-intl/helpers/t';
 
 interface Sig {
   Args: { controller: SayController };
 }
-export default class InsertStructureComponent extends Component<Sig> {
+export default class InsertArticleComponent extends Component<Sig> {
   get controller() {
     return this.args.controller;
   }
@@ -81,7 +82,7 @@ export default class InsertStructureComponent extends Component<Sig> {
         @skin='link'
         {{on 'click' this.doInsert}}
       >
-        Insert structure
+        {{t 'besluit-plugin.insert.article'}}
       </AuButton>
     </li>
   </template>

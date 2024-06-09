@@ -94,10 +94,6 @@
                 <this.InsertArticle @controller={{this.controller}} />
               </Sidebar.Collapsible>
               <Sidebar.Collapsible @title='Insert'>
-                <ArticleStructurePlugin::ArticleStructureCard
-                  @controller={{this.controller}}
-                  @options={{this.config.structures}}
-                />
                 <CitationPlugin::CitationInsert
                   @controller={{this.controller}}
                   @config={{this.config.citation}}
@@ -128,10 +124,6 @@
                   @config={{this.config.lpdc}}
                 />
               </Sidebar.Collapsible>
-              <ArticleStructurePlugin::StructureCard
-                @controller={{this.controller}}
-                @options={{this.config.structures}}
-              />
               <this.StructureControlCard @controller={{this.controller}} />
               <DecisionPlugin::DecisionPluginCard
                 @controller={{this.controller}}

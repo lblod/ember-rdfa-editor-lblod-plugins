@@ -56,10 +56,7 @@ import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-
 
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
-import {
-  besluitNodes,
-  structureSpecs,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
+import { besluitNodes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   citationPlugin,
@@ -101,13 +98,13 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
-import InsertStructureComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/insert';
+import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
-  InsertArticle = InsertStructureComponent;
+  InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
 
   @tracked editableNodes = false;
@@ -218,7 +215,6 @@ export default class BesluitSampleController extends Controller {
 
   get config() {
     return {
-      structures: structureSpecs,
       citation: {
         type: 'nodes',
         activeInNodeTypes(schema: Schema): Set<NodeType> {
