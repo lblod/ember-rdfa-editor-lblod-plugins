@@ -37,6 +37,5 @@
 .idea/vcs.xml
 
 # VScode & extensions settings
-.vscode/extensions.json
-.vscode/settings.json
+.vscode
 .favorites.json
