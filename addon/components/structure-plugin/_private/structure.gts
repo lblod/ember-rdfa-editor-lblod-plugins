@@ -103,7 +103,7 @@ export default class Structure extends Component<Sig> {
   @action
   onAttrsUpdate() {
     if (this.titleAttr !== this.innerEditor?.htmlContent) {
-      this.innerEditor?.setHtmlContent(this.titleAttr);
+      this.innerEditor?.setInnerHtmlContent(this.titleAttr);
     }
   }
 

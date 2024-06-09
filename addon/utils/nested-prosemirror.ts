@@ -6,7 +6,9 @@ import {
   SayView,
   Schema,
   Transaction,
+  Selection,
 } from '@lblod/ember-rdfa-editor';
+import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
 export interface NestedProsemirrorArgs {
   target: HTMLElement;
   schema: Schema;
@@ -84,11 +86,24 @@ export default class NestedProsemirror {
     if (this.view) {
       const newState = this.view.state.apply(tr);
       this.view.updateState(newState);
-      this.onUpdateContent(this.view.htmlContent);
+      if (!tr.getMeta('fromOutside')) {
+        this.onUpdateContent(this.view.htmlContent);
+      }
     }
   };
-  setHtmlContent(html: string) {
-    this.view.setHtmlContent(html);
+  setInnerHtmlContent(html: string) {
+    const state = this.view.state;
+    const tr = state.tr;
+    tr.setMeta('fromOutside', true);
+
+    const doc = htmlToDoc(html, {
+      schema: state.schema,
+      parser: this.view.domParser,
+      editorView: this.view,
+    });
+    tr.replaceWith(0, tr.doc.nodeSize - 2, doc);
+    tr.setSelection(Selection.atEnd(tr.doc));
+    this.dispatch(tr);
   }
   get htmlContent() {
     return this.view.htmlContent;
