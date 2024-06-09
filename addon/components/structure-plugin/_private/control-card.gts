@@ -42,6 +42,9 @@ export default class StructureControlCardComponent extends Component<Sig> {
     }
     return null;
   }
+  get structureName(): string {
+    return this.structure?.node.attrs.structureName ?? 'Unknown structure';
+  }
   get canMoveUp() {
     return this.controller.checkCommand(moveStructure('up'));
   }
@@ -81,12 +84,14 @@ export default class StructureControlCardComponent extends Component<Sig> {
       <AuCard
         @flex={{true}}
         @divided={{true}}
-        @expandable={{false}}
+        @expandable={{true}}
         @shadow={{true}}
-        @size='flush'
+        @isOpenInitially={{true}}
+        @size='small'
         as |Card|
       >
         <Card.header>
+
           <AuHeading @level='3' @skin='6'>{{t
               'article-structure-plugin.title.structure-card'
             }}</AuHeading>
@@ -107,7 +112,10 @@ export default class StructureControlCardComponent extends Component<Sig> {
                 @disabled={{not this.canMoveUp}}
                 {{on 'click' (fn this.moveStructure 'up')}}
               >
-                {{t 'article-structure-plugin.move-up.article'}}
+                {{t
+                  'structure-plugin.move-up'
+                  structureName=this.structureName
+                }}
               </AuButton>
             </Item>
             <Item>

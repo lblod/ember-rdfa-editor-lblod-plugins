@@ -11,6 +11,9 @@ common:
     asc: Oplopend sorteren
     desc: Aflopend sorteren
 
+structure-plugin:
+  move-up: '{structureName} naar boven verplaatsen'
+  move-down: '{structureName} naar beneden verplaatsen'
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
@@ -151,6 +154,7 @@ besluit-plugin:
     decision-title: Voeg besluittitel in
     motivation: Voeg motivatie in
     article-block: Voeg artikelblok in
+    article: Artikel invoegen
   placeholder:
     decision-title: Geef titel besluit op
     decision-description: Voeg beschrijving in

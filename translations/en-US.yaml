@@ -11,6 +11,10 @@ common:
     asc: Sort ascending
     desc: Sort descending
 
+structure-plugin:
+  move-up: 'Move {structureName} up'
+  move-down: 'Move {structureName} down'
+
 article-structure-plugin:
   insert:
     paragraph: Insert paragraph
@@ -151,6 +155,7 @@ besluit-plugin:
     decision-title: Insert decision title
     motivation: Insert motivation
     article-block: Insert article block
+    article: Insert article
   placeholder:
     decision-title: Insert decision title
     decision-description: Insert description
