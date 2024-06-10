@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import {
   DCT,
   LOCN,
@@ -7,10 +6,8 @@ import {
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import { Place } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
-import { constructPointNode, parsePointNode } from './point';
-
-export const fallbackPlaceUri = () =>
-  `http://data.lblod.info/id/plaats/${uuidv4()}`;
+import { constructPointSpec } from './point';
+import { type NodeContentsUtils } from './';
 
 export const constructPlaceSpec = (place: Place) => {
   return span(
@@ -25,34 +22,36 @@ export const constructPlaceSpec = (place: Place) => {
       },
       place.name,
     ),
-    constructPointNode(place.location, LOCN('geometry')),
+    constructPointSpec(place.location, LOCN('geometry')),
   );
 };
 
-export const parsePlaceElement = (element: Element): Place | undefined => {
-  const placeNode = findChildWithRdfaAttribute(
-    element,
-    'typeof',
-    LOCN('Location'),
-  );
-  const placeResource = placeNode?.getAttribute('resource');
-  const label =
-    placeNode &&
-    findChildWithRdfaAttribute(placeNode, 'property', RDFS('label'))
-      ?.textContent;
+export const parsePlaceElement =
+  (nodeContentsUtils: NodeContentsUtils) =>
+  (element: Element): Place | undefined => {
+    const placeNode = findChildWithRdfaAttribute(
+      element,
+      'typeof',
+      LOCN('Location'),
+    );
+    const placeResource = placeNode?.getAttribute('resource');
+    const label =
+      placeNode &&
+      findChildWithRdfaAttribute(placeNode, 'property', RDFS('label'))
+        ?.textContent;
 
-  const pointNode =
-    placeNode &&
-    findChildWithRdfaAttribute(placeNode, 'property', LOCN('geometry'));
-  const location = parsePointNode(pointNode);
+    const pointNode =
+      placeNode &&
+      findChildWithRdfaAttribute(placeNode, 'property', LOCN('geometry'));
+    const location = nodeContentsUtils.point.parse(pointNode);
 
-  if (placeResource && label && location) {
-    return new Place({
-      uri: placeResource,
-      name: label,
-      location,
-    });
-  } else {
-    return;
-  }
-};
+    if (label && location) {
+      return new Place({
+        uri: placeResource ?? nodeContentsUtils.fallbackPlaceUri(),
+        name: label,
+        location,
+      });
+    } else {
+      return;
+    }
+  };

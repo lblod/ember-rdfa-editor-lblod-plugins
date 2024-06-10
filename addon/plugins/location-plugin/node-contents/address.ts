@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import {
   ADRES,
   ADRES_TYPO,
@@ -11,12 +10,10 @@ import {
   span,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
-import { constructPointNode, parseOldPointNode, parsePointNode } from './point';
+import { constructPointSpec } from './point';
+import { type NodeContentsUtils } from './';
 
-export const fallbackAddressUri = () =>
-  `http://data.lblod.info/id/adresvoorstelling/${uuidv4()}`;
-
-export const constructAddressNode = (address: Address) => {
+export const constructAddressSpec = (address: Address) => {
   const housenumberNode = address.housenumber
     ? [
         ' ',
@@ -75,129 +72,132 @@ export const constructAddressNode = (address: Address) => {
       address.municipality,
     ),
     ...idNode,
-    constructPointNode(address.location, ADRES('positie')),
+    constructPointSpec(address.location, ADRES('positie')),
   );
 };
 
 /** Parse pre-OSLO model rdfaAware address nodes */
-export const parseOldAddressNode = (
-  addressNode: Element,
-): Address | undefined => {
-  const uri = addressNode.getAttribute('resource');
-  const street = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES_TYPO('heeftStraatnaam'),
-  )?.textContent;
-  const housenumber = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES_TYPO('huisnummer'),
-  )?.textContent;
-  const busnumber = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES_TYPO('busnummer'),
-  )?.textContent;
-  const postInfoNode = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES_TYPO('heeftPostinfo'),
-  );
-  const zipcode =
-    postInfoNode &&
-    findChildWithRdfaAttribute(postInfoNode, 'property', ADRES_TYPO('postcode'))
-      ?.textContent;
-  const municipality = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES_TYPO('gemeentenaam'),
-  )?.textContent;
-
-  const locationNode = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES_TYPO('positie'),
-  );
-  const location = parseOldPointNode(locationNode);
-
-  if (street && municipality && zipcode && location) {
-    return new Address({
-      uri: uri ?? fallbackAddressUri(),
-      street,
-      housenumber: housenumber ?? undefined,
-      zipcode,
-      municipality,
-      busnumber: busnumber ?? undefined,
-      location,
-    });
-  } else {
-    return;
-  }
-};
-
-export const parseAddressNode = (
-  addressNode: Element | undefined,
-): Address | undefined => {
-  if (!addressNode) return undefined;
-
-  const uri = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES('verwijstNaar'),
-  )?.getAttribute('content');
-  const spatialNode = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    DCT('spatial'),
-  );
-  const street =
-    spatialNode &&
-    findChildWithRdfaAttribute(spatialNode, 'property', LOCN('thoroughfare'))
-      ?.textContent;
-  const housenumber =
-    spatialNode &&
-    findChildWithRdfaAttribute(
-      spatialNode,
+export const parseOldAddressElement =
+  (nodeContentsUtils: NodeContentsUtils) =>
+  (addressNode: Element): Address | undefined => {
+    const uri = addressNode.getAttribute('resource');
+    const street = findChildWithRdfaAttribute(
+      addressNode,
       'property',
-      ADRES('Adresvoorstelling.huisnummer'),
+      ADRES_TYPO('heeftStraatnaam'),
     )?.textContent;
-  const busnumber =
-    spatialNode &&
-    findChildWithRdfaAttribute(
-      spatialNode,
+    const housenumber = findChildWithRdfaAttribute(
+      addressNode,
       'property',
-      ADRES('Adresvoorstelling.busnummer'),
+      ADRES_TYPO('huisnummer'),
     )?.textContent;
-  const zipcode = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    LOCN('postcode'),
-  )?.textContent;
-  const municipality = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES('gemeentenaam'),
-  )?.textContent;
+    const busnumber = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES_TYPO('busnummer'),
+    )?.textContent;
+    const postInfoNode = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES_TYPO('heeftPostinfo'),
+    );
+    const zipcode =
+      postInfoNode &&
+      findChildWithRdfaAttribute(
+        postInfoNode,
+        'property',
+        ADRES_TYPO('postcode'),
+      )?.textContent;
+    const municipality = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES_TYPO('gemeentenaam'),
+    )?.textContent;
 
-  const pointNode = findChildWithRdfaAttribute(
-    addressNode,
-    'property',
-    ADRES('positie'),
-  );
-  const location = parsePointNode(pointNode);
+    const locationNode = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES_TYPO('positie'),
+    );
+    const location = nodeContentsUtils.point.parseOld(locationNode);
 
-  if (street && municipality && zipcode && location) {
-    return new Address({
-      uri: uri ?? fallbackAddressUri(),
-      street,
-      housenumber: housenumber ?? undefined,
-      zipcode,
-      municipality,
-      busnumber: busnumber ?? undefined,
-      location,
-    });
-  } else {
-    return;
-  }
-};
+    if (street && municipality && zipcode && location) {
+      return new Address({
+        uri: uri ?? nodeContentsUtils.fallbackAddressUri(),
+        street,
+        housenumber: housenumber ?? undefined,
+        zipcode,
+        municipality,
+        busnumber: busnumber ?? undefined,
+        location,
+      });
+    } else {
+      return;
+    }
+  };
+
+export const parseAddressElement =
+  (nodeContentsUtils: NodeContentsUtils) =>
+  (addressNode: Element | undefined): Address | undefined => {
+    if (!addressNode) return undefined;
+
+    const uri = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES('verwijstNaar'),
+    )?.getAttribute('content');
+    const spatialNode = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      DCT('spatial'),
+    );
+    const street =
+      spatialNode &&
+      findChildWithRdfaAttribute(spatialNode, 'property', LOCN('thoroughfare'))
+        ?.textContent;
+    const housenumber =
+      spatialNode &&
+      findChildWithRdfaAttribute(
+        spatialNode,
+        'property',
+        ADRES('Adresvoorstelling.huisnummer'),
+      )?.textContent;
+    const busnumber =
+      spatialNode &&
+      findChildWithRdfaAttribute(
+        spatialNode,
+        'property',
+        ADRES('Adresvoorstelling.busnummer'),
+      )?.textContent;
+    const zipcode = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      LOCN('postcode'),
+    )?.textContent;
+    const municipality = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES('gemeentenaam'),
+    )?.textContent;
+
+    const pointNode = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES('positie'),
+    );
+    const location = nodeContentsUtils.point.parse(pointNode);
+
+    if (street && municipality && zipcode && location) {
+      return new Address({
+        uri: uri ?? nodeContentsUtils.fallbackAddressUri(),
+        street,
+        housenumber: housenumber ?? undefined,
+        zipcode,
+        municipality,
+        busnumber: busnumber ?? undefined,
+        location,
+      });
+    } else {
+      return;
+    }
+  };

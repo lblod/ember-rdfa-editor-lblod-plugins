@@ -23,8 +23,8 @@ import {
   Point,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { replaceSelectionWithAddress } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
-import { fallbackPlaceUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents/place';
-import { fallbackPointUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents/point';
+import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
+import { NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import Edit from './edit';
 import LocationMap, { type LocationType } from './map';
 
@@ -33,6 +33,7 @@ export type CurrentLocation = Address | GlobalCoordinates | undefined;
 interface Signature {
   Args: {
     controller: SayController;
+    config: LocationPluginConfig;
     defaultMunicipality?: string;
   };
   Element: HTMLLIElement;
@@ -103,6 +104,10 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   get controller() {
     return this.args.controller;
+  }
+
+  get nodeContentsUtils() {
+    return new NodeContentsUtils(this.args.config);
   }
 
   get documentLanguage() {
@@ -192,10 +197,10 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       ) {
         convertWGS84CoordsToLambert(this.chosenPoint.global).then((lambert) => {
           toInsert = new Place({
-            uri: fallbackPlaceUri(),
+            uri: this.nodeContentsUtils.fallbackPlaceUri(),
             name: this.placeName,
             location: new Point({
-              uri: fallbackPointUri(),
+              uri: this.nodeContentsUtils.fallbackPointUri(),
               location: {
                 lambert,
                 global: this.chosenPoint?.global,
@@ -248,6 +253,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
             @defaultMunicipality={{@defaultMunicipality}}
             @placeName={{this.placeName}}
             @setPlaceName={{this.setPlaceName}}
+            @nodeContentsUtils={{this.nodeContentsUtils}}
           />
           <LocationMap
             class='au-o-grid__item au-u-1-2@small au-o-box-large'

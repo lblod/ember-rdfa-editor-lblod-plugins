@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import {
   GEOSPARQL,
   LOCN,
@@ -14,11 +13,9 @@ import {
   parseLambert72WKTString,
   Point,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import { type NodeContentsUtils } from './';
 
-export const fallbackPointUri = () =>
-  `http://data.lblod.info/id/geometrie/${uuidv4()}`;
-
-export const constructPointNode = (point: Point, property: Resource) => {
+export const constructPointSpec = (point: Point, property: Resource) => {
   return span(
     {
       property: property.full,
@@ -33,43 +30,46 @@ export const constructPointNode = (point: Point, property: Resource) => {
   );
 };
 
-export const parsePointNode = (
-  node: Element | undefined,
-): Point | undefined => {
-  const wkt =
-    node &&
-    findChildWithRdfaAttribute(
-      node,
-      'property',
-      GEOSPARQL('asWKT'),
-    )?.getAttribute('content');
-  const uri = node?.getAttribute('resource');
+export const parsePointElement =
+  (nodeContentsUtils: NodeContentsUtils) =>
+  (node: Element | undefined): Point | undefined => {
+    const wkt =
+      node &&
+      findChildWithRdfaAttribute(
+        node,
+        'property',
+        GEOSPARQL('asWKT'),
+      )?.getAttribute('content');
+    const uri = node?.getAttribute('resource');
 
-  const location =
-    typeof wkt === 'string' ? parseLambert72WKTString(wkt) : undefined;
+    const location =
+      typeof wkt === 'string' ? parseLambert72WKTString(wkt) : undefined;
 
-  return (
-    location &&
-    new Point({
-      uri: uri ?? fallbackPointUri(),
-      location,
-    })
-  );
-};
+    return (
+      location &&
+      new Point({
+        uri: uri ?? nodeContentsUtils.fallbackPointUri(),
+        location,
+      })
+    );
+  };
 
-export const parseOldPointNode = (
-  node: Element | undefined,
-): Point | undefined => {
-  const gml =
-    node &&
-    findChildWithRdfaAttribute(
-      node,
-      'property',
-      GEOSPARQL('asGML'),
-    )?.getAttribute('content');
+export const parseOldPointElement =
+  (nodeContentsUtils: NodeContentsUtils) =>
+  (node: Element | undefined): Point | undefined => {
+    const gml =
+      node &&
+      findChildWithRdfaAttribute(
+        node,
+        'property',
+        GEOSPARQL('asGML'),
+      )?.getAttribute('content');
 
-  const location =
-    typeof gml === 'string' ? parseLambert72GMLString(gml) : undefined;
+    const location =
+      typeof gml === 'string' ? parseLambert72GMLString(gml) : undefined;
 
-  return location && new Point({ uri: fallbackPointUri(), location });
-};
+    return (
+      location &&
+      new Point({ uri: nodeContentsUtils.fallbackPointUri(), location })
+    );
+  };

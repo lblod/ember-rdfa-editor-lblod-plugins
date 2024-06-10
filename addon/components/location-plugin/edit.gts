@@ -32,6 +32,7 @@ import {
   resolveStreet,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import { type LocationType } from './map';
 
 interface Message {
@@ -52,6 +53,7 @@ type Signature = {
     setIsLoading?: (isLoading: boolean) => void;
     placeName?: string;
     setPlaceName: (name: string) => void;
+    nodeContentsUtils: NodeContentsUtils;
   };
   Element: HTMLFormElement;
 };
@@ -231,19 +233,25 @@ export default class LocationPluginEditComponent extends Component<Signature> {
         } else {
           await timeout(200);
           if (newHousenumber) {
-            const address = await resolveAddress({
-              street: newStreetName,
-              municipality: newMunicipality,
-              housenumber: newHousenumber,
-              busnumber: newBusnumber,
-            });
+            const address = await resolveAddress(
+              {
+                street: newStreetName,
+                municipality: newMunicipality,
+                housenumber: newHousenumber,
+                busnumber: newBusnumber,
+              },
+              this.args.nodeContentsUtils,
+            );
             this.args.setAddressToInsert(address);
             return address;
           } else {
-            const address = await resolveStreet({
-              street: newStreetName,
-              municipality: newMunicipality,
-            });
+            const address = await resolveStreet(
+              {
+                street: newStreetName,
+                municipality: newMunicipality,
+              },
+              this.args.nodeContentsUtils,
+            );
             this.args.setAddressToInsert(address);
             return address;
           }

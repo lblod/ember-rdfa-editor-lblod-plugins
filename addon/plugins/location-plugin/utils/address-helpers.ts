@@ -1,6 +1,5 @@
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { fallbackAddressUri } from '../node-contents/address';
-import { fallbackPointUri } from '../node-contents/point';
+import { NodeContentsUtils } from '../node-contents';
 import {
   convertLambertCoordsToWGS84,
   parseLambert72GMLString,
@@ -244,7 +243,10 @@ type StreetInfo = {
   street: string;
 };
 
-export async function resolveStreet(info: StreetInfo) {
+export async function resolveStreet(
+  info: StreetInfo,
+  nodeContentsUtils: NodeContentsUtils,
+) {
   const searchTerm = `${info.street}, ${info.municipality}`;
   const url = new URL(LOC_GEOPUNT_ENDPOINT);
   url.searchParams.append(
@@ -261,12 +263,12 @@ export async function resolveStreet(info: StreetInfo) {
     const streetinfo = jsonResult.LocationResult[0];
     if (streetinfo) {
       return new Address({
-        uri: fallbackAddressUri(),
+        uri: nodeContentsUtils.fallbackAddressUri(),
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
         location: new Point({
-          uri: fallbackPointUri(),
+          uri: nodeContentsUtils.fallbackPointUri(),
           location: {
             global: {
               lng: streetinfo.Location.Lon_WGS84,
@@ -300,7 +302,10 @@ type AddressInfo = {
   busnumber?: string;
 };
 
-export async function resolveAddress(info: AddressInfo) {
+export async function resolveAddress(
+  info: AddressInfo,
+  nodeContentsUtils: NodeContentsUtils,
+) {
   const addressSearchResult = await searchAddress(info, 1);
   if (addressSearchResult.adressen.length) {
     const addressDetailURL = addressSearchResult.adressen[0].detail;
@@ -333,10 +338,13 @@ export async function resolveAddress(info: AddressInfo) {
       });
     }
   } else {
-    const alternativeAddress = await resolveStreet({
-      street: info.street,
-      municipality: info.municipality,
-    });
+    const alternativeAddress = await resolveStreet(
+      {
+        street: info.street,
+        municipality: info.municipality,
+      },
+      nodeContentsUtils,
+    );
 
     throw new AddressError({
       translation: 'editor-plugins.address.edit.errors.address-not-found',

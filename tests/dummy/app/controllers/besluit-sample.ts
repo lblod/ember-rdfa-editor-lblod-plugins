@@ -202,7 +202,7 @@ export default class BesluitSampleController extends Controller {
         number,
         location,
         codelist,
-        oslo_location: osloLocation,
+        oslo_location: osloLocation(this.config.location),
         ...besluitNodes,
         roadsign_regulation,
         heading: headingWithConfig({ rdfaAware: true }),
@@ -311,6 +311,14 @@ export default class BesluitSampleController extends Controller {
         // Needs to point at the same port as the ember app
         endpoint: 'http://localhost/lpdc-service',
       },
+      location: {
+        defaultPointUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/geometrie/',
+        defaultPlaceUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/plaats/',
+        defaultAddressUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
+      },
     };
   }
 
@@ -332,7 +340,7 @@ export default class BesluitSampleController extends Controller {
       location: locationView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
-      oslo_location: osloLocationView(controller),
+      oslo_location: osloLocationView(this.config.location)(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };
