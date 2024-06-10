@@ -19,6 +19,7 @@ import AuAlert, {
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
 import AuFieldset from '@appuniversum/ember-appuniversum/components/au-fieldset';
+import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CheckIcon } from '@appuniversum/ember-appuniversum/components/icons/check';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
@@ -364,6 +365,9 @@ export default class LocationPluginEditComponent extends Component<Signature> {
             {{on 'input' this.updatePlaceName}}
           />
         </AuFormRow>
+        <AuHeading @level='6' @skin='6'>
+          {{t 'location-plugin.search.hint'}}
+        </AuHeading>
       {{/if}}
       <AuFormRow>
         <AuLabel for='municipality-select'>

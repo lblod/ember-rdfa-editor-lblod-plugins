@@ -438,6 +438,7 @@ location-plugin:
   default-label: location
   search:
     type: Type
+    hint: 'Search by address:'
     place-name:
       label: Place
       placeholder: Place name

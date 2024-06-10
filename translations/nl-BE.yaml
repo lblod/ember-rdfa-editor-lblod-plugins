@@ -440,6 +440,7 @@ location-plugin:
   default-label: locatie
   search:
     type: Soort
+    hint: 'Zoeken op adres:'
     place-name:
       label: Plaats
       placeholder: Naam van de plaats

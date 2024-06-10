@@ -3,8 +3,18 @@
     width: 100%;
   }
 
-  .au-c-modal__body > .au-o-grid {
+  .au-c-modal__body {
+    padding: $au-unit-small;
+    padding-bottom: 0;
+
+    & > .au-o-grid {
+      height: 100%;
+    }
+  }
+
+  .edit-form {
     height: 100%;
+    overflow: scroll;
   }
 
   .map-wrapper {

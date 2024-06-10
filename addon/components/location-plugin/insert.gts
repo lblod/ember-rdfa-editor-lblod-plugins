@@ -241,20 +241,21 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       @size='large'
       as |modal|
     >
-      <modal.Body class='au-u-padding-small au-u-padding-bottom-none'>
+      <modal.Body>
         <div class='au-o-grid au-o-grid--tiny'>
-          <Edit
-            class='au-o-grid__item au-u-1-2@small'
-            @locationType={{this.locationType}}
-            @setLocationType={{this.setLocationType}}
-            @selectedLocationNode={{this.selectedLocationNode}}
-            @setAddressToInsert={{this.setAddressToInsert}}
-            @setIsLoading={{this.setIsLoading}}
-            @defaultMunicipality={{@defaultMunicipality}}
-            @placeName={{this.placeName}}
-            @setPlaceName={{this.setPlaceName}}
-            @nodeContentsUtils={{this.nodeContentsUtils}}
-          />
+          <div class='edit-form au-o-grid__item au-u-1-2@small'>
+            <Edit
+              @locationType={{this.locationType}}
+              @setLocationType={{this.setLocationType}}
+              @selectedLocationNode={{this.selectedLocationNode}}
+              @setAddressToInsert={{this.setAddressToInsert}}
+              @setIsLoading={{this.setIsLoading}}
+              @defaultMunicipality={{@defaultMunicipality}}
+              @placeName={{this.placeName}}
+              @setPlaceName={{this.setPlaceName}}
+              @nodeContentsUtils={{this.nodeContentsUtils}}
+            />
+          </div>
           <LocationMap
             class='au-o-grid__item au-u-1-2@small au-o-box-large'
             @address={{this.addressToInsert}}
