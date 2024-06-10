@@ -68,17 +68,6 @@ export async function fetchVlaamseCodexLegalDocuments({
       publicationDateFilter += `FILTER (?publicationDate <= "${publicationDateTo}"^^xsd:date) `;
   }
 
-  const excludeAdaptationFilters = [];
-  if (!words.includes('houdende')) {
-    excludeAdaptationFilters.push(
-      'FILTER(! STRSTARTS(LCASE(?title),"houdende"))',
-    );
-  }
-  if (!words.includes('wijziging')) {
-    excludeAdaptationFilters.push(
-      'FILTER(! STRSTARTS(LCASE(?title),"tot wijziging"))',
-    );
-  }
   const totalCount = await executeCountQuery({
     query: `PREFIX eli: <http://data.europa.eu/eli/ontology#>
 
@@ -96,7 +85,6 @@ export async function fetchVlaamseCodexLegalDocuments({
               ).toLowerCase()}"))`,
           )
           .join('\n')}
-        ${excludeAdaptationFilters.join('\n')}
         ${documentDateFilter}
         ${publicationDateFilter}
       }`,
@@ -122,7 +110,6 @@ export async function fetchVlaamseCodexLegalDocuments({
             )
             .join('\n')}
           OPTIONAL { ?expressionUri eli:date_publication ?publicationDate . }
-          ${excludeAdaptationFilters.join('\n')}
           ${documentDateFilter}
           ${publicationDateFilter}
         } ORDER BY ?title LIMIT ${pageSize} OFFSET ${pageNumber * pageSize}`,
