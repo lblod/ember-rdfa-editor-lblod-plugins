@@ -16,7 +16,7 @@ export function replaceSelectionWithAddress(
 
   controller.withTransaction((tr) => {
     tr.replaceSelectionWith(
-      controller.schema.node('address', {
+      controller.schema.node('oslo_location', {
         subject: mappingResource,
         rdfaNodeType: 'resource',
         __rdfaId: uuidv4(),

@@ -5,6 +5,7 @@ export const RDF = namespace(
   'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   'rdf',
 );
+export const RDFS = namespace('http://www.w3.org/2000/01/rdf-schema#', 'rdfs');
 
 export const ELI = namespace('http://data.europa.eu/eli/ontology#', 'eli');
 export const XSD = namespace('http://www.w3.org/2001/XMLSchema#', 'xsd');

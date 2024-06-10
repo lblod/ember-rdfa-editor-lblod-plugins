@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import not from 'ember-truth-helpers/helpers/not';
 import IntlService from 'ember-intl/services/intl';
 import t from 'ember-intl/helpers/t';
+import { trackedReset } from 'tracked-toolbox';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
 import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
@@ -14,9 +15,20 @@ import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
+import {
+  convertWGS84CoordsToLambert,
+  GeoPos,
+  type GlobalCoordinates,
+  Place,
+  Point,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { replaceSelectionWithAddress } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
+import { fallbackPlaceUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents/place';
+import { fallbackPointUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents/point';
 import Edit from './edit';
-import LocationMap from './map';
+import LocationMap, { type LocationType } from './map';
+
+export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
 interface Signature {
   Args: {
@@ -29,8 +41,65 @@ interface Signature {
 export default class LocationPluginInsertComponent extends Component<Signature> {
   @service declare intl: IntlService;
   @tracked modalOpen = false;
-  @tracked addressToInsert?: Address;
+  @tracked chosenPoint: GeoPos | undefined;
   @tracked isLoading = false;
+
+  @trackedReset({
+    memo: 'selectedLocationNode',
+    update(component: LocationPluginInsertComponent) {
+      const currentLocation = component.selectedLocationNode?.value.attrs
+        .value as Address | Place | null;
+      return currentLocation instanceof Address ? currentLocation : undefined;
+    },
+  })
+  addressToInsert?: Address;
+
+  @trackedReset({
+    memo: 'selectedLocationNode',
+    update(component: LocationPluginInsertComponent) {
+      const currentLocation = component.selectedLocationNode?.value.attrs
+        .value as Address | Place | null;
+      return currentLocation instanceof Place
+        ? currentLocation.location.location
+        : undefined;
+    },
+  })
+  savedLocation: GeoPos | undefined;
+
+  @trackedReset({
+    memo: 'selectedLocationNode',
+    update(component: LocationPluginInsertComponent) {
+      const currentLocation = component.selectedLocationNode?.value.attrs
+        .value as Address | Place | null;
+      return currentLocation instanceof Place ? currentLocation.name : '';
+    },
+  })
+  placeName: string = '';
+
+  @trackedReset({
+    memo: 'selectedLocationNode',
+    update(component: LocationPluginInsertComponent) {
+      const currentLocation = component.selectedLocationNode?.value.attrs
+        .value as Address | Place | null;
+      return currentLocation instanceof Place ? 'place' : 'address';
+    },
+  })
+  locationType: LocationType = 'address';
+
+  @trackedReset({
+    memo: 'controller.activeEditorState',
+    update(component: LocationPluginInsertComponent) {
+      const { selection, schema } = component.controller.activeEditorState;
+      if (
+        selection instanceof NodeSelection &&
+        selection.node.type === schema.nodes.oslo_location
+      ) {
+        return { value: selection.node, pos: selection.from };
+      }
+      return null;
+    },
+  })
+  selectedLocationNode: ResolvedPNode | null = null;
 
   get controller() {
     return this.args.controller;
@@ -41,28 +110,40 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   }
 
   get modalTitle() {
-    return this.selectedAddressVariable
+    return this.selectedLocationNode
       ? this.intl.t('location-plugin.modal.edit')
       : this.intl.t('location-plugin.modal.insert');
   }
 
-  get selectedAddressVariable(): ResolvedPNode | null {
-    const { selection, schema } = this.controller.activeEditorState;
-    if (
-      selection instanceof NodeSelection &&
-      selection.node.type === schema.nodes.address
-    ) {
-      return { value: selection.node, pos: selection.from };
-    }
-    return null;
+  get canInsert() {
+    return !!this.controller.activeEditorView.props.nodeViews?.oslo_location;
   }
 
-  get canInsertAddress() {
-    if (this.controller.activeEditorView.props.nodeViews?.address) {
-      return true;
+  get disableConfirm() {
+    if (this.locationType === 'place') {
+      return !this.selectedLocationNode || !this.placeName || !this.chosenPoint;
     } else {
-      return false;
+      return !this.selectedLocationNode || !this.addressToInsert;
     }
+  }
+
+  @action
+  setLocationType(type: LocationType) {
+    this.locationType = type;
+  }
+
+  @action
+  setChosenPoint(point: GlobalCoordinates) {
+    // Since we only use the global coordinates, we don't have to do a conversion to lambert here
+    this.chosenPoint = {
+      lambert: { x: 0, y: 0 },
+      global: point,
+    };
+  }
+
+  @action
+  setPlaceName(name: string) {
+    this.placeName = name;
   }
 
   @action
@@ -72,7 +153,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   @action
   insertOrEditAddress() {
-    if (!this.selectedAddressVariable) {
+    if (!this.selectedLocationNode) {
       replaceSelectionWithAddress(
         this.controller,
         this.intl.t('location-plugin.default-label', {
@@ -94,13 +175,40 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   }
 
   @action
-  setAddress() {
-    if (this.selectedAddressVariable && this.addressToInsert) {
-      const { pos } = this.selectedAddressVariable;
-      this.controller.withTransaction((tr) => {
-        return tr.setNodeAttribute(pos, 'value', this.addressToInsert);
-      });
-      this.modalOpen = false;
+  confirmLocation() {
+    if (this.selectedLocationNode) {
+      let toInsert: Address | Place | undefined;
+      const { pos } = this.selectedLocationNode;
+      if (this.locationType === 'address' && this.addressToInsert) {
+        toInsert = this.addressToInsert;
+        this.controller.withTransaction((tr) => {
+          return tr.setNodeAttribute(pos, 'value', toInsert);
+        });
+        this.modalOpen = false;
+      } else if (
+        this.locationType === 'place' &&
+        this.chosenPoint?.global &&
+        this.placeName
+      ) {
+        convertWGS84CoordsToLambert(this.chosenPoint.global).then((lambert) => {
+          toInsert = new Place({
+            uri: fallbackPlaceUri(),
+            name: this.placeName,
+            location: new Point({
+              uri: fallbackPointUri(),
+              location: {
+                lambert,
+                global: this.chosenPoint?.global,
+              },
+            }),
+          });
+          this.controller.withTransaction((tr) => {
+            return tr.setNodeAttribute(pos, 'value', toInsert);
+          });
+          this.modalOpen = false;
+          this.chosenPoint = undefined;
+        });
+      }
     }
   }
 
@@ -111,9 +219,9 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         @iconAlignment='left'
         @skin='link'
         {{on 'click' this.insertOrEditAddress}}
-        @disabled={{not this.canInsertAddress}}
+        @disabled={{not this.canInsert}}
       >
-        {{#if this.selectedAddressVariable}}
+        {{#if this.selectedLocationNode}}
           {{t 'location-plugin.modal.edit'}}
         {{else}}
           {{t 'location-plugin.modal.insert'}}
@@ -121,24 +229,40 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       </AuButton>
     </li>
     <AuModal
+      class='location-modal'
       @modalOpen={{this.modalOpen}}
       @closeModal={{this.closeModal}}
       @title={{this.modalTitle}}
+      @size='large'
       as |modal|
     >
-      <modal.Body>
-        <LocationMap @address={{this.addressToInsert}} />
-        <Edit
-          @selectedAddressVariable={{this.selectedAddressVariable}}
-          @setAddressToInsert={{this.setAddressToInsert}}
-          @setIsLoading={{this.setIsLoading}}
-          @defaultMunicipality={{@defaultMunicipality}}
-        />
+      <modal.Body class='au-u-padding-small au-u-padding-bottom-none'>
+        <div class='au-o-grid au-o-grid--tiny'>
+          <Edit
+            class='au-o-grid__item au-u-1-2@small'
+            @locationType={{this.locationType}}
+            @setLocationType={{this.setLocationType}}
+            @selectedLocationNode={{this.selectedLocationNode}}
+            @setAddressToInsert={{this.setAddressToInsert}}
+            @setIsLoading={{this.setIsLoading}}
+            @defaultMunicipality={{@defaultMunicipality}}
+            @placeName={{this.placeName}}
+            @setPlaceName={{this.setPlaceName}}
+          />
+          <LocationMap
+            class='au-o-grid__item au-u-1-2@small au-o-box-large'
+            @address={{this.addressToInsert}}
+            @locationType={{this.locationType}}
+            @location={{this.chosenPoint}}
+            @existingLocation={{this.savedLocation}}
+            @setLocation={{this.setChosenPoint}}
+          />
+        </div>
       </modal.Body>
       <modal.Footer>
         <AuButton
-          @disabled={{(not this.addressToInsert)}}
-          {{on 'click' this.setAddress}}
+          @disabled={{this.disableConfirm}}
+          {{on 'click' this.confirmLocation}}
         >
           {{#if this.isLoading}}
             <AuLoader @hideMessage={{true}} @inline={{true}}>

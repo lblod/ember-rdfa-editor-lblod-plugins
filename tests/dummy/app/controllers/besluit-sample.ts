@@ -89,9 +89,9 @@ import {
   locationView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
-  address,
-  addressView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/address';
+  osloLocation,
+  osloLocationView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import {
   date,
   dateView,
@@ -202,7 +202,7 @@ export default class BesluitSampleController extends Controller {
         number,
         location,
         codelist,
-        address,
+        oslo_location: osloLocation,
         ...besluitNodes,
         roadsign_regulation,
         heading: headingWithConfig({ rdfaAware: true }),
@@ -332,7 +332,7 @@ export default class BesluitSampleController extends Controller {
       location: locationView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
-      address: addressView(controller),
+      oslo_location: osloLocationView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
     };
   };

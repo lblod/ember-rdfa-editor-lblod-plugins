@@ -1,3 +1,17 @@
-.leaflet-container {
-  height: 100%;
+.location-modal {
+  .au-c-form-row > * {
+    width: 100%;
+  }
+
+  .au-c-modal__body > .au-o-grid {
+    height: 100%;
+  }
+
+  .map-wrapper {
+    height: 100%;
+  }
+
+  .leaflet-container {
+    height: 100%;
+  }
 }

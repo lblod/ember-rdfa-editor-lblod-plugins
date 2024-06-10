@@ -1,52 +1,131 @@
 import Component from '@glimmer/component';
-import { localCopy } from 'tracked-toolbox';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import and from 'ember-truth-helpers/helpers/and';
+import eq from 'ember-truth-helpers/helpers/eq';
+import t from 'ember-intl/helpers/t';
 import { LeafletMap } from 'ember-leaflet';
+import { type LeafletMouseEvent } from 'leaflet';
+import { restartableTask } from 'ember-concurrency';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
+import {
+  convertLambertCoordsToWGS84,
+  GeoPos,
+  type GlobalCoordinates,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 
-const COORD_SYSTEM_CENTER = {
+export type LocationType = 'address' | 'place';
+
+const COORD_SYSTEM_CENTER: GlobalCoordinates = {
   lng: 4.450822554431,
   lat: 50.50526730529,
 };
 
+function displayLocation(location: GeoPos | undefined) {
+  return location ? `[x: ${location.lambert.x}, y: ${location.lambert.y}]` : '';
+}
+
 interface Signature {
   Args: {
     address: Address | undefined;
+    locationType: LocationType;
+    location?: GeoPos;
+    setLocation: (loc: GlobalCoordinates) => void;
+    existingLocation?: GeoPos;
   };
-  Element: HTMLLIElement;
+  Element: HTMLElement;
+}
+
+async function ensureGlobalCoordinates(geoPos: GeoPos) {
+  if (geoPos.global) {
+    return geoPos.global;
+  }
+  return await convertLambertCoordsToWGS84(geoPos.lambert);
 }
 
 export default class LocationPluginMapComponent extends Component<Signature> {
-  @localCopy('args.address') address: Address | undefined;
+  @tracked mapCenter = COORD_SYSTEM_CENTER;
+  @tracked zoom = 7;
+  @tracked existingLocationCoords: GlobalCoordinates | undefined;
 
-  get addressLatLng() {
-    return this.address?.location.global ?? COORD_SYSTEM_CENTER;
+  addressLatLngLookup = restartableTask(
+    async (): Promise<GlobalCoordinates | undefined> => {
+      const { address, existingLocation } = this.args;
+      if (address) {
+        this.mapCenter = await ensureGlobalCoordinates(
+          address.location.location,
+        );
+        this.zoom = 19;
+      } else if (existingLocation) {
+        this.mapCenter = await ensureGlobalCoordinates(existingLocation);
+        this.existingLocationCoords = this.mapCenter;
+        this.zoom = 19;
+      }
+      return COORD_SYSTEM_CENTER;
+    },
+  );
+  addressLatLng = trackedTask<GlobalCoordinates | undefined>(
+    this,
+    this.addressLatLngLookup,
+    () => [this.args.address, this.args.existingLocation],
+  );
+
+  get doRenderMap() {
+    return this.addressLatLng.value && this.zoom;
   }
-  get zoom() {
-    return this.address?.location ? 20 : 7;
+
+  @action
+  onMapClick(event: LeafletMouseEvent) {
+    if (this.args.locationType === 'place') {
+      this.args.setLocation(event.latlng);
+    }
   }
 
   <template>
-    {{! template-lint-disable no-inline-styles }}
-    <div style='height:300px'>
-      <LeafletMap
-        @center={{this.addressLatLng}}
-        @zoom={{this.zoom}}
-        as |layers|
-      >
-        <layers.tile
-          @url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
-        />
-        <layers.marker
-          @location={{this.addressLatLng}}
-          @opacity={{0.4}}
-          as |marker|
+    <div class='map-wrapper' ...attributes>
+      {{#if this.addressLatLng.isRunning}}
+        <AuLoader @hideMessage={{true}}>
+          {{t 'common.initialBounds.loading'}}
+        </AuLoader>
+      {{else if this.addressLatLng.value}}
+        <LeafletMap
+          @center={{this.mapCenter}}
+          @zoom={{this.zoom}}
+          @onClick={{this.onMapClick}}
+          as |layers|
         >
-          {{! template-lint-disable no-bare-strings }}
-          <marker.popup>
-            Main location
-          </marker.popup>
-        </layers.marker>
-      </LeafletMap>
+          <layers.tile
+            @url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
+          />
+          {{#if (and @address (eq @locationType 'address'))}}
+            <layers.marker @location={{this.mapCenter}} as |marker|>
+              <marker.popup>
+                {{@address.formatted}}
+              </marker.popup>
+            </layers.marker>
+          {{/if}}
+          {{#if this.existingLocationCoords}}
+            <layers.marker
+              @opacity={{if @location 0.3 1}}
+              @location={{this.existingLocationCoords}}
+              as |marker|
+            >
+              <marker.popup>
+                {{displayLocation @existingLocation}}
+              </marker.popup>
+            </layers.marker>
+          {{/if}}
+          {{#if @location}}
+            <layers.marker @location={{@location.global}} as |marker|>
+              <marker.popup>
+                {{displayLocation @location}}
+              </marker.popup>
+            </layers.marker>
+          {{/if}}
+        </LeafletMap>
+      {{/if}}
     </div>
   </template>
 }

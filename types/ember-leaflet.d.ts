@@ -4,6 +4,7 @@ declare module 'ember-leaflet' {
   import {
     type LatLngBounds,
     type LatLngExpression,
+    type LeafletMouseEventHandlerFn,
     type MapOptions,
     type MarkerOptions,
     type TileLayerOptions,
@@ -32,9 +33,12 @@ declare module 'ember-leaflet' {
       };
 
   interface LeafletMapSig {
-    Args: MapOptions & MapStart;
+    Args: MapOptions &
+      MapStart & {
+        /** See leaflet types for more event handlers */
+        onClick?: LeafletMouseEventHandlerFn;
+      };
     Blocks: {
-      // default: [{ tile: LeafletTileLayer }];
       default: [
         {
           tile: WithBoundArgs<typeof LeafletTileLayer, 'parent'>;
@@ -50,9 +54,6 @@ declare module 'ember-leaflet' {
       parent: unknown;
       url: string;
     } & TileLayerOptions;
-    // Blocks: {
-    //   default: [];
-    // };
     Element: HTMLElement;
   }
   export class LeafletTileLayer extends Component<LeafletTileLayerSig> {}
@@ -74,9 +75,4 @@ declare module 'ember-leaflet' {
   export class LeafletMarker extends Component<LeafletMarkerSig> {}
 
   export const Leaflet = L;
-  // export const Leaflet = {
-  //   Proj: {
-  //     CRS: {},
-  //   },
-  // };
 }

@@ -8,13 +8,17 @@ import { service } from '@ember/service';
 import { on } from '@ember/modifier';
 import type { SafeString } from '@ember/template/-private/handlebars';
 import not from 'ember-truth-helpers/helpers/not';
+import eq from 'ember-truth-helpers/helpers/eq';
 import IntlService from 'ember-intl/services/intl';
 import t from 'ember-intl/helpers/t';
-import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 import PowerSelect from 'ember-power-select/components/power-select';
+import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 import AuAlert, {
   type AuAlertSignature,
 } from '@appuniversum/ember-appuniversum/components/au-alert';
+import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
+import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
+import AuFieldset from '@appuniversum/ember-appuniversum/components/au-fieldset';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CheckIcon } from '@appuniversum/ember-appuniversum/components/icons/check';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
@@ -27,6 +31,8 @@ import {
   resolveAddress,
   resolveStreet,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
+import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import { type LocationType } from './map';
 
 interface Message {
   skin: AuAlertSignature['Args']['skin'];
@@ -35,14 +41,22 @@ interface Message {
   body: string | SafeString;
 }
 
-type Args = {
-  defaultMunicipality?: string;
-  selectedAddressVariable: ResolvedPNode | null;
-  setAddressToInsert: (address: Address | undefined) => void;
-  setIsLoading?: (isLoading: boolean) => void;
+type Signature = {
+  Args: {
+    locationType: LocationType;
+    setLocationType: (type: LocationType) => void;
+    defaultMunicipality?: string;
+    currentAddress?: Address;
+    selectedLocationNode: ResolvedPNode | null;
+    setAddressToInsert: (address: Address | undefined) => void;
+    setIsLoading?: (isLoading: boolean) => void;
+    placeName?: string;
+    setPlaceName: (name: string) => void;
+  };
+  Element: HTMLFormElement;
 };
 
-export default class LocationPluginEditComponent extends Component<Args> {
+export default class LocationPluginEditComponent extends Component<Signature> {
   @service declare intl: IntlService;
 
   @trackedReset({
@@ -91,7 +105,7 @@ export default class LocationPluginEditComponent extends Component<Args> {
       return {
         skin: 'success',
         icon: CheckIcon,
-        title: this.intl.t('editor-plugins.address.edit.success.address-found'),
+        title: this.intl.t('location-plugin.search.success.address-found'),
         body: value.formatted,
       };
     }
@@ -107,10 +121,10 @@ export default class LocationPluginEditComponent extends Component<Args> {
           skin: 'warning',
           icon: AlertTriangleIcon,
           title: this.intl.t(
-            'editor-plugins.address.edit.errors.address-not-found-short',
+            'location-plugin.search.errors.address-not-found-short',
           ),
           body: this.intl.t(
-            'editor-plugins.address.edit.errors.alternative-address',
+            'location-plugin.search.errors.alternative-address',
             { address: this.newAddress.error.alternativeAddress.formatted },
           ),
         };
@@ -123,7 +137,7 @@ export default class LocationPluginEditComponent extends Component<Args> {
           status: error.status,
           coords: error.coords,
         }),
-        body: this.intl.t('editor-plugins.address.edit.errors.contact', {
+        body: this.intl.t('location-plugin.search.errors.contact', {
           htmlSafe: true,
           email: 'gelinktnotuleren@vlaanderen.be',
         }),
@@ -134,8 +148,11 @@ export default class LocationPluginEditComponent extends Component<Args> {
   }
 
   get currentAddress() {
-    return this.args.selectedAddressVariable?.value.attrs
-      .value as Address | null;
+    const currentLocation = this.args.selectedLocationNode?.value.attrs
+      .value as Address | Point | null;
+    return currentLocation && currentLocation instanceof Address
+      ? currentLocation
+      : null;
   }
 
   get currentMunicipality() {
@@ -283,6 +300,11 @@ export default class LocationPluginEditComponent extends Component<Args> {
     this.newBusnumber = (event.target as HTMLInputElement).value;
   }
 
+  @action
+  updatePlaceName(event: InputEvent) {
+    this.args.setPlaceName((event.target as HTMLInputElement).value);
+  }
+
   searchMunicipality = restartableTask(async (term: string) => {
     await timeout(200);
     return fetchMunicipalities(term);
@@ -299,84 +321,119 @@ export default class LocationPluginEditComponent extends Component<Args> {
   });
 
   <template>
-    <form class='au-c-form'>
-      <AuLabel for='municipality-select'>
-        {{t 'editor-plugins.address.edit.municipality.label'}}*
-      </AuLabel>
-      <PowerSelect
-        id='municipality-select'
-        @loadingMessage={{t 'editor-plugins.utils.loading'}}
-        @searchMessage={{t
-          'editor-plugins.address.edit.municipality.search-message'
-        }}
-        @noMatchesMessage={{t
-          'editor-plugins.address.edit.municipality.no-results'
-        }}
-        @placeholder={{t
-          'editor-plugins.address.edit.municipality.placeholder'
-        }}
-        @allowClear={{true}}
-        @renderInPlace={{true}}
-        @searchEnabled={{true}}
-        @search={{perform this.searchMunicipality}}
-        @selected={{this.newMunicipality}}
-        @onChange={{this.selectMunicipality}}
-        as |municipality|
-      >
-        {{municipality}}
-      </PowerSelect>
-      <AuLabel for='streetname-select'>
-        {{t 'editor-plugins.address.edit.street.label'}}*
-      </AuLabel>
-      <PowerSelect
-        id='streetname-select'
-        @loadingMessage={{t 'editor-plugins.utils.loading'}}
-        @searchMessage={{t 'editor-plugins.address.edit.street.search-message'}}
-        @noMatchesMessage={{t 'editor-plugins.address.edit.street.no-results'}}
-        @placeholder={{t 'editor-plugins.address.edit.street.placeholder'}}
-        @allowClear={{true}}
-        @renderInPlace={{true}}
-        @searchEnabled={{true}}
-        @search={{perform this.searchStreet}}
-        @selected={{this.newStreetName}}
-        @disabled={{not this.canUpdateStreet}}
-        @onChange={{this.selectStreet}}
-        as |street|
-      >
-        {{street}}
-      </PowerSelect>
-      <div class='au-o-grid au-o-grid--tiny'>
-        <div class='au-o-grid__item au-u-1-2@medium'>
-          <AuLabel for='housenumber-select'>
-            {{t 'editor-plugins.address.edit.housenumber.label'}}
+    <form class='au-c-form' ...attributes>
+      <AuFieldset @alignment='inline' as |fs|>
+        <fs.legend>
+          {{t 'location-plugin.search.type'}}
+        </fs.legend>
+        <fs.content>
+          <AuRadioGroup
+            id='location-type'
+            @alignment='inline'
+            @selected={{@locationType}}
+            @onChange={{@setLocationType}}
+            as |Group|
+          >
+            <Group.Radio @value='address'>
+              {{t 'location-plugin.types.address'}}
+            </Group.Radio>
+            <Group.Radio @value='place'>
+              {{t 'location-plugin.types.place'}}
+            </Group.Radio>
+          </AuRadioGroup>
+        </fs.content>
+      </AuFieldset>
+      {{#if (eq @locationType 'place')}}
+        <AuFormRow>
+          <AuLabel for='place-name'>
+            {{t 'location-plugin.search.place-name.label'}}
           </AuLabel>
           <AuNativeInput
-            id='housenumber-select'
-            placeholder={{t
-              'editor-plugins.address.edit.housenumber.placeholder'
-            }}
+            id='place-name'
+            placeholder={{t 'location-plugin.search.place-name.placeholder'}}
             @width='block'
-            value={{this.newHousenumber}}
-            @disabled={{not this.canUpdateHousenumber}}
-            {{on 'input' this.updateHousenumber}}
+            value={{@placeName}}
+            {{on 'input' this.updatePlaceName}}
           />
+        </AuFormRow>
+      {{/if}}
+      <AuFormRow>
+        <AuLabel for='municipality-select'>
+          {{t 'location-plugin.search.municipality.label'}}
+        </AuLabel>
+        <PowerSelect
+          id='municipality-select'
+          @loadingMessage={{t 'editor-plugins.utils.loading'}}
+          @searchMessage={{t
+            'location-plugin.search.municipality.search-message'
+          }}
+          @noMatchesMessage={{t
+            'location-plugin.search.municipality.no-results'
+          }}
+          @placeholder={{t 'location-plugin.search.municipality.placeholder'}}
+          @allowClear={{true}}
+          @renderInPlace={{true}}
+          @searchEnabled={{true}}
+          @search={{perform this.searchMunicipality}}
+          @selected={{this.newMunicipality}}
+          @onChange={{this.selectMunicipality}}
+          as |municipality|
+        >
+          {{municipality}}
+        </PowerSelect>
+      </AuFormRow>
+      <AuFormRow>
+        <AuLabel for='streetname-select'>
+          {{t 'location-plugin.search.street.label'}}
+        </AuLabel>
+        <PowerSelect
+          id='streetname-select'
+          @loadingMessage={{t 'editor-plugins.utils.loading'}}
+          @searchMessage={{t 'location-plugin.search.street.search-message'}}
+          @noMatchesMessage={{t 'location-plugin.search.street.no-results'}}
+          @placeholder={{t 'location-plugin.search.street.placeholder'}}
+          @allowClear={{true}}
+          @renderInPlace={{true}}
+          @searchEnabled={{true}}
+          @search={{perform this.searchStreet}}
+          @selected={{this.newStreetName}}
+          @disabled={{not this.canUpdateStreet}}
+          @onChange={{this.selectStreet}}
+          as |street|
+        >
+          {{street}}
+        </PowerSelect>
+      </AuFormRow>
+      <AuFormRow>
+        <div class='au-o-grid au-o-grid--tiny'>
+          <div class='au-o-grid__item au-u-1-2@medium'>
+            <AuLabel for='housenumber-select'>
+              {{t 'location-plugin.search.housenumber.label'}}
+            </AuLabel>
+            <AuNativeInput
+              id='housenumber-select'
+              placeholder={{t 'location-plugin.search.housenumber.placeholder'}}
+              @width='block'
+              value={{this.newHousenumber}}
+              @disabled={{not this.canUpdateHousenumber}}
+              {{on 'input' this.updateHousenumber}}
+            />
+          </div>
+          <div class='au-o-grid__item au-u-1-2@medium'>
+            <AuLabel for='busnumber-select'>
+              {{t 'location-plugin.search.busnumber.label'}}
+            </AuLabel>
+            <AuNativeInput
+              id='busnumber-select'
+              placeholder={{t 'location-plugin.search.busnumber.placeholder'}}
+              @width='block'
+              value={{this.newBusnumber}}
+              @disabled={{not this.canUpdateBusnumber}}
+              {{on 'input' this.updateBusnumber}}
+            />
+          </div>
         </div>
-        <div class='au-o-grid__item au-u-1-2@medium'>
-          <AuLabel for='busnumber-select'>
-            {{t 'editor-plugins.address.edit.busnumber.label'}}
-          </AuLabel>
-          <AuNativeInput
-            id='busnumber-select'
-            placeholder={{t
-              'editor-plugins.address.edit.busnumber.placeholder'
-            }}
-            @width='block'
-            value={{this.newBusnumber}}
-            @disabled={{not this.canUpdateBusnumber}}
-            {{on 'input' this.updateBusnumber}}
-          />
-        </div>
-      </div>
+      </AuFormRow>
 
       {{#if this.message}}
         <AuAlert

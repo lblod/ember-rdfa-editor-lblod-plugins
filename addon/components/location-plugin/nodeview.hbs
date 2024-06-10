@@ -1,8 +1,9 @@
 {{! @glint-nocheck: not typesafe yet }}
 <AuPill
+  class='variable atomic'
   @icon={{this.PencilIcon}}
   @iconAlignment='right'
-  class='variable atomic'
+  ...attributes
   {{on 'click' @selectNode}}
 >
   {{#if this.address}}
