@@ -4,7 +4,7 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { TransactionResult } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import type { TransactionResult } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 export function recalculateNumbers(
   state: EditorState,

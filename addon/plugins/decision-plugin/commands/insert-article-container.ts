@@ -2,13 +2,11 @@ import { Command, EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { v4 as uuid } from 'uuid';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
-import {
-  addPropertyToNode,
-  transactionCombinator,
-} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { buildArticleStructure } from '../utils/build-article-structure';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;

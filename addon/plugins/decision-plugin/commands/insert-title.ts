@@ -1,12 +1,10 @@
 import { EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import { v4 as uuid } from 'uuid';
-import {
-  addPropertyToNode,
-  transactionCombinator,
-} from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertTitleArgs {
   placeholderText: string;

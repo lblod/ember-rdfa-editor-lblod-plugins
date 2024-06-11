@@ -1,6 +1,5 @@
 import {
   Command,
-  NodeSelection,
   PNode,
   ResolvedPos,
   TextSelection,
@@ -14,8 +13,8 @@ import {
   isNone,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { recalculateNumbers } from './recalculate-structure-numbers';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 export function moveStructure(direction: 'up' | 'down'): Command {
   return (state, dispatch) => {

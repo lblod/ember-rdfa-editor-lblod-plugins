@@ -3,11 +3,9 @@ import {
   Command,
   EditorState,
   PNode,
-  SayView,
   TextSelection,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { buildArticleStructure } from '../utils/build-article-structure';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   ELI,
@@ -16,10 +14,10 @@ import {
 import {
   addPropertyToNode,
   findNodeByRdfaId,
-  transactionCombinator,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertArticleArgs {
   node: PNode;

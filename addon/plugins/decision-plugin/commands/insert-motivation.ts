@@ -4,11 +4,9 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import { v4 as uuid } from 'uuid';
-import {
-  addPropertyToNode,
-  transactionCombinator,
-} from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
+import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertMotivationArgs {
   intl: IntlService;

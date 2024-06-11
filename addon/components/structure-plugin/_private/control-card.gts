@@ -19,9 +19,9 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { not } from 'ember-truth-helpers';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/move-structure';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 interface Sig {
   Args: { controller: SayController };
 }
