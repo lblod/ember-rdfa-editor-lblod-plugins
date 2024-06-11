@@ -6,7 +6,7 @@ import {
   insertDescription,
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
-import { PNode, SayController } from '@lblod/ember-rdfa-editor';
+import type { PNode, SayController, Selection } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
@@ -41,7 +41,7 @@ export default class DecisionPluginCard extends Component<Sig> {
   get controller() {
     return this.args.controller;
   }
-  get selection() {
+  get selection(): Selection {
     return this.controller.mainEditorState.selection;
   }
 
