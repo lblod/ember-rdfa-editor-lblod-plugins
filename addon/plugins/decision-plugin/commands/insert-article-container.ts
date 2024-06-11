@@ -7,8 +7,8 @@ import {
   transactionCombinator,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { buildArticleStructure } from '../../structure-plugin/node';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { buildArticleStructure } from '../utils/build-article-structure';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;
