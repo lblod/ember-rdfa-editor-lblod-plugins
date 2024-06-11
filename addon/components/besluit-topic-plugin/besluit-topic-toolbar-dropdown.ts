@@ -2,7 +2,6 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';

@@ -1,5 +1,4 @@
 import {
-  DOMSerializer,
   EditorState,
   NodeSelection,
   ProseParser,
@@ -46,7 +45,6 @@ export default class ProseMirrorEditor extends Component<Args> {
         domParser: parser,
         dispatchTransaction: this.dispatch,
         handleDOMEvents: {
-
           mousedown: () => {
             // Kludge to prevent issues due to the fact that the whole
             // footnote is node-selected (and thus DOM-selected) when
@@ -55,7 +53,6 @@ export default class ProseMirrorEditor extends Component<Args> {
             if (this.outerView.hasFocus()) this.view?.focus();
           },
           focus: () => {
-
             const pos = this.args.getPos();
             if (pos !== undefined) {
               const outerSelectionTr = this.outerView.state.tr;
@@ -95,12 +92,12 @@ export default class ProseMirrorEditor extends Component<Args> {
   }
 
   dispatch = (tr: Transaction) => {
-    console.log("transaction", tr);
+    console.log('transaction', tr);
     if (this.view) {
       const newState = this.view.state.apply(tr);
-      console.log("newState", newState)
+      console.log('newState', newState);
       this.view.updateState(newState);
-      console.log("htmlcontent", this.view.htmlContent)
+      console.log('htmlcontent', this.view.htmlContent);
       this.args.onUpdate?.(this.view.htmlContent);
     }
   };

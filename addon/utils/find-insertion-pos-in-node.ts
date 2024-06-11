@@ -1,4 +1,4 @@
-import { PNode, ResolvedPos, Selection } from '@lblod/ember-rdfa-editor';
+import { PNode, ResolvedPos } from '@lblod/ember-rdfa-editor';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 export function findInsertionPosInNode(
   $searchPos: ResolvedPos,

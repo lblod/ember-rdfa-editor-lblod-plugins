@@ -4,11 +4,9 @@ import { action } from '@ember/object';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
