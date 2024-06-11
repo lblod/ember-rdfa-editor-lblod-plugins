@@ -6,6 +6,7 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 
 /**
  * Card displaying a hint of the Date plugin
@@ -53,24 +54,23 @@ export default class RoadsignRegulationCard extends Component<Args> {
   }
 
   get showCard() {
-    const selection = this.controller.mainEditorState.selection;
-    const besluitNode = findParentNode((node) => {
-      if (node.type === this.schema.nodes['besluit']) {
-        const properties = node.attrs.properties as OutgoingTriple[];
-        const decisionHasAcceptedType = Boolean(
-          properties.find((property) => {
-            const { predicate, object } = property;
-            return (
-              RDF('type').matches(predicate) &&
-              object.termType === 'NamedNode' &&
-              acceptedTypes.includes(object.value)
-            );
-          }),
-        );
-        return decisionHasAcceptedType;
-      }
+    const decisionRange = getCurrentBesluitRange(this.controller);
+    if (!decisionRange) {
       return false;
-    })(selection);
-    return !!besluitNode;
+    }
+    const decisionNode = decisionRange.node;
+    const properties: OutgoingTriple[] = decisionNode.attrs.properties;
+
+    const decisionHasAcceptedType = Boolean(
+      properties.find((property) => {
+        const { predicate, object } = property;
+        return (
+          RDF('type').matches(predicate) &&
+          object.termType === 'NamedNode' &&
+          acceptedTypes.includes(object.value)
+        );
+      }),
+    );
+    return decisionHasAcceptedType;
   }
 }

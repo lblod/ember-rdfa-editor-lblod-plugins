@@ -18,6 +18,7 @@ import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/i
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
 import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 
 type Args = {
   controller: SayController;
@@ -65,20 +66,8 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     return types;
   });
 
-  get currentBesluitRange(): ResolvedPNode | undefined {
-    const selection = this.controller.mainEditorState.selection;
-    const besluit = findAncestorOfType(
-      selection,
-      this.controller.schema.nodes['besluit'],
-    );
-    if (!besluit) {
-      return undefined;
-    }
-    return {
-      node: besluit.node,
-      from: besluit.start - 1,
-      to: besluit.start + besluit.node.nodeSize - 1,
-    };
+  get currentBesluitRange() {
+    return getCurrentBesluitRange(this.controller);
   }
 
   get currentBesluitURI() {
@@ -98,10 +87,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     if (!this.currentBesluitURI || !this.types.value) {
       return;
     }
-    const besluit = findAncestorOfType(
-      this.controller.mainEditorState.selection,
-      this.controller.schema.nodes['besluit'],
-    );
+    const besluit = this.currentBesluitRange;
     if (!besluit) {
       console.warn(
         `We have a besluit URI (${this.currentBesluitURI}), but can't find a besluit ancestor`,
