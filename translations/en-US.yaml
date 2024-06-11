@@ -266,6 +266,7 @@ table-of-contents-plugin:
 dummy:
   validation-card:
     title: Document Validation
+  toggle-editable-nodes: Toggle editable nodes
 
 generic-rdfa-variable:
   menu:

@@ -266,6 +266,7 @@ variable-plugin:
 dummy:
   validation-card:
     title: Documentvalidatie
+  toggle-editable-nodes: Editable nodes aan/uitzetten
 
 generic-rdfa-variable:
   menu:
