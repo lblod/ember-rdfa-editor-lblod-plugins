@@ -56,8 +56,6 @@ export default function insertArticle({
 
         const { result, transaction } = combiResult;
 
-        console.log('insertLocation', insertLocation);
-
         transaction.setSelection(
           TextSelection.create(
             transaction.doc,
