@@ -11,7 +11,7 @@ const updateSnippetPlaceholder = ({
   oldSnippetProperties,
   newSnippetIds,
   node,
-  snippetNames
+  snippetNames,
 }: {
   resource: string;
   oldSnippetProperties: OutgoingTriple[];
@@ -23,7 +23,7 @@ const updateSnippetPlaceholder = ({
     if (dispatch) {
       let transaction = state.tr;
       let newState = state;
-      
+
       oldSnippetProperties.forEach((property) => {
         newState = state.apply(transaction);
 
@@ -50,7 +50,11 @@ const updateSnippetPlaceholder = ({
           transaction = newTransaction;
         });
       });
-      transaction = transaction.setNodeAttribute(node.pos, 'listNames', snippetNames);
+      transaction = transaction.setNodeAttribute(
+        node.pos,
+        'listNames',
+        snippetNames,
+      );
 
       dispatch(transaction);
     }
