@@ -7,7 +7,7 @@ import {
   getAssignedSnippetListsIdsFromProperties,
   getSnippetListIdsProperties,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
-import { updateSnippetIds } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands';
+import { updateSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
@@ -49,13 +49,15 @@ export default class SnippetListSelectRdfaComponent extends Component<Args> {
     );
   }
 
-  saveChanges = (snippetIds: string[]) => {
+  saveChanges = (snippetIds: string[], snippetNames: string[]) => {
     if (this.currentResource) {
       this.args.controller?.doCommand(
-        updateSnippetIds({
+        updateSnippetPlaceholder({
           resource: this.currentResource,
           oldSnippetProperties: this.snippetListIdsProperties ?? [],
           newSnippetIds: snippetIds,
+          node: this.node,
+          snippetNames,
         }),
         {
           view: this.args.controller.mainEditorView,

@@ -133,6 +133,7 @@ besluit-type-plugin:
 besluit-topic-plugin:
   dt: 'Besluitonderwerp'
   insert-dt: 'Selecteer een besluitonderwerp'
+  selected: '{num} geselecteerd'
   search-message: 'Typ om te zoeken'
   no-matches-message: 'Geen resultaten'
   alert-title: 'Opgelet'
@@ -273,8 +274,10 @@ snippet-plugin:
     title: Fragment invoegen
     placeholder: Plaatshouder voor fragment invoegen
   placeholder:
-    title: Fragment hier invoegen
+    title-single: Fragment uit de lijst "{listName}"
+    title-multiple: Fragment uit meerdere lijsten
     text: Selecteer dit en voeg het gewenste fragment in
+    active-lists: 'Actieve lijsten:'
   modal:
     title: Kies een fragment
     select: Selecteer
