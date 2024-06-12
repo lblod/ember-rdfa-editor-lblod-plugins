@@ -4,15 +4,20 @@ import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
-const updateSnippetIds = ({
+const updateSnippetPlaceholder = ({
   resource,
   oldSnippetProperties,
   newSnippetIds,
+  node,
+  snippetNames,
 }: {
   resource: string;
   oldSnippetProperties: OutgoingTriple[];
   newSnippetIds: string[];
+  node: ResolvedPNode;
+  snippetNames: string[];
 }): Command => {
   return (state, dispatch) => {
     if (dispatch) {
@@ -45,6 +50,11 @@ const updateSnippetIds = ({
           transaction = newTransaction;
         });
       });
+      transaction = transaction.setNodeAttribute(
+        node.pos,
+        'listNames',
+        snippetNames,
+      );
 
       dispatch(transaction);
     }
@@ -52,4 +62,4 @@ const updateSnippetIds = ({
   };
 };
 
-export default updateSnippetIds;
+export default updateSnippetPlaceholder;

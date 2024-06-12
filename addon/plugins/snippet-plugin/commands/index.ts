@@ -1,1 +1,1 @@
-export { default as updateSnippetIds } from './update-snippet-ids';
+export { default as updateSnippetPlaceholder } from './update-snippet-ids';

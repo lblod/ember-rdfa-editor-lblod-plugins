@@ -274,8 +274,10 @@ snippet-plugin:
     title: Fragment invoegen
     placeholder: Plaatshouder voor fragment invoegen
   placeholder:
-    title: Fragment hier invoegen
+    title-single: Fragment uit de lijst "{listName}"
+    title-multiple: Fragment uit meerdere lijsten
     text: Selecteer dit en voeg het gewenste fragment in
+    active-lists: 'Actieve lijsten:'
   modal:
     title: Kies een fragment
     select: Selecteer
