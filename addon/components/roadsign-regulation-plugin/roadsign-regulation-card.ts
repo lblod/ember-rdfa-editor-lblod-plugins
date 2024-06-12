@@ -60,16 +60,14 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const decisionNode = decisionRange.node;
     const properties: OutgoingTriple[] = decisionNode.attrs.properties;
 
-    const decisionHasAcceptedType = Boolean(
-      properties.find((property) => {
-        const { predicate, object } = property;
-        return (
-          RDF('type').matches(predicate) &&
-          object.termType === 'NamedNode' &&
-          acceptedTypes.includes(object.value)
-        );
-      }),
-    );
+    const decisionHasAcceptedType = properties.some((property) => {
+      const { predicate, object } = property;
+      return (
+        RDF('type').matches(predicate) &&
+        object.termType === 'NamedNode' &&
+        acceptedTypes.includes(object.value)
+      );
+    });
     return decisionHasAcceptedType;
   }
 }
