@@ -4,11 +4,11 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import type { TransactionResult } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import type { TransactionMonadResult } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 export function recalculateNumbers(
   state: EditorState,
-): TransactionResult<boolean> {
+): TransactionMonadResult<boolean> {
   const tr = state.tr;
   const doc = tr.doc;
   let counter = 0;
