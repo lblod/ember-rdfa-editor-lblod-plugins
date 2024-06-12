@@ -100,6 +100,8 @@ import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-nod
 
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
+import applyDevTools from 'prosemirror-dev-tools';
+
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -318,7 +320,7 @@ export default class BesluitSampleController extends Controller {
   @action
   async rdfaEditorInit(controller: SayController) {
     this.controller = controller;
-    // applyDevTools(controller.mainEditorView);
+    applyDevTools(controller.mainEditorView);
     await this.importRdfaSnippet.downloadSnippet({
       omitCredentials: 'true',
       source:
