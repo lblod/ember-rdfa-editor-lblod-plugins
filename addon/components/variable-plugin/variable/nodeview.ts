@@ -41,6 +41,9 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
   }
 
   get label() {
+    if (this.innerView?.state.doc.firstChild?.type.name !== 'placeholder') {
+      return '';
+    }
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }
