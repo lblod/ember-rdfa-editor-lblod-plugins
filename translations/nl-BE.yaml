@@ -155,6 +155,7 @@ besluit-plugin:
     motivation: Voeg motivatie in
     article-block: Voeg artikelblok in
     article: Artikel invoegen
+    description: Voeg beschrijving in
   placeholder:
     decision-title: Geef titel besluit op
     decision-description: Voeg beschrijving in

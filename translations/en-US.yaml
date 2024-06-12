@@ -156,6 +156,7 @@ besluit-plugin:
     motivation: Insert motivation
     article-block: Insert article block
     article: Insert article
+    description: Insert description
   placeholder:
     decision-title: Insert decision title
     decision-description: Insert description
