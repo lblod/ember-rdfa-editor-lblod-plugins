@@ -9,5 +9,4 @@ export default class Router extends EmberRouter {
 Router.map(function () {
   this.route('besluit-sample', { path: '/' });
   this.route('regulatory-statement-sample');
-  this.route('editable-node');
 });
