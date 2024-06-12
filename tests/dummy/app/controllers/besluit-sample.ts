@@ -108,6 +108,7 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -349,6 +350,7 @@ export default class BesluitSampleController extends Controller {
       shouldShowInvisibles: false,
     }),
     editableNodePlugin(),
+    recreateUuidsOnPaste,
   ];
 
   @action
