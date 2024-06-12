@@ -55,7 +55,6 @@ export default class SnippetListModalComponent extends Component<Signature> {
         this.assignedSnippetListsIds.includes(snippetList.id as string),
       )
       .map((snippetList) => snippetList.label) as string[];
-    console.log(snippetListNames);
     this.args.onSaveSnippetListIds(
       this.assignedSnippetListsIds,
       snippetListNames,
