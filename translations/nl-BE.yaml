@@ -442,7 +442,7 @@ location-plugin:
   default-label: locatie
   search:
     type: Soort
-    hint: 'Zoeken op adres:'
+    hint: 'Zoek een locatie door een adres in te voeren:'
     place-name:
       label: Plaats
       placeholder: Naam van de plaats

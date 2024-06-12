@@ -24,7 +24,10 @@ const COORD_SYSTEM_CENTER: GlobalCoordinates = {
 };
 
 function displayLocation(location: GeoPos | undefined) {
-  return location ? `[x: ${location.lambert.x}, y: ${location.lambert.y}]` : '';
+  const { lambert } = location ?? {};
+  return lambert
+    ? `[x: ${lambert.x.toFixed(2)}, y: ${lambert.y.toFixed(2)}]`
+    : '';
 }
 
 interface Signature {
@@ -97,7 +100,8 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           as |layers|
         >
           <layers.tile
-            @url='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
+            @url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            @attribution='&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           {{#if (and @address (eq @locationType 'address'))}}
             <layers.marker @location={{this.mapCenter}} as |marker|>
@@ -117,12 +121,8 @@ export default class LocationPluginMapComponent extends Component<Signature> {
               </marker.popup>
             </layers.marker>
           {{/if}}
-          {{#if @location}}
-            <layers.marker @location={{@location.global}} as |marker|>
-              <marker.popup>
-                {{displayLocation @location}}
-              </marker.popup>
-            </layers.marker>
+          {{#if (and @location (eq @locationType 'place'))}}
+            <layers.marker @location={{@location.global}} />
           {{/if}}
         </LeafletMap>
       {{/if}}
