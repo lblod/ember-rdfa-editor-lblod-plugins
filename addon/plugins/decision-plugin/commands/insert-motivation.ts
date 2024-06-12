@@ -109,7 +109,6 @@ export default function insertMotivation({
         ]),
       ],
     );
-    // how the offset between the insertion point and the point where the cursor should end up
     const tr = state.tr;
     tr.replaceSelectionWith(nodeToInsert);
     const factory = new SayDataFactory();
@@ -130,12 +129,6 @@ export default function insertMotivation({
       return false;
     }
     if (dispatch) {
-      // const selectionPos = newTr.doc.resolve(insertionPos + cursorOffset);
-      // const targetPos = tr.doc.resolve(insertionPos + cursorOffset + 1);
-      // TODO figure out why I cant just set a nodeSelection here
-      // newTr.setSelection(
-      //   new NodeSelection(newTr.doc.resolve(selectionPos.posAtIndex(0))),
-      // );
       dispatch(newTr);
     }
     return true;
