@@ -272,8 +272,10 @@ snippet-plugin:
     title: Insert snippet
     placeholder: Insert snippet placeholder
   placeholder:
-    title: Insert snippet here
+    title-single: Snippet from the list "{listName}"
+    title-multiple: Snippet from multiple lists
     text: Select this then insert the desired snippet
+    active-lists: 'Active lists:'
   modal:
     title: Choose a snippet
     select: Select

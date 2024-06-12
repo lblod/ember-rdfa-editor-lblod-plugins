@@ -37,9 +37,7 @@ export default class LocationNodeviewComponent extends Component<Signature> {
   }
 
   get label() {
-    return (
-      this.address &&
-      getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value
-    );
+    if (this.address) return '';
+    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }
