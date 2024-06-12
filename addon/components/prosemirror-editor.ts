@@ -79,12 +79,9 @@ export default class ProseMirrorEditor extends Component<Args> {
 
   @action
   onContentUpdate() {
-    console.log('content update');
     if (this.view) {
       const newContent = this.args.content;
       const currentContent = this.view.htmlContent;
-      console.log(newContent);
-      console.log(currentContent);
       if (currentContent !== newContent) {
         this.view.setHtmlContent(newContent ?? '');
       }
@@ -92,12 +89,9 @@ export default class ProseMirrorEditor extends Component<Args> {
   }
 
   dispatch = (tr: Transaction) => {
-    console.log('transaction', tr);
     if (this.view) {
       const newState = this.view.state.apply(tr);
-      console.log('newState', newState);
       this.view.updateState(newState);
-      console.log('htmlcontent', this.view.htmlContent);
       this.args.onUpdate?.(this.view.htmlContent);
     }
   };
