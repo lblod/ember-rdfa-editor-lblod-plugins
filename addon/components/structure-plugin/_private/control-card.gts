@@ -123,7 +123,10 @@ export default class StructureControlCardComponent extends Component<Sig> {
                 @disabled={{not this.canMoveDown}}
                 {{on 'click' (fn this.moveStructure 'down')}}
               >
-                {{t 'article-structure-plugin.move-down.article'}}
+                {{t
+                  'structure-plugin.move-down'
+                  structureName=this.structureName
+                }}
               </AuButton>
             </Item>
             <Item>
