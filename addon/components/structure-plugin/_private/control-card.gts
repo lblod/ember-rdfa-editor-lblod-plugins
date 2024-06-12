@@ -91,14 +91,11 @@ export default class StructureControlCardComponent extends Component<Sig> {
         as |Card|
       >
         <Card.header>
-
           <AuHeading @level='3' @skin='6'>{{t
               'article-structure-plugin.title.structure-card'
             }}</AuHeading>
-
         </Card.header>
         <Card.content>
-
           <AuList
             @divider={{true}}
             class='au-u-padding-top-tiny au-u-padding-bottom-tiny'
@@ -182,14 +179,11 @@ export default class StructureControlCardComponent extends Component<Sig> {
                     </AuPill>
                   </:tooltip>
                 </HoverTooltip>
-
               </AuButtonGroup>
             </Item>
           </AuList>
-
         </Card.content>
       </AuCard>
-
     {{/if}}
   </template>
 }
