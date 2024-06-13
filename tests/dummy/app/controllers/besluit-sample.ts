@@ -56,7 +56,6 @@ import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-
 
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
-import { besluitNodes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin';
 import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   citationPlugin,
@@ -153,7 +152,6 @@ export default class BesluitSampleController extends Controller {
         location,
         codelist,
         address,
-        ...besluitNodes,
         roadsign_regulation,
         heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
