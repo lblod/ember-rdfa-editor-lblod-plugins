@@ -27,6 +27,10 @@ export function buildArticleStructure(schema: Schema) {
       headerTag: 'h5',
       subject: articleResource,
     },
-    schema.node('paragraph'),
+    schema.node(
+      'paragraph',
+      {},
+      schema.node('placeholder', { placeholderText: 'Voeg inhoud artikel in' }),
+    ),
   );
 }
