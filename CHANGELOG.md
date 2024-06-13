@@ -1,5 +1,23 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 19.3.0
+
+### Minor Changes
+
+- [#433](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/433) [`b43ae7e6b08b2b78e21a2ab6b2dfee3d044b5297`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b43ae7e6b08b2b78e21a2ab6b2dfee3d044b5297) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Hide label if the variable is filled
+
+- [#439](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/439) [`3c848481a9725b86c3bc4bd82d7381a3dfc2e509`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3c848481a9725b86c3bc4bd82d7381a3dfc2e509) Thanks [@piemonkey](https://github.com/piemonkey)! - Add ability to select geographical positions from a map to the location plugin
+
+- [#436](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/436) [`2b270eccf55469187dd2273d6953a286b4868154`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2b270eccf55469187dd2273d6953a286b4868154) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Changed UI of snippet placeholder to show which lists you can insert from
+
+- [#435](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/435) [`596b85bfe9c85a3a24b6964d44381cea8909698f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/596b85bfe9c85a3a24b6964d44381cea8909698f) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4820: Paste variables
+
+  Pasting variable (which was copied from same editor) will now paste actual variable, not just the text that was contained inside it.
+
+### Patch Changes
+
+- [#437](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/437) [`f2c4ece21d5a2c56029f7111361719220eeaefef`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f2c4ece21d5a2c56029f7111361719220eeaefef) Thanks [@dkozickis](https://github.com/dkozickis)! - GN-4692: Add missing `nl-BE` translation for besluit topic plugin
+
 ## 19.2.0
 
 ### Minor Changes
