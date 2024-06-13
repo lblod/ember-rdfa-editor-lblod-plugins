@@ -9,8 +9,11 @@ import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/pl
 import t from 'ember-intl/helpers/t';
 import { not } from 'ember-truth-helpers';
 
+export interface InsertArticleOptions {
+  uriGenerator: () => string;
+}
 interface Sig {
-  Args: { controller: SayController };
+  Args: { controller: SayController; options: InsertArticleOptions };
 }
 export default class InsertArticleComponent extends Component<Sig> {
   get controller() {
@@ -32,7 +35,10 @@ export default class InsertArticleComponent extends Component<Sig> {
     if (!this.decisionLocation) {
       return false;
     }
-    const article = buildArticleStructure(this.schema);
+    const article = buildArticleStructure(
+      this.schema,
+      this.args.options.uriGenerator,
+    );
     return this.controller.checkCommand(
       insertArticle({ node: article, decisionLocation: this.decisionLocation }),
     );
@@ -40,7 +46,10 @@ export default class InsertArticleComponent extends Component<Sig> {
 
   @action
   doInsert() {
-    const structureNode = buildArticleStructure(this.schema);
+    const structureNode = buildArticleStructure(
+      this.schema,
+      this.args.options.uriGenerator,
+    );
     if (!structureNode) {
       return;
     }

@@ -29,9 +29,13 @@ import { not } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
 
+interface DecisionCardOptions {
+  articleUriGenerator?: () => string;
+}
 interface Sig {
   Args: {
     controller: SayController;
+    options: DecisionCardOptions;
   };
 }
 
@@ -148,6 +152,7 @@ export default class DecisionPluginCard extends Component<Sig> {
         insertArticleContainer({
           intl: this.intl,
           decisionLocation: this.decisionNodeLocation,
+          articleUriGenerator: this.args.options.articleUriGenerator,
         }),
         {
           view: this.controller.mainEditorView,

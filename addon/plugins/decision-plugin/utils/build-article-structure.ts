@@ -7,9 +7,17 @@ import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuid } from 'uuid';
 
-export function buildArticleStructure(schema: Schema) {
-  const articleId = uuid();
-  const articleResource = `http://data.lblod.info/artikels/--ref-uuid4-${articleId}`;
+export function buildArticleStructure(
+  schema: Schema,
+  uriGenerator?: () => string,
+) {
+  let articleResource: string;
+  if (uriGenerator) {
+    articleResource = uriGenerator();
+  } else {
+    const articleId = uuid();
+    articleResource = `http://data.lblod.info/artikels/--ref-uuid4-${articleId}`;
+  }
   const factory = new SayDataFactory();
   return schema.node(
     'structure',

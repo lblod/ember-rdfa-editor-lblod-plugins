@@ -322,6 +322,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
     const article = buildArticleStructure(
       this.controller.activeEditorState.schema,
+      this.args.options.articleUriGenrator,
     );
     const contentFragment = ProseParser.fromSchema(
       this.args.controller.schema,

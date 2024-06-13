@@ -11,10 +11,12 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 interface InsertArticleContainerArgs {
   intl: IntlService;
   decisionLocation: NodeWithPos;
+  articleUriGenerator?: () => string;
 }
 
 export default function insertArticleContainer({
   decisionLocation,
+  articleUriGenerator,
 }: InsertArticleContainerArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { schema } = state;
@@ -22,7 +24,7 @@ export default function insertArticleContainer({
     const nodeToInsert = schema.node(
       'block_rdfa',
       { rdfaNodeType: 'literal', __rdfaId: articleContainerId },
-      buildArticleStructure(schema),
+      buildArticleStructure(schema, articleUriGenerator),
     );
 
     const tr = state.tr;
