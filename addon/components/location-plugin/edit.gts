@@ -355,7 +355,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
       {{#if (eq @locationType 'place')}}
         <AuFormRow>
           <AuLabel for='place-name'>
-            {{t 'location-plugin.search.place-name.label'}}
+            {{t 'location-plugin.search.place-name.label'}}*
           </AuLabel>
           <AuNativeInput
             id='place-name'
@@ -366,8 +366,11 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           />
         </AuFormRow>
         <AuHeading @level='6' @skin='6'>
-          {{t 'location-plugin.search.hint'}}
+          {{t 'location-plugin.search.title'}}
         </AuHeading>
+        <p class='au-u-para-tiny au-u-margin-none'>
+          {{t 'location-plugin.search.hint'}}
+        </p>
       {{/if}}
       <AuFormRow>
         <AuLabel for='municipality-select'>
@@ -418,7 +421,13 @@ export default class LocationPluginEditComponent extends Component<Signature> {
       </AuFormRow>
       <AuFormRow>
         <div class='au-o-grid au-o-grid--tiny'>
-          <div class='au-o-grid__item au-u-1-2@medium'>
+          <div
+            class={{if
+              (eq @locationType 'address')
+              'au-o-grid__item au-u-1-2@medium'
+              'au-o-grid__item'
+            }}
+          >
             <AuLabel for='housenumber-select'>
               {{t 'location-plugin.search.housenumber.label'}}
             </AuLabel>
@@ -431,19 +440,21 @@ export default class LocationPluginEditComponent extends Component<Signature> {
               {{on 'input' this.updateHousenumber}}
             />
           </div>
-          <div class='au-o-grid__item au-u-1-2@medium'>
-            <AuLabel for='busnumber-select'>
-              {{t 'location-plugin.search.busnumber.label'}}
-            </AuLabel>
-            <AuNativeInput
-              id='busnumber-select'
-              placeholder={{t 'location-plugin.search.busnumber.placeholder'}}
-              @width='block'
-              value={{this.newBusnumber}}
-              @disabled={{not this.canUpdateBusnumber}}
-              {{on 'input' this.updateBusnumber}}
-            />
-          </div>
+          {{#if (eq @locationType 'address')}}
+            <div class='au-o-grid__item au-u-1-2@medium'>
+              <AuLabel for='busnumber-select'>
+                {{t 'location-plugin.search.busnumber.label'}}
+              </AuLabel>
+              <AuNativeInput
+                id='busnumber-select'
+                placeholder={{t 'location-plugin.search.busnumber.placeholder'}}
+                @width='block'
+                value={{this.newBusnumber}}
+                @disabled={{not this.canUpdateBusnumber}}
+                {{on 'input' this.updateBusnumber}}
+              />
+            </div>
+          {{/if}}
         </div>
       </AuFormRow>
 

@@ -442,7 +442,8 @@ location-plugin:
   default-label: locatie
   search:
     type: Soort
-    hint: 'Zoek een locatie door een adres in te voeren:'
+    title: Centreer de kaart rond adres
+    hint: Gebruik de onderstaande zoekfunctie om de kaart te centreren rond de gewenste plaats, en klik daarna op de kaart om de locatie te kiezen
     place-name:
       label: Plaats
       placeholder: Naam van de plaats

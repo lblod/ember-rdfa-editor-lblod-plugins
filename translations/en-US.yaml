@@ -440,7 +440,8 @@ location-plugin:
   default-label: location
   search:
     type: Type
-    hint: 'Search for a location by entering an address:'
+    title: Center the map around address
+    hint: Use the below form to help you find the approximate location, then mark the place on the map with your mouse
     place-name:
       label: Place
       placeholder: Place name
