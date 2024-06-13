@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 19.3.1
+
+### Patch Changes
+
+- [`b13b2c304448ca0b342c794388f9e5dacf28ab38`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b13b2c304448ca0b342c794388f9e5dacf28ab38) Thanks [@piemonkey](https://github.com/piemonkey)! - Correct peer-dependency range of ember-modifier to include 4.x
+
 ## 19.3.0
 
 ### Minor Changes
