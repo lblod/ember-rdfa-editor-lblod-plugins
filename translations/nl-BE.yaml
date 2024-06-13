@@ -390,6 +390,7 @@ editor-plugins:
         address-not-found-short: Adres niet gevonden
         alternative-address: 'Geef een ander adres op of ga verder met het volgende adres: {address}'
         http-error: 'Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}.'
+        projection-error: 'Kan locatiecoördinaten niet converteren: {coords}'
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Voeg adres in
@@ -431,9 +432,47 @@ location-plugin:
     insert: locatie invoegen
     edit: Bewerk locatie
     confirm: Ingestelde locatie
+  nodeview:
+    placeholder: Voeg locatie in
+  types:
+    address: Adres
+    place: Plaats
   label: Label
   labelPlaceholder: Type iets...
   default-label: locatie
+  search:
+    type: Soort
+    title: Centreer de kaart rond adres
+    hint: Gebruik de onderstaande zoekfunctie om de kaart te centreren rond de gewenste plaats, en klik daarna op de kaart om de locatie te kiezen
+    place-name:
+      label: Plaats
+      placeholder: Naam van de plaats
+    municipality:
+      label: Gemeente
+      placeholder: Gemeente
+      search-message: Typ om een gemeente op te zoeken
+      no-results: Geen gemeenten gevonden
+    street:
+      label: Straatnaam
+      placeholder: Straatnaam
+      search-message: Typ om een straatnaam op te zoeken
+      no-results: Geen straatnamen gevonden
+    housenumber:
+      label: Huisnummer
+      placeholder: Huisnummer
+    busnumber:
+      label: Busnummer
+      placeholder: Busnummer
+    loading: Adres aan het opzoeken.
+    success:
+      address-found: Adres gevonden.
+    errors:
+      address-not-found: We konden het adres niet terugvinden.
+      address-not-found-short: Adres niet gevonden
+      alternative-address: 'Geef een ander adres op of ga verder met het volgende adres: {address}'
+      http-error: 'Er is iets mis gelopen bij het opvragen van dit adres, statuscode: {status}.'
+      projection-error: 'Kan locatiecoördinaten niet converteren: {coords}'
+      contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
 
 lpdc-plugin:
   insert:

@@ -1,5 +1,25 @@
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { NodeContentsUtils } from '../node-contents';
+import {
+  convertLambertCoordsToWGS84,
+  parseLambert72GMLString,
+  Point,
+} from './geo-helpers';
 
+type Identificator = {
+  id: string;
+  naamruimte: string;
+  objectId: string;
+  versieId: string;
+};
+type GeographicalName = {
+  spelling: string;
+  taal: string;
+};
+type DetailLink = {
+  objectId: string;
+  detail: string;
+};
 type GeoCoordinate = {
   Lat_WGS84: number;
   Lon_WGS84: number;
@@ -33,11 +53,11 @@ type StreetSearchResult = {
   adresMatches: [
     {
       gemeente: {
-        gemeentenaam: { geografischeNaam: { spelling: string } };
+        gemeentenaam: { geografischeNaam: GeographicalName };
       };
       straatnaam?: {
         straatnaam: {
-          geografischeNaam: { spelling: string };
+          geografischeNaam: GeographicalName;
         };
       };
     },
@@ -46,10 +66,11 @@ type StreetSearchResult = {
 
 type AddressSearchResult = {
   adressen: {
-    identificator: {
-      id: string;
-    };
+    identificator: Identificator;
     detail: string;
+    huisnummer?: string;
+    volledigAdres: GeographicalName;
+    adresStatus: string;
   }[];
 };
 
@@ -57,45 +78,41 @@ type AddressSearchResult = {
  * {@link https://docs.basisregisters.vlaanderen.be/docs/api-documentation.html#operation/GetAddressV2}
  */
 type AddressDetailResult = {
-  identificator: {
-    id: string;
-  };
-  gemeente: {
+  identificator: Identificator;
+  gemeente: DetailLink & {
     gemeentenaam: {
-      geografischeNaam: {
-        spelling: string;
-        taal: string;
-      };
+      geografischeNaam: GeographicalName;
     };
   };
-  postinfo: {
-    objectId: string;
-  };
-  straatnaam: {
+  postinfo: DetailLink;
+  straatnaam: DetailLink & {
     straatnaam: {
-      geografischeNaam: {
-        spelling: string;
-        taal: string;
-      };
+      geografischeNaam: GeographicalName;
     };
   };
   huisnummer: string;
-  busnummer: string;
+  busnummer?: string;
+  volledigAdres: GeographicalName;
+  officieelToegekend: boolean;
   adresPositie: {
     geometrie: {
-      gml: string; // coordinates in Lambert72
+      type: 'Point' | string;
+      /** GML encoded coordinates using Lambert72 CRS */
+      gml: string;
     };
+    positieGeometrieMethode: string;
+    positieSpecificatie: string;
   };
 };
 
 export class Address {
-  declare id?: string;
+  declare uri: string;
   declare street: string;
   declare zipcode: string;
   declare municipality: string;
   declare housenumber?: string;
   declare busnumber?: string;
-  declare location: Lambert72Coordinates;
+  declare location: Point;
   constructor(
     args: Pick<
       Address,
@@ -103,7 +120,7 @@ export class Address {
       | 'housenumber'
       | 'zipcode'
       | 'municipality'
-      | 'id'
+      | 'uri'
       | 'busnumber'
       | 'location'
     >,
@@ -143,19 +160,22 @@ export class Address {
 export class AddressError extends Error {
   translation: string;
   status?: number;
+  coords?: string;
   alternativeAddress?: Address;
   constructor({
     message,
     translation,
     status,
+    coords,
     alternativeAddress,
   }: Pick<
     AddressError,
-    'message' | 'translation' | 'status' | 'alternativeAddress'
+    'message' | 'translation' | 'status' | 'alternativeAddress' | 'coords'
   >) {
     super(message);
     this.translation = translation;
     this.status = status;
+    this.coords = coords;
     this.alternativeAddress = alternativeAddress;
   }
 }
@@ -223,7 +243,10 @@ type StreetInfo = {
   street: string;
 };
 
-export async function resolveStreet(info: StreetInfo) {
+export async function resolveStreet(
+  info: StreetInfo,
+  nodeContentsUtils: NodeContentsUtils,
+) {
   const searchTerm = `${info.street}, ${info.municipality}`;
   const url = new URL(LOC_GEOPUNT_ENDPOINT);
   url.searchParams.append(
@@ -240,13 +263,23 @@ export async function resolveStreet(info: StreetInfo) {
     const streetinfo = jsonResult.LocationResult[0];
     if (streetinfo) {
       return new Address({
+        uri: nodeContentsUtils.fallbackAddressUri(),
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
-        location: {
-          x: streetinfo.Location.X_Lambert72,
-          y: streetinfo.Location.Y_Lambert72,
-        },
+        location: new Point({
+          uri: nodeContentsUtils.fallbackPointUri(),
+          location: {
+            global: {
+              lng: streetinfo.Location.Lon_WGS84,
+              lat: streetinfo.Location.Lat_WGS84,
+            },
+            lambert: {
+              x: streetinfo.Location.X_Lambert72,
+              y: streetinfo.Location.Y_Lambert72,
+            },
+          },
+        }),
       });
     } else {
       throw new AddressError({
@@ -269,21 +302,33 @@ type AddressInfo = {
   busnumber?: string;
 };
 
-export async function resolveAddress(info: AddressInfo) {
+export async function resolveAddress(
+  info: AddressInfo,
+  nodeContentsUtils: NodeContentsUtils,
+) {
   const addressSearchResult = await searchAddress(info, 1);
   if (addressSearchResult.adressen.length) {
     const addressDetailURL = addressSearchResult.adressen[0].detail;
     const response = await fetch(addressDetailURL);
     if (response.ok) {
       const result = (await response.json()) as AddressDetailResult;
+      const { lambert } = parseLambert72GMLString(
+        result.adresPositie.geometrie.gml,
+      );
       return new Address({
         street: result.straatnaam.straatnaam.geografischeNaam.spelling,
         housenumber: result.huisnummer,
         busnumber: result.busnummer,
         zipcode: result.postinfo.objectId,
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
-        id: result.identificator.id,
-        location: parseLambert72GMLString(result.adresPositie.geometrie.gml),
+        uri: result.identificator.id,
+        location: new Point({
+          uri: `${result.identificator.id}/1`,
+          location: {
+            lambert,
+            global: await convertLambertCoordsToWGS84(lambert),
+          },
+        }),
       });
     } else {
       throw new AddressError({
@@ -293,10 +338,13 @@ export async function resolveAddress(info: AddressInfo) {
       });
     }
   } else {
-    const alternativeAddress = await resolveStreet({
-      street: info.street,
-      municipality: info.municipality,
-    });
+    const alternativeAddress = await resolveStreet(
+      {
+        street: info.street,
+        municipality: info.municipality,
+      },
+      nodeContentsUtils,
+    );
 
     throw new AddressError({
       translation: 'editor-plugins.address.edit.errors.address-not-found',
@@ -333,63 +381,4 @@ export async function searchAddress(
       status: response.status,
     });
   }
-}
-
-/** Representation of a location in the `BD72 / Belgian Lambert 72` Coordinate Reference System */
-export type Lambert72Coordinates = {
-  x: number;
-  y: number;
-};
-
-export function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
-  return `<gml:Point srsName="https://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
-}
-/**
- * Use a regex to parse a simple point as a GML string and return the coordinates.
- * Throws an error if the format or CRS are not recognised
- */
-export function parseLambert72GMLString(gml: string): Lambert72Coordinates {
-  // Parsers for GML exist in other libraries, but mostly within much larger projects (e.g.
-  // openlayers) in a way that is hard to extract due to the potential complexity of the geometries
-  // which can be represented. Since we handle only simple points, it's much less complex to just
-  // use a simple regex.
-  const [_, crs, x, y] =
-    /<gml.Point .*srsName="https:\/\/www.opengis.net\/def\/crs\/([^"]+)".+<gml.pos>(\S+) ([^<]+)<\/gml:pos>/.exec(
-      gml,
-    ) || [];
-  if (!crs || crs !== 'EPSG/0/31370') {
-    throw new AddressError({
-      translation: 'editor-plugins.address.edit.errors.http-error',
-      message: 'An error occured when querying the address register',
-    });
-  }
-  return { x: Number(x), y: Number(y) };
-}
-/**
- * Construct a string to represent a geolocation, using the Lambert 72 reference system according to
- * [the GeoSPARQL spec]{@link https://docs.ogc.org/is/22-047r1/22-047r1.html#10-8-1-%C2%A0-well-known-text}
- */
-export function constructLambert72WKTString({ x, y }: Lambert72Coordinates) {
-  return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
-}
-/**
- * Use a regex to parse a simple point as a WKT string and return the coordinates.
- * Throws an error if the format or CRS are not recognised
- */
-export function parseLambert72WKTString(gml: string): Lambert72Coordinates {
-  // Parsers for WKT exist in other libraries, but either within much larger projects (e.g.
-  // openlayers) in a way that is hard to extract due to the potential complexity of the geometries
-  // which can be represented or within untyped libraries (e.g. wicket). Since we handle only simple
-  // points, it's much less complex to just use a simple regex.
-  const [_, crs, x, y] =
-    /<https:\/\/www.opengis.net\/def\/crs\/([^"]+)> POINT\((\S+) ([^)]+)\)/.exec(
-      gml,
-    ) || [];
-  if (!crs || crs !== 'EPSG/0/31370') {
-    throw new AddressError({
-      translation: 'editor-plugins.address.edit.errors.http-error',
-      message: 'An error occured when querying the address register',
-    });
-  }
-  return { x: Number(x), y: Number(y) };
 }
