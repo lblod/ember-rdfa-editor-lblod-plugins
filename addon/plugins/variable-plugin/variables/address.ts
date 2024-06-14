@@ -101,7 +101,7 @@ const constructAddressNode = (address: Address) => {
       ]
     : [];
   return contentSpan(
-    { resource: address.id, typeof: LOCN('Adres').full },
+    { resource: address.id, typeof: LOCN('Address').full },
     span(
       {
         property: DCT('spatial').full,

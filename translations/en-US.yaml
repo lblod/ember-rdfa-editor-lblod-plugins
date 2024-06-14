@@ -281,8 +281,10 @@ snippet-plugin:
     title: Insert snippet
     placeholder: Insert snippet placeholder
   placeholder:
-    title: Insert snippet here
+    title-single: Snippet from the list "{listName}"
+    title-multiple: Snippet from multiple lists
     text: Select this then insert the desired snippet
+    active-lists: 'Active lists:'
   modal:
     title: Choose a snippet
     select: Select
@@ -395,6 +397,7 @@ editor-plugins:
         address-not-found-short: Address not found
         alternative-address: 'Provide another input or proceed with the following address: {address}'
         http-error: 'Something went wrong while resolving this address, status code: {status}.'
+        projection-error: 'Unable to convert location coordinates: {coords}'
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
       placeholder: Insert address
@@ -436,9 +439,47 @@ location-plugin:
     insert: Insert location
     edit: Edit location
     confirm: Set location
+  nodeview:
+    placeholder: Insert location
+  types:
+    address: Address
+    place: Place
   label: Label
   labelPlaceholder: Type something...
   default-label: location
+  search:
+    type: Type
+    title: Center the map around address
+    hint: Use the below form to help you find the approximate location, then mark the place on the map with your mouse
+    place-name:
+      label: Place
+      placeholder: Place name
+    municipality:
+      label: Municipality
+      placeholder: Municipality
+      search-message: Type to search for a municipality
+      no-results: No municipalities found
+    street:
+      label: Street
+      placeholder: Street
+      search-message: Type to search for a street
+      no-results: No streets found
+    housenumber:
+      label: Housenumber
+      placeholder: Housenumber
+    busnumber:
+      label: Busnumber
+      placeholder: Busnumber
+    loading: Resolving address.
+    success:
+      address-found: Address found.
+    errors:
+      address-not-found: We could not resolve the provided address
+      address-not-found-short: Address not found
+      alternative-address: 'Provide another input or proceed with the following address: {address}'
+      http-error: 'Something went wrong while resolving this address, status code: {status}.'
+      projection-error: 'Unable to convert location coordinates: {coords}'
+      contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
 
 lpdc-plugin:
   insert:

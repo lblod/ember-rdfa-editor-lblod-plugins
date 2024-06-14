@@ -113,6 +113,7 @@ import {
   snippetPlaceholder,
   snippetPlaceholderView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
+import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -339,6 +340,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     }),
     emberApplication({ application: getOwner(this) }),
     editableNodePlugin(),
+    recreateUuidsOnPaste,
   ];
 
   @action

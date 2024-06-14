@@ -72,9 +72,9 @@ import {
   locationView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
-  address,
-  addressView,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/address';
+  osloLocation,
+  osloLocationView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import {
   date,
   dateView,
@@ -100,6 +100,7 @@ import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-nod
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 import applyDevTools from 'prosemirror-dev-tools';
+import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -151,7 +152,7 @@ export default class BesluitSampleController extends Controller {
         number,
         location,
         codelist,
-        address,
+        oslo_location: osloLocation(this.config.location),
         roadsign_regulation,
         heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
@@ -258,6 +259,14 @@ export default class BesluitSampleController extends Controller {
         // Needs to point at the same port as the ember app
         endpoint: 'http://localhost/lpdc-service',
       },
+      location: {
+        defaultPointUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/geometrie/',
+        defaultPlaceUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/plaats/',
+        defaultAddressUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
+      },
     };
   }
 
@@ -282,7 +291,7 @@ export default class BesluitSampleController extends Controller {
       location: locationView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
-      address: addressView(controller),
+      oslo_location: osloLocationView(this.config.location)(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       structure: structureView(controller),
     } satisfies Record<string, SayNodeViewConstructor>;
@@ -299,6 +308,7 @@ export default class BesluitSampleController extends Controller {
       shouldShowInvisibles: false,
     }),
     editableNodePlugin(),
+    recreateUuidsOnPaste,
   ];
 
   @action

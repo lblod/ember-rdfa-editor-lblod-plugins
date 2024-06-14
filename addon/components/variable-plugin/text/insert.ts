@@ -77,7 +77,9 @@ export default class TextVariableInsertComponent extends Component<Args> {
           },
         ],
       },
-      this.schema.text('text'),
+      this.schema.node('placeholder', {
+        placeholderText: 'text',
+      }),
     );
 
     this.label = undefined;
