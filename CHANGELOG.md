@@ -1,5 +1,19 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 20.0.0
+
+### Major Changes
+
+- [#440](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/440) [`8c242fe2eda10725e2bce59a77c86e905b6878b9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8c242fe2eda10725e2bce59a77c86e905b6878b9) Thanks [@abeforgit](https://github.com/abeforgit)! - Convert plugins that used decision nodes to work on any nodes that have the rdf decision type
+
+### Minor Changes
+
+- [#440](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/440) [`8c242fe2eda10725e2bce59a77c86e905b6878b9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8c242fe2eda10725e2bce59a77c86e905b6878b9) Thanks [@abeforgit](https://github.com/abeforgit)! - Add new structure node using a nodeview approach
+
+### Patch Changes
+
+- [#441](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/441) [`45aad15462f89eede7cd2633ccf129189367d8db`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/45aad15462f89eede7cd2633ccf129189367d8db) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix docker image builds
+
 ## 19.3.1
 
 ### Patch Changes
