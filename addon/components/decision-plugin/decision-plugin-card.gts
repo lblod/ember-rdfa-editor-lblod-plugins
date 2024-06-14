@@ -35,7 +35,7 @@ interface DecisionCardOptions {
 interface Sig {
   Args: {
     controller: SayController;
-    options: DecisionCardOptions;
+    options?: DecisionCardOptions;
   };
 }
 
@@ -152,7 +152,7 @@ export default class DecisionPluginCard extends Component<Sig> {
         insertArticleContainer({
           intl: this.intl,
           decisionLocation: this.decisionNodeLocation,
-          articleUriGenerator: this.args.options.articleUriGenerator,
+          articleUriGenerator: this.args.options?.articleUriGenerator,
         }),
         {
           view: this.controller.mainEditorView,

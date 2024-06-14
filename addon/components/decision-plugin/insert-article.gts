@@ -10,10 +10,10 @@ import t from 'ember-intl/helpers/t';
 import { not } from 'ember-truth-helpers';
 
 export interface InsertArticleOptions {
-  uriGenerator: () => string;
+  uriGenerator?: () => string;
 }
 interface Sig {
-  Args: { controller: SayController; options: InsertArticleOptions };
+  Args: { controller: SayController; options?: InsertArticleOptions };
 }
 export default class InsertArticleComponent extends Component<Sig> {
   get controller() {
@@ -37,7 +37,7 @@ export default class InsertArticleComponent extends Component<Sig> {
     }
     const article = buildArticleStructure(
       this.schema,
-      this.args.options.uriGenerator,
+      this.args.options?.uriGenerator,
     );
     return this.controller.checkCommand(
       insertArticle({ node: article, decisionLocation: this.decisionLocation }),
@@ -48,7 +48,7 @@ export default class InsertArticleComponent extends Component<Sig> {
   doInsert() {
     const structureNode = buildArticleStructure(
       this.schema,
-      this.args.options.uriGenerator,
+      this.args.options?.uriGenerator,
     );
     if (!structureNode) {
       return;
