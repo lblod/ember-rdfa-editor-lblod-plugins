@@ -41,9 +41,13 @@
                 <Tb.Group>
                   <Plugins::Link::LinkMenu @controller={{this.controller}} />
                 </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Table::TableMenu @controller={{this.controller}} />
-                </Tb.Group>
+                {{#if this.supportsTables}}
+                  <Tb.Group>
+                    <Plugins::Table::TableMenu
+                      @controller={{this.controller}}
+                    />
+                  </Tb.Group>
+                {{/if}}
                 <Tb.Group>
                   <Plugins::Heading::HeadingMenu
                     @controller={{this.controller}}
@@ -86,36 +90,10 @@
         <:aside>
           {{#if this.controller}}
             <Sidebar as |Sidebar|>
+              <Sidebar.Collapsible @title='Structures'>
+                <this.InsertArticle @controller={{this.controller}} />
+              </Sidebar.Collapsible>
               <Sidebar.Collapsible @title='Insert'>
-                <AuButton
-                  @skin='link'
-                  @disabled={{not this.canInsertDescription}}
-                  {{on 'click' this.insertDescription}}
-                >
-                  description
-                </AuButton>
-                <AuButton
-                  @skin='link'
-                  @disabled={{not this.canInsertTitle}}
-                  {{on 'click' this.insertTitle}}
-                >title
-                </AuButton>
-                <AuButton
-                  @skin='link'
-                  @disabled={{not this.canInsertMotivation}}
-                  {{on 'click' this.insertMotivation}}
-                >motivation
-                </AuButton>
-                <AuButton
-                  @skin='link'
-                  @disabled={{not this.canInsertContainer}}
-                  {{on 'click' this.insertArticleContainer}}
-                >articles
-                </AuButton>
-                <ArticleStructurePlugin::ArticleStructureCard
-                  @controller={{this.controller}}
-                  @options={{this.config.structures}}
-                />
                 <CitationPlugin::CitationInsert
                   @controller={{this.controller}}
                   @config={{this.config.citation}}
@@ -147,10 +125,7 @@
                   @config={{this.config.lpdc}}
                 />
               </Sidebar.Collapsible>
-              <ArticleStructurePlugin::StructureCard
-                @controller={{this.controller}}
-                @options={{this.config.structures}}
-              />
+              <this.StructureControlCard @controller={{this.controller}} />
               <DecisionPlugin::DecisionPluginCard
                 @controller={{this.controller}}
               />
@@ -176,7 +151,9 @@
                 @node={{this.activeNode}}
                 @controller={{this.controller}}
               />
-              <this.DebugInfo @node={{this.activeNode}} />
+              {{#if this.activeNode}}
+                <this.DebugInfo @node={{this.activeNode}} />
+              {{/if}}
               <this.AttributeEditor
                 @node={{this.activeNode}}
                 @controller={{this.controller}}

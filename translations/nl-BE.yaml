@@ -11,6 +11,9 @@ common:
     asc: Oplopend sorteren
     desc: Aflopend sorteren
 
+structure-plugin:
+  move-up: '{structureName} naar boven verplaatsen'
+  move-down: '{structureName} naar beneden verplaatsen'
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
@@ -120,7 +123,6 @@ citaten-plugin:
 besluit-type-plugin:
   dt: 'Besluittype'
   insert-dt: 'Selecteer een besluittype'
-  selected: '{num} geselecteerd'
   search-message: 'Typ om te zoeken'
   no-matches-message: 'Geen resultaten'
   alert-title: 'Pas op'
@@ -145,14 +147,18 @@ besluit-topic-plugin:
 
 besluit-plugin:
   missing-title-warning: Dit besluit heeft geen titel.
-  missing-motivation-warning: Dit besluit mist een motivatieblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
-  missing-article-block-warning: Deze besluit mist een artikelblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
+  missing-motivation-warning: Dit besluit heeft geen motivatieblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
+  missing-article-block-warning: Dit besluit heeft geen artikelblok, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
+  missing-description-warning: Dit besluit heeft geen beschrijving, een besluit zonder dit blok zal moeilijker te ontleden zijn door ons systeem.
   insert:
     decision-title: Voeg besluittitel in
     motivation: Voeg motivatie in
     article-block: Voeg artikelblok in
+    article: Artikel invoegen
+    description: Voeg beschrijving in
   placeholder:
     decision-title: Geef titel besluit op
+    decision-description: Voeg beschrijving in
     government-body: geef bestuursorgaan op
     legal-jurisdiction: Rechtsgrond die bepaalt dat dit orgaan bevoegd is.
     insert-legal-context: Voeg juridische context in
@@ -261,6 +267,7 @@ variable-plugin:
 dummy:
   validation-card:
     title: Documentvalidatie
+  toggle-editable-nodes: Editable nodes aan/uitzetten
 
 generic-rdfa-variable:
   menu:

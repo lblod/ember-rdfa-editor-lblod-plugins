@@ -2,7 +2,6 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
@@ -48,6 +47,13 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   get doc() {
     return this.controller.mainEditorState.doc;
   }
+  get decisionRange() {
+    return getCurrentBesluitRange(this.controller);
+  }
+
+  get showCard() {
+    return !!this.decisionRange;
+  }
 
   topics = trackedFunction(this, async () => {
     const result = await fetchBesluitTopics({
@@ -74,11 +80,7 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
       return;
     }
 
-    const besluit = findAncestorOfType(
-      this.controller.mainEditorState.selection,
-      this.controller.schema.nodes['besluit'],
-    );
-
+    const besluit = this.decisionRange;
     if (!besluit) {
       console.warn(
         `We have a besluit URI (${currentBesluitURI}), but can't find a besluit ancestor`,
@@ -112,10 +114,6 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
     } else {
       this.besluitTopicsSelected = undefined;
     }
-  }
-
-  get showCard() {
-    return !!getCurrentBesluitRange(this.controller);
   }
 
   @action

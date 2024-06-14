@@ -1,135 +1,135 @@
-import {
-  Command,
-  EditorState,
-  NodeSelection,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
-import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
+import { Command, EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import { v4 as uuid } from 'uuid';
+import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/_private/rdfa-utils';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertMotivationArgs {
   intl: IntlService;
-  validateShapes?: Set<string>;
+  decisionLocation: NodeWithPos;
 }
 
 export default function insertMotivation({
   intl,
-  validateShapes,
+  decisionLocation,
 }: InsertMotivationArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const translationWithDocLang = getTranslationFunction(state);
-    const { selection, schema } = state;
-    const nodeToInsert = schema.node('motivering', {}, [
-      schema.node(
-        'paragraph',
-        null,
-        schema.node('placeholder', {
-          placeholderText: translationWithDocLang(
-            'besluit-plugin.placeholder.government-body',
-            intl.t('besluit-plugin.placeholder.government-body'),
-          ),
-        }),
-      ),
-      schema.node(
-        'heading',
-        {
-          level: 5,
-        },
-        [schema.text(intl.t('besluit-plugin.text.authority'))],
-      ),
-      schema.node('bullet_list', null, [
-        schema.node('list_item', null, [
-          schema.node('paragraph', null, [
-            schema.node('placeholder', {
-              placeholderText: translationWithDocLang(
-                'besluit-plugin.placeholder.legal-jurisdiction',
-                intl.t('besluit-plugin.placeholder.legal-jurisdiction'),
-              ),
-            }),
-          ]),
-        ]),
-      ]),
-      schema.node(
-        'heading',
-        {
-          level: 5,
-        },
-        [
-          schema.text(
-            translationWithDocLang(
-              'besluit-plugin.text.legal-context',
-              intl.t('besluit-plugin.text.legal-context'),
+    const { schema } = state;
+    const decisionNode = decisionLocation;
+    const motivationId = uuid();
+    const nodeToInsert = schema.node(
+      'block_rdfa',
+      { rdfaNodeType: 'literal', __rdfaId: motivationId },
+      [
+        schema.node(
+          'paragraph',
+          null,
+          schema.node('placeholder', {
+            placeholderText: translationWithDocLang(
+              'besluit-plugin.placeholder.government-body',
+              intl.t('besluit-plugin.placeholder.government-body'),
             ),
-          ),
-        ],
-      ),
-      schema.node('bullet_list', null, [
-        schema.node('list_item', null, [
-          schema.node('paragraph', null, [
-            schema.node('placeholder', {
-              placeholderText: translationWithDocLang(
-                'besluit-plugin.placeholder.insert-legal-context',
-                intl.t('besluit-plugin.placeholder.insert-legal-context'),
-              ),
-            }),
+          }),
+        ),
+        schema.node(
+          'heading',
+          {
+            level: 5,
+          },
+          [schema.text(intl.t('besluit-plugin.text.authority'))],
+        ),
+        schema.node('bullet_list', null, [
+          schema.node('list_item', null, [
+            schema.node('paragraph', null, [
+              schema.node('placeholder', {
+                placeholderText: translationWithDocLang(
+                  'besluit-plugin.placeholder.legal-jurisdiction',
+                  intl.t('besluit-plugin.placeholder.legal-jurisdiction'),
+                ),
+              }),
+            ]),
           ]),
         ]),
-      ]),
-      schema.node(
-        'heading',
-        {
-          level: 5,
-        },
-        [
-          schema.text(
-            translationWithDocLang(
-              'besluit-plugin.text.factual-context',
-              intl.t('besluit-plugin.text.factual-context'),
+        schema.node(
+          'heading',
+          {
+            level: 5,
+          },
+          [
+            schema.text(
+              translationWithDocLang(
+                'besluit-plugin.text.legal-context',
+                intl.t('besluit-plugin.text.legal-context'),
+              ),
             ),
-          ),
-        ],
-      ),
-      schema.node('bullet_list', null, [
-        schema.node('list_item', null, [
-          schema.node('paragraph', null, [
-            schema.node('placeholder', {
-              placeholderText: translationWithDocLang(
-                'besluit-plugin.placeholder.insert-factual-context',
-                intl.t('besluit-plugin.placeholder.insert-factual-context'),
-              ),
-            }),
+          ],
+        ),
+        schema.node('bullet_list', null, [
+          schema.node('list_item', null, [
+            schema.node('paragraph', null, [
+              schema.node('placeholder', {
+                placeholderText: translationWithDocLang(
+                  'besluit-plugin.placeholder.insert-legal-context',
+                  intl.t('besluit-plugin.placeholder.insert-legal-context'),
+                ),
+              }),
+            ]),
           ]),
         ]),
-      ]),
-    ]);
-    // how the offset between the insertion point and the point where the cursor should end up
-    const cursorOffset = 2;
-
-    const insertionPos = findInsertionPosInAncestorOfType(
-      selection,
-      schema.nodes.besluit,
-      nodeToInsert,
+        schema.node(
+          'heading',
+          {
+            level: 5,
+          },
+          [
+            schema.text(
+              translationWithDocLang(
+                'besluit-plugin.text.factual-context',
+                intl.t('besluit-plugin.text.factual-context'),
+              ),
+            ),
+          ],
+        ),
+        schema.node('bullet_list', null, [
+          schema.node('list_item', null, [
+            schema.node('paragraph', null, [
+              schema.node('placeholder', {
+                placeholderText: translationWithDocLang(
+                  'besluit-plugin.placeholder.insert-factual-context',
+                  intl.t('besluit-plugin.placeholder.insert-factual-context'),
+                ),
+              }),
+            ]),
+          ]),
+        ]),
+      ],
     );
-    if (isNone(insertionPos)) {
-      return false;
-    }
     const tr = state.tr;
+    tr.replaceSelectionWith(nodeToInsert);
+    const factory = new SayDataFactory();
 
-    tr.replaceRangeWith(insertionPos, insertionPos, nodeToInsert);
-    if (!transactionCompliesWithShapes(state, tr, validateShapes)) {
+    const { transaction: newTr, result } = transactionCombinator<boolean>(
+      state,
+      tr,
+    )([
+      addPropertyToNode({
+        resource: decisionNode.node.attrs.subject,
+        property: {
+          predicate: BESLUIT('motivering').full,
+          object: factory.literalNode(motivationId),
+        },
+      }),
+    ]);
+    if (result.some((success) => !success)) {
       return false;
     }
     if (dispatch) {
-      const selectionPos = tr.doc.resolve(insertionPos + cursorOffset);
-      // const targetPos = tr.doc.resolve(insertionPos + cursorOffset + 1);
-      // TODO figure out why I cant just set a nodeSelection here
-      tr.setSelection(
-        new NodeSelection(tr.doc.resolve(selectionPos.posAtIndex(0))),
-      );
-      dispatch(tr);
+      dispatch(newTr);
     }
     return true;
   };

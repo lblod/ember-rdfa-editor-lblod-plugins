@@ -1,52 +1,50 @@
-import {
-  Command,
-  EditorState,
-  NodeSelection,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
+import { Command, EditorState, Transaction } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import { isNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { transactionCompliesWithShapes } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/validation/utils/transaction-complies-with-shapes';
-import { findInsertionPosInAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/find-insertion-pos-in-ancestor-of-type';
+import { v4 as uuid } from 'uuid';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { buildArticleStructure } from '../utils/build-article-structure';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;
-  validateShapes?: Set<string>;
+  decisionLocation: NodeWithPos;
+  articleUriGenerator?: () => string;
 }
 
 export default function insertArticleContainer({
-  intl,
-  validateShapes,
+  decisionLocation,
+  articleUriGenerator,
 }: InsertArticleContainerArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
-    const { selection, schema } = state;
+    const { schema } = state;
+    const articleContainerId = uuid();
     const nodeToInsert = schema.node(
-      'article_container',
-      {},
-      besluitArticleStructure.constructor({
-        schema,
-        intl,
-      }).node,
+      'block_rdfa',
+      { rdfaNodeType: 'literal', __rdfaId: articleContainerId },
+      buildArticleStructure(schema, articleUriGenerator),
     );
 
-    const insertionPos = findInsertionPosInAncestorOfType(
-      selection,
-      schema.nodes.besluit,
-      nodeToInsert,
-    );
-    if (isNone(insertionPos)) {
-      return false;
-    }
     const tr = state.tr;
-    tr.replaceRangeWith(insertionPos, insertionPos, nodeToInsert);
+    tr.replaceSelectionWith(nodeToInsert);
 
-    if (!transactionCompliesWithShapes(state, tr, validateShapes)) {
-      return false;
-    }
-    if (dispatch) {
-      tr.setSelection(NodeSelection.create(tr.doc, insertionPos + 4));
-      dispatch(tr.scrollIntoView());
+    const factory = new SayDataFactory();
+    const { transaction: newTr, result } = transactionCombinator<boolean>(
+      state,
+      tr,
+    )([
+      addPropertyToNode({
+        resource: decisionLocation.node.attrs.subject,
+        property: {
+          predicate: PROV('value').full,
+          object: factory.literalNode(articleContainerId),
+        },
+      }),
+    ]);
+    if (dispatch && result.every((ok) => ok)) {
+      dispatch(newTr.scrollIntoView());
     }
     return true;
   };

@@ -14,12 +14,13 @@ import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/serv
 import { assert } from '@ember/debug';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
-import { besluitArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/standard-template-plugin/utils/nodes';
 import IntlService from 'ember-intl/services/intl';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
+import insertArticle from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-article-command';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -94,6 +95,17 @@ export default class RoadsignRegulationCard extends Component<Args> {
 
   get schema() {
     return this.args.controller.schema;
+  }
+  get controller() {
+    return this.args.controller;
+  }
+  get decisionRange() {
+    return getCurrentBesluitRange(this.controller);
+  }
+  get decisionLocation() {
+    return this.decisionRange
+      ? { node: this.decisionRange.node, pos: this.decisionRange.from }
+      : null;
   }
 
   @action
@@ -308,14 +320,22 @@ export default class RoadsignRegulationCard extends Component<Args> {
                           `;
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
+    const article = buildArticleStructure(
+      this.controller.activeEditorState.schema,
+      this.args.options.articleUriGenrator,
+    );
     const contentFragment = ProseParser.fromSchema(
       this.args.controller.schema,
     ).parseSlice(htmlNode, {
       preserveWhitespace: false,
     }).content;
+    const nodeToInsert = article.copy(contentFragment);
 
     this.args.controller.doCommand(
-      insertStructure(besluitArticleStructure, this.intl, contentFragment),
+      insertArticle({
+        node: nodeToInsert,
+        decisionLocation: unwrap(this.decisionLocation),
+      }),
       { view: this.args.controller.mainEditorView },
     );
     this.args.closeModal();

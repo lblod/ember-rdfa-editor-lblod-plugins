@@ -1,25 +1,34 @@
-import { SayController } from '@lblod/ember-rdfa-editor';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { PNode, SayController } from '@lblod/ember-rdfa-editor';
+import {
+  BESLUIT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
+import { ElementPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
+import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
 export const getCurrentBesluitRange = (
   controller: SayController,
-): ResolvedPNode | undefined => {
+): ElementPNode | undefined => {
   const selection = controller.mainEditorState.selection;
-  const besluit = findAncestorOfType(
-    selection,
-    controller.schema.nodes['besluit'],
-  );
 
+  const besluit =
+    findAncestors(selection.$from, (node: PNode) => {
+      return hasOutgoingNamedNodeTriple(
+        node.attrs,
+        RDF('type'),
+        BESLUIT('Besluit'),
+      );
+    })[0] ?? null;
   if (!besluit) {
     return undefined;
   }
 
   return {
     node: besluit.node,
-    from: besluit.start - 1,
-    to: besluit.start + besluit.node.nodeSize - 1,
+    from: besluit.pos,
+    to: besluit.pos + besluit.node.nodeSize,
   };
 };
 

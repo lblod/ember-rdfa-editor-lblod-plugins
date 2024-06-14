@@ -4,11 +4,9 @@ import { action } from '@ember/object';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { trackedFunction } from 'ember-resources/util/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
@@ -18,6 +16,7 @@ import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/i
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
 import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 
 type Args = {
   controller: SayController;
@@ -65,20 +64,8 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     return types;
   });
 
-  get currentBesluitRange(): ResolvedPNode | undefined {
-    const selection = this.controller.mainEditorState.selection;
-    const besluit = findAncestorOfType(
-      selection,
-      this.controller.schema.nodes['besluit'],
-    );
-    if (!besluit) {
-      return undefined;
-    }
-    return {
-      node: besluit.node,
-      from: besluit.start - 1,
-      to: besluit.start + besluit.node.nodeSize - 1,
-    };
+  get currentBesluitRange() {
+    return getCurrentBesluitRange(this.controller);
   }
 
   get currentBesluitURI() {
@@ -98,10 +85,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     if (!this.currentBesluitURI || !this.types.value) {
       return;
     }
-    const besluit = findAncestorOfType(
-      this.controller.mainEditorState.selection,
-      this.controller.schema.nodes['besluit'],
-    );
+    const besluit = this.currentBesluitRange;
     if (!besluit) {
       console.warn(
         `We have a besluit URI (${this.currentBesluitURI}), but can't find a besluit ancestor`,
