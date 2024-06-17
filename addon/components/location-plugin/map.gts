@@ -41,11 +41,8 @@ interface Signature {
   Element: HTMLElement;
 }
 
-async function ensureGlobalCoordinates(geoPos: GeoPos) {
-  if (geoPos.global) {
-    return geoPos.global;
-  }
-  return await convertLambertCoordsToWGS84(geoPos.lambert);
+function ensureGlobalCoordinates(geoPos: GeoPos) {
+  return geoPos.global || convertLambertCoordsToWGS84(geoPos.lambert);
 }
 
 export default class LocationPluginMapComponent extends Component<Signature> {
@@ -57,12 +54,10 @@ export default class LocationPluginMapComponent extends Component<Signature> {
     async (): Promise<GlobalCoordinates | undefined> => {
       const { address, existingLocation } = this.args;
       if (address) {
-        this.mapCenter = await ensureGlobalCoordinates(
-          address.location.location,
-        );
+        this.mapCenter = ensureGlobalCoordinates(address.location.location);
         this.zoom = 19;
       } else if (existingLocation) {
-        this.mapCenter = await ensureGlobalCoordinates(existingLocation);
+        this.mapCenter = ensureGlobalCoordinates(existingLocation);
         this.existingLocationCoords = this.mapCenter;
         this.zoom = 19;
       }
@@ -90,7 +85,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
     <div class='map-wrapper' ...attributes>
       {{#if this.addressLatLng.isRunning}}
         <AuLoader @hideMessage={{true}}>
-          {{t 'common.initialBounds.loading'}}
+          {{t 'common.search.loading'}}
         </AuLoader>
       {{else if this.addressLatLng.value}}
         <LeafletMap

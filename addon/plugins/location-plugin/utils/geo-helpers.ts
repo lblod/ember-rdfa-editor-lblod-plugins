@@ -1,4 +1,4 @@
-import memoize from '@lblod/ember-rdfa-editor-lblod-plugins/utils/memoize';
+import proj from 'proj4';
 import { AddressError } from './address-helpers';
 
 /** A point represents a location in the OSLO model. */
@@ -31,45 +31,30 @@ export class Place {
 }
 
 /**
- * Use the epsg.io API to convert between CRSs. We could use a library such as proj4js to convert
- * locally, but the results do not agree with those given by this API or the proj (C++) library.
- * This is likely a problem with the WKT2 representation of the Lambert72 projection on epsg.io, but
- * while that is investigated, just use the API...
+ * This CRS definition is corrected from that on epsg.io/31370, as there is a known bug that their
+ * definitions invert some of the TOWGS84 parameters.
+ * See [this issue]{@link https://github.com/OSGeo/PROJ/issues/4170} for more details.
  */
-export const convertLambertCoordsToWGS84 = memoize(
-  async (lambert: Lambert72Coordinates): Promise<GlobalCoordinates> => {
-    const res = await fetch(
-      `https://epsg.io/trans?x=${lambert.x}&y=${lambert.y}&z=0&s_srs=31370&t_srs=4326`,
-    );
-    if (!res.ok) {
-      throw new AddressError({
-        translation: 'editor-plugins.address.edit.errors.projection-error',
-        message: `Unable to convert location coordinates: ${JSON.stringify(lambert)}`,
-        coords: JSON.stringify(lambert),
-      });
-    }
-    const { x: lng, y: lat } = await res.json();
-    return { lat: Number(lat), lng: Number(lng) };
-  },
-);
+const LAMBERT_CRS =
+  'PROJCS["BD72 / Belgian Lambert 72",GEOGCS["BD72",DATUM["Reseau_National_Belge_1972",SPHEROID["International 1924",6378388,297],TOWGS84[-106.8686,52.2978,-103.7239,0.3366,-0.457,1.8422,-1.2747]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4313"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["latitude_of_origin",90],PARAMETER["central_meridian",4.36748666666667],PARAMETER["standard_parallel_1",51.1666672333333],PARAMETER["standard_parallel_2",49.8333339],PARAMETER["false_easting",150000.013],PARAMETER["false_northing",5400088.438],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","31370"]]';
+const lambertToWgs84 = proj(LAMBERT_CRS, 'EPSG:4326');
 /**
- * Use the epsg.io API to convert between CRSs. We could use a library such as proj4js to convert
- * locally, but the results do not agree with those given by this API or the proj (C++) library.
- * This is likely a problem with the WKT2 representation of the Lambert72 projection on epsg.io, but
- * while that is investigated, just use the API...
+ * Convert between CRSs using the proj4js library.
  */
-export const convertWGS84CoordsToLambert = memoize(
-  async (wgs84: GlobalCoordinates): Promise<Lambert72Coordinates> => {
-    const res = await fetch(
-      `https://epsg.io/trans?x=${wgs84.lng}&y=${wgs84.lat}&z=0&s_srs=4326&t_srs=31370`,
-    );
-    if (!res.ok) {
-      throw new Error('Unable to convert');
-    }
-    const { x: lng, y: lat } = await res.json();
-    return { y: Number(lat), x: Number(lng) };
-  },
-);
+export function convertLambertCoordsToWGS84(
+  lambert: Lambert72Coordinates,
+): GlobalCoordinates {
+  const { x, y } = lambertToWgs84.forward(lambert);
+  return { lat: y, lng: x };
+}
+/**
+ * Convert between CRSs using the proj4js library.
+ */
+export function convertWGS84CoordsToLambert(
+  wgs84: GlobalCoordinates,
+): Lambert72Coordinates {
+  return lambertToWgs84.inverse({ x: wgs84.lng, y: wgs84.lat });
+}
 
 /** Representation of a location in the `WGS84` (globally applicable) Coordinate Reference System */
 export type GlobalCoordinates = {

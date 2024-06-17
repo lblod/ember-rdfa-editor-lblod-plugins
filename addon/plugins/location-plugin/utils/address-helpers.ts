@@ -326,7 +326,7 @@ export async function resolveAddress(
           uri: `${result.identificator.id}/1`,
           location: {
             lambert,
-            global: await convertLambertCoordsToWGS84(lambert),
+            global: convertLambertCoordsToWGS84(lambert),
           },
         }),
       });

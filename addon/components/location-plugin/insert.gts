@@ -139,9 +139,8 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   @action
   setChosenPoint(point: GlobalCoordinates) {
-    // Since we only use the global coordinates, we don't have to do a conversion to lambert here
     this.chosenPoint = {
-      lambert: { x: 0, y: 0 },
+      lambert: convertWGS84CoordsToLambert(point),
       global: point,
     };
   }
@@ -195,24 +194,22 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         this.chosenPoint?.global &&
         this.placeName
       ) {
-        convertWGS84CoordsToLambert(this.chosenPoint.global).then((lambert) => {
-          toInsert = new Place({
-            uri: this.nodeContentsUtils.fallbackPlaceUri(),
-            name: this.placeName,
-            location: new Point({
-              uri: this.nodeContentsUtils.fallbackPointUri(),
-              location: {
-                lambert,
-                global: this.chosenPoint?.global,
-              },
-            }),
-          });
-          this.controller.withTransaction((tr) => {
-            return tr.setNodeAttribute(pos, 'value', toInsert);
-          });
-          this.modalOpen = false;
-          this.chosenPoint = undefined;
+        toInsert = new Place({
+          uri: this.nodeContentsUtils.fallbackPlaceUri(),
+          name: this.placeName,
+          location: new Point({
+            uri: this.nodeContentsUtils.fallbackPointUri(),
+            location: {
+              lambert: convertWGS84CoordsToLambert(this.chosenPoint.global),
+              global: this.chosenPoint?.global,
+            },
+          }),
         });
+        this.controller.withTransaction((tr) => {
+          return tr.setNodeAttribute(pos, 'value', toInsert);
+        });
+        this.modalOpen = false;
+        this.chosenPoint = undefined;
       }
     }
   }
