@@ -349,10 +349,13 @@ export default class LocationPluginEditComponent extends Component<Signature> {
             <Group.Radio @value='place'>
               {{t 'location-plugin.types.place'}}
             </Group.Radio>
+            <Group.Radio @value='area'>
+              {{t 'location-plugin.types.area'}}
+            </Group.Radio>
           </AuRadioGroup>
         </fs.content>
       </AuFieldset>
-      {{#if (eq @locationType 'place')}}
+      {{#unless (eq @locationType 'address')}}
         <AuFormRow>
           <AuLabel for='place-name'>
             {{t 'location-plugin.search.place-name.label'}}*
@@ -371,7 +374,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
         <p class='au-u-para-tiny au-u-margin-none'>
           {{t 'location-plugin.search.hint'}}
         </p>
-      {{/if}}
+      {{/unless}}
       <AuFormRow>
         <AuLabel for='municipality-select'>
           {{t 'location-plugin.search.municipality.label'}}

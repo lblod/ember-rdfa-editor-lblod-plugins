@@ -444,9 +444,14 @@ location-plugin:
   types:
     address: Address
     place: Place
+    area: Area
   label: Label
   labelPlaceholder: Type something...
   default-label: location
+  map:
+    hint:
+      finish-shape: Click on the first node to finish the area shape
+      delete-point: Click on the last node to remove it from the shape
   search:
     type: Type
     title: Center the map around address

@@ -29,6 +29,22 @@ export class Place {
     return this.name;
   }
 }
+/**
+ * An area represents multiple points which bound a part of the map, along with the human readable
+ * name of that it represents. This is used as a place for the oslo model.
+ */
+export class Area {
+  declare uri: string;
+  declare name: string;
+  declare locations: GeoPos[];
+  constructor(args: Omit<Area, 'constructor' | 'formatted'>) {
+    Object.assign(this, args);
+  }
+
+  get formatted() {
+    return this.name;
+  }
+}
 
 /**
  * This CRS definition is corrected from that on epsg.io/31370, as there is a known bug that their
