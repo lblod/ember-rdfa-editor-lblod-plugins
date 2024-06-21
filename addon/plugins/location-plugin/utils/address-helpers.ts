@@ -268,7 +268,7 @@ export async function resolveStreet(
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
         location: new Point({
-          uri: nodeContentsUtils.fallbackPointUri(),
+          uri: nodeContentsUtils.fallbackGeometryUri(),
           location: {
             global: {
               lng: streetinfo.Location.Lon_WGS84,

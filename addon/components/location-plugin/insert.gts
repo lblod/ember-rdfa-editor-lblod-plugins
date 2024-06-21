@@ -22,6 +22,7 @@ import {
   type GlobalCoordinates,
   Place,
   Point,
+  Polygon,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { replaceSelectionWithAddress } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
@@ -88,7 +89,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   @trackedReset({
     memo: 'selectedLocationNode',
-    update: updateFromNode(Area, (area) => area.locations),
+    update: updateFromNode(Area, (area) => area.shape.locations),
   })
   savedArea: GeoPos[] | undefined;
 
@@ -224,7 +225,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
           uri: this.nodeContentsUtils.fallbackPlaceUri(),
           name: this.placeName,
           location: new Point({
-            uri: this.nodeContentsUtils.fallbackPointUri(),
+            uri: this.nodeContentsUtils.fallbackGeometryUri(),
             location: {
               lambert: convertWGS84CoordsToLambert(this.chosenPoint.global),
               global: this.chosenPoint?.global,
@@ -240,7 +241,10 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         toInsert = new Area({
           uri: this.nodeContentsUtils.fallbackPlaceUri(),
           name: this.placeName,
-          locations: this.savedArea,
+          shape: new Polygon({
+            uri: this.nodeContentsUtils.fallbackGeometryUri(),
+            locations: this.savedArea,
+          }),
         });
       }
       if (toInsert) {

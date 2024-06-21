@@ -1,7 +1,7 @@
 import proj from 'proj4';
 import { AddressError } from './address-helpers';
 
-/** A point represents a location in the OSLO model. */
+/** A point represents a location as a geometry in the OSLO model. */
 export class Point {
   declare uri: string;
   declare location: GeoPos;
@@ -11,6 +11,20 @@ export class Point {
 
   get formatted() {
     return `[${this.location.lambert.x}, ${this.location.lambert.y}]`;
+  }
+}
+/** A polygon represents a bounded area, a kind of geometry in the OSLO model. */
+export class Polygon {
+  declare uri: string;
+  declare locations: GeoPos[];
+  constructor(args: Omit<Polygon, 'constructor' | 'formatted'>) {
+    Object.assign(this, args);
+  }
+
+  get formatted() {
+    return `[${this.locations
+      .map(({ lambert }) => `[${lambert.x}, ${lambert.y}]`)
+      .join(', ')}]`;
   }
 }
 /**
@@ -36,7 +50,7 @@ export class Place {
 export class Area {
   declare uri: string;
   declare name: string;
-  declare locations: GeoPos[];
+  declare shape: Polygon;
   constructor(args: Omit<Area, 'constructor' | 'formatted'>) {
     Object.assign(this, args);
   }
@@ -125,29 +139,57 @@ export function parseLambert72GMLString(gml: string): GeoPos {
  * Construct a string to represent a geolocation, using the Lambert 72 reference system according to
  * [the GeoSPARQL spec]{@link https://docs.ogc.org/is/22-047r1/22-047r1.html#10-8-1-%C2%A0-well-known-text}
  */
-export function constructLambert72WKTString({ x, y }: Lambert72Coordinates) {
-  return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
+export function constructLambert72WKTString(
+  coords: Lambert72Coordinates | Lambert72Coordinates[],
+) {
+  if (!Array.isArray(coords)) {
+    const { x, y } = coords;
+    return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
+  } else {
+    const points = coords.map(({ x, y }) => `${x} ${y}`).join(', ');
+    // Double brackets are not a mistake...
+    return `<https://www.opengis.net/def/crs/EPSG/0/31370> POLYGON((${points}))`;
+  }
+}
+
+function parseWKTCoord(coordString: string): GeoPos | false {
+  const [x, y] = coordString.split(' ');
+  const lambert = { x: Number(x), y: Number(y) };
+  if (!Number.isNaN(lambert.x) && !Number.isNaN(lambert.y)) {
+    return { lambert };
+  }
+  return false;
 }
 /**
  * Use a regex to parse a simple point as a WKT string and return the coordinates.
  * Throws an error if the format or CRS are not recognised
  */
-export function parseLambert72WKTString(gml: string): GeoPos {
+export function parseLambert72WKTString(gml: string): GeoPos | GeoPos[] {
   // Parsers for WKT exist in other libraries, but either within much larger projects (e.g.
   // openlayers) in a way that is hard to extract due to the potential complexity of the geometries
   // which can be represented or within untyped libraries (e.g. wicket). Since we handle only simple
-  // points, it's much less complex to just use a simple regex.
-  const [_, crs, x, y] =
-    /<https:\/\/www.opengis.net\/def\/crs\/([^"]+)> POINT\((\S+) ([^)]+)\)/.exec(
+  // cases, it's much less complex to just use a simple regex.
+
+  const [_, crs, shape, dimensions] =
+    /<https:\/\/www.opengis.net\/def\/crs\/([^"]+)> (POLYGON|POINT)\(\(?([\d,. ]+)\)\)?/.exec(
       gml,
     ) || [];
-  if (!crs || crs !== 'EPSG/0/31370') {
-    throw new AddressError({
-      translation: 'editor-plugins.address.edit.errors.http-error',
-      message: 'An error occured when querying the address register',
-    });
+  if (crs && crs === 'EPSG/0/31370') {
+    if (shape === 'POINT') {
+      const point = parseWKTCoord(dimensions);
+      if (point) {
+        return point;
+      }
+    } else if (shape === 'POLYGON') {
+      const coords = dimensions.split(/, ?/).map(parseWKTCoord);
+      if (coords && coords.every(Boolean)) {
+        return coords as GeoPos[];
+      }
+    }
   }
-  const lambert = { x: Number(x), y: Number(y) };
 
-  return { lambert };
+  throw new AddressError({
+    translation: 'editor-plugins.address.edit.errors.http-error',
+    message: 'An error occured when querying the address register',
+  });
 }

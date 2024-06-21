@@ -10,7 +10,8 @@ import {
   span,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
-import { constructPointSpec } from './point';
+import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 
 export const constructAddressSpec = (address: Address) => {
@@ -72,7 +73,7 @@ export const constructAddressSpec = (address: Address) => {
       address.municipality,
     ),
     ...idNode,
-    constructPointSpec(address.location, ADRES('positie')),
+    constructGeometrySpec(address.location, ADRES('positie')),
   );
 };
 
@@ -119,7 +120,7 @@ export const parseOldAddressElement =
       'property',
       ADRES_TYPO('positie'),
     );
-    const location = nodeContentsUtils.point.parseOld(locationNode);
+    const location = nodeContentsUtils.geometry.parseOldPoint(locationNode);
 
     if (street && municipality && zipcode && location) {
       return new Address({
@@ -185,9 +186,9 @@ export const parseAddressElement =
       'property',
       ADRES('positie'),
     );
-    const location = nodeContentsUtils.point.parse(pointNode);
+    const location = nodeContentsUtils.geometry.parse(pointNode);
 
-    if (street && municipality && zipcode && location) {
+    if (street && municipality && zipcode && location instanceof Point) {
       return new Address({
         uri: uri ?? nodeContentsUtils.fallbackAddressUri(),
         street,

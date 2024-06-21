@@ -6,16 +6,16 @@ import {
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import {
-  Place,
-  Point,
+  Area,
+  Polygon,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 
-export const constructPlaceSpec = (place: Place) => {
+export const constructAreaSpec = (area: Area) => {
   return span(
     {
-      resource: place.uri,
+      resource: area.uri,
       typeof: LOCN('Location').full,
       property: DCT('spatial').full,
     },
@@ -23,15 +23,15 @@ export const constructPlaceSpec = (place: Place) => {
       {
         property: RDFS('label').full,
       },
-      place.name,
+      area.name,
     ),
-    constructGeometrySpec(place.location, LOCN('geometry')),
+    constructGeometrySpec(area.shape, LOCN('geometry')),
   );
 };
 
-export const parsePlaceElement =
+export const parseAreaElement =
   (nodeContentsUtils: NodeContentsUtils) =>
-  (element: Element): Place | undefined => {
+  (element: Element): Area | undefined => {
     const placeNode = findChildWithRdfaAttribute(
       element,
       'typeof',
@@ -46,13 +46,13 @@ export const parsePlaceElement =
     const pointNode =
       placeNode &&
       findChildWithRdfaAttribute(placeNode, 'property', LOCN('geometry'));
-    const location = nodeContentsUtils.geometry.parse(pointNode);
+    const shape = nodeContentsUtils.geometry.parse(pointNode);
 
-    if (label && location instanceof Point) {
-      return new Place({
+    if (label && shape instanceof Polygon) {
+      return new Area({
         uri: placeResource ?? nodeContentsUtils.fallbackPlaceUri(),
         name: label,
-        location,
+        shape,
       });
     } else {
       return;
