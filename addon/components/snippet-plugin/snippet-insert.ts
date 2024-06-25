@@ -66,11 +66,13 @@ export default class SnippetInsertComponent extends Component<Args> {
     if (documentDiv) {
       return this.controller.withTransaction((tr: Transaction) => {
         return tr.replaceSelectionWith(
-          htmlToDoc(content, {
-            schema: this.controller.schema,
-            parser,
-            editorView: this.controller.mainEditorView,
-          }),
+          this.controller.schema.node('snippet', {assignedSnippetListsIds: this.args.assignedSnippetListsIds},
+            htmlToDoc(content, {
+              schema: this.controller.schema,
+              parser,
+              editorView: this.controller.mainEditorView,
+            }).content
+          ),
         );
       });
     }
