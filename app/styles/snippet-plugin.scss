@@ -115,3 +115,41 @@ div[typeof='besluitpublicatie:Documentonderdeel']
   [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
   padding-bottom: 2rem;
 }
+
+.say-snippet-card {
+  border: 1px solid var(--au-blue-300);
+  .say-snippet-title {
+    background-color: var(--au-blue-300);
+  }
+  .say-snippet-icons {
+    display: none;
+    width: fit-content;
+    position: absolute !important;
+    right: 5px;
+    bottom: 5px;
+    flex-direction: column;
+    .say-snippet-button {
+      height: 24px;
+      width: 24px;
+      margin: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid var(--au-blue-700);
+      border-radius: 4px;
+      color: var(--au-blue-700);
+      &.say-snippet-remove-button{
+        color: var(--au-red-600);
+        border-color: var(--au-red-600);
+      }
+    }
+  }
+}
+
+.ProseMirror-focused {
+  .say-snippet-card {
+    .say-snippet-icons {
+      display: flex;
+    }
+  }
+}

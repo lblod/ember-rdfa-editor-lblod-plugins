@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { on } from '@ember/modifier';
 import t from 'ember-intl/helpers/t';
-import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import { service } from '@ember/service';
@@ -117,25 +117,29 @@ export default class SnippetNode extends Component<Signature> {
     this.closeModal()
   }
   <template>
-    <div style="border: 1px solid red;">
-    {{yield}}
-    <AuButton {{on 'click' this.addFragment}}>
-        Add Another fragment from list
-    </AuButton>
-    <AuButton {{on 'click' this.editFragment}}>
-        Edit
-    </AuButton>
-    <AuButton {{on 'click' this.deleteFragment}}>
-        X
-    </AuButton>
+    <div class='say-snippet-card'>
+      <div class='say-snippet-title'>Title</div>
+      {{yield}}
+      <div class='say-snippet-icons'>
+        <button {{on 'click' this.addFragment}} class='say-snippet-button'>
+          <AuIcon @icon='synchronize' @size='large'/>
+        </button>
+        <button {{on 'click' this.deleteFragment}} class='say-snippet-button say-snippet-remove-button'>
+          <AuIcon @icon='bin'/>
+        </button>
+        <button {{on 'click' this.editFragment}} class='say-snippet-button'>
+          <AuIcon @icon='add'/>
+        </button>
+      </div>
 
-    </div>
-    <SearchModal
-      @open={{this.showModal}}
-      @closeModal={{this.closeModal}}
-      @config={{this.node.attrs.config}}
-      @onInsert={{this.onInsert}}
-      @assignedSnippetListsIds={{this.node.attrs.assignedSnippetListsIds}}
-    />
+
+      </div>
+      <SearchModal
+        @open={{this.showModal}}
+        @closeModal={{this.closeModal}}
+        @config={{this.node.attrs.config}}
+        @onInsert={{this.onInsert}}
+        @assignedSnippetListsIds={{this.node.attrs.assignedSnippetListsIds}}
+      />
   </template>
 }
