@@ -29,6 +29,10 @@ const COORD_SYSTEM_CENTER: GlobalCoordinates = {
   lng: 4.450822554431,
   lat: 50.50526730529,
 };
+const COORD_SYSTEM_START = {
+  center: COORD_SYSTEM_CENTER,
+  zoom: 7,
+};
 
 function isLast(array: unknown[], index: number) {
   return array.length === index + 1;
@@ -56,8 +60,11 @@ interface Signature {
 function ensureGlobalCoordinates(geoPos: GeoPos) {
   return geoPos.global || convertLambertCoordsToWGS84(geoPos.lambert);
 }
-function areaLocations(positions: GeoPos[] | undefined) {
-  return positions?.length !== 0
+function areaLocations(
+  locationType: LocationType,
+  positions: GeoPos[] | undefined,
+) {
+  return locationType === 'area' && positions?.length !== 0
     ? positions?.map((pos) => ensureGlobalCoordinates(pos))
     : undefined;
 }
@@ -108,6 +115,12 @@ class MapWrapper extends Component<MapWrapperSig> {
   get unwrappedBounds() {
     return 'bounds' in this.args.mapStart ? this.args.mapStart.bounds : false;
   }
+  get isOrigin() {
+    return (
+      'center' in this.args.mapStart &&
+      this.args.mapStart.center === COORD_SYSTEM_CENTER
+    );
+  }
   get unwrappedCenter() {
     return 'center' in this.args.mapStart
       ? {
@@ -129,6 +142,16 @@ class MapWrapper extends Component<MapWrapperSig> {
     {{#if this.unwrappedBounds}}
       <LeafletMap
         @bounds={{this.unwrappedBounds}}
+        @onClick={{@onClick}}
+        as |layers|
+      >
+        {{yield layers}}
+      </LeafletMap>
+    {{else if this.isOrigin}}
+      {{! If we're at the default center, use hard-coded values to avoid map jumps }}
+      <LeafletMap
+        @center={{COORD_SYSTEM_CENTER}}
+        @zoom={{7}}
         @onClick={{@onClick}}
         as |layers|
       >
@@ -158,7 +181,6 @@ class MapWrapper extends Component<MapWrapperSig> {
 }
 
 export default class LocationPluginMapComponent extends Component<Signature> {
-  @tracked mapCenter = COORD_SYSTEM_CENTER;
   @tracked vertices: GlobalCoordinates[] = [];
 
   // Use untracked properties as otherwise the map jumps to any area or location we pick
@@ -193,14 +215,11 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           bounds: component.existingAreaBounds,
         };
       } else {
-        return {
-          center: COORD_SYSTEM_CENTER,
-          zoom: 7,
-        };
+        return COORD_SYSTEM_START;
       }
     },
   })
-  mapLocation: LeafletMapStart = { center: COORD_SYSTEM_CENTER, zoom: 7 };
+  mapLocation: LeafletMapStart = COORD_SYSTEM_START;
 
   get foundAddress() {
     return 'center' in this.mapLocation ? this.mapLocation.center : false;
@@ -279,8 +298,10 @@ export default class LocationPluginMapComponent extends Component<Signature> {
             </layers.marker>
           {{/each}}
         {{/if}}
-        {{#if (areaLocations @existingArea)}}
-          <layers.polygon @locations={{(areaLocations @existingArea)}} />
+        {{#if (areaLocations @locationType @existingArea)}}
+          <layers.polygon
+            @locations={{(areaLocations @locationType @existingArea)}}
+          />
         {{/if}}
       </MapWrapper>
     </div>

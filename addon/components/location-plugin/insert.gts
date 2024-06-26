@@ -65,19 +65,19 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   @tracked isLoading = false;
 
   @trackedReset({
-    memo: 'selectedLocationNode',
+    memo: 'modalOpen',
     update: updateFromNode(Address, (address) => address),
   })
   addressToInsert?: Address;
 
   @trackedReset({
-    memo: 'selectedLocationNode',
+    memo: 'modalOpen',
     update: updateFromNode(Place, (place) => place.location.location),
   })
   savedLocation: GeoPos | undefined;
 
   @trackedReset({
-    memo: 'selectedLocationNode',
+    memo: 'modalOpen',
     update(component: LocationPluginInsertComponent) {
       return (
         updateFromNode(Place, (place) => place.name)(component) ??
@@ -88,13 +88,13 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   placeName: string = '';
 
   @trackedReset({
-    memo: 'selectedLocationNode',
+    memo: 'modalOpen',
     update: updateFromNode(Area, (area) => area.shape.locations),
   })
   savedArea: GeoPos[] | undefined;
 
   @trackedReset({
-    memo: 'selectedLocationNode',
+    memo: 'modalOpen',
     update(component: LocationPluginInsertComponent) {
       return (
         updateFromNode(Place, () => 'place')(component) ??
@@ -138,6 +138,14 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   }
 
   get canInsert() {
+    // trackedReset only actually resets any values if the values are used somewhere. Since we're
+    // not actually rendering anything inside the modal if this.modalOpen is false, we need to use
+    // these values somewhere outside of the modal contents block.
+    this.addressToInsert;
+    this.placeName;
+    this.savedLocation;
+    this.savedArea;
+    this.locationType;
     return !!this.controller.activeEditorView.props.nodeViews?.oslo_location;
   }
 
@@ -174,8 +182,8 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   @action
   closeModal() {
+    this.chosenPoint = undefined;
     this.modalOpen = false;
-    this.addressToInsert = undefined;
   }
 
   @action
