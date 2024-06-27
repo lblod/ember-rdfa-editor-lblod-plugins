@@ -47,7 +47,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       const parser = new DOMParser();
       const tag = node.attrs.headerTag;
       const structureName = node.attrs.structureName;
-      const number = node.attrs.number;
+      const number = node.attrs.number as number;
 
       let headerSpec;
       if (node.attrs.hasTitle) {
@@ -61,7 +61,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               { 'data-say-structure-header-name': true },
               `${structureName} `,
             ],
-            ['span', { 'data-say-structure-header-number': true }, number],
+            [
+              'span',
+              { 'data-say-structure-header-number': true },
+              number.toString(),
+            ],
             [
               'span',
               { 'data-say-structure-header-content': true },
@@ -76,7 +80,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               { 'data-say-structure-header-name': true },
               `${structureName} `,
             ],
-            ['span', { 'data-say-structure-header-number': true }, number],
+            [
+              'span',
+              { 'data-say-structure-header-number': true },
+              number.toString(),
+            ],
           ];
         }
       } else {
@@ -87,7 +95,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             { 'data-say-structure-header-name': true },
             `${structureName} `,
           ],
-          ['span', { 'data-say-structure-header-number': true }, number],
+          [
+            'span',
+            { 'data-say-structure-header-number': true },
+            number.toString(),
+          ],
         ];
       }
 
@@ -99,7 +111,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           'data-say-has-title': node.attrs.hasTitle,
           'data-say-structure-name': node.attrs.structureName,
           'data-say-header-tag': node.attrs.headerTag,
-          'data-say-number': node.attrs.number,
+          'data-say-number': number,
         },
         content: [
           'div',
