@@ -16,6 +16,14 @@ import {
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
+import {
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
+import {
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -74,8 +82,30 @@ export default class SnippetNode extends Component<Signature> {
       0,
     );
   }
+  get selection(): Selection {
+    return this.controller.mainEditorState.selection;
+  }
+  get isActive(): boolean {
+    console.log(findAncestors(this.selection.$from, (node: PNode) => {
+      console.log(node.attrs)
+        return hasOutgoingNamedNodeTriple(
+          node.attrs,
+          RDF('type'),
+          EXT('Snippet'),
+        );
+      }))
+    return !!(
+      findAncestors(this.selection.$from, (node: PNode) => {
+        return hasOutgoingNamedNodeTriple(
+          node.attrs,
+          RDF('type'),
+          EXT('Snippet'),
+        );
+      })[0]
+    );
+  }
   @action
-  onInsert(content: string) {
+  onInsert(content: string, title: string) {
     const assignedSnippetListsIds = this.node.attrs.assignedSnippetListsIds;
     let rangeStart = 0;
     let rangeEnd = 0;
@@ -100,7 +130,7 @@ export default class SnippetNode extends Component<Signature> {
     if (documentDiv) {
       return this.controller.withTransaction((tr: Transaction) => {
         return tr.replaceRangeWith(rangeStart, rangeEnd,
-          this.controller.schema.node('snippet', {assignedSnippetListsIds: assignedSnippetListsIds},
+          this.controller.schema.node('snippet', {assignedSnippetListsIds, title},
             htmlToDoc(content, {
               schema: this.controller.schema,
               parser,
@@ -118,19 +148,30 @@ export default class SnippetNode extends Component<Signature> {
   }
   <template>
     <div class='say-snippet-card'>
-      <div class='say-snippet-title'>Title</div>
+      <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
       {{yield}}
-      <div class='say-snippet-icons'>
-        <button {{on 'click' this.addFragment}} class='say-snippet-button'>
-          <AuIcon @icon='synchronize' @size='large'/>
-        </button>
-        <button {{on 'click' this.deleteFragment}} class='say-snippet-button say-snippet-remove-button'>
-          <AuIcon @icon='bin'/>
-        </button>
-        <button {{on 'click' this.editFragment}} class='say-snippet-button'>
-          <AuIcon @icon='add'/>
-        </button>
-      </div>
+      {{#if this.isActive}}
+        <div class='say-snippet-icons'>
+          <button {{on 'click' this.editFragment}} class='say-snippet-button'>
+            <AuIcon @icon='synchronize' @size='large'/>
+            <div class='say-snippet-button-text'>
+              Change Fragment
+            </div>
+          </button>
+          <button {{on 'click' this.deleteFragment}} class='say-snippet-button say-snippet-remove-button'>
+            <AuIcon @icon='bin'/>
+            <div class='say-snippet-button-text'>
+              Remove Fragment
+            </div>
+          </button>
+          <button {{on 'click' this.addFragment}} class='say-snippet-button'>
+            <AuIcon @icon='add'/>
+             <div class='say-snippet-button-text'>
+              Add new fragment
+            </div>
+          </button>
+        </div>
+      {{/if}}
 
 
       </div>

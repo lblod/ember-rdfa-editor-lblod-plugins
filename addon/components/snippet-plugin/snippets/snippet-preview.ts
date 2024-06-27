@@ -11,7 +11,7 @@ import {
 interface Args {
   config: SnippetPluginConfig;
   snippet: Snippet;
-  onInsert: (content: string) => void;
+  onInsert: (content: string, title: string) => void;
 }
 
 export default class SnippetPreviewComponent extends Component<Args> {
@@ -23,6 +23,6 @@ export default class SnippetPreviewComponent extends Component<Args> {
 
   @action
   onInsert() {
-    this.args.onInsert(this.args.snippet.content?.toHTML() ?? '');
+    this.args.onInsert(this.args.snippet.content?.toHTML() ?? '', this.args.snippet.title ?? '');
   }
 }

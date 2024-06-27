@@ -32,6 +32,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('Snippet') },
     assignedSnippetListsIds: {default: []},
+    title: {default: ''},
     config: {default: options},
   },
   component: SnippetComponent,
@@ -45,6 +46,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
         'data-assigned-snippet-ids': (node.attrs.assignedSnippetListsIds as string[]).join(','),
+        'data-snippet-title': node.attrs.title,
       },
       content: 0,
     });
@@ -66,6 +68,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
           return {
             ...rdfaAttrs,
             assignedSnippetListsIds: node.getAttribute('data-assigned-snippet-ids')?.split(','),
+            title: node.getAttribute('data-snippet-title'),
           };
         }
         return false;
