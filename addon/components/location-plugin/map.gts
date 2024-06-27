@@ -194,7 +194,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
       return (
         component.args.address ||
         component.args.existingLocation ||
-        component.args.existingArea
+        component.existingAreaBounds
       );
     },
     update(component: LocationPluginMapComponent) {
