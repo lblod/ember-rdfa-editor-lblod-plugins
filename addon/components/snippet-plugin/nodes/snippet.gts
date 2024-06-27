@@ -24,6 +24,7 @@ import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import {
   hasOutgoingNamedNodeTriple,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -86,23 +87,14 @@ export default class SnippetNode extends Component<Signature> {
     return this.controller.mainEditorState.selection;
   }
   get isActive(): boolean {
-    console.log(findAncestors(this.selection.$from, (node: PNode) => {
-      console.log(node.attrs)
-        return hasOutgoingNamedNodeTriple(
-          node.attrs,
-          RDF('type'),
-          EXT('Snippet'),
-        );
-      }))
-    return !!(
-      findAncestors(this.selection.$from, (node: PNode) => {
+    const ancestor = findAncestors(this.selection.$from, (node: PNode) => {
         return hasOutgoingNamedNodeTriple(
           node.attrs,
           RDF('type'),
           EXT('Snippet'),
         );
       })[0]
-    );
+    return ancestor && ancestor.node === this.node;
   }
   @action
   onInsert(content: string, title: string) {
@@ -130,7 +122,7 @@ export default class SnippetNode extends Component<Signature> {
     if (documentDiv) {
       return this.controller.withTransaction((tr: Transaction) => {
         return tr.replaceRangeWith(rangeStart, rangeEnd,
-          this.controller.schema.node('snippet', {assignedSnippetListsIds, title},
+          this.controller.schema.node('snippet', {assignedSnippetListsIds, title, subject: `http://example.net/lblod-snippet/${uuidv4()}`},
             htmlToDoc(content, {
               schema: this.controller.schema,
               parser,

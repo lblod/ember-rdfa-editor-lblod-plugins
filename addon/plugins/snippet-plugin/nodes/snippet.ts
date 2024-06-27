@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import {
   getRdfaAttrs,
   rdfaAttrSpec,
@@ -36,6 +35,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
         object: sayDataFactory.namedNode(EXT('Snippet').full),
       },
     ] },
+    rdfaNodeType: {default: 'resource'},
     assignedSnippetListsIds: {default: []},
     title: {default: ''},
     config: {default: options},
@@ -62,7 +62,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
       getAttrs(node) {
         if (typeof node === 'string') return false;
         const rdfaAttrs = getRdfaAttrs(node, { rdfaAware: true });
-        console.log(rdfaAttrs)
         if (
           hasOutgoingNamedNodeTriple(
             rdfaAttrs,
