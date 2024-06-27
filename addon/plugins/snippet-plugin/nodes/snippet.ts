@@ -30,7 +30,12 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
-    typeof: { default: EXT('Snippet') },
+    properties: { default: [
+      {
+        predicate: RDF('type').full,
+        object: sayDataFactory.namedNode(EXT('Snippet').full),
+      },
+    ] },
     assignedSnippetListsIds: {default: []},
     title: {default: ''},
     config: {default: options},
