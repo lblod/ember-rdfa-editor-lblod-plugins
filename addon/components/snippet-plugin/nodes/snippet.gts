@@ -141,7 +141,7 @@ export default class SnippetNode extends Component<Signature> {
   <template>
     <div class='say-snippet-card'>
       <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
-      {{yield}}
+      <div class='say-snippet-content'>{{yield}}</div>
       {{#if this.isActive}}
         <div class='say-snippet-icons'>
           <button {{on 'click' this.editFragment}} class='say-snippet-button'>

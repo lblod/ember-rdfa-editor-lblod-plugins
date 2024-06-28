@@ -120,6 +120,12 @@ div[typeof='besluitpublicatie:Documentonderdeel']
   border: 1px solid var(--au-blue-300);
   .say-snippet-title {
     background-color: var(--au-blue-300);
+    font-size: 1rem;
+    font-weight: var(--au-medium);
+    padding: 5px;
+  }
+  .say-snippet-content {
+    padding: 20px;
   }
   .say-snippet-icons {
     display: flex;
