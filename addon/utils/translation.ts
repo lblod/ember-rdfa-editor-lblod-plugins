@@ -1,5 +1,5 @@
 import type { EditorState } from '@lblod/ember-rdfa-editor';
-import IntlService, { type TOptions } from 'ember-intl/services/intl';
+import IntlService from 'ember-intl/services/intl';
 import { emberApplicationPluginKey } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 
 /* Get a function that will translate the string through `intl` based on the document language
@@ -13,7 +13,11 @@ export const getTranslationFunction = (state?: EditorState) => {
 
   const locale = state?.doc.attrs.lang as string;
 
-  return (key: string, fallback: string, options?: TOptions) => {
+  return (
+    key: string,
+    fallback: string,
+    options?: Parameters<IntlService['t']>[1],
+  ) => {
     if (!intl) {
       return fallback;
     }
