@@ -23,6 +23,9 @@ export default class SnippetPreviewComponent extends Component<Args> {
 
   @action
   onInsert() {
-    this.args.onInsert(this.args.snippet.content?.toHTML() ?? '', this.args.snippet.title ?? '');
+    this.args.onInsert(
+      this.args.snippet.content?.toHTML() ?? '',
+      this.args.snippet.title ?? '',
+    );
   }
 }

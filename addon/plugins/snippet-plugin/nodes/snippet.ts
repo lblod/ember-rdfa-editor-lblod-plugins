@@ -1,9 +1,8 @@
+import { getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import {
-  getRdfaAttrs,
-  rdfaAttrSpec,
-  type Schema,
-} from '@lblod/ember-rdfa-editor';
-import { renderRdfaAware, getRdfaContentElement } from '@lblod/ember-rdfa-editor/core/schema';
+  renderRdfaAware,
+  getRdfaContentElement,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   createEmberNodeSpec,
@@ -17,10 +16,9 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { getSnippetUriFromId, SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
-const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
+const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   name: 'snippet',
   inline: false,
   atom: false,
@@ -29,28 +27,31 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
   editable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
-    properties: { default: [
-      {
-        predicate: RDF('type').full,
-        object: sayDataFactory.namedNode(EXT('Snippet').full),
-      },
-    ] },
-    rdfaNodeType: {default: 'resource'},
-    assignedSnippetListsIds: {default: []},
-    title: {default: ''},
-    config: {default: options},
+    properties: {
+      default: [
+        {
+          predicate: RDF('type').full,
+          object: sayDataFactory.namedNode(EXT('Snippet').full),
+        },
+      ],
+    },
+    rdfaNodeType: { default: 'resource' },
+    assignedSnippetListsIds: { default: [] },
+    title: { default: '' },
+    config: { default: options },
   },
   component: SnippetComponent,
   content: '(block | title | chapter | article)*',
-  serialize(node, editorState) {
-    const t = getTranslationFunction(editorState);
+  serialize(node) {
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
       attrs: {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
-        'data-assigned-snippet-ids': (node.attrs.assignedSnippetListsIds as string[]).join(','),
+        'data-assigned-snippet-ids': (
+          node.attrs.assignedSnippetListsIds as string[]
+        ).join(','),
         'data-snippet-title': node.attrs.title,
       },
       content: 0,
@@ -63,24 +64,24 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
         if (typeof node === 'string') return false;
         const rdfaAttrs = getRdfaAttrs(node, { rdfaAware: true });
         if (
-          hasOutgoingNamedNodeTriple(
-            rdfaAttrs,
-            RDF('type'),
-            EXT('Snippet'),
-          )
+          hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), EXT('Snippet'))
         ) {
           return {
             ...rdfaAttrs,
-            assignedSnippetListsIds: node.getAttribute('data-assigned-snippet-ids')?.split(','),
+            assignedSnippetListsIds: node
+              .getAttribute('data-assigned-snippet-ids')
+              ?.split(','),
             title: node.getAttribute('data-snippet-title'),
           };
         }
         return false;
       },
-      contentElement: getRdfaContentElement
+      contentElement: getRdfaContentElement,
     },
   ],
 });
 
-export const snippet = (config: SnippetPluginConfig) => createEmberNodeSpec(emberNodeConfig(config));
-export const snippetView = (config: SnippetPluginConfig) => createEmberNodeView(emberNodeConfig(config));
+export const snippet = (config: SnippetPluginConfig) =>
+  createEmberNodeSpec(emberNodeConfig(config));
+export const snippetView = (config: SnippetPluginConfig) =>
+  createEmberNodeView(emberNodeConfig(config));

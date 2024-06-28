@@ -119,7 +119,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 
-
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelectRdfaComponent;
@@ -188,7 +187,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
       snippet_placeholder: snippetPlaceholder,
-      snippet: snippet(this.config.snippet)
+      snippet: snippet(this.config.snippet),
     },
     marks: {
       em,

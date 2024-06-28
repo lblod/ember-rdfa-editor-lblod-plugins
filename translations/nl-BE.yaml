@@ -308,6 +308,10 @@ snippet-plugin:
         select: Selecteer
         list: Lijst
         created: Aangemaakt op
+  snippet-node:
+    change-fragment: Fragment vervangen
+    remove-fragment: Fragment verwijderen
+    add-fragment: Voeg nog een fragment toe uit dezelfde lijst
 
 template-comments-plugin:
   title: Toelichting

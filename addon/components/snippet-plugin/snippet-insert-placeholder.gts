@@ -49,7 +49,6 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
       { view: this.args.controller.mainEditorView },
     );
   }
-  
 
   <template>
     <li class='au-c-list__item'>
