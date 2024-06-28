@@ -14,6 +14,14 @@ common:
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
   move-down: '{structureName} naar beneden verplaatsen'
+  types:
+    article: Artikel
+    title: Titel
+    chapter: Hoofdstuk
+    section: Afdeling
+    subsection: Onderafdeling
+    paragraph: Paragraaf
+
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
