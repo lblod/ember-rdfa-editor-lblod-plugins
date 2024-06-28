@@ -3,7 +3,7 @@ import {
   rdfaAttrSpec,
   type Schema,
 } from '@lblod/ember-rdfa-editor';
-import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import { renderRdfaAware, getRdfaContentElement } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   createEmberNodeSpec,
@@ -77,6 +77,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig  => ({
         }
         return false;
       },
+      contentElement: getRdfaContentElement
     },
   ],
 });
