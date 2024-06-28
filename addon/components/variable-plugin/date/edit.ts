@@ -175,14 +175,23 @@ export default class DateEditComponent extends Component<Args> {
   get humanError(): string | null {
     if (this.customDateFormatError) {
       const { error, payload } = this.customDateFormatError;
+      const locale = this.intl.primaryLocale ?? this.intl.locales[0];
       if (error === 'character') {
-        const msg = this.intl.lookup(`date-plugin.validation.${error}`) ?? '';
+        const msg =
+          this.intl.getTranslation(`date-plugin.validation.${error}`, locale) ??
+          '';
         const suggestion =
-          this.intl.lookup('date-plugin.validation.character-suggestion') ?? '';
+          this.intl.getTranslation(
+            'date-plugin.validation.character-suggestion',
+            locale,
+          ) ?? '';
         const chars = payload?.invalidCharacters ?? '';
         return `${msg}: ${chars}. ${suggestion}: '${chars}'`;
       }
-      return this.intl.lookup(`date-plugin.validation.${error}`) ?? null;
+      return (
+        this.intl.getTranslation(`date-plugin.validation.${error}`, locale) ??
+        null
+      );
     }
     return null;
   }
