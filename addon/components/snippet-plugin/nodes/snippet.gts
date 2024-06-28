@@ -159,7 +159,7 @@ export default class SnippetNode extends Component<Signature> {
           <button {{on 'click' this.addFragment}} class='say-snippet-button'>
             <AuIcon @icon='add'/>
              <div class='say-snippet-button-text'>
-              Add new fragment
+              Add another fragment from the same lists
             </div>
           </button>
         </div>
