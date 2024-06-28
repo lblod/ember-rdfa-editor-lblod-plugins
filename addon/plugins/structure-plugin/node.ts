@@ -1,7 +1,17 @@
 import type { ComponentLike } from '@glint/template';
 import { PNode, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
 import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/structure';
-import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  BESLUIT,
+  ELI,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  getRdfaContentElement,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
@@ -152,6 +162,57 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           return false;
         },
         contentElement: `div[data-say-structure-content]`,
+      },
+      {
+        tag: 'div',
+        getAttrs(node: string | HTMLElement) {
+          if (typeof node === 'string') {
+            return false;
+          }
+          const rdfaAttrs = getRdfaAttrs(node, { rdfaAware });
+          if (
+            rdfaAttrs &&
+            rdfaAttrs.rdfaNodeType === 'resource' &&
+            hasOutgoingNamedNodeTriple(
+              rdfaAttrs,
+              RDF('type'),
+              BESLUIT('Artikel'),
+            )
+          ) {
+            const headerNode = getRdfaContentElement(node).firstElementChild;
+            const numberNode = headerNode?.querySelector(
+              `span[property~='${ELI('number').prefixed}'],
+               span[property~='${ELI('number').full}']`,
+            );
+            const number = numberNode?.textContent
+              ? parseInt(numberNode.textContent, 10)
+              : 1;
+            const factory = new SayDataFactory();
+            return {
+              subject: rdfaAttrs.subject,
+              rdfaNodeType: 'resource',
+              properties: [
+                {
+                  predicate: RDF('type').full,
+                  object: factory.namedNode(BESLUIT('Artikel').full),
+                },
+              ],
+              headerTag: 'h5',
+              structureName: 'Artikel',
+              hasTitle: false,
+              number,
+            };
+          }
+          return false;
+        },
+        contentElement: (node) => {
+          const bodyNode = getRdfaContentElement(node).lastElementChild;
+          if (bodyNode) {
+            return getRdfaContentElement(bodyNode);
+          } else {
+            return node as HTMLElement;
+          }
+        },
       },
     ],
   };
