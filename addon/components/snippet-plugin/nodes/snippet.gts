@@ -156,7 +156,7 @@ export default class SnippetNode extends Component<Signature> {
           >
             <AuIcon @icon='synchronize' @size='large' />
             <div class='say-snippet-button-text'>
-              {{t 'snippet-plugin.snippet.node.change-fragment'}}
+              {{t 'snippet-plugin.snippet-node.change-fragment'}}
             </div>
           </button>
           <button
@@ -166,7 +166,7 @@ export default class SnippetNode extends Component<Signature> {
           >
             <AuIcon @icon='bin' />
             <div class='say-snippet-button-text'>
-              {{t 'snippet-plugin.snippet.node.remove-fragment'}}
+              {{t 'snippet-plugin.snippet-node.remove-fragment'}}
             </div>
           </button>
           <button
@@ -176,7 +176,7 @@ export default class SnippetNode extends Component<Signature> {
           >
             <AuIcon @icon='add' />
             <div class='say-snippet-button-text'>
-              {{t 'snippet-plugin.snippet.node.add-fragment'}}
+              {{t 'snippet-plugin.snippet-node.add-fragment'}}
             </div>
           </button>
         </div>
