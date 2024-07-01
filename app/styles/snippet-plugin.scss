@@ -126,6 +126,8 @@ div[typeof='besluitpublicatie:Documentonderdeel']
   }
   .say-snippet-content {
     padding: 20px;
+    min-height: 100px;
+    padding-right: 44px;
   }
   .say-snippet-icons {
     display: flex;
@@ -135,8 +137,8 @@ div[typeof='besluitpublicatie:Documentonderdeel']
     bottom: 5px;
     flex-direction: column;
     .say-snippet-button {
-      height: 24px;
-      width: 24px;
+      height: 32px;
+      width: 32px;
       margin: 4px;
       display: flex;
       justify-content: center;
@@ -152,15 +154,16 @@ div[typeof='besluitpublicatie:Documentonderdeel']
       .say-snippet-button-text {
         display: none;
         position: absolute !important;
-        right: 30px;
+        right: 38px;
         border: 1px solid;
         border-radius: 3px;
         width: max-content;
-        font-size: 0.8rem;
-        height: 24px;
+        font-size: 1.2rem;
+        height: 32px;
         padding-right: 1rem;
         padding-left: 1rem;
         align-items: center;
+        background-color: #fff;
       }
       &:hover .say-snippet-button-text {
         display: flex;
