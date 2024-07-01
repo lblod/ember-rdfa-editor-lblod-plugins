@@ -247,8 +247,10 @@ WHERE {
             ext:concept ?uri.
   ?uri a ?type;
         skos:prefLabel ?code;
-        ext:zonality ?zonality;
         mobiliteit:grafischeWeergave ?image.
+  OPTIONAL {
+      ?uri ext:zonality ?zonality.
+  }
   OPTIONAL {
     ?uri org:classification/skos:prefLabel ?classification.
   }
