@@ -25,6 +25,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   group: 'block',
   selectable: true,
   editable: true,
+  isolating: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
     properties: {
