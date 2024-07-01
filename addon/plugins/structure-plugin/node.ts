@@ -191,6 +191,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             return {
               subject: rdfaAttrs.subject,
               rdfaNodeType: 'resource',
+              backlinks: rdfaAttrs.backlinks,
               properties: [
                 {
                   predicate: RDF('type').full,
