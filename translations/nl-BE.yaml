@@ -452,9 +452,14 @@ location-plugin:
   types:
     address: Adres
     place: Plaats
+    area: Gebied
   label: Label
   labelPlaceholder: Type iets...
   default-label: locatie
+  map:
+    hint:
+      finish-shape: Klik op het eerste knooppunt om de gebiedsvorm af te maken
+      delete-point: Klik op het laatste knooppunt om het uit de vorm te verwijderen
   search:
     type: Soort
     title: Centreer de kaart rond adres

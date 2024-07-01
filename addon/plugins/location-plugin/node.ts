@@ -37,7 +37,10 @@ import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-ou
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
-import { Place } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import {
+  Area,
+  Place,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { NodeContentsUtils } from './node-contents';
 
 export interface LocationPluginConfig {
@@ -72,15 +75,14 @@ const parseDOM = (config: LocationPluginConfig): ParseRule[] => {
           attrs.properties = attrs.properties.filter((prop) => {
             return !EXT('content').matches(prop.predicate);
           });
-          let location: Address | Place | undefined;
 
           const addressNode = [...dataContainer.children].find((el) =>
             hasRDFaAttribute(el, 'property', EXT('content')),
           );
-          location = nodeContentsUtils.address.parse(addressNode);
-          if (!location) {
-            location = nodeContentsUtils.place.parse(dataContainer);
-          }
+          const location =
+            nodeContentsUtils.address.parse(addressNode) ||
+            nodeContentsUtils.place.parse(dataContainer) ||
+            nodeContentsUtils.area.parse(dataContainer);
           return {
             ...attrs,
             value:
@@ -166,6 +168,8 @@ const serialize =
         contentNode = nodeContentsUtils.address.construct(value);
       } else if (value instanceof Place) {
         contentNode = nodeContentsUtils.place.construct(value);
+      } else if (value instanceof Area) {
+        contentNode = nodeContentsUtils.area.construct(value);
       }
     }
     if (!contentNode) {
