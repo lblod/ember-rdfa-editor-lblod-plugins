@@ -8,7 +8,7 @@ export default class Sign {
     readonly classifications: string[] = [],
     readonly uri: string,
     readonly order: string,
-    readonly zonality: string,
+    readonly zonality?: string,
   ) {}
   static fromBinding(binding: IBindings) {
     const code = unwrap(binding['code']?.value);
@@ -21,7 +21,7 @@ export default class Sign {
     const order = unwrap(binding['order']?.value);
 
     const classifications = binding['classifications']?.value.split('|') ?? [];
-    const zonality = unwrap(binding['zonality']?.value);
+    const zonality = binding['zonality']?.value;
     return new Sign(code, image, classifications, uri, order, zonality);
   }
 
