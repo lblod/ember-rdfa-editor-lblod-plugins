@@ -2,12 +2,15 @@ declare module 'ember-leaflet' {
   import Component from '@glimmer/component';
   import { type WithBoundArgs } from '@glimmer/template';
   import {
-    type LatLngBounds,
+    type LatLngBoundsExpression,
     type LatLngExpression,
     type LeafletMouseEventHandlerFn,
     type MapOptions,
     type MarkerOptions,
+    type PolylineOptions,
+    type PopupOptions,
     type TileLayerOptions,
+    type TooltipOptions,
   } from 'leaflet';
 
   type PointLocation =
@@ -18,7 +21,7 @@ declare module 'ember-leaflet' {
     | {
         location: LatLngExpression;
       };
-  type MapStart =
+  export type LeafletMapStart =
     | {
         lat: number;
         lng: number;
@@ -29,25 +32,8 @@ declare module 'ember-leaflet' {
         zoom: number;
       }
     | {
-        bounds: LatLngBounds;
+        bounds: LatLngBoundsExpression;
       };
-
-  interface LeafletMapSig {
-    Args: MapOptions &
-      MapStart & {
-        /** See leaflet types for more event handlers */
-        onClick?: LeafletMouseEventHandlerFn;
-      };
-    Blocks: {
-      default: [
-        {
-          tile: WithBoundArgs<typeof LeafletTileLayer, 'parent'>;
-          marker: WithBoundArgs<typeof LeafletMarker, 'parent'>;
-        },
-      ];
-    };
-  }
-  export class LeafletMap extends Component<LeafletMapSig> {}
 
   interface LeafletTileLayerSig {
     Args: {
@@ -58,21 +44,84 @@ declare module 'ember-leaflet' {
   }
   export class LeafletTileLayer extends Component<LeafletTileLayerSig> {}
 
+  interface LeafletPopupSig {
+    Args: { parent: unknown } & PopupOptions;
+    Blocks: {
+      default: [];
+    };
+    Element: HTMLElement;
+  }
+  export class LeafletPopup extends Component<LeafletPopupSig> {}
+
+  interface LeafletTooltipSig {
+    Args: { parent: unknown } & TooltipOptions;
+    Blocks: {
+      default: [];
+    };
+    Element: HTMLElement;
+  }
+  export class LeafletTooltip extends Component<LeafletTooltipSig> {}
+
+  type InteractiveLayerBlocks = {
+    popup: WithBoundArgs<typeof LeafletPopup, 'parent'>;
+    tooltip: WithBoundArgs<typeof LeafletTooltip, 'parent'>;
+  };
+
   interface LeafletMarkerSig {
     Args: {
       parent: unknown;
       location: PointLocation;
     } & MarkerOptions;
     Blocks: {
-      default: [
-        {
-          popup: WithBoundArgs<typeof LeafletMarker, 'parent'>;
-        },
-      ];
+      default: [InteractiveLayerBlocks];
     };
     Element: HTMLElement;
   }
   export class LeafletMarker extends Component<LeafletMarkerSig> {}
+
+  interface LeafletPolylineSig {
+    Args: {
+      parent: unknown;
+      locations: PointLocation[];
+    } & PolylineOptions;
+    Blocks: {
+      default: [InteractiveLayerBlocks];
+    };
+    Element: HTMLElement;
+  }
+  export class LeafletPolyline extends Component<LeafletPolylineSig> {}
+
+  interface LeafletPolygonSig {
+    Args: {
+      parent: unknown;
+      locations: PointLocation[];
+      // The below is not a mistake, polygons extend polylines and add no options
+    } & PolylineOptions;
+    Blocks: {
+      default: [InteractiveLayerBlocks];
+    };
+    Element: HTMLElement;
+  }
+  export class LeafletPolygon extends Component<LeafletPolygonSig> {}
+
+  export interface LeafletMapSig {
+    Args: MapOptions &
+      LeafletMapStart & {
+        /** See leaflet types for more event handlers */
+        onClick?: LeafletMouseEventHandlerFn;
+      };
+    Blocks: {
+      default: [
+        {
+          tile: WithBoundArgs<typeof LeafletTileLayer, 'parent'>;
+          marker: WithBoundArgs<typeof LeafletMarker, 'parent'>;
+          polyline: WithBoundArgs<typeof LeafletPolyline, 'parent'>;
+          polygon: WithBoundArgs<typeof LeafletPolygon, 'parent'>;
+        },
+      ];
+    };
+  }
+  export class LeafletMap extends Component<LeafletMapSig> {}
 
   export const Leaflet = L;
 }

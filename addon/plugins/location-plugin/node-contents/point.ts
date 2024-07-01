@@ -12,27 +12,34 @@ import {
   parseLambert72GMLString,
   parseLambert72WKTString,
   Point,
+  Polygon,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { type NodeContentsUtils } from './';
 
-export const constructPointSpec = (point: Point, property: Resource) => {
-  return span(
+export const constructGeometrySpec = (
+  geometry: Point | Polygon,
+  property: Resource,
+) =>
+  span(
     {
       property: property.full,
-      resource: point.uri,
+      resource: geometry.uri,
       typeof: LOCN('Geometry').full,
     },
     span({
       property: GEOSPARQL('asWKT').full,
       datatype: GEOSPARQL('wktLiteral').full,
-      content: constructLambert72WKTString(point.location.lambert),
+      content: constructLambert72WKTString(
+        'location' in geometry
+          ? geometry.location.lambert
+          : geometry.locations.map(({ lambert }) => lambert),
+      ),
     }),
   );
-};
 
-export const parsePointElement =
+export const parseGeometryElement =
   (nodeContentsUtils: NodeContentsUtils) =>
-  (node: Element | undefined): Point | undefined => {
+  (node: Element | undefined): Point | Polygon | undefined => {
     const wkt =
       node &&
       findChildWithRdfaAttribute(
@@ -45,13 +52,20 @@ export const parsePointElement =
     const location =
       typeof wkt === 'string' ? parseLambert72WKTString(wkt) : undefined;
 
-    return (
-      location &&
-      new Point({
-        uri: uri ?? nodeContentsUtils.fallbackPointUri(),
-        location,
-      })
-    );
+    if (location) {
+      if (!Array.isArray(location)) {
+        return new Point({
+          uri: uri ?? nodeContentsUtils.fallbackGeometryUri(),
+          location,
+        });
+      } else {
+        return new Polygon({
+          uri: uri ?? nodeContentsUtils.fallbackGeometryUri(),
+          locations: location,
+        });
+      }
+    }
+    return undefined;
   };
 
 export const parseOldPointElement =
@@ -70,6 +84,6 @@ export const parseOldPointElement =
 
     return (
       location &&
-      new Point({ uri: nodeContentsUtils.fallbackPointUri(), location })
+      new Point({ uri: nodeContentsUtils.fallbackGeometryUri(), location })
     );
   };
