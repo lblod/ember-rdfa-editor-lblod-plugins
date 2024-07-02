@@ -22,6 +22,12 @@ import didInsert from '@ember/render-modifiers/modifiers/did-insert';
 // eslint-disable-next-line ember/no-at-ember-render-modifiers
 import didUpdate from '@ember/render-modifiers/modifiers/did-update';
 import { element } from 'ember-element-helper';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import {
+  StructureType,
+  getNameForStructureType,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -30,6 +36,8 @@ interface Sig {
   };
 }
 export default class Structure extends Component<Sig> {
+  @service declare intl: IntlService;
+
   titleSchema = new Schema({
     nodes: {
       text: {},
@@ -93,8 +101,22 @@ export default class Structure extends Component<Sig> {
   get number() {
     return this.node.attrs.number;
   }
+
+  get displayStructureName() {
+    return this.node.attrs.displayStructureName as boolean;
+  }
+
+  get structureType() {
+    return this.node.attrs.structureType as StructureType;
+  }
+
   get structureName() {
-    return this.node.attrs.structureName;
+    const docLang = this.controller.mainEditorState.doc.attrs.lang;
+    if (this.displayStructureName) {
+      return getNameForStructureType(this.structureType, this.intl, docLang);
+    } else {
+      return '';
+    }
   }
   get hasTitle() {
     return this.node.attrs.hasTitle;
