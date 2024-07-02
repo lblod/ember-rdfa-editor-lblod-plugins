@@ -9,6 +9,7 @@ import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structu
 import {
   BESLUIT,
   ELI,
+  PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -226,6 +227,10 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
                 {
                   predicate: RDF('type').full,
                   object: factory.namedNode(BESLUIT('Artikel').full),
+                },
+                {
+                  predicate: PROV('value').full,
+                  object: factory.contentLiteral(),
                 },
               ],
               headerTag: 'h5',
