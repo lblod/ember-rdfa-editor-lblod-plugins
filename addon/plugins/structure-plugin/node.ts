@@ -1,5 +1,10 @@
 import type { ComponentLike } from '@glint/template';
-import { PNode, getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  EditorState,
+  PNode,
+  getRdfaAttrs,
+  rdfaAttrSpec,
+} from '@lblod/ember-rdfa-editor';
 import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/structure';
 import {
   BESLUIT,
@@ -7,6 +12,7 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getIntlService } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   getRdfaContentElement,
@@ -17,7 +23,27 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import IntlService from 'ember-intl/services/intl';
 const rdfaAware = true;
+
+export function getNameForStructureType(
+  structureType: StructureType,
+  intl?: IntlService,
+  locale?: string,
+) {
+  if (intl?.exists(`structure-plugin.types.${structureType}`, locale)) {
+    return intl?.t(`structure-plugin.types.${structureType}`, { locale });
+  } else {
+    return structureType;
+  }
+}
+
+export type StructureType =
+  | 'article'
+  | 'chapter'
+  | 'section'
+  | 'subsection'
+  | 'paragraph';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
@@ -44,8 +70,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       number: {
         default: 1,
       },
-      structureName: {
-        default: 'Structure',
+      structureType: {},
+      displayStructureName: {
+        default: false,
       },
       headerTag: {
         default: 'h3',
@@ -53,74 +80,76 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 
       sayRenderAs: { default: 'structure' },
     },
-    serialize(node: PNode) {
+    serialize(node: PNode, state: EditorState) {
       const parser = new DOMParser();
       const tag = node.attrs.headerTag;
-      const structureName = node.attrs.structureName;
+      const structureType = node.attrs.structureType as StructureType;
       const number = node.attrs.number as number;
-
+      const hasTitle = node.attrs.hasTitle as boolean;
+      const titleHTML = hasTitle
+        ? parser.parseFromString(node.attrs.title, 'text/html').body
+            .firstElementChild
+        : null;
+      const displayStructureName = node.attrs.displayStructureName as boolean;
+      const structureName = displayStructureName
+        ? getNameForStructureType(
+            structureType,
+            getIntlService(state),
+            state.doc.attrs.lang,
+          )
+        : null;
       let headerSpec;
-      if (node.attrs.hasTitle) {
-        const html = parser.parseFromString(node.attrs.title, 'text/html');
-        if (html.body.firstElementChild) {
-          headerSpec = [
-            tag,
-            { 'data-say-structure-header': true },
-            [
-              'span',
-              { 'data-say-structure-header-name': true },
-              `${structureName} `,
-            ],
-            [
-              'span',
-              { 'data-say-structure-header-number': true },
-              number.toString(),
-            ],
-            [
-              'span',
-              { 'data-say-structure-header-content': true },
-              html.body.firstElementChild,
-            ],
-          ];
-        } else {
-          headerSpec = [
-            tag,
-            [
-              'span',
-              { 'data-say-structure-header-name': true },
-              `${structureName} `,
-            ],
-            [
-              'span',
-              { 'data-say-structure-header-number': true },
-              number.toString(),
-            ],
-          ];
-        }
-      } else {
+
+      if (titleHTML) {
         headerSpec = [
           tag,
-          [
-            'span',
-            { 'data-say-structure-header-name': true },
-            `${structureName} `,
-          ],
+          { 'data-say-structure-header': true },
+          ...(structureName
+            ? [
+                [
+                  'span',
+                  { 'data-say-structure-header-name': true },
+                  `${structureName} `,
+                ],
+              ]
+            : []),
           [
             'span',
             { 'data-say-structure-header-number': true },
             number.toString(),
           ],
+          '. ',
+          ['span', { 'data-say-structure-header-content': true }, titleHTML],
+        ];
+      } else {
+        headerSpec = [
+          tag,
+          ...(structureName
+            ? [
+                [
+                  'span',
+                  { 'data-say-structure-header-name': true },
+                  `${structureName} `,
+                ],
+              ]
+            : []),
+          [
+            'span',
+            { 'data-say-structure-header-number': true },
+            number.toString(),
+          ],
+          '.',
         ];
       }
-
       return renderRdfaAware({
         renderable: node,
         tag: 'div',
         attrs: {
           'data-say-render-as': 'structure',
-          'data-say-has-title': node.attrs.hasTitle,
-          'data-say-structure-name': node.attrs.structureName,
-          'data-say-header-tag': node.attrs.headerTag,
+          'data-say-has-title': hasTitle,
+          'data-say-structure-type': structureType,
+          'data-say-display-structure-name': displayStructureName,
+          'data-say-header-tag': tag,
           'data-say-number': number,
         },
         content: [
@@ -153,7 +182,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             return {
               ...attrs,
               hasTitle,
-              structureName: node.dataset.sayStructureName,
+              structureType: node.dataset.sayStructureType,
+              displayStructureName: node.dataset.sayDisplayStructureName,
               headerTag: node.dataset.sayHeaderTag,
               number: node.dataset.sayNumber,
               title,
@@ -199,7 +229,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
                 },
               ],
               headerTag: 'h5',
-              structureName: 'Artikel',
+              structureType: 'article',
+              displayStructureName: true,
               hasTitle: false,
               number,
             };
