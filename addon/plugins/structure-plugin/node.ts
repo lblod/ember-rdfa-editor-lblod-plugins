@@ -116,7 +116,10 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             : []),
           [
             'span',
-            { 'data-say-structure-header-number': true },
+            {
+              'data-say-structure-header-number': true,
+              property: ELI('number').full,
+            },
             number.toString(),
           ],
           '. ',
@@ -136,7 +139,10 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             : []),
           [
             'span',
-            { 'data-say-structure-header-number': true },
+            {
+              'data-say-structure-header-number': true,
+              property: ELI('number').full,
+            },
             number.toString(),
           ],
           '.',
@@ -168,7 +174,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             return false;
           }
           const attrs = getRdfaAttrs(node, { rdfaAware });
-          if (node.dataset.sayRenderAs === 'structure') {
+          if (
+            attrs &&
+            attrs.rdfaNodeType === 'resource' &&
+            node.dataset.sayRenderAs === 'structure'
+          ) {
             const hasTitle =
               node.dataset.sayHasTitle && node.dataset.sayHasTitle !== 'false';
             // strict selector here to avoid false positives when structures are nested
@@ -180,8 +190,13 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             if (titleElement) {
               title = titleElement.innerHTML;
             }
+            // Filter out RDFa properties we handle ourselves
+            const filteredProperties = attrs.properties.filter(
+              (prop) => !ELI('number').matches(prop.predicate),
+            );
             return {
               ...attrs,
+              properties: filteredProperties,
               hasTitle,
               structureType: node.dataset.sayStructureType,
               displayStructureName: node.dataset.sayDisplayStructureName,
