@@ -7,7 +7,7 @@ import {
   DOMOutputSpec,
   EditorState,
   getRdfaAttrs,
-  ParseRule,
+  TagParseRule,
   PNode,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
@@ -38,7 +38,7 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 const rdfaAware = true;
-const parseDOM: ParseRule[] = [
+const parseDOM: TagParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {

@@ -18,7 +18,7 @@ import {
   DOMOutputSpec,
   EditorState,
   PNode,
-  ParseRule,
+  TagParseRule,
 } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
@@ -263,7 +263,7 @@ const parseAddressNode = (addressNode: Element): Address | undefined => {
   }
 };
 
-const parseDOM: ParseRule[] = [
+const parseDOM: TagParseRule[] = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
