@@ -27,19 +27,13 @@ export default class NumberInsertComponent extends Component<Args> {
   @tracked validMinimum = true;
   @tracked validMaximum = true;
 
-  minimumInput = modifier(
-    (element: HTMLInputElement) => {
-      this.validMinimum = element.checkValidity();
-    },
-    { eager: false },
-  );
+  minimumInput = modifier((element: HTMLInputElement) => {
+    this.validMinimum = element.checkValidity();
+  });
 
-  maximumInput = modifier(
-    (element: HTMLInputElement) => {
-      this.validMaximum = element.checkValidity();
-    },
-    { eager: false },
-  );
+  maximumInput = modifier((element: HTMLInputElement) => {
+    this.validMaximum = element.checkValidity();
+  });
 
   get controller() {
     return this.args.controller;
