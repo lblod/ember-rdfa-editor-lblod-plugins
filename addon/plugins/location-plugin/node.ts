@@ -9,7 +9,7 @@ import {
   DOMOutputSpec,
   EditorState,
   PNode,
-  ParseRule,
+  TagParseRule,
 } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
@@ -49,7 +49,7 @@ export interface LocationPluginConfig {
   defaultPointUriRoot: string;
 }
 
-const parseDOM = (config: LocationPluginConfig): ParseRule[] => {
+const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
   const nodeContentsUtils = new NodeContentsUtils(config);
   return [
     {
