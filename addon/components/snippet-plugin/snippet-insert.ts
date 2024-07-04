@@ -12,6 +12,7 @@ import {
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Args {
   controller: SayController;
@@ -55,7 +56,7 @@ export default class SnippetInsertComponent extends Component<Args> {
   }
 
   @action
-  onInsert(content: string) {
+  onInsert(content: string, title: string) {
     const domParser = new DOMParser();
     const parsed = domParser.parseFromString(content, 'text/html').body;
     const documentDiv = parsed.querySelector('div[data-say-document="true"]');
@@ -66,11 +67,19 @@ export default class SnippetInsertComponent extends Component<Args> {
     if (documentDiv) {
       return this.controller.withTransaction((tr: Transaction) => {
         return tr.replaceSelectionWith(
-          htmlToDoc(content, {
-            schema: this.controller.schema,
-            parser,
-            editorView: this.controller.mainEditorView,
-          }),
+          this.controller.schema.node(
+            'snippet',
+            {
+              assignedSnippetListsIds: this.args.assignedSnippetListsIds,
+              title: title,
+              subject: `http://data.lblod.info/snippets/${uuidv4()}`,
+            },
+            htmlToDoc(content, {
+              schema: this.controller.schema,
+              parser,
+              editorView: this.controller.mainEditorView,
+            }).content,
+          ),
         );
       });
     }

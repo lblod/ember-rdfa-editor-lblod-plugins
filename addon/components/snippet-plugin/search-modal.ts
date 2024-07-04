@@ -13,6 +13,8 @@ interface Args {
   config: SnippetPluginConfig;
   assignedSnippetListsIds: string[];
   closeModal: () => void;
+  open: boolean;
+  onInsert: (content: string, title: string) => void;
 }
 
 export default class SnippetPluginSearchModalComponent extends Component<Args> {

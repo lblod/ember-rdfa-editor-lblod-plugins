@@ -315,6 +315,10 @@ snippet-plugin:
         select: Select
         list: List
         created: Created
+  snippet-node:
+    change-fragment: Change Fragment
+    remove-fragment: Remove Fragment
+    add-fragment: Add another fragment from the same list
 
 template-comments-plugin:
   title: Template comment
