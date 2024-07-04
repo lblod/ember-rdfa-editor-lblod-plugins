@@ -14,6 +14,13 @@ common:
 structure-plugin:
   move-up: 'Move {structureName} up'
   move-down: 'Move {structureName} down'
+  types:
+    article: Article
+    title: Title
+    chapter: Chapter
+    section: Section
+    subsection: Subsection
+    paragraph: Paragraph
 
 article-structure-plugin:
   insert:
@@ -308,6 +315,10 @@ snippet-plugin:
         select: Select
         list: List
         created: Created
+  snippet-node:
+    change-fragment: Change Fragment
+    remove-fragment: Remove Fragment
+    add-fragment: Add another fragment from the same list
 
 template-comments-plugin:
   title: Template comment

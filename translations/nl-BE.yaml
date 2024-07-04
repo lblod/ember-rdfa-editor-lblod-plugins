@@ -14,6 +14,14 @@ common:
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
   move-down: '{structureName} naar beneden verplaatsen'
+  types:
+    article: Artikel
+    title: Titel
+    chapter: Hoofdstuk
+    section: Afdeling
+    subsection: Onderafdeling
+    paragraph: Paragraaf
+
 article-structure-plugin:
   insert:
     paragraph: Paragraaf invoegen
@@ -308,6 +316,10 @@ snippet-plugin:
         select: Selecteer
         list: Lijst
         created: Aangemaakt op
+  snippet-node:
+    change-fragment: Fragment vervangen
+    remove-fragment: Fragment verwijderen
+    add-fragment: Voeg nog een fragment toe uit dezelfde lijst
 
 template-comments-plugin:
   title: Toelichting

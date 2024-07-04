@@ -115,3 +115,59 @@ div[typeof='besluitpublicatie:Documentonderdeel']
   [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
   padding-bottom: 2rem;
 }
+
+.say-snippet-card {
+  border: 1px solid var(--au-blue-300);
+  .say-snippet-title {
+    background-color: var(--au-blue-300);
+    font-size: 1.6rem;
+    font-weight: var(--au-medium);
+    padding: 5px;
+  }
+  .say-snippet-content {
+    padding: 20px;
+    min-height: 100px;
+    padding-right: 44px;
+  }
+  .say-snippet-icons {
+    display: flex;
+    width: fit-content;
+    position: absolute !important;
+    right: 5px;
+    bottom: 5px;
+    flex-direction: column;
+    .say-snippet-button {
+      height: 32px;
+      width: 32px;
+      margin: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid var(--au-blue-700);
+      border-radius: 4px;
+      color: var(--au-blue-700);
+      cursor: pointer;
+      &.say-snippet-remove-button {
+        color: var(--au-red-600);
+        border-color: var(--au-red-600);
+      }
+      .say-snippet-button-text {
+        display: none;
+        position: absolute !important;
+        right: 38px;
+        border: 1px solid;
+        border-radius: 3px;
+        width: max-content;
+        font-size: 1.2rem;
+        height: 32px;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        align-items: center;
+        background-color: #fff;
+      }
+      &:hover .say-snippet-button-text {
+        display: flex;
+      }
+    }
+  }
+}

@@ -101,6 +101,8 @@ import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/compo
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 import applyDevTools from 'prosemirror-dev-tools';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
+import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
+import { getOwner } from '@ember/application';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -308,6 +310,7 @@ export default class BesluitSampleController extends Controller {
       shouldShowInvisibles: false,
     }),
     editableNodePlugin(),
+    emberApplication({ application: getOwner(this) }),
     recreateUuidsOnPaste,
   ];
 

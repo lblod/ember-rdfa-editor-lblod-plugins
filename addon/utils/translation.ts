@@ -27,6 +27,16 @@ export const getTranslationFunction = (state?: EditorState) => {
 };
 
 /**
+ * Helper function which retrieves the Intl service given an EditorState
+ */
+export const getIntlService = (state: EditorState) => {
+  const intl = emberApplicationPluginKey
+    .getState(state)
+    ?.application.lookup('service:intl');
+  console.log(emberApplicationPluginKey.getState(state));
+  return intl;
+};
+/**
  * Helper function to help pick supported locales for ember-intl.
  * Returns exact matches first, then language matches, then the default.
  **/
