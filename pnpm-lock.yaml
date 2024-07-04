@@ -160,8 +160,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 9.13.0-dev.e9a33c76b2a2a0678515e9be459dcf5aa89a96cb
-        version: 9.13.0-dev.e9a33c76b2a2a0678515e9be459dcf5aa89a96cb(k5lyymqhz3updejxh4ojyc7t7a)
+        specifier: 9.14.0-dev.4448c75b33c1acd4715f63492d02980e7fb0662d
+        version: 9.14.0-dev.4448c75b33c1acd4715f63492d02980e7fb0662d(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1586,11 +1586,12 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@9.13.0-dev.e9a33c76b2a2a0678515e9be459dcf5aa89a96cb':
-    resolution: {integrity: sha512-YRMJUq65LbJVnkCTWVTo2wY87E+CMHyvZbP7GsOQnH2ETX1BS2ZgrN9CNh9IV88P3eD7qIiegWx9rPtagOi0kQ==}
+  '@lblod/ember-rdfa-editor@9.14.0-dev.4448c75b33c1acd4715f63492d02980e7fb0662d':
+    resolution: {integrity: sha512-p6TFl1nw9DLSGsNI2zvZDwrrplC80tZbeQFNQAFrit50DhtVMJH29+tsoW9JgoOps9AF4Jde8KW/czIScWb3PA==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
+      '@floating-ui/dom': ^1.6.0
       '@glint/template': ^1.4.0
       ember-changeset: ^4.1.2
       ember-cli-sass: ^11.0.1
@@ -1598,7 +1599,15 @@ packages:
       ember-modifier: ^4.1.0
       ember-power-select: ^7.1.0
       ember-source: ^4.12.0
+      ember-template-imports: ^4.1.1
       ember-truth-helpers: ^4.0.3
+    peerDependenciesMeta:
+      '@floating-ui/dom':
+        optional: true
+      '@glint/template':
+        optional: true
+      ember-template-imports:
+        optional: true
 
   '@lblod/marawa@0.8.0-beta.6':
     resolution: {integrity: sha512-BW3yCpeQlk9EPnQAEQnM9uViA8RC5DkuoiaPJzbuhMcLvKHfI4cjc6dTg9i8qAijbL/xObmQ/Aexko2Xcj9ktw==}
@@ -10709,7 +10718,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@9.13.0-dev.e9a33c76b2a2a0678515e9be459dcf5aa89a96cb(k5lyymqhz3updejxh4ojyc7t7a)':
+  '@lblod/ember-rdfa-editor@9.14.0-dev.4448c75b33c1acd4715f63492d02980e7fb0662d(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
@@ -10722,9 +10731,7 @@ snapshots:
       '@ember/optional-features': 2.1.0
       '@ember/render-modifiers': 2.1.0(@babel/core@7.24.7)(@glint/template@1.4.0)(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))
       '@embroider/macros': 1.16.5(@glint/template@1.4.0)
-      '@floating-ui/dom': 1.6.7
       '@glimmer/tracking': 1.1.2
-      '@glint/template': 1.4.0
       '@graphy/memory.dataset.fast': 4.3.3
       '@lblod/marawa': 0.8.0-beta.6
       '@say-editor/prosemirror-invisibles': 0.1.1(prosemirror-model@1.21.3)(prosemirror-state@1.4.3)(prosemirror-view@1.33.8)
@@ -10745,7 +10752,6 @@ snapshots:
       ember-modifier: 4.1.0(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))
       ember-power-select: 7.1.2(@babel/core@7.24.7)(@glint/environment-ember-loose@1.4.0(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(@types/ember__array@4.0.10(@babel/core@7.24.7))(@types/ember__component@4.0.22(@babel/core@7.24.7))(@types/ember__controller@4.0.12(@babel/core@7.24.7))(@types/ember__object@4.0.12(@babel/core@7.24.7))(@types/ember__routing@4.0.22(@babel/core@7.24.7))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.1.0(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))))(@glint/template@1.4.0)(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))(webpack@5.92.1)
       ember-source: 4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1)
-      ember-template-imports: 4.1.1
       ember-truth-helpers: 4.0.3(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))
       ember-velcro: 2.2.0(ember-modifier@4.1.0(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1)))(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))
       handlebars: 4.7.8
@@ -10773,6 +10779,10 @@ snapshots:
       tracked-toolbox: 2.0.0(@babel/core@7.24.7)(ember-source@4.12.0(@babel/core@7.24.7)(@glimmer/component@1.1.2(@babel/core@7.24.7))(@glint/template@1.4.0)(webpack@5.92.1))
       uuid: 9.0.1
       yup: 1.4.0
+    optionalDependencies:
+      '@floating-ui/dom': 1.6.7
+      '@glint/template': 1.4.0
+      ember-template-imports: 4.1.1
     transitivePeerDependencies:
       - '@lezer/common'
       - supports-color
