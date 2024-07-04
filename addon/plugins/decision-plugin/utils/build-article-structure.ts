@@ -1,6 +1,7 @@
 import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   BESLUIT,
+  PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
@@ -28,10 +29,14 @@ export function buildArticleStructure(
           predicate: RDF('type').full,
           object: factory.namedNode(BESLUIT('Artikel').full),
         },
+        {
+          predicate: PROV('value').full,
+          object: factory.contentLiteral(),
+        },
       ] satisfies OutgoingTriple[],
-      hasTitle: true,
-      title: '',
-      structureName: 'Artikel',
+      hasTitle: false,
+      structureType: 'article',
+      displayStructureName: true,
       headerTag: 'h5',
       subject: articleResource,
     },
