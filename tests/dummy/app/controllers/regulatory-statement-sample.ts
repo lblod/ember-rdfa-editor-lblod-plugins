@@ -113,6 +113,10 @@ import {
   snippetPlaceholder,
   snippetPlaceholderView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
+import {
+  snippet,
+  snippetView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 
 export default class RegulatoryStatementSampleController extends Controller {
@@ -183,6 +187,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
       snippet_placeholder: snippetPlaceholder,
+      snippet: snippet(this.config.snippet),
     },
     marks: {
       em,
@@ -326,6 +331,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       snippet_placeholder: snippetPlaceholderView(controller),
+      snippet: snippetView(this.config.snippet)(controller),
     };
   };
   @tracked plugins: Plugin[] = [
