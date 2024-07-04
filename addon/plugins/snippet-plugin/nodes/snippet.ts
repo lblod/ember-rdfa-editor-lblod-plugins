@@ -49,7 +49,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       tag: 'div',
       attrs: {
         ...node.attrs,
-        class: 'say-snippet-placeholder-node',
         'data-assigned-snippet-ids': (
           node.attrs.assignedSnippetListsIds as string[]
         ).join(','),
