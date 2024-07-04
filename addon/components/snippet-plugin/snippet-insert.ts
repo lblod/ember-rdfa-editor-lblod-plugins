@@ -72,7 +72,7 @@ export default class SnippetInsertComponent extends Component<Args> {
             {
               assignedSnippetListsIds: this.args.assignedSnippetListsIds,
               title: title,
-              subject: `http://example.net/lblod-snippet/${uuidv4()}`,
+              subject: `http://data.lblod.info/snippets/${uuidv4()}`,
             },
             htmlToDoc(content, {
               schema: this.controller.schema,

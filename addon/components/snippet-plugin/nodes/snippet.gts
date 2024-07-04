@@ -122,7 +122,7 @@ export default class SnippetNode extends Component<Signature> {
             {
               assignedSnippetListsIds,
               title,
-              subject: `http://example.net/lblod-snippet/${uuidv4()}`,
+              subject: `http://data.lblod.info/snippets/${uuidv4()}`,
             },
             htmlToDoc(content, {
               schema: this.controller.schema,
