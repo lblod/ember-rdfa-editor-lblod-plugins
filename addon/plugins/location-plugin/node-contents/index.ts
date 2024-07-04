@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import {
-  constructPointSpec,
+  constructGeometrySpec,
+  parseGeometryElement,
   parseOldPointElement,
-  parsePointElement,
 } from './point';
 import { constructPlaceSpec, parsePlaceElement } from './place';
 import {
@@ -11,6 +11,7 @@ import {
   parseOldAddressElement,
   parseAddressElement,
 } from './address';
+import { constructAreaSpec, parseAreaElement } from './area';
 
 export class NodeContentsUtils {
   declare config: LocationPluginConfig;
@@ -18,17 +19,22 @@ export class NodeContentsUtils {
     this.config = config;
   }
 
-  fallbackPointUri = () => `${this.config.defaultPointUriRoot}${uuidv4()}`;
-  point = {
-    construct: constructPointSpec,
-    parseOld: parseOldPointElement(this),
-    parse: parsePointElement(this),
+  fallbackGeometryUri = () => `${this.config.defaultPointUriRoot}${uuidv4()}`;
+  geometry = {
+    construct: constructGeometrySpec,
+    parseOldPoint: parseOldPointElement(this),
+    parse: parseGeometryElement(this),
   };
 
   fallbackPlaceUri = () => `${this.config.defaultPlaceUriRoot}${uuidv4()}`;
   place = {
     construct: constructPlaceSpec,
     parse: parsePlaceElement(this),
+  };
+
+  area = {
+    construct: constructAreaSpec,
+    parse: parseAreaElement(this),
   };
 
   fallbackAddressUri = () => `${this.config.defaultAddressUriRoot}${uuidv4()}`;
