@@ -1,4 +1,4 @@
-import { PNode, SayController } from '@lblod/ember-rdfa-editor';
+import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import {
   BESLUIT,
   RDF,
@@ -9,9 +9,13 @@ import { ElementPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
 export const getCurrentBesluitRange = (
-  controller: SayController,
+  controllerOrState: SayController | EditorState,
 ): ElementPNode | undefined => {
-  const selection = controller.mainEditorState.selection;
+  const state =
+    controllerOrState instanceof SayController
+      ? controllerOrState.mainEditorState
+      : controllerOrState;
+  const selection = state.selection;
 
   const besluit =
     findAncestors(selection.$from, (node: PNode) => {
