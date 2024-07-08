@@ -9,8 +9,8 @@ export default class Mandatee {
     readonly lastName: string,
     readonly fullName: string,
     readonly status: string,
-    readonly fractie: string,
     readonly role: string,
+    readonly fractie: string,
   ) {}
   static fromBinding(binding: IBindings) {
     const personUri = unwrap(binding['person']?.value);
@@ -19,8 +19,8 @@ export default class Mandatee {
     const lastName = unwrap(binding['lastName']?.value);
     const fullName = `${firstName} ${lastName}`;
     const status = unwrap(binding['statusLabel']?.value);
-    const fractie = unwrap(binding['fractieLabel']?.value);
     const role = unwrap(binding['roleLabel']?.value);
+    const fractie = binding['fractieLabel']?.value ?? 'Onafhankelijk';
     return new Mandatee(
       personUri,
       mandateeUri,
@@ -28,8 +28,8 @@ export default class Mandatee {
       lastName,
       fullName,
       status,
-      fractie,
       role,
+      fractie,
     );
   }
 }
