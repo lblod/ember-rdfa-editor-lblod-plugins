@@ -1,0 +1,31 @@
+{{! @glint-nocheck: not typesafe yet }}
+{{#if this.showCard}}
+  <AuCard
+    @flex={{true}}
+    @divided={{true}}
+    @isOpenInitially={{true}}
+    @expandable={{true}}
+    @shadow={{true}}
+    @size='small'
+    as |c|
+  >
+    <c.header>
+      <AuHeading @level='3' @skin='6'>
+        {{t 'variable-plugin.enter-variable-value'}}
+      </AuHeading>
+    </c.header>
+    <c.content>
+      <AuButton
+        {{on 'click' this.openModal}}
+      >
+        {{t 'editor-plugins.utils.insert'}}
+      </AuButton>
+    </c.content>
+  </AuCard>
+  <LmbPlugin::SearchModal
+    @open={{this.showModal}}
+    @closeModal={{this.closeModal}}
+    @config={{@config}}
+    @onInsert={{this.onInsert}}
+  />
+{{/if}}

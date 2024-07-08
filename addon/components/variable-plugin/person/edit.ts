@@ -1,25 +1,43 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
-
+import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { NodeSelection } from '@lblod/ember-rdfa-editor';
+import { trackedFunction } from 'ember-resources/util/function';
+import { tracked } from '@glimmer/tracking';
 import { LmbPluginConfig, createMandateeNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 
-interface Args {
+type Args = {
   controller: SayController;
   config: LmbPluginConfig;
-}
+};
 
-export default class LmbPluginInsertComponent extends Component<Args> {
-  AddIcon = AddIcon;
-
+export default class CodelistEditComponent extends Component<Args> {
   @tracked showModal = false;
 
   get controller() {
     return this.args.controller;
   }
+
+  selectedPersonNode = trackedFunction(this, () => {
+    const { selection } = this.controller.mainEditorState;
+    if (
+      selection instanceof NodeSelection &&
+      selection.node.type === this.controller.schema.nodes.person_variable
+    ) {
+      const personNode = {
+        node: selection.node,
+        pos: selection.from,
+      };
+      return personNode;
+    }
+    return;
+  });
+
+  get showCard() {
+    return !!this.selectedPersonNode.value;
+  }
+
 
   @action
   openModal() {
@@ -31,7 +49,6 @@ export default class LmbPluginInsertComponent extends Component<Args> {
   closeModal() {
     this.showModal = false;
   }
-
   @action
   onInsert(mandatee: Mandatee) {
     const mandateeNode = createMandateeNode(this.controller, mandatee)
