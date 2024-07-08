@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "20.0.0",
+  "version": "21.0.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -189,7 +189,7 @@
     "@appuniversum/ember-appuniversum": "^3.4.1",
     "@ember/string": "3.x",
     "@glint/template": "^1.4.0",
-    "@lblod/ember-rdfa-editor": "^9.13.0",
+    "@lblod/ember-rdfa-editor": "^9.13.0 || 9.14.0-dev.4448c75b33c1acd4715f63492d02980e7fb0662d",
     "ember-concurrency": "^3.1.0",
     "ember-element-helper": "^0.8.6",
     "ember-intl": "^7.0.0",

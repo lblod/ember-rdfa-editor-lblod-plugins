@@ -1,5 +1,37 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 21.0.0
+
+### Major Changes
+
+- [#449](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/449) [`335cb673df926d26a0d421a958c414d334653575`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/335cb673df926d26a0d421a958c414d334653575) Thanks [@elpoelma](https://github.com/elpoelma)! - Drop obsolete decision nodes from `standard-template` plugin
+
+### Minor Changes
+
+- [#443](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/443) [`9f53a0c5a0e0db0414b0c84aed978d01752ccbf8`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9f53a0c5a0e0db0414b0c84aed978d01752ccbf8) Thanks [@piemonkey](https://github.com/piemonkey)! - Add ability to specify area locations in the location-plugin
+
+- [#445](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/445) [`06fe546cea3d3e7076f3a0ab4549c8de389a43d7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/06fe546cea3d3e7076f3a0ab4549c8de389a43d7) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Support for repeatable fragments
+
+  Addition of a custom, interactive `fragment` node and nodeview.
+  Using the fragment node interactive buttons, you can replace, add and remove fragments.
+
+- [#444](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/444) [`3eea339d0d4bd5bf746d6c8cd9c99cf95e127825`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3eea339d0d4bd5bf746d6c8cd9c99cf95e127825) Thanks [@elpoelma](https://github.com/elpoelma)! - Addition of a backwards-compatible parsing-rule for decision articles to `structure` node-spec
+
+- [#446](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/446) [`f9b4a65a743b214d4f5fa2ba3936fc9fca9fa4c2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f9b4a65a743b214d4f5fa2ba3936fc9fca9fa4c2) Thanks [@elpoelma](https://github.com/elpoelma)! - Introduce some modifications to new `structure` node-spec:
+  - Drop `structureName` node-attribute. This attribute has been replaced by both the `structureType` and `displayStructureName` attributes.
+  - Introduction of a required `structureType` attribute. Examples of `structureType` values are:
+    - `article`
+    - `title`
+    - `chapter`
+    - `section`
+    - `subsection`
+    - `paragraph`
+  - Introduction of a `displayStructureName` attribute. This attribute controls whether the internationalizated (based on the document language) version of the structure name is displayed inside the header of the structure. The internationalized structure name is based on the `structureType` value and the entries included in the translation files. `displayStructureName` has a default value of `false`.
+
+### Patch Changes
+
+- [#447](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/447) [`f06edfdf1681fc2c52e46462cad8faa5d97215c4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f06edfdf1681fc2c52e46462cad8faa5d97215c4) Thanks [@elpoelma](https://github.com/elpoelma)! - Ensure `zonality` is set up as optional when fetching traffic signs
+
 ## 20.0.0
 
 ### Major Changes
