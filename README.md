@@ -30,7 +30,6 @@ This addon contains the following editor plugins:
 - [standard-template-plugin](#standard-template-plugin)
 - [table-of-contents-plugin](#table-of-contents-plugin)
 - [variable-plugin](#variable-plugin)
-- [validation-plugin](#validation-plugin)
 - [template-comments-plugin](#template-comments-plugin)
 
 You can configure your editor like this:
@@ -784,10 +783,6 @@ You can also add an insert component meant for use outside of `insert-variable-c
 ```hbs
 <VariablePlugin::Address::Insert @controller={{this.controller}} />
 ```
-
-## validation-plugin
-
-see [the plugin docs](addon/plugins/validation/README.md)
 
 ## template-comments-plugin
 
