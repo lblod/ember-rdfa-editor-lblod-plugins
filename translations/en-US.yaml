@@ -252,6 +252,8 @@ variable:
     label: date
   address:
     label: address
+  person:
+    label: person
 variable-plugin:
   insert-variable: Insert variable
   button: Insert

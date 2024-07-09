@@ -44,7 +44,7 @@ export default class PersonVariableInsertComponent extends Component<Args> {
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
     const variableId = uuidv4();
 
-    const placeholder = this.intl.t('variable.text.label', {
+    const placeholder = this.intl.t('variable.person.label', {
       locale: this.documentLanguage,
     });
 
