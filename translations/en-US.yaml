@@ -264,8 +264,6 @@ variable-plugin:
     maximum: Maximum
     maximum-placeholder: maximum value
     to: to
-validation-plugin:
-  default-fix-message: Resolve
 
 table-of-contents-plugin:
   title: Table of Contents
