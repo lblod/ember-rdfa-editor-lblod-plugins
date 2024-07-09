@@ -271,7 +271,9 @@ variable-plugin:
     maximum: Maximum
     maximum-placeholder: maximumwaarde
     to: tot
-
+  person:
+    card-title: Persoon invoegen
+    nodeview-placeholder: persoon
 dummy:
   validation-card:
     title: Documentvalidatie

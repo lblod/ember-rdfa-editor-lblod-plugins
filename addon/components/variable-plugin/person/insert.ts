@@ -69,17 +69,10 @@ export default class PersonVariableInsertComponent extends Component<Args> {
           },
           {
             predicate: DCT('type').full,
-            object: sayDataFactory.literal('text'),
-          },
-          {
-            predicate: EXT('content').full,
-            object: sayDataFactory.contentLiteral(),
-          },
+            object: sayDataFactory.literal('person'),
+          }
         ],
       },
-      this.schema.node('placeholder', {
-        placeholderText: 'text',
-      }),
     );
 
     this.label = undefined;

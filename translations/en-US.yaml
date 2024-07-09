@@ -264,6 +264,9 @@ variable-plugin:
     maximum: Maximum
     maximum-placeholder: maximum value
     to: to
+  person:
+    card-title: Insert person
+    nodeview-placeholder: person
 validation-plugin:
   default-fix-message: Resolve
 

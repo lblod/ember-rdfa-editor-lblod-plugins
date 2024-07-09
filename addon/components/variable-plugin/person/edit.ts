@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { SayController, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'ember-resources/util/function';
 import { tracked } from '@glimmer/tracking';
@@ -11,6 +11,11 @@ type Args = {
   controller: SayController;
   config: LmbPluginConfig;
 };
+
+type PersonNode = {
+  node: PNode;
+  pos: number;
+}
 
 export default class CodelistEditComponent extends Component<Args> {
   @tracked showModal = false;
@@ -25,7 +30,7 @@ export default class CodelistEditComponent extends Component<Args> {
       selection instanceof NodeSelection &&
       selection.node.type === this.controller.schema.nodes.person_variable
     ) {
-      const personNode = {
+      const personNode : PersonNode = {
         node: selection.node,
         pos: selection.from,
       };
@@ -51,13 +56,11 @@ export default class CodelistEditComponent extends Component<Args> {
   }
   @action
   onInsert(mandatee: Mandatee) {
-    const mandateeNode = createMandateeNode(this.controller, mandatee)
-    this.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(mandateeNode);
-      },
-      { view: this.controller.mainEditorView },
-    );
+    const personNode = this.selectedPersonNode.value as PersonNode;
+    this.controller.withTransaction((tr) => {
+      tr.setNodeAttribute(personNode.pos, 'mandatee', mandatee);
+      return tr.setNodeAttribute(personNode.pos, 'content', mandatee.mandateeUri);
+    });
     this.closeModal();
   }
 }

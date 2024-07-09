@@ -1,0 +1,20 @@
+{{! @glint-nocheck: not typesafe yet }}
+<AuPill
+  @icon={{this.PencilIcon}}
+  @iconAlignment='right'
+  class='variable atomic'
+  {{on 'click' @selectNode}}
+>
+  {{#if this.mandatee}}
+    {{this.mandatee.firstName}} {{this.mandatee.lastName}}
+  {{else}}
+    <span class='mark-highlight-manual'>
+      {{this.translations.placeholder}}
+    </span>
+  {{/if}}
+  {{#if this.label}}
+    <span class='label'>
+      ({{this.label}})
+    </span>
+  {{/if}}
+</AuPill>

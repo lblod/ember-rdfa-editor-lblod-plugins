@@ -22,7 +22,7 @@ import {
   parseVariableInstance,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
-import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
+import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
@@ -39,6 +39,7 @@ const parseDOM = [
       if (!attrs) {
         return false;
       }
+
       if (
         hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
@@ -47,65 +48,15 @@ const parseDOM = [
         if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
-        return attrs;
+        return {
+          ...attrs,
+          mandatee: JSON.parse(node.getAttribute('data-mandatee') ?? '{}')
+        }
       }
 
       return false;
     },
     contentElement: '[data-content-container="true"]',
-  },
-  {
-    tag: 'span',
-    getAttrs: (node: HTMLElement) => {
-      if (
-        isVariable(node) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        parseVariableType(node) === 'person'
-      ) {
-        const mappingSubject =
-          node.getAttribute('subject') ||
-          node.getAttribute('resource') ||
-          node.getAttribute('about');
-        if (!mappingSubject) {
-          return false;
-        }
-        const variableInstance = parseVariableInstance(node);
-        const label = parseLabel(node);
-        return {
-          __rdfaId: uuidv4(),
-          subject: mappingSubject,
-          rdfaNodeType: 'resource',
-          properties: [
-            {
-              predicate: RDF('type').full,
-              object: sayDataFactory.namedNode(EXT('Mapping').full),
-            },
-            {
-              predicate: EXT('instance').full,
-              object: sayDataFactory.namedNode(
-                variableInstance ??
-                  `http://data.lblod.info/variables/${uuidv4()}`,
-              ),
-            },
-            {
-              predicate: EXT('label').full,
-              object: sayDataFactory.literal(label || ''),
-            },
-            {
-              predicate: DCT('type').full,
-              object: sayDataFactory.literal('person'),
-            },
-            {
-              predicate: EXT('content').full,
-              object: sayDataFactory.contentLiteral(),
-            },
-          ],
-        };
-      }
-
-      return false;
-    },
-    contentElement: CONTENT_SELECTOR,
   },
 ];
 
@@ -113,14 +64,17 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: node.attrs,
+    attrs: {
+      ...node.attrs,
+      'data-mandatee': JSON.stringify(node.attrs.mandatee)
+    },
     content: 0,
   });
 };
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'person-variable',
-  component: VariableNodeViewComponent as unknown as ComponentLike,
+  component: PersonNodeViewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
   content: 'inline*',
@@ -133,6 +87,12 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    content: {
+      default: null,
+    },
+    mandatee: {
+      default: null,
+    }
   },
   toDOM,
   parseDOM,
