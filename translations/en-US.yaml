@@ -380,6 +380,7 @@ editor-plugins:
         insert-attachment: Insert attachment
         insert-document: Insert document
   utils:
+    edit: Edit
     insert: Insert
     cancel: Cancel
     loading: Loading

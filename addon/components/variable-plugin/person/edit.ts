@@ -43,6 +43,11 @@ export default class CodelistEditComponent extends Component<Args> {
     return !!this.selectedPersonNode.value;
   }
 
+  get isEditing() {
+    const personNode = this.selectedPersonNode.value;
+    return !!personNode?.node.attrs.mandatee;
+  }
+
 
   @action
   openModal() {

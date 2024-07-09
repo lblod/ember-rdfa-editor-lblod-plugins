@@ -18,7 +18,11 @@
       <AuButton
         {{on 'click' this.openModal}}
       >
-        {{t 'editor-plugins.utils.insert'}}
+        {{#if this.isEditing}}
+          {{t 'editor-plugins.utils.edit'}}
+        {{else}}
+          {{t 'editor-plugins.utils.insert'}}
+        {{/if}}
       </AuButton>
     </c.content>
   </AuCard>

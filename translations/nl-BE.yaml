@@ -380,6 +380,7 @@ editor-plugins:
         insert-attachment: Bijlage invoegen
         insert-document: Document invoegen
   utils:
+    edit: Bewerk
     insert: Voeg in
     cancel: Annuleer
     loading: Aan het laden

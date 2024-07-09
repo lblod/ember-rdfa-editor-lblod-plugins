@@ -8,7 +8,6 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { v4 as uuidv4 } from 'uuid';
 import {
   DOMOutputSpec,
   getRdfaAttrs,
@@ -17,19 +16,12 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import {
   hasRdfaVariableType,
-  isVariable,
-  parseLabel,
-  parseVariableInstance,
-  parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
-const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
-                          span[property~='${EXT('content').full}']`;
 const rdfaAware = true;
 const parseDOM = [
   {
@@ -61,14 +53,15 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
+  const mandatee = node.attrs.mandatee
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
     attrs: {
       ...node.attrs,
-      'data-mandatee': JSON.stringify(node.attrs.mandatee)
+      'data-mandatee': JSON.stringify(mandatee)
     },
-    content: 0,
+    content: mandatee ? `${mandatee.firstName} ${mandatee.lastName}` : '',
   });
 };
 
