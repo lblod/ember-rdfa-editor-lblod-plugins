@@ -13,9 +13,7 @@ import {
   PNode,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
-import {
-  hasRdfaVariableType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
+import { hasRdfaVariableType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -41,8 +39,8 @@ const parseDOM = [
         }
         return {
           ...attrs,
-          mandatee: JSON.parse(node.getAttribute('data-mandatee') ?? '{}')
-        }
+          mandatee: JSON.parse(node.getAttribute('data-mandatee') ?? '{}'),
+        };
       }
 
       return false;
@@ -52,13 +50,13 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const mandatee = node.attrs.mandatee
+  const mandatee = node.attrs.mandatee;
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
     attrs: {
       ...node.attrs,
-      'data-mandatee': JSON.stringify(mandatee)
+      'data-mandatee': JSON.stringify(mandatee),
     },
     content: mandatee ? `${mandatee.fullName}` : '',
   });
@@ -84,7 +82,7 @@ const emberNodeConfig: EmberNodeConfig = {
     },
     mandatee: {
       default: null,
-    }
+    },
   },
   toDOM,
   parseDOM,

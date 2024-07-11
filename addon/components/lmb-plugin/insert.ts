@@ -4,7 +4,10 @@ import { tracked } from '@glimmer/tracking';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { LmbPluginConfig, createMandateeNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
+import {
+  LmbPluginConfig,
+  createMandateeNode,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -52,33 +55,30 @@ export default class LmbPluginInsertComponent extends Component<Args> {
     const label = this.intl.t('variable.person.label', {
       locale: this.controller.documentLanguage,
     });
-    const node = this.controller.schema.nodes.person_variable.create(
-      {
-        subject: mappingSubject,
-        rdfaNodeType: 'resource',
-        __rdfaId: variableId,
-        mandatee,
-        properties: [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(variableInstance),
-          },
-          {
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('person'),
-          }
-        ],
-      },
-    );
-
+    const node = this.controller.schema.nodes.person_variable.create({
+      subject: mappingSubject,
+      rdfaNodeType: 'resource',
+      __rdfaId: variableId,
+      mandatee,
+      properties: [
+        {
+          predicate: RDF('type').full,
+          object: sayDataFactory.namedNode(EXT('Mapping').full),
+        },
+        {
+          predicate: EXT('instance').full,
+          object: sayDataFactory.namedNode(variableInstance),
+        },
+        {
+          predicate: EXT('label').full,
+          object: sayDataFactory.literal(label),
+        },
+        {
+          predicate: DCT('type').full,
+          object: sayDataFactory.literal('person'),
+        },
+      ],
+    });
 
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,

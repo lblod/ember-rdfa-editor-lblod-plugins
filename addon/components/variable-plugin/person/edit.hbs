@@ -13,9 +13,7 @@
       </AuHeading>
     </c.header>
     <c.content>
-      <AuButton
-        {{on 'click' this.openModal}}
-      >
+      <AuButton {{on 'click' this.openModal}}>
         {{#if this.isEditing}}
           {{t 'editor-plugins.utils.edit'}}
         {{else}}

@@ -15,7 +15,7 @@ type Args = {
 type PersonNode = {
   node: PNode;
   pos: number;
-}
+};
 
 export default class PersonEditComponent extends Component<Args> {
   @tracked showModal = false;
@@ -30,7 +30,7 @@ export default class PersonEditComponent extends Component<Args> {
       selection instanceof NodeSelection &&
       selection.node.type === this.controller.schema.nodes.person_variable
     ) {
-      const personNode : PersonNode = {
+      const personNode: PersonNode = {
         node: selection.node,
         pos: selection.from,
       };
@@ -48,7 +48,6 @@ export default class PersonEditComponent extends Component<Args> {
     return !!personNode?.node.attrs.mandatee;
   }
 
-
   @action
   openModal() {
     this.controller.focus();
@@ -64,7 +63,11 @@ export default class PersonEditComponent extends Component<Args> {
     const personNode = this.selectedPersonNode.value as PersonNode;
     this.controller.withTransaction((tr) => {
       tr.setNodeAttribute(personNode.pos, 'mandatee', mandatee);
-      return tr.setNodeAttribute(personNode.pos, 'content', mandatee.mandateeUri);
+      return tr.setNodeAttribute(
+        personNode.pos,
+        'content',
+        mandatee.mandateeUri,
+      );
     });
     this.closeModal();
   }

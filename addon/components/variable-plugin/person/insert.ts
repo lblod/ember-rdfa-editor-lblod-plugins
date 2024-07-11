@@ -49,31 +49,29 @@ export default class PersonVariableInsertComponent extends Component<Args> {
     });
 
     const label = this.label ?? placeholder;
-    const node = this.schema.nodes.person_variable.create(
-      {
-        subject: mappingSubject,
-        rdfaNodeType: 'resource',
-        __rdfaId: variableId,
-        properties: [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(variableInstance),
-          },
-          {
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('person'),
-          }
-        ],
-      },
-    );
+    const node = this.schema.nodes.person_variable.create({
+      subject: mappingSubject,
+      rdfaNodeType: 'resource',
+      __rdfaId: variableId,
+      properties: [
+        {
+          predicate: RDF('type').full,
+          object: sayDataFactory.namedNode(EXT('Mapping').full),
+        },
+        {
+          predicate: EXT('instance').full,
+          object: sayDataFactory.namedNode(variableInstance),
+        },
+        {
+          predicate: EXT('label').full,
+          object: sayDataFactory.literal(label),
+        },
+        {
+          predicate: DCT('type').full,
+          object: sayDataFactory.literal('person'),
+        },
+      ],
+    });
 
     this.label = undefined;
 
