@@ -4,7 +4,7 @@ import { SayController, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'ember-resources/util/function';
 import { tracked } from '@glimmer/tracking';
-import { LmbPluginConfig, createMandateeNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
+import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 
 type Args = {
@@ -17,7 +17,7 @@ type PersonNode = {
   pos: number;
 }
 
-export default class CodelistEditComponent extends Component<Args> {
+export default class PersonEditComponent extends Component<Args> {
   @tracked showModal = false;
 
   get controller() {

@@ -1,5 +1,4 @@
 import {
-  DCT,
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';

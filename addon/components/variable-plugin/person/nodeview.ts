@@ -4,7 +4,6 @@ import IntlService from 'ember-intl/services/intl';
 import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
-import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
@@ -15,7 +14,7 @@ type Args = {
   controller: SayController;
 };
 
-export default class AddressNodeviewComponent extends Component<Args> {
+export default class PersonNodeviewComponent extends Component<Args> {
   PencilIcon = PencilIcon;
 
   @service declare intl: IntlService;
