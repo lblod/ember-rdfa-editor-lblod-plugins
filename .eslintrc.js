@@ -10,6 +10,7 @@ module.exports = {
       legacyDecorators: true,
     },
   },
+  reportUnusedDisableDirectives: true,
   plugins: ['ember', '@typescript-eslint'],
   extends: [
     'eslint:recommended',
@@ -50,7 +51,6 @@ module.exports = {
         node: true,
       },
       plugins: ['node'],
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       rules: Object.assign(
         {},
         require('eslint-plugin-node').configs.recommended.rules,

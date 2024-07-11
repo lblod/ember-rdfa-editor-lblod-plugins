@@ -1,13 +1,20 @@
-import Mark from '@lblod/ember-rdfa-editor/components/toolbar/mark';
+import { TemplateOnlyComponent } from '@ember/component/template-only';
 import t from 'ember-intl/helpers/t';
 import { NotVisibleIcon } from '@appuniversum/ember-appuniversum/components/icons/not-visible';
+import { SayController } from '@lblod/ember-rdfa-editor';
+import Mark from '@lblod/ember-rdfa-editor/components/toolbar/mark';
 
-<template>
+interface Sig {
+  Args: {
+    controller: SayController;
+  };
+}
+
+export const redact: TemplateOnlyComponent<Sig> = <template>
   <Mark
     @icon={{NotVisibleIcon}}
     @title={{t 'confidentiality-plugin.redact'}}
     @mark='redacted'
-    {{! @glint-expect-error: not typesafe yet }}
     @controller={{@controller}}
   />
-</template>
+</template>;

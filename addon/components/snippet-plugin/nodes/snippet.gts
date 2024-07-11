@@ -32,9 +32,6 @@ interface Signature {
   };
 }
 
-// We don't have a way to type template only components without ember-source 5, so create an empty
-// class to allow for type checking
-// eslint-disable-next-line ember/no-empty-glimmer-component-classes
 export default class SnippetNode extends Component<Signature> {
   @tracked showModal: boolean = false;
   @tracked mode: string = '';
