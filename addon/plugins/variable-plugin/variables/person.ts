@@ -18,6 +18,7 @@ import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 
 const rdfaAware = true;
 const parseDOM = [
@@ -50,7 +51,7 @@ const parseDOM = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const mandatee = node.attrs.mandatee;
+  const mandatee = node.attrs.mandatee as Mandatee;
   return renderRdfaAware({
     renderable: node,
     tag: 'span',

@@ -6,7 +6,6 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   LmbPluginConfig,
-  createMandateeNode,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 import { v4 as uuidv4 } from 'uuid';
