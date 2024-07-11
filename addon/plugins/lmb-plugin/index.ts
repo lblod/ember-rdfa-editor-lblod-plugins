@@ -19,7 +19,7 @@ export function createMandateeNode(controller: SayController, mandatee: Mandatee
       rdfaNodeType: 'resource',
       subject: mandatee.mandateeUri,
     },
-    [schema.text(`${mandatee.firstName} ${mandatee.lastName}`)],
+    [schema.text(`${mandatee.fullName}`)],
   );
   return mandateeNode;
 }

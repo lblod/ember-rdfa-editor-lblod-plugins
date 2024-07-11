@@ -6,7 +6,7 @@
   {{on 'click' @selectNode}}
 >
   {{#if this.mandatee}}
-    {{this.mandatee.firstName}} {{this.mandatee.lastName}}
+    {{this.mandatee.fullName}}
   {{else}}
     <span class='mark-highlight-manual'>
       {{this.translations.placeholder}}

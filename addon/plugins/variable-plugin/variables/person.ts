@@ -61,7 +61,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       ...node.attrs,
       'data-mandatee': JSON.stringify(mandatee)
     },
-    content: mandatee ? `${mandatee.firstName} ${mandatee.lastName}` : '',
+    content: mandatee ? `${mandatee.fullName}` : '',
   });
 };
 
