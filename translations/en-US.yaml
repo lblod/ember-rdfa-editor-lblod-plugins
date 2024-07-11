@@ -269,8 +269,6 @@ variable-plugin:
   person:
     card-title: Insert person
     nodeview-placeholder: person
-validation-plugin:
-  default-fix-message: Resolve
 
 table-of-contents-plugin:
   title: Table of Contents
