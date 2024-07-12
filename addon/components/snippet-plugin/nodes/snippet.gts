@@ -5,6 +5,9 @@ import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/embe
 import SearchModal from '../search-modal';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
+import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import {
   PNode,
   ProseParser,
@@ -29,9 +32,6 @@ interface Signature {
   };
 }
 
-// We don't have a way to type template only components without ember-source 5, so create an empty
-// class to allow for type checking
-// eslint-disable-next-line ember/no-empty-glimmer-component-classes
 export default class SnippetNode extends Component<Signature> {
   @tracked showModal: boolean = false;
   @tracked mode: string = '';
@@ -154,7 +154,7 @@ export default class SnippetNode extends Component<Signature> {
             type='button'
             {{on 'click' this.editFragment}}
           >
-            <AuIcon @icon='synchronize' @size='large' />
+            <AuIcon @icon={{SynchronizeIcon}} @size='large' />
             <div class='say-snippet-button-text'>
               {{t 'snippet-plugin.snippet-node.change-fragment'}}
             </div>
@@ -164,7 +164,7 @@ export default class SnippetNode extends Component<Signature> {
             type='button'
             {{on 'click' this.deleteFragment}}
           >
-            <AuIcon @icon='bin' />
+            <AuIcon @icon={{BinIcon}} />
             <div class='say-snippet-button-text'>
               {{t 'snippet-plugin.snippet-node.remove-fragment'}}
             </div>
@@ -174,7 +174,7 @@ export default class SnippetNode extends Component<Signature> {
             type='button'
             {{on 'click' this.addFragment}}
           >
-            <AuIcon @icon='add' />
+            <AuIcon @icon={{AddIcon}} />
             <div class='say-snippet-button-text'>
               {{t 'snippet-plugin.snippet-node.add-fragment'}}
             </div>

@@ -2,6 +2,7 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import insertArticle from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-article-command';
@@ -68,7 +69,7 @@ export default class InsertArticleComponent extends Component<Sig> {
   <template>
     <li class='au-csidebar-list__item'>
       <AuButton
-        @icon='add'
+        @icon={{AddIcon}}
         @iconAlignment='left'
         @skin='link'
         @disabled={{not this.canInsert}}
