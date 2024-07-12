@@ -11,9 +11,6 @@ interface Signature {
   Args: EmberNodeArgs;
 }
 
-// We don't have a way to type template only components without ember-source 5, so create an empty
-// class to allow for type checking
-// eslint-disable-next-line ember/no-empty-glimmer-component-classes
 export default class SnippetPluginPlaceholder extends Component<Signature> {
   @service declare intl: IntlService;
   get listNames() {
