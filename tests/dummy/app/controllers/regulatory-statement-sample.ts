@@ -69,6 +69,8 @@ import {
   numberView,
   textVariableView,
   text_variable,
+  personVariableView,
+  person_variable,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
@@ -85,6 +87,7 @@ import {
   dateView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/text/insert';
+import PersonVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/insert';
 import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/insert';
 import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
 import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
@@ -167,6 +170,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       address,
       date: date(this.dateOptions),
       text_variable,
+      person_variable,
       number,
       location,
       codelist,
@@ -261,6 +265,10 @@ export default class RegulatoryStatementSampleController extends Controller {
         component:
           VariablePluginAddressInsertVariableComponent as unknown as ComponentLike,
       },
+      {
+        label: 'person',
+        component: PersonVariableInsertComponent as unknown as ComponentLike,
+      },
     ];
   }
 
@@ -296,6 +304,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
+      lmb: {
+        endpoint: 'http://localhost/vendor-proxy/query',
+      },
       citation: {
         type: 'nodes',
         activeInNodeTypes(schema: Schema) {
@@ -325,6 +336,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       date: dateView(this.dateOptions)(controller),
       number: numberView(controller),
       text_variable: textVariableView(controller),
+      person_variable: personVariableView(controller),
       location: locationView(controller),
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),

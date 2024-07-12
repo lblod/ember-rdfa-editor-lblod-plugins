@@ -1,62 +1,58 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
-
-import { SayController } from '@lblod/ember-rdfa-editor';
-import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
-import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
+import { action } from '@ember/object';
+import { service } from '@ember/service';
+import { type SayController } from '@lblod/ember-rdfa-editor';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuidv4 } from 'uuid';
+import IntlService from 'ember-intl/services/intl';
 import {
   DCT,
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
-import { service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
-interface Args {
+type Args = {
   controller: SayController;
-  config: LmbPluginConfig;
-}
+};
 
-export default class LmbPluginInsertComponent extends Component<Args> {
+export default class PersonVariableInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
-  AddIcon = AddIcon;
-
-  @tracked showModal = false;
+  @tracked label?: string;
 
   get controller() {
     return this.args.controller;
   }
 
-  @action
-  openModal() {
-    this.controller.focus();
-    this.showModal = true;
+  get schema() {
+    return this.args.controller.schema;
+  }
+
+  get documentLanguage() {
+    return this.controller.documentLanguage;
   }
 
   @action
-  closeModal() {
-    this.showModal = false;
+  updateLabel(event: InputEvent) {
+    this.label = (event.target as HTMLInputElement).value;
   }
 
   @action
-  onInsert(mandatee: Mandatee) {
+  insert() {
     const mappingSubject = `http://data.lblod.info/mappings/${uuidv4()}`;
     const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
     const variableId = uuidv4();
 
-    const label = this.intl.t('variable.person.label', {
-      locale: this.controller.documentLanguage,
+    const placeholder = this.intl.t('variable.person.label', {
+      locale: this.documentLanguage,
     });
-    const node = this.controller.schema.nodes.person_variable.create({
+
+    const label = this.label ?? placeholder;
+    const node = this.schema.nodes.person_variable.create({
       subject: mappingSubject,
       rdfaNodeType: 'resource',
       __rdfaId: variableId,
-      mandatee,
       properties: [
         {
           predicate: RDF('type').full,
@@ -77,9 +73,10 @@ export default class LmbPluginInsertComponent extends Component<Args> {
       ],
     });
 
+    this.label = undefined;
+
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,
     });
-    this.closeModal();
   }
 }
