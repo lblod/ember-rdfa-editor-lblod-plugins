@@ -252,6 +252,8 @@ variable:
     label: date
   address:
     label: address
+  person:
+    label: person
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
@@ -264,6 +266,9 @@ variable-plugin:
     maximum: Maximum
     maximum-placeholder: maximum value
     to: to
+  person:
+    card-title: Insert person
+    nodeview-placeholder: person
 
 table-of-contents-plugin:
   title: Table of Contents
@@ -375,6 +380,7 @@ editor-plugins:
         insert-attachment: Insert attachment
         insert-document: Insert document
   utils:
+    edit: Edit
     insert: Insert
     cancel: Cancel
     loading: Loading

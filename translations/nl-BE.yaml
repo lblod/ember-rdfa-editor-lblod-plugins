@@ -256,6 +256,8 @@ variable:
     label: datum
   address:
     label: adres
+  person:
+    label: persoon
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
@@ -268,7 +270,9 @@ variable-plugin:
     maximum: Maximum
     maximum-placeholder: maximumwaarde
     to: tot
-
+  person:
+    card-title: Persoon invoegen
+    nodeview-placeholder: persoon
 dummy:
   validation-card:
     title: Documentvalidatie
@@ -375,6 +379,7 @@ editor-plugins:
         insert-attachment: Bijlage invoegen
         insert-document: Document invoegen
   utils:
+    edit: Bewerk
     insert: Voeg in
     cancel: Annuleer
     loading: Aan het laden
