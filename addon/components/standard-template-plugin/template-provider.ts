@@ -63,6 +63,7 @@ export default class TemplateProviderComponent extends Component<Args> {
   templateIsApplicable(template: StandardTemplate) {
     const { $from } = this.controller.mainEditorState.selection;
     const containsTypes =
+      template.contexts.length === 0 ||
       this.controller.externalContextStore
         .match(null, 'a')
         .dataset.some((quad) => {
