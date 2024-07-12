@@ -10,7 +10,7 @@ interface Sig {
   };
 }
 
-export const redact: TemplateOnlyComponent<Sig> = <template>
+const Redact: TemplateOnlyComponent<Sig> = <template>
   <Mark
     @icon={{NotVisibleIcon}}
     @title={{t 'confidentiality-plugin.redact'}}
@@ -18,3 +18,4 @@ export const redact: TemplateOnlyComponent<Sig> = <template>
     @controller={{@controller}}
   />
 </template>;
+export default Redact;
