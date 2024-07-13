@@ -1,5 +1,35 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.0.0
+
+### Major Changes
+
+- [#448](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/448) [`e6fe1df`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e6fe1dfd89c0e7fba6d58c0f373438fdd7730403) Thanks [@piemonkey](https://github.com/piemonkey)! - Update ember-intl to v7, drops support for v5 and v6 due to API changes
+
+- [#448](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/448) [`e6fe1df`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e6fe1dfd89c0e7fba6d58c0f373438fdd7730403) Thanks [@piemonkey](https://github.com/piemonkey)! - Update ember-modifier to v4 and drop support for older versions
+
+- [#448](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/448) [`e6fe1df`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e6fe1dfd89c0e7fba6d58c0f373438fdd7730403) Thanks [@piemonkey](https://github.com/piemonkey)! - Update to ember-power-select v7.1, drops support for older versions
+
+- [#448](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/448) [`e6fe1df`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e6fe1dfd89c0e7fba6d58c0f373438fdd7730403) Thanks [@piemonkey](https://github.com/piemonkey)! - Update all dependencies to latest supported versions
+
+- [#448](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/448) [`e6fe1df`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e6fe1dfd89c0e7fba6d58c0f373438fdd7730403) Thanks [@piemonkey](https://github.com/piemonkey)! - Run pnpm up to update dependencies to latest supported versions
+
+- [#451](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/451) [`8f560c6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8f560c688458eb6c143c20a6758749811871d78e) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove `nodeType`-based validation plugin. This validation plugin validated documents based on the presence of nodes with a specific node-type. This turned out not to be as useful/intuitive.
+
+### Minor Changes
+
+- [#455](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/455) [`0ae858b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0ae858b4dd6bf8034024e312abc468e2bc1bc21f) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Added person variable
+
+- [#448](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/448) [`e6fe1df`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e6fe1dfd89c0e7fba6d58c0f373438fdd7730403) Thanks [@piemonkey](https://github.com/piemonkey)! - Update to ember-template-imports 4.1.1
+
+### Patch Changes
+
+- [#453](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/453) [`9ffbcae`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9ffbcae60370a43d80e03887fc3f41473cd8b849) Thanks [@abeforgit](https://github.com/abeforgit)! - fix: allow basic templates to be inserted again
+
+- [#450](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/450) [`19d811d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/19d811dfae52ff0dca37ddedcb0a141fbb3cb5b0) Thanks [@elpoelma](https://github.com/elpoelma)! - lbm-plugin: add support for inserting independent mandatees (who are not part of a fraction)
+
+- [#454](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/454) [`fdeb6cd`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/fdeb6cd7b9bfcf7f13ad3c4005f2179776d3ef41) Thanks [@piemonkey](https://github.com/piemonkey)! - Use icon classes in order to support embeddable editor
+
 ## 21.0.0
 
 ### Major Changes
