@@ -41,7 +41,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
     config: { default: options },
   },
   component: SnippetComponent,
-  content: '(block | title | chapter | article)*',
+  content: 'block+',
   serialize(node) {
     return renderRdfaAware({
       renderable: node,
