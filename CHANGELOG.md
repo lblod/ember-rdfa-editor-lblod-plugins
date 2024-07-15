@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.0.1
+
+### Patch Changes
+
+- [#456](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/456) [`f1844a1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f1844a1c61112bbc226e84b2728b20ae18410715) Thanks [@abeforgit](https://github.com/abeforgit)! - Allow any block content in snippet nodes
+
 ## 22.0.0
 
 ### Major Changes
