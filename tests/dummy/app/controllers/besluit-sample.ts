@@ -258,7 +258,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'http://localhost/vendor-proxy/query',
       },
       lpdc: {
-        // Needs to point at the same port as the ember app
+        // Needs to be exposed locally without authentication as otherwise calls fail
         endpoint: 'http://localhost/lpdc-service',
       },
       location: {
