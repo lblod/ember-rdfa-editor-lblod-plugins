@@ -60,9 +60,11 @@ export const fetchLpdcs = async ({
     };
   };
 }> => {
-  const endpoint = config?.endpoint;
+  const endpoint = `${config?.endpoint}/doc/instantie`;
 
-  const url = new URL(`${endpoint}/doc/instantie`);
+  const url = endpoint.startsWith('/')
+    ? new URL(endpoint, window.location.origin)
+    : new URL(endpoint);
 
   if (filter?.name) {
     url.searchParams.append('zoekterm', filter.name);
@@ -72,7 +74,7 @@ export const fetchLpdcs = async ({
     url.searchParams.append('pageIndex', pageNumber.toString());
   }
 
-  const results = await fetch(url.toString(), {
+  const results = await fetch(url, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
