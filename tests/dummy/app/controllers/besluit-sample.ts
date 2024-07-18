@@ -70,6 +70,8 @@ import {
   numberView,
   codelistView,
   locationView,
+  personVariableView,
+  person_variable,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
   osloLocation,
@@ -151,6 +153,7 @@ export default class BesluitSampleController extends Controller {
         }),
         date: date(this.dateOptions),
         text_variable,
+        person_variable,
         number,
         location,
         codelist,
@@ -288,6 +291,7 @@ export default class BesluitSampleController extends Controller {
   ) => Record<string, SayNodeViewConstructor> = (controller) => {
     return {
       text_variable: textVariableView(controller),
+      person_variable: personVariableView(controller),
       number: numberView(controller),
       codelist: codelistView(controller),
       location: locationView(controller),
