@@ -22,10 +22,13 @@ import { not } from 'ember-truth-helpers';
 import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/move-structure';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 interface Sig {
   Args: { controller: SayController };
 }
 export default class StructureControlCardComponent extends Component<Sig> {
+  @service declare intl: IntlService;
   get controller(): SayController {
     return this.args.controller;
   }
@@ -43,7 +46,8 @@ export default class StructureControlCardComponent extends Component<Sig> {
     return null;
   }
   get structureName(): string {
-    return this.structure?.node.attrs.structureName ?? 'Unknown structure';
+    const type = this.structure?.node.attrs.structureType;
+    return this.intl.t(`structure-plugin.types.${type}`) ?? 'Unknown structure';
   }
   get canMoveUp() {
     return this.controller.checkCommand(moveStructure('up'));
