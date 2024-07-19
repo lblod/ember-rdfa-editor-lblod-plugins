@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.0.2
+
+### Patch Changes
+
+- [`3f90b8a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3f90b8ac9a07a884e28d838aa39d4eec42fffbd9) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix structure-control card labels
+
+- [#458](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/458) [`d1f3a8c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d1f3a8c10c84fcfd02fbea2df18f10523d548287) Thanks [@piemonkey](https://github.com/piemonkey)! - Add support for relative urls to lpdc endpoint configuration
+
 ## 22.0.1
 
 ### Patch Changes
