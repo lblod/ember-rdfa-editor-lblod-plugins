@@ -18,30 +18,31 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  getSnippetUriFromId,
+  type SnippetList,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
-export function createSnippetPlaceholder(
-  listIds: string[],
-  listNames: string[],
-  schema: Schema,
-) {
+export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
+  const importedResources = lists.flatMap((list) => list.importedResources);
 
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
-    listNames,
+    listNames: lists.map((list) => list.label),
     subject: mappingResource,
     properties: [
       {
         predicate: RDF('type').full,
         object: sayDataFactory.namedNode(EXT('SnippetPlaceholder').full),
       },
-      ...listIds.map((listId) => ({
+      ...lists.map((list) => ({
         predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-        object: sayDataFactory.namedNode(getSnippetUriFromId(listId)),
+        object: sayDataFactory.namedNode(getSnippetUriFromId(list.id)),
       })),
     ],
+    importedResources,
   });
 }
 
@@ -56,6 +57,7 @@ const emberNodeConfig: EmberNodeConfig = {
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
     listNames: { default: [] },
+    importedResources: { default: [] },
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
@@ -67,6 +69,9 @@ const emberNodeConfig: EmberNodeConfig = {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
         'data-list-names': (node.attrs.listNames as string[]).join(','),
+        'data-imported-resources': (
+          node.attrs.importedResources as string[]
+        ).join(','),
       },
       content: [
         'text',
@@ -93,6 +98,9 @@ const emberNodeConfig: EmberNodeConfig = {
           return {
             ...rdfaAttrs,
             listNames: node.getAttribute('data-list-names')?.split(','),
+            importedResources: node
+              .getAttribute('data-imported-resources')
+              ?.split(','),
           };
         }
         return false;

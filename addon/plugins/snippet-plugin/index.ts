@@ -27,9 +27,11 @@ export class Snippet {
 }
 
 interface SnippetListArgs {
-  id: string | null;
-  label: string | null;
-  createdOn: string | null;
+  id: string;
+  label: string;
+  createdOn: string;
+  // TODO still need to add this to the data model
+  // importedResources: string[];
 }
 
 const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
@@ -40,13 +42,18 @@ export const getSnippetIdFromUri = (uri: string) =>
   uri.replace(snippetListBase, '');
 
 export class SnippetList {
-  id: string | null;
-  label: string | null;
+  id: string;
+  label: string;
   createdOn: string | null;
+  importedResources: string[];
 
   constructor({ id, label, createdOn }: SnippetListArgs) {
-    this.id = id ? getSnippetIdFromUri(id) : null;
+    this.id = getSnippetIdFromUri(id);
     this.label = label;
-    this.createdOn = dateValue(createdOn ?? undefined);
+    this.createdOn = dateValue(createdOn);
+    this.importedResources = [
+      'http://example.org/placeholder/12345-abcd',
+      'http://example.org/placehoder/67890-efgh',
+    ];
   }
 }

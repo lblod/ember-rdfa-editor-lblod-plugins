@@ -113,7 +113,7 @@ export default class BesluitSampleController extends Controller {
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
 
-  @tracked editableNodes = false;
+  @tracked editableNodes = true;
 
   @action
   toggleEditableNodes() {

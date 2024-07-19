@@ -121,6 +121,7 @@ import {
   snippetView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
+import { placeholderPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/snippet-linking';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -128,7 +129,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
-  @tracked editableNodes = false;
+  @tracked editableNodes = true;
 
   @action
   toggleEditableNodes() {
@@ -359,6 +360,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     emberApplication({ application: getOwner(this) }),
     editableNodePlugin(),
     recreateUuidsOnPaste,
+    placeholderPlugin,
   ];
 
   @action
