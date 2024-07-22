@@ -361,7 +361,7 @@ export default class BesluitSampleController extends Controller {
           'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
         ],
         disabledInContexts: [],
-        body: '<p><span class="mark-highlight-manual">Vrije tekst voor bijvoorbeeld vraag, antwoord, amendement, mededeling of tussenkomst.</span></p>'
+        body: '<p><span class="mark-highlight-manual">Vrije tekst voor bijvoorbeeld vraag, antwoord, amendement, mededeling of tussenkomst.</span></p>',
       },
       {
         id: 'b04fc03e-e8ff-496a-9343-1f07b4f55551',
@@ -382,7 +382,7 @@ export default class BesluitSampleController extends Controller {
             <p>Korte openbare beschrijving:</p>
             <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
           </div>
-        `
+        `,
       },
       {
         id: '2deed136-94c2-47ec-a542-8746cd020579',
@@ -451,7 +451,7 @@ export default class BesluitSampleController extends Controller {
               </div>
             </div>
           </div>
-        `
+        `,
       },
       {
         id: '39c31a7e-2ba9-11e9-88cf-83ebfda837dc',
@@ -501,7 +501,7 @@ export default class BesluitSampleController extends Controller {
               </div>
             </div>
           </div>
-        `
+        `,
       },
       {
         id: '6933312e-2bac-11e9-af69-3baeff70b1a8',
@@ -546,7 +546,7 @@ export default class BesluitSampleController extends Controller {
             </div>
           </div>
         </div>
-        `
+        `,
       },
     ];
   }
