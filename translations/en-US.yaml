@@ -516,7 +516,7 @@ lpdc-plugin:
 
 mandatee-table-plugin:
   insert:
-      title: Insert mandatee table
+    title: Insert mandatee table
   configure:
     title: Configure mandatee table
     tag-input:
@@ -527,4 +527,4 @@ mandatee-table-plugin:
       placeholder: Title
   node:
     warning: Information which you enter below may be removed upon
-             synchronisation of the inauguration meeting.
+      synchronisation of the inauguration meeting.

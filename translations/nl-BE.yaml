@@ -526,4 +526,4 @@ mandatee-table-plugin:
       placeholder: Titel
   node:
     warning: Informatie die u hieronder manueel ingeeft, wordt mogelijks
-             verwijderd bij synchronisatie van de installatievergadering.
+      verwijderd bij synchronisatie van de installatievergadering.
