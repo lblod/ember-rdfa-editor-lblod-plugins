@@ -512,3 +512,18 @@ lpdc-plugin:
       name: Naam
   search:
     placeholder: LPDC-naam/beschrijving
+
+mandatee-table-plugin:
+  insert:
+    title: Mandatarissen-tabel invoegen
+  configure:
+    title: Mandatarissen-tabel configureren
+    tag-input:
+      label: Tag
+      placeholder: Selecteer tag
+    title-input:
+      label: Titel
+      placeholder: Titel
+  node:
+    warning: Informatie die u hieronder manueel ingeeft, wordt mogelijks
+             verwijderd bij synchronisatie van de installatievergadering.
