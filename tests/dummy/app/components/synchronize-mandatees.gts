@@ -34,6 +34,7 @@ export default class SychronizeMandateesComponent<R> extends Component<Sig<R>> {
       @iconAlignment='left'
       @loading={{this.synchronize.isRunning}}
     >
+      {{! template-lint-disable no-bare-strings  }}
       Synchronise mandatees
     </AuButton>
   </template>
