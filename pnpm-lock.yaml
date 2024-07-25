@@ -160,8 +160,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.0.1
-        version: 10.0.1(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.0.2
+        version: 10.0.2(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1586,8 +1586,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.0.1':
-    resolution: {integrity: sha512-wYI3LIPQIMrulE1E1PzCrOhOpVgMEiEmGmMdThTYTljnZpzTJggGNqrJJCpVJ6wvaM4KFPZq3PtuRYeTfZlfeQ==}
+  '@lblod/ember-rdfa-editor@10.0.2':
+    resolution: {integrity: sha512-2tVTQeedXufvIPjt894Lr/7DpwdRXOH7WA5v2MK2Q4JMPdgTdLpb/JZYCrUIAVIen8qB/V2bFqcjNDitzrBq1w==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -10718,7 +10718,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.0.1(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.0.2(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
