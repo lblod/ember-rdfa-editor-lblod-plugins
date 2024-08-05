@@ -105,6 +105,11 @@ import applyDevTools from 'prosemirror-dev-tools';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { getOwner } from '@ember/application';
+import {
+  mandatee_table,
+  mandateeTableView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin/node';
+import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -159,6 +164,7 @@ export default class BesluitSampleController extends Controller {
         codelist,
         oslo_location: osloLocation(this.config.location),
         roadsign_regulation,
+        mandatee_table,
         heading: headingWithConfig({ rdfaAware: true }),
         blockquote,
 
@@ -272,6 +278,11 @@ export default class BesluitSampleController extends Controller {
         defaultAddressUriRoot:
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
       },
+      mandateeTable: {
+        config: MANDATEE_TABLE_SAMPLE_CONFIG,
+        tags: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG),
+        defaultTag: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG)[0],
+      },
     };
   }
 
@@ -300,6 +311,7 @@ export default class BesluitSampleController extends Controller {
       oslo_location: osloLocationView(this.config.location)(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       structure: structureView(controller),
+      mandatee_table: mandateeTableView(controller),
     } satisfies Record<string, SayNodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [

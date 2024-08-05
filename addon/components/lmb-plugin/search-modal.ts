@@ -7,7 +7,7 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
-import { IBindings } from 'fetch-sparql-endpoint';
+import { fetchMandatees } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchMandatees';
 type SearchSort = [keyof Mandatee, 'ASC' | 'DESC'] | false;
 
 interface Args {
@@ -15,12 +15,6 @@ interface Args {
   open: boolean;
   closeModal: () => void;
   onInsert: () => void;
-}
-
-interface SparqlResponse {
-  results: {
-    bindings: IBindings[];
-  };
 }
 
 export default class LmbPluginSearchModalComponent extends Component<Args> {
@@ -45,47 +39,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   }
 
   fetchData = restartableTask(async () => {
-    const endpoint = this.args.config.endpoint;
-    const queryResponse = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `
-        PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
-        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-        PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
-        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-        PREFIX persoon: <http://data.vlaanderen.be/ns/persoon#>
-        PREFIX org: <http://www.w3.org/ns/org#>
-        PREFIX regorg: <https://www.w3.org/ns/regorg#>
-        SELECT DISTINCT ?mandatee ?person ?firstName ?lastName ?statusLabel ?fractieLabel ?roleLabel WHERE {
-            ?mandatee a mandaat:Mandataris;
-              org:holds ?mandaat;
-              mandaat:status ?status;
-              mandaat:isBestuurlijkeAliasVan ?person.
-            ?person foaf:familyName ?lastName;
-              persoon:gebruikteVoornaam ?firstName.
-            ?status skos:prefLabel ?statusLabel.
-            ?mandaat org:role ?role.
-            ?role skos:prefLabel ?roleLabel.
-            OPTIONAL  {
-              ?mandatee mandaat:einde ?endDate
-            }
-            OPTIONAL {
-              ?mandatee org:hasMembership ?membership.
-              ?membership org:organisation ?fractie.
-              ?fractie regorg:legalName ?fractieLabel.
-            }
-            filter (!bound(?endDate) || ?endDate > now()).
-        }
-        `,
-      }),
-    });
-    const queryJson: SparqlResponse = await queryResponse.json();
-    const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding);
-    return mandatees;
+    return fetchMandatees({ endpoint: this.args.config.endpoint });
   });
 
   search = restartableTask(async () => {

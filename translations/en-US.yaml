@@ -513,3 +513,18 @@ lpdc-plugin:
       name: Name
   search:
     placeholder: LPDC Name/Description
+
+mandatee-table-plugin:
+  insert:
+    title: Insert mandatee table
+  configure:
+    title: Configure mandatee table
+    tag-input:
+      label: Tag
+      placeholder: Select tag
+    title-input:
+      label: Title
+      placeholder: Title
+  node:
+    warning: Information which you enter below may be removed upon
+      synchronisation of the inauguration meeting.

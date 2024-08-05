@@ -89,6 +89,10 @@
         </:default>
         <:aside>
           {{#if this.controller}}
+            <SynchronizeMandatees
+              @controller={{this.controller}}
+              @config={{this.config.mandateeTable.config}}
+            />
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Structures'>
                 <this.InsertArticle @controller={{this.controller}} />
@@ -120,6 +124,10 @@
                   @controller={{this.controller}}
                   @config={{this.config.lmb}}
                 />
+                <MandateeTablePlugin::Insert
+                  @controller={{this.controller}}
+                  @defaultTag={{this.config.mandateeTable.defaultTag}}
+                />
                 <LpdcPlugin::LpdcInsert
                   @controller={{this.controller}}
                   @config={{this.config.lpdc}}
@@ -135,6 +143,10 @@
                 @config={{this.config.citation}}
               />
               <ImportSnippetPlugin::Card @controller={{this.controller}} />
+              <MandateeTablePlugin::Configure
+                @controller={{this.controller}}
+                @supportedTags={{this.config.mandateeTable.tags}}
+              />
               <VariablePlugin::Codelist::Edit
                 @controller={{this.controller}}
                 @options={{this.codelistOptions}}

@@ -1,0 +1,14 @@
+.say-mandatee-table-node {
+  border: 1px solid var(--au-blue-300);
+  .say-mandatee-table-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--au-blue-300);
+    padding: 0.6rem 0.6rem 0.6rem 0;
+    cursor: default;
+  }
+  .say-mandatee-table-content {
+    padding: 1.2rem;
+  }
+}
