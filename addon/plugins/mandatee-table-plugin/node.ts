@@ -30,25 +30,38 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       return [
         'div',
         {
-          'data-mandatee-table': true,
-          'data-tag': tag,
-          'data-title': title,
+          'data-say-mandatee-table': true,
+          'data-say-mandatee-table-tag': tag,
+          'data-say-mandatee-table-title': title,
+          class: 'say-mandatee-table-node',
         },
-        0,
+        ['p', { class: 'say-mandatee-table-header' }, ['strong', {}, title]],
+        [
+          'div',
+          {
+            class: 'say-mandatee-table-content',
+            'data-say-mandatee-table-content': true,
+          },
+          0,
+        ],
       ];
     },
     parseDOM: [
       {
         tag: 'div',
         getAttrs(element: HTMLElement) {
-          if (element.dataset.mandateeTable && element.dataset.tag) {
+          if (
+            element.dataset.sayMandateeTable &&
+            element.dataset.sayMandateeTableTag
+          ) {
             return {
-              tag: element.dataset.tag,
-              title: element.dataset.title,
+              tag: element.dataset.sayMandateeTableTag,
+              title: element.dataset.sayMandateeTableTitle,
             };
           }
           return false;
         },
+        contentElement: `div[data-say-mandatee-table-content]`,
       },
     ],
   };

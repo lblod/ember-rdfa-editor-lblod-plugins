@@ -36,9 +36,13 @@ export default class MandateeTableNode extends Component<Sig> {
   <template>
     <div class='say-mandatee-table-node'>
       <div
-        class='say-mandatee-table-header au-u-flex au-u-flex--row au-u-flex--vertical-center'
+        class='say-mandatee-table-header au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--spaced-tiny'
       >
-        <AuIcon @icon={{UserIcon}} @size='large' class='au-u-margin-small' />
+        <AuIcon
+          @icon={{UserIcon}}
+          @size='large'
+          class='au-u-margin-left-tiny au-u-margin-right-tiny'
+        />
         <div>
           <strong>{{this.title}}</strong>
           <p>
