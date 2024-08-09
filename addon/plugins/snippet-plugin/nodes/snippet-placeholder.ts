@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import {
   getRdfaAttrs,
   rdfaAttrSpec,
@@ -18,30 +17,33 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { jsonParse } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import {
+  getSnippetUriFromId,
+  type ImportedResourceMap,
+  type SnippetList,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
-export function createSnippetPlaceholder(
-  listIds: string[],
-  listNames: string[],
-  schema: Schema,
-) {
-  const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
+export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
+  const importedResources = Object.fromEntries<ImportedResourceMap[string]>(
+    lists.flatMap((list) => list.importedResources).map((res) => [res, null]),
+  );
 
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
-    listNames,
-    subject: mappingResource,
+    listNames: lists.map((list) => list.label),
     properties: [
       {
         predicate: RDF('type').full,
         object: sayDataFactory.namedNode(EXT('SnippetPlaceholder').full),
       },
-      ...listIds.map((listId) => ({
+      ...lists.map((list) => ({
         predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-        object: sayDataFactory.namedNode(getSnippetUriFromId(listId)),
+        object: sayDataFactory.namedNode(getSnippetUriFromId(list.id)),
       })),
     ],
+    importedResources,
   });
 }
 
@@ -56,6 +58,7 @@ const emberNodeConfig: EmberNodeConfig = {
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
     listNames: { default: [] },
+    importedResources: { default: {} },
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
@@ -67,6 +70,7 @@ const emberNodeConfig: EmberNodeConfig = {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
         'data-list-names': (node.attrs.listNames as string[]).join(','),
+        'data-imported-resources': JSON.stringify(node.attrs.importedResources),
       },
       content: [
         'text',
@@ -93,6 +97,9 @@ const emberNodeConfig: EmberNodeConfig = {
           return {
             ...rdfaAttrs,
             listNames: node.getAttribute('data-list-names')?.split(','),
+            importedResources: jsonParse(
+              node.getAttribute('data-imported-resources'),
+            ),
           };
         }
         return false;

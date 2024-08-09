@@ -240,6 +240,11 @@ export const fetchSnippetLists = async ({
         id: binding.id?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
+        // FIXME add this to the data model later, for now just hardcode
+        importedResources: [
+          'http://example.org/placeholder/12345-abcd',
+          'http://example.org/placehoder/67890-efgh',
+        ],
       }),
   );
 

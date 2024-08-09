@@ -1,4 +1,10 @@
-import { getRdfaAttrs, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  getRdfaAttrs,
+  ProseParser,
+  rdfaAttrSpec,
+  type SayController,
+} from '@lblod/ember-rdfa-editor';
 import {
   renderRdfaAware,
   getRdfaContentElement,
@@ -9,13 +15,57 @@ import {
   createEmberNodeView,
   type EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
 import SnippetComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/snippet';
 import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { jsonParse } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import {
+  type ImportedResourceMap,
+  type SnippetPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+
+export function createSnippet({
+  controller,
+  content,
+  title,
+  snippetListIds,
+  importedResources,
+}: {
+  controller: SayController;
+  content: string;
+  title: string;
+  snippetListIds: string[];
+  importedResources: ImportedResourceMap;
+}) {
+  // Replace instances of linked to uris with the resources that exist in the outer document.
+  let replacedContent = content;
+  for (const imported in importedResources) {
+    const linked = importedResources[imported];
+    if (linked) {
+      replacedContent = replacedContent.replaceAll(imported, linked);
+    }
+  }
+  const parser = ProseParser.fromSchema(controller.schema);
+
+  return controller.schema.node(
+    'snippet',
+    {
+      assignedSnippetListsIds: snippetListIds,
+      title,
+      subject: `http://data.lblod.info/snippets/${uuidv4()}`,
+      importedResources,
+    },
+    htmlToDoc(replacedContent, {
+      schema: controller.schema,
+      parser,
+      editorView: controller.mainEditorView,
+    }).content,
+  );
+}
 
 const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   name: 'snippet',
@@ -37,6 +87,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
     },
     rdfaNodeType: { default: 'resource' },
     assignedSnippetListsIds: { default: [] },
+    importedResources: { default: {} },
     title: { default: '' },
     config: { default: options },
   },
@@ -51,6 +102,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         'data-assigned-snippet-ids': (
           node.attrs.assignedSnippetListsIds as string[]
         ).join(','),
+        'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
       },
       content: 0,
@@ -70,6 +122,9 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
             assignedSnippetListsIds: node
               .getAttribute('data-assigned-snippet-ids')
               ?.split(','),
+            importedResources: jsonParse(
+              node.getAttribute('data-imported-resources'),
+            ),
             title: node.getAttribute('data-snippet-title'),
           };
         }

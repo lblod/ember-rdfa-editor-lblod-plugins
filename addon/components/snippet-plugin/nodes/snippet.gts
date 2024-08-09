@@ -1,13 +1,14 @@
 import Component from '@glimmer/component';
 import { on } from '@ember/modifier';
-import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
-import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import SearchModal from '../search-modal';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import t from 'ember-intl/helpers/t';
+import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
+import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import {
   PNode,
   ProseParser,
@@ -15,15 +16,13 @@ import {
   Slice,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
+import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { v4 as uuidv4 } from 'uuid';
-import t from 'ember-intl/helpers/t';
+import { createSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -91,7 +90,6 @@ export default class SnippetNode extends Component<Signature> {
   }
   @action
   onInsert(content: string, title: string) {
-    const assignedSnippetListsIds = this.node.attrs.assignedSnippetListsIds;
     let rangeStart = 0;
     let rangeEnd = 0;
     if (this.args.getPos() === undefined) return;
@@ -110,26 +108,19 @@ export default class SnippetNode extends Component<Signature> {
     const documentDiv = parsed.querySelector('div[data-say-document="true"]');
 
     this.closeModal();
-    const parser = ProseParser.fromSchema(this.controller.schema);
 
     if (documentDiv) {
       return this.controller.withTransaction((tr: Transaction) => {
         return tr.replaceRangeWith(
           rangeStart,
           rangeEnd,
-          this.controller.schema.node(
-            'snippet',
-            {
-              assignedSnippetListsIds,
-              title,
-              subject: `http://data.lblod.info/snippets/${uuidv4()}`,
-            },
-            htmlToDoc(content, {
-              schema: this.controller.schema,
-              parser,
-              editorView: this.controller.mainEditorView,
-            }).content,
-          ),
+          createSnippet({
+            controller: this.controller,
+            content,
+            title,
+            snippetListIds: this.node.attrs.assignedSnippetListsIds,
+            importedResources: this.node.attrs.importedResources,
+          }),
         );
       });
     }

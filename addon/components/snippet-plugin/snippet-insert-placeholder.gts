@@ -7,7 +7,10 @@ import not from 'ember-truth-helpers/helpers/not';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { type NodeType, type SayController } from '@lblod/ember-rdfa-editor';
-import { type SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  type SnippetPluginConfig,
+  type SnippetList,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
 import SnippetListModal from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list/snippet-list-modal';
 
@@ -35,19 +38,17 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
   }
 
   @action
-  insertPlaceholder(listIds: string[], listNames: string[]) {
-    const node = createSnippetPlaceholder(
-      listIds,
-      listNames,
-      this.args.controller.schema,
-    );
+  insertPlaceholder(lists: SnippetList[] | undefined) {
+    if (lists) {
+      const node = createSnippetPlaceholder(lists, this.args.controller.schema);
 
-    this.args.controller.withTransaction(
-      (tr) => {
-        return tr.replaceSelectionWith(node);
-      },
-      { view: this.args.controller.mainEditorView },
-    );
+      this.args.controller.withTransaction(
+        (tr) => {
+          return tr.replaceSelectionWith(node);
+        },
+        { view: this.args.controller.mainEditorView },
+      );
+    }
   }
 
   <template>
