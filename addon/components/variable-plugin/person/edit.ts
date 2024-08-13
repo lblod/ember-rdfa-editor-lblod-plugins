@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
-import { trackedFunction } from 'ember-resources/util/function';
 import { tracked } from '@glimmer/tracking';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
@@ -24,7 +23,7 @@ export default class PersonEditComponent extends Component<Args> {
     return this.args.controller;
   }
 
-  selectedPersonNode = trackedFunction(this, () => {
+  get selectedPersonNode() {
     const { selection } = this.controller.mainEditorState;
     if (
       selection instanceof NodeSelection &&
@@ -37,19 +36,20 @@ export default class PersonEditComponent extends Component<Args> {
       return personNode;
     }
     return;
-  });
+  }
 
   get showCard() {
-    return !!this.selectedPersonNode.value;
+    return !!this.selectedPersonNode;
   }
 
   get isEditing() {
-    const personNode = this.selectedPersonNode.value;
+    const personNode = this.selectedPersonNode;
     return !!personNode?.node.attrs.mandatee;
   }
 
   @action
   openModal() {
+    console.log('Open modal!!!');
     this.controller.focus();
     this.showModal = true;
   }
@@ -60,7 +60,7 @@ export default class PersonEditComponent extends Component<Args> {
   }
   @action
   onInsert(mandatee: Mandatee) {
-    const personNode = this.selectedPersonNode.value as PersonNode;
+    const personNode = this.selectedPersonNode as PersonNode;
     this.controller.withTransaction((tr) => {
       tr.setNodeAttribute(personNode.pos, 'mandatee', mandatee);
       return tr.setNodeAttribute(
