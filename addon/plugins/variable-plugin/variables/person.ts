@@ -66,7 +66,12 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
       ...node.attrs,
       'data-mandatee': JSON.stringify(mandatee),
     },
-    content: mandatee ? `${mandatee.fullName}` : t('variable-plugin.person.nodeview-placeholder', TRANSLATION_FALLBACKS.nodeview_placeholder),
+    content: mandatee
+      ? `${mandatee.fullName}`
+      : t(
+          'variable-plugin.person.nodeview-placeholder',
+          TRANSLATION_FALLBACKS.nodeview_placeholder,
+        ),
   });
 };
 
