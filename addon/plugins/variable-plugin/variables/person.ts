@@ -9,6 +9,7 @@ import {
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
   DOMOutputSpec,
+  EditorState,
   getRdfaAttrs,
   PNode,
   rdfaAttrSpec,
@@ -19,6 +20,11 @@ import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
+import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+
+const TRANSLATION_FALLBACKS = {
+  nodeview_placeholder: 'persoon',
+};
 
 const rdfaAware = true;
 const parseDOM = [
@@ -50,7 +56,8 @@ const parseDOM = [
   },
 ];
 
-const toDOM = (node: PNode): DOMOutputSpec => {
+const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
+  const t = getTranslationFunction(state);
   const mandatee = node.attrs.mandatee as Mandatee;
   return renderRdfaAware({
     renderable: node,
@@ -59,7 +66,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       ...node.attrs,
       'data-mandatee': JSON.stringify(mandatee),
     },
-    content: mandatee ? `${mandatee.fullName}` : '',
+    content: mandatee ? `${mandatee.fullName}` : t('variable-plugin.person.nodeview-placeholder', TRANSLATION_FALLBACKS.nodeview_placeholder),
   });
 };
 
@@ -85,7 +92,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  toDOM,
+  serialize,
   parseDOM,
 };
 
