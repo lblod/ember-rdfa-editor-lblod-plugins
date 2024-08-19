@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.2.0
+
+### Minor Changes
+
+- [#461](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/461) [`c3d659f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c3d659f0ddfb62c9241a8a34aea53a45375687f2) Thanks [@elpoelma](https://github.com/elpoelma)! - Improve serialization of `mandatee_table` node
+
+- [#463](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/463) [`8c18bc2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8c18bc2106dd2a48231e5465bf0df9bf2e507d13) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix issue with unresponsive edit/insert button when person variable is selected
+
 ## 22.1.0
 
 ### Minor Changes

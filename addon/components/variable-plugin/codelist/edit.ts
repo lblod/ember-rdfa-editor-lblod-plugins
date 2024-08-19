@@ -33,7 +33,7 @@ export default class CodelistEditComponent extends Component<Args> {
     return this.args.controller;
   }
 
-  selectedCodelist = trackedFunction(this, () => {
+  get selectedCodelist() {
     const { selection } = this.controller.mainEditorState;
     if (
       selection instanceof NodeSelection &&
@@ -46,11 +46,11 @@ export default class CodelistEditComponent extends Component<Args> {
       return codelist;
     }
     return;
-  });
+  }
 
   get source() {
-    if (this.selectedCodelist.value) {
-      const { node } = this.selectedCodelist.value;
+    if (this.selectedCodelist) {
+      const { node } = this.selectedCodelist;
       const source = getOutgoingTriple(node.attrs, DCT('source'))?.object
         .value as Option<string>;
       if (source) {
@@ -61,8 +61,8 @@ export default class CodelistEditComponent extends Component<Args> {
   }
 
   get codelistUri() {
-    if (this.selectedCodelist.value) {
-      const { node } = this.selectedCodelist.value;
+    if (this.selectedCodelist) {
+      const { node } = this.selectedCodelist;
       const codelistUri = getOutgoingTriple(node.attrs, EXT('codelist'))?.object
         .value as Option<string>;
       if (codelistUri) {
@@ -73,11 +73,11 @@ export default class CodelistEditComponent extends Component<Args> {
   }
 
   get showCard() {
-    return !!this.selectedCodelist.value;
+    return !!this.selectedCodelist;
   }
 
   get label() {
-    return this.selectedCodelist.value?.node.attrs.label as string | undefined;
+    return this.selectedCodelist?.node.attrs.label as string | undefined;
   }
 
   codelistOptions = trackedFunction(this, async () => {
@@ -89,7 +89,7 @@ export default class CodelistEditComponent extends Component<Args> {
   });
 
   get multiSelect() {
-    const localStyle = this.selectedCodelist.value?.node.attrs
+    const localStyle = this.selectedCodelist?.node.attrs
       .selectionStyle as string;
     if (localStyle) {
       return localStyle === 'multi';
@@ -99,11 +99,11 @@ export default class CodelistEditComponent extends Component<Args> {
 
   @action
   insert() {
-    if (!this.selectedCodelist.value || !this.selectedCodelistOption) {
+    if (!this.selectedCodelist || !this.selectedCodelistOption) {
       return;
     }
     updateCodelistVariable(
-      this.selectedCodelist.value,
+      this.selectedCodelist,
       this.selectedCodelistOption,
       this.controller,
     );
