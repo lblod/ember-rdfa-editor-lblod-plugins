@@ -142,10 +142,11 @@ const buildSnippetListFetchQuery = ({
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-        SELECT (?snippetLists as ?id) ?label ?createdOn WHERE {
+        SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
           ?snippetLists a ext:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
+          OPTIONAL { ?snippetLists ext:SnippetImportedResource ?importedResources . }
           ${
             name
               ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
@@ -228,6 +229,7 @@ export const fetchSnippetLists = async ({
     id: { value: string };
     label: { value: string };
     createdOn: { value: string };
+    importedResources: { value: string[] };
   }>({
     endpoint,
     query: buildSnippetListFetchQuery({ filter, orderBy }),
@@ -240,11 +242,7 @@ export const fetchSnippetLists = async ({
         id: binding.id?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
-        // FIXME add this to the data model later, for now just hardcode
-        importedResources: [
-          'http://example.org/placeholder/12345-abcd',
-          'http://example.org/placehoder/67890-efgh',
-        ],
+        importedResources: binding.importedResources?.value || [],
       }),
   );
 

@@ -19,7 +19,7 @@ import { trackedReset } from 'tracked-toolbox';
 interface Signature {
   Args: {
     config: SnippetPluginConfig;
-    onSaveSnippetListIds: (lists: SnippetList[]) => void;
+    onSaveSnippetLists: (lists: SnippetList[]) => void;
     assignedSnippetListsIds: string[] | undefined;
     closeModal: () => void;
     open: boolean;
@@ -55,7 +55,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
     const snippetLists = this.snippetListResource.value?.filter((snippetList) =>
       this.assignedSnippetListsIds.includes(snippetList.id),
     );
-    this.args.onSaveSnippetListIds(snippetLists || []);
+    this.args.onSaveSnippetLists(snippetLists || []);
     this.args.closeModal();
     // Clear selection for next time
     this.assignedSnippetListsIds = [];

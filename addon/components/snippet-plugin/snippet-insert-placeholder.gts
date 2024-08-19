@@ -66,7 +66,7 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
     <SnippetListModal
       @config={{@config}}
       @assignedSnippetListsIds={{empty}}
-      @onSaveSnippetListIds={{this.insertPlaceholder}}
+      @onSaveSnippetLists={{this.insertPlaceholder}}
       @open={{this.isModalOpen}}
       @closeModal={{this.closeModal}}
     />

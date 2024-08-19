@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import {
   getRdfaAttrs,
   rdfaAttrSpec,
@@ -25,14 +26,24 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
-export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
-  const importedResources = Object.fromEntries<ImportedResourceMap[string]>(
-    lists.flatMap((list) => list.importedResources).map((res) => [res, null]),
+export function importedResourcesFromSnippetLists(
+  lists: SnippetList[],
+  existing: ImportedResourceMap = {},
+) {
+  return Object.fromEntries<ImportedResourceMap[string]>(
+    lists
+      .flatMap((list) => list.importedResources)
+      // Null is important (in place of undefined) in order to keep the unlinked entries
+      .map((res) => [res, existing[res] ?? null]),
   );
+}
 
+export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
+  const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
     listNames: lists.map((list) => list.label),
+    subject: mappingResource,
     properties: [
       {
         predicate: RDF('type').full,
@@ -43,7 +54,7 @@ export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
         object: sayDataFactory.namedNode(getSnippetUriFromId(list.id)),
       })),
     ],
-    importedResources,
+    importedResources: importedResourcesFromSnippetLists(lists),
   });
 }
 
