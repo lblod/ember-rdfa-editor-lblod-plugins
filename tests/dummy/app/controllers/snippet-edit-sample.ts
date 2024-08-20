@@ -84,6 +84,7 @@ import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/compon
 import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
+import PersonVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/insert';
 import {
   inlineRdfaWithConfig,
   inlineRdfaWithConfigView,
@@ -229,6 +230,10 @@ export default class RegulatoryStatementSampleController extends Controller {
         label: 'codelist',
         component: CodelistInsertComponent as unknown as ComponentLike,
         options: this.codelistOptions,
+      },
+      {
+        label: 'person',
+        component: PersonVariableInsertComponent as unknown as ComponentLike,
       },
     ];
   }
