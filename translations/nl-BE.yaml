@@ -272,7 +272,7 @@ variable-plugin:
     to: tot
   person:
     card-title: Persoon invoegen
-    nodeview-placeholder: persoon
+    nodeview-placeholder: Voeg persoon in
 dummy:
   validation-card:
     title: Documentvalidatie
