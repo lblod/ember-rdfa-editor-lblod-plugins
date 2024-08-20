@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.2.1
+
+### Patch Changes
+
+- [#464](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/464) [`8401163`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8401163ca2789e1303060fa1532cd26ce3eaa9e7) Thanks [@elpoelma](https://github.com/elpoelma)! - test-app: exclude fingerprinting on ember-leaflet related images to ensure production builds behave as expected
+
+- [#466](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/466) [`227387b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/227387b683b3b49314683b2c299c45c492393eb8) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Don't show title annotation outside the editor
+
 ## 22.2.0
 
 ### Minor Changes
