@@ -268,7 +268,7 @@ variable-plugin:
     to: to
   person:
     card-title: Insert person
-    nodeview-placeholder: person
+    nodeview-placeholder: Insert person
 
 table-of-contents-plugin:
   title: Table of Contents
