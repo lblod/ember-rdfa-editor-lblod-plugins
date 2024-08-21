@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.2.2
+
+### Patch Changes
+
+- [#465](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/465) [`83b95db`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/83b95db9991f6b5ef090cd77765d8c09eac90db7) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Correctly export empty person nodes
+
+- [#465](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/465) [`be233e8`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/be233e8bc70aee1db00644ad6f956157da8d3a20) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Correctly export empty person node
+
 ## 22.2.1
 
 ### Patch Changes
