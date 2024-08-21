@@ -141,12 +141,13 @@ const buildSnippetListFetchQuery = ({
         PREFIX pav: <http://purl.org/pav/>
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+        PREFIX say: <https://say.data.gift/ns/>
 
         SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
           ?snippetLists a ext:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
-          OPTIONAL { ?snippetLists ext:SnippetImportedResource ?importedResources . }
+          OPTIONAL { ?snippetLists say:snippetImportedResource ?importedResources . }
           ${
             name
               ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
