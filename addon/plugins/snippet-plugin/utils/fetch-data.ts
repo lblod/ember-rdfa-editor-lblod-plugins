@@ -1,9 +1,10 @@
 import {
+  type BindingObject,
   executeCountQuery,
   executeQuery,
   sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { Snippet, SnippetList } from '../index';
+import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
 type Filter = { name?: string; assignedSnippetListIds?: string[] };
 export type OrderBy =
@@ -226,26 +227,35 @@ export const fetchSnippetLists = async ({
     return { totalCount, results: [] };
   }
 
-  const queryResult = await executeQuery<{
-    id: { value: string };
-    label: { value: string };
-    createdOn: { value: string };
-    importedResources: { value: string[] };
-  }>({
+  const queryResult = await executeQuery<BindingObject<SnippetListArgs>>({
     endpoint,
     query: buildSnippetListFetchQuery({ filter, orderBy }),
     abortSignal,
   });
 
-  const results = queryResult.results.bindings.map(
-    (binding) =>
-      new SnippetList({
+  const results = [
+    ...queryResult.results.bindings
+      .map((binding) => ({
         id: binding.id?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
-        importedResources: binding.importedResources?.value || [],
-      }),
-  );
+        importedResources: binding.importedResources?.value,
+      }))
+      .reduce((mappedResults, bindings) => {
+        const existing = mappedResults.get(bindings.id) ?? {
+          ...bindings,
+          importedResources: [],
+        };
+        if (bindings.importedResources) {
+          existing.importedResources = [
+            ...existing.importedResources,
+            bindings.importedResources,
+          ];
+        }
+        return mappedResults.set(bindings.id, existing);
+      }, new Map<string, SnippetListArgs>())
+      .values(),
+  ].map((slArgs) => new SnippetList(slArgs));
 
   return { totalCount, results };
 };

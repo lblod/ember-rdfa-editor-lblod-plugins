@@ -31,12 +31,12 @@ export class Snippet {
 
 export type ImportedResourceMap = Record<string, Option<string>>;
 
-interface SnippetListArgs {
+export type SnippetListArgs = {
   id: string;
   label: string;
   createdOn: string;
   importedResources: string[];
-}
+};
 
 const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
 
