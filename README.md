@@ -17,6 +17,22 @@ related to the LBLOD Project.
 ember install ember-rdfa-editor-lblod-plugins
 ```
 
+If you are using the location-plugin, you should also add the following configuration to your `ember-cli-build.js` file:
+```js
+fingerprint: {
+  exclude: [
+    'images/layers-2x.png',
+    'images/layers.png',
+    'images/marker-icon-2x.png',
+    'images/marker-icon.png',
+    'images/marker-shadow.png'
+  ]
+}
+```
+This ensures the map-view behaves as expected in production builds.
+
+Check-out https://github.com/miguelcobain/ember-leaflet?tab=readme-ov-file#production-builds for more information.
+
 ## General addon information
 
 This addon contains the following editor plugins:
