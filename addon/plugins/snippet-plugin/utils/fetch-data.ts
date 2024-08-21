@@ -53,21 +53,21 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
       `;
 };
 
-const buildSnippetListCountQuery = ({ name }: Filter) => {
-  return `
-      PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-      SELECT (COUNT(?snippetLists) AS ?count)
-      WHERE {
-          ?snippetLists a ext:SnippetList;
-              skos:prefLabel ?label.
-          ${
-            name
-              ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
-              : ''
-          }
-      }
-      `;
-};
+// const buildSnippetListCountQuery = ({ name }: Filter) => {
+//   return `
+//       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+//       SELECT (COUNT(?snippetLists) AS ?count)
+//       WHERE {
+//           ?snippetLists a ext:SnippetList;
+//               skos:prefLabel ?label.
+//           ${
+//             name
+//               ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
+//               : ''
+//           }
+//       }
+//       `;
+// };
 
 const buildSnippetFetchQuery = ({
   filter: { name, assignedSnippetListIds },
@@ -217,15 +217,17 @@ export const fetchSnippetLists = async ({
   filter: Filter;
   orderBy: OrderBy;
 }) => {
-  const totalCount = await executeCountQuery({
-    endpoint,
-    query: buildSnippetListCountQuery(filter),
-    abortSignal,
-  });
+  // We don't currently use this count, so skip the query, but we'll need it if we make pagination
+  // work for the snippet list selector
+  // const totalCount = await executeCountQuery({
+  //   endpoint,
+  //   query: buildSnippetListCountQuery(filter),
+  //   abortSignal,
+  // });
 
-  if (totalCount === 0) {
-    return { totalCount, results: [] };
-  }
+  // if (totalCount === 0) {
+  //   return { totalCount, results: [] };
+  // }
 
   const queryResult = await executeQuery<BindingObject<SnippetListArgs>>({
     endpoint,
@@ -257,5 +259,5 @@ export const fetchSnippetLists = async ({
       .values(),
   ].map((slArgs) => new SnippetList(slArgs));
 
-  return { totalCount, results };
+  return { results };
 };
