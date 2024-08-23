@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 19.3.2
+
+### Patch Changes
+
+- [`881194d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/881194d4f8e31a5f5242617a1e0dcc5e0ef4eec5) Thanks [@elpoelma](https://github.com/elpoelma)! - Removal of styles from `article-structure-plugin` stylesheet which removed annotation styles
+
+- [`78d8685`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/78d86858f11c85e88c09157e71402eeba13294d3) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Don't show title annotation outside the editor
+
 ## 19.3.1
 
 ### Patch Changes
