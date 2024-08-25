@@ -296,11 +296,16 @@ snippet-plugin:
     active-lists: 'Actieve lijsten:'
   modal:
     title: Kies een fragment
-    select: Selecteer
+    preview-button:
+      title: Preview van fragment tonen
+    select-button:
+      label: Selecteer
+      title: Fragment invoegen
     search:
       title: Filter op
       label: Fragmentnaam
       placeholder: Typ iets...
+    no-content: Fragment bevat geen inhoud
   snippet-list:
     open-modal: Fragmentlijsten beheren
     modal:
