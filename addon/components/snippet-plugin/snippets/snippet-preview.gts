@@ -51,6 +51,7 @@ export default class SnippetPreviewComponent extends Component<Signature> {
           role='button'
           title={{t 'snippet-plugin.modal.preview-button.title'}}
           {{on 'click' this.togglePreview}}
+          {{! template-lint-disable require-presentational-children}}
         >
           <AuButton @skin='link' class='snippet-preview__toggle'>
             {{#if this.isExpanded}}
@@ -59,6 +60,7 @@ export default class SnippetPreviewComponent extends Component<Signature> {
               <AuIcon @icon={{NavDownIcon}} @size='large' />
             {{/if}}
           </AuButton>
+          {{! template-lint-disable no-heading-inside-button}}
           <h3 class='snippet-preview__title'>
             {{@snippet.title}}
           </h3>
@@ -67,6 +69,7 @@ export default class SnippetPreviewComponent extends Component<Signature> {
           role='button'
           title={{t 'snippet-plugin.modal.select-button.title'}}
           {{on 'click' this.onInsert}}
+          {{! template-lint-disable require-presentational-children}}
         >
           <AuButton class='snippet-preview__insert-button' @skin='naked'>
             {{t 'snippet-plugin.modal.select-button.label'}}
@@ -78,8 +81,8 @@ export default class SnippetPreviewComponent extends Component<Signature> {
         <div
           class='say-editor say-content rdfa-annotations rdfa-annotations-highlight rdfa-annotations-hover snippet-preview__content'
         >
-          {{#if this.args.snippet.content}}
-            {{this.args.snippet.content}}
+          {{#if @snippet.content}}
+            {{@snippet.content}}
           {{else}}
             <p class='au-u-italic'>{{t 'snippet-plugin.modal.no-content'}}</p>
           {{/if}}
