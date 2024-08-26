@@ -40,6 +40,11 @@
   border: 0.1rem solid var(--au-gray-200);
   border-radius: var(--au-radius);
 
+  &--expanded {
+    > .snippet-preview__header {
+      border-bottom: 0.1rem solid var(--au-gray-200);
+    }
+  }
   &__header {
     display: flex;
     flex-direction: row;

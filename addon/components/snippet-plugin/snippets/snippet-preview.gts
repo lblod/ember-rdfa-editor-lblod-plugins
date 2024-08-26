@@ -45,7 +45,10 @@ export default class SnippetPreviewComponent extends Component<Signature> {
   }
 
   <template>
-    <div class='snippet-preview' ...attributes>
+    <div
+      class='snippet-preview {{if this.isExpanded "snippet-preview--expanded"}}'
+      ...attributes
+    >
       <div class='snippet-preview__header'>
         <div
           role='button'
