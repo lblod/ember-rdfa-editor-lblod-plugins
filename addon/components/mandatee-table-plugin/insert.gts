@@ -3,8 +3,6 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { not } from 'ember-truth-helpers';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { action } from '@ember/object';
 import { unwrap } from '@lblod/ember-rdfa-editor/utils/_private/option';
 import t from 'ember-intl/helpers/t';
