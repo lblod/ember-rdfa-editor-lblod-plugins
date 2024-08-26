@@ -17,9 +17,6 @@ export default class InsertMandateeTableComponent extends Component<Sig> {
   get controller() {
     return this.args.controller;
   }
-  get decisionRange() {
-    return getCurrentBesluitRange(this.controller);
-  }
 
   @action
   insert() {
@@ -33,10 +30,6 @@ export default class InsertMandateeTableComponent extends Component<Sig> {
     });
   }
 
-  get canInsert() {
-    return Boolean(this.decisionRange);
-  }
-
   <template>
     <li class='au-c-list__item'>
       <AuButton
@@ -44,7 +37,6 @@ export default class InsertMandateeTableComponent extends Component<Sig> {
         @icon={{AddIcon}}
         @iconAlignment='left'
         @skin='link'
-        @disabled={{not this.canInsert}}
       >
         {{t 'mandatee-table-plugin.insert.title'}}
       </AuButton>
