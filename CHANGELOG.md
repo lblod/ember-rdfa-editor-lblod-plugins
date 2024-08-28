@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.2.3
+
+### Patch Changes
+
+- [#469](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/469) [`52c22d6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/52c22d6042a5c8e7bc88094625c3b1136d1dcdc9) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove constraint on mandatee table insertion. Mandatee table can now be inserted everywhere in a document.
+
 ## 22.2.2
 
 ### Patch Changes
