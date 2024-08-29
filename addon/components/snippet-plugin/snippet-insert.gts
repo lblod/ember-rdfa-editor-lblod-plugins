@@ -7,12 +7,11 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import {
   ProseParser,
-  SayController,
+  type SayController,
   Slice,
-  Transaction,
 } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { createSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import { createAndInsertSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { type ImportedResourceMap } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import SearchModal from './search-modal';
 
@@ -65,21 +64,21 @@ export default class SnippetInsertComponent extends Component<Sig> {
     const assignedSnippetListProperties = this.args.snippetListProperties;
 
     if (documentDiv && assignedSnippetListProperties) {
-      return this.controller.withTransaction((tr: Transaction) =>
-        tr.replaceSelectionWith(
-          createSnippet({
-            controller: this.controller,
-            content,
-            title,
-            snippetListIds: assignedSnippetListProperties.listIds,
-            importedResources: assignedSnippetListProperties.importedResources,
-          }),
-        ),
+      return createAndInsertSnippet(
+        {
+          controller: this.controller,
+          content,
+          title,
+          snippetListIds: assignedSnippetListProperties.listIds,
+          importedResources: assignedSnippetListProperties.importedResources,
+        },
+        (tr, snippet) => tr.replaceSelectionWith(snippet),
+      );
+    } else {
+      return this.controller.withTransaction((tr) =>
+        tr.replaceSelection(this.createSliceFromElement(parsed)),
       );
     }
-    this.controller.withTransaction((tr) =>
-      tr.replaceSelection(this.createSliceFromElement(parsed)),
-    );
   }
 
   get disabled() {

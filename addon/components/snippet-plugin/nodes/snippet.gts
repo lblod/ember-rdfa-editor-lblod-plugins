@@ -10,11 +10,10 @@ import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import {
-  PNode,
+  type PNode,
   ProseParser,
-  Selection,
+  type Selection,
   Slice,
-  Transaction,
 } from '@lblod/ember-rdfa-editor';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import {
@@ -22,7 +21,7 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { createSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import { createAndInsertSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -110,19 +109,16 @@ export default class SnippetNode extends Component<Signature> {
     this.closeModal();
 
     if (documentDiv) {
-      return this.controller.withTransaction((tr: Transaction) => {
-        return tr.replaceRangeWith(
-          rangeStart,
-          rangeEnd,
-          createSnippet({
-            controller: this.controller,
-            content,
-            title,
-            snippetListIds: this.node.attrs.assignedSnippetListsIds,
-            importedResources: this.node.attrs.importedResources,
-          }),
-        );
-      });
+      return createAndInsertSnippet(
+        {
+          controller: this.controller,
+          content,
+          title,
+          snippetListIds: this.node.attrs.assignedSnippetListsIds,
+          importedResources: this.node.attrs.importedResources,
+        },
+        (tr, snippet) => tr.replaceRangeWith(rangeStart, rangeEnd, snippet),
+      );
     }
 
     this.controller.withTransaction((tr) =>
