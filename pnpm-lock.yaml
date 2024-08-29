@@ -160,8 +160,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.3.0-dev.25fcd19a67b9d953c24000ec52b0ec5efadb6120
-        version: 10.3.0-dev.25fcd19a67b9d953c24000ec52b0ec5efadb6120(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.3.0-dev.6b2952177ee4b12164e36807056de74e447b17fd
+        version: 10.3.0-dev.6b2952177ee4b12164e36807056de74e447b17fd(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1586,8 +1586,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.3.0-dev.25fcd19a67b9d953c24000ec52b0ec5efadb6120':
-    resolution: {integrity: sha512-ibD5CvWFbW1YnB/Q2ZCvu52nkzlMn8X/fHL6mWUF3C4GECmPJFoBkY5Q6FOt/pYeDIsUEn2BCpKmt8ul+RmjyA==}
+  '@lblod/ember-rdfa-editor@10.3.0-dev.6b2952177ee4b12164e36807056de74e447b17fd':
+    resolution: {integrity: sha512-i/orxhKTDt6qKQWXLupwqlCH6Makpxh80+jcZdtdVsVZjioqw7Oc1gOaIxaWNQvsgoROy2BlRXZvO4KLr98UIQ==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -2599,8 +2599,8 @@ packages:
   async@2.6.4:
     resolution: {integrity: sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==}
 
-  async@3.2.5:
-    resolution: {integrity: sha512-baNZyqaaLhyLVKm/DlvdW051MSgO6b8eVfIezl9E5PqWxFgzLm/wQntEW4zOytVburDEr0JlALEpdOFwvErLsg==}
+  async@3.2.6:
+    resolution: {integrity: sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==}
 
   at-least-node@1.0.0:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
@@ -10718,7 +10718,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.3.0-dev.25fcd19a67b9d953c24000ec52b0ec5efadb6120(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.3.0-dev.6b2952177ee4b12164e36807056de74e447b17fd(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
@@ -12098,7 +12098,7 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  async@3.2.5: {}
+  async@3.2.6: {}
 
   at-least-node@1.0.0: {}
 
@@ -16148,7 +16148,7 @@ snapshots:
 
   handlebars-loader@1.7.3(handlebars@4.7.8):
     dependencies:
-      async: 3.2.5
+      async: 3.2.6
       fastparse: 1.1.2
       handlebars: 4.7.8
       loader-utils: 1.4.2
