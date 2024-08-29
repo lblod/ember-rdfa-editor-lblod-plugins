@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.3.0
+
+### Minor Changes
+
+- [#468](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/468) [`c430761`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c430761784bb5017b803fc91321e51b05899bf20) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `snippet-preview` component to include a collapsible (by default not shown) preview of the snippet
+
 ## 22.2.3
 
 ### Patch Changes
