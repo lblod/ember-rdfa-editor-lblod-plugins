@@ -34,51 +34,44 @@
 }
 
 .snippet-preview {
-  // double specificity fix
-  // https://stackoverflow.com/a/47781599/20388916
-  // compiles to .snippet-preview--container.snippet-preview--container { flex-direction: row; }
-  // need this to override the default flex-direction: column of the panel container
-  &--container {
-    &#{&} {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--au-white);
+  border: 0.1rem solid var(--au-gray-200);
+  border-radius: var(--au-radius);
+
+  &--expanded {
+    > .snippet-preview__header {
+      border-bottom: 0.1rem solid var(--au-gray-200);
+    }
+  }
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > :nth-child(1) {
+      flex-grow: 1;
+      display: flex;
       flex-direction: row;
+      align-items: center;
+      padding: $au-unit-small;
+      cursor: pointer;
+    }
+    > :nth-child(2) {
+      border-left: 1px solid var(--au-gray-200);
+      padding: $au-unit-small;
+      cursor: pointer;
     }
   }
 
-  &--article {
-    flex-grow: 1;
-
-    .say-editor__paper,
-    .say-editor__inner {
-      min-height: auto;
-      white-space: inherit;
-    }
-
-    .say-editor,
-    .say-editor__inner {
-      padding: 0;
-    }
-  }
-
-  &--title {
+  &__title {
     color: var(--au-gray-700);
     font-weight: var(--au-medium);
   }
 
-  &--button {
-    border-left: 1px solid var(--au-gray-200);
-    display: flex;
-    align-items: center;
-  }
-
-  &--editor-overlay {
-    position: absolute !important;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  &--editor-container {
-    position: relative;
+  &__content {
+    padding: $au-unit-small $au-unit $au-unit-small $au-unit;
   }
 }
 

@@ -297,11 +297,16 @@ snippet-plugin:
     active-lists: 'Active lists:'
   modal:
     title: Choose a snippet
-    select: Select
+    preview-button:
+      title: Show snippet preview
+    select-button:
+      label: Select
+      title: Insert snippet
     search:
       title: Filter on
       label: Snippet name
       placeholder: Type something...
+    no-content: Snippet does not contain any content
   snippet-list:
     open-modal: Manage snippet lists
     modal:
