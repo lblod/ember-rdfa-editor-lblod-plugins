@@ -96,6 +96,11 @@
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible @title='Structures'>
                 <this.InsertArticle @controller={{this.controller}} />
+                <this.InsertArticle
+                  @controller={{this.controller}}
+                  @label='Insert article freely'
+                  @options={{hash insertFreely=true}}
+                />
               </Sidebar.Collapsible>
               <Sidebar.Collapsible @title='Insert'>
                 <CitationPlugin::CitationInsert
