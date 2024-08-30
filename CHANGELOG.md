@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.4.0
+
+### Minor Changes
+
+- [#471](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/471) [`8132a55`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8132a550124cf90b47c3d1c759ce43bd9f72cfab) Thanks [@elpoelma](https://github.com/elpoelma)! - Introduce opt-in option to `insert-article` component to allow for inserting decision articles everywhere in a document (not just to the article-container of a decision). Useful when e.g. creating snippets.
+
+### Patch Changes
+
+- [#470](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/470) [`fdfd8b8`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/fdfd8b80c58adc07e968d131dce7618b57b27e49) Thanks [@piemonkey](https://github.com/piemonkey)! - Correct CRS URI used in location plugin to correctly use http: instead of https:
+
 ## 22.3.0
 
 ### Minor Changes
