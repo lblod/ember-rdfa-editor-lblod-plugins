@@ -342,7 +342,7 @@ export type Lambert72Coordinates = {
 };
 
 export function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
-  return `<gml:Point srsName="https://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
+  return `<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
 }
 /**
  * Use a regex to parse a simple point as a GML string and return the coordinates.
@@ -354,7 +354,7 @@ export function parseLambert72GMLString(gml: string): Lambert72Coordinates {
   // which can be represented. Since we handle only simple points, it's much less complex to just
   // use a simple regex.
   const [_, crs, x, y] =
-    /<gml.Point .*srsName="https:\/\/www.opengis.net\/def\/crs\/([^"]+)".+<gml.pos>(\S+) ([^<]+)<\/gml:pos>/.exec(
+    /<gml.Point .*srsName="https?:\/\/www.opengis.net\/def\/crs\/([^"]+)".+<gml.pos>(\S+) ([^<]+)<\/gml:pos>/.exec(
       gml,
     ) || [];
   if (!crs || crs !== 'EPSG/0/31370') {
@@ -370,7 +370,7 @@ export function parseLambert72GMLString(gml: string): Lambert72Coordinates {
  * [the GeoSPARQL spec]{@link https://docs.ogc.org/is/22-047r1/22-047r1.html#10-8-1-%C2%A0-well-known-text}
  */
 export function constructLambert72WKTString({ x, y }: Lambert72Coordinates) {
-  return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
+  return `<http://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
 }
 /**
  * Use a regex to parse a simple point as a WKT string and return the coordinates.
@@ -382,7 +382,7 @@ export function parseLambert72WKTString(gml: string): Lambert72Coordinates {
   // which can be represented or within untyped libraries (e.g. wicket). Since we handle only simple
   // points, it's much less complex to just use a simple regex.
   const [_, crs, x, y] =
-    /<https:\/\/www.opengis.net\/def\/crs\/([^"]+)> POINT\((\S+) ([^)]+)\)/.exec(
+    /<https?:\/\/www.opengis.net\/def\/crs\/([^"]+)> POINT\((\S+) ([^)]+)\)/.exec(
       gml,
     ) || [];
   if (!crs || crs !== 'EPSG/0/31370') {
