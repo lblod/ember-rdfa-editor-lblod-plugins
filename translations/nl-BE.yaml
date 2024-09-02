@@ -273,6 +273,10 @@ variable-plugin:
   person:
     card-title: Persoon invoegen
     nodeview-placeholder: Voeg persoon in
+  autofill:
+    autofillKey: Autovultoets
+    convertToString: Automatisch converteren naar tekst
+    autofillKeyPlaceholder: Autovultoets
 dummy:
   validation-card:
     title: Documentvalidatie

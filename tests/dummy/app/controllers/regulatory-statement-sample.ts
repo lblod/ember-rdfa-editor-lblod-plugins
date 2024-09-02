@@ -71,6 +71,8 @@ import {
   text_variable,
   personVariableView,
   person_variable,
+  autofilled_variable,
+  autofilledVariableView
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
@@ -92,6 +94,7 @@ import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/compon
 import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
 import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
+import AutofilledInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/autofilled/insert';
 import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 import {
@@ -171,6 +174,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       date: date(this.dateOptions),
       text_variable,
       person_variable,
+      autofilled_variable: autofilled_variable(this.config.autofilledVariable),
       number,
       location,
       codelist,
@@ -269,6 +273,10 @@ export default class RegulatoryStatementSampleController extends Controller {
         label: 'person',
         component: PersonVariableInsertComponent as unknown as ComponentLike,
       },
+      {
+        label: 'autofilled',
+        component: AutofilledInsertComponent as unknown as ComponentLike,
+      },
     ];
   }
 
@@ -314,6 +322,10 @@ export default class RegulatoryStatementSampleController extends Controller {
         },
         endpoint: '/codex/sparql',
       } as CitationPluginConfig,
+      autofilledVariable: {
+        autofilledValues: {
+        }
+      }
     };
   }
 
@@ -344,6 +356,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       snippet_placeholder: snippetPlaceholderView(controller),
       snippet: snippetView(this.config.snippet)(controller),
+      autofilled_variable: autofilledVariableView(this.config.autofilledVariable)(controller)
     };
   };
   @tracked plugins: Plugin[] = [

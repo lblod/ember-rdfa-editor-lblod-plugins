@@ -1,0 +1,26 @@
+{{! @glint-nocheck: not typesafe yet }}
+<AuPill
+  @icon={{this.PencilIcon}}
+  @iconAlignment='right'
+  class='variable'
+  {{on 'click' this.onClick}}
+  {{did-insert this.didInsert}}
+>
+  <EmberNode::EmbeddedEditor
+    @controller={{@controller}}
+    @node={{@node}}
+    @view={{@view}}
+    @getPos={{@getPos}}
+    @selected={{@selected}}
+    @initEditor={{this.initEditor}}
+    @nodeViews={{@nodeViews}}
+    @plugins={{this.plugins}}
+    @decorations={{@decorations}}
+    @contentDecorations={{@contentDecorations}}
+  />
+  {{#if this.label}}
+    <span class='label'>
+      ({{this.label}})
+    </span>
+  {{/if}}
+</AuPill>

@@ -1,0 +1,32 @@
+{{! @glint-nocheck: not typesafe yet }}
+<AuFormRow>
+  <VariablePlugin::Utils::LabelInput
+    @label={{this.label}}
+    @updateLabel={{this.updateLabel}}
+  />
+</AuFormRow>
+<AuFormRow>
+  <AuLabel for='autofill_key'>
+    {{t 'variable-plugin.autofill.autofillKey'}}
+  </AuLabel>
+  <AuNativeInput
+    id='autofill_key'
+    placeholder={{t 'variable-plugin.autofill.autofillKeyPlaceholder'}}
+    @type='text'
+    @width='block'
+    value={{this.autofillKey}}
+    {{on 'input' this.updateAutofillKey}}
+  />
+</AuFormRow>
+<AuFormRow>
+  <AuCheckbox
+    id='convert_to_string'
+    @checked={{this.convertToString}}
+    @onChange={{this.updateConvertToString}}
+  >
+     {{t 'variable-plugin.autofill.convertToString'}}
+  </AuCheckbox>
+</AuFormRow>
+<AuButton {{on 'click' this.insert}}>
+  {{t 'variable-plugin.button'}}
+</AuButton>

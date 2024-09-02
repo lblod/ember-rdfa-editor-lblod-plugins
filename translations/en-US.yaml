@@ -269,6 +269,10 @@ variable-plugin:
   person:
     card-title: Insert person
     nodeview-placeholder: Insert person
+  autofill:
+    autofillKey: Autofill Key
+    convertToString: Automatically convert to text
+    autofillKeyPlaceholder: Autofill Key
 
 table-of-contents-plugin:
   title: Table of Contents

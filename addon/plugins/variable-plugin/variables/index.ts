@@ -5,3 +5,4 @@ export * from './location';
 export * from './address';
 export * from './date';
 export * from './person';
+export * from './autofilled'

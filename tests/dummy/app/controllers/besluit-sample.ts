@@ -72,6 +72,8 @@ import {
   locationView,
   personVariableView,
   person_variable,
+  autofilled_variable,
+  autofilledVariableView
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
   osloLocation,
@@ -159,6 +161,7 @@ export default class BesluitSampleController extends Controller {
         date: date(this.dateOptions),
         text_variable,
         person_variable,
+        autofilled_variable: autofilled_variable(this.config.autofilledVariable),
         number,
         location,
         codelist,
@@ -283,6 +286,12 @@ export default class BesluitSampleController extends Controller {
         tags: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG),
         defaultTag: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG)[0],
       },
+      autofilledVariable: {
+        autofilledValues: {
+          administrativeUnit: 'Geemente Aalst',
+          dateRightNow: new Date().toLocaleString(),
+        }
+      }
     };
   }
 
@@ -312,6 +321,7 @@ export default class BesluitSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       structure: structureView(controller),
       mandatee_table: mandateeTableView(controller),
+      autofilled_variable: autofilledVariableView(this.config.autofilledVariable)(controller)
     } satisfies Record<string, SayNodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [
