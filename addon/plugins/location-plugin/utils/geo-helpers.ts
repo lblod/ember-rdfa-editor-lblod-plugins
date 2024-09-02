@@ -110,7 +110,7 @@ export type GeoPos = {
 };
 
 export function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
-  return `<gml:Point srsName="https://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
+  return `<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;
 }
 /**
  * Use a regex to parse a simple point as a GML string and return the coordinates.
@@ -122,7 +122,7 @@ export function parseLambert72GMLString(gml: string): GeoPos {
   // which can be represented. Since we handle only simple points, it's much less complex to just
   // use a simple regex.
   const [_, crs, x, y] =
-    /<gml.Point .*srsName="https:\/\/www.opengis.net\/def\/crs\/([^"]+)".+<gml.pos>(\S+) ([^<]+)<\/gml:pos>/.exec(
+    /<gml.Point .*srsName="https?:\/\/www.opengis.net\/def\/crs\/([^"]+)".+<gml.pos>(\S+) ([^<]+)<\/gml:pos>/.exec(
       gml,
     ) || [];
   if (!crs || crs !== 'EPSG/0/31370') {
@@ -144,11 +144,11 @@ export function constructLambert72WKTString(
 ) {
   if (!Array.isArray(coords)) {
     const { x, y } = coords;
-    return `<https://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
+    return `<http://www.opengis.net/def/crs/EPSG/0/31370> POINT(${x} ${y})`;
   } else {
     const points = coords.map(({ x, y }) => `${x} ${y}`).join(', ');
     // Double brackets are not a mistake...
-    return `<https://www.opengis.net/def/crs/EPSG/0/31370> POLYGON((${points}))`;
+    return `<http://www.opengis.net/def/crs/EPSG/0/31370> POLYGON((${points}))`;
   }
 }
 
@@ -171,7 +171,7 @@ export function parseLambert72WKTString(gml: string): GeoPos | GeoPos[] {
   // cases, it's much less complex to just use a simple regex.
 
   const [_, crs, shape, dimensions] =
-    /<https:\/\/www.opengis.net\/def\/crs\/([^"]+)> (POLYGON|POINT)\(\(?([\d,. ]+)\)\)?/.exec(
+    /<https?:\/\/www.opengis.net\/def\/crs\/([^"]+)> (POLYGON|POINT)\(\(?([\d,. ]+)\)\)?/.exec(
       gml,
     ) || [];
   if (crs && crs === 'EPSG/0/31370') {
