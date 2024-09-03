@@ -76,10 +76,11 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Ember
         })
       } else {
         console.log('replacing inner')
+        if(!this.innerView) return
         this.args.controller.withTransaction((tr: Transaction) => {
-          tr.replaceRangeWith(nodePos + 1, nodePos+nodeSize -1  , valueNode)
+          tr.replaceRangeWith(0, this.innerView.state.doc.nodeSize - 1, valueNode)
           return tr;
-        })
+        }, {view: this.innerView})
       }
     }
   }
