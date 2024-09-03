@@ -68,7 +68,7 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Ember
         schema.text(value),
       )
       console.log(this.args.node.attrs.convertToString)
-      if(false && this.args.node.attrs.convertToString) {
+      if(this.args.node.attrs.convertToString === 'true') {
         console.log('not here')
         this.args.controller.withTransaction((tr: Transaction) => {
           tr.replaceRangeWith(nodePos, nodePos+nodeSize , valueNode)
