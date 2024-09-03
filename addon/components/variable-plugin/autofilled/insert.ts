@@ -93,7 +93,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
       },
 
       this.schema.node('placeholder', {
-        placeholderText: 'autofilled',
+        placeholderText: `Autofill ${this.autofillKey}`,
       }),
     );
     this.label = undefined;
