@@ -51,15 +51,10 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Ember
   }
   @action
   async didInsert() {
-    console.log('inserting')
     const autofillKey = this.args.node.attrs.autofillKey;
     const autofilledValues = this.args.node.attrs.autofilledValues;
     const value = autofilledValues[autofillKey]
-    console.log(this.args.node.attrs)
-    console.log(autofillKey)
-    console.log(autofilledValues)
     if(value) {
-      console.log(value)
       const nodePos = this.args.getPos() as number;
       const nodeSize = this.args.node.nodeSize;
       const schema = this.args.controller.schema;
@@ -67,18 +62,19 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Ember
         {},
         schema.text(value),
       )
-      console.log(this.args.node.attrs.convertToString)
       if(this.args.node.attrs.convertToString === 'true') {
-        console.log('not here')
         this.args.controller.withTransaction((tr: Transaction) => {
           tr.replaceRangeWith(nodePos, nodePos+nodeSize , valueNode)
           return tr;
         })
       } else {
-        console.log('replacing inner')
         if(!this.innerView) return
+        if(this.innerView?.state.doc.firstChild?.textContent === value) {
+          // Same value not replacing
+          return;
+        }
         this.args.controller.withTransaction((tr: Transaction) => {
-          tr.replaceRangeWith(0, this.innerView.state.doc.nodeSize - 1, valueNode)
+          tr.replaceRangeWith(0, this.innerView?.state.doc.nodeSize as number - 2, valueNode)
           return tr;
         }, {view: this.innerView})
       }

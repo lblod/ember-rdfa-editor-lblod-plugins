@@ -96,8 +96,6 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
         placeholderText: 'autofilled',
       }),
     );
-    console.log(this.autofillKey)
-    console.log(this.convertToString);
     this.label = undefined;
 
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
