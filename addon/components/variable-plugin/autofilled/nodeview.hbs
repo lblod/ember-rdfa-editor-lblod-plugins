@@ -4,6 +4,7 @@
   @iconAlignment='right'
   class='variable'
   {{on 'click' this.onClick}}
+  {{did-insert this.didInsert}}
 >
   <EmberNode::EmbeddedEditor
     @controller={{@controller}}
@@ -23,8 +24,3 @@
     </span>
   {{/if}}
 </AuPill>
-<AuButton
-        {{on 'click' this.didInsert}}
-      >
-      Update
-</AuButton>
