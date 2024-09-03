@@ -10,6 +10,7 @@ import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { paragraph } from '@lblod/ember-rdfa-editor/nodes';
 
 export default class AutoFilledVariableNodeViewComponent extends Component<EmberNodeArgs> {
   PencilIcon = PencilIcon;
@@ -65,18 +66,19 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Ember
         {},
         schema.text(value),
       )
-      console.log(nodePos)
-      console.log(nodeSize)
+      console.log(this.args.node.attrs.convertToString)
       if(this.args.node.attrs.convertToString) {
         this.args.controller.withTransaction((tr: Transaction) => {
           tr.replaceRangeWith(nodePos, nodePos+nodeSize , valueNode)
           return tr;
         })
       } else {
+        console.log('replacing inner')
+        if(!this.innerView) return
         this.args.controller.withTransaction((tr: Transaction) => {
-          tr.replaceRangeWith(nodePos + 1, nodePos+nodeSize - 1, valueNode)
+          tr.replaceRangeWith(0, this.innerView.state.doc.nodeSize - 1, valueNode)
           return tr;
-        })
+        }, {view: this.innerView})
       }
     }
   }
