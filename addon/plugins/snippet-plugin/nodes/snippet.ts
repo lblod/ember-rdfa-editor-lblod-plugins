@@ -15,7 +15,10 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  DEFAULT_CONTENT_STRING,
+  SnippetPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   name: 'snippet',
@@ -41,7 +44,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
     config: { default: options },
   },
   component: SnippetComponent,
-  content: 'block+',
+  content: options.allowedContent || DEFAULT_CONTENT_STRING,
   serialize(node) {
     return renderRdfaAware({
       renderable: node,
