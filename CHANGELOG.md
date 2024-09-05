@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.4.1
+
+### Patch Changes
+
+- [#474](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/474) [`714f260`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/714f260e2c9024fe8ea3f031b42b746fd2ac0c26) Thanks [@elpoelma](https://github.com/elpoelma)! - LMB-plugin: query mandatees using `application/x-www-form-urlencoded` approach
+
 ## 22.4.0
 
 ### Minor Changes
