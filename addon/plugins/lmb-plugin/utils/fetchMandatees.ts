@@ -1,24 +1,12 @@
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
-import { IBindings } from 'fetch-sparql-endpoint';
-
-type SparqlResponse = {
-  results: {
-    bindings: IBindings[];
-  };
-};
+import { executeQuery } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 
 type FetchMandateesArgs = {
   endpoint: string;
 };
 
 export async function fetchMandatees({ endpoint }: FetchMandateesArgs) {
-  const queryResponse = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
+  const query = `
       PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
       PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
       PREFIX mandaat: <http://data.vlaanderen.be/ns/mandaat#>
@@ -46,10 +34,11 @@ export async function fetchMandatees({ endpoint }: FetchMandateesArgs) {
           }
           filter (!bound(?endDate) || ?endDate > now()).
       }
-      `,
-    }),
+      `;
+  const response = await executeQuery({
+    query,
+    endpoint,
   });
-  const queryJson: SparqlResponse = await queryResponse.json();
-  const mandatees = queryJson.results.bindings.map(Mandatee.fromBinding);
+  const mandatees = response.results.bindings.map(Mandatee.fromBinding);
   return mandatees;
 }
