@@ -4,11 +4,11 @@ import { action } from '@ember/object';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
-import AuInput from '@appuniversum/ember-appuniversum/components/au-input';
 import PowerSelect from 'ember-power-select/components/power-select';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { on } from '@ember/modifier';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
+import AuTextarea from '@appuniversum/ember-appuniversum/components/au-textarea';
 import t from 'ember-intl/helpers/t';
 
 interface Sig {
@@ -105,15 +105,14 @@ export default class ConfigureMandateeTableComponent extends Component<Sig> {
             <AuLabel for='mandatee-table-title-input'>
               {{t 'mandatee-table-plugin.configure.title-input.label'}}
             </AuLabel>
-            <AuInput
+            <AuTextarea
               @width='block'
               placeholder={{t
                 'mandatee-table-plugin.configure.title-input.placeholder'
               }}
               id='mandatee-table-title-input'
-              value={{this.nodeTitle}}
               {{on 'input' this.updateNodeTitle}}
-            />
+            >{{this.nodeTitle}}</AuTextarea>
           </AuFormRow>
         </c.content>
       </AuCard>
