@@ -18,6 +18,8 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import t from 'ember-intl/helpers/t';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -57,7 +59,10 @@ export default class SnippetNode extends Component<Signature> {
     const position = this.args.getPos();
     if (position !== undefined) {
       this.controller.withTransaction((tr) => {
-        return tr.deleteRange(position, position + this.node.nodeSize);
+        return transactionCombinator(
+          this.controller.mainEditorState,
+          tr.deleteRange(position, position + this.node.nodeSize),
+        )([recalculateNumbers]).transaction;
       });
     }
   }
