@@ -8,22 +8,16 @@ import { action } from '@ember/object';
 import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
-import {
-  PNode,
-  ProseParser,
-  Selection,
-  Slice,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
+import { PNode, ProseParser, Selection, Slice } from '@lblod/ember-rdfa-editor';
 import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { v4 as uuidv4 } from 'uuid';
 import t from 'ember-intl/helpers/t';
+import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
+import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -91,57 +85,31 @@ export default class SnippetNode extends Component<Signature> {
   }
   @action
   onInsert(content: string, title: string) {
+    this.closeModal();
     const assignedSnippetListsIds = this.node.attrs.assignedSnippetListsIds;
-    let rangeStart = 0;
-    let rangeEnd = 0;
-    if (this.args.getPos() === undefined) return;
+    let start = 0;
+    let end = 0;
+    const pos = this.args.getPos();
+    if (isNone(pos)) {
+      return;
+    }
     if (this.mode === 'add') {
       // Add new snippet
-      rangeStart = (this.args.getPos() as number) + this.node.nodeSize;
-      rangeEnd = (this.args.getPos() as number) + this.node.nodeSize;
+      start = pos + this.node.nodeSize;
+      end = pos + this.node.nodeSize;
     } else {
       //Replace current snippet
-      rangeStart = this.args.getPos() as number;
-      rangeEnd = (this.args.getPos() as number) + this.node.nodeSize;
+      start = pos;
+      end = pos + this.node.nodeSize;
     }
-
-    const domParser = new DOMParser();
-    const parsed = domParser.parseFromString(content, 'text/html').body;
-    const documentDiv = parsed.querySelector('div[data-say-document="true"]');
-
-    this.closeModal();
-    const parser = ProseParser.fromSchema(this.controller.schema);
-
-    if (documentDiv) {
-      return this.controller.withTransaction((tr: Transaction) => {
-        return tr.replaceRangeWith(
-          rangeStart,
-          rangeEnd,
-          this.controller.schema.node(
-            'snippet',
-            {
-              assignedSnippetListsIds,
-              title,
-              subject: `http://data.lblod.info/snippets/${uuidv4()}`,
-            },
-            htmlToDoc(content, {
-              schema: this.controller.schema,
-              parser,
-              editorView: this.controller.mainEditorView,
-            }).content,
-          ),
-        );
-      });
-    }
-
-    this.controller.withTransaction((tr) =>
-      tr.replaceRange(
-        rangeStart,
-        rangeEnd,
-        this.createSliceFromElement(parsed),
-      ),
+    this.controller.doCommand(
+      insertSnippet({
+        content,
+        title,
+        assignedSnippetListsIds,
+        range: { start, end },
+      }),
     );
-    this.closeModal();
   }
   <template>
     <div class='say-snippet-card'>

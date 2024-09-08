@@ -4,15 +4,9 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
-import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
-import {
-  ProseParser,
-  SayController,
-  Slice,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
+import { ProseParser, SayController, Slice } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { v4 as uuidv4 } from 'uuid';
+import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 
 interface Args {
   controller: SayController;
@@ -57,35 +51,13 @@ export default class SnippetInsertComponent extends Component<Args> {
 
   @action
   onInsert(content: string, title: string) {
-    const domParser = new DOMParser();
-    const parsed = domParser.parseFromString(content, 'text/html').body;
-    const documentDiv = parsed.querySelector('div[data-say-document="true"]');
-
     this.closeModal();
-    const parser = ProseParser.fromSchema(this.controller.schema);
-
-    if (documentDiv) {
-      return this.controller.withTransaction((tr: Transaction) => {
-        return tr.replaceSelectionWith(
-          this.controller.schema.node(
-            'snippet',
-            {
-              assignedSnippetListsIds: this.args.assignedSnippetListsIds,
-              title: title,
-              subject: `http://data.lblod.info/snippets/${uuidv4()}`,
-            },
-            htmlToDoc(content, {
-              schema: this.controller.schema,
-              parser,
-              editorView: this.controller.mainEditorView,
-            }).content,
-          ),
-        );
-      });
-    }
-
-    this.controller.withTransaction((tr) =>
-      tr.replaceSelection(this.createSliceFromElement(parsed)),
+    this.controller.doCommand(
+      insertSnippet({
+        content,
+        title,
+        assignedSnippetListsIds: this.args.assignedSnippetListsIds,
+      }),
     );
   }
 
