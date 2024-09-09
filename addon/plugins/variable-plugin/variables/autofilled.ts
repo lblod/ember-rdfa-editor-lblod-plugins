@@ -48,12 +48,12 @@ const parseDOM = [
           return false;
         }
         const autofillKey = node.dataset.autofillKey;
-        const convertToString = node.dataset.convertToString
+        const convertToString = node.dataset.convertToString;
         return {
           ...attrs,
           autofillKey,
-          convertToString
-        }
+          convertToString,
+        };
       }
 
       return false;
@@ -78,7 +78,7 @@ const parseDOM = [
         const variableInstance = parseVariableInstance(node);
         const label = parseLabel(node);
         const autofillKey = node.dataset.autofillKey;
-        const convertToString = node.dataset.convertToString
+        const convertToString = node.dataset.convertToString;
         return {
           __rdfaId: uuidv4(),
           subject: mappingSubject,
@@ -109,7 +109,7 @@ const parseDOM = [
             },
           ],
           autofillKey,
-          convertToString
+          convertToString,
         };
       }
 
@@ -126,17 +126,11 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     attrs: {
       ...node.attrs,
       'data-autofill-key': node.attrs.autofillKey,
-      'data-convert-to-string': node.attrs.convertToString
+      'data-convert-to-string': node.attrs.convertToString,
     },
     content: 0,
   });
 };
-
-type AutofilledArgs = {
-  autofilledValues: {
-    [Key: string]: string
-  }
-}
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'autofilled-variable',
@@ -154,11 +148,11 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
     autofillKey: {
-      default: ''
+      default: '',
     },
     convertToString: {
-      default: false
-    }
+      default: false,
+    },
   },
   toDOM,
   parseDOM,

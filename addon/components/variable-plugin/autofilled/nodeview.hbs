@@ -5,21 +5,21 @@
   class='variable'
   {{on 'click' this.onClick}}
 >
-    <EmberNode::EmbeddedEditor
-      @controller={{@controller}}
-      @view={{@view}}
-      @getPos={{@getPos}}
-      @node={{@node}}
-      @selected={{@selected}}
-      @initEditor={{this.initEditor}}
-      @nodeViews={{@nodeViews}}
-      @plugins={{this.plugins}}
-      @decorations={{@decorations}}
-      @contentDecorations={{@contentDecorations}}
-    />
-    {{#if this.label}}
-      <span class='label'>
-        ({{this.label}})
-      </span>
-    {{/if}}
+  <EmberNode::EmbeddedEditor
+    @controller={{@controller}}
+    @view={{@view}}
+    @getPos={{@getPos}}
+    @node={{@node}}
+    @selected={{@selected}}
+    @initEditor={{this.initEditor}}
+    @nodeViews={{@nodeViews}}
+    @plugins={{this.plugins}}
+    @decorations={{@decorations}}
+    @contentDecorations={{@contentDecorations}}
+  />
+  {{#if this.label}}
+    <span class='label'>
+      ({{this.label}})
+    </span>
+  {{/if}}
 </AuPill>

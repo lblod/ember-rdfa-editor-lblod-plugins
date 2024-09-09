@@ -72,7 +72,7 @@ import {
   personVariableView,
   person_variable,
   autofilled_variable,
-  autofilledVariableView
+  autofilledVariableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
@@ -324,9 +324,8 @@ export default class RegulatoryStatementSampleController extends Controller {
         endpoint: '/codex/sparql',
       } as CitationPluginConfig,
       autofilledVariable: {
-        autofilledValues: {
-        }
-      }
+        autofilledValues: {},
+      },
     };
   }
 
@@ -357,7 +356,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       snippet_placeholder: snippetPlaceholderView(controller),
       snippet: snippetView(this.config.snippet)(controller),
-      autofilled_variable: autofilledVariableView(controller)
+      autofilled_variable: autofilledVariableView(controller),
     };
   };
   @tracked plugins: Plugin[] = [

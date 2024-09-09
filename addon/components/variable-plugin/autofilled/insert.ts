@@ -46,7 +46,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   }
 
   @action
-  updateConvertToString(value: boolean){
+  updateConvertToString(value: boolean) {
     this.convertToString = value;
   }
 
@@ -89,7 +89,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
           },
         ],
         autofillKey: this.autofillKey,
-        convertToString: this.convertToString
+        convertToString: this.convertToString,
       },
 
       this.schema.node('placeholder', {
