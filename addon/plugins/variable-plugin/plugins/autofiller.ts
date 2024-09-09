@@ -67,7 +67,7 @@ function autofillVariable(node: PNode, pos: number, values: {[Key: string]: stri
     if(value) {
       const nodeSize = node.nodeSize;
       const valueNode = schema.text(value);
-      if(node.attrs.convertToString === true) {
+      if(node.attrs.convertToString === true || node.attrs.convertToString === "true" ) {
           tr.replaceRangeWith(pos, pos+nodeSize , valueNode)
           return;
       } else {
