@@ -70,8 +70,8 @@ function autofillVariable(
   tr: Transaction,
   schema: Schema,
 ) {
-  const autofillKey = node.attrs.autofillKey;
-  const value = values[autofillKey] as string;
+  const autofillKey = node.attrs.autofillKey as string;
+  const value = values[autofillKey];
   if (value) {
     const nodeSize = node.nodeSize;
     const valueNode = schema.text(value);
