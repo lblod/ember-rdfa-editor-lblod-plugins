@@ -124,6 +124,7 @@ import {
   snippetView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
+import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -174,7 +175,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       date: date(this.dateOptions),
       text_variable,
       person_variable,
-      autofilled_variable: autofilled_variable(this.config.autofilledVariable),
+      autofilled_variable,
       number,
       location,
       codelist,
@@ -356,7 +357,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       snippet_placeholder: snippetPlaceholderView(controller),
       snippet: snippetView(this.config.snippet)(controller),
-      autofilled_variable: autofilledVariableView(this.config.autofilledVariable)(controller)
+      autofilled_variable: autofilledVariableView(controller)
     };
   };
   @tracked plugins: Plugin[] = [
@@ -372,6 +373,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     emberApplication({ application: getOwner(this) }),
     editableNodePlugin(),
     recreateUuidsOnPaste,
+    variableAutofillerPlugin(this.config.autofilledVariable),
   ];
 
   @action

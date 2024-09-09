@@ -8,9 +8,7 @@ import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pe
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { paragraph } from '@lblod/ember-rdfa-editor/nodes';
+
 
 export default class AutoFilledVariableNodeViewComponent extends Component<EmberNodeArgs> {
   PencilIcon = PencilIcon;
@@ -48,36 +46,5 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Ember
       return '';
     }
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
-  }
-  @action
-  async didInsert() {
-    const autofillKey = this.args.node.attrs.autofillKey;
-    const autofilledValues = this.args.node.attrs.autofilledValues;
-    const value = autofilledValues[autofillKey]
-    if(value) {
-      const nodePos = this.args.getPos() as number;
-      const nodeSize = this.args.node.nodeSize;
-      const schema = this.args.controller.schema;
-      const valueNode = schema.nodes.paragraph.create(
-        {},
-        schema.text(value),
-      )
-      if(this.args.node.attrs.convertToString === 'true') {
-        this.args.controller.withTransaction((tr: Transaction) => {
-          tr.replaceRangeWith(nodePos, nodePos+nodeSize , valueNode)
-          return tr;
-        })
-      } else {
-        if(!this.innerView) return
-        if(this.innerView?.state.doc.firstChild?.textContent === value) {
-          // Same value not replacing
-          return;
-        }
-        this.args.controller.withTransaction((tr: Transaction) => {
-          tr.replaceRangeWith(0, this.innerView?.state.doc.nodeSize as number - 2, valueNode)
-          return tr;
-        }, {view: this.innerView})
-      }
-    }
   }
 }

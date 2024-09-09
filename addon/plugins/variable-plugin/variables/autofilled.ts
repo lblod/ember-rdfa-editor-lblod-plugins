@@ -138,7 +138,7 @@ type AutofilledArgs = {
   }
 }
 
-const emberNodeConfig: (config: AutofilledArgs) => EmberNodeConfig = (config) => ({
+const emberNodeConfig: EmberNodeConfig = {
   name: 'autofilled-variable',
   component: AutofilledNodeViewComponent as unknown as ComponentLike,
   inline: true,
@@ -153,9 +153,6 @@ const emberNodeConfig: (config: AutofilledArgs) => EmberNodeConfig = (config) =>
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    autofilledValues: {
-      default: config.autofilledValues,
-    },
     autofillKey: {
       default: ''
     },
@@ -165,7 +162,7 @@ const emberNodeConfig: (config: AutofilledArgs) => EmberNodeConfig = (config) =>
   },
   toDOM,
   parseDOM,
-});
+};
 
-export const autofilled_variable = (config: AutofilledArgs) => createEmberNodeSpec(emberNodeConfig(config));
-export const autofilledVariableView = (config: AutofilledArgs) => createEmberNodeView(emberNodeConfig(config));
+export const autofilled_variable = createEmberNodeSpec(emberNodeConfig);
+export const autofilledVariableView = createEmberNodeView(emberNodeConfig);

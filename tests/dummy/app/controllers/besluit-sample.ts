@@ -112,6 +112,7 @@ import {
   mandateeTableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin/node';
 import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
+import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -161,7 +162,7 @@ export default class BesluitSampleController extends Controller {
         date: date(this.dateOptions),
         text_variable,
         person_variable,
-        autofilled_variable: autofilled_variable(this.config.autofilledVariable),
+        autofilled_variable,
         number,
         location,
         codelist,
@@ -321,7 +322,7 @@ export default class BesluitSampleController extends Controller {
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       structure: structureView(controller),
       mandatee_table: mandateeTableView(controller),
-      autofilled_variable: autofilledVariableView(this.config.autofilledVariable)(controller)
+      autofilled_variable: autofilledVariableView(controller)
     } satisfies Record<string, SayNodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [
@@ -338,6 +339,7 @@ export default class BesluitSampleController extends Controller {
     editableNodePlugin(),
     emberApplication({ application: getOwner(this) }),
     recreateUuidsOnPaste,
+    variableAutofillerPlugin(this.config.autofilledVariable),
   ];
 
   @action
