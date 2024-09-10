@@ -1,6 +1,9 @@
 import { htmlSafe } from '@ember/template';
 
-import { optionMapOr } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  type Option,
+  optionMapOr,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { SafeString } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 
@@ -29,11 +32,14 @@ export class Snippet {
   }
 }
 
-interface SnippetListArgs {
-  id: string | null;
-  label: string | null;
-  createdOn: string | null;
-}
+export type ImportedResourceMap = Record<string, Option<string>>;
+
+export type SnippetListArgs = {
+  id: string;
+  label: string;
+  createdOn: string;
+  importedResources: string[];
+};
 
 const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
 
@@ -43,13 +49,15 @@ export const getSnippetIdFromUri = (uri: string) =>
   uri.replace(snippetListBase, '');
 
 export class SnippetList {
-  id: string | null;
-  label: string | null;
+  id: string;
+  label: string;
   createdOn: string | null;
+  importedResources: string[];
 
-  constructor({ id, label, createdOn }: SnippetListArgs) {
-    this.id = id ? getSnippetIdFromUri(id) : null;
+  constructor({ id, label, createdOn, importedResources }: SnippetListArgs) {
+    this.id = getSnippetIdFromUri(id);
     this.label = label;
-    this.createdOn = dateValue(createdOn ?? undefined);
+    this.createdOn = dateValue(createdOn);
+    this.importedResources = importedResources;
   }
 }
