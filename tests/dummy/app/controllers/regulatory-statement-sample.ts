@@ -299,7 +299,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         rdfaAware: true,
       },
       snippet: {
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',

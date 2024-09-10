@@ -3,8 +3,12 @@ import { on } from '@ember/modifier';
 import SearchModal from '../search-modal';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { TemplateOnlyComponent } from '@ember/component/template-only';
 import t from 'ember-intl/helpers/t';
-import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
+import { not } from 'ember-truth-helpers';
+import AuIcon, {
+  type AuIconSignature,
+} from '@appuniversum/ember-appuniversum/components/au-icon';
 import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
@@ -22,6 +26,33 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { createAndInsertSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+
+interface ButtonSig {
+  Args: {
+    isActive: boolean;
+    onClick: () => void;
+    icon: AuIconSignature['Args']['icon'];
+    helpText: string;
+  };
+  Element: HTMLButtonElement;
+}
+
+const SnippetButton: TemplateOnlyComponent<ButtonSig> = <template>
+  <button
+    class='say-snippet-button {{if @isActive "" "say-snippet-hidden"}}'
+    disabled={{(not @isActive)}}
+    type='button'
+    {{on 'click' @onClick}}
+    ...attributes
+  >
+    {{#if @isActive}}
+      <AuIcon @icon={{@icon}} @size='large' {{on 'click' @onClick}} />
+      <div class='say-snippet-button-text'>
+        {{t @helpText}}
+      </div>
+    {{/if}}
+  </button>
+</template>;
 
 interface Signature {
   Args: EmberNodeArgs;
@@ -130,44 +161,32 @@ export default class SnippetNode extends Component<Signature> {
     );
     this.closeModal();
   }
+
   <template>
     <div class='say-snippet-card'>
       <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
       <div class='say-snippet-content'>{{yield}}</div>
-      {{#if this.isActive}}
-        <div class='say-snippet-icons'>
-          <button
-            class='say-snippet-button'
-            type='button'
-            {{on 'click' this.editFragment}}
-          >
-            <AuIcon @icon={{SynchronizeIcon}} @size='large' />
-            <div class='say-snippet-button-text'>
-              {{t 'snippet-plugin.snippet-node.change-fragment'}}
-            </div>
-          </button>
-          <button
-            class='say-snippet-button say-snippet-remove-button'
-            type='button'
-            {{on 'click' this.deleteFragment}}
-          >
-            <AuIcon @icon={{BinIcon}} />
-            <div class='say-snippet-button-text'>
-              {{t 'snippet-plugin.snippet-node.remove-fragment'}}
-            </div>
-          </button>
-          <button
-            class='say-snippet-button'
-            type='button'
-            {{on 'click' this.addFragment}}
-          >
-            <AuIcon @icon={{AddIcon}} />
-            <div class='say-snippet-button-text'>
-              {{t 'snippet-plugin.snippet-node.add-fragment'}}
-            </div>
-          </button>
-        </div>
-      {{/if}}
+      <div class='say-snippet-icons'>
+        <SnippetButton
+          @icon={{SynchronizeIcon}}
+          @helpText='snippet-plugin.snippet-node.change-fragment'
+          @onClick={{this.editFragment}}
+          @isActive={{this.isActive}}
+        />
+        <SnippetButton
+          @icon={{BinIcon}}
+          @helpText='snippet-plugin.snippet-node.remove-fragment'
+          @onClick={{this.deleteFragment}}
+          @isActive={{this.isActive}}
+          class='say-snippet-remove-button'
+        />
+        <SnippetButton
+          @icon={{AddIcon}}
+          @helpText='snippet-plugin.snippet-node.add-fragment'
+          @onClick={{this.addFragment}}
+          @isActive={{this.isActive}}
+        />
+      </div>
 
     </div>
     <SearchModal
