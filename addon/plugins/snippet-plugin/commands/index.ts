@@ -1,1 +1,1 @@
-export { default as updateSnippetPlaceholder } from './update-snippet-ids';
+export { updateSnippetPlaceholder } from './update-snippet-placeholder';

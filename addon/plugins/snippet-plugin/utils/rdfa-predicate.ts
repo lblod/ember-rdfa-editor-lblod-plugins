@@ -11,23 +11,11 @@ export const getSnippetListIdsProperties = (node: PNode) => {
 };
 
 export const getAssignedSnippetListsIdsFromProperties = (
-  snippetListIdsProperty: OutgoingTriple[] | undefined,
+  snippetListIdsProperty: OutgoingTriple[] | undefined = [],
 ) => {
-  if (!snippetListIdsProperty) {
-    return [];
-  }
-
-  const snippetListUris = snippetListIdsProperty
+  return snippetListIdsProperty
     .map((property) => property.object.value)
-    .filter((object) => object !== undefined);
-
-  if (snippetListUris.length === 0) {
-    return [];
-  }
-
-  const snippetListIds = snippetListUris
+    .filter((object) => object !== undefined)
     .map(getSnippetIdFromUri)
     .filter((id) => id !== undefined);
-
-  return snippetListIds;
 };
