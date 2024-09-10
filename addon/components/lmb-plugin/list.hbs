@@ -37,7 +37,7 @@
     </tr>
   </:header>
   <:body>
-    {{#unless (or @services.isRunning @error)}}
+    {{#unless @services.isRunning}}
       {{#if @services.value.totalCount}}
         {{#each @services.value.results as |row|}}
           <tr>
