@@ -5,7 +5,10 @@ export interface AanvraagPluginConfig {
 export type Aanvraag = {
   uri: string;
   title: string;
+  gemeente: string;
+  objectUri: string;
   object: string;
+  description: string;
 };
 export interface AanvraagResults {
   data: Aanvraag[];

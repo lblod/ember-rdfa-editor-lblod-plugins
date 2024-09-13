@@ -99,6 +99,7 @@ export default class AanvraagInsert extends Component<Args> {
         {{on 'click' this.openModal}}
         @disabled={{this.isButtonDisabled}}
       >
+        {{! template-lint-disable no-bare-strings  }}
         Aanvraag Invoegen
       </AuButton>
     </li>

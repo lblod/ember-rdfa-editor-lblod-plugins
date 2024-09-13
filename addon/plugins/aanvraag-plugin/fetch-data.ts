@@ -1,8 +1,8 @@
 import {
   BindingObject,
-  executeCountQuery,
+  // executeCountQuery,
   executeQuery,
-  sparqlEscapeString,
+  // sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import {
   Aanvraag,
@@ -19,35 +19,35 @@ export type OrderBy =
   | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
-const buildAanvraagCountQuery = ({ municipality }: Filter) => {
-  return `
-      PREFIX schema: <http://schema.org/>
-      PREFIX dct: <http://purl.org/dc/terms/>
-      PREFIX pav: <http://purl.org/pav/>
-      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-      PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-      PREFIX prov: <http://www.w3.org/ns/prov#>
-      PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+// const buildAanvraagCountQuery = ({ municipality }: Filter) => {
+//   return `
+//       PREFIX schema: <http://schema.org/>
+//       PREFIX dct: <http://purl.org/dc/terms/>
+//       PREFIX pav: <http://purl.org/pav/>
+//       PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+//       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+//       PREFIX prov: <http://www.w3.org/ns/prov#>
+//       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
 
-      SELECT (COUNT(?publishedSnippetVersion) AS ?count)
-      WHERE {
-          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
-                             pav:hasCurrentVersion ?publishedSnippetVersion ;
-                             ext:fromSnippetList ?fromSnippetList .
-          ?fromSnippetList mu:uuid ?fromSnippetListId .
-          ?publishedSnippetVersion dct:title ?title ;
-               ext:editorDocumentContent ?content ;
-               pav:createdOn ?createdOn .
-          OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
-          FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
-          ${
-            municipality
-              ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
-              : ''
-          }
-      }
-      `;
-};
+//       SELECT (COUNT(?publishedSnippetVersion) AS ?count)
+//       WHERE {
+//           ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
+//                              pav:hasCurrentVersion ?publishedSnippetVersion ;
+//                              ext:fromSnippetList ?fromSnippetList .
+//           ?fromSnippetList mu:uuid ?fromSnippetListId .
+//           ?publishedSnippetVersion dct:title ?title ;
+//                ext:editorDocumentContent ?content ;
+//                pav:createdOn ?createdOn .
+//           OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
+//           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
+//           ${
+//             municipality
+//               ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
+//               : ''
+//           }
+//       }
+//       `;
+// };
 
 const buildAanvraagFetchQuery = ({
   filter: { municipality },
@@ -61,14 +61,17 @@ const buildAanvraagFetchQuery = ({
       PREFIX dcterms: <http://purl.org/dc/terms/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX ex: <https://inventaris.onroerenderfgoed.be/>
+      PREFIX dcterms: <http://purl.org/dc/terms/>
 
-      SELECT DISTINCT ?uri ?title ?object
+      SELECT DISTINCT ?uri ?title ?objectUri ?object ?gemeente ?description
       WHERE {
           ?uri a ex:aanvraag ;
               ex:detailsAanduidingsobject ?objectUri ;
               ex:beschrijvingHandeling ?title .
-          ?objectUri ex:gemeente ?gemeente;
-              foaf:name ?object.
+
+          ?objectUri <https://inventaris.onroerenderfgoed.be/gemeente> ?gemeente ;
+              foaf:name ?object ;
+              dcterms:description ?description .
           ${
             municipality
               ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
@@ -110,7 +113,10 @@ export const fetchAanvragen = async ({
   const results = queryResult.results.bindings.map((binding) => ({
     uri: binding.uri.value,
     title: binding.title?.value,
+    objectUri: binding.objectUri?.value,
     object: binding.object?.value,
+    gemeente: binding.gemeente?.value,
+    description: binding.description?.value,
   }));
 
   return { meta: { count: 10 }, data: results };
