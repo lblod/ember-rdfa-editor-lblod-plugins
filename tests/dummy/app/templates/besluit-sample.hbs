@@ -94,6 +94,10 @@
               @config={{this.config.mandateeTable.config}}
             />
             <Sidebar as |Sidebar|>
+              <this.InsertAanvraag
+                @controller={{this.controller}}
+                @config={{this.config.aanvraag}}
+              />
               <Sidebar.Collapsible @title='Structures'>
                 <this.InsertArticle @controller={{this.controller}} />
                 <this.InsertArticle

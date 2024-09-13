@@ -110,6 +110,7 @@ import {
   mandateeTableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin/node';
 import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
+import InsertAanvraag from '@lblod/ember-rdfa-editor-lblod-plugins/components/aanvraag-plugin/insert';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -117,6 +118,7 @@ export default class BesluitSampleController extends Controller {
   RdfaEditor = RdfaEditor;
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
+  InsertAanvraag = InsertAanvraag;
 
   @tracked editableNodes = false;
 
@@ -282,6 +284,9 @@ export default class BesluitSampleController extends Controller {
         config: MANDATEE_TABLE_SAMPLE_CONFIG,
         tags: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG),
         defaultTag: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG)[0],
+      },
+      aanvraag: {
+        endpoint: 'http://localhost/sparql',
       },
     };
   }
