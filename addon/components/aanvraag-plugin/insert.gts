@@ -70,15 +70,20 @@ export default class AanvraagInsert extends Component<Args> {
           },
           [
             this.controller.schema.node('paragraph', {}, [
-              this.controller.schema.text(aanvraag.title),
-            ]),
-            this.controller.schema.node('paragraph', {}, [
+              this.controller.schema.text(
+                'Aanvraag om toelatingsplichtige werken op aanduidingsobject ',
+              ),
               this.controller.schema.node(
                 'link',
                 {
                   href: aanvraag.objectUri,
                 },
                 [this.controller.schema.text(aanvraag.object)],
+              ),
+              this.controller.schema.text(' door te voeren. Gegeven dat '),
+              this.controller.schema.text(aanvraag.motivation),
+              this.controller.schema.text(
+                ' denkt het college dat de werken gerechtvaardigd zijne en keuren we deze goed.',
               ),
             ]),
           ],

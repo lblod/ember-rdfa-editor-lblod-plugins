@@ -9,6 +9,7 @@ export type Aanvraag = {
   objectUri: string;
   object: string;
   description: string;
+  motivation: string;
 };
 export interface AanvraagResults {
   data: Aanvraag[];

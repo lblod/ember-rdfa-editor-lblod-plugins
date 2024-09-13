@@ -62,11 +62,12 @@ const buildAanvraagFetchQuery = ({
       PREFIX ex: <https://inventaris.onroerenderfgoed.be/>
       PREFIX dcterms: <http://purl.org/dc/terms/>
 
-      SELECT DISTINCT ?uri ?title ?objectUri ?object ?gemeente ?description
+      SELECT DISTINCT ?uri ?title ?objectUri ?object ?gemeente ?description ?motivation
       WHERE {
           ?uri a ex:aanvraag ;
               ex:detailsAanduidingsobject ?objectUri ;
-              ex:beschrijvingHandeling ?title .
+              ex:beschrijvingHandeling ?title ;
+              ex:motivatie ?motivation .
 
           ?objectUri <https://inventaris.onroerenderfgoed.be/gemeente> ?gemeente ;
               foaf:name ?object ;
@@ -115,6 +116,7 @@ export const fetchAanvragen = async ({
     object: binding.object?.value,
     gemeente: binding.gemeente?.value,
     description: binding.description?.value,
+    motivation: binding.motivation?.value,
   }));
 
   return { meta: { count }, data: results };
