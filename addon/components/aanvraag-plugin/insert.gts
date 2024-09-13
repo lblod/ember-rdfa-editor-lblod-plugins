@@ -58,6 +58,7 @@ export default class AanvraagInsert extends Component<Args> {
     }
 
     const rdfaId = uuidv4();
+    const motivationUuid = uuidv4();
 
     this.controller.withTransaction(
       (tr) => {
@@ -80,10 +81,14 @@ export default class AanvraagInsert extends Component<Args> {
                 },
                 [this.controller.schema.text(aanvraag.object)],
               ),
-              this.controller.schema.text(' door te voeren. Gegeven dat '),
-              this.controller.schema.text(aanvraag.motivation),
+              this.controller.schema.text(' door te voeren. Gegeven dat "'),
+              this.controller.schema.node(
+                'inline_rdfa',
+                { rdfaNodeType: 'literal', __rdfaId: motivationUuid },
+                this.controller.schema.text(aanvraag.motivation),
+              ),
               this.controller.schema.text(
-                ' denkt het college dat de werken gerechtvaardigd zijne en keuren we deze goed.',
+                '" denkt het college dat de werken gerechtvaardigd zijne en keuren we deze goed.',
               ),
             ]),
           ],
@@ -100,6 +105,15 @@ export default class AanvraagInsert extends Component<Args> {
         property: {
           predicate: ELI('refers_to').prefixed,
           object: sayDataFactory.resourceNode(aanvraag.uri),
+        },
+      }),
+    );
+    this.controller.doCommand(
+      addProperty({
+        resource: aanvraag.uri,
+        property: {
+          predicate: 'https://inventaris.onroerenderfgoed.be/motivatie',
+          object: sayDataFactory.literalNode(motivationUuid),
         },
       }),
     );
