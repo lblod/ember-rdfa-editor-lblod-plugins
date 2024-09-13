@@ -1,8 +1,8 @@
 import {
   BindingObject,
-  // executeCountQuery,
+  executeCountQuery,
   executeQuery,
-  // sparqlEscapeString,
+  sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import {
   Aanvraag,
@@ -19,35 +19,31 @@ export type OrderBy =
   | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
-// const buildAanvraagCountQuery = ({ municipality }: Filter) => {
-//   return `
-//       PREFIX schema: <http://schema.org/>
-//       PREFIX dct: <http://purl.org/dc/terms/>
-//       PREFIX pav: <http://purl.org/pav/>
-//       PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-//       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-//       PREFIX prov: <http://www.w3.org/ns/prov#>
-//       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+const buildAanvraagCountQuery = ({ municipality }: Filter) => {
+  return `
+      PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+      PREFIX dcterms: <http://purl.org/dc/terms/>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      PREFIX ex: <https://inventaris.onroerenderfgoed.be/>
+      PREFIX dcterms: <http://purl.org/dc/terms/>
 
-//       SELECT (COUNT(?publishedSnippetVersion) AS ?count)
-//       WHERE {
-//           ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
-//                              pav:hasCurrentVersion ?publishedSnippetVersion ;
-//                              ext:fromSnippetList ?fromSnippetList .
-//           ?fromSnippetList mu:uuid ?fromSnippetListId .
-//           ?publishedSnippetVersion dct:title ?title ;
-//                ext:editorDocumentContent ?content ;
-//                pav:createdOn ?createdOn .
-//           OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
-//           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
-//           ${
-//             municipality
-//               ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
-//               : ''
-//           }
-//       }
-//       `;
-// };
+      SELECT (COUNT(?uri) AS ?count)
+      WHERE {
+          ?uri a ex:aanvraag ;
+              ex:detailsAanduidingsobject ?objectUri ;
+              ex:beschrijvingHandeling ?title .
+
+          ?objectUri <https://inventaris.onroerenderfgoed.be/gemeente> ?gemeente ;
+              foaf:name ?object ;
+              dcterms:description ?description .
+          ${
+            municipality
+              ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
+              : ''
+          }
+      }
+      `;
+};
 
 const buildAanvraagFetchQuery = ({
   filter: { municipality },
@@ -93,16 +89,15 @@ export const fetchAanvragen = async ({
   filter: Filter;
   pagination: Pagination;
 }): Promise<AanvraagResults> => {
-  // TODO re-enable count when the query is settled
-  // const count = await executeCountQuery({
-  //   endpoint,
-  //   query: buildAanvraagCountQuery(filter),
-  //   abortSignal,
-  // });
+  const count = await executeCountQuery({
+    endpoint,
+    query: buildAanvraagCountQuery(filter),
+    abortSignal,
+  });
 
-  // if (count === 0) {
-  //   return { meta: { count }, data: [] };
-  // }
+  if (count === 0) {
+    return { meta: { count }, data: [] };
+  }
 
   const queryResult = await executeQuery<BindingObject<Aanvraag>>({
     endpoint,
@@ -119,5 +114,5 @@ export const fetchAanvragen = async ({
     description: binding.description?.value,
   }));
 
-  return { meta: { count: 10 }, data: results };
+  return { meta: { count }, data: results };
 };

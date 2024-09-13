@@ -56,7 +56,13 @@ const TableView: TemplateOnlyComponent<Args> = <template>
           <c.header>
             <AuDataTableThSortable
               @field='title'
-              @label='title'
+              @label='titel'
+              @currentSorting={{@sort}}
+              @class='data-table__header-title'
+            />
+            <AuDataTableThSortable
+              @field='gemeente'
+              @label='gemeente'
               @currentSorting={{@sort}}
               @class='data-table__header-title'
             />
@@ -66,11 +72,19 @@ const TableView: TemplateOnlyComponent<Args> = <template>
               @currentSorting={{@sort}}
               @class='data-table__header-title'
             />
+            <AuDataTableThSortable
+              @field='description'
+              @label='beschrijving'
+              @currentSorting={{@sort}}
+              @class='data-table__header-title'
+            />
             <th class='snippet-list-table-select-column'>{{insert}}</th>
           </c.header>
           <c.body as |row|>
             <td>{{row.title}}</td>
+            <td>{{row.gemeente}}</td>
             <td>{{row.object}}</td>
+            <td>{{row.description}}</td>
             <td class='snippet-list-table-select-column'>
               <AuButton {{on 'click' (fn @onInsert row)}}>
                 {{insert}}

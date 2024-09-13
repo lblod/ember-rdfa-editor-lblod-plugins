@@ -286,7 +286,7 @@ export default class BesluitSampleController extends Controller {
         defaultTag: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG)[0],
       },
       aanvraag: {
-        endpoint: 'http://localhost/sparql',
+        endpoint: 'https://aanvraag.hackathon-5.s.redhost.be/sparql',
       },
     };
   }
