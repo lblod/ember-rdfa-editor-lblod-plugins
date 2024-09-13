@@ -58,9 +58,9 @@ export default class AanvraagModal extends Component<Signature> {
     try {
       const results = await fetchAanvragen({
         filter: {},
-        // endpoint: this.args.config.endpoint,
-        // abortSignal: abortController.signal,
-        // pagination: { pageNumber: this.pageNumber, pageSize: 200 },
+        endpoint: this.args.config.endpoint,
+        abortSignal: abortController.signal,
+        pagination: { pageNumber: this.pageNumber, pageSize: 200 },
       });
 
       return results;
