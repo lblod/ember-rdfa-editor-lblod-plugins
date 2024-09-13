@@ -68,9 +68,20 @@ export default class AanvraagInsert extends Component<Args> {
             __rdfaId: rdfaId,
             subject: aanvraag.uri,
           },
-          this.controller.schema.node('paragraph', {}, [
-            this.controller.schema.text(aanvraag.title),
-          ]),
+          [
+            this.controller.schema.node('paragraph', {}, [
+              this.controller.schema.text(aanvraag.title),
+            ]),
+            this.controller.schema.node('paragraph', {}, [
+              this.controller.schema.node(
+                'link',
+                {
+                  href: aanvraag.objectUri,
+                },
+                [this.controller.schema.text(aanvraag.object)],
+              ),
+            ]),
+          ],
         );
 
         return tr.replaceSelectionWith(node);

@@ -9,7 +9,10 @@ import {
   AanvraagResults,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/aanvraag-plugin';
 
-type Filter = { municipality?: string };
+type Filter = {
+  title?: string | null;
+  municipality?: string | null;
+};
 export type OrderBy =
   | 'label'
   | 'created-on'
@@ -19,7 +22,7 @@ export type OrderBy =
   | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
-const buildAanvraagCountQuery = ({ municipality }: Filter) => {
+const buildAanvraagCountQuery = ({ title }: Filter) => {
   return `
       PREFIX foaf: <http://xmlns.com/foaf/0.1/>
       PREFIX dcterms: <http://purl.org/dc/terms/>
@@ -37,8 +40,8 @@ const buildAanvraagCountQuery = ({ municipality }: Filter) => {
               foaf:name ?object ;
               dcterms:description ?description .
           ${
-            municipality
-              ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
+            title
+              ? `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(title.toLowerCase())}))`
               : ''
           }
       }
@@ -46,7 +49,7 @@ const buildAanvraagCountQuery = ({ municipality }: Filter) => {
 };
 
 const buildAanvraagFetchQuery = ({
-  filter: { municipality },
+  filter: { title },
   pagination: { pageSize, pageNumber },
 }: {
   filter: Filter;
@@ -69,8 +72,8 @@ const buildAanvraagFetchQuery = ({
               foaf:name ?object ;
               dcterms:description ?description .
           ${
-            municipality
-              ? `FILTER (CONTAINS(LCASE(?gemeente), "${municipality.toLowerCase()}"))`
+            title
+              ? `FILTER (CONTAINS(LCASE(?title), "${title.toLowerCase()}"))`
               : ''
           }
       }

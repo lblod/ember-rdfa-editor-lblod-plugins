@@ -35,7 +35,7 @@ const TableView: TemplateOnlyComponent<Args> = <template>
         @noDataMessage={{t 'common.search.no-results'}}
         @sort={{@sort}}
         @page={{@pageNumber}}
-        @size={{25}}
+        @size={{200}}
         as |t|
       >
         <t.menu as |menu|>

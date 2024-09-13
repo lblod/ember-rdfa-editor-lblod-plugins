@@ -57,7 +57,7 @@ export default class AanvraagModal extends Component<Signature> {
     const abortController = new AbortController();
     try {
       const results = await fetchAanvragen({
-        filter: {},
+        filter: { title: this.searchText },
         endpoint: this.args.config.endpoint,
         abortSignal: abortController.signal,
         pagination: { pageNumber: this.pageNumber, pageSize: 200 },
