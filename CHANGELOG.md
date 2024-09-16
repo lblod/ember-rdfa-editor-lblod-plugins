@@ -1,5 +1,23 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.5.0
+
+### Minor Changes
+
+- [#475](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/475) [`9e2ef89`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9e2ef899e5e35ed755e4af90ca15096b3957222b) Thanks [@elpoelma](https://github.com/elpoelma)! - Introduction of `auto-resizing-text-area` component
+
+- [#475](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/475) [`a9df4e7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a9df4e7546a1414e2fe8551a8ca21fd5b9f64898) Thanks [@elpoelma](https://github.com/elpoelma)! - mandatee-table plugin: replace `input` element by `textarea` element for entering mandatee table titles
+
+- [#462](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/462) [`dfb349e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/dfb349ef83c97eac2c498eaac392dbfd6ab77a4b) Thanks [@piemonkey](https://github.com/piemonkey)! - Allow resources imported into snippet placeholders to be linked to resources in the document
+
+### Patch Changes
+
+- [#475](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/475) [`36b0005`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/36b00054624de60a1c51f7617a83c61594f4074b) Thanks [@elpoelma](https://github.com/elpoelma)! - Support newlines in mandatee table titles (using the `white-space: pre-line` rule)
+
+- [#475](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/475) [`127c6e2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/127c6e256d7fb3a0e1912bfc0a56a2f4d08d1837) Thanks [@elpoelma](https://github.com/elpoelma)! - Use `h6` to represent mandatee table title
+
+- [#473](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/473) [`1c9dd11`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1c9dd1119670ee35f04f8a0d0677e6a4230acd84) Thanks [@piemonkey](https://github.com/piemonkey)! - Add error handling to lmb-plugin
+
 ## 22.4.1
 
 ### Patch Changes

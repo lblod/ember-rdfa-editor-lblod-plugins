@@ -1,18 +1,27 @@
 import { Command, ProseParser, Schema, Slice } from '@lblod/ember-rdfa-editor';
-import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
-import { v4 as uuidv4 } from 'uuid';
+import { createSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import { type ImportedResourceMap } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  isSome,
+  unwrap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+
 export interface InsertSnippetCommandArgs {
   content: string;
   title: string;
   assignedSnippetListsIds: string[];
+  importedResources?: ImportedResourceMap;
   range?: { start: number; end: number };
 }
+
 const insertSnippet = ({
   content,
   title,
   assignedSnippetListsIds,
+  importedResources,
   range,
 }: InsertSnippetCommandArgs): Command => {
   return (state, dispatch) => {
@@ -22,8 +31,6 @@ const insertSnippet = ({
 
     const schema = state.schema;
 
-    const parser = ProseParser.fromSchema(schema);
-
     let tr = state.tr;
     const insertRange = range ?? {
       start: state.selection.from,
@@ -31,23 +38,33 @@ const insertSnippet = ({
     };
 
     if (documentDiv) {
-      const node = schema.node(
-        'snippet',
-        {
-          assignedSnippetListsIds,
-          title: title,
-          subject: `http://data.lblod.info/snippets/${uuidv4()}`,
-        },
-        htmlToDoc(content, {
-          schema,
-          parser,
-        }).content,
-      );
+      const [snippet, importedTriples] = createSnippet({
+        schema: state.schema,
+        content,
+        title,
+        snippetListIds: assignedSnippetListsIds,
+        importedResources,
+      });
+
+      const addImportedResourceProperties = Object.values(
+        importedResources ?? {},
+      )
+        .map((linked) => {
+          const newProperties =
+            (isSome(linked) && importedTriples.get(linked)) || [];
+          return newProperties.map((newProp) =>
+            addPropertyToNode({
+              resource: unwrap(linked),
+              property: newProp,
+            }),
+          );
+        })
+        .flat();
 
       tr = transactionCombinator(
         state,
-        tr.replaceRangeWith(insertRange.start, insertRange.end, node),
-      )([recalculateNumbers]).transaction;
+        tr.replaceRangeWith(insertRange.start, insertRange.end, snippet),
+      )([recalculateNumbers, ...addImportedResourceProperties]).transaction;
     } else {
       const slice = createSliceFromElement(parsed, schema);
       tr = transactionCombinator(

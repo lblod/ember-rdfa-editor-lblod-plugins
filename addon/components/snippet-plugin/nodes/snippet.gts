@@ -1,21 +1,26 @@
 import Component from '@glimmer/component';
 import { on } from '@ember/modifier';
-import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
-import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import SearchModal from '../search-modal';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import t from 'ember-intl/helpers/t';
+import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
-import { PNode, ProseParser, Selection, Slice } from '@lblod/ember-rdfa-editor';
+import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
+import {
+  type PNode,
+  ProseParser,
+  type Selection,
+  Slice,
+} from '@lblod/ember-rdfa-editor';
+import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import {
   EXT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import t from 'ember-intl/helpers/t';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
@@ -112,6 +117,7 @@ export default class SnippetNode extends Component<Signature> {
         content,
         title,
         assignedSnippetListsIds,
+        importedResources: this.node.attrs.importedResources,
         range: { start, end },
       }),
     );

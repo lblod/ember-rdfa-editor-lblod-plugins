@@ -1,4 +1,5 @@
 import { warn } from '@ember/debug';
+import { isNone, type Option } from './option';
 
 const STRING_CAPITALIZE_REGEXP = /(^|\/)([a-z\u00C0-\u024F])/g;
 export function capitalize(value: string): string {
@@ -47,4 +48,16 @@ export function isNumber(value: string | number | null | undefined): boolean {
       value !== undefined &&
       value !== '')
   );
+}
+
+export function jsonParse<T = unknown>(json: Option<string>): T | undefined {
+  if (isNone(json)) {
+    return undefined;
+  }
+  try {
+    return JSON.parse(json);
+  } catch (err) {
+    console.warn('unable to parse JSON', json, err);
+    return undefined;
+  }
 }

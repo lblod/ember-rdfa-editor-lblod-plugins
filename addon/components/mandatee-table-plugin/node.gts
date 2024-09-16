@@ -44,7 +44,7 @@ export default class MandateeTableNode extends Component<Sig> {
           class='au-u-margin-left-tiny au-u-margin-right-tiny'
         />
         <div>
-          <strong>{{this.title}}</strong>
+          <h6 class='say-mandatee-table__title'>{{this.title}}</h6>
           <p>
             {{this.warning}}
           </p>
