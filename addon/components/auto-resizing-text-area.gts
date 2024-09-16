@@ -38,8 +38,6 @@ export default class AutoResizingTextArea extends Component<Sig> {
       @error={{@error}}
       @warning={{@warning}}
       ...attributes
-    >
-      {{yield}}
-    </AuTextarea>
+    >{{yield}}</AuTextarea>
   </template>
 }
