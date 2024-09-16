@@ -36,13 +36,16 @@
       </mc.sidebar>
       <mc.content @scroll={{true}}>
         <div class='worship-modal--list-container'>
-          <LmbPlugin::List
-            @error={{this.error}}
-            @services={{this.servicesResource}}
-            @sort={{this.sort}}
-            @setSort={{this.setSort}}
-            @insert={{@onInsert}}
-          />
+          {{#if this.error}}
+            <Common::Search::AlertLoadError @error={{this.error}} />
+          {{else}}
+            <LmbPlugin::List
+              @services={{this.servicesResource}}
+              @sort={{this.sort}}
+              @setSort={{this.setSort}}
+              @insert={{@onInsert}}
+            />
+          {{/if}}
         </div>
         {{#if this.servicesResource.value.totalCount}}
           {{#let
