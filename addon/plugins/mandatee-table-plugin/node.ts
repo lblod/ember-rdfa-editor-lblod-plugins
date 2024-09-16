@@ -35,7 +35,11 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           'data-say-mandatee-table-title': title,
           class: 'say-mandatee-table-node',
         },
-        ['p', { class: 'say-mandatee-table-header' }, ['strong', {}, title]],
+        [
+          'div',
+          { class: 'say-mandatee-table-header' },
+          ['h6', { class: 'say-mandatee-table__title' }, title],
+        ],
         [
           'div',
           {

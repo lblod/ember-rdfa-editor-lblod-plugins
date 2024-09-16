@@ -4,12 +4,12 @@ import { action } from '@ember/object';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
-import AuInput from '@appuniversum/ember-appuniversum/components/au-input';
 import PowerSelect from 'ember-power-select/components/power-select';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { on } from '@ember/modifier';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import t from 'ember-intl/helpers/t';
+import AutoResizingTextArea from '../auto-resizing-text-area';
 
 interface Sig {
   Args: { controller: SayController; supportedTags: string[] };
@@ -105,15 +105,15 @@ export default class ConfigureMandateeTableComponent extends Component<Sig> {
             <AuLabel for='mandatee-table-title-input'>
               {{t 'mandatee-table-plugin.configure.title-input.label'}}
             </AuLabel>
-            <AuInput
+            <AutoResizingTextArea
               @width='block'
               placeholder={{t
                 'mandatee-table-plugin.configure.title-input.placeholder'
               }}
               id='mandatee-table-title-input'
-              value={{this.nodeTitle}}
+              class='mandatee-table-title-input'
               {{on 'input' this.updateNodeTitle}}
-            />
+            >{{this.nodeTitle}}</AutoResizingTextArea>
           </AuFormRow>
         </c.content>
       </AuCard>
