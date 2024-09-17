@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.5.1
+
+### Patch Changes
+
+- [`ca26f13`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ca26f1373d1fb14f8cc998d4a91a6f1a10d48049) Thanks [@piemonkey](https://github.com/piemonkey)! - Correct peer dependency editor version as it shouldn't change on a non-major release
+
 ## 22.5.0
 
 ### Minor Changes
