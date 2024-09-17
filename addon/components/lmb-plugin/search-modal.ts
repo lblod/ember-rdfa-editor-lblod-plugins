@@ -42,10 +42,17 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     return fetchMandatees({ endpoint: this.args.config.endpoint });
   });
 
+  // TODO Either make this a trackedFunction or do filtering on the query and correctly pass an
+  // AbortController
   search = restartableTask(async () => {
     // Can't do what I want, so if the user modifies the filter before resolving the query will run again
     if (!this.fetchData.lastComplete) {
-      await this.fetchData.perform();
+      try {
+        await this.fetchData.perform();
+      } catch (err) {
+        console.error('Got an error fetching LMB data', err);
+        this.error = err;
+      }
     }
 
     if (!this.fetchData.lastComplete?.value) return;

@@ -3,21 +3,26 @@ import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
+import { type OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { type ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
+import {
+  type ImportedResourceMap,
+  type SnippetList,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { importedResourcesFromSnippetLists } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
 
-const updateSnippetPlaceholder = ({
+export const updateSnippetPlaceholder = ({
   resource,
   oldSnippetProperties,
-  newSnippetIds,
+  newSnippetLists,
+  oldImportedResources,
   node,
-  snippetNames,
 }: {
   resource: string;
   oldSnippetProperties: OutgoingTriple[];
-  newSnippetIds: string[];
+  newSnippetLists: SnippetList[];
+  oldImportedResources: ImportedResourceMap;
   node: ResolvedPNode;
-  snippetNames: string[];
 }): Command => {
   return (state, dispatch) => {
     if (dispatch) {
@@ -36,14 +41,14 @@ const updateSnippetPlaceholder = ({
         });
       });
 
-      newSnippetIds.forEach((snippetId) => {
+      newSnippetLists.forEach((list) => {
         newState = state.apply(transaction);
 
         addProperty({
           resource,
           property: {
             predicate: SNIPPET_LIST_RDFA_PREDICATE.prefixed,
-            object: sayDataFactory.namedNode(getSnippetUriFromId(snippetId)),
+            object: sayDataFactory.namedNode(getSnippetUriFromId(list.id)),
           },
           transaction,
         })(newState, (newTransaction) => {
@@ -53,7 +58,15 @@ const updateSnippetPlaceholder = ({
       transaction = transaction.setNodeAttribute(
         node.pos,
         'listNames',
-        snippetNames,
+        newSnippetLists.map((list) => list.label),
+      );
+      transaction = transaction.setNodeAttribute(
+        node.pos,
+        'importedResources',
+        importedResourcesFromSnippetLists(
+          newSnippetLists,
+          oldImportedResources,
+        ),
       );
 
       dispatch(transaction);
@@ -61,5 +74,3 @@ const updateSnippetPlaceholder = ({
     return true;
   };
 };
-
-export default updateSnippetPlaceholder;

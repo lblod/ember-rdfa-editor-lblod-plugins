@@ -6,7 +6,8 @@
     (t 'snippet-plugin.snippet-list.modal.table.select')
     (t 'snippet-plugin.snippet-list.modal.subtitle')
     (t 'snippet-plugin.snippet-list.modal.search.label')
-    as |list created select subtitle search|
+    (t 'snippet-plugin.snippet-list.modal.table.imported-resources')
+    as |list created select subtitle search imported|
   }}
     <AuDataTable
       @content={{this.snippetLists}}
@@ -39,6 +40,7 @@
             @currentSorting={{@sort}}
             @class='data-table__header-title'
           />
+          <th>{{imported}}</th>
           <AuDataTableThSortable
             @field='createdOn'
             @label={{created}}
@@ -55,6 +57,7 @@
             />
           </td>
           <td>{{row.label}}</td>
+          <td>{{row.importedResources}}</td>
           <td class='snippet-list-table-created-column'>{{row.createdOn}}</td>
         </c.body>
       </t.content>

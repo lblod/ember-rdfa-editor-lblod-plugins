@@ -19,8 +19,8 @@ import { trackedReset } from 'tracked-toolbox';
 interface Signature {
   Args: {
     config: SnippetPluginConfig;
-    onSaveSnippetListIds: (listIds: string[], listNames: string[]) => void;
-    assignedSnippetListsIds: string[];
+    onSaveSnippetLists: (lists: SnippetList[]) => void;
+    assignedSnippetListsIds: string[] | undefined;
     closeModal: () => void;
     open: boolean;
   };
@@ -37,7 +37,9 @@ export default class SnippetListModalComponent extends Component<Signature> {
   @tracked error: unknown;
 
   @trackedReset('args.assignedSnippetListsIds')
-  assignedSnippetListsIds: string[] = [...this.args.assignedSnippetListsIds];
+  assignedSnippetListsIds: string[] = [
+    ...(this.args.assignedSnippetListsIds ?? []),
+  ];
 
   get config() {
     return this.args.config;
@@ -50,15 +52,10 @@ export default class SnippetListModalComponent extends Component<Signature> {
 
   @action
   saveAndClose() {
-    const snippetListNames: string[] = this.snippetListResource.value
-      ?.filter((snippetList) =>
-        this.assignedSnippetListsIds.includes(snippetList.id as string),
-      )
-      .map((snippetList) => snippetList.label) as string[];
-    this.args.onSaveSnippetListIds(
-      this.assignedSnippetListsIds,
-      snippetListNames,
+    const snippetLists = this.snippetListResource.value?.filter((snippetList) =>
+      this.assignedSnippetListsIds.includes(snippetList.id),
     );
+    this.args.onSaveSnippetLists(snippetLists || []);
     this.args.closeModal();
     // Clear selection for next time
     this.assignedSnippetListsIds = [];

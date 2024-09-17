@@ -11,7 +11,7 @@ import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 
 interface Args {
   config: SnippetPluginConfig;
-  assignedSnippetListsIds: string[];
+  assignedSnippetListsIds: string[] | undefined;
   closeModal: () => void;
   open: boolean;
   onInsert: (content: string, title: string) => void;
