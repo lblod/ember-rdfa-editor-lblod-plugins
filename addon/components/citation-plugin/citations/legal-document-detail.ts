@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { CalendarIcon } from '@appuniversum/ember-appuniversum/components/icons/calendar';
 import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
 import { LinkExternalIcon } from '@appuniversum/ember-appuniversum/components/icons/link-external';

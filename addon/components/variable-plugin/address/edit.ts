@@ -11,7 +11,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { trackedReset } from 'tracked-toolbox';
-import { trackedTask } from 'ember-resources/util/ember-concurrency';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';

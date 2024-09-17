@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { restartableTask, timeout } from 'ember-concurrency';
 import perform from 'ember-concurrency/helpers/perform';
 import { trackedReset } from 'tracked-toolbox';
-import { trackedTask } from 'ember-resources/util/ember-concurrency';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { service } from '@ember/service';
 import { on } from '@ember/modifier';
 import type { SafeString } from '@ember/template/-private/handlebars';
