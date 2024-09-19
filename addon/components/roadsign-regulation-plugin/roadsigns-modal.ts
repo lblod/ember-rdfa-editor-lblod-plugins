@@ -24,12 +24,8 @@ import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/pl
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
-  'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept';
-const ROAD_MARKING_URI =
-  'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept';
-const TRAFFIC_LIGHT_URI =
-  'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept';
-const measureTypes = [SIGN_TYPE_URI, ROAD_MARKING_URI, TRAFFIC_LIGHT_URI];
+  'https://data.vlaanderen.be/ns/mobiliteit#Verkeerstekenconcept';
+const measureTypes = [SIGN_TYPE_URI];
 
 type Option = {
   label: string;
@@ -214,13 +210,11 @@ export default class RoadsignRegulationCard extends Component<Args> {
           },
           {
             label: 'Wegmarkeringen',
-            value:
-              'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept',
+            value: SIGN_TYPE_URI,
           },
           {
             label: 'Verkeerslichten',
-            value:
-              'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept',
+            value: SIGN_TYPE_URI,
           },
         ],
       },
@@ -283,7 +277,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
         <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
         <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
           sign.uri
-        }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
+        }" typeof="mobiliteit:Verkeerstekenconcept" style="display:flex;align-items:center;">
           <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${
             sign.code
           }</span>
@@ -303,7 +297,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
                               measure.uri
                             }">&nbsp;</span>
                             <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-                            <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
+                            <span style="display:none;" property="mobiliteit:variabeleSignalisatie" value="${measure.temporal.toString()}"></span>
                               <div property="dct:description">
                                 ${html}
                                 <p>Dit wordt aangeduid door verkeerstekens:</p>

@@ -11,7 +11,7 @@ import { optionMapOr, unwrap } from '../utils/option';
 
 const PREFIXES = `
 PREFIX ex: <http://example.org#>
-PREFIX lblodMobiliteit: <http://data.lblod.info/vocabularies/mobiliteit/>
+PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 PREFIX sh: <http://www.w3.org/ns/shacl#>
 PREFIX oslo: <http://data.vlaanderen.be/ns#>
@@ -94,21 +94,10 @@ export default class RoadsignRegistryService extends Service {
       const query = `
       SELECT DISTINCT ?signUri ?signCode WHERE {
         ?measure ext:relation/ext:concept ?signUri.
-        ?signUri a ${type ? `<${type}>` : '?signType'};
+        ?signUri a ${type ? `<${type}>` : '<https://data.vlaanderen.be/ns/mobiliteit#Verkeerstekenconcept>'};
           skos:prefLabel ?signCode;
           ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
         ${category ? `?signUri org:classification <${category}>` : ''}
-        ${
-          type
-            ? ''
-            : `
-          VALUES ?signType {
-            <https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept>
-            <https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept>
-            <https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept>
-          }
-        `
-        }
         ${signFilter}
         ${
           codeString
@@ -169,7 +158,7 @@ export default class RoadsignRegistryService extends Service {
             ext:variable ?name;
             ext:instructionVariable ?instructionVariable.
           ?instructionVariable ext:annotated ?annotatedTemplate;
-            ext:value ?template.
+            prov:value ?template.
           }
           `;
       const result = await this.executeQuery.perform(query, endpoint);
