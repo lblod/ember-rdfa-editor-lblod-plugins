@@ -36,7 +36,7 @@ export default class RoadsignRegistryService extends Service {
       `
     SELECT DISTINCT ?classificationUri ?classificationLabel  WHERE {
       ?measure ext:relation/ext:concept ?signUri.
-      ?signUri org:classification ?classificationUri.
+      ?signUri dct:type ?classificationUri.
       ?classificationUri a mobiliteit:Verkeersbordcategorie;
         skos:prefLabel ?classificationLabel.
     }
@@ -97,7 +97,7 @@ export default class RoadsignRegistryService extends Service {
         ?signUri a ${type ? `<${type}>` : '<https://data.vlaanderen.be/ns/mobiliteit#Verkeerstekenconcept>'};
           skos:prefLabel ?signCode;
           ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
-        ${category ? `?signUri org:classification <${category}>` : ''}
+        ${category ? `?signUri dct:type <${category}>` : ''}
         ${signFilter}
         ${
           codeString
@@ -151,12 +151,12 @@ export default class RoadsignRegistryService extends Service {
 
   fetchInstructionsForMeasure = task(
     async (uri: string, endpoint: string): Promise<Instruction[]> => {
-      const query = `SELECT ?name ?template ?annotatedTemplate
+      const query = `SELECT ?value ?template ?annotatedTemplate
            WHERE {
-            <${uri}> ext:template/ext:mapping ?mapping.
-          ?mapping ext:variableType 'instruction';
-            ext:variable ?name;
-            ext:instructionVariable ?instructionVariable.
+            <${uri}> mobiliteit:template/mobiliteit:variabele ?variable.
+          ?variable dct:type 'instruction';
+            rdfs:value ?value;
+            mobiliteit:template ?instructionVariable.
           ?instructionVariable ext:annotated ?annotatedTemplate;
             prov:value ?template.
           }
