@@ -23,11 +23,19 @@ export function variableAutofillerPlugin(config: AutofilledArgs): ProsePlugin {
     ) {
       const autofilledVariables: { node: PNode; pos: number }[] = [];
       if (undoDepth(oldState)) {
+        let isInsertSnippet = false;
+        for (let transaction of transactions) {
+          if (transaction.getMeta('insertSnippet')) {
+            isInsertSnippet = true;
+          }
+        }
+        if (!isInsertSnippet) return;
         changedDescendants(
           oldState.doc,
           newState.doc,
           0,
           (node: PNode, pos: number) => {
+            console.log(node);
             if (node.type.name === 'autofilled_variable') {
               autofilledVariables.push({ node, pos });
               return false;

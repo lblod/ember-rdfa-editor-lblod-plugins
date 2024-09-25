@@ -66,6 +66,7 @@ export default class SnippetInsertComponent extends Component<Args> {
 
     if (documentDiv) {
       return this.controller.withTransaction((tr: Transaction) => {
+        tr.setMeta('insertSnippet', true);
         return tr.replaceSelectionWith(
           this.controller.schema.node(
             'snippet',
