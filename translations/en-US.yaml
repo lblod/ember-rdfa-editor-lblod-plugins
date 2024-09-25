@@ -271,7 +271,7 @@ variable-plugin:
     nodeview-placeholder: Insert person
   autofill:
     autofillKey: Autofill Key
-    convertToString: Automatically convert to text
+    convertToString: Remove variable node on text insertion
     autofillKeyPlaceholder: Autofill Key
 
 table-of-contents-plugin:
