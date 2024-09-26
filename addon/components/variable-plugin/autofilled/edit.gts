@@ -13,7 +13,7 @@ import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
-
+import { trackedReset } from 'tracked-toolbox';
 type Args = {
   controller: SayController;
 };
@@ -21,8 +21,30 @@ type Args = {
 export default class AutoFilledVariableInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked label?: string;
-  @tracked autofillKey?: string;
-  @tracked convertToString?: boolean;
+
+  // memo is the path to the trigger, which calls update
+  // see https://github.com/tracked-tools/tracked-toolbox?tab=readme-ov-file#trackedreset
+  // it's sort of badly explained in the docs, but it's a more generic version
+  // of localCopy, which we can't use here cause our derived state from the args
+  // is too complex to express as a string path
+  @trackedReset({
+    memo: 'args.controller.mainEditorState',
+    // using this as the first arg is special typescript syntax
+    // which allows you to explicitly type the this context, cause
+    // ts is not smart enough to know that
+    update(this: AutoFilledVariableInsertComponent) {
+      return this.convertToStringAttr;
+    },
+  })
+  convertToString: boolean = false;
+
+  @trackedReset({
+    memo: 'args.controller.mainEditorState',
+    update(this: AutoFilledVariableInsertComponent) {
+      return this.autofillKeyAttr;
+    },
+  })
+  autofillKey?: string;
 
   get selectedVariable() {
     const { selection } = this.controller.mainEditorState;
@@ -30,17 +52,19 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
       selection instanceof NodeSelection &&
       selection.node.type === this.controller.schema.nodes.autofilled_variable
     ) {
-      const node = selection.node;
-      this.autofillKey = node.attrs.autofillKey;
-      console.log(node.attrs.convertToString);
-      this.convertToString = node.attrs.convertToString === 'true';
       return {
         node: selection.node,
         pos: selection.from,
       };
     } else {
-      return;
+      return null;
     }
+  }
+  get autofillKeyAttr() {
+    return this.selectedVariable?.node.attrs.autofillKey;
+  }
+  get convertToStringAttr() {
+    return this.selectedVariable?.node.attrs.convertToString === 'true';
   }
 
   get showCard() {
