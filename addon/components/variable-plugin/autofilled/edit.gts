@@ -101,13 +101,27 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   @action
   edit() {
     if (this.selectedVariable) {
-      this.controller.withTransaction((tr) => {
-        const position = this.selectedVariable?.pos as number;
-        console.log(position);
-        tr.setNodeAttribute(position, 'autofillKey', this.autofillKey);
-        tr.setNodeAttribute(position, 'convertToString', this.convertToString);
-        return tr;
-      });
+      this.controller.withTransaction(
+        (tr) => {
+          const position = this.selectedVariable?.pos as number;
+          console.log(position);
+          tr.setNodeAttribute(position, 'autofillKey', this.autofillKey);
+          tr.setNodeAttribute(
+            position,
+            'convertToString',
+            this.convertToString ? 'true' : 'false',
+          );
+          return tr;
+        },
+        // because the variable pill contains a nested editor, when it's
+        // selected, the currentEditorView is the nested one. When you run
+        // withTransaction without the optional second argument, it defaults to using
+        // the current view.
+        //
+        // Here, we don't want that, cause we want to edit the outside node, not
+        // any node in the nested editor.
+        { view: this.controller.mainEditorView },
+      );
     }
   }
   <template>
