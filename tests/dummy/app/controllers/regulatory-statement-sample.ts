@@ -299,6 +299,8 @@ export default class RegulatoryStatementSampleController extends Controller {
         rdfaAware: true,
       },
       snippet: {
+        allowedContent:
+          'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
       },
       worship: {
