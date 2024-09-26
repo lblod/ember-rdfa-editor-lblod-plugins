@@ -75,6 +75,7 @@ export default class SnippetNode extends Component<Signature> {
     this.showModal = false;
   }
   openModal() {
+    this.controller.focus();
     this.showModal = true;
   }
   @action
@@ -166,7 +167,7 @@ export default class SnippetNode extends Component<Signature> {
     <div class='say-snippet-card'>
       <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
       <div class='say-snippet-content'>{{yield}}</div>
-      <div class='say-snippet-icons'>
+      <div class='say-snippet-icons' contenteditable='false'>
         <SnippetButton
           @icon={{SynchronizeIcon}}
           @helpText='snippet-plugin.snippet-node.change-fragment'
