@@ -3,15 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { NodeSelection, type SayController } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
-import {
-  DCT,
-  EXT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
