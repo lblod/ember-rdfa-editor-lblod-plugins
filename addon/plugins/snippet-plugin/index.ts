@@ -7,8 +7,11 @@ import {
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { SafeString } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 
+export const DEFAULT_CONTENT_STRING = 'block+';
+
 export type SnippetPluginConfig = {
   endpoint: string;
+  allowedContent?: string;
 };
 
 interface SnippetArgs {
