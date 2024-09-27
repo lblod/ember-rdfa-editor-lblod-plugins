@@ -329,6 +329,7 @@ snippet-plugin:
         select: Select
         list: List
         created: Created
+        imported-resources: Imported Resources
   snippet-node:
     change-fragment: Change Fragment
     remove-fragment: Remove Fragment

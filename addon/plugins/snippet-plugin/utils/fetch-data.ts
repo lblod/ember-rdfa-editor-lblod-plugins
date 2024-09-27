@@ -1,9 +1,10 @@
 import {
+  type BindingObject,
   executeCountQuery,
   executeQuery,
   sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { Snippet, SnippetList } from '../index';
+import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
 type Filter = { name?: string; assignedSnippetListIds?: string[] };
 export type OrderBy =
@@ -52,21 +53,21 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
       `;
 };
 
-const buildSnippetListCountQuery = ({ name }: Filter) => {
-  return `
-      PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-      SELECT (COUNT(?snippetLists) AS ?count)
-      WHERE {
-          ?snippetLists a ext:SnippetList;
-              skos:prefLabel ?label.
-          ${
-            name
-              ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
-              : ''
-          }
-      }
-      `;
-};
+// const buildSnippetListCountQuery = ({ name }: Filter) => {
+//   return `
+//       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+//       SELECT (COUNT(?snippetLists) AS ?count)
+//       WHERE {
+//           ?snippetLists a ext:SnippetList;
+//               skos:prefLabel ?label.
+//           ${
+//             name
+//               ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
+//               : ''
+//           }
+//       }
+//       `;
+// };
 
 const buildSnippetFetchQuery = ({
   filter: { name, assignedSnippetListIds },
@@ -141,11 +142,13 @@ const buildSnippetListFetchQuery = ({
         PREFIX pav: <http://purl.org/pav/>
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+        PREFIX say: <https://say.data.gift/ns/>
 
-        SELECT (?snippetLists as ?id) ?label ?createdOn WHERE {
+        SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
           ?snippetLists a ext:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
+          OPTIONAL { ?snippetLists say:snippetImportedResource ?importedResources . }
           ${
             name
               ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
@@ -214,34 +217,47 @@ export const fetchSnippetLists = async ({
   filter: Filter;
   orderBy: OrderBy;
 }) => {
-  const totalCount = await executeCountQuery({
-    endpoint,
-    query: buildSnippetListCountQuery(filter),
-    abortSignal,
-  });
+  // We don't currently use this count, so skip the query, but we'll need it if we make pagination
+  // work for the snippet list selector
+  // const totalCount = await executeCountQuery({
+  //   endpoint,
+  //   query: buildSnippetListCountQuery(filter),
+  //   abortSignal,
+  // });
 
-  if (totalCount === 0) {
-    return { totalCount, results: [] };
-  }
+  // if (totalCount === 0) {
+  //   return { totalCount, results: [] };
+  // }
 
-  const queryResult = await executeQuery<{
-    id: { value: string };
-    label: { value: string };
-    createdOn: { value: string };
-  }>({
+  const queryResult = await executeQuery<BindingObject<SnippetListArgs>>({
     endpoint,
     query: buildSnippetListFetchQuery({ filter, orderBy }),
     abortSignal,
   });
 
-  const results = queryResult.results.bindings.map(
-    (binding) =>
-      new SnippetList({
+  const results = [
+    ...queryResult.results.bindings
+      .map((binding) => ({
         id: binding.id?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
-      }),
-  );
+        importedResources: binding.importedResources?.value,
+      }))
+      .reduce((mappedResults, bindings) => {
+        const existing = mappedResults.get(bindings.id) ?? {
+          ...bindings,
+          importedResources: [],
+        };
+        if (bindings.importedResources) {
+          existing.importedResources = [
+            ...existing.importedResources,
+            bindings.importedResources,
+          ];
+        }
+        return mappedResults.set(bindings.id, existing);
+      }, new Map<string, SnippetListArgs>())
+      .values(),
+  ].map((slArgs) => new SnippetList(slArgs));
 
-  return { totalCount, results };
+  return { results };
 };

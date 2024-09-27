@@ -18,30 +18,43 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { getSnippetUriFromId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { jsonParse } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import {
+  getSnippetUriFromId,
+  type ImportedResourceMap,
+  type SnippetList,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
-export function createSnippetPlaceholder(
-  listIds: string[],
-  listNames: string[],
-  schema: Schema,
+export function importedResourcesFromSnippetLists(
+  lists: SnippetList[],
+  existing: ImportedResourceMap = {},
 ) {
-  const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
+  return Object.fromEntries<ImportedResourceMap[string]>(
+    lists
+      .flatMap((list) => list.importedResources)
+      // Null is important (in place of undefined) in order to keep the unlinked entries
+      .map((res) => [res, existing[res] ?? null]),
+  );
+}
 
+export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
+  const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
-    listNames,
+    listNames: lists.map((list) => list.label),
     subject: mappingResource,
     properties: [
       {
         predicate: RDF('type').full,
         object: sayDataFactory.namedNode(EXT('SnippetPlaceholder').full),
       },
-      ...listIds.map((listId) => ({
+      ...lists.map((list) => ({
         predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-        object: sayDataFactory.namedNode(getSnippetUriFromId(listId)),
+        object: sayDataFactory.namedNode(getSnippetUriFromId(list.id)),
       })),
     ],
+    importedResources: importedResourcesFromSnippetLists(lists),
   });
 }
 
@@ -56,6 +69,7 @@ const emberNodeConfig: EmberNodeConfig = {
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
     listNames: { default: [] },
+    importedResources: { default: {} },
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
@@ -67,6 +81,7 @@ const emberNodeConfig: EmberNodeConfig = {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
         'data-list-names': (node.attrs.listNames as string[]).join(','),
+        'data-imported-resources': JSON.stringify(node.attrs.importedResources),
       },
       content: [
         'text',
@@ -93,6 +108,9 @@ const emberNodeConfig: EmberNodeConfig = {
           return {
             ...rdfaAttrs,
             listNames: node.getAttribute('data-list-names')?.split(','),
+            importedResources: jsonParse(
+              node.getAttribute('data-imported-resources'),
+            ),
           };
         }
         return false;
