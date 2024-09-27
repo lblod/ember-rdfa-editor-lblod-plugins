@@ -24,7 +24,7 @@ export function variableAutofillerPlugin(config: AutofilledArgs): ProsePlugin {
       const autofilledVariables: { node: PNode; pos: number }[] = [];
       if (undoDepth(oldState)) {
         let isInsertSnippet = false;
-        for (let transaction of transactions) {
+        for (const transaction of transactions) {
           if (transaction.getMeta('insertSnippet')) {
             isInsertSnippet = true;
           }

@@ -134,7 +134,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
         @onChange={{this.updateConvertToString}}
       >
         {{t 'variable-plugin.autofill.convertToString'}}
-      </AuCheckbox>t
+      </AuCheckbox>
     </AuFormRow>
     <AuButton {{on 'click' this.insert}}>
       {{t 'variable-plugin.button'}}
