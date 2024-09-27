@@ -148,6 +148,7 @@ export function createAndInsertSnippet(
   insertTransactionGenerator: (tr: Transaction, snippet: PNode) => Transaction,
 ) {
   return createSnippetArgs.controller.withTransaction((tr, state) => {
+    tr.setMeta('insertSnippet', true);
     const [snippet, importedTriples] = createSnippet(createSnippetArgs);
     const result = transactionCombinator<boolean>(
       state,
