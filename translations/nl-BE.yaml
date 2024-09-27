@@ -258,6 +258,8 @@ variable:
     label: adres
   person:
     label: persoon
+  autofilled:
+    label: automatisch ingevuld
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

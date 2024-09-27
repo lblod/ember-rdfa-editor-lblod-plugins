@@ -254,6 +254,8 @@ variable:
     label: address
   person:
     label: person
+  autofilled:
+    label: autofilled
 variable-plugin:
   insert-variable: Insert variable
   button: Insert

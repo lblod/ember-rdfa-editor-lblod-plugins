@@ -48,11 +48,13 @@ const parseDOM = [
           return false;
         }
         const autofillKey = node.dataset.autofillKey;
-        const convertToString = node.dataset.convertToString;
+        const convertToString = node.dataset.convertToString === 'true';
+        const initialized = node.dataset.initialized === 'true';
         return {
           ...attrs,
           autofillKey,
           convertToString,
+          initialized,
         };
       }
 
@@ -78,7 +80,8 @@ const parseDOM = [
         const variableInstance = parseVariableInstance(node);
         const label = parseLabel(node);
         const autofillKey = node.dataset.autofillKey;
-        const convertToString = node.dataset.convertToString;
+        const convertToString = node.dataset.convertToString === 'true';
+        const initialized = node.dataset.initialized === 'true';
         return {
           __rdfaId: uuidv4(),
           subject: mappingSubject,
@@ -110,6 +113,7 @@ const parseDOM = [
           ],
           autofillKey,
           convertToString,
+          initialized,
         };
       }
 
@@ -127,6 +131,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       ...node.attrs,
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
+      'data-initialized': node.attrs.initialized,
     },
     content: 0,
   });
@@ -151,6 +156,9 @@ const emberNodeConfig: EmberNodeConfig = {
       default: '',
     },
     convertToString: {
+      default: false,
+    },
+    initialized: {
       default: false,
     },
   },

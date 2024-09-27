@@ -64,7 +64,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
     return this.selectedVariable?.node.attrs.autofillKey;
   }
   get convertToStringAttr() {
-    return this.selectedVariable?.node.attrs.convertToString === 'true';
+    return this.selectedVariable?.node.attrs.convertToString;
   }
 
   get showCard() {
@@ -104,12 +104,11 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
       this.controller.withTransaction(
         (tr) => {
           const position = this.selectedVariable?.pos as number;
-          console.log(position);
           tr.setNodeAttribute(position, 'autofillKey', this.autofillKey);
           tr.setNodeAttribute(
             position,
             'convertToString',
-            this.convertToString ? 'true' : 'false',
+            this.convertToString,
           );
           return tr;
         },

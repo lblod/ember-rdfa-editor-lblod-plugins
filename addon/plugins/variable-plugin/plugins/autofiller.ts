@@ -35,8 +35,10 @@ export function variableAutofillerPlugin(config: AutofilledArgs): ProsePlugin {
           newState.doc,
           0,
           (node: PNode, pos: number) => {
-            console.log(node);
-            if (node.type.name === 'autofilled_variable') {
+            if (
+              node.type.name === 'autofilled_variable' &&
+              !node.attrs.initialized
+            ) {
               autofilledVariables.push({ node, pos });
               return false;
             }
@@ -45,7 +47,10 @@ export function variableAutofillerPlugin(config: AutofilledArgs): ProsePlugin {
         );
       } else {
         newState.doc.descendants((node: PNode, pos: number) => {
-          if (node.type.name === 'autofilled_variable') {
+          if (
+            node.type.name === 'autofilled_variable' &&
+            !node.attrs.initialized
+          ) {
             autofilledVariables.push({ node, pos });
             return false;
           }
@@ -83,14 +88,11 @@ function autofillVariable(
   if (value) {
     const nodeSize = node.nodeSize;
     const valueNode = schema.text(value);
-    if (
-      node.attrs.convertToString === true ||
-      node.attrs.convertToString === 'true'
-    ) {
+    if (node.attrs.convertToString === true) {
       tr.replaceRangeWith(pos, pos + nodeSize, valueNode);
-      return;
     } else {
       tr.replaceRangeWith(pos + 1, pos + nodeSize - 1, valueNode);
+      tr.setNodeAttribute(pos, 'initialized', true);
     }
   }
 }

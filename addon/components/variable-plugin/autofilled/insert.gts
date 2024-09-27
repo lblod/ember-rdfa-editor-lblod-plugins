@@ -68,7 +68,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
       locale: this.documentLanguage,
     });
 
-    const label = this.label ?? placeholder;
+    const label = this.label != '' ? this.label : placeholder;
     const node = this.schema.nodes.autofilled_variable.create(
       {
         subject: mappingSubject,
