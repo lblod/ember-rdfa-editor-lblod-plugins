@@ -27,7 +27,7 @@ type Args = {
 
 export default class AutoFilledVariableInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
-  @tracked label?: string;
+  @tracked label: string = '';
   @tracked autofillKey?: string;
   @tracked convertToString?: boolean;
 
@@ -104,7 +104,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
         placeholderText: `Autofill ${this.autofillKey}`,
       }),
     );
-    this.label = undefined;
+    this.label = '';
 
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,
@@ -134,7 +134,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
         @onChange={{this.updateConvertToString}}
       >
         {{t 'variable-plugin.autofill.convertToString'}}
-      </AuCheckbox>
+      </AuCheckbox>t
     </AuFormRow>
     <AuButton {{on 'click' this.insert}}>
       {{t 'variable-plugin.button'}}
