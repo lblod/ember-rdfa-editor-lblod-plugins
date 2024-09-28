@@ -25,7 +25,10 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { createAndInsertSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
+import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 
 interface ButtonSig {
   Args: {
@@ -93,7 +96,10 @@ export default class SnippetNode extends Component<Signature> {
     const position = this.args.getPos();
     if (position !== undefined) {
       this.controller.withTransaction((tr) => {
-        return tr.deleteRange(position, position + this.node.nodeSize);
+        return transactionCombinator(
+          this.controller.mainEditorState,
+          tr.deleteRange(position, position + this.node.nodeSize),
+        )([recalculateNumbers]).transaction;
       });
     }
   }
@@ -121,46 +127,32 @@ export default class SnippetNode extends Component<Signature> {
   }
   @action
   onInsert(content: string, title: string) {
-    let rangeStart = 0;
-    let rangeEnd = 0;
-    if (this.args.getPos() === undefined) return;
+    this.closeModal();
+    const assignedSnippetListsIds = this.node.attrs.assignedSnippetListsIds;
+    let start = 0;
+    let end = 0;
+    const pos = this.args.getPos();
+    if (isNone(pos)) {
+      return;
+    }
     if (this.mode === 'add') {
       // Add new snippet
-      rangeStart = (this.args.getPos() as number) + this.node.nodeSize;
-      rangeEnd = (this.args.getPos() as number) + this.node.nodeSize;
+      start = pos + this.node.nodeSize;
+      end = pos + this.node.nodeSize;
     } else {
       //Replace current snippet
-      rangeStart = this.args.getPos() as number;
-      rangeEnd = (this.args.getPos() as number) + this.node.nodeSize;
+      start = pos;
+      end = pos + this.node.nodeSize;
     }
-
-    const domParser = new DOMParser();
-    const parsed = domParser.parseFromString(content, 'text/html').body;
-    const documentDiv = parsed.querySelector('div[data-say-document="true"]');
-
-    this.closeModal();
-
-    if (documentDiv) {
-      return createAndInsertSnippet(
-        {
-          controller: this.controller,
-          content,
-          title,
-          snippetListIds: this.node.attrs.assignedSnippetListsIds,
-          importedResources: this.node.attrs.importedResources,
-        },
-        (tr, snippet) => tr.replaceRangeWith(rangeStart, rangeEnd, snippet),
-      );
-    }
-
-    this.controller.withTransaction((tr) =>
-      tr.replaceRange(
-        rangeStart,
-        rangeEnd,
-        this.createSliceFromElement(parsed),
-      ),
+    this.controller.doCommand(
+      insertSnippet({
+        content,
+        title,
+        assignedSnippetListsIds,
+        importedResources: this.node.attrs.importedResources,
+        range: { start, end },
+      }),
     );
-    this.closeModal();
   }
 
   <template>
