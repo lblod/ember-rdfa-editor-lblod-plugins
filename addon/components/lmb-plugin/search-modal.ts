@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
 import { restartableTask } from 'ember-concurrency';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';

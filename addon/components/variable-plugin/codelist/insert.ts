@@ -9,7 +9,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { v4 as uuidv4 } from 'uuid';
 import {
   DCT,
