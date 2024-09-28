@@ -1,5 +1,16 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 23.0.0
+
+### Major Changes
+
+- [#478](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/478) [`b3cf324`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b3cf324e6b959a50ba354e1563b04a0e12f41f67) Thanks [@abeforgit](https://github.com/abeforgit)! - Run recalculate numbers after inserting a snippet
+
+### Minor Changes
+
+- [#480](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/480) [`789180f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/789180fde786000756c2880dca9591866bf7132f) Thanks [@piemonkey](https://github.com/piemonkey)! - Internal: update to latest ember-resources 7.0.2. Requires an upgrade only if consumer app uses
+  ember dependency-lint to maintain matching versions.
+
 ## 22.5.2
 
 ### Patch Changes
