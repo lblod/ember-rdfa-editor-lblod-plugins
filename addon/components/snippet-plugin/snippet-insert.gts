@@ -11,8 +11,8 @@ import {
   Slice,
 } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { createAndInsertSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { type ImportedResourceMap } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import SearchModal from './search-modal';
 
 interface Sig {
@@ -56,29 +56,15 @@ export default class SnippetInsertComponent extends Component<Sig> {
 
   @action
   onInsert(content: string, title: string) {
-    const domParser = new DOMParser();
-    const parsed = domParser.parseFromString(content, 'text/html').body;
-    const documentDiv = parsed.querySelector('div[data-say-document="true"]');
-
     this.closeModal();
-    const assignedSnippetListProperties = this.args.snippetListProperties;
-
-    if (documentDiv && assignedSnippetListProperties) {
-      return createAndInsertSnippet(
-        {
-          controller: this.controller,
-          content,
-          title,
-          snippetListIds: assignedSnippetListProperties.listIds,
-          importedResources: assignedSnippetListProperties.importedResources,
-        },
-        (tr, snippet) => tr.replaceSelectionWith(snippet),
-      );
-    } else {
-      return this.controller.withTransaction((tr) =>
-        tr.replaceSelection(this.createSliceFromElement(parsed)),
-      );
-    }
+    this.controller.doCommand(
+      insertSnippet({
+        content,
+        title,
+        assignedSnippetListsIds: this.args.snippetListProperties?.listIds || [],
+        importedResources: this.args.snippetListProperties?.importedResources,
+      }),
+    );
   }
 
   get disabled() {

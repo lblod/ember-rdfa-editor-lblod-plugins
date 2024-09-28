@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 22.5.2
+
+### Patch Changes
+
+- [#476](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/476) [`6de71f8`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6de71f8b57e1cf5297445e288e0221707f1fbc7c) Thanks [@piemonkey](https://github.com/piemonkey)! - Add configuration option to snippet plugin to set the allowed content
+
+- [#479](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/479) [`4755750`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/47557501ed745a274cc062bd59234736bc278ded) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix bug where snippet hover buttons were not always functional on Chrome
+
 ## 22.5.1
 
 ### Patch Changes

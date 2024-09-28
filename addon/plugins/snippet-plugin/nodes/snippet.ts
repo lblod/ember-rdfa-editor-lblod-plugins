@@ -5,8 +5,7 @@ import {
   type PNode,
   ProseParser,
   rdfaAttrSpec,
-  type SayController,
-  type Transaction,
+  type Schema,
 } from '@lblod/ember-rdfa-editor';
 import {
   renderRdfaAware,
@@ -23,8 +22,6 @@ import {
   type EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import SnippetComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/snippet';
 import {
   EXT,
@@ -37,10 +34,6 @@ import {
   type ImportedResourceMap,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import {
-  isSome,
-  unwrap,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 function outgoingFromBacklink(
   backlink: IncomingTriple,
@@ -65,11 +58,11 @@ function outgoingFromBacklink(
 }
 
 interface CreateSnippetArgs {
-  controller: SayController;
+  schema: Schema;
   content: string;
   title: string;
   snippetListIds: string[];
-  importedResources: ImportedResourceMap;
+  importedResources?: ImportedResourceMap;
 }
 
 /**
@@ -79,7 +72,7 @@ interface CreateSnippetArgs {
  * properties that these resources will have after the snippet is inserted into the document.
  **/
 export function createSnippet({
-  controller,
+  schema,
   content,
   title,
   snippetListIds,
@@ -94,13 +87,12 @@ export function createSnippet({
     }
   }
   // Create the new node
-  const parser = ProseParser.fromSchema(controller.schema);
+  const parser = ProseParser.fromSchema(schema);
   const contentAsNode = htmlToDoc(replacedContent, {
-    schema: controller.schema,
+    schema,
     parser,
-    editorView: controller.mainEditorView,
   });
-  const node = controller.schema.node(
+  const node = schema.node(
     'snippet',
     {
       assignedSnippetListsIds: snippetListIds,
@@ -112,7 +104,7 @@ export function createSnippet({
   );
   // Find all the new backlinks that refer to imported resources and generate OutgoingLinks for them
   const importedTriples: Map<string, OutgoingTriple[]> = new Map();
-  if (Object.keys(importedResources).length > 0) {
+  if (Object.keys(importedResources ?? {}).length > 0) {
     contentAsNode.descendants((node) => {
       const backlinks = node.attrs.backlinks as IncomingTriple[] | undefined;
       if (backlinks && backlinks.length > 0) {
@@ -134,41 +126,6 @@ export function createSnippet({
   }
 
   return [node, importedTriples];
-}
-
-/**
- * Creates a Snippet node wrapping the given content while allowing for further snippets to be added
- * or removed.
- * Takes the same arguments object as creating a snippet but also a generator that produces a
- * transaction that inserts the snippet into the document, so that this can be done in a way
- * specific to the situation.
- **/
-export function createAndInsertSnippet(
-  createSnippetArgs: CreateSnippetArgs,
-  insertTransactionGenerator: (tr: Transaction, snippet: PNode) => Transaction,
-) {
-  return createSnippetArgs.controller.withTransaction((tr, state) => {
-    const [snippet, importedTriples] = createSnippet(createSnippetArgs);
-    const result = transactionCombinator<boolean>(
-      state,
-      insertTransactionGenerator(tr, snippet),
-    )(
-      Object.values(createSnippetArgs.importedResources)
-        .map((linked) => {
-          const newProperties =
-            (isSome(linked) && importedTriples.get(linked)) || [];
-          return newProperties.map((newProp) =>
-            addPropertyToNode({
-              resource: unwrap(linked),
-              property: newProp,
-            }),
-          );
-        })
-        .flat(),
-    );
-
-    return result.transaction;
-  });
 }
 
 const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
