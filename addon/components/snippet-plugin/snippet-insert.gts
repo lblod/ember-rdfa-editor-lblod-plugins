@@ -75,10 +75,11 @@ export default class SnippetInsertComponent extends Component<Sig> {
         (tr, snippet) => tr.replaceSelectionWith(snippet),
       );
     } else {
-      return this.controller.withTransaction((tr) =>
+      return this.controller.withTransaction((tr) => {
         tr.setMeta('insertSnippet', true);
-        tr.replaceSelection(this.createSliceFromElement(parsed)),
-      );
+        tr.replaceSelection(this.createSliceFromElement(parsed));
+        return tr;
+      });
     }
   }
 

@@ -1,4 +1,3 @@
-import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-native-input';
 import t from 'ember-intl/helpers/t';

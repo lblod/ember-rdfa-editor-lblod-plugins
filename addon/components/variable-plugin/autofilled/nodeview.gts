@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import {
-  DecorationSet,
   NodeSelection,
   PNode,
   ProsePlugin,
