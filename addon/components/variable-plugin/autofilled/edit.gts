@@ -14,13 +14,35 @@ import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { trackedReset } from 'tracked-toolbox';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory/data-factory';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import LabelInput from '../utils/label-input';
+import {
+  ContentLiteralTerm,
+  SayLiteral,
+  SayNamedNode,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
 type Args = {
   controller: SayController;
 };
 
+type nodeProperty =
+  | {
+      predicate: string;
+      object: SayNamedNode<string>;
+    }
+  | {
+      predicate: string;
+      object: SayLiteral;
+    }
+  | {
+      predicate: string;
+      object: ContentLiteralTerm;
+    };
+
 export default class AutoFilledVariableInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
-  @tracked label?: string;
 
   // memo is the path to the trigger, which calls update
   // see https://github.com/tracked-tools/tracked-toolbox?tab=readme-ov-file#trackedreset
@@ -46,6 +68,14 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   })
   autofillKey?: string;
 
+  @trackedReset({
+    memo: 'args.controller.mainEditorState',
+    update(this: AutoFilledVariableInsertComponent) {
+      return this.labelAttr;
+    },
+  })
+  label!: string;
+
   get selectedVariable() {
     const { selection } = this.controller.mainEditorState;
     if (
@@ -65,6 +95,11 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   }
   get convertToStringAttr() {
     return this.selectedVariable?.node.attrs.convertToString;
+  }
+  get labelAttr() {
+    if (!this.selectedVariable) return '';
+    return getOutgoingTriple(this.selectedVariable.node.attrs, EXT('label'))
+      ?.object.value;
   }
 
   get showCard() {
@@ -110,6 +145,16 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
             'convertToString',
             this.convertToString,
           );
+          const oldProperties = this.selectedVariable?.node.attrs.properties;
+          const newProperties = oldProperties.filter(
+            (property: nodeProperty) =>
+              property.predicate !== EXT('label').full,
+          );
+          newProperties.push({
+            predicate: EXT('label').full,
+            object: sayDataFactory.literal(this.label || ''),
+          });
+          tr.setNodeAttribute(position, 'properties', newProperties);
           return tr;
         },
         // because the variable pill contains a nested editor, when it's
@@ -140,6 +185,12 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
           </AuHeading>
         </c.header>
         <c.content>
+          <AuFormRow>
+            <LabelInput
+              @label={{this.label}}
+              @updateLabel={{this.updateLabel}}
+            />
+          </AuFormRow>
           <AuFormRow>
             <AuLabel for='autofill_key'>
               {{t 'variable-plugin.autofill.autofillKey'}}
