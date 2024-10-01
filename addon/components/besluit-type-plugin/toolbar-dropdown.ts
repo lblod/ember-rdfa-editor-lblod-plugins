@@ -7,7 +7,7 @@ import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';

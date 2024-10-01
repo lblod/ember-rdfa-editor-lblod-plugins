@@ -2,7 +2,7 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';

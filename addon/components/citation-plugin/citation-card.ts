@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { capitalize } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import {
   Option,
   unwrap,

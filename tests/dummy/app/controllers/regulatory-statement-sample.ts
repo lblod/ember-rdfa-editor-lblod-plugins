@@ -310,7 +310,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       snippet: {
         allowedContent:
           'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
