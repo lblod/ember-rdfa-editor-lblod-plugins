@@ -7,6 +7,15 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { dependencySatisfies, macroCondition } from '@embroider/macros';
+import { importSync } from '@embroider/macros';
+const HIDE_FOR_PUBLISH_ATTR = macroCondition(
+  dependencySatisfies('@lblod/ember-rdfa-editor', '>=10.6.0'),
+)
+  ? // @ts-expect-error TS/glint doesn't seem to treat this as an import
+    importSync('@lblod/ember-rdfa-editor/utils/strip-html-for-publish')
+      .HIDE_FOR_PUBLISH_ATTR
+  : 'data-say-hide-for-publish';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
@@ -30,6 +39,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
         {
           typeof: EXT('TemplateComment').prefixed,
           class: 'say-template-comment',
+          [HIDE_FOR_PUBLISH_ATTR]: true,
         },
         ['p', {}, ['strong', {}, heading]],
         ['div', { property: EXT('content').prefixed }, 0],
