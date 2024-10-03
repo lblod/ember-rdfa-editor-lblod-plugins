@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 23.1.0
+
+### Minor Changes
+
+- [#483](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/483) [`2ac7d9a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2ac7d9ae70a885fa7747df6e3a18eece2b06e910) Thanks [@piemonkey](https://github.com/piemonkey)! - Add property to hide template comments while publishing
+
 ## 23.0.0
 
 ### Major Changes
