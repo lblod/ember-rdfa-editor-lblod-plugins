@@ -5,6 +5,7 @@ import {
 import {
   executeCountQuery,
   executeQuery,
+  sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import {
   LegalDocument,
@@ -91,9 +92,9 @@ export async function fetchVlaamseCodexLegalDocuments({
         ${words
           .map(
             (word) =>
-              `FILTER (CONTAINS(LCASE(?title), "${replaceDiacriticsInWord(
-                word,
-              ).toLowerCase()}"))`,
+              `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(
+                replaceDiacriticsInWord(word).toLowerCase(),
+              )}))`,
           )
           .join('\n')}
         ${excludeAdaptationFilters.join('\n')}
@@ -116,9 +117,9 @@ export async function fetchVlaamseCodexLegalDocuments({
           ${words
             .map(
               (word) =>
-                `FILTER (CONTAINS(LCASE(?title), "${replaceDiacriticsInWord(
-                  word,
-                ).toLowerCase()}"))`,
+                `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(
+                  replaceDiacriticsInWord(word).toLowerCase(),
+                )}))`,
             )
             .join('\n')}
           OPTIONAL { ?expressionUri eli:date_publication ?publicationDate . }

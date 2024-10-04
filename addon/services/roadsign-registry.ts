@@ -8,6 +8,7 @@ import Sign from '../models/sign';
 import { IBindings } from 'fetch-sparql-endpoint';
 import dataFactory from '@rdfjs/data-model';
 import { optionMapOr, unwrap } from '../utils/option';
+import { sparqlEscapeString } from '../utils/sparql-helpers';
 
 const PREFIXES = `
 PREFIX ex: <http://example.org#>
@@ -112,7 +113,7 @@ export default class RoadsignRegistryService extends Service {
         ${signFilter}
         ${
           codeString
-            ? `FILTER(CONTAINS(LCASE(?signCode), "${codeString.toLowerCase()}"))`
+            ? `FILTER(CONTAINS(LCASE(?signCode), ${sparqlEscapeString(codeString.toLowerCase())}))`
             : ''
         }
       }

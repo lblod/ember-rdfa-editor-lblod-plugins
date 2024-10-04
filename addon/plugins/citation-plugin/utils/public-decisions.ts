@@ -1,6 +1,7 @@
 import {
   executeCountQuery,
   executeQuery,
+  sparqlEscapeString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import {
   dateValue,
@@ -43,18 +44,18 @@ const getFilters = ({
   }
 
   const governmentNameFilter = filter.governmentName?.trim()
-    ? `FILTER (CONTAINS(LCASE(?administrativeUnitName), "${replaceDiacriticsInWord(
-        filter.governmentName?.trim(),
-      ).toLowerCase()}"))`
+    ? `FILTER (CONTAINS(LCASE(?administrativeUnitName), ${sparqlEscapeString(
+        replaceDiacriticsInWord(filter.governmentName?.trim()).toLowerCase(),
+      )}))`
     : '';
 
   return `
     ${words
       .map(
         (word) =>
-          `FILTER (CONTAINS(LCASE(?decisionTitle), "${replaceDiacriticsInWord(
-            word,
-          ).toLowerCase()}"))`,
+          `FILTER (CONTAINS(LCASE(?decisionTitle), ${sparqlEscapeString(
+            replaceDiacriticsInWord(word).toLowerCase(),
+          )}))`,
       )
       .join('\n')}
     ${documentDateFilter.join('\n')}

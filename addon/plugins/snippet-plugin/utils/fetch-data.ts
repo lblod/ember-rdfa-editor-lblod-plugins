@@ -38,7 +38,7 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
           ${
             name
-              ? `FILTER (CONTAINS(LCASE(?title), "${name.toLowerCase()}"))`
+              ? `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(name.toLowerCase())}))`
               : ''
           }
           ${
@@ -102,7 +102,7 @@ const buildSnippetFetchQuery = ({
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
           ${
             name
-              ? `FILTER (CONTAINS(LCASE(?title), "${name.toLowerCase()}"))`
+              ? `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(name.toLowerCase())}))`
               : ''
           }
           ${
@@ -155,7 +155,7 @@ const buildSnippetListFetchQuery = ({
           OPTIONAL { ?snippetLists say:snippetImportedResource ?importedResources . }
           ${
             name
-              ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
+              ? `FILTER (CONTAINS(LCASE(?label), ${sparqlEscapeString(name.toLowerCase())}))`
               : ''
           }
         }
