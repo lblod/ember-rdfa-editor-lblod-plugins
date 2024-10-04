@@ -14,15 +14,19 @@ import {
   SnippetPluginConfig,
   SnippetList,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { trackedReset } from 'tracked-toolbox';
+import { localCopy, trackedReset } from 'tracked-toolbox';
 
 interface Signature {
   Args: {
     config: SnippetPluginConfig;
-    onSaveSnippetLists: (lists: SnippetList[]) => void;
+    onSaveSnippetLists: (
+      lists: SnippetList[],
+      allowMultipleSnippets: boolean,
+    ) => void;
     assignedSnippetListsIds: string[] | undefined;
     closeModal: () => void;
     open: boolean;
+    allowMultipleSnippets?: boolean;
   };
 }
 
@@ -41,12 +45,20 @@ export default class SnippetListModalComponent extends Component<Signature> {
     ...(this.args.assignedSnippetListsIds ?? []),
   ];
 
+  @localCopy('args.allowMultipleSnippets') allowMultipleSnippets = false;
+
+  @action
+  handleMultipleSnippetsCheckbox(checked: boolean) {
+    this.allowMultipleSnippets = checked;
+  }
+
   get config() {
     return this.args.config;
   }
 
   @action
   closeModal() {
+    this.allowMultipleSnippets = this.args.allowMultipleSnippets ?? false;
     this.args.closeModal();
   }
 
@@ -55,7 +67,10 @@ export default class SnippetListModalComponent extends Component<Signature> {
     const snippetLists = this.snippetListResource.value?.filter((snippetList) =>
       this.assignedSnippetListsIds.includes(snippetList.id),
     );
-    this.args.onSaveSnippetLists(snippetLists || []);
+    this.args.onSaveSnippetLists(
+      snippetLists || [],
+      this.allowMultipleSnippets,
+    );
     this.args.closeModal();
     // Clear selection for next time
     this.assignedSnippetListsIds = [];

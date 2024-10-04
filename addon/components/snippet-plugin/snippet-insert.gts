@@ -23,6 +23,7 @@ interface Sig {
       | { listIds: string[]; importedResources: ImportedResourceMap }
       | undefined;
     disabled?: boolean;
+    allowMultipleSnippets?: boolean;
   };
 }
 
@@ -63,6 +64,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
         title,
         assignedSnippetListsIds: this.args.snippetListProperties?.listIds || [],
         importedResources: this.args.snippetListProperties?.importedResources,
+        allowMultipleSnippets: this.args.allowMultipleSnippets,
       }),
     );
   }

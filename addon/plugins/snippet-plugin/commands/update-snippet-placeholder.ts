@@ -17,12 +17,14 @@ export const updateSnippetPlaceholder = ({
   newSnippetLists,
   oldImportedResources,
   node,
+  allowMultipleSnippets = false,
 }: {
   resource: string;
   oldSnippetProperties: OutgoingTriple[];
   newSnippetLists: SnippetList[];
   oldImportedResources: ImportedResourceMap;
   node: ResolvedPNode;
+  allowMultipleSnippets?: boolean;
 }): Command => {
   return (state, dispatch) => {
     if (dispatch) {
@@ -67,6 +69,11 @@ export const updateSnippetPlaceholder = ({
           newSnippetLists,
           oldImportedResources,
         ),
+      );
+      transaction = transaction.setNodeAttribute(
+        node.pos,
+        'allowMultipleSnippets',
+        allowMultipleSnippets,
       );
 
       dispatch(transaction);

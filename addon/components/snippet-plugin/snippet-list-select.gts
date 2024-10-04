@@ -59,12 +59,16 @@ export default class SnippetListSelect extends Component<Signature> {
     );
   }
 
+  get allowMultipleSnippets(): boolean {
+    return this.args.node.value.attrs.allowMultipleSnippets as boolean;
+  }
+
   get imported(): ImportedResourceMap {
     return this.args.node.value.attrs['importedResources'];
   }
 
   @action
-  onSaveSnippetLists(lists: SnippetList[]) {
+  onSaveSnippetLists(lists: SnippetList[], allowMultipleSnippets: boolean) {
     if (this.currentResource) {
       this.args.controller?.doCommand(
         updateSnippetPlaceholder({
@@ -73,6 +77,7 @@ export default class SnippetListSelect extends Component<Signature> {
           newSnippetLists: lists,
           oldImportedResources: this.imported,
           node: this.args.node,
+          allowMultipleSnippets,
         }),
         {
           view: this.args.controller.mainEditorView,
@@ -96,6 +101,7 @@ export default class SnippetListSelect extends Component<Signature> {
         @config={{@config}}
         @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
         @onSaveSnippetLists={{this.onSaveSnippetLists}}
+        @allowMultipleSnippets={{this.allowMultipleSnippets}}
         @open={{this.showModal}}
         @closeModal={{this.closeModal}}
       />

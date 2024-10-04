@@ -63,6 +63,7 @@ interface CreateSnippetArgs {
   title: string;
   snippetListIds: string[];
   importedResources?: ImportedResourceMap;
+  allowMultipleSnippets?: boolean;
 }
 
 /**
@@ -77,6 +78,7 @@ export function createSnippet({
   title,
   snippetListIds,
   importedResources,
+  allowMultipleSnippets,
 }: CreateSnippetArgs): [PNode, Map<string, OutgoingTriple[]>] {
   // Replace instances of linked to uris with the resources that exist in the outer document.
   let replacedContent = content;
@@ -99,6 +101,7 @@ export function createSnippet({
       title,
       subject: `http://data.lblod.info/snippets/${uuidv4()}`,
       importedResources,
+      allowMultipleSnippets,
     },
     contentAsNode.content,
   );
@@ -151,6 +154,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
     importedResources: { default: {} },
     title: { default: '' },
     config: { default: options },
+    allowMultipleSnippets: { default: false },
   },
   component: SnippetComponent,
   content: options.allowedContent || DEFAULT_CONTENT_STRING,
@@ -165,6 +169,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         ).join(','),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
+        'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
       },
       content: 0,
     });
@@ -187,6 +192,8 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
               node.getAttribute('data-imported-resources'),
             ),
             title: node.getAttribute('data-snippet-title'),
+            allowMultipleSnippets:
+              node.dataset.allowMultipleSnippets === 'true',
           };
         }
         return false;

@@ -330,6 +330,7 @@ snippet-plugin:
         list: List
         created: Created
         imported-resources: Imported Resources
+      multi-snippet-toggle: Allow multi-snippet selection
   snippet-node:
     change-fragment: Change Fragment
     remove-fragment: Remove Fragment
