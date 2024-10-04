@@ -17,7 +17,7 @@ export type OrderBy =
 type Pagination = { pageNumber: number; pageSize: number };
 
 const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
-  return `
+  return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
@@ -25,26 +25,25 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
       PREFIX prov: <http://www.w3.org/ns/prov#>
       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+      PREFIX say: <https://say.data.gift/ns/>
 
-      SELECT (COUNT(?publishedSnippetVersion) AS ?count)
+      SELECT (COUNT(?snippet) AS ?count)
       WHERE {
-          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
-                             pav:hasCurrentVersion ?publishedSnippetVersion ;
-                             ext:fromSnippetList ?fromSnippetList .
-          ?fromSnippetList mu:uuid ?fromSnippetListId .
-          ?publishedSnippetVersion dct:title ?title ;
-               ext:editorDocumentContent ?content ;
-               pav:createdOn ?createdOn .
-          OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
+          ?snippet a say:Snippet;
+                   pav:hasCurrentVersion ?snippetVersion;
+                   ^say:hasSnippet ?snippetList.
+          ?snippetList mu:uuid ?snippetListId.
+          ?snippetVersion dct:title ?title.
+          OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
           ${
             name
-              ? `FILTER (CONTAINS(LCASE(?title), "${name.toLowerCase()}"))`
+              ? `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(name.toLowerCase())}))`
               : ''
           }
           ${
             assignedSnippetListIds && assignedSnippetListIds.length
-              ? `FILTER (?fromSnippetListId IN (${assignedSnippetListIds
+              ? `FILTER (?snippetListId IN (${assignedSnippetListIds
                   .map((from) => sparqlEscapeString(from))
                   .join(', ')}))`
               : ''
@@ -76,7 +75,7 @@ const buildSnippetFetchQuery = ({
   filter: Filter;
   pagination: Pagination;
 }) => {
-  return `
+  return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
@@ -84,32 +83,37 @@ const buildSnippetFetchQuery = ({
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
       PREFIX prov: <http://www.w3.org/ns/prov#>
       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+      PREFIX say: <https://say.data.gift/ns/>
 
       SELECT DISTINCT ?title ?content ?createdOn
       WHERE {
-          ?publishedSnippetContainer a ext:PublishedSnippetContainer ;
-                             pav:hasCurrentVersion ?publishedSnippetVersion ;
-                             ext:fromSnippetList ?fromSnippetList .
-          ?fromSnippetList mu:uuid ?fromSnippetListId .
-          ?publishedSnippetVersion dct:title ?title ;
-               ext:editorDocumentContent ?content ;
-               pav:createdOn ?createdOn .
+          ?snippet a say:Snippet;
+                   pav:hasCurrentVersion ?snippetVersion;
+                   pav:createdOn ?createdOn;
+                   ^say:hasSnippet ?snippetList.
+          OPTIONAL {
+            ?snippet schema:position ?position.
+          }
+          ?snippetList mu:uuid ?snippetListId;
+                       pav:createdOn ?snippetListCreatedOn.
+          ?snippetVersion dct:title ?title ;
+                          ext:editorDocumentContent ?content.
+          OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
+          FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
           ${
             name
-              ? `FILTER (CONTAINS(LCASE(?title), "${name.toLowerCase()}"))`
+              ? `FILTER (CONTAINS(LCASE(?title), ${sparqlEscapeString(name.toLowerCase())}))`
               : ''
           }
           ${
             assignedSnippetListIds && assignedSnippetListIds.length
-              ? `FILTER (?fromSnippetListId IN (${assignedSnippetListIds
+              ? `FILTER (?snippetListId IN (${assignedSnippetListIds
                   .map((from) => sparqlEscapeString(from))
                   .join(', ')}))`
               : ''
           }
-          OPTIONAL { ?publishedSnippetVersion schema:validThrough ?validThrough. }
-          FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
       }
-      ORDER BY DESC(?createdOn) LIMIT ${pageSize} OFFSET ${
+      ORDER BY DESC(?snippetListCreatedOn) ASC(?position) DESC(?createdOn) LIMIT ${pageSize} OFFSET ${
         pageNumber * pageSize
       }
       `;
@@ -138,20 +142,19 @@ const buildSnippetListFetchQuery = ({
   filter: Filter;
   orderBy: OrderBy;
 }) => {
-  return `
+  return /* sparql */ `
         PREFIX pav: <http://purl.org/pav/>
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-        PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
         PREFIX say: <https://say.data.gift/ns/>
 
         SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
-          ?snippetLists a ext:SnippetList;
+          ?snippetLists a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
           OPTIONAL { ?snippetLists say:snippetImportedResource ?importedResources . }
           ${
             name
-              ? `FILTER (CONTAINS(LCASE(?label), "${name.toLowerCase()}"))`
+              ? `FILTER (CONTAINS(LCASE(?label), ${sparqlEscapeString(name.toLowerCase())}))`
               : ''
           }
         }
