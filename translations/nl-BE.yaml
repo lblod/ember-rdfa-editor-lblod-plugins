@@ -277,7 +277,7 @@ variable-plugin:
     nodeview-placeholder: Voeg persoon in
   autofill:
     autofillKey: Sleutelwaarde
-    convertToString: Variabele node verwijderen bij tekst invoegen
+    convertToString: Vervang variabele door platte tekst bij invoegen
     autofillKeyPlaceholder: Sleutelwaarde
 dummy:
   validation-card:
