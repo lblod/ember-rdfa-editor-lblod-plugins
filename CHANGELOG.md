@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.0.0
+
+### Major Changes
+
+- [#482](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/482) [`8c46ded`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8c46deddb0ab3d156b27fb555709e6489f647ced) Thanks [@elpoelma](https://github.com/elpoelma)! - Adjust snippet queries to work with new snippet data-model
+
+### Minor Changes
+
+- [#472](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/472) [`a114436`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a114436ce7b0a7a4f2fca9faf494729169554dbd) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add autofill variable
+
+- [#484](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/484) [`14e8c57`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/14e8c5746b7674dfa3e0d968d4ce16c5855ffff3) Thanks [@elpoelma](https://github.com/elpoelma)! - Add option for enabling/disabling multi-snippet insertion
+
 ## 23.1.0
 
 ### Minor Changes
