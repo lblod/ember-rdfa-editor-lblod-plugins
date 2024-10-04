@@ -276,7 +276,7 @@ variable-plugin:
     card-title: Persoon invoegen
     nodeview-placeholder: Voeg persoon in
   autofill:
-    autofillKey: Autovultoets
+    autofillKey: Sleutelwaarde
     convertToString: Variabele node verwijderen bij tekst invoegen
     autofillKeyPlaceholder: Autovultoets
 dummy:
