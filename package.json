@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "23.0.0",
+  "version": "23.1.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -55,6 +55,7 @@
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.28.3",
     "@curvenote/prosemirror-utils": "^1.0.5",
+    "@embroider/macros": "^1.16.5",
     "@lblod/marawa": "0.8.0-beta.6",
     "@rdfjs/data-model": "^2.0.2",
     "@rdfjs/dataset": "^2.0.2",
