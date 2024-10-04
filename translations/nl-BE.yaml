@@ -329,6 +329,7 @@ snippet-plugin:
         list: Lijst
         created: Aangemaakt op
         imported-resources: Ingevoerde Middelen
+      multi-snippet-toggle: Meerkeuze-fragmentselectie
   snippet-node:
     change-fragment: Fragment vervangen
     remove-fragment: Fragment verwijderen

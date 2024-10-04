@@ -31,20 +31,31 @@
           @border='top'
           @size='large'
           @nowrap={{true}}
-          @reverse={{true}}
+          class='au-u-flex--vertical-center'
+          as |Group|
         >
-          <AuButtonGroup>
-            <AuButton @skin='secondary' {{on 'click' this.closeModal}}>
-              {{t 'snippet-plugin.snippet-list.modal.button.cancel'}}
-            </AuButton>
-            <AuButton
-              @skin='primary'
-              {{on 'click' this.saveAndClose}}
-              @disabled={{@onSaveSnippetLists.isRunning}}
+          <Group>
+            <AuCheckbox
+              @checked={{this.allowMultipleSnippets}}
+              @onChange={{this.handleMultipleSnippetsCheckbox}}
             >
-              {{t 'snippet-plugin.snippet-list.modal.button.update'}}
-            </AuButton>
-          </AuButtonGroup>
+              {{t 'snippet-plugin.snippet-list.modal.multi-snippet-toggle'}}
+            </AuCheckbox>
+          </Group>
+          <Group>
+            <AuButtonGroup>
+              <AuButton @skin='secondary' {{on 'click' this.closeModal}}>
+                {{t 'snippet-plugin.snippet-list.modal.button.cancel'}}
+              </AuButton>
+              <AuButton
+                @skin='primary'
+                {{on 'click' this.saveAndClose}}
+                @disabled={{@onSaveSnippetLists.isRunning}}
+              >
+                {{t 'snippet-plugin.snippet-list.modal.button.update'}}
+              </AuButton>
+            </AuButtonGroup>
+          </Group>
         </AuToolbar>
       </mc.content>
     </AuMainContainer>

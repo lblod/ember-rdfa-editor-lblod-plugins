@@ -71,12 +71,17 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
     return undefined;
   }
 
+  get allowMultipleSnippets() {
+    return this.args.node.value.attrs.allowMultipleSnippets as boolean;
+  }
+
   <template>
     <SnippetInsert
       @config={{@config}}
       @controller={{@controller}}
       @snippetListProperties={{this.snippetListProperties}}
       @disabled={{this.disableInsert}}
+      @allowMultipleSnippets={{this.allowMultipleSnippets}}
     />
   </template>
 }

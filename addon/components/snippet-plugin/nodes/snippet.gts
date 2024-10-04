@@ -81,10 +81,17 @@ export default class SnippetNode extends Component<Signature> {
     this.controller.focus();
     this.showModal = true;
   }
+
+  get allowMultipleSnippets() {
+    return this.node.attrs.allowMultipleSnippets as boolean;
+  }
+
   @action
   addFragment() {
-    this.mode = 'add';
-    this.openModal();
+    if (this.allowMultipleSnippets) {
+      this.mode = 'add';
+      this.openModal();
+    }
   }
   @action
   editFragment() {
@@ -151,6 +158,7 @@ export default class SnippetNode extends Component<Signature> {
         assignedSnippetListsIds,
         importedResources: this.node.attrs.importedResources,
         range: { start, end },
+        allowMultipleSnippets: this.allowMultipleSnippets,
       }),
     );
   }
@@ -173,12 +181,14 @@ export default class SnippetNode extends Component<Signature> {
           @isActive={{this.isActive}}
           class='say-snippet-remove-button'
         />
-        <SnippetButton
-          @icon={{AddIcon}}
-          @helpText='snippet-plugin.snippet-node.add-fragment'
-          @onClick={{this.addFragment}}
-          @isActive={{this.isActive}}
-        />
+        {{#if this.allowMultipleSnippets}}
+          <SnippetButton
+            @icon={{AddIcon}}
+            @helpText='snippet-plugin.snippet-node.add-fragment'
+            @onClick={{this.addFragment}}
+            @isActive={{this.isActive}}
+          />
+        {{/if}}
       </div>
 
     </div>

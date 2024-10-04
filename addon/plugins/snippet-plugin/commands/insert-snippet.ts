@@ -15,6 +15,7 @@ export interface InsertSnippetCommandArgs {
   assignedSnippetListsIds: string[];
   importedResources?: ImportedResourceMap;
   range?: { start: number; end: number };
+  allowMultipleSnippets?: boolean;
 }
 
 const insertSnippet = ({
@@ -23,6 +24,7 @@ const insertSnippet = ({
   assignedSnippetListsIds,
   importedResources,
   range,
+  allowMultipleSnippets,
 }: InsertSnippetCommandArgs): Command => {
   return (state, dispatch) => {
     const domParser = new DOMParser();
@@ -44,6 +46,7 @@ const insertSnippet = ({
         title,
         snippetListIds: assignedSnippetListsIds,
         importedResources,
+        allowMultipleSnippets,
       });
 
       const addImportedResourceProperties = Object.values(

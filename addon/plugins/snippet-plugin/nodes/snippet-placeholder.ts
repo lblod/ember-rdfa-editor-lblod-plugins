@@ -38,7 +38,11 @@ export function importedResourcesFromSnippetLists(
   );
 }
 
-export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
+export function createSnippetPlaceholder(
+  lists: SnippetList[],
+  schema: Schema,
+  allowMultipleSnippets?: boolean,
+) {
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
@@ -55,6 +59,7 @@ export function createSnippetPlaceholder(lists: SnippetList[], schema: Schema) {
       })),
     ],
     importedResources: importedResourcesFromSnippetLists(lists),
+    allowMultipleSnippets,
   });
 }
 
@@ -70,6 +75,7 @@ const emberNodeConfig: EmberNodeConfig = {
     typeof: { default: EXT('SnippetPlaceholder') },
     listNames: { default: [] },
     importedResources: { default: {} },
+    allowMultipleSnippets: { default: false },
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
@@ -82,6 +88,7 @@ const emberNodeConfig: EmberNodeConfig = {
         class: 'say-snippet-placeholder-node',
         'data-list-names': (node.attrs.listNames as string[]).join(','),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
+        'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
       },
       content: [
         'text',
@@ -111,6 +118,8 @@ const emberNodeConfig: EmberNodeConfig = {
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),
+            allowMultipleSnippets:
+              node.dataset.allowMultipleSnippets === 'true',
           };
         }
         return false;
