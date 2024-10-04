@@ -258,6 +258,8 @@ variable:
     label: adres
   person:
     label: persoon
+  autofilled:
+    label: automatisch ingevuld
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
@@ -273,6 +275,10 @@ variable-plugin:
   person:
     card-title: Persoon invoegen
     nodeview-placeholder: Voeg persoon in
+  autofill:
+    autofillKey: Sleutelwaarde
+    convertToString: Vervang variabele door platte tekst bij invoegen
+    autofillKeyPlaceholder: Sleutelwaarde
 dummy:
   validation-card:
     title: Documentvalidatie

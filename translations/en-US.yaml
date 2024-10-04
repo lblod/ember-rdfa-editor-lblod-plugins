@@ -254,6 +254,8 @@ variable:
     label: address
   person:
     label: person
+  autofilled:
+    label: autofilled
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
@@ -269,6 +271,10 @@ variable-plugin:
   person:
     card-title: Insert person
     nodeview-placeholder: Insert person
+  autofill:
+    autofillKey: Autofill Key
+    convertToString: Replace variable node with plain text on text insertion
+    autofillKeyPlaceholder: Autofill Key
 
 table-of-contents-plugin:
   title: Table of Contents

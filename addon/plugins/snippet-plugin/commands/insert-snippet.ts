@@ -60,7 +60,6 @@ const insertSnippet = ({
           );
         })
         .flat();
-
       tr = transactionCombinator(
         state,
         tr.replaceRangeWith(insertRange.start, insertRange.end, snippet),
@@ -72,6 +71,7 @@ const insertSnippet = ({
         tr.replaceRange(insertRange.start, insertRange.end, slice),
       )([recalculateNumbers]).transaction;
     }
+    tr.setMeta('insertSnippet', true);
     if (dispatch) {
       dispatch(tr);
     }
