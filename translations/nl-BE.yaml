@@ -278,7 +278,7 @@ variable-plugin:
   autofill:
     autofillKey: Sleutelwaarde
     convertToString: Variabele node verwijderen bij tekst invoegen
-    autofillKeyPlaceholder: Autovultoets
+    autofillKeyPlaceholder: Sleutelwaarde
 dummy:
   validation-card:
     title: Documentvalidatie
