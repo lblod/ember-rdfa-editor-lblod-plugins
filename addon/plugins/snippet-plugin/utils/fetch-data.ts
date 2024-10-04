@@ -17,7 +17,7 @@ export type OrderBy =
 type Pagination = { pageNumber: number; pageSize: number };
 
 const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
-  return `
+  return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
@@ -25,13 +25,13 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
       PREFIX prov: <http://www.w3.org/ns/prov#>
       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
-      PREFIX gn: <http://data.lblod.info/vocabularies/gelinktnotuleren/>
+      PREFIX say: <https://say.data.gift/ns/>
 
       SELECT (COUNT(?snippet) AS ?count)
       WHERE {
-          ?snippet a gn:Snippet;
+          ?snippet a say:Snippet;
                    pav:hasCurrentVersion ?snippetVersion;
-                   ^gn:hasSnippet ?snippetList.
+                   ^say:hasSnippet ?snippetList.
           ?snippetList mu:uuid ?snippetListId.
           ?snippetVersion dct:title ?title.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
@@ -75,7 +75,7 @@ const buildSnippetFetchQuery = ({
   filter: Filter;
   pagination: Pagination;
 }) => {
-  return `
+  return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
       PREFIX pav: <http://purl.org/pav/>
@@ -83,14 +83,14 @@ const buildSnippetFetchQuery = ({
       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
       PREFIX prov: <http://www.w3.org/ns/prov#>
       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
-      PREFIX gn: <http://data.lblod.info/vocabularies/gelinktnotuleren/>
+      PREFIX say: <https://say.data.gift/ns/>
 
       SELECT DISTINCT ?title ?content ?createdOn
       WHERE {
-          ?snippet a gn:Snippet;
+          ?snippet a say:Snippet;
                    pav:hasCurrentVersion ?snippetVersion;
                    pav:createdOn ?createdOn;
-                   ^gn:hasSnippet ?snippetList.
+                   ^say:hasSnippet ?snippetList.
           OPTIONAL {
             ?snippet schema:position ?position.
           }
@@ -142,14 +142,13 @@ const buildSnippetListFetchQuery = ({
   filter: Filter;
   orderBy: OrderBy;
 }) => {
-  return `
+  return /* sparql */ `
         PREFIX pav: <http://purl.org/pav/>
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-        PREFIX gn: <http://data.lblod.info/vocabularies/gelinktnotuleren/>
         PREFIX say: <https://say.data.gift/ns/>
 
         SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
-          ?snippetLists a gn:SnippetList;
+          ?snippetLists a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
           OPTIONAL { ?snippetLists say:snippetImportedResource ?importedResources . }
