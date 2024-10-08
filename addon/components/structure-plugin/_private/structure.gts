@@ -122,6 +122,17 @@ export default class Structure extends Component<Sig> {
     return this.node.attrs.hasTitle;
   }
 
+  get title() {
+    if (this.node.attrs.isOnlyArticle) {
+      const docLang = this.controller.mainEditorState.doc.attrs.lang;
+      return this.intl.t('structure-plugin.only-article-title', {
+        locale: docLang,
+      });
+    } else {
+      return `${this.structureName} ${this.number}.`;
+    }
+  }
+
   @action
   onAttrsUpdate() {
     if (this.titleAttr !== this.innerEditor?.htmlContent) {
@@ -161,8 +172,7 @@ export default class Structure extends Component<Sig> {
       <div class='say-structure__header' contenteditable='false'>
 
         {{#let (element this.headerTag) as |Tag|}}
-          <Tag>{{this.structureName}}
-            {{this.number}}.
+          <Tag>{{this.title}}
 
             {{#if this.hasTitle}}
               <span
