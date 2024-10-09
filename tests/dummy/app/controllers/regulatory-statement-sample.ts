@@ -209,13 +209,13 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   get codelistOptions() {
     return {
-      endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+      endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
     };
   }
 
   get locationOptions() {
     return {
-      endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+      endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
       zonalLocationCodelistUri:
         'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF',
       nonZonalLocationCodelistUri:
@@ -296,7 +296,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         },
       ],
       templateVariable: {
-        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
         zonalLocationCodelistUri:
           'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF',
         nonZonalLocationCodelistUri:
