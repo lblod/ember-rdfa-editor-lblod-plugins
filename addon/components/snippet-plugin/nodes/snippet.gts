@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
 import t from 'ember-intl/helpers/t';
-import { not } from 'ember-truth-helpers';
 import AuIcon, {
   type AuIconSignature,
 } from '@appuniversum/ember-appuniversum/components/au-icon';
@@ -41,20 +40,19 @@ interface ButtonSig {
 }
 
 const SnippetButton: TemplateOnlyComponent<ButtonSig> = <template>
-  <button
-    class='say-snippet-button {{if @isActive "" "say-snippet-hidden"}}'
-    disabled={{(not @isActive)}}
-    type='button'
-    {{on 'click' @onClick}}
-    ...attributes
-  >
-    {{#if @isActive}}
+  {{#if @isActive}}
+    <button
+      class='say-snippet-button'
+      type='button'
+      {{on 'click' @onClick}}
+      ...attributes
+    >
       <AuIcon @icon={{@icon}} @size='large' {{on 'click' @onClick}} />
       <div class='say-snippet-button-text'>
         {{t @helpText}}
       </div>
-    {{/if}}
-  </button>
+    </button>
+  {{/if}}
 </template>;
 
 interface Signature {
