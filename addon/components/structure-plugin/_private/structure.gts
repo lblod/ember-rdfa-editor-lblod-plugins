@@ -113,7 +113,12 @@ export default class Structure extends Component<Sig> {
   get structureName() {
     const docLang = this.controller.mainEditorState.doc.attrs.lang;
     if (this.displayStructureName) {
-      return getNameForStructureType(this.structureType, this.intl, docLang);
+      return getNameForStructureType(
+        this.structureType,
+        this.number,
+        this.intl,
+        docLang,
+      );
     } else {
       return '';
     }

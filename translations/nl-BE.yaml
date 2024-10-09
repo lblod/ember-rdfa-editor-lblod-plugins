@@ -15,6 +15,7 @@ structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
   move-down: '{structureName} naar beneden verplaatsen'
   only-article-title: Enig artikel
+  shortened-article: Art.
   types:
     article: Artikel
     title: Titel

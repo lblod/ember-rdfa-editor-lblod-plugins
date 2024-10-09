@@ -29,11 +29,16 @@ const rdfaAware = true;
 
 export function getNameForStructureType(
   structureType: StructureType,
+  number: number,
   intl?: IntlService,
   locale?: string,
 ) {
   if (intl?.exists(`structure-plugin.types.${structureType}`, locale)) {
-    return intl?.t(`structure-plugin.types.${structureType}`, { locale });
+    if (structureType === 'article' && number !== 1) {
+      return intl?.t(`structure-plugin.shortened-article`, { locale });
+    } else {
+      return intl?.t(`structure-plugin.types.${structureType}`, { locale });
+    }
   } else {
     return structureType;
   }
@@ -100,6 +105,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       const structureName = displayStructureName
         ? getNameForStructureType(
             structureType,
+            number,
             intlService,
             state.doc.attrs.lang,
           )
@@ -216,7 +222,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               structureType: node.dataset.sayStructureType,
               displayStructureName: node.dataset.sayDisplayStructureName,
               headerTag: node.dataset.sayHeaderTag,
-              number: node.dataset.sayNumber,
+              number: Number(node.dataset.sayNumber),
               isOnlyArticle,
               title,
             };
