@@ -29,11 +29,16 @@ const rdfaAware = true;
 
 export function getNameForStructureType(
   structureType: StructureType,
+  number: number,
   intl?: IntlService,
   locale?: string,
 ) {
   if (intl?.exists(`structure-plugin.types.${structureType}`, locale)) {
-    return intl?.t(`structure-plugin.types.${structureType}`, { locale });
+    if (structureType === 'article' && number !== 1) {
+      return intl?.t(`structure-plugin.shortened-article`, { locale });
+    } else {
+      return intl?.t(`structure-plugin.types.${structureType}`, { locale });
+    }
   } else {
     return structureType;
   }
@@ -71,6 +76,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       number: {
         default: 1,
       },
+      isOnlyArticle: {
+        default: false,
+      },
       structureType: {},
       displayStructureName: {
         default: false,
@@ -86,21 +94,29 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
       const number = node.attrs.number as number;
+      const isOnlyArticle = node.attrs.isOnlyArticle as boolean;
       const hasTitle = node.attrs.hasTitle as boolean;
       const titleHTML = hasTitle
         ? parser.parseFromString(node.attrs.title, 'text/html').body
             .firstElementChild
         : null;
       const displayStructureName = node.attrs.displayStructureName as boolean;
+      const intlService = getIntlService(state);
       const structureName = displayStructureName
         ? getNameForStructureType(
             structureType,
-            getIntlService(state),
+            number,
+            intlService,
             state.doc.attrs.lang,
           )
         : null;
       let headerSpec;
 
+      const onlyArticleTitle = intlService
+        ? intlService.t('structure-plugin.only-article-title', {
+            locale: state.doc.attrs.lang,
+          })
+        : structureName;
       if (titleHTML) {
         headerSpec = [
           tag,
@@ -133,13 +149,14 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
                 [
                   'span',
                   { 'data-say-structure-header-name': true },
-                  `${structureName} `,
+                  `${isOnlyArticle ? onlyArticleTitle : structureName} `,
                 ],
               ]
             : []),
           [
             'span',
             {
+              style: isOnlyArticle ? 'display: none;' : '',
               'data-say-structure-header-number': true,
               property: ELI('number').full,
             },
@@ -158,6 +175,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           'data-say-display-structure-name': displayStructureName,
           'data-say-header-tag': tag,
           'data-say-number': number,
+          'data-say-is-only-article': isOnlyArticle,
         },
         content: [
           'div',
@@ -181,6 +199,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           ) {
             const hasTitle =
               node.dataset.sayHasTitle && node.dataset.sayHasTitle !== 'false';
+            const isOnlyArticle =
+              node.dataset.sayIsOnlyArticle &&
+              node.dataset.sayIsOnlyArticle !== 'false';
             // strict selector here to avoid false positives when structures are nested
             // :scope refers to the element on which we call querySelector
             const titleElement = node.querySelector(
@@ -201,7 +222,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               structureType: node.dataset.sayStructureType,
               displayStructureName: node.dataset.sayDisplayStructureName,
               headerTag: node.dataset.sayHeaderTag,
-              number: node.dataset.sayNumber,
+              number: Number(node.dataset.sayNumber),
+              isOnlyArticle,
               title,
             };
           }
@@ -252,6 +274,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               structureType: 'article',
               displayStructureName: true,
               hasTitle: false,
+              isOnlyArticle: false,
               number,
             };
           }
