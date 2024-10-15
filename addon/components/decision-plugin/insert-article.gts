@@ -16,6 +16,8 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 export interface InsertArticleOptions {
   uriGenerator?: () => string;
   insertFreely?: boolean;
+  /** Pass a decision URI instead of finding one in the document. Implies `insertFreely`. */
+  decisionUri?: string;
 }
 interface Sig {
   Args: {
@@ -53,16 +55,16 @@ export default class InsertArticleComponent extends Component<Sig> {
       : null;
   }
 
+  get canInsertFreely() {
+    return this.options?.insertFreely || this.options?.decisionUri;
+  }
+
   get canInsert() {
-    if (this.options?.insertFreely) {
-      return this.canInsertFreely;
+    if (this.canInsertFreely) {
+      return true;
     } else {
       return this.canInsertInDecision;
     }
-  }
-
-  get canInsertFreely() {
-    return true;
   }
 
   get canInsertInDecision() {
@@ -83,8 +85,9 @@ export default class InsertArticleComponent extends Component<Sig> {
     const structureNode = buildArticleStructure(
       this.schema,
       this.args.options?.uriGenerator,
+      this.args.options?.decisionUri,
     );
-    if (this.args.options?.insertFreely) {
+    if (this.canInsertFreely) {
       this.insertFreely(structureNode);
     } else {
       this.insertInDecision(structureNode);
