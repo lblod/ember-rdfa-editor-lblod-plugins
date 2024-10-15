@@ -79,6 +79,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
   @tracked tableData: Measure[] = [];
   @tracked count?: number;
   @tracked pageStart = 0;
+  @tracked conceptCodePrefix?: string;
 
   get isNotTypeSign() {
     if (!this.typeSelected) return true;
@@ -279,12 +280,21 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const signsHTML = measure.signs
       .map((sign) => {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();
+
+        this.conceptCodePrefix = sign.uri.includes('Verkeersbordconcept')
+          ? 'Verkeersborden'
+          : sign.uri.includes('Verkeerslichtconcept')
+            ? 'Verkeerslichten van artikel'
+            : sign.uri.includes('Wegmarkeringsconcept')
+              ? 'Wegmarkeringen van artikel'
+              : undefined;
+
         return `<li style="margin-bottom:1rem;">
         <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
         <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
           sign.uri
         }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
-          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${
+          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;"> ${this.conceptCodePrefix} ${
             sign.code
           }</span>
           <span style="margin-left:0;margin-top:0;">${
