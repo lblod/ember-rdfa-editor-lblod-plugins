@@ -19,19 +19,46 @@ import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
-interface InsertArticleArgs {
+interface InsertArticleToDecisionArgs {
   node: PNode;
-  decisionLocation: NodeWithPos;
+  decisionLocation: NodeWithPos | null;
+  insertFreely?: false;
 }
+interface InsertArticleFreelyArgs {
+  node: PNode;
+  insertFreely: true;
+}
+
 export default function insertArticle({
   node,
-  decisionLocation,
-}: InsertArticleArgs): Command {
+  ...args
+}: InsertArticleToDecisionArgs | InsertArticleFreelyArgs): Command {
   return function (
     state: EditorState,
     dispatch?: (tr: Transaction) => void,
   ): boolean {
-    const decision = decisionLocation;
+    if ('insertFreely' in args) {
+      const tr = state.tr;
+      const { result, transaction } = transactionCombinator(
+        state,
+        tr.replaceSelectionWith(node),
+      )([recalculateNumbers]);
+
+      transaction.scrollIntoView();
+      if (result.every((ok) => ok)) {
+        if (dispatch) {
+          dispatch(transaction);
+        }
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    const decision = args.decisionLocation;
+    if (!decision) {
+      return false;
+    }
     const decisionResource = decision.node.attrs.subject;
     const container = getOutgoingTriple(decision.node.attrs, PROV('value'));
     if (container) {

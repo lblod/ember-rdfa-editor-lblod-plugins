@@ -10,8 +10,6 @@ import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/pl
 import { not } from 'ember-truth-helpers';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 export interface InsertArticleOptions {
   uriGenerator?: () => string;
@@ -96,12 +94,12 @@ export default class InsertArticleComponent extends Component<Sig> {
 
   @action
   insertFreely(node: PNode) {
-    this.controller.withTransaction((tr) => {
-      return transactionCombinator(
-        this.controller.activeEditorState,
-        tr.replaceSelectionWith(node),
-      )([recalculateNumbers]).transaction;
-    });
+    this.controller.doCommand(
+      insertArticle({
+        node,
+        insertFreely: true,
+      }),
+    );
     this.controller.focus();
   }
 

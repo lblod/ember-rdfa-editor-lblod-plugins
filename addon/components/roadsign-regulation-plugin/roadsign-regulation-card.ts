@@ -6,6 +6,7 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 
 /**
  * Card displaying a hint of the Date plugin
@@ -26,6 +27,7 @@ const acceptedTypes = [
 
 type Args = {
   controller: SayController;
+  options: RoadsignRegulationPluginOptions;
 };
 
 export default class RoadsignRegulationCard extends Component<Args> {
@@ -53,21 +55,28 @@ export default class RoadsignRegulationCard extends Component<Args> {
   }
 
   get showCard() {
-    const decisionRange = getCurrentBesluitRange(this.controller);
-    if (!decisionRange) {
-      return false;
+    const decisionContext = this.args.options.decisionContext;
+    let decisionTypes = [];
+    if (decisionContext && decisionContext.decisionType) {
+      decisionTypes = [decisionContext.decisionType];
+    } else {
+      const decisionRange = getCurrentBesluitRange(this.controller);
+      if (!decisionRange) {
+        return false;
+      }
+      const decisionNode = decisionRange.node;
+      const properties: OutgoingTriple[] = decisionNode.attrs.properties;
+      decisionTypes = properties
+        .filter(
+          ({ predicate, object }) =>
+            RDF('type').matches(predicate) && object.termType === 'NamedNode',
+        )
+        .map((property) => property.object.value);
     }
-    const decisionNode = decisionRange.node;
-    const properties: OutgoingTriple[] = decisionNode.attrs.properties;
 
-    const decisionHasAcceptedType = properties.some((property) => {
-      const { predicate, object } = property;
-      return (
-        RDF('type').matches(predicate) &&
-        object.termType === 'NamedNode' &&
-        acceptedTypes.includes(object.value)
-      );
-    });
+    const decisionHasAcceptedType = decisionTypes.some((type) =>
+      acceptedTypes.includes(type),
+    );
     return decisionHasAcceptedType;
   }
 }
