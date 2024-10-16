@@ -1,4 +1,3 @@
-import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
 import {
   Fragment,
   PNode,
@@ -6,13 +5,9 @@ import {
   Schema,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
+import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { MandateeTableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin';
-import {
-  BESLUIT,
-  EXT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import {
   QueryResult,
@@ -106,15 +101,7 @@ export const MANDATEE_TABLE_SAMPLE_CONFIG: MandateeTableConfig<QueryResult> = {
       return (state) => {
         const { schema, doc } = state;
         const $pos = doc.resolve(pos);
-        const decisionUri = unwrap(
-          findParentNodeClosestToPos($pos, (node) => {
-            return hasOutgoingNamedNodeTriple(
-              node.attrs,
-              RDF('type'),
-              BESLUIT('Besluit'),
-            );
-          }),
-        ).node.attrs.subject;
+        const decisionUri = getCurrentBesluitURI(state);
         if (!decisionUri) {
           return { result: false, initialState: state, transaction: state.tr };
         }
@@ -185,15 +172,7 @@ export const MANDATEE_TABLE_SAMPLE_CONFIG: MandateeTableConfig<QueryResult> = {
       return (state) => {
         const { doc, schema } = state;
         const $pos = doc.resolve(pos);
-        const decisionUri = unwrap(
-          findParentNodeClosestToPos($pos, (node) => {
-            return hasOutgoingNamedNodeTriple(
-              node.attrs,
-              RDF('type'),
-              BESLUIT('Besluit'),
-            );
-          }),
-        ).node.attrs.subject;
+        const decisionUri = getCurrentBesluitURI(state);
         if (!decisionUri) {
           return { initialState: state, result: false, transaction: state.tr };
         }

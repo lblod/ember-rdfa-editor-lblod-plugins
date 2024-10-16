@@ -74,22 +74,16 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
 
   @action
   updateBesluitTopic() {
-    const currentBesluitURI = getCurrentBesluitURI(this.controller);
-
-    if (!currentBesluitURI || !this.topics.value) {
+    if (!this.topics.isFinished || !this.decisionRange) {
       return;
     }
-
-    const besluit = this.decisionRange;
-    if (!besluit) {
-      console.warn(
-        `We have a besluit URI (${currentBesluitURI}), but can't find a besluit ancestor`,
-      );
+    if (!this.topics.value) {
+      console.warn('Request for besluit topics failed');
       return;
     }
 
     const outgoingBesluitTopics = getOutgoingTripleList(
-      besluit.node.attrs,
+      this.decisionRange.node.attrs,
       ELI(ELI_SUBJECT),
     );
 
@@ -120,13 +114,7 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   upsertBesluitTopic(selected: BesluitTopic[]) {
     this.besluitTopicsSelected = selected;
 
-    const currentBesluitRange = getCurrentBesluitRange(this.controller);
-
-    const resource =
-      (currentBesluitRange &&
-        'node' in currentBesluitRange &&
-        (currentBesluitRange.node.attrs.subject as string)) ||
-      undefined;
+    const resource = getCurrentBesluitURI(this.controller);
 
     if (this.besluitTopicsSelected && resource) {
       this.controller.doCommand(
