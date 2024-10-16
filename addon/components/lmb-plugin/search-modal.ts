@@ -34,6 +34,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
 
   @action
   async closeModal() {
+    this.inputSearchText = null;
+    this.sort = false;
     await this.servicesResource.cancel();
     this.args.closeModal();
   }
@@ -45,6 +47,13 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   // TODO Either make this a trackedFunction or do filtering on the query and correctly pass an
   // AbortController
   search = restartableTask(async () => {
+    if (!this.args.open) {
+      return {
+        results: [],
+        totalCount: 0,
+      };
+    }
+
     // Can't do what I want, so if the user modifies the filter before resolving the query will run again
     if (!this.fetchData.lastComplete) {
       try {
@@ -108,6 +117,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     this.sort,
     this.pageNumber,
     this.pageSize,
+    this.args.open,
   ]);
 
   @action
