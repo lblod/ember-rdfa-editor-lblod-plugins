@@ -11,7 +11,7 @@ import {
   type LpdcPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lpdc-plugin';
 import { v4 as uuidv4 } from 'uuid';
-import { getCurrentBesluitRange } from '../../plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitURI } from '../../plugins/besluit-topic-plugin/utils/helpers';
 import { SRO } from '../../utils/constants';
 
 interface Args {
@@ -39,21 +39,19 @@ export default class LpdcPluginsInsertComponent extends Component<Args> {
     this.showModal = false;
   }
 
+  get decisionUri() {
+    return (
+      this.args.config?.decisionUri ?? getCurrentBesluitURI(this.controller)
+    );
+  }
+
   get isButtonDisabled() {
-    return !getCurrentBesluitRange(this.controller);
+    return !getCurrentBesluitURI(this.controller);
   }
 
   @action
   onLpdcInsert(lpdc: LPDC) {
-    const currentBesluitRange = getCurrentBesluitRange(this.controller);
-
-    const resource =
-      (currentBesluitRange &&
-        'node' in currentBesluitRange &&
-        (currentBesluitRange.node.attrs.subject as string)) ||
-      undefined;
-
-    if (!resource) {
+    if (!this.decisionUri) {
       throw new Error('No besluit found in selection');
     }
 
@@ -80,7 +78,7 @@ export default class LpdcPluginsInsertComponent extends Component<Args> {
 
     this.controller.doCommand(
       addProperty({
-        resource,
+        resource: this.decisionUri,
         property: {
           predicate: SRO('bekrachtigt').full,
           object: sayDataFactory.resourceNode(uri),

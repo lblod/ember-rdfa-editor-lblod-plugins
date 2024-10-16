@@ -81,6 +81,12 @@ export const fetchLpdcs = async ({
     },
   });
 
+  if (!results.ok) {
+    throw new Error(
+      `Received '${results.status}: ${results.statusText}' when fetching from LPDC`,
+    );
+  }
+
   const resultJson = (await results.json()) as FetchResults;
 
   return {
