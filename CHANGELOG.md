@@ -1,5 +1,12 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.1.0
+
+### Minor Changes
+
+- [#486](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/486) [`630ee77`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/630ee77532506c3643edfe70c0e220e61e33ffa2) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Use a special name if you only have one article in the document
+  The title from the second article is shortened to Art.
+
 ## 24.0.0
 
 ### Major Changes
