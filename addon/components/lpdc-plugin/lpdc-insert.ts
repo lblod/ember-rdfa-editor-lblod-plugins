@@ -46,7 +46,7 @@ export default class LpdcPluginsInsertComponent extends Component<Args> {
   }
 
   get isButtonDisabled() {
-    return !getCurrentBesluitURI(this.controller);
+    return !this.decisionUri;
   }
 
   @action
