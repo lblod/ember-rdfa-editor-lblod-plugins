@@ -113,13 +113,29 @@ export default class Structure extends Component<Sig> {
   get structureName() {
     const docLang = this.controller.mainEditorState.doc.attrs.lang;
     if (this.displayStructureName) {
-      return getNameForStructureType(this.structureType, this.intl, docLang);
+      return getNameForStructureType(
+        this.structureType,
+        this.number,
+        this.intl,
+        docLang,
+      );
     } else {
       return '';
     }
   }
   get hasTitle() {
     return this.node.attrs.hasTitle;
+  }
+
+  get title() {
+    if (this.node.attrs.isOnlyArticle) {
+      const docLang = this.controller.mainEditorState.doc.attrs.lang;
+      return this.intl.t('structure-plugin.only-article-title', {
+        locale: docLang,
+      });
+    } else {
+      return `${this.structureName} ${this.number}.`;
+    }
   }
 
   @action
@@ -161,8 +177,7 @@ export default class Structure extends Component<Sig> {
       <div class='say-structure__header' contenteditable='false'>
 
         {{#let (element this.headerTag) as |Tag|}}
-          <Tag>{{this.structureName}}
-            {{this.number}}.
+          <Tag>{{this.title}}
 
             {{#if this.hasTitle}}
               <span
