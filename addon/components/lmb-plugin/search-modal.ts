@@ -14,7 +14,7 @@ interface Args {
   config: LmbPluginConfig;
   open: boolean;
   closeModal: () => void;
-  onInsert: () => void;
+  onInsert: (mandatee: Mandatee) => void;
 }
 
 export default class LmbPluginSearchModalComponent extends Component<Args> {
@@ -142,5 +142,10 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   @action
   nextPage() {
     ++this.pageNumber;
+  }
+  @action
+  onInsert(mandatee: Mandatee) {
+    this.args.onInsert(mandatee);
+    this.closeModal();
   }
 }
