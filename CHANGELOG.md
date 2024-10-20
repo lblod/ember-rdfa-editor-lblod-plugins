@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.1.1
+
+### Patch Changes
+
+- [#488](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/488) [`8f665b9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8f665b907a1e89859b236d43c69beb941337dc48) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix the person edit modal was not being resetted on closing
+
 ## 24.1.0
 
 ### Minor Changes
