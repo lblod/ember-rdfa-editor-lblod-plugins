@@ -80,6 +80,5 @@ export default class LmbPluginInsertComponent extends Component<Args> {
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,
     });
-    this.closeModal();
   }
 }
