@@ -64,24 +64,24 @@ SELECT ${
       : '?uri ?label ?basicTemplate ?annotatedTemplate ?zonality ?temporal'
   }
 WHERE {
-    ?uri a lblodMobiliteit:TrafficMeasureConcept;
+    ?uri a mobiliteit:Mobiliteitmaatregelconcept;
          skos:prefLabel ?label;
          ext:zonality ?zonality;
          ext:relation ?relationUri;
-         ext:template ?template.
+         mobiliteit:template ?template.
          ?template ext:annotated ?annotatedTemplate;
-                   ext:value ?basicTemplate.
+                   prov:value ?basicTemplate.
     ?relationUri a ext:MustUseRelation ;
-                 ext:concept ?signUri.
+                 mobiliteit:Verkeerstekenconcept ?signUri.
     ?signUri a ?signType;
              skos:prefLabel ?signCode.
             
     ${filters.join('\n')}
   OPTIONAL {
-    ?uri ext:temporal ?temporal.
+    ?uri mobiliteit:variabeleSignalisatie ?temporal.
   }
   OPTIONAL {
-    ?signUri org:classification ?signClassification.
+    ?signUri dct:type ?signClassification.
   }
 }
 ${
