@@ -26,7 +26,7 @@
     }
     padding: 0;
     white-space: break-spaces;
-    word-break: break-all;
+    word-break: break-word;
     word-wrap: break-word;
   }
   padding: var(--au-small);
@@ -34,7 +34,7 @@
 .say-structure__content {
   [data-slot] {
     white-space: break-spaces;
-    word-break: break-all;
+    word-break: break-word;
     word-wrap: break-word;
   }
   padding: var(--au-small);

@@ -1,5 +1,24 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.1.2
+
+### Patch Changes
+
+- [`45068be`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/45068be46fccd98ad9af2afafcd423c9c5dfd5fd) Thanks [@abeforgit](https://github.com/abeforgit)! - fix word-wrapping in structure nodes
+
+## 24.1.1
+
+### Patch Changes
+
+- [#488](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/488) [`8f665b9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8f665b907a1e89859b236d43c69beb941337dc48) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix the person edit modal was not being resetted on closing
+
+## 24.1.0
+
+### Minor Changes
+
+- [#486](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/486) [`630ee77`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/630ee77532506c3643edfe70c0e220e61e33ffa2) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Use a special name if you only have one article in the document
+  The title from the second article is shortened to Art.
+
 ## 24.0.0
 
 ### Major Changes

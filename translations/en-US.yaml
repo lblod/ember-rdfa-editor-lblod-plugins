@@ -14,6 +14,8 @@ common:
 structure-plugin:
   move-up: 'Move {structureName} up'
   move-down: 'Move {structureName} down'
+  only-article-title: Only article
+  shortened-article: Art.
   types:
     article: Article
     title: Title
