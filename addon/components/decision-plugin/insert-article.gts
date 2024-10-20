@@ -10,12 +10,12 @@ import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/pl
 import { not } from 'ember-truth-helpers';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 export interface InsertArticleOptions {
   uriGenerator?: () => string;
   insertFreely?: boolean;
+  /** Pass a decision URI instead of finding one in the document. Implies `insertFreely`. */
+  decisionUri?: string;
 }
 interface Sig {
   Args: {
@@ -53,16 +53,16 @@ export default class InsertArticleComponent extends Component<Sig> {
       : null;
   }
 
+  get canInsertFreely() {
+    return this.options?.insertFreely || this.options?.decisionUri;
+  }
+
   get canInsert() {
-    if (this.options?.insertFreely) {
-      return this.canInsertFreely;
+    if (this.canInsertFreely) {
+      return true;
     } else {
       return this.canInsertInDecision;
     }
-  }
-
-  get canInsertFreely() {
-    return true;
   }
 
   get canInsertInDecision() {
@@ -83,8 +83,9 @@ export default class InsertArticleComponent extends Component<Sig> {
     const structureNode = buildArticleStructure(
       this.schema,
       this.args.options?.uriGenerator,
+      this.args.options?.decisionUri,
     );
-    if (this.args.options?.insertFreely) {
+    if (this.canInsertFreely) {
       this.insertFreely(structureNode);
     } else {
       this.insertInDecision(structureNode);
@@ -93,12 +94,12 @@ export default class InsertArticleComponent extends Component<Sig> {
 
   @action
   insertFreely(node: PNode) {
-    this.controller.withTransaction((tr) => {
-      return transactionCombinator(
-        this.controller.activeEditorState,
-        tr.replaceSelectionWith(node),
-      )([recalculateNumbers]).transaction;
-    });
+    this.controller.doCommand(
+      insertArticle({
+        node,
+        insertFreely: true,
+      }),
+    );
     this.controller.focus();
   }
 

@@ -6,20 +6,15 @@ import {
   insertDescription,
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
-import type { PNode, SayController, Selection } from '@lblod/ember-rdfa-editor';
+import type { SayController, Selection } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
-import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
-import {
-  getOutgoingTriple,
-  hasOutgoingNamedNodeTriple,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   BESLUIT,
   ELI,
   PROV,
-  RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
@@ -28,6 +23,7 @@ import { on } from '@ember/modifier';
 import { not } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 
 interface DecisionCardOptions {
   articleUriGenerator?: () => string;
@@ -50,15 +46,13 @@ export default class DecisionPluginCard extends Component<Sig> {
   }
 
   get decisionNodeLocation(): NodeWithPos | null {
-    return (
-      findAncestors(this.selection.$from, (node: PNode) => {
-        return hasOutgoingNamedNodeTriple(
-          node.attrs,
-          RDF('type'),
-          BESLUIT('Besluit'),
-        );
-      })[0] ?? null
-    );
+    const besluitRange = getCurrentBesluitRange(this.controller);
+    return besluitRange
+      ? {
+          pos: besluitRange.from,
+          node: besluitRange.node,
+        }
+      : null;
   }
 
   @action

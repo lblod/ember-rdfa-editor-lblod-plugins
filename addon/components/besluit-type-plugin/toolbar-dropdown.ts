@@ -8,7 +8,6 @@ import fetchBesluitTypes, {
   BesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 import { trackedFunction } from 'reactiveweb/function';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -16,7 +15,10 @@ import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/i
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
 import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import {
+  getCurrentBesluitRange,
+  getCurrentBesluitURI,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 
 type Args = {
   controller: SayController;
@@ -69,11 +71,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   get currentBesluitURI() {
-    if (this.currentBesluitRange) {
-      const node = unwrap(this.doc.nodeAt(this.currentBesluitRange.from));
-      return node.attrs['subject'] as string | undefined;
-    }
-    return;
+    return getCurrentBesluitURI(this.controller);
   }
 
   get showCard() {
@@ -82,16 +80,14 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   @action
   updateBesluitTypes() {
-    if (!this.currentBesluitURI || !this.types.value) {
+    if (!this.types.isFinished || !this.currentBesluitRange) {
+      return;
+    }
+    if (!this.types.value) {
+      console.warn('Request for besluit types failed');
       return;
     }
     const besluit = this.currentBesluitRange;
-    if (!besluit) {
-      console.warn(
-        `We have a besluit URI (${this.currentBesluitURI}), but can't find a besluit ancestor`,
-      );
-      return;
-    }
     const besluitTypes = getOutgoingTripleList(besluit.node.attrs, RDF('type'));
     const besluitTypeRelevant = besluitTypes.find(
       (type) =>
@@ -192,11 +188,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   }
 
   insert() {
-    const resource =
-      (this.currentBesluitRange &&
-        'node' in this.currentBesluitRange &&
-        (this.currentBesluitRange.node.attrs.subject as string)) ||
-      undefined;
+    const resource = this.currentBesluitURI;
     if (this.besluitType && resource) {
       this.cardExpanded = false;
       if (this.previousBesluitType) {
