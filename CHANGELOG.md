@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.1.2
+
+### Patch Changes
+
+- [`45068be`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/45068be46fccd98ad9af2afafcd423c9c5dfd5fd) Thanks [@abeforgit](https://github.com/abeforgit)! - fix word-wrapping in structure nodes
+
 ## 24.1.1
 
 ### Patch Changes
