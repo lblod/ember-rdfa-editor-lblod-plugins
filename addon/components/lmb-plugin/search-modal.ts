@@ -144,8 +144,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     ++this.pageNumber;
   }
   @action
-  onInsert(mandatee: Mandatee) {
+  async onInsert(mandatee: Mandatee) {
     this.args.onInsert(mandatee);
-    this.closeModal();
+    await this.closeModal();
   }
 }
