@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.2.0
+
+### Minor Changes
+
+- [#489](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/489) [`9a89b99`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9a89b992a2e6520e06720c099bff1dd7f115d9ab) Thanks [@piemonkey](https://github.com/piemonkey)! - Add config to specify an external decision URI when creating decision article structures
+
+- [#489](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/489) [`9a89b99`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9a89b992a2e6520e06720c099bff1dd7f115d9ab) Thanks [@piemonkey](https://github.com/piemonkey)! - Add config to specify an external decision URI in lpdc plugin
+
+- [#489](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/489) [`9a89b99`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9a89b992a2e6520e06720c099bff1dd7f115d9ab) Thanks [@piemonkey](https://github.com/piemonkey)! - Add config to specify an external decision URI and type in roadsign-regulation-plugin
+
 ## 24.1.2
 
 ### Patch Changes
