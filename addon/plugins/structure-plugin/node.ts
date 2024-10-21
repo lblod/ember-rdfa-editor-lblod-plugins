@@ -252,6 +252,9 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               `span[property~='${ELI('number').prefixed}'],
                span[property~='${ELI('number').full}']`,
             );
+            const isOnlyArticle =
+              node.dataset.sayIsOnlyArticle &&
+              node.dataset.sayIsOnlyArticle !== 'false';
             const number = numberNode?.textContent
               ? parseInt(numberNode.textContent, 10)
               : 1;
@@ -274,7 +277,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
               structureType: 'article',
               displayStructureName: true,
               hasTitle: false,
-              isOnlyArticle: false,
+              isOnlyArticle,
               number,
             };
           }
