@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.2.1
+
+### Patch Changes
+
+- [#490](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/490) [`816bb59`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/816bb59edb6e8e51dee6ee1ad26acb1b7ad44761) Thanks [@lagartoverde](https://github.com/lagartoverde)! - parse articles also from templates
+
 ## 24.2.0
 
 ### Minor Changes
