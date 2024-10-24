@@ -35,7 +35,6 @@ const parseDOM = [
         node.querySelector(CONTENT_SELECTOR) &&
         parseVariableType(node) === 'location'
       ) {
-        console.log('Parse location: ', node);
         const mappingResource = node.getAttribute('resource');
         if (!mappingResource) {
           return false;
