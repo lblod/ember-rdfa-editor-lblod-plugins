@@ -21,6 +21,7 @@ import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-
 import insertArticle from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-article-command';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
+import Sign from '@lblod/ember-rdfa-editor-lblod-plugins/models/sign';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -281,12 +282,13 @@ export default class RoadsignRegulationCard extends Component<Args> {
     const signsHTML = measure.signs
       .map((sign) => {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();
+        const trafficSignPrefix = this.addTrafficSignPrefix(sign);
         return `<li style="margin-bottom:1rem;">
         <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
         <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
           sign.uri
         }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
-          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;"> ${sign.classifications?.join(' ')} ${
+          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;"> ${trafficSignPrefix} ${
             sign.code
           }</span>
           <span style="margin-left:0;margin-top:0;">${
@@ -341,6 +343,23 @@ export default class RoadsignRegulationCard extends Component<Args> {
       { view: this.args.controller.mainEditorView },
     );
     this.args.closeModal();
+  }
+
+  @action
+  addTrafficSignPrefix(sign: Sign) {
+    let trafficSignPrefix;
+    switch (sign.signType) {
+      case 'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept':
+        trafficSignPrefix = 'Verkeersbord';
+        break;
+      case 'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept':
+        trafficSignPrefix = 'Wegmarkering van artikel';
+        break;
+      case 'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept':
+        trafficSignPrefix = 'Verkeerslicht van artikel';
+        break;
+    }
+    return trafficSignPrefix;
   }
 
   @action
