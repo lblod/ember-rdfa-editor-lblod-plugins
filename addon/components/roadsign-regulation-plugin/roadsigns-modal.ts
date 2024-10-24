@@ -80,7 +80,6 @@ export default class RoadsignRegulationCard extends Component<Args> {
   @tracked tableData: Measure[] = [];
   @tracked count?: number;
   @tracked pageStart = 0;
-  @tracked conceptCodePrefix?: string;
 
   get isNotTypeSign() {
     if (!this.typeSelected) return true;
