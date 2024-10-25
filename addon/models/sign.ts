@@ -4,7 +4,7 @@ import { unwrap } from '../utils/option';
 export default class Sign {
   constructor(
     readonly code: string,
-    readonly signType: string,
+    readonly type: string,
     readonly image: string,
     readonly classifications: string[] = [],
     readonly uri: string,
@@ -20,18 +20,10 @@ export default class Sign {
 
     const uri = unwrap(binding['uri']?.value);
     const order = unwrap(binding['order']?.value);
-    const signType = unwrap(binding['signType']?.value);
+    const type = unwrap(binding['type']?.value);
     const classifications = binding['classifications']?.value.split('|') ?? [];
     const zonality = binding['zonality']?.value;
-    return new Sign(
-      code,
-      signType,
-      image,
-      classifications,
-      uri,
-      order,
-      zonality,
-    );
+    return new Sign(code, type, image, classifications, uri, order, zonality);
   }
 
   static processImage(url: string, imageBaseUrl: string) {

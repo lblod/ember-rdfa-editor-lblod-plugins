@@ -240,13 +240,13 @@ export default class RoadsignRegistryService extends Service {
   fetchSignsForMeasure = task(
     async (uri: string, endpoint: string, imageBaseUrl: string) => {
       const query = `
-SELECT ?uri ?code ?image ?zonality ?order ?signType (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
+SELECT ?uri ?code ?image ?zonality ?order ?type (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
 WHERE {
   <${uri}> ext:relation ?relation.
   ?relation a ext:MustUseRelation;
             <http://purl.org/linked-data/cube#order> ?order;
             ext:concept ?uri.
-  ?uri a ?signType;
+  ?uri a ?type;
         skos:prefLabel ?code;
         mobiliteit:grafischeWeergave ?image.
   OPTIONAL {

@@ -347,7 +347,7 @@ export default class RoadsignRegulationCard extends Component<Args> {
   @action
   addTrafficSignPrefix(sign: Sign) {
     let trafficSignPrefix;
-    switch (sign.signType) {
+    switch (sign.type) {
       case 'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept':
         trafficSignPrefix = 'Verkeersbord';
         break;
