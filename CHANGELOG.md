@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.2.2
+
+### Patch Changes
+
+- [`651d431`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/651d431f79c13ee85f9265cc01a7389e71392716) Thanks [@abeforgit](https://github.com/abeforgit)! - Allow block content in template comments
+
 ## 24.2.1
 
 ### Patch Changes
