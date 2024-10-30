@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.2.3
+
+### Patch Changes
+
+- [#491](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/491) [`2191d5a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2191d5a18669ab15bb64e09ec8e7273020dbca79) Thanks [@piemonkey](https://github.com/piemonkey)! - Do not add `" ."` at the end of 'only article' for single articles
+
 ## 24.2.2
 
 ### Patch Changes
