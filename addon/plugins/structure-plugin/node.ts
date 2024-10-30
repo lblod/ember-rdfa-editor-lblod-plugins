@@ -162,7 +162,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             },
             number.toString(),
           ],
-          '.',
+          isOnlyArticle ? '' : '.',
         ];
       }
       return renderRdfaAware({
