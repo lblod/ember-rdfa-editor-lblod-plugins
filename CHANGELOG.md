@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.3.0
+
+### Minor Changes
+
+- [#493](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/493) [`1e596e1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1e596e1db4d201ed2cba0713808d918944c51eb6) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign structure nodes v1
+
+### Patch Changes
+
+- [#492](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/492) [`76b6ecb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/76b6ecb4ff09ec18088448fd6da69b9e69f34a7c) Thanks [@elpoelma](https://github.com/elpoelma)! - Disable `rdfaAware` setting for heading nodes in dummy app
+
 ## 24.2.3
 
 ### Patch Changes
