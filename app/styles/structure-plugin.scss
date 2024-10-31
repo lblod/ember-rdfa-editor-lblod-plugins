@@ -55,3 +55,16 @@
     }
   }
 }
+
+.ember-node.say-active:has(> .say-structure) {
+  outline: none;
+}
+
+.ember-node.say-active > .say-structure {
+  border-color: var(--au-blue-500);
+  border-width: 0.2rem;
+  >.say-structure__header {
+    border-bottom-color: var(--au-blue-500);
+    border-bottom-width: 0.2rem;
+  }
+}
