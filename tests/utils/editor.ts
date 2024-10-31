@@ -105,7 +105,7 @@ export const SAMPLE_SCHEMA = new Schema({
     codelist,
     address,
     ...STRUCTURE_NODES,
-    heading: headingWithConfig({ rdfaAware: true }),
+    heading: headingWithConfig({ rdfaAware: false }),
     blockquote,
     horizontal_rule,
     code_block,

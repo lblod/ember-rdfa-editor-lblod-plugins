@@ -169,7 +169,7 @@ export default class BesluitSampleController extends Controller {
         oslo_location: osloLocation(this.config.location),
         roadsign_regulation,
         mandatee_table,
-        heading: headingWithConfig({ rdfaAware: true }),
+        heading: headingWithConfig({ rdfaAware: false }),
         blockquote,
 
         horizontal_rule,
