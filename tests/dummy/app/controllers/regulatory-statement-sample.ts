@@ -180,7 +180,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       location,
       codelist,
       ...STRUCTURE_NODES,
-      heading: headingWithConfig({ rdfaAware: true }),
+      heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
 
       horizontal_rule,
