@@ -13,6 +13,8 @@
   flex-direction: row;
   padding-left: 0.7rem;
   border-bottom: 1px solid var(--au-gray-300);
+  border-radius: 0.1em 0.1em 0 0;
+
   h5 {
     margin: 0;
     font-weight: var(--au-medium);
@@ -61,10 +63,10 @@
 }
 
 .ember-node.say-active > .say-structure {
-  border-color: var(--au-blue-500);
+  border-color: var(--au-blue-700);
   border-width: 0.2rem;
-  >.say-structure__header {
-    border-bottom-color: var(--au-blue-500);
+  > .say-structure__header {
+    border-bottom-color: var(--au-blue-700);
     border-bottom-width: 0.2rem;
   }
 }
