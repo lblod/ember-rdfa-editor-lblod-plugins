@@ -32,7 +32,6 @@ import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 interface ButtonSig {
   Args: {
     isActive: boolean;
-    onClick: () => void;
     icon: AuIconSignature['Args']['icon'];
     helpText: string;
   };
@@ -41,13 +40,8 @@ interface ButtonSig {
 
 const SnippetButton: TemplateOnlyComponent<ButtonSig> = <template>
   {{#if @isActive}}
-    <button
-      class='say-snippet-button'
-      type='button'
-      {{on 'click' @onClick}}
-      ...attributes
-    >
-      <AuIcon @icon={{@icon}} @size='large' {{on 'click' @onClick}} />
+    <button class='say-snippet-button' type='button' ...attributes>
+      <AuIcon @icon={{@icon}} @size='large' />
       <div class='say-snippet-button-text'>
         {{t @helpText}}
       </div>
@@ -169,13 +163,13 @@ export default class SnippetNode extends Component<Signature> {
         <SnippetButton
           @icon={{SynchronizeIcon}}
           @helpText='snippet-plugin.snippet-node.change-fragment'
-          @onClick={{this.editFragment}}
+          {{on 'click' this.editFragment}}
           @isActive={{this.isActive}}
         />
         <SnippetButton
           @icon={{BinIcon}}
           @helpText='snippet-plugin.snippet-node.remove-fragment'
-          @onClick={{this.deleteFragment}}
+          {{on 'click' this.deleteFragment}}
           @isActive={{this.isActive}}
           class='say-snippet-remove-button'
         />
@@ -183,7 +177,7 @@ export default class SnippetNode extends Component<Signature> {
           <SnippetButton
             @icon={{AddIcon}}
             @helpText='snippet-plugin.snippet-node.add-fragment'
-            @onClick={{this.addFragment}}
+            {{on 'click' this.addFragment}}
             @isActive={{this.isActive}}
           />
         {{/if}}
