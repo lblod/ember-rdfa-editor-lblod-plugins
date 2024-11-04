@@ -62,6 +62,7 @@ interface CreateSnippetArgs {
   content: string;
   title: string;
   snippetListIds: string[];
+  snippetListNames: string[];
   importedResources?: ImportedResourceMap;
   allowMultipleSnippets?: boolean;
 }
@@ -77,6 +78,7 @@ export function createSnippet({
   content,
   title,
   snippetListIds,
+  snippetListNames,
   importedResources,
   allowMultipleSnippets,
 }: CreateSnippetArgs): [PNode, Map<string, OutgoingTriple[]>] {
@@ -97,7 +99,8 @@ export function createSnippet({
   const node = schema.node(
     'snippet',
     {
-      assignedSnippetListsIds: snippetListIds,
+      snippetListIds,
+      snippetListNames,
       title,
       subject: `http://data.lblod.info/snippets/${uuidv4()}`,
       importedResources,
@@ -150,7 +153,8 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       ],
     },
     rdfaNodeType: { default: 'resource' },
-    assignedSnippetListsIds: { default: [] },
+    snippetListNames: { default: [] },
+    snippetListIds: { default: [] },
     importedResources: { default: {} },
     title: { default: '' },
     config: { default: options },
@@ -165,8 +169,9 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       attrs: {
         ...node.attrs,
         'data-assigned-snippet-ids': (
-          node.attrs.assignedSnippetListsIds as string[]
-        ).join(','),
+          node.attrs.snippetListIds as string[]
+        )?.join(','),
+        'data-list-names': (node.attrs.snippetListNames as string[])?.join(','),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
@@ -185,9 +190,11 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         ) {
           return {
             ...rdfaAttrs,
-            assignedSnippetListsIds: node
+            // TODO need to handle `,` inside list names correctly
+            snippetListIds: node
               .getAttribute('data-assigned-snippet-ids')
               ?.split(','),
+            snippetListNames: node.getAttribute('data-list-names')?.split(','),
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),

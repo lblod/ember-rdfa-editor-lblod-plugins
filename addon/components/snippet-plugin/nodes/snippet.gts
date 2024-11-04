@@ -127,7 +127,8 @@ export default class SnippetNode extends Component<Signature> {
   @action
   onInsert(content: string, title: string) {
     this.closeModal();
-    const assignedSnippetListsIds = this.node.attrs.assignedSnippetListsIds;
+    const snippetListIds = this.node.attrs.snippetListIds;
+    const snippetListNames = this.node.attrs.snippetListNames;
     let start = 0;
     let end = 0;
     const pos = this.args.getPos();
@@ -147,7 +148,8 @@ export default class SnippetNode extends Component<Signature> {
       insertSnippet({
         content,
         title,
-        assignedSnippetListsIds,
+        snippetListIds,
+        snippetListNames,
         importedResources: this.node.attrs.importedResources,
         range: { start, end },
         allowMultipleSnippets: this.allowMultipleSnippets,
@@ -189,7 +191,7 @@ export default class SnippetNode extends Component<Signature> {
       @closeModal={{this.closeModal}}
       @config={{this.node.attrs.config}}
       @onInsert={{this.onInsert}}
-      @assignedSnippetListsIds={{this.node.attrs.assignedSnippetListsIds}}
+      @snippetListIds={{this.node.attrs.snippetListIds}}
     />
   </template>
 }

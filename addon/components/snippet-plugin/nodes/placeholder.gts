@@ -8,13 +8,13 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
 interface Signature {
-  Args: EmberNodeArgs;
+  Args: Pick<EmberNodeArgs, 'node' | 'selectNode'>;
 }
 
 export default class SnippetPluginPlaceholder extends Component<Signature> {
   @service declare intl: IntlService;
   get listNames() {
-    return this.args.node.attrs.listNames;
+    return this.args.node.attrs.snippetListNames;
   }
   get isSingleList() {
     return this.listNames.length === 1;

@@ -12,7 +12,8 @@ import {
 export interface InsertSnippetCommandArgs {
   content: string;
   title: string;
-  assignedSnippetListsIds: string[];
+  snippetListIds: string[];
+  snippetListNames: string[];
   importedResources?: ImportedResourceMap;
   range?: { start: number; end: number };
   allowMultipleSnippets?: boolean;
@@ -21,7 +22,8 @@ export interface InsertSnippetCommandArgs {
 const insertSnippet = ({
   content,
   title,
-  assignedSnippetListsIds,
+  snippetListIds,
+  snippetListNames,
   importedResources,
   range,
   allowMultipleSnippets,
@@ -44,7 +46,8 @@ const insertSnippet = ({
         schema: state.schema,
         content,
         title,
-        snippetListIds: assignedSnippetListsIds,
+        snippetListIds,
+        snippetListNames,
         importedResources,
         allowMultipleSnippets,
       });

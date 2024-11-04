@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
-  type ImportedResourceMap,
+  type SnippetListProperties,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
@@ -27,9 +27,7 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
     return (this.snippetListProperties?.listIds.length ?? 0) === 0;
   }
 
-  get snippetListProperties():
-    | { listIds: string[]; importedResources: ImportedResourceMap }
-    | undefined {
+  get snippetListProperties(): SnippetListProperties | undefined {
     const activeNode = this.args.node.value;
     const activeNodeSnippetListIds = getSnippetListIdsProperties(activeNode);
 
@@ -38,6 +36,7 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
         listIds: getAssignedSnippetListsIdsFromProperties(
           activeNodeSnippetListIds,
         ),
+        names: activeNode.attrs.snippetListNames,
         importedResources: activeNode.attrs.importedResources,
       };
     }
@@ -58,6 +57,7 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
       if (properties.length > 0) {
         return {
           listIds: getAssignedSnippetListsIdsFromProperties(properties),
+          names: parentNode.node.attrs.snippetListNames,
           importedResources: parentNode.node.attrs.importedResources,
         };
       }

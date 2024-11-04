@@ -46,7 +46,7 @@ export function createSnippetPlaceholder(
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
-    listNames: lists.map((list) => list.label),
+    snippetListNames: lists.map((list) => list.label),
     subject: mappingResource,
     properties: [
       {
@@ -73,7 +73,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
-    listNames: { default: [] },
+    snippetListNames: { default: [] },
     importedResources: { default: {} },
     allowMultipleSnippets: { default: false },
   },
@@ -86,7 +86,7 @@ const emberNodeConfig: EmberNodeConfig = {
       attrs: {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
-        'data-list-names': (node.attrs.listNames as string[]).join(','),
+        'data-list-names': (node.attrs.snippetListNames as string[])?.join(','),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
       },
@@ -114,7 +114,7 @@ const emberNodeConfig: EmberNodeConfig = {
         ) {
           return {
             ...rdfaAttrs,
-            listNames: node.getAttribute('data-list-names')?.split(','),
+            snippetListNames: node.getAttribute('data-list-names')?.split(','),
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),

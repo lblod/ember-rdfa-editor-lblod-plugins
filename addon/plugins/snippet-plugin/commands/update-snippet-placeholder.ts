@@ -59,7 +59,7 @@ export const updateSnippetPlaceholder = ({
       });
       transaction = transaction.setNodeAttribute(
         node.pos,
-        'listNames',
+        'snippetListNames',
         newSnippetLists.map((list) => list.label),
       );
       transaction = transaction.setNodeAttribute(

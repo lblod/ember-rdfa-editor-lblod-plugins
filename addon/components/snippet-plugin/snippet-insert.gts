@@ -11,7 +11,7 @@ import {
   Slice,
 } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { type ImportedResourceMap } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import SearchModal from './search-modal';
 
@@ -19,9 +19,7 @@ interface Sig {
   Args: {
     controller: SayController;
     config: SnippetPluginConfig;
-    snippetListProperties:
-      | { listIds: string[]; importedResources: ImportedResourceMap }
-      | undefined;
+    snippetListProperties: SnippetListProperties | undefined;
     disabled?: boolean;
     allowMultipleSnippets?: boolean;
   };
@@ -62,7 +60,8 @@ export default class SnippetInsertComponent extends Component<Sig> {
       insertSnippet({
         content,
         title,
-        assignedSnippetListsIds: this.args.snippetListProperties?.listIds || [],
+        snippetListIds: this.args.snippetListProperties?.listIds || [],
+        snippetListNames: this.args.snippetListProperties?.names || [],
         importedResources: this.args.snippetListProperties?.importedResources,
         allowMultipleSnippets: this.args.allowMultipleSnippets,
       }),
@@ -91,7 +90,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @closeModal={{this.closeModal}}
       @config={{@config}}
       @onInsert={{this.onInsert}}
-      @assignedSnippetListsIds={{@snippetListProperties.listIds}}
+      @snippetListIds={{@snippetListProperties.listIds}}
     />
   </template>
 }
