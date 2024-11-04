@@ -114,6 +114,7 @@ export class Address {
   declare housenumber?: string;
   declare busnumber?: string;
   declare location: Point;
+  declare includeCityAndPostcode?: boolean;
   constructor(
     args: Pick<
       Address,
@@ -125,18 +126,23 @@ export class Address {
       | 'busnumber'
       | 'location'
       | 'belgianAddressUri'
+      | 'includeCityAndPostcode'
     >,
   ) {
     Object.assign(this, args);
   }
 
   get formatted() {
+    const cityAndPostcode = this.includeCityAndPostcode
+      ? `, ${this.zipcode} ${this.municipality}`
+      : '';
+
     if (this.housenumber && this.busnumber) {
-      return `${this.street} ${this.housenumber} bus ${this.busnumber}, ${this.zipcode} ${this.municipality}`;
+      return `${this.street} ${this.housenumber} bus ${this.busnumber} ${cityAndPostcode}`;
     } else if (this.housenumber) {
-      return `${this.street} ${this.housenumber}, ${this.zipcode} ${this.municipality}`;
+      return `${this.street} ${this.housenumber} ${cityAndPostcode}`;
     } else {
-      return `${this.street}, ${this.zipcode} ${this.municipality}`;
+      return `${this.street} ${cityAndPostcode}`;
     }
   }
 

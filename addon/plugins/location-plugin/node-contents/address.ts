@@ -12,6 +12,8 @@ import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 
 export const constructAddressSpec = (address: Address) => {
+  const shouldIncludeCity = address.includeCityAndPostcode;
+
   const housenumberNode = address.housenumber
     ? [
         ' ',
@@ -38,6 +40,19 @@ export const constructAddressSpec = (address: Address) => {
         }),
       ]
     : [];
+  const cityAndPostcodeNode = shouldIncludeCity
+    ? [
+        span({ property: LOCN('postcode').full }, address.zipcode),
+        ' ',
+        span(
+          {
+            property: ADRES('gemeentenaam').full,
+            language: 'nl',
+          },
+          address.municipality,
+        ),
+      ]
+    : [];
   return span(
     { resource: address.uri, typeof: LOCN('Address').full },
     span(
@@ -49,20 +64,7 @@ export const constructAddressSpec = (address: Address) => {
     ...housenumberNode,
     ...busnumberNode,
     ', ',
-    span(
-      {
-        property: LOCN('postcode').full,
-      },
-      address.zipcode,
-    ),
-    ' ',
-    span(
-      {
-        property: ADRES('gemeentenaam').full,
-        language: 'nl',
-      },
-      address.municipality,
-    ),
+    ...cityAndPostcodeNode,
     ...belgianUriNode,
     constructGeometrySpec(address.location, ADRES('positie')),
   );
