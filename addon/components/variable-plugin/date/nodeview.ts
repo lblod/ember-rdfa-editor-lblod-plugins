@@ -55,15 +55,7 @@ export default class DateNodeviewComponent extends Component<Args> {
         return 'Ongeldig formaat';
       }
     } else {
-      const insertDateString = (this.args.node.attrs.onlyDate as boolean)
-        ? this.intl.t('date-plugin.insert.date', {
-            locale: this.documentLanguage,
-          })
-        : this.intl.t('date-plugin.insert.datetime', {
-            locale: this.documentLanguage,
-          });
-
-      return `${insertDateString} ${this.label}`;
+      return this.label;
     }
   }
 

@@ -47,4 +47,16 @@ export default class AddressNodeviewComponent extends Component<Args> {
     if (this.address) return '';
     return getOutgoingTriple(this.node.attrs, EXT('label'))?.object.value;
   }
+
+  get filled() {
+    return !!this.address;
+  }
+
+  get content() {
+    if (this.filled) {
+      return this.address;
+    } else {
+      return this.label;
+    }
+  }
 }

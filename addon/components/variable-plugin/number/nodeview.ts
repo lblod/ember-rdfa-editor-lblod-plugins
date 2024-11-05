@@ -80,6 +80,18 @@ export default class NumberNodeviewComponent extends Component<Args> {
     }
   }
 
+  get filled() {
+    return !!this.formattedNumber;
+  }
+
+  get content() {
+    if (this.filled) {
+      return this.formattedNumber;
+    } else {
+      return this.label;
+    }
+  }
+
   get selected() {
     return this.args.selected;
   }

@@ -9,13 +9,9 @@
     {{velcro.hook}}
     {{on 'click' @selectNode}}
   >
-    {{#if this.formattedNumber}}
-      {{this.formattedNumber}}
-    {{else}}
-      <span class='mark-highlight-manual'>
-        {{this.translations.placeholder}}
-      </span>
-    {{/if}}
+    <span class="{{unless this.filled 'unfilled-variable'}}">
+      {{this.content}}
+    </span>
   </AuPill>
   {{#if this.selected}}
     <div class='say-tooltip say-number-tooltip' {{velcro.loop}}>

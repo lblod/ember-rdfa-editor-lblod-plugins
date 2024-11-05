@@ -3,11 +3,7 @@
   class='variable atomic'
   {{on 'click' @selectNode}}
 >
-  {{#if this.mandatee}}
-    {{this.mandatee.fullName}}
-  {{else}}
-    <span class='mark-highlight-manual'>
-      {{this.translations.placeholder}}
-    </span>
-  {{/if}}
+  <span class="{{unless this.filled 'unfilled-variable'}}">
+    {{this.content}}
+  </span>
 </AuPill>

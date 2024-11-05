@@ -51,15 +51,17 @@ export default class LocationInsertComponent extends Component<Args> {
       locale: this.documentLanguage,
     });
 
+    const label = this.label ?? placeholder;
+
     const node = this.schema.nodes.location.create(
       {
         mappingResource,
         variableInstance,
-        label: this.label ?? placeholder,
+        label: label,
         source: this.endpoint,
       },
       this.schema.node('placeholder', {
-        placeholderText: placeholder,
+        placeholderText: label,
       }),
     );
 

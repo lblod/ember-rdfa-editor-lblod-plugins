@@ -61,17 +61,25 @@
     background-color: var(--au-blue-100);
     border-color: var(--au-blue-300);
     border-radius: var(--au-radius);
+    font-weight: var(--au-regular);
+    color: var(--au-blue-700);
     [contenteditable] {
       white-space: break-spaces;
       word-break: break-all;
       word-wrap: break-word;
       outline: 0px;
       padding: 2px;
+      color: var(--au-blue-700);
+      &.mark-highlight-manual {
+        color: var(--au-orange-700);
+      }
     }
     .unfilled-variable {
       color: var(--au-orange-700);
       background-color: var(--au-orange-300);
       font-style: italic;
+      line-height: 1.2rem;
+      padding: 0.3rem;
 
     }
   }

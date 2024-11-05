@@ -47,4 +47,16 @@ export default class PersonNodeviewComponent extends Component<Args> {
     if (this.mandatee) return '';
     return getOutgoingTriple(this.node.attrs, EXT('label'))?.object.value;
   }
+
+  get filled() {
+    return !!this.mandatee;
+  }
+
+  get content() {
+    if (this.filled) {
+      return this.mandatee?.fullName;
+    } else {
+      return this.label;
+    }
+  }
 }
