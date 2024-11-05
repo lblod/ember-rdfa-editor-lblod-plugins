@@ -159,17 +159,22 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   component: SnippetComponent,
   content: options.allowedContent || DEFAULT_CONTENT_STRING,
   serialize(node) {
+    const {
+      assignedSnippetListsIds,
+      importedResources,
+      title,
+      allowMultipleSnippets,
+    } = node.attrs;
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
       attrs: {
-        ...node.attrs,
-        'data-assigned-snippet-ids': (
-          node.attrs.assignedSnippetListsIds as string[]
-        ).join(','),
-        'data-imported-resources': JSON.stringify(node.attrs.importedResources),
-        'data-snippet-title': node.attrs.title,
-        'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
+        'data-assigned-snippet-ids': (assignedSnippetListsIds as string[]).join(
+          ',',
+        ),
+        'data-imported-resources': JSON.stringify(importedResources),
+        'data-snippet-title': title,
+        'data-allow-multiple-snippets': allowMultipleSnippets,
       },
       content: 0,
     });
