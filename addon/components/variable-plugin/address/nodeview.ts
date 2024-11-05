@@ -1,7 +1,4 @@
 import Component from '@glimmer/component';
-import { service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
-import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
@@ -15,26 +12,6 @@ type Args = {
 };
 
 export default class AddressNodeviewComponent extends Component<Args> {
-  PencilIcon = PencilIcon;
-
-  @service declare intl: IntlService;
-
-  get controller() {
-    return this.args.controller;
-  }
-
-  get documentLanguage() {
-    return this.controller.documentLanguage;
-  }
-
-  get translations() {
-    return {
-      placeholder: this.intl.t('editor-plugins.address.nodeview.placeholder', {
-        locale: this.documentLanguage,
-      }),
-    };
-  }
-
   get node() {
     return this.args.node;
   }

@@ -17,7 +17,6 @@ import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 type Args = {
   getPos: () => number | undefined;
@@ -31,7 +30,6 @@ type Args = {
 };
 
 export default class NumberNodeviewComponent extends Component<Args> {
-  PencilIcon = PencilIcon;
   Velcro = Velcro;
 
   @localCopy('number', '') declare inputNumber: string;
@@ -50,14 +48,6 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
   get documentLanguage() {
     return this.controller.documentLanguage;
-  }
-
-  get translations() {
-    return {
-      placeholder: this.intl.t('variable.number.placeholder', {
-        locale: this.documentLanguage,
-      }),
-    };
   }
 
   get node() {

@@ -9,14 +9,11 @@ import {
 import { editableNodePlugin } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 import {
   EmberNodeArgs,
   SayNodeViewConstructor,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
 import { on } from '@ember/modifier';
 import EmbeddedEditor from '@lblod/ember-rdfa-editor/components/ember-node/embedded-editor';
@@ -33,8 +30,6 @@ type Args = EmberNodeArgs & {
 };
 
 export default class AutoFilledVariableNodeViewComponent extends Component<Args> {
-  PencilIcon = PencilIcon;
-
   @tracked innerView?: SayView;
 
   get plugins(): ProsePlugin[] {
@@ -61,13 +56,6 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Args>
   @action
   initEditor(view: SayView) {
     this.innerView = view;
-  }
-
-  get label() {
-    if (this.innerView?.state.doc.firstChild?.type.name !== 'placeholder') {
-      return '';
-    }
-    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
   <template>
     <AuPill class='variable' {{on 'click' this.onClick}}>

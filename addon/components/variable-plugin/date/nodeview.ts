@@ -5,8 +5,6 @@ import {
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
-import IntlService from 'ember-intl/services/intl';
-import { service } from '@ember/service';
 import {
   formatDate,
   validateDateFormat,
@@ -26,18 +24,6 @@ type Args = {
 };
 
 export default class DateNodeviewComponent extends Component<Args> {
-  PencilIcon = PencilIcon;
-
-  @service declare intl: IntlService;
-
-  get controller() {
-    return this.args.controller;
-  }
-
-  get documentLanguage() {
-    return this.controller.documentLanguage;
-  }
-
   get filled() {
     const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
       ?.object.value;
