@@ -31,7 +31,7 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { jsonParse } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import {
   DEFAULT_CONTENT_STRING,
-  type ImportedResourceMap,
+  SnippetListProperties,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
@@ -59,12 +59,10 @@ function outgoingFromBacklink(
 
 interface CreateSnippetArgs {
   schema: Schema;
+  allowMultipleSnippets?: boolean;
   content: string;
   title: string;
-  snippetListIds: string[];
-  snippetListNames: string[];
-  importedResources?: ImportedResourceMap;
-  allowMultipleSnippets?: boolean;
+  listProperties: SnippetListProperties;
 }
 
 /**
@@ -77,10 +75,13 @@ export function createSnippet({
   schema,
   content,
   title,
-  snippetListIds,
-  snippetListNames,
-  importedResources,
   allowMultipleSnippets,
+  listProperties: {
+    listIds: snippetListIds,
+    names: snippetListNames,
+    importedResources,
+    placeholderId,
+  },
 }: CreateSnippetArgs): [PNode, Map<string, OutgoingTriple[]>] {
   // Replace instances of linked to uris with the resources that exist in the outer document.
   let replacedContent = content;
@@ -99,6 +100,7 @@ export function createSnippet({
   const node = schema.node(
     'snippet',
     {
+      placeholderId,
       snippetListIds,
       snippetListNames,
       title,
@@ -153,6 +155,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       ],
     },
     rdfaNodeType: { default: 'resource' },
+    placeholderId: { default: '' },
     snippetListNames: { default: [] },
     snippetListIds: { default: [] },
     importedResources: { default: {} },
@@ -168,6 +171,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       tag: 'div',
       attrs: {
         ...node.attrs,
+        'data-snippet-placeholder-id': node.attrs.placeholderId,
         'data-assigned-snippet-ids': (
           node.attrs.snippetListIds as string[]
         )?.join(','),
@@ -188,8 +192,15 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         if (
           hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), EXT('Snippet'))
         ) {
+          // For older documents without placeholder ids, treat each inserted snippet separately.
+          // This means that pressing 'remove snippet' will add a placeholder in it's place, which
+          // is not expected, but simple to remove (hitting backspace). This is better than
+          // risking having no ability to insert another snippet.
+          const placeholderId =
+            node.getAttribute('data-snippet-placeholder-id') || uuidv4();
           return {
             ...rdfaAttrs,
+            placeholderId,
             // TODO need to handle `,` inside list names correctly
             snippetListIds: node
               .getAttribute('data-assigned-snippet-ids')

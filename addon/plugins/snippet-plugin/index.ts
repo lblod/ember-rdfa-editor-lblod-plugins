@@ -35,6 +35,7 @@ export class Snippet {
 export type ImportedResourceMap = Record<string, Option<string>>;
 
 export type SnippetListProperties = {
+  placeholderId: string;
   listIds: string[];
   names: string[];
   importedResources: ImportedResourceMap;

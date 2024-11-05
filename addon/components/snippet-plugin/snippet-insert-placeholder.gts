@@ -43,11 +43,11 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
     allowMultipleSnippets: boolean,
   ) {
     if (lists) {
-      const node = createSnippetPlaceholder(
+      const node = createSnippetPlaceholder({
         lists,
-        this.args.controller.schema,
+        schema: this.args.controller.schema,
         allowMultipleSnippets,
-      );
+      });
 
       this.args.controller.withTransaction(
         (tr) => {

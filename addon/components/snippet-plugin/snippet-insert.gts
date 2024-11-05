@@ -19,8 +19,7 @@ interface Sig {
   Args: {
     controller: SayController;
     config: SnippetPluginConfig;
-    snippetListProperties: SnippetListProperties | undefined;
-    disabled?: boolean;
+    listProperties: SnippetListProperties | undefined;
     allowMultipleSnippets?: boolean;
   };
 }
@@ -30,6 +29,9 @@ export default class SnippetInsertComponent extends Component<Sig> {
 
   get controller() {
     return this.args.controller;
+  }
+  get disabled() {
+    return (this.args.listProperties?.listIds.length ?? 0) === 0;
   }
 
   @action
@@ -56,20 +58,16 @@ export default class SnippetInsertComponent extends Component<Sig> {
   @action
   onInsert(content: string, title: string) {
     this.closeModal();
-    this.controller.doCommand(
-      insertSnippet({
-        content,
-        title,
-        snippetListIds: this.args.snippetListProperties?.listIds || [],
-        snippetListNames: this.args.snippetListProperties?.names || [],
-        importedResources: this.args.snippetListProperties?.importedResources,
-        allowMultipleSnippets: this.args.allowMultipleSnippets,
-      }),
-    );
-  }
-
-  get disabled() {
-    return this.args.disabled ?? false;
+    if (this.args.listProperties) {
+      this.controller.doCommand(
+        insertSnippet({
+          content,
+          title,
+          listProperties: this.args.listProperties,
+          allowMultipleSnippets: this.args.allowMultipleSnippets,
+        }),
+      );
+    }
   }
 
   <template>
@@ -90,7 +88,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @closeModal={{this.closeModal}}
       @config={{@config}}
       @onInsert={{this.onInsert}}
-      @snippetListIds={{@snippetListProperties.listIds}}
+      @snippetListIds={{@listProperties.listIds}}
     />
   </template>
 }

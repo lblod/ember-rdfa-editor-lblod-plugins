@@ -3,7 +3,7 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import { createSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
-import { type ImportedResourceMap } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
   isSome,
   unwrap,
@@ -12,9 +12,7 @@ import {
 export interface InsertSnippetCommandArgs {
   content: string;
   title: string;
-  snippetListIds: string[];
-  snippetListNames: string[];
-  importedResources?: ImportedResourceMap;
+  listProperties: SnippetListProperties;
   range?: { start: number; end: number };
   allowMultipleSnippets?: boolean;
 }
@@ -22,9 +20,7 @@ export interface InsertSnippetCommandArgs {
 const insertSnippet = ({
   content,
   title,
-  snippetListIds,
-  snippetListNames,
-  importedResources,
+  listProperties,
   range,
   allowMultipleSnippets,
 }: InsertSnippetCommandArgs): Command => {
@@ -46,14 +42,12 @@ const insertSnippet = ({
         schema: state.schema,
         content,
         title,
-        snippetListIds,
-        snippetListNames,
-        importedResources,
+        listProperties,
         allowMultipleSnippets,
       });
 
       const addImportedResourceProperties = Object.values(
-        importedResources ?? {},
+        listProperties.importedResources ?? {},
       )
         .map((linked) => {
           const newProperties =
