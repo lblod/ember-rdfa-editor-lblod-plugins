@@ -1,81 +1,31 @@
 import Component from '@glimmer/component';
-import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
-import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import { service } from '@ember/service';
+import { on } from '@ember/modifier';
 import IntlService from 'ember-intl/services/intl';
+import t from 'ember-intl/helpers/t';
+import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
-import { on } from '@ember/modifier';
-import SearchModal from '../search-modal';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
-import { ProseParser, Slice } from '@lblod/ember-rdfa-editor';
-import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
-import {
-  getAssignedSnippetListsIdsFromProperties,
-  getSnippetListIdsProperties,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
-import t from 'ember-intl/helpers/t';
+import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
+import { type SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface Signature {
-  Args: Pick<EmberNodeArgs, 'node' | 'selectNode'>;
+  Args: Pick<EmberNodeArgs, 'node' | 'selectNode'> & {
+    insertSnippet: () => void;
+  };
 }
 
 export default class SnippetPluginPlaceholder extends Component<Signature> {
   @service declare intl: IntlService;
 
-  @tracked showModal = false;
-
-  get controller() {
-    return this.args.controller;
-  }
-
   get node() {
     return this.args.node;
   }
-
-  get snippetListIds() {
-    const activeNodeSnippetListIds = getSnippetListIdsProperties(this.node);
-    return getAssignedSnippetListsIdsFromProperties(activeNodeSnippetListIds);
-  }
-
-  @action
-  openModal() {
-    this.controller.focus();
-    this.showModal = true;
-  }
-
-  @action
-  closeModal() {
-    this.showModal = false;
-  }
-
-  createSliceFromElement(element: Element) {
-    return new Slice(
-      ProseParser.fromSchema(this.controller.schema).parse(element, {
-        preserveWhitespace: true,
-      }).content,
-      0,
-      0,
-    );
-  }
-
-  @action
-  onInsert(content: string, title: string) {
-    this.closeModal();
-    this.controller.doCommand(
-      insertSnippet({
-        content,
-        title,
-        assignedSnippetListsIds: this.snippetListIds,
-        importedResources: this.node.attrs.importedResources,
-        allowMultipleSnippets: this.node.attrs.allowMultipleSnippets,
-      }),
-    );
-  }
-
   get listNames() {
     return this.args.node.attrs.snippetListNames;
+  }
+  get config(): SnippetPluginConfig {
+    return this.node.attrs.config;
   }
   get isSingleList() {
     return this.listNames.length === 1;
@@ -89,7 +39,9 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
       return this.intl.t('snippet-plugin.placeholder.title-multiple');
     }
   }
+
   <template>
+    {{! template-lint-disable no-invalid-interactive }}
     <div class='say-snippet-placeholder' {{on 'click' @selectNode}}>
       <div class='say-snippet-placeholder__icon'>
         <AuIcon @icon={{PlusTextIcon}} />
@@ -103,23 +55,16 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
             {{/each}}
           </ul>
         {{/unless}}
-        {{#if this.node.attrs.config.showInsertButton}}
+        {{#unless this.config.hidePlaceholderInsertButton}}
           <AuButton
             @skin='link'
             class='say-snippet-placeholder__button'
-            {{on 'click' this.openModal}}
+            {{on 'click' @insertSnippet}}
           >
             {{t 'snippet-plugin.placeholder.button'}}
           </AuButton>
-        {{/if}}
+        {{/unless}}
       </div>
     </div>
-    <SearchModal
-      @open={{this.showModal}}
-      @closeModal={{this.closeModal}}
-      @config={{this.node.attrs.config}}
-      @onInsert={{this.onInsert}}
-      @assignedSnippetListsIds={{this.snippetListIds}}
-    />
   </template>
 }

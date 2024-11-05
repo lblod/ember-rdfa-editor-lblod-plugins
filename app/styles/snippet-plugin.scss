@@ -145,14 +145,14 @@
 .say-snippet-placeholder {
   display: flex;
   flex-direction: row;
-  padding: $au-unit-small $au-unit-small*1.5;
+  padding: $au-unit-small $au-unit-small * 1.5;
   background-color: #fff7bb;
   border-radius: var(--au-radius);
   border: 0.1rem solid #e5d34f;
 }
 
 .say-snippet-placeholder__icon {
-  background-color: #FFA10A;
+  background-color: #ffa10a;
   color: black;
   height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
   width: $au-unit;
@@ -169,7 +169,7 @@
 }
 
 .say-snippet-placeholder__title {
-  color: #9E5805;
+  color: #9e5805;
   font-weight: 500;
 }
 

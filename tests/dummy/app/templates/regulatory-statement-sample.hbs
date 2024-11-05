@@ -93,6 +93,13 @@
                   @controller={{this.controller}}
                   @options={{this.config.structures}}
                 />
+                {{#if this.activeNode}}
+                  <this.SnippetInsert
+                    @controller={{this.controller}}
+                    @config={{this.config.snippet}}
+                    @node={{this.activeNode}}
+                  />
+                {{/if}}
                 <TemplateCommentsPlugin::Insert
                   @controller={{this.controller}}
                 />

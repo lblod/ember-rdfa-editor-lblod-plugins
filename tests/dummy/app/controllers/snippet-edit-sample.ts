@@ -184,7 +184,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       table_of_contents: table_of_contents(this.config.tableOfContents),
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
-      snippet_placeholder: snippetPlaceholder(this.config.snippetPlaceholder),
+      snippet_placeholder: snippetPlaceholder(this.config.snippet),
       snippet: snippet(this.config.snippet),
     },
     marks: {
@@ -288,11 +288,7 @@ export default class RegulatoryStatementSampleController extends Controller {
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
       },
       snippet: {
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
-      },
-      snippetPlaceholder: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
-        showInsertButton: true,
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',

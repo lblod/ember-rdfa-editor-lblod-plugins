@@ -13,6 +13,7 @@ export const DEFAULT_CONTENT_STRING = 'block+';
 export type SnippetPluginConfig = {
   endpoint: string;
   allowedContent?: string;
+  hidePlaceholderInsertButton?: boolean;
 };
 
 interface SnippetArgs {

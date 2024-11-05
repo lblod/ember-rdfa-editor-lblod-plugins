@@ -7,10 +7,7 @@ import {
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
-import {
-  getAssignedSnippetListsIdsFromProperties,
-  getSnippetListIdsProperties,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { getSnippetListIdsFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import SnippetInsert from './snippet-insert';
 
@@ -25,13 +22,11 @@ interface Sig {
 export default class SnippetInsertRdfaComponent extends Component<Sig> {
   get listProperties(): SnippetListProperties | undefined {
     const activeNode = this.args.node.value;
-    const activeNodeSnippetListIds = getSnippetListIdsProperties(activeNode);
+    const listIds = getSnippetListIdsFromNode(activeNode);
 
-    if (activeNodeSnippetListIds.length > 0) {
+    if (listIds.length > 0) {
       return {
-        listIds: getAssignedSnippetListsIdsFromProperties(
-          activeNodeSnippetListIds,
-        ),
+        listIds,
         placeholderId: activeNode.attrs.placeholderId,
         names: activeNode.attrs.snippetListNames,
         importedResources: activeNode.attrs.importedResources,
@@ -49,11 +44,11 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
       isResourceNode(node),
     );
     while (parentNode) {
-      const properties = getSnippetListIdsProperties(parentNode.node);
+      const listIds = getSnippetListIdsFromNode(parentNode.node);
 
-      if (properties.length > 0) {
+      if (listIds.length > 0) {
         return {
-          listIds: getAssignedSnippetListsIdsFromProperties(properties),
+          listIds,
           placeholderId: parentNode.node.attrs.placeholderId,
           names: parentNode.node.attrs.snippetListNames,
           importedResources: parentNode.node.attrs.importedResources,

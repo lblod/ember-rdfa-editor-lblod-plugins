@@ -11,7 +11,7 @@ import {
   createEmberNodeView,
   type EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import SnippetPlaceholderComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
+import SnippetComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/snippet';
 import {
   EXT,
   RDF,
@@ -23,14 +23,10 @@ import {
   type SnippetListProperties,
   type ImportedResourceMap,
   type SnippetList,
+  type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { tripleForSnippetListId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-
-type SnippetPlaceholderConfig = {
-  endpoint?: string;
-  showInsertButton?: boolean;
-};
 
 export function importedResourcesFromSnippetLists(
   lists: SnippetList[],
@@ -98,9 +94,7 @@ export function createSnippetPlaceholder({
   });
 }
 
-const emberNodeConfig = (
-  config: SnippetPlaceholderConfig,
-): EmberNodeConfig => ({
+const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
   name: 'snippet_placeholder',
   inline: false,
   group: 'block',
@@ -118,7 +112,7 @@ const emberNodeConfig = (
       default: config,
     },
   },
-  component: SnippetPlaceholderComponent,
+  component: SnippetComponent,
   serialize(node, editorState) {
     const t = getTranslationFunction(editorState);
     const listNames = node.attrs.snippetListNames as string[];
@@ -180,7 +174,7 @@ const emberNodeConfig = (
   ],
 });
 
-export const snippetPlaceholder = (config: SnippetPlaceholderConfig) =>
+export const snippetPlaceholder = (config: SnippetPluginConfig) =>
   createEmberNodeSpec(emberNodeConfig(config));
-export const snippetPlaceholderView = (config: SnippetPlaceholderConfig) =>
+export const snippetPlaceholderView = (config: SnippetPluginConfig) =>
   createEmberNodeView(emberNodeConfig(config));
