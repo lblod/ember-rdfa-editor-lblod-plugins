@@ -38,6 +38,12 @@ export default class DateNodeviewComponent extends Component<Args> {
     return this.controller.documentLanguage;
   }
 
+  get filled() {
+    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
+      ?.object.value;
+    return !!value;
+  }
+
   get humanReadableDate() {
     const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
       ?.object.value;
@@ -49,20 +55,19 @@ export default class DateNodeviewComponent extends Component<Args> {
         return 'Ongeldig formaat';
       }
     } else {
-      return (this.args.node.attrs.onlyDate as boolean)
+      const insertDateString = (this.args.node.attrs.onlyDate as boolean)
         ? this.intl.t('date-plugin.insert.date', {
             locale: this.documentLanguage,
           })
         : this.intl.t('date-plugin.insert.datetime', {
             locale: this.documentLanguage,
           });
+
+      return `${insertDateString} ${this.label}`;
     }
   }
 
   get label() {
-    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
-      ?.object.value;
-    if (value) return '';
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }

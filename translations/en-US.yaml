@@ -201,8 +201,8 @@ date-plugin:
     long-month-content: January, February, ..., December
     long-year: Long year
   insert:
-    date: 'Insert date'
-    datetime: 'Insert date and time'
+    date: 'Date'
+    datetime: 'Date and time'
   card:
     title: 'Date'
     insert-date: 'Insert date'

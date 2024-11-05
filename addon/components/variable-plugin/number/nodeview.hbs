@@ -5,8 +5,6 @@
   as |velcro|
 >
   <AuPill
-    @icon={{this.PencilIcon}}
-    @iconAlignment='right'
     class='variable atomic'
     {{velcro.hook}}
     {{on 'click' @selectNode}}
@@ -16,11 +14,6 @@
     {{else}}
       <span class='mark-highlight-manual'>
         {{this.translations.placeholder}}
-      </span>
-    {{/if}}
-    {{#if this.label}}
-      <span class='label'>
-        ({{this.label}})
       </span>
     {{/if}}
   </AuPill>

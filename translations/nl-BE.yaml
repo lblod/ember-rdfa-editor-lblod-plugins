@@ -201,8 +201,8 @@ date-plugin:
     long-month-content: Januari, Februari, ..., December
     long-year: Jaar
   insert:
-    date: 'Datum invoegen'
-    datetime: 'Datum en tijd invoegen'
+    date: 'Datum'
+    datetime: 'Datum en tijd'
   card:
     title: 'Datum'
     insert-date: 'Datum invoegen'

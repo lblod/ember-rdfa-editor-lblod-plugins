@@ -1,14 +1,9 @@
 {{! @glint-nocheck: not typesafe yet }}
 <AuPill
-  @icon={{this.PencilIcon}}
-  @iconAlignment='right'
   class='variable atomic'
   {{on 'click' @selectNode}}
 >
-  {{this.humanReadableDate}}
-  {{#if this.label}}
-    <span class='label'>
-      ({{this.label}})
-    </span>
-  {{/if}}
+  <span class="{{unless this.filled 'unfilled-variable'}}">
+    {{this.humanReadableDate}}
+  </span>
 </AuPill>

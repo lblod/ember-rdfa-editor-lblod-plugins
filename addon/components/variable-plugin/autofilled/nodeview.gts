@@ -70,12 +70,7 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Args>
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
   <template>
-    <AuPill
-      @icon={{this.PencilIcon}}
-      @iconAlignment='right'
-      class='variable'
-      {{on 'click' this.onClick}}
-    >
+    <AuPill class='variable' {{on 'click' this.onClick}}>
       <EmbeddedEditor
         @controller={{@controller}}
         @view={{@view}}
@@ -90,11 +85,6 @@ export default class AutoFilledVariableNodeViewComponent extends Component<Args>
         @placeholder=''
         @contentDecorations={{@contentDecorations}}
       />
-      {{#if this.label}}
-        <span class='label'>
-          ({{this.label}})
-        </span>
-      {{/if}}
     </AuPill>
   </template>
 }
