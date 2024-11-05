@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.3.1
+
+### Patch Changes
+
+- [#494](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/494) [`3941b65`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3941b659fbb710be0aafd34b911a42416a1124c9) Thanks [@elpoelma](https://github.com/elpoelma)! - Ensure that the event handlers of snippet actions are only triggered once
+
 ## 24.3.0
 
 ### Minor Changes
