@@ -166,6 +166,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   component: SnippetComponent,
   content: options.allowedContent || DEFAULT_CONTENT_STRING,
   serialize(node) {
+    const listNames = node.attrs.snippetListNames as string[];
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
@@ -175,7 +176,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         'data-assigned-snippet-ids': (
           node.attrs.snippetListIds as string[]
         )?.join(','),
-        'data-list-names': (node.attrs.snippetListNames as string[])?.join(','),
+        'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
@@ -201,11 +202,10 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
           return {
             ...rdfaAttrs,
             placeholderId,
-            // TODO need to handle `,` inside list names correctly
             snippetListIds: node
               .getAttribute('data-assigned-snippet-ids')
               ?.split(','),
-            snippetListNames: node.getAttribute('data-list-names')?.split(','),
+            snippetListNames: jsonParse(node.getAttribute('data-list-names')),
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),

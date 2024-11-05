@@ -20,12 +20,11 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { jsonParse } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import {
-  getSnippetUriFromId,
   type SnippetListProperties,
   type ImportedResourceMap,
   type SnippetList,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { tripleForSnippetListId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 export function importedResourcesFromSnippetLists(
@@ -66,17 +65,15 @@ export function createSnippetPlaceholder({
       names: args.lists.map((list) => list.label),
       importedResources: importedResourcesFromSnippetLists(args.lists),
     };
-    additionalProperties = args.lists.map((list) => ({
-      predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-      object: sayDataFactory.namedNode(getSnippetUriFromId(list.id)),
-    }));
+    additionalProperties = args.lists.map((list) =>
+      tripleForSnippetListId(list.id),
+    );
   } else {
     // Replacing the last snippet, so keep the id
     listProps = args.listProperties;
-    additionalProperties = args.listProperties.listIds.map((id) => ({
-      predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-      object: sayDataFactory.namedNode(getSnippetUriFromId(id)),
-    }));
+    additionalProperties = args.listProperties.listIds.map(
+      tripleForSnippetListId,
+    );
   }
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;
   return schema.nodes.snippet_placeholder.create({
@@ -114,13 +111,14 @@ const emberNodeConfig: EmberNodeConfig = {
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
     const t = getTranslationFunction(editorState);
+    const listNames = node.attrs.snippetListNames as string[];
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
       attrs: {
         ...node.attrs,
         class: 'say-snippet-placeholder-node',
-        'data-list-names': (node.attrs.snippetListNames as string[])?.join(','),
+        'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
       },
@@ -146,13 +144,20 @@ const emberNodeConfig: EmberNodeConfig = {
             EXT('SnippetPlaceholder'),
           )
         ) {
+          let snippetListNames = jsonParse(
+            node.getAttribute('data-list-names'),
+          );
+          if (!snippetListNames) {
+            // We might have an older version which is comma separated
+            snippetListNames = node.getAttribute('data-list-names')?.split(',');
+          }
           return {
             ...rdfaAttrs,
             // Generate a placeholderId any time we deserialise, this way we don't need to handle
             // generating new ids whenever we re-use parts of a document (e.g. copy-paste or
             // placeholders inside snippets)
             placeholderId: uuidv4(),
-            snippetListNames: node.getAttribute('data-list-names')?.split(','),
+            snippetListNames,
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),

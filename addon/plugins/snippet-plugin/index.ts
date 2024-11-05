@@ -6,6 +6,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { SafeString } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
+import { getSnippetIdFromUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
 export const DEFAULT_CONTENT_STRING = 'block+';
 
@@ -47,13 +48,6 @@ export type SnippetListArgs = {
   createdOn: string;
   importedResources: string[];
 };
-
-const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
-
-export const getSnippetUriFromId = (id: string) => `${snippetListBase}${id}`;
-
-export const getSnippetIdFromUri = (uri: string) =>
-  uri.replace(snippetListBase, '');
 
 export class SnippetList {
   id: string;
