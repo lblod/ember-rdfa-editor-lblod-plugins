@@ -27,6 +27,11 @@ import {
 import { tripleForSnippetListId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
+type SnippetPlaceholderConfig = {
+  endpoint?: string;
+  showInsertButton?: boolean;
+};
+
 export function importedResourcesFromSnippetLists(
   lists: SnippetList[],
   existing: ImportedResourceMap = {},
@@ -93,7 +98,9 @@ export function createSnippetPlaceholder({
   });
 }
 
-const emberNodeConfig: EmberNodeConfig = {
+const emberNodeConfig = (
+  config: SnippetPlaceholderConfig,
+): EmberNodeConfig => ({
   name: 'snippet_placeholder',
   inline: false,
   group: 'block',
@@ -107,6 +114,9 @@ const emberNodeConfig: EmberNodeConfig = {
     snippetListNames: { default: [] },
     importedResources: { default: {} },
     allowMultipleSnippets: { default: false },
+    config: {
+      default: config,
+    },
   },
   component: SnippetPlaceholderComponent,
   serialize(node, editorState) {
@@ -116,7 +126,6 @@ const emberNodeConfig: EmberNodeConfig = {
       renderable: node,
       tag: 'div',
       attrs: {
-        ...node.attrs,
         class: 'say-snippet-placeholder-node',
         'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
@@ -169,7 +178,9 @@ const emberNodeConfig: EmberNodeConfig = {
       },
     },
   ],
-};
+});
 
-export const snippetPlaceholder = createEmberNodeSpec(emberNodeConfig);
-export const snippetPlaceholderView = createEmberNodeView(emberNodeConfig);
+export const snippetPlaceholder = (config: SnippetPlaceholderConfig) =>
+  createEmberNodeSpec(emberNodeConfig(config));
+export const snippetPlaceholderView = (config: SnippetPlaceholderConfig) =>
+  createEmberNodeView(emberNodeConfig(config));

@@ -86,29 +86,6 @@
   }
 }
 
-.ProseMirror-selectednode > .say-snippet-placeholder {
-  background-color: var(--au-blue-200);
-}
-
-.say-snippet-placeholder-node {
-  background-color: var(--au-orange-200);
-  padding: 2rem;
-
-  div {
-    font-weight: var(--au-medium);
-  }
-}
-
-div[typeof='besluitpublicatie:Documentonderdeel']
-  .say-snippet-placeholder-node {
-  background-color: var(--au-gray-300);
-}
-
-.rdfa-annotations
-  [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
-  padding-bottom: 2rem;
-}
-
 .say-snippet-card {
   border: 1px solid var(--au-blue-300);
   .say-snippet-title {
@@ -163,4 +140,63 @@ div[typeof='besluitpublicatie:Documentonderdeel']
       }
     }
   }
+}
+
+.say-snippet-placeholder {
+  display: flex;
+  flex-direction: row;
+  padding: $au-unit-small $au-unit-small*1.5;
+  background-color: #fff7bb;
+  border-radius: var(--au-radius);
+  border: 0.1rem solid #e5d34f;
+}
+
+.say-snippet-placeholder__icon {
+  background-color: #FFA10A;
+  color: black;
+  height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
+  width: $au-unit;
+  margin-right: $au-unit * 0.5;
+  border-radius: $au-unit-large;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.say-snippet-placeholder__content {
+  margin-top: 0 !important;
+}
+
+.say-snippet-placeholder__title {
+  color: #9E5805;
+  font-weight: 500;
+}
+
+.say-snippet-placeholder__button {
+  margin: 0;
+  padding: 0;
+}
+
+.ProseMirror-selectednode > .say-snippet-placeholder {
+  background-color: var(--au-blue-200);
+}
+
+.say-snippet-placeholder-node {
+  background-color: var(--au-orange-200);
+  padding: 2rem;
+
+  div {
+    font-weight: var(--au-medium);
+  }
+}
+
+div[typeof='besluitpublicatie:Documentonderdeel']
+  .say-snippet-placeholder-node {
+  background-color: var(--au-gray-300);
+}
+
+.rdfa-annotations
+  [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
+  padding-bottom: 2rem;
 }

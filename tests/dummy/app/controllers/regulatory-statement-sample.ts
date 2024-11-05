@@ -104,7 +104,6 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
-import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 import SnippetListSelect from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select';
 import {
   CitationPluginConfig,
@@ -127,7 +126,6 @@ import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 
 export default class RegulatoryStatementSampleController extends Controller {
-  SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelect;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -195,7 +193,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
-      snippet_placeholder: snippetPlaceholder,
+      snippet_placeholder: snippetPlaceholder(this.config.snippetPlaceholder),
       snippet: snippet(this.config.snippet),
     },
     marks: {
@@ -312,6 +310,10 @@ export default class RegulatoryStatementSampleController extends Controller {
           'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
       },
+      snippetPlaceholder: {
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
+        showInsertButton: true,
+      },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
       },
@@ -356,7 +358,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment: templateCommentView(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
-      snippet_placeholder: snippetPlaceholderView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
       snippet: snippetView(this.config.snippet)(controller),
       autofilled_variable: autofilledVariableView(controller),
     };
