@@ -166,8 +166,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b
-        version: 10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.7.0-dev.717fce1dbf9eea1967b49abe9744aeb2b3b4d100
+        version: 10.7.0-dev.717fce1dbf9eea1967b49abe9744aeb2b3b4d100(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1592,8 +1592,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b':
-    resolution: {integrity: sha512-TKKsaxRXHUvnMVKyk/SSFInYToIZwPrkvIf6rkUXmqIkxlv0jREV4ju/x7JH63Nxbg+ktbfFWKUena4l40EtSA==}
+  '@lblod/ember-rdfa-editor@10.7.0-dev.717fce1dbf9eea1967b49abe9744aeb2b3b4d100':
+    resolution: {integrity: sha512-gEOXlIeJ35XrcmpSpsDTrsDcFlQ3C6sBLqXWfEvrWA3MXI63skuvid1ape/LPW7cmAkzI74soA0wJLSd7k9bsw==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -10732,7 +10732,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.7.0-dev.717fce1dbf9eea1967b49abe9744aeb2b3b4d100(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
