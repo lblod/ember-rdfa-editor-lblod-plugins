@@ -166,8 +166,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.4.0
-        version: 10.4.0(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b
+        version: 10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1592,8 +1592,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.4.0':
-    resolution: {integrity: sha512-rmSMmJj6Xbxg2v1xHo3wtJbfpwzrzm1mmKRc2vTsG3ho64V4QQE7IWD2PdnutEMYVYEQKet0W653tHAT8Em/1w==}
+  '@lblod/ember-rdfa-editor@10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b':
+    resolution: {integrity: sha512-TKKsaxRXHUvnMVKyk/SSFInYToIZwPrkvIf6rkUXmqIkxlv0jREV4ju/x7JH63Nxbg+ktbfFWKUena4l40EtSA==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -1604,7 +1604,7 @@ packages:
       ember-intl: ^6.4.0 || ^7.0.2
       ember-modifier: ^4.1.0
       ember-power-select: ^7.1.0
-      ember-source: ^4.12.0
+      ember-source: ~4.12.0
       ember-template-imports: ^4.1.1
       ember-truth-helpers: ^4.0.3
     peerDependenciesMeta:
@@ -7270,8 +7270,8 @@ packages:
   property-expr@2.0.6:
     resolution: {integrity: sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==}
 
-  prosemirror-commands@1.6.0:
-    resolution: {integrity: sha512-xn1U/g36OqXn2tn5nGmvnnimAj/g1pUx2ypJJIe8WkVX83WyJVC5LTARaxZa2AtQRwntu9Jc5zXs9gL9svp/mg==}
+  prosemirror-commands@1.6.2:
+    resolution: {integrity: sha512-0nDHH++qcf/BuPLYvmqZTUUsPJUCPBUXt0J1ErTcDIS369CTp773itzLGIgIXG4LJXOlwYCr44+Mh4ii6MP1QA==}
 
   prosemirror-dev-tools@4.1.0:
     resolution: {integrity: sha512-TqMyXLiY8EUoq4f4LV+8dQVuRejwGfeOJdJWjrHNXR9ttKy3MVYBCqmiu3CDULgjv8gtLsqoZY6+ab6BZRmr1g==}
@@ -7303,6 +7303,9 @@ packages:
 
   prosemirror-state@1.4.3:
     resolution: {integrity: sha512-goFKORVbvPuAQaXhpbemJFRKJ2aixr+AZMGiquiqKxaucC6hlpHNZHWgz5R7dS4roHiwq9vDctE//CZ++o0W1Q==}
+
+  prosemirror-transform@1.10.2:
+    resolution: {integrity: sha512-2iUq0wv2iRoJO/zj5mv8uDUriOHWzXRnOTVgCzSXnktS/2iQRa3UUQwVlkBlYZFtygw6Nh1+X4mGqoYBINn5KQ==}
 
   prosemirror-transform@1.9.0:
     resolution: {integrity: sha512-5UXkr1LIRx3jmpXXNKDhv8OyAOeLTGuXNwdVfg8x27uASna/wQkr9p6fD3eupGOi4PLJfbezxTyi/7fSJypXHg==}
@@ -10729,7 +10732,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.4.0(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.7.0-dev.3b939846a24c913a8c1f349df7013594989fbc7b(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
@@ -10772,7 +10775,7 @@ snapshots:
       linkifyjs: 4.1.3
       mdn-polyfills: 5.20.0
       process: 0.11.10
-      prosemirror-commands: 1.6.0
+      prosemirror-commands: 1.6.2
       prosemirror-dropcursor: 1.8.1
       prosemirror-history: 1.4.1
       prosemirror-inputrules: 1.4.0
@@ -18256,11 +18259,11 @@ snapshots:
 
   property-expr@2.0.6: {}
 
-  prosemirror-commands@1.6.0:
+  prosemirror-commands@1.6.2:
     dependencies:
       prosemirror-model: 1.21.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
 
   prosemirror-dev-tools@4.1.0(@babel/core@7.24.7)(@babel/template@7.24.7)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -18332,6 +18335,10 @@ snapshots:
       prosemirror-model: 1.21.3
       prosemirror-transform: 1.9.0
       prosemirror-view: 1.33.8
+
+  prosemirror-transform@1.10.2:
+    dependencies:
+      prosemirror-model: 1.21.3
 
   prosemirror-transform@1.9.0:
     dependencies:
