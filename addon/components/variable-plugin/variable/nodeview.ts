@@ -5,6 +5,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export default class VariableNodeViewComponent extends Component<EmberNodeArgs> {
   @tracked innerView?: SayView;
@@ -33,5 +35,25 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
   @action
   initEditor(view: SayView) {
     this.innerView = view;
+  }
+  @action
+  resetVariable() {
+    if (this.innerView && this.innerView.state.doc.childCount === 0) {
+      const tr = this.innerView.state.tr;
+      const placeholderNode = this.innerView.state.schema.node('placeholder', {
+        placeholderText: this.label,
+      });
+      tr.insert(0, placeholderNode);
+      this.innerView?.dispatch(tr);
+    }
+  }
+  get label() {
+    const triple = getOutgoingTriple(this.args.node.attrs, EXT('label'));
+    if (triple) {
+      return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object
+        .value;
+    } else {
+      return this.args.node.attrs.label;
+    }
   }
 }

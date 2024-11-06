@@ -2,6 +2,7 @@
 <AuPill
   class='variable'
   {{on 'click' this.onClick}}
+  {{on 'focusout' this.resetVariable}}
 >
   <EmberNode::EmbeddedEditor
     @controller={{@controller}}

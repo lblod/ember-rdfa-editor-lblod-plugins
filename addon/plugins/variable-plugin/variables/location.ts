@@ -20,7 +20,7 @@ import {
   typeSpan,
 } from '../utils/dom-constructors';
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
-import LocationNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/nodeview';
+import NodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
@@ -73,7 +73,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'location',
-  component: LocationNodeViewComponent as unknown as ComponentLike,
+  component: NodeViewComponent as unknown as ComponentLike,
   inline: true,
   group: 'inline variable',
   content: 'inline*',
