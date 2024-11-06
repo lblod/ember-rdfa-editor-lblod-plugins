@@ -48,10 +48,9 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
     }
   }
   get label() {
-    const triple = getOutgoingTriple(this.args.node.attrs, EXT('label'));
-    if (triple) {
-      return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object
-        .value;
+    const labelTriple = getOutgoingTriple(this.args.node.attrs, EXT('label'));
+    if (labelTriple) {
+      return labelTriple.object.value;
     } else {
       return this.args.node.attrs.label;
     }
