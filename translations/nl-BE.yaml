@@ -1,7 +1,7 @@
 common:
   insert: Voeg in
   search:
-    loading: Laden…
+    loading: Aan het laden…
     no-results: Geen resultaten gevonden
     error-title: Probleem bij het laden
     error-intro: 'Er is een fout opgetreden tijdens het laden van de resultaten:'
