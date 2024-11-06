@@ -69,11 +69,11 @@ export function hasOutgoingNamedNodeTriple(
 }
 
 export function getOutgoingTriple(rdfaAttrs: Attrs, predicate: Resource) {
-  return (isRdfaAttrs(rdfaAttrs) &&
+  return (
+    isRdfaAttrs(rdfaAttrs) &&
     rdfaAttrs.rdfaNodeType === 'resource' &&
-    rdfaAttrs.properties.find((prop) =>
-      predicate.matches(prop.predicate),
-    )) as Option<OutgoingTriple>;
+    rdfaAttrs.properties.find((prop) => predicate.matches(prop.predicate))
+  );
 }
 
 export function getOutgoingTripleList(rdfaAttrs: Attrs, predicate: Resource) {

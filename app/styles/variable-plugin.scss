@@ -49,52 +49,31 @@
   }
 }
 
-.ember-node.say-active:has(> .variable) {
+.ember-node.say-active:has(> .say-pill) {
   outline: none;
 }
 
-
 .ember-node {
   white-space: normal !important;
-  .variable {
-    min-height: 24px;
-    background-color: var(--au-blue-100);
-    border-color: var(--au-blue-300);
-    border-radius: var(--au-radius);
-    font-weight: var(--au-regular);
-    color: var(--au-blue-700);
-    [contenteditable] {
-      white-space: break-spaces;
-      word-break: break-all;
-      word-wrap: break-word;
-      outline: 0px;
-      padding: 2px;
-      color: var(--au-blue-700);
-      &.mark-highlight-manual {
-        color: var(--au-orange-700);
-      }
+  .say-pill [contenteditable].mark-highlight-manual {
+    color: var(--au-orange-700);
+    &.ProseMirror-selectednode {
+      background-color: var(--au-blue-300);
+      outline: none;
     }
-    .unfilled-variable {
-      color: var(--au-orange-700);
-      background-color: var(--au-orange-300);
-      font-style: italic;
-      line-height: 1.2rem;
-      padding: 0.3rem;
-
-    }
+  }
+  .unfilled-variable {
+    color: var(--au-orange-700);
+    background-color: var(--au-orange-300);
+    font-style: italic;
+    line-height: 1.2rem;
+    padding: 0.3rem;
   }
 }
 
 .ember-node.ProseMirror-selectednode {
-  > .variable {
-    &.atomic {
-      background-color: var(--au-blue-200);
-    }
-    outline: 2px solid var(--au-blue-500);
-
-    ::selection {
-      //background-color: var(--au-blue-300);
-    }
+  > .say-pill.atomic {
+    background-color: var(--au-blue-200);
   }
 }
 
