@@ -1,6 +1,7 @@
 import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   BESLUIT,
+  ELI,
   PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -11,6 +12,13 @@ import { v4 as uuid } from 'uuid';
 export function buildArticleStructure(
   schema: Schema,
   uriGenerator?: () => string,
+  /**
+   * Adds a backlink to this resource instead of relying on being linked to the decision after
+   * creation.
+   * Adding backlinks like this does not play nice with the RDFa tools, but if combined with a
+   * document with this URI imported it works as expected. It creates valid RDFa in either case.
+   */
+  decisionUri?: string,
 ) {
   let articleResource: string;
   if (uriGenerator) {
@@ -34,6 +42,14 @@ export function buildArticleStructure(
           object: factory.contentLiteral(),
         },
       ] satisfies OutgoingTriple[],
+      backlinks: !decisionUri
+        ? undefined
+        : [
+            {
+              subject: factory.resourceNode(decisionUri),
+              predicate: ELI('has_part'),
+            },
+          ],
       hasTitle: false,
       structureType: 'article',
       displayStructureName: true,

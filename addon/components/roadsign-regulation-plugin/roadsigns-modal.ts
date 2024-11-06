@@ -48,7 +48,7 @@ type Args = {
   options: RoadsignRegulationPluginOptions;
 };
 
-export default class RoadsignRegulationCard extends Component<Args> {
+export default class RoadsignsModal extends Component<Args> {
   endpoint: string;
   imageBaseUrl: string;
 
@@ -100,12 +100,10 @@ export default class RoadsignRegulationCard extends Component<Args> {
   get controller() {
     return this.args.controller;
   }
-  get decisionRange() {
-    return getCurrentBesluitRange(this.controller);
-  }
   get decisionLocation() {
-    return this.decisionRange
-      ? { node: this.decisionRange.node, pos: this.decisionRange.from }
+    const decisionRange = getCurrentBesluitRange(this.controller);
+    return decisionRange
+      ? { node: decisionRange.node, pos: decisionRange.from }
       : null;
   }
 
@@ -323,9 +321,11 @@ export default class RoadsignRegulationCard extends Component<Args> {
                           `;
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
+    const passedDecisionUri = this.args.options.decisionContext?.decisionUri;
     const article = buildArticleStructure(
       this.controller.activeEditorState.schema,
       this.args.options.articleUriGenrator,
+      this.args.options.decisionContext?.decisionUri,
     );
     const contentFragment = ProseParser.fromSchema(
       this.args.controller.schema,
@@ -334,13 +334,12 @@ export default class RoadsignRegulationCard extends Component<Args> {
     }).content;
     const nodeToInsert = article.copy(contentFragment);
 
-    this.args.controller.doCommand(
-      insertArticle({
-        node: nodeToInsert,
-        decisionLocation: unwrap(this.decisionLocation),
-      }),
-      { view: this.args.controller.mainEditorView },
-    );
+    const insertArgs: Parameters<typeof insertArticle>[0] = passedDecisionUri
+      ? { node: nodeToInsert, insertFreely: true }
+      : { node: nodeToInsert, decisionLocation: unwrap(this.decisionLocation) };
+    this.args.controller.doCommand(insertArticle(insertArgs), {
+      view: this.args.controller.mainEditorView,
+    });
     this.args.closeModal();
   }
 

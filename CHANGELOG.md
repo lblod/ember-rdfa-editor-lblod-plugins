@@ -1,5 +1,68 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.3.1
+
+### Patch Changes
+
+- [#494](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/494) [`3941b65`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3941b659fbb710be0aafd34b911a42416a1124c9) Thanks [@elpoelma](https://github.com/elpoelma)! - Ensure that the event handlers of snippet actions are only triggered once
+
+## 24.3.0
+
+### Minor Changes
+
+- [#493](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/493) [`1e596e1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1e596e1db4d201ed2cba0713808d918944c51eb6) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign structure nodes v1
+
+### Patch Changes
+
+- [#492](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/492) [`76b6ecb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/76b6ecb4ff09ec18088448fd6da69b9e69f34a7c) Thanks [@elpoelma](https://github.com/elpoelma)! - Disable `rdfaAware` setting for heading nodes in dummy app
+
+## 24.2.3
+
+### Patch Changes
+
+- [#491](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/491) [`2191d5a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2191d5a18669ab15bb64e09ec8e7273020dbca79) Thanks [@piemonkey](https://github.com/piemonkey)! - Do not add `" ."` at the end of 'only article' for single articles
+
+## 24.2.2
+
+### Patch Changes
+
+- [`651d431`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/651d431f79c13ee85f9265cc01a7389e71392716) Thanks [@abeforgit](https://github.com/abeforgit)! - Allow block content in template comments
+
+## 24.2.1
+
+### Patch Changes
+
+- [#490](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/490) [`816bb59`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/816bb59edb6e8e51dee6ee1ad26acb1b7ad44761) Thanks [@lagartoverde](https://github.com/lagartoverde)! - parse articles also from templates
+
+## 24.2.0
+
+### Minor Changes
+
+- [#489](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/489) [`9a89b99`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9a89b992a2e6520e06720c099bff1dd7f115d9ab) Thanks [@piemonkey](https://github.com/piemonkey)! - Add config to specify an external decision URI when creating decision article structures
+
+- [#489](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/489) [`9a89b99`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9a89b992a2e6520e06720c099bff1dd7f115d9ab) Thanks [@piemonkey](https://github.com/piemonkey)! - Add config to specify an external decision URI in lpdc plugin
+
+- [#489](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/489) [`9a89b99`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9a89b992a2e6520e06720c099bff1dd7f115d9ab) Thanks [@piemonkey](https://github.com/piemonkey)! - Add config to specify an external decision URI and type in roadsign-regulation-plugin
+
+## 24.1.2
+
+### Patch Changes
+
+- [`45068be`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/45068be46fccd98ad9af2afafcd423c9c5dfd5fd) Thanks [@abeforgit](https://github.com/abeforgit)! - fix word-wrapping in structure nodes
+
+## 24.1.1
+
+### Patch Changes
+
+- [#488](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/488) [`8f665b9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8f665b907a1e89859b236d43c69beb941337dc48) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix the person edit modal was not being resetted on closing
+
+## 24.1.0
+
+### Minor Changes
+
+- [#486](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/486) [`630ee77`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/630ee77532506c3643edfe70c0e220e61e33ffa2) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Use a special name if you only have one article in the document
+  The title from the second article is shortened to Art.
+
 ## 24.0.0
 
 ### Major Changes

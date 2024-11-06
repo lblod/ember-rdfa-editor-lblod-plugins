@@ -169,7 +169,7 @@ export default class BesluitSampleController extends Controller {
         oslo_location: osloLocation(this.config.location),
         roadsign_regulation,
         mandatee_table,
-        heading: headingWithConfig({ rdfaAware: true }),
+        heading: headingWithConfig({ rdfaAware: false }),
         blockquote,
 
         horizontal_rule,
@@ -466,7 +466,7 @@ export default class BesluitSampleController extends Controller {
             <h5>Beslissing</h5>
 
             <div property="prov:value" datatype="xsd:string">
-              <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel">
+              <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel" data-say-is-only-article="true">
                 <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
                 <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
                 <div property="prov:value" datatype="xsd:string">
@@ -518,7 +518,7 @@ export default class BesluitSampleController extends Controller {
 
             <p class="u-spacer--small">Beslist,</p>
             <div property="prov:value" datatype="xsd:string">
-              <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel">
+              <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel" data-say-is-only-article="true">
                 <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
                 <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
                 <div property="prov:value" datatype="xsd:string"><span class="mark-highlight-manual">Voer inhoud in</span></div>
@@ -563,7 +563,7 @@ export default class BesluitSampleController extends Controller {
           <br />
           <h5>Beslissing</h5>
           <div property="prov:value" datatype="xsd:string">
-            <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel">
+            <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel" data-say-is-only-article="true">
               <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
               <span style="display: none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
               <div property="prov:value" datatype="xsd:string"><span class="mark-highlight-manual">Voer inhoud in</span></div>

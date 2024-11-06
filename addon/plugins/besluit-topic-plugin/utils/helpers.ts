@@ -4,7 +4,6 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { ElementPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
@@ -36,13 +35,13 @@ export const getCurrentBesluitRange = (
   };
 };
 
-export const getCurrentBesluitURI = (controller: SayController) => {
-  const currentBesluitRange = getCurrentBesluitRange(controller);
-  const doc = controller.mainEditorState.doc;
+export const getCurrentBesluitURI = (
+  controllerOrState: SayController | EditorState,
+) => {
+  const currentBesluitRange = getCurrentBesluitRange(controllerOrState);
 
   if (currentBesluitRange) {
-    const node = unwrap(doc.nodeAt(currentBesluitRange.from));
-    return node.attrs['subject'] as string | undefined;
+    return currentBesluitRange.node.attrs['subject'] as string | undefined;
   }
 
   return;

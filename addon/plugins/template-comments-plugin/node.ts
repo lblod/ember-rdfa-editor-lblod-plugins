@@ -24,7 +24,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     component: TemplateCommentsComponent as unknown as ComponentLike,
     inline: false,
     group: 'block',
-    content: '(paragraph|list)+',
+    content: 'block+',
     draggable: false,
     selectable: true,
     isolating: true,
