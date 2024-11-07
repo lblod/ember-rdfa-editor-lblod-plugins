@@ -169,8 +169,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.4.0
-        version: 10.4.0(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.7.0-dev.4a5ee3605e2f6f564e265dcc4cbd349ece3cfd41
+        version: 10.7.0-dev.4a5ee3605e2f6f564e265dcc4cbd349ece3cfd41(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1595,8 +1595,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.4.0':
-    resolution: {integrity: sha512-rmSMmJj6Xbxg2v1xHo3wtJbfpwzrzm1mmKRc2vTsG3ho64V4QQE7IWD2PdnutEMYVYEQKet0W653tHAT8Em/1w==}
+  '@lblod/ember-rdfa-editor@10.7.0-dev.4a5ee3605e2f6f564e265dcc4cbd349ece3cfd41':
+    resolution: {integrity: sha512-Z/9g18tmhwkzBwv++ppHmtYxbHr/KAz3LPuDm64Mzxqoxi0IZ0h6gwcWfRDknascP8VUWyew7Ri9nf/+6fg2XQ==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -1607,7 +1607,7 @@ packages:
       ember-intl: ^6.4.0 || ^7.0.2
       ember-modifier: ^4.1.0
       ember-power-select: ^7.1.0
-      ember-source: ^4.12.0
+      ember-source: ~4.12.0
       ember-template-imports: ^4.1.1
       ember-truth-helpers: ^4.0.3
     peerDependenciesMeta:
@@ -10735,7 +10735,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.4.0(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.7.0-dev.4a5ee3605e2f6f564e265dcc4cbd349ece3cfd41(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7

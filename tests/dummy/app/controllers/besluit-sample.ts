@@ -113,6 +113,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin/node';
 import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
+import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -323,6 +324,7 @@ export default class BesluitSampleController extends Controller {
       structure: structureView(controller),
       mandatee_table: mandateeTableView(controller),
       autofilled_variable: autofilledVariableView(controller),
+      block_rdfa: (node) => new BlockRDFaView(node),
     } satisfies Record<string, SayNodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [
