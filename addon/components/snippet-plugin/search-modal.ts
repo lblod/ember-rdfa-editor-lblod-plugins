@@ -39,7 +39,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   }
 
   get snippetListNames() {
-    return this.args.snippetListNames?.join(', ');
+    return this.args.snippetListNames?.map((name) => `"${name}"`).join(', ');
   }
 
   @action
