@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
-  type ImportedResourceMap,
+  type SnippetListProperties,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
@@ -23,13 +23,7 @@ interface Sig {
 }
 
 export default class SnippetInsertRdfaComponent extends Component<Sig> {
-  get disableInsert() {
-    return (this.snippetListProperties?.listIds.length ?? 0) === 0;
-  }
-
-  get snippetListProperties():
-    | { listIds: string[]; importedResources: ImportedResourceMap }
-    | undefined {
+  get listProperties(): SnippetListProperties | undefined {
     const activeNode = this.args.node.value;
     const activeNodeSnippetListIds = getSnippetListIdsProperties(activeNode);
 
@@ -38,6 +32,8 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
         listIds: getAssignedSnippetListsIdsFromProperties(
           activeNodeSnippetListIds,
         ),
+        placeholderId: activeNode.attrs.placeholderId,
+        names: activeNode.attrs.snippetListNames,
         importedResources: activeNode.attrs.importedResources,
       };
     }
@@ -58,6 +54,8 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
       if (properties.length > 0) {
         return {
           listIds: getAssignedSnippetListsIdsFromProperties(properties),
+          placeholderId: parentNode.node.attrs.placeholderId,
+          names: parentNode.node.attrs.snippetListNames,
           importedResources: parentNode.node.attrs.importedResources,
         };
       }
@@ -79,8 +77,7 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
     <SnippetInsert
       @config={{@config}}
       @controller={{@controller}}
-      @snippetListProperties={{this.snippetListProperties}}
-      @disabled={{this.disableInsert}}
+      @listProperties={{this.listProperties}}
       @allowMultipleSnippets={{this.allowMultipleSnippets}}
     />
   </template>
