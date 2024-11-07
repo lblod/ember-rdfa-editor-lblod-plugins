@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import templateUuidInstantiator from '@lblod/template-uuid-instantiator';
 import {
   type Attrs,
   getRdfaAttrs,
@@ -99,6 +100,8 @@ export function createSnippet({
       replacedContent = replacedContent.replaceAll(imported, linked);
     }
   }
+  // Instantiate URIs of the form --ref-algo-123
+  replacedContent = templateUuidInstantiator(replacedContent);
   // Create the new node
   const parser = ProseParser.fromSchema(schema);
   const contentAsNode = htmlToDoc(replacedContent, {
