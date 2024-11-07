@@ -149,33 +149,33 @@
   background-color: var(--au-orange-300);
   border-radius: var(--au-radius);
   border: 0.1rem solid var(--au-orange-500);
-}
 
-.say-snippet-placeholder__icon {
-  background-color: var(--au-orange-500);
-  color: black;
-  height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
-  width: $au-unit;
-  margin-right: $au-unit * 0.5;
-  border-radius: $au-unit-large;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
+  .say-snippet-placeholder__icon {
+    background-color: var(--au-orange-500);
+    color: black;
+    height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
+    width: $au-unit;
+    margin-right: $au-unit * 0.5;
+    border-radius: $au-unit-large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 
-.say-snippet-placeholder__content {
-  margin-top: 0 !important;
-}
+  .say-snippet-placeholder__content {
+    margin-top: 0;
+  }
 
-.say-snippet-placeholder__title {
-  color: var(--au-orange-700);
-  font-weight: var(--au-medium);
-}
+  .say-snippet-placeholder__title {
+    color: var(--au-orange-700);
+    font-weight: var(--au-medium);
+  }
 
-.say-snippet-placeholder__button {
-  margin: 0;
-  padding: 0;
+  .say-snippet-placeholder__button {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .ProseMirror-selectednode > .say-snippet-placeholder {
