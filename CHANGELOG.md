@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 24.3.2
+
+### Patch Changes
+
+- [#498](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/498) [`2f0c6fa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2f0c6fa7bb8db188849b5331892eb16d7d692f44) Thanks [@piemonkey](https://github.com/piemonkey)! - Correctly instantiate placeholder URIs in snippets when inserting
+
 ## 24.3.1
 
 ### Patch Changes
