@@ -45,7 +45,7 @@ export default class MandateeTableNode extends Component<Sig> {
         />
         <div>
           <h6 class='say-mandatee-table__title'>{{this.title}}</h6>
-          <p>
+          <p class='say-mandatee-table__warning'>
             {{this.warning}}
           </p>
         </div>

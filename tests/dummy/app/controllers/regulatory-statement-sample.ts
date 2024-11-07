@@ -125,6 +125,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
+import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -359,6 +360,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       snippet_placeholder: snippetPlaceholderView(controller),
       snippet: snippetView(this.config.snippet)(controller),
       autofilled_variable: autofilledVariableView(controller),
+      block_rdfa: (node) => new BlockRDFaView(node),
     };
   };
   @tracked plugins: Plugin[] = [
