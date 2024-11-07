@@ -288,7 +288,7 @@ export default class RegulatoryStatementSampleController extends Controller {
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
       },
       snippet: {
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',

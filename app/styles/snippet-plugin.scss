@@ -152,7 +152,7 @@
 }
 
 .say-snippet-placeholder__icon {
-  background-color: #ffa10a;
+  background-color: var(--au-orange-500);
   color: black;
   height: $au-unit - 0.1rem; // compensate for visual distortion of perfect circle
   width: $au-unit;
@@ -170,7 +170,7 @@
 
 .say-snippet-placeholder__title {
   color: #9e5805;
-  font-weight: 500;
+  font-weight: var(--au-medium);
 }
 
 .say-snippet-placeholder__button {
