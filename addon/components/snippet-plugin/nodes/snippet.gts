@@ -28,6 +28,8 @@ import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippe
 import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
+import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
+import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
 
 interface ButtonSig {
   Args: {
@@ -62,6 +64,15 @@ export default class SnippetNode extends Component<Signature> {
   get controller() {
     return this.args.controller;
   }
+  get schema() {
+    return this.controller.schema;
+  }
+  get snippetOrPlaceholder() {
+    return [
+      this.schema.nodes.snippet,
+      this.schema.nodes.snippet_placeholder,
+    ].filter(Boolean);
+  }
   get node() {
     return this.args.node;
   }
@@ -94,17 +105,46 @@ export default class SnippetNode extends Component<Signature> {
   deleteFragment() {
     const position = this.args.getPos();
     if (position !== undefined) {
-      this.controller.withTransaction((tr) => {
-        return transactionCombinator(
-          this.controller.mainEditorState,
-          tr.deleteRange(position, position + this.node.nodeSize),
-        )([recalculateNumbers]).transaction;
-      });
+      const matchingSnippetExists = hasDecendant(
+        this.controller.mainEditorState.doc,
+        (node) =>
+          node !== this.node &&
+          this.snippetOrPlaceholder.includes(node.type) &&
+          node.attrs.placeholderId === this.node.attrs.placeholderId,
+      );
+      if (matchingSnippetExists) {
+        this.controller.withTransaction((tr) => {
+          return transactionCombinator(
+            this.controller.mainEditorState,
+            tr.deleteRange(position, position + this.node.nodeSize),
+          )([recalculateNumbers]).transaction;
+        });
+      } else {
+        const node = createSnippetPlaceholder({
+          listProperties: {
+            placeholderId: this.node.attrs.placeholderId,
+            listIds: this.node.attrs.snippetListIds,
+            names: this.node.attrs.snippetListNames,
+            importedResources: this.node.attrs.importedResources,
+          },
+          schema: this.schema,
+          allowMultipleSnippets: this.allowMultipleSnippets,
+        });
+
+        this.args.controller.withTransaction(
+          (tr) =>
+            transactionCombinator(
+              this.controller.mainEditorState,
+              tr.replaceWith(position, position + this.node.nodeSize, node),
+            )([recalculateNumbers]).transaction,
+          { view: this.args.controller.mainEditorView },
+        );
+      }
     }
   }
   createSliceFromElement(element: Element) {
     return new Slice(
-      ProseParser.fromSchema(this.controller.schema).parse(element, {
+      ProseParser.fromSchema(this.schema).parse(element, {
         preserveWhitespace: true,
       }).content,
       0,
@@ -127,7 +167,6 @@ export default class SnippetNode extends Component<Signature> {
   @action
   onInsert(content: string, title: string) {
     this.closeModal();
-    const assignedSnippetListsIds = this.node.attrs.assignedSnippetListsIds;
     let start = 0;
     let end = 0;
     const pos = this.args.getPos();
@@ -147,8 +186,12 @@ export default class SnippetNode extends Component<Signature> {
       insertSnippet({
         content,
         title,
-        assignedSnippetListsIds,
-        importedResources: this.node.attrs.importedResources,
+        listProperties: {
+          placeholderId: this.node.attrs.placeholderId,
+          listIds: this.node.attrs.snippetListIds,
+          names: this.node.attrs.snippetListNames,
+          importedResources: this.node.attrs.importedResources,
+        },
         range: { start, end },
         allowMultipleSnippets: this.allowMultipleSnippets,
       }),
@@ -189,7 +232,7 @@ export default class SnippetNode extends Component<Signature> {
       @closeModal={{this.closeModal}}
       @config={{this.node.attrs.config}}
       @onInsert={{this.onInsert}}
-      @assignedSnippetListsIds={{this.node.attrs.assignedSnippetListsIds}}
+      @snippetListIds={{this.node.attrs.snippetListIds}}
     />
   </template>
 }

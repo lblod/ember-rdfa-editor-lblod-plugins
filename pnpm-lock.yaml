@@ -29,6 +29,9 @@ importers:
       '@lblod/marawa':
         specifier: 0.8.0-beta.6
         version: 0.8.0-beta.6
+      '@lblod/template-uuid-instantiator':
+        specifier: ^1.0.2
+        version: 1.0.2
       '@rdfjs/data-model':
         specifier: ^2.0.2
         version: 2.0.2
@@ -166,8 +169,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.4.0
-        version: 10.4.0(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.7.2
+        version: 10.7.2(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1592,8 +1595,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.4.0':
-    resolution: {integrity: sha512-rmSMmJj6Xbxg2v1xHo3wtJbfpwzrzm1mmKRc2vTsG3ho64V4QQE7IWD2PdnutEMYVYEQKet0W653tHAT8Em/1w==}
+  '@lblod/ember-rdfa-editor@10.7.2':
+    resolution: {integrity: sha512-PSkYAAFqhl7+wpPtSlX0cO4sFG8Gk+/Fic1ORuMr2hltYUx0BIZB/3JeTmnr0UAiUAmMZG7XXM1nDbcTPnlfYg==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -1604,7 +1607,7 @@ packages:
       ember-intl: ^6.4.0 || ^7.0.2
       ember-modifier: ^4.1.0
       ember-power-select: ^7.1.0
-      ember-source: ^4.12.0
+      ember-source: ~4.12.0
       ember-template-imports: ^4.1.1
       ember-truth-helpers: ^4.0.3
     peerDependenciesMeta:
@@ -1617,6 +1620,9 @@ packages:
 
   '@lblod/marawa@0.8.0-beta.6':
     resolution: {integrity: sha512-BW3yCpeQlk9EPnQAEQnM9uViA8RC5DkuoiaPJzbuhMcLvKHfI4cjc6dTg9i8qAijbL/xObmQ/Aexko2Xcj9ktw==}
+
+  '@lblod/template-uuid-instantiator@1.0.2':
+    resolution: {integrity: sha512-gw6nJnWCcHZYOG/Z/5Br8Txjqi5qV4S95ApoBpxeJKFzFyXMpl1Gh6LOKeOtuJerLp4NtZ71uVTJ3LzrrS2bdQ==}
 
   '@lezer/common@1.2.1':
     resolution: {integrity: sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ==}
@@ -4968,7 +4974,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -10729,7 +10735,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.4.0(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.7.2(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
@@ -10803,6 +10809,10 @@ snapshots:
     dependencies:
       '@rdfjs/data-model': 1.3.4
       '@rdfjs/dataset': 1.1.1
+
+  '@lblod/template-uuid-instantiator@1.0.2':
+    dependencies:
+      uuid: 9.0.1
 
   '@lezer/common@1.2.1': {}
 

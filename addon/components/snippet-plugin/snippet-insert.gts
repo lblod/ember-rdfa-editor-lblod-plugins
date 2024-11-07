@@ -11,7 +11,7 @@ import {
   Slice,
 } from '@lblod/ember-rdfa-editor';
 import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { type ImportedResourceMap } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import SearchModal from './search-modal';
 
@@ -19,10 +19,7 @@ interface Sig {
   Args: {
     controller: SayController;
     config: SnippetPluginConfig;
-    snippetListProperties:
-      | { listIds: string[]; importedResources: ImportedResourceMap }
-      | undefined;
-    disabled?: boolean;
+    listProperties: SnippetListProperties | undefined;
     allowMultipleSnippets?: boolean;
   };
 }
@@ -32,6 +29,9 @@ export default class SnippetInsertComponent extends Component<Sig> {
 
   get controller() {
     return this.args.controller;
+  }
+  get disabled() {
+    return (this.args.listProperties?.listIds.length ?? 0) === 0;
   }
 
   @action
@@ -58,19 +58,16 @@ export default class SnippetInsertComponent extends Component<Sig> {
   @action
   onInsert(content: string, title: string) {
     this.closeModal();
-    this.controller.doCommand(
-      insertSnippet({
-        content,
-        title,
-        assignedSnippetListsIds: this.args.snippetListProperties?.listIds || [],
-        importedResources: this.args.snippetListProperties?.importedResources,
-        allowMultipleSnippets: this.args.allowMultipleSnippets,
-      }),
-    );
-  }
-
-  get disabled() {
-    return this.args.disabled ?? false;
+    if (this.args.listProperties) {
+      this.controller.doCommand(
+        insertSnippet({
+          content,
+          title,
+          listProperties: this.args.listProperties,
+          allowMultipleSnippets: this.args.allowMultipleSnippets,
+        }),
+      );
+    }
   }
 
   <template>
@@ -91,7 +88,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @closeModal={{this.closeModal}}
       @config={{@config}}
       @onInsert={{this.onInsert}}
-      @assignedSnippetListsIds={{@snippetListProperties.listIds}}
+      @snippetListIds={{@listProperties.listIds}}
     />
   </template>
 }
