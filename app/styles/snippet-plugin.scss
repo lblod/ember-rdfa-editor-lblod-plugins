@@ -146,9 +146,9 @@
   display: flex;
   flex-direction: row;
   padding: $au-unit-small $au-unit-small * 1.5;
-  background-color: #fff7bb;
+  background-color: var(--au-orange-300);
   border-radius: var(--au-radius);
-  border: 0.1rem solid #e5d34f;
+  border: 0.1rem solid var(--au-orange-500);
 }
 
 .say-snippet-placeholder__icon {
@@ -169,7 +169,7 @@
 }
 
 .say-snippet-placeholder__title {
-  color: #9e5805;
+  color: var(--au-orange-700);
   font-weight: var(--au-medium);
 }
 
