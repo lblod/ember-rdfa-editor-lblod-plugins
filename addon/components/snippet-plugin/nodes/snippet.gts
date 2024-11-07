@@ -253,6 +253,7 @@ export default class SnippetNode extends Component<Signature> {
       @config={{this.node.attrs.config}}
       @onInsert={{this.onInsert}}
       @snippetListIds={{getSnippetListIdsFromNode this.node}}
+      @snippetListNames={{this.node.attrs.snippetListNames}}
     />
   </template>
 }

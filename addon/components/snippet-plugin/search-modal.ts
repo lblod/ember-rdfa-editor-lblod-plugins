@@ -12,6 +12,7 @@ import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 interface Args {
   config: SnippetPluginConfig;
   snippetListIds: string[] | undefined;
+  snippetListNames: string[] | undefined;
   closeModal: () => void;
   open: boolean;
   onInsert: (content: string, title: string) => void;
@@ -35,6 +36,10 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
 
   get searchText() {
     return this.inputSearchText;
+  }
+
+  get snippetListNames() {
+    return this.args.snippetListNames?.map((name) => `"${name}"`).join(', ');
   }
 
   @action
