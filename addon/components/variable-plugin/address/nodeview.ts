@@ -31,7 +31,7 @@ export default class AddressNodeviewComponent extends Component<Args> {
 
   get content() {
     if (this.filled) {
-      return this.address;
+      return this.address?.formatted;
     } else {
       return this.label;
     }
