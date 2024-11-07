@@ -303,7 +303,7 @@ snippet-plugin:
     button: Selecteer het gewenste fragment
     active-lists: 'Actieve lijsten:'
   modal:
-    title: Kies een fragment
+    title: Kies een fragment uit {snippetListNames}
     preview-button:
       title: Preview van fragment tonen
     select-button:

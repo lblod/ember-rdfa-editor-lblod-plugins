@@ -304,7 +304,7 @@ snippet-plugin:
     button: Select the desired snippet
     active-lists: 'Active lists:'
   modal:
-    title: Choose a snippet
+    title: Choose a snippet from {snippetListNames}
     preview-button:
       title: Show snippet preview
     select-button:

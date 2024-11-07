@@ -89,6 +89,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @config={{@config}}
       @onInsert={{this.onInsert}}
       @snippetListIds={{@listProperties.listIds}}
+      @snippetListNames={{@listProperties.names}}
     />
   </template>
 }
