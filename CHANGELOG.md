@@ -1,5 +1,23 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 25.0.0
+
+### Major Changes
+
+- [#499](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/499) [`3255c70`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3255c7021008a801eb5b07ebd49a6e557467b4ba) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/ember-rdfa-editor` peerdep requirement to version [10.7.2](https://github.com/lblod/ember-rdfa-editor/releases/tag/v10.7.2)
+
+### Minor Changes
+
+- [#495](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/495) [`046b6b7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/046b6b7c65b1e9144b7c469bbb2d968652639117) Thanks [@piemonkey](https://github.com/piemonkey)! - When removing last snippet of a 'group', replace the placeholder instead of completely deleting
+
+### Patch Changes
+
+- [#495](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/495) [`6547270`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/65472703c65a05feb6793a973e3785228822e1a1) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix bug with snippet list names containing a `,` displaying as multiple lists
+
+- [#499](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/499) [`3255c70`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3255c7021008a801eb5b07ebd49a6e557467b4ba) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix margins of mandatee table warning message
+
+- [#500](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/500) [`0b336ad`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0b336addbf4287620d471515aa75c2d62dc2627d) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix bug when setting a date with a day bigger than the number of days in the current month
+
 ## 24.3.2
 
 ### Patch Changes
