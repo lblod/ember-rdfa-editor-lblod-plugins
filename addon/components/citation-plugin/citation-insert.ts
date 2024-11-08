@@ -64,6 +64,10 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     }
     const { selection } = this.controller.mainEditorState;
     const config = this.config;
+    if (!('type' in config)) {
+      // Enable plugin document wide
+      return false;
+    }
     if (config.type === 'ranges') {
       const ranges = config.activeInRanges(this.controller.mainEditorState);
       for (const range of ranges) {

@@ -335,9 +335,10 @@ Make `this.citationPlugin` a tracked reference to the plugin created with the fu
 
 Configuration:
 
-- type: it can either be 'nodes', or 'ranges'
+- type (optional): it can either be 'nodes', or 'ranges'
   * if 'nodes' is selected, you are expected to pass the `activeInNode` function. It's a function which expects an instance of a prosemirror node and returns whether it should be active in that node. The previously expected `activeInNodeTypes` is marked as deprecated and will be removed in a future release.
   * if 'ranges' is selected, you are expected to pass the `activeInRanges` function. It's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`
+  * if no type is provided, the citation plugin will be activated document-wide
 
 - regex: you can provide your custom regex to detect citations, if not the default one will be used
 
