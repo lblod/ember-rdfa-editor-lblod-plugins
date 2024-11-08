@@ -458,11 +458,17 @@ lmb-plugin:
     insert: Insert
     search:
       title: Filter on
+    nameSearch:
+      placeholder: Search by name...
+    adminUnitSeach:
+      placeholder: Administrative Unit...
     fields:
       name: Name
       status: Status
       fractie: Fractie
       role: Role
+      period: Administrative Period
+      adminUnit: e.g. Gent, Aalst...
 
 location-plugin:
   modal:

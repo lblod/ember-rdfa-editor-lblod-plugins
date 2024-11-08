@@ -2,19 +2,32 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
 import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
-import { fetchMandatees } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchMandatees';
-type SearchSort = [keyof Mandatee, 'ASC' | 'DESC'] | false;
+import {
+  FetchMandateesArgs,
+  fetchMandatees,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchMandatees';
+import {
+  BESTUURSPERIODES,
+  BestuursperiodeLabel,
+  BestuursperiodeURI,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { isSome } from '@lblod/ember-rdfa-editor/utils/_private/option';
+export type SearchSort = [keyof Mandatee, 'ASC' | 'DESC'] | false;
 
 interface Args {
   config: LmbPluginConfig;
   open: boolean;
   closeModal: () => void;
   onInsert: (mandatee: Mandatee) => void;
+}
+interface AdminPeriodOption {
+  label: BestuursperiodeLabel;
+  uri: BestuursperiodeURI;
 }
 
 export default class LmbPluginSearchModalComponent extends Component<Args> {
@@ -28,96 +41,120 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   @tracked pageSize = 20;
   @tracked totalCount = 0;
 
+  // Admin periods
+  @tracked selectedAdminPeriod: AdminPeriodOption;
+  adminPeriods: AdminPeriodOption[];
+  // Admin units
+  @tracked adminUnitSearch: string;
+  // tracks whether the user has just typed a character
+  // doesn't need to be reactive
+  typing = false;
+  constructor(owner: unknown, args: Args) {
+    super(owner, args);
+    this.adminPeriods = Object.entries(BESTUURSPERIODES).map(
+      ([key, value]: [BestuursperiodeLabel, BestuursperiodeURI]) => ({
+        label: key,
+        uri: value,
+      }),
+    );
+    this.selectedAdminPeriod =
+      this.adminPeriods.find(
+        (entry) =>
+          isSome(args.config.defaultPeriod) &&
+          entry.label === args.config.defaultPeriod,
+      ) ?? this.adminPeriods[this.adminPeriods.length - 1];
+    this.adminUnitSearch = args.config.defaultAdminUnit ?? '';
+  }
+
   get config() {
     return this.args.config;
   }
+  selectAdminPeriod = (value: AdminPeriodOption) => {
+    this.selectedAdminPeriod = value;
+    this.pageNumber = 0;
+  };
+  setAdminUnitSearch = (event: InputEvent) => {
+    this.typing = true;
+    assert(
+      'setAdminUnitSearch must be bound to an input element',
+      event.target instanceof HTMLInputElement,
+    );
+    this.adminUnitSearch = event.target.value;
+    this.pageNumber = 0;
+  };
 
   @action
   async closeModal() {
+    this.typing = false;
     this.inputSearchText = null;
     this.sort = false;
     await this.servicesResource.cancel();
     this.args.closeModal();
   }
 
-  fetchData = restartableTask(async () => {
-    return fetchMandatees({ endpoint: this.args.config.endpoint });
-  });
-
   // TODO Either make this a trackedFunction or do filtering on the query and correctly pass an
   // AbortController
-  search = restartableTask(async () => {
-    if (!this.args.open) {
-      return {
-        results: [],
-        totalCount: 0,
-      };
-    }
+  search = restartableTask(
+    async ({
+      endpoint,
+      searchString,
+      page,
+      pageSize,
+      sort,
+      period,
+      adminUnitSearch,
+    }: FetchMandateesArgs) => {
+      // debounce, but only when the input fields are being used
+      if (this.typing) {
+        this.typing = false;
+        await timeout(250);
+      }
 
-    // Can't do what I want, so if the user modifies the filter before resolving the query will run again
-    if (!this.fetchData.lastComplete) {
+      if (!this.args.open) {
+        return {
+          results: [],
+          totalCount: 0,
+        };
+      }
+
       try {
-        await this.fetchData.perform();
+        const result = await fetchMandatees({
+          endpoint,
+          searchString,
+          page,
+          pageSize,
+          sort,
+          period,
+          adminUnitSearch,
+        });
+        const { count, mandatees } = result;
+
+        return {
+          results: mandatees,
+          totalCount: count,
+        };
       } catch (err) {
         console.error('Got an error fetching LMB data', err);
         this.error = err;
       }
-    }
-
-    if (!this.fetchData.lastComplete?.value) return;
-    let mandatees: Mandatee[] = [...this.fetchData.lastComplete.value];
-
-    if (this.inputSearchText) {
-      mandatees = mandatees?.filter((mandatee: Mandatee) =>
-        mandatee.fullName
-          .toLowerCase()
-          .includes(this.inputSearchText?.toLowerCase() as string),
-      );
-    }
-
-    if (this.sort) {
-      const [key, sortingDirection] = this.sort;
-      mandatees = mandatees.sort((a: Mandatee, b: Mandatee) => {
-        if (key === 'fullName') {
-          if (a.lastName === b.lastName) {
-            if (a.firstName > b.firstName) {
-              return sortingDirection === 'ASC' ? 1 : -1;
-            } else {
-              return sortingDirection === 'ASC' ? -1 : 1;
-            }
-          } else {
-            if (a.lastName > b.lastName) {
-              return sortingDirection === 'ASC' ? 1 : -1;
-            } else {
-              return sortingDirection === 'ASC' ? -1 : 1;
-            }
-          }
-        } else if (a[key] > b[key]) {
-          return sortingDirection === 'ASC' ? 1 : -1;
-        } else {
-          return sortingDirection === 'ASC' ? -1 : 1;
-        }
-      });
-    }
-
-    const totalCount = mandatees?.length;
-
-    mandatees = mandatees?.slice(
-      this.pageSize * this.pageNumber,
-      this.pageSize * (this.pageNumber + 1),
-    );
-    return {
-      results: mandatees,
-      totalCount,
-    };
-  });
+      return {
+        results: [],
+        totalCount: 0,
+      };
+    },
+  );
 
   servicesResource = trackedTask(this, this.search, () => [
-    this.inputSearchText,
-    this.sort,
-    this.pageNumber,
-    this.pageSize,
-    this.args.open,
+    {
+      endpoint: this.args.config.endpoint,
+      searchString: this.inputSearchText ?? '',
+      sort: this.sort,
+      page: this.pageNumber,
+      pageSize: this.pageSize,
+      open: this.args.open,
+      period: this.selectedAdminPeriod.uri,
+      adminUnitSearch: this.adminUnitSearch,
+    } satisfies Partial<FetchMandateesArgs> & { open: boolean },
   ]);
 
   @action
@@ -130,6 +167,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       'inputSearchText must be bound to an input element',
       event.target instanceof HTMLInputElement,
     );
+    this.typing = true;
 
     this.inputSearchText = event.target.value;
     this.pageNumber = 0;

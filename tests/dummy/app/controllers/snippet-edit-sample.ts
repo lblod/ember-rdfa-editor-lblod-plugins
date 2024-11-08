@@ -110,6 +110,7 @@ import {
   snippet,
   snippetView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetListSelect = SnippetListSelect;
@@ -335,6 +336,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         controller,
       ),
       snippet: snippetView(this.config.snippet)(controller),
+      block_rdfa: (node) => new BlockRDFaView(node),
     };
   };
   @tracked plugins: Plugin[] = [

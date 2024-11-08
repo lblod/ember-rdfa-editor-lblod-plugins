@@ -1,7 +1,7 @@
 common:
   insert: Voeg in
   search:
-    loading: Laden…
+    loading: Aan het laden…
     no-results: Geen resultaten gevonden
     error-title: Probleem bij het laden
     error-intro: 'Er is een fout opgetreden tijdens het laden van de resultaten:'
@@ -457,11 +457,17 @@ lmb-plugin:
     insert: Invoegen
     search:
       title: Filter op
+    nameSearch:
+      placeholder: Zoek op naam...
+    adminUnitSearch:
+      placeholder: bv. Gent, Aalst...
     fields:
       name: Naam
       status: Status
       fractie: Fractie
       role: Rol
+      period: Bestuursperiode
+      adminUnit: Bestuurseenheid
 
 location-plugin:
   modal:
