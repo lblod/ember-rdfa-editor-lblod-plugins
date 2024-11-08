@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 25.2.1
+
+### Patch Changes
+
+- [#497](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/497) [`2b4b401`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2b4b4011e3d66c23f232bf6690ca80a5b0a90298) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign variable pills
+
+- [#497](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/497) [`2b4b401`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2b4b4011e3d66c23f232bf6690ca80a5b0a90298) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Bump ember-rdfa-editor to 10.7.3
+
 ## 25.2.0
 
 ### Minor Changes
