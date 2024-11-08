@@ -301,10 +301,10 @@ snippet-plugin:
   placeholder:
     title-single: Snippet from the list "{listName}"
     title-multiple: Snippet from multiple lists
-    text: Select this then insert the desired snippet
+    button: Select the desired snippet
     active-lists: 'Active lists:'
   modal:
-    title: Choose a snippet
+    title: Choose a snippet from {snippetListNames}
     preview-button:
       title: Show snippet preview
     select-button:
@@ -458,11 +458,17 @@ lmb-plugin:
     insert: Insert
     search:
       title: Filter on
+    nameSearch:
+      placeholder: Search by name...
+    adminUnitSeach:
+      placeholder: Administrative Unit...
     fields:
       name: Name
       status: Status
       fractie: Fractie
       role: Role
+      period: Administrative Period
+      adminUnit: e.g. Gent, Aalst...
 
 location-plugin:
   modal:

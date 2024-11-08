@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
   em,
@@ -125,6 +125,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
+import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -195,7 +196,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
-      snippet_placeholder: snippetPlaceholder,
+      snippet_placeholder: snippetPlaceholder(this.config.snippet),
       snippet: snippet(this.config.snippet),
     },
     marks: {
@@ -310,7 +311,8 @@ export default class RegulatoryStatementSampleController extends Controller {
       snippet: {
         allowedContent:
           'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+        hidePlaceholderInsertButton: true,
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
@@ -320,10 +322,10 @@ export default class RegulatoryStatementSampleController extends Controller {
       },
       citation: {
         type: 'nodes',
-        activeInNodeTypes(schema: Schema) {
-          return new Set([schema.nodes.doc]);
+        activeInNode(node: PNode, state: EditorState) {
+          return node.type === state.schema.nodes.doc;
         },
-        endpoint: '/codex/sparql',
+        endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
       } as CitationPluginConfig,
       autofilledVariable: {
         autofilledValues: {},
@@ -356,9 +358,12 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment: templateCommentView(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
-      snippet_placeholder: snippetPlaceholderView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
       snippet: snippetView(this.config.snippet)(controller),
       autofilled_variable: autofilledVariableView(controller),
+      block_rdfa: (node) => new BlockRDFaView(node),
     };
   };
   @tracked plugins: Plugin[] = [

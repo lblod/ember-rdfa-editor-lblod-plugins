@@ -1,5 +1,78 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 25.2.0
+
+### Minor Changes
+
+- [#496](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/496) [`2e3c09f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2e3c09f95db40967caaceaa791e7eefd6187c5e4) Thanks [@piemonkey](https://github.com/piemonkey)! - Redesign snippet placeholder to have more intuitive UX
+
+- [#503](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/503) [`37ba9c3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/37ba9c3ecd2c0452fb49ea1d0bb2704e6e716d05) Thanks [@elpoelma](https://github.com/elpoelma)! - Extension of configuration options of `citation-plugin`.
+  The `CitationPluginNodeConfig` is extended to allow for a `activeInNode` condition.
+  This allows you to specify a condition which an active/context node needs to satisfy.
+
+  ```ts
+  interface CitationPluginNodeConditionConfig {
+    type: 'nodes';
+    regex?: RegExp;
+
+    activeInNode(node: PNode, state?: EditorState): boolean;
+  }
+  ```
+
+  The previously expected `activeInNodeTypes` option is marked as deprecated and will be removed in a future release.
+
+- [#501](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/501) [`997fa98`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/997fa986a7094349ad368d291cb8364e5c50a140) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add snippet list names to the modal title
+
+## 25.1.0
+
+### Minor Changes
+
+- [#502](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/502) [`9beff10`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9beff10b99a5825a4eb9be94128c2efb822ac982) Thanks [@abeforgit](https://github.com/abeforgit)! - Improved LMB-plugin
+
+  - Fixes missing data due to 10000 triple limit of query
+  - does all pagination, sorting and searching through the query
+  - adds filters for administrative period and unit
+
+## 25.0.0
+
+### Major Changes
+
+- [#499](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/499) [`3255c70`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3255c7021008a801eb5b07ebd49a6e557467b4ba) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/ember-rdfa-editor` peerdep requirement to version [10.7.2](https://github.com/lblod/ember-rdfa-editor/releases/tag/v10.7.2)
+
+### Minor Changes
+
+- [#495](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/495) [`046b6b7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/046b6b7c65b1e9144b7c469bbb2d968652639117) Thanks [@piemonkey](https://github.com/piemonkey)! - When removing last snippet of a 'group', replace the placeholder instead of completely deleting
+
+### Patch Changes
+
+- [#495](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/495) [`6547270`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/65472703c65a05feb6793a973e3785228822e1a1) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix bug with snippet list names containing a `,` displaying as multiple lists
+
+- [#499](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/499) [`3255c70`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3255c7021008a801eb5b07ebd49a6e557467b4ba) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix margins of mandatee table warning message
+
+- [#500](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/500) [`0b336ad`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0b336addbf4287620d471515aa75c2d62dc2627d) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix bug when setting a date with a day bigger than the number of days in the current month
+
+## 24.3.2
+
+### Patch Changes
+
+- [#498](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/498) [`2f0c6fa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2f0c6fa7bb8db188849b5331892eb16d7d692f44) Thanks [@piemonkey](https://github.com/piemonkey)! - Correctly instantiate placeholder URIs in snippets when inserting
+
+## 24.3.1
+
+### Patch Changes
+
+- [#494](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/494) [`3941b65`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3941b659fbb710be0aafd34b911a42416a1124c9) Thanks [@elpoelma](https://github.com/elpoelma)! - Ensure that the event handlers of snippet actions are only triggered once
+
+## 24.3.0
+
+### Minor Changes
+
+- [#493](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/493) [`1e596e1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1e596e1db4d201ed2cba0713808d918944c51eb6) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign structure nodes v1
+
+### Patch Changes
+
+- [#492](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/492) [`76b6ecb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/76b6ecb4ff09ec18088448fd6da69b9e69f34a7c) Thanks [@elpoelma](https://github.com/elpoelma)! - Disable `rdfaAware` setting for heading nodes in dummy app
+
 ## 24.2.3
 
 ### Patch Changes

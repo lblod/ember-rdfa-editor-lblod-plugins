@@ -3,7 +3,7 @@ import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
   em,
@@ -92,7 +92,6 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
-import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 import SnippetListSelect from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select';
 import {
   CitationPluginConfig,
@@ -111,9 +110,9 @@ import {
   snippet,
   snippetView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 
 export default class RegulatoryStatementSampleController extends Controller {
-  SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelect;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -186,7 +185,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       table_of_contents: table_of_contents(this.config.tableOfContents),
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
-      snippet_placeholder: snippetPlaceholder,
+      snippet_placeholder: snippetPlaceholder(this.config.snippet),
       snippet: snippet(this.config.snippet),
     },
     marks: {
@@ -300,10 +299,10 @@ export default class RegulatoryStatementSampleController extends Controller {
       },
       citation: {
         type: 'nodes',
-        activeInNodeTypes(schema: Schema) {
-          return new Set([schema.nodes.doc]);
+        activeInNode(node: PNode, state: EditorState) {
+          return node.type === state.schema.nodes.doc;
         },
-        endpoint: '/codex/sparql',
+        endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
       } as CitationPluginConfig,
     };
   }
@@ -333,8 +332,11 @@ export default class RegulatoryStatementSampleController extends Controller {
       person_variable: personVariableView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       oslo_location: osloLocationView(this.config.location)(controller),
-      snippet_placeholder: snippetPlaceholderView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
       snippet: snippetView(this.config.snippet)(controller),
+      block_rdfa: (node) => new BlockRDFaView(node),
     };
   };
   @tracked plugins: Plugin[] = [
