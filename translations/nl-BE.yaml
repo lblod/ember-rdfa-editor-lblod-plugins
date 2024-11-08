@@ -457,11 +457,13 @@ lmb-plugin:
     insert: Invoegen
     search:
       title: Filter op
+      placeholder: Zoek op naam...
     fields:
       name: Naam
       status: Status
       fractie: Fractie
       role: Rol
+      period: Bestuursperiode
 
 location-plugin:
   modal:

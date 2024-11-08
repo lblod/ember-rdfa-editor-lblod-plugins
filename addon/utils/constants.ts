@@ -54,3 +54,6 @@ export const BESTUURSPERIODES = {
   '2024-heden':
     'http://data.lblod.info/id/concept/Bestuursperiode/96efb929-5d83-48fa-bfbb-b98dfb1180c7',
 };
+export type BestuursperiodeLabel = keyof typeof BESTUURSPERIODES;
+export type BestuursperiodeURI =
+  (typeof BESTUURSPERIODES)[BestuursperiodeLabel];
