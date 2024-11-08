@@ -9,6 +9,7 @@ import {
 export type FetchMandateesArgs = {
   endpoint: string;
   searchString: string;
+  adminUnitSearch: string;
   page: number;
   pageSize: number;
   sort: SearchSort;
@@ -18,8 +19,12 @@ export type FetchMandateesArgs = {
 export async function countMandatees({
   endpoint,
   searchString,
+  adminUnitSearch,
   period,
-}: Pick<FetchMandateesArgs, 'searchString' | 'endpoint' | 'period'>) {
+}: Pick<
+  FetchMandateesArgs,
+  'searchString' | 'endpoint' | 'period' | 'adminUnitSearch'
+>) {
   const query = `
       PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
       PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -41,7 +46,9 @@ export async function countMandatees({
           ?role skos:prefLabel ?roleLabel.
             ?bestuursorgaanIT org:hasPost ?mandaat.
             ?bestuursorgaanIT lmb:heeftBestuursperiode <${period}>.
+            ?bestuursorgaanIT mandaat:isTijdspecialisatieVan/besluit:bestuurt/skos:prefLabel ?adminUnitName.
 
+          ${adminUnitSearch.length ? `FILTER(contains(lcase(?adminUnitName), lcase(${sparqlEscapeString(adminUnitSearch)}) )).` : ''}
           ${searchString.length ? `FILTER(contains(lcase(concat(?firstName, " ", ?lastName)), lcase(${sparqlEscapeString(searchString)}) )).` : ''}
       }
       `;
@@ -58,10 +65,16 @@ export async function fetchMandatees({
   page,
   pageSize,
   searchString,
+  adminUnitSearch,
   sort,
   period,
 }: FetchMandateesArgs) {
-  const count = await countMandatees({ endpoint, searchString, period });
+  const count = await countMandatees({
+    endpoint,
+    searchString,
+    period,
+    adminUnitSearch,
+  });
   let sortString = '?lastName ?firstName';
   if (sort) {
     const [key, direction] = sort;
@@ -106,6 +119,7 @@ export async function fetchMandatees({
             ?role skos:prefLabel ?roleLabel.
             ?bestuursorgaanIT org:hasPost ?mandaat.
             ?bestuursorgaanIT lmb:heeftBestuursperiode <${period}>.
+            ?bestuursorgaanIT mandaat:isTijdspecialisatieVan/besluit:bestuurt/skos:prefLabel ?adminUnitName.
           }
           OPTIONAL {
             ?mandatee org:hasMembership ?membership.
@@ -113,7 +127,7 @@ export async function fetchMandatees({
             ?fractie regorg:legalName ?fractieLabel.
           }
 
-
+          ${adminUnitSearch.length ? `FILTER(contains(lcase(?adminUnitName), lcase(${sparqlEscapeString(adminUnitSearch)}) )).` : ''}
           ${searchString.length ? `FILTER(contains(lcase(concat(?firstName, "", ?lastName)), lcase(${sparqlEscapeString(searchString)}) )).` : ''}
       }
         ORDER BY ${sortString}

@@ -28,7 +28,7 @@
               @width='block'
               id='searchTerm'
               value={{this.searchText}}
-              placeholder={{t 'lmb-plugin.modal.search.placeholder'}}
+              placeholder={{t 'lmb-plugin.modal.nameSearch.placeholder'}}
               {{on 'input' this.setInputSearchText}}
             />
             <AuLabel class='au-margin-bottom-small' for='periodSelect'>
@@ -43,6 +43,18 @@
               as |period|>
               {{period.label}}
             </PowerSelect>
+
+            <AuLabel class='au-margin-bottom-small' for='searchAdminUnit'>
+              {{t 'lmb-plugin.modal.fields.adminUnit'}}
+            </AuLabel>
+            <AuNativeInput
+              @type='text'
+              @width='block'
+              id='searchAdminUnit'
+              value={{this.adminUnitSearch}}
+              placeholder={{t 'lmb-plugin.modal.adminUnitSearch.placeholder'}}
+              {{on 'input' this.setAdminUnitSearch}}
+            />
 
           </div>
         </div>

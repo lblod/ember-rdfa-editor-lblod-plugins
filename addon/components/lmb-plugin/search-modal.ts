@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
@@ -44,6 +44,11 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   // Admin periods
   @tracked selectedAdminPeriod: AdminPeriodOption;
   adminPeriods: AdminPeriodOption[];
+  // Admin units
+  @tracked adminUnitSearch: string;
+  // tracks whether the user has just typed a character
+  // doesn't need to be reactive
+  typing = false;
   constructor(owner: unknown, args: Args) {
     super(owner, args);
     this.adminPeriods = Object.entries(BESTUURSPERIODES).map(
@@ -58,6 +63,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
           isSome(args.config.defaultPeriod) &&
           entry.label === args.config.defaultPeriod,
       ) ?? this.adminPeriods[this.adminPeriods.length - 1];
+    this.adminUnitSearch = args.config.defaultAdminUnit ?? '';
   }
 
   get config() {
@@ -65,10 +71,21 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   }
   selectAdminPeriod = (value: AdminPeriodOption) => {
     this.selectedAdminPeriod = value;
+    this.pageNumber = 0;
+  };
+  setAdminUnitSearch = (event: InputEvent) => {
+    this.typing = true;
+    assert(
+      'setAdminUnitSearch must be bound to an input element',
+      event.target instanceof HTMLInputElement,
+    );
+    this.adminUnitSearch = event.target.value;
+    this.pageNumber = 0;
   };
 
   @action
   async closeModal() {
+    this.typing = false;
     this.inputSearchText = null;
     this.sort = false;
     await this.servicesResource.cancel();
@@ -79,13 +96,20 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   // AbortController
   search = restartableTask(
     async ({
-      endpoint = this.args.config.endpoint,
-      searchString = '',
-      page = this.pageNumber,
-      pageSize = 20,
-      sort = this.sort,
-      period = this.selectedAdminPeriod.uri,
-    }: Partial<FetchMandateesArgs> = {}) => {
+      endpoint,
+      searchString,
+      page,
+      pageSize,
+      sort,
+      period,
+      adminUnitSearch,
+    }: FetchMandateesArgs) => {
+      // debounce, but only when the input fields are being used
+      if (this.typing) {
+        this.typing = false;
+        await timeout(250);
+      }
+
       if (!this.args.open) {
         return {
           results: [],
@@ -101,6 +125,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
           pageSize,
           sort,
           period,
+          adminUnitSearch,
         });
         const { count, mandatees } = result;
 
@@ -121,12 +146,14 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
 
   servicesResource = trackedTask(this, this.search, () => [
     {
+      endpoint: this.args.config.endpoint,
       searchString: this.inputSearchText ?? '',
       sort: this.sort,
       page: this.pageNumber,
       pageSize: this.pageSize,
       open: this.args.open,
       period: this.selectedAdminPeriod.uri,
+      adminUnitSearch: this.adminUnitSearch,
     } satisfies Partial<FetchMandateesArgs> & { open: boolean },
   ]);
 
@@ -140,6 +167,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       'inputSearchText must be bound to an input element',
       event.target instanceof HTMLInputElement,
     );
+    this.typing = true;
 
     this.inputSearchText = event.target.value;
     this.pageNumber = 0;

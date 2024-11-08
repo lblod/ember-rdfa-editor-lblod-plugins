@@ -457,13 +457,17 @@ lmb-plugin:
     insert: Invoegen
     search:
       title: Filter op
+    nameSearch:
       placeholder: Zoek op naam...
+    adminUnitSearch:
+      placeholder: bv. Gent, Aalst...
     fields:
       name: Naam
       status: Status
       fractie: Fractie
       role: Rol
       period: Bestuursperiode
+      adminUnit: Bestuurseenheid
 
 location-plugin:
   modal:

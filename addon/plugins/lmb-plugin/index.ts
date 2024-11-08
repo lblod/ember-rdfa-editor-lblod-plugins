@@ -5,6 +5,7 @@ import { BestuursperiodeLabel } from '@lblod/ember-rdfa-editor-lblod-plugins/uti
 export type LmbPluginConfig = {
   endpoint: string;
   defaultPeriod?: BestuursperiodeLabel;
+  defaultAdminUnit?: string;
 };
 
 export function createMandateeNode(
