@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 25.1.0
+
+### Minor Changes
+
+- [#502](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/502) [`9beff10`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9beff10b99a5825a4eb9be94128c2efb822ac982) Thanks [@abeforgit](https://github.com/abeforgit)! - Improved LMB-plugin
+
+  - Fixes missing data due to 10000 triple limit of query
+  - does all pagination, sorting and searching through the query
+  - adds filters for administrative period and unit
+
 ## 25.0.0
 
 ### Major Changes
