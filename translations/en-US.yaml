@@ -301,10 +301,10 @@ snippet-plugin:
   placeholder:
     title-single: Snippet from the list "{listName}"
     title-multiple: Snippet from multiple lists
-    text: Select this then insert the desired snippet
+    button: Select the desired snippet
     active-lists: 'Active lists:'
   modal:
-    title: Choose a snippet
+    title: Choose a snippet from {snippetListNames}
     preview-button:
       title: Show snippet preview
     select-button:

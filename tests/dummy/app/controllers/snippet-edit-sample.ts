@@ -92,7 +92,6 @@ import {
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
-import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 import SnippetListSelect from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select';
 import {
   CitationPluginConfig,
@@ -114,7 +113,6 @@ import {
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 
 export default class RegulatoryStatementSampleController extends Controller {
-  SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelect;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
@@ -187,7 +185,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       table_of_contents: table_of_contents(this.config.tableOfContents),
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
-      snippet_placeholder: snippetPlaceholder,
+      snippet_placeholder: snippetPlaceholder(this.config.snippet),
       snippet: snippet(this.config.snippet),
     },
     marks: {
@@ -334,7 +332,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       person_variable: personVariableView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       oslo_location: osloLocationView(this.config.location)(controller),
-      snippet_placeholder: snippetPlaceholderView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
       snippet: snippetView(this.config.snippet)(controller),
       block_rdfa: (node) => new BlockRDFaView(node),
     };

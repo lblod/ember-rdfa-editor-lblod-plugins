@@ -135,13 +135,6 @@
                 <VariablePlugin::Address::Insert
                   @controller={{this.controller}}
                 />
-                {{#if this.activeNode}}
-                  <this.SnippetInsert
-                    @controller={{this.controller}}
-                    @config={{this.config.snippet}}
-                    @node={{this.activeNode}}
-                  />
-                {{/if}}
                 <SnippetPlugin::SnippetInsertPlaceholder
                   @controller={{this.controller}}
                   @config={{this.config.snippet}}

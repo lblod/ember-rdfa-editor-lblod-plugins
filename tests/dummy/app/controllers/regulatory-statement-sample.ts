@@ -196,7 +196,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
-      snippet_placeholder: snippetPlaceholder,
+      snippet_placeholder: snippetPlaceholder(this.config.snippet),
       snippet: snippet(this.config.snippet),
     },
     marks: {
@@ -311,7 +311,8 @@ export default class RegulatoryStatementSampleController extends Controller {
       snippet: {
         allowedContent:
           'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/raw-sparql',
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+        hidePlaceholderInsertButton: true,
       },
       worship: {
         endpoint: 'https://data.lblod.info/sparql',
@@ -357,7 +358,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment: templateCommentView(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
-      snippet_placeholder: snippetPlaceholderView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
       snippet: snippetView(this.config.snippet)(controller),
       autofilled_variable: autofilledVariableView(controller),
       block_rdfa: (node) => new BlockRDFaView(node),

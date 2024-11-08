@@ -11,7 +11,7 @@ import {
   createEmberNodeView,
   type EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import SnippetPlaceholderComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
+import SnippetComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/snippet';
 import {
   EXT,
   RDF,
@@ -23,6 +23,7 @@ import {
   type SnippetListProperties,
   type ImportedResourceMap,
   type SnippetList,
+  type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { tripleForSnippetListId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
@@ -93,7 +94,7 @@ export function createSnippetPlaceholder({
   });
 }
 
-const emberNodeConfig: EmberNodeConfig = {
+const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
   name: 'snippet_placeholder',
   inline: false,
   group: 'block',
@@ -107,8 +108,11 @@ const emberNodeConfig: EmberNodeConfig = {
     snippetListNames: { default: [] },
     importedResources: { default: {} },
     allowMultipleSnippets: { default: false },
+    config: {
+      default: config,
+    },
   },
-  component: SnippetPlaceholderComponent,
+  component: SnippetComponent,
   serialize(node, editorState) {
     const t = getTranslationFunction(editorState);
     const listNames = node.attrs.snippetListNames as string[];
@@ -116,7 +120,6 @@ const emberNodeConfig: EmberNodeConfig = {
       renderable: node,
       tag: 'div',
       attrs: {
-        ...node.attrs,
         class: 'say-snippet-placeholder-node',
         'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
@@ -169,7 +172,9 @@ const emberNodeConfig: EmberNodeConfig = {
       },
     },
   ],
-};
+});
 
-export const snippetPlaceholder = createEmberNodeSpec(emberNodeConfig);
-export const snippetPlaceholderView = createEmberNodeView(emberNodeConfig);
+export const snippetPlaceholder = (config: SnippetPluginConfig) =>
+  createEmberNodeSpec(emberNodeConfig(config));
+export const snippetPlaceholderView = (config: SnippetPluginConfig) =>
+  createEmberNodeView(emberNodeConfig(config));
