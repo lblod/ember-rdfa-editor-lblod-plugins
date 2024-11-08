@@ -137,7 +137,7 @@ export default class CodelistInsertComponent extends Component<Args> {
         ],
       },
       this.schema.node('placeholder', {
-        placeholderText: this.selectedCodelist?.label,
+        placeholderText: label,
       }),
     );
 

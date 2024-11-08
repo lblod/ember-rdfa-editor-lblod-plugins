@@ -201,8 +201,8 @@ date-plugin:
     long-month-content: Januari, Februari, ..., December
     long-year: Jaar
   insert:
-    date: 'Datum invoegen'
-    datetime: 'Datum en tijd invoegen'
+    date: 'Datum'
+    datetime: 'Datum en tijd'
   card:
     title: 'Datum'
     insert-date: 'Datum invoegen'
@@ -236,7 +236,7 @@ table-of-contents-plugin:
 
 variable:
   number:
-    placeholder: Voeg getal in
+    placeholder: Getal
     label: nummer
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
@@ -276,7 +276,7 @@ variable-plugin:
     to: tot
   person:
     card-title: Persoon invoegen
-    nodeview-placeholder: Voeg persoon in
+    nodeview-placeholder: Persoon
   autofill:
     autofillKey: Sleutelwaarde
     convertToString: Vervang variabele door platte tekst bij invoegen
@@ -429,7 +429,7 @@ editor-plugins:
         projection-error: 'Kan locatiecoördinaten niet converteren: {coords}'
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
-      placeholder: Voeg adres in
+      placeholder: Adres
 
 confidentiality-plugin:
   redact: Redigeren

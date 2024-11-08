@@ -1,9 +1,8 @@
 {{! @glint-nocheck: not typesafe yet }}
 <AuPill
-  @icon={{this.PencilIcon}}
-  @iconAlignment='right'
-  class='variable'
+  class='say-pill'
   {{on 'click' this.onClick}}
+  {{on 'focusout' this.resetVariable}}
 >
   <EmberNode::EmbeddedEditor
     @controller={{@controller}}
@@ -17,9 +16,4 @@
     @decorations={{@decorations}}
     @contentDecorations={{@contentDecorations}}
   />
-  {{#if this.label}}
-    <span class='label'>
-      ({{this.label}})
-    </span>
-  {{/if}}
 </AuPill>

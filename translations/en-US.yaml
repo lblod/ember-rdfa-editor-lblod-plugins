@@ -201,8 +201,8 @@ date-plugin:
     long-month-content: January, February, ..., December
     long-year: Long year
   insert:
-    date: 'Insert date'
-    datetime: 'Insert date and time'
+    date: 'Date'
+    datetime: 'Date and time'
   card:
     title: 'Date'
     insert-date: 'Insert date'
@@ -232,7 +232,7 @@ document-title-plugin:
 
 variable:
   number:
-    placeholder: Insert number
+    placeholder: Number
     label: number
     type-number: Type a number...
     error-not-integer: Only integers are allowed
@@ -272,7 +272,7 @@ variable-plugin:
     to: to
   person:
     card-title: Insert person
-    nodeview-placeholder: Insert person
+    nodeview-placeholder: Person
   autofill:
     autofillKey: Autofill Key
     convertToString: Replace variable node with plain text on text insertion
@@ -430,7 +430,7 @@ editor-plugins:
         projection-error: 'Unable to convert location coordinates: {coords}'
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
-      placeholder: Insert address
+      placeholder: Address
 
 confidentiality-plugin:
   redact: Redact
