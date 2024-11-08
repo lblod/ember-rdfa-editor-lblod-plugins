@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
   em,
@@ -322,10 +322,10 @@ export default class RegulatoryStatementSampleController extends Controller {
       },
       citation: {
         type: 'nodes',
-        activeInNodeTypes(schema: Schema) {
-          return new Set([schema.nodes.doc]);
+        activeInNode(node: PNode, state: EditorState) {
+          return node.type === state.schema.nodes.doc;
         },
-        endpoint: '/codex/sparql',
+        endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
       } as CitationPluginConfig,
       autofilledVariable: {
         autofilledValues: {},
