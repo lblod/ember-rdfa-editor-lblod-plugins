@@ -1,5 +1,28 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 25.2.0
+
+### Minor Changes
+
+- [#496](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/496) [`2e3c09f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2e3c09f95db40967caaceaa791e7eefd6187c5e4) Thanks [@piemonkey](https://github.com/piemonkey)! - Redesign snippet placeholder to have more intuitive UX
+
+- [#503](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/503) [`37ba9c3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/37ba9c3ecd2c0452fb49ea1d0bb2704e6e716d05) Thanks [@elpoelma](https://github.com/elpoelma)! - Extension of configuration options of `citation-plugin`.
+  The `CitationPluginNodeConfig` is extended to allow for a `activeInNode` condition.
+  This allows you to specify a condition which an active/context node needs to satisfy.
+
+  ```ts
+  interface CitationPluginNodeConditionConfig {
+    type: 'nodes';
+    regex?: RegExp;
+
+    activeInNode(node: PNode, state?: EditorState): boolean;
+  }
+  ```
+
+  The previously expected `activeInNodeTypes` option is marked as deprecated and will be removed in a future release.
+
+- [#501](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/501) [`997fa98`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/997fa986a7094349ad368d291cb8364e5c50a140) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add snippet list names to the modal title
+
 ## 25.1.0
 
 ### Minor Changes
