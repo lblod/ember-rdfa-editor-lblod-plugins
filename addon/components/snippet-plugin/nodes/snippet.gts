@@ -13,6 +13,7 @@ import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import {
+  NodeSelection,
   type PNode,
   ProseParser,
   type Selection,
@@ -30,6 +31,8 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
 import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
+import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
+import { getSnippetListIdsFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
 interface ButtonSig {
   Args: {
@@ -76,6 +79,13 @@ export default class SnippetNode extends Component<Signature> {
   get node() {
     return this.args.node;
   }
+  get isPlaceholder() {
+    return this.node.content.size === 0;
+  }
+  get allowMultipleSnippets() {
+    return this.node.attrs.allowMultipleSnippets as boolean;
+  }
+
   @action
   closeModal() {
     this.showModal = false;
@@ -83,10 +93,6 @@ export default class SnippetNode extends Component<Signature> {
   openModal() {
     this.controller.focus();
     this.showModal = true;
-  }
-
-  get allowMultipleSnippets() {
-    return this.node.attrs.allowMultipleSnippets as boolean;
   }
 
   @action
@@ -123,7 +129,7 @@ export default class SnippetNode extends Component<Signature> {
         const node = createSnippetPlaceholder({
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
-            listIds: this.node.attrs.snippetListIds,
+            listIds: getSnippetListIdsFromNode(this.node),
             names: this.node.attrs.snippetListNames,
             importedResources: this.node.attrs.importedResources,
           },
@@ -155,6 +161,12 @@ export default class SnippetNode extends Component<Signature> {
     return this.controller.mainEditorState.selection;
   }
   get isActive(): boolean {
+    if (
+      this.selection instanceof NodeSelection &&
+      this.selection.node === this.node
+    ) {
+      return true;
+    }
     const ancestor = findAncestors(this.selection.$from, (node: PNode) => {
       return hasOutgoingNamedNodeTriple(
         node.attrs,
@@ -188,7 +200,7 @@ export default class SnippetNode extends Component<Signature> {
         title,
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
-          listIds: this.node.attrs.snippetListIds,
+          listIds: getSnippetListIdsFromNode(this.node),
           names: this.node.attrs.snippetListNames,
           importedResources: this.node.attrs.importedResources,
         },
@@ -199,40 +211,49 @@ export default class SnippetNode extends Component<Signature> {
   }
 
   <template>
-    <div class='say-snippet-card'>
-      <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
-      <div class='say-snippet-content'>{{yield}}</div>
-      <div class='say-snippet-icons' contenteditable='false'>
-        <SnippetButton
-          @icon={{SynchronizeIcon}}
-          @helpText='snippet-plugin.snippet-node.change-fragment'
-          {{on 'click' this.editFragment}}
-          @isActive={{this.isActive}}
-        />
-        <SnippetButton
-          @icon={{BinIcon}}
-          @helpText='snippet-plugin.snippet-node.remove-fragment'
-          {{on 'click' this.deleteFragment}}
-          @isActive={{this.isActive}}
-          class='say-snippet-remove-button'
-        />
-        {{#if this.allowMultipleSnippets}}
+    {{#if this.isPlaceholder}}
+      <SnippetPlaceholder
+        @node={{@node}}
+        @selectNode={{@selectNode}}
+        @insertSnippet={{this.editFragment}}
+      />
+    {{else}}
+      <div class='say-snippet-card'>
+        <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
+        <div class='say-snippet-content'>{{yield}}</div>
+        <div class='say-snippet-icons' contenteditable='false'>
           <SnippetButton
-            @icon={{AddIcon}}
-            @helpText='snippet-plugin.snippet-node.add-fragment'
-            {{on 'click' this.addFragment}}
+            @icon={{SynchronizeIcon}}
+            @helpText='snippet-plugin.snippet-node.change-fragment'
+            {{on 'click' this.editFragment}}
             @isActive={{this.isActive}}
           />
-        {{/if}}
-      </div>
+          <SnippetButton
+            @icon={{BinIcon}}
+            @helpText='snippet-plugin.snippet-node.remove-fragment'
+            {{on 'click' this.deleteFragment}}
+            @isActive={{this.isActive}}
+            class='say-snippet-remove-button'
+          />
+          {{#if this.allowMultipleSnippets}}
+            <SnippetButton
+              @icon={{AddIcon}}
+              @helpText='snippet-plugin.snippet-node.add-fragment'
+              {{on 'click' this.addFragment}}
+              @isActive={{this.isActive}}
+            />
+          {{/if}}
+        </div>
 
-    </div>
+      </div>
+    {{/if}}
     <SearchModal
       @open={{this.showModal}}
       @closeModal={{this.closeModal}}
       @config={{this.node.attrs.config}}
       @onInsert={{this.onInsert}}
-      @snippetListIds={{this.node.attrs.snippetListIds}}
+      @snippetListIds={{getSnippetListIdsFromNode this.node}}
+      @snippetListNames={{this.node.attrs.snippetListNames}}
     />
   </template>
 }

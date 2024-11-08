@@ -108,6 +108,14 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin/node';
 import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
+import {
+  snippetPlaceholder,
+  snippetPlaceholderView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
+import {
+  snippet,
+  snippetView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -182,6 +190,8 @@ export default class BesluitSampleController extends Controller {
         invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
         inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
         link: link(this.config.link),
+        snippet_placeholder: snippetPlaceholder(this.config.snippet),
+        snippet: snippet(this.config.snippet),
       },
       marks: {
         em,
@@ -298,6 +308,9 @@ export default class BesluitSampleController extends Controller {
           dateRightNow: new Date().toLocaleString(),
         },
       },
+      snippet: {
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+      },
     };
   }
 
@@ -328,6 +341,10 @@ export default class BesluitSampleController extends Controller {
       structure: structureView(controller),
       mandatee_table: mandateeTableView(controller),
       autofilled_variable: autofilledVariableView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
+      snippet: snippetView(this.config.snippet)(controller),
       block_rdfa: (node) => new BlockRDFaView(node),
     } satisfies Record<string, SayNodeViewConstructor>;
   };

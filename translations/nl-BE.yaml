@@ -300,10 +300,10 @@ snippet-plugin:
   placeholder:
     title-single: Fragment uit de lijst "{listName}"
     title-multiple: Fragment uit meerdere lijsten
-    text: Selecteer dit en voeg het gewenste fragment in
+    button: Selecteer het gewenste fragment
     active-lists: 'Actieve lijsten:'
   modal:
-    title: Kies een fragment
+    title: Kies een fragment uit {snippetListNames}
     preview-button:
       title: Preview van fragment tonen
     select-button:

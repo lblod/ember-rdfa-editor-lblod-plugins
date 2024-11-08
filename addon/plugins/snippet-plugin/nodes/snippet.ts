@@ -35,6 +35,7 @@ import {
   SnippetListProperties,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { tripleForSnippetListId } from '../utils/rdfa-predicate';
 
 function outgoingFromBacklink(
   backlink: IncomingTriple,
@@ -58,6 +59,13 @@ function outgoingFromBacklink(
   }
 }
 
+const defaultProperties = [
+  {
+    predicate: RDF('type').full,
+    object: sayDataFactory.namedNode(EXT('Snippet').full),
+  },
+];
+
 interface CreateSnippetArgs {
   schema: Schema;
   allowMultipleSnippets?: boolean;
@@ -78,7 +86,7 @@ export function createSnippet({
   title,
   allowMultipleSnippets,
   listProperties: {
-    listIds: snippetListIds,
+    listIds,
     names: snippetListNames,
     importedResources,
     placeholderId,
@@ -100,11 +108,15 @@ export function createSnippet({
     schema,
     parser,
   });
+  const properties = [
+    ...defaultProperties,
+    ...listIds.map(tripleForSnippetListId),
+  ];
   const node = schema.node(
     'snippet',
     {
       placeholderId,
-      snippetListIds,
+      properties,
       snippetListNames,
       title,
       subject: `http://data.lblod.info/snippets/${uuidv4()}`,
@@ -150,17 +162,11 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
     properties: {
-      default: [
-        {
-          predicate: RDF('type').full,
-          object: sayDataFactory.namedNode(EXT('Snippet').full),
-        },
-      ],
+      default: defaultProperties,
     },
     rdfaNodeType: { default: 'resource' },
     placeholderId: { default: '' },
     snippetListNames: { default: [] },
-    snippetListIds: { default: [] },
     importedResources: { default: {} },
     title: { default: '' },
     config: { default: options },
@@ -176,9 +182,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       attrs: {
         ...node.attrs,
         'data-snippet-placeholder-id': node.attrs.placeholderId,
-        'data-assigned-snippet-ids': (
-          node.attrs.snippetListIds as string[]
-        )?.join(','),
         'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
@@ -194,6 +197,8 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         if (typeof node === 'string') return false;
         const rdfaAttrs = getRdfaAttrs(node, { rdfaAware: true });
         if (
+          rdfaAttrs &&
+          rdfaAttrs.rdfaNodeType !== 'literal' &&
           hasOutgoingNamedNodeTriple(rdfaAttrs, RDF('type'), EXT('Snippet'))
         ) {
           // For older documents without placeholder ids, treat each inserted snippet separately.
@@ -202,12 +207,19 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
           // risking having no ability to insert another snippet.
           const placeholderId =
             node.getAttribute('data-snippet-placeholder-id') || uuidv4();
+          const legacySnippetListIds = node
+            .getAttribute('data-assigned-snippet-ids')
+            ?.split(',');
+          const properties = !legacySnippetListIds
+            ? rdfaAttrs.properties
+            : [
+                ...rdfaAttrs.properties,
+                ...legacySnippetListIds.map(tripleForSnippetListId),
+              ];
           return {
             ...rdfaAttrs,
+            properties,
             placeholderId,
-            snippetListIds: node
-              .getAttribute('data-assigned-snippet-ids')
-              ?.split(','),
             snippetListNames: jsonParse(node.getAttribute('data-list-names')),
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
