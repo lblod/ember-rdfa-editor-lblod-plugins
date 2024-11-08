@@ -37,7 +37,15 @@
     </tr>
   </:header>
   <:body>
-    {{#unless @services.isRunning}}
+    {{#if @services.isRunning}}
+      <tr>
+        <td colspan='5'>
+          <AuLoader @centered={{true}}>
+            {{t 'common.search.loading'}}
+          </AuLoader>
+        </td>
+      </tr>
+    {{else}}
       {{#if @services.value.totalCount}}
         {{#each @services.value.results as |row|}}
           <tr>
@@ -53,15 +61,6 @@
           </tr>
         {{/each}}
       {{/if}}
-    {{else}}
-
-      <tr>
-        <td colspan="5">
-      <AuLoader @centered={{true}}>
-        {{t 'common.search.loading'}}
-      </AuLoader>
-    </td>
-  </tr>
-    {{/unless}}
+    {{/if}}
   </:body>
 </AuTable>

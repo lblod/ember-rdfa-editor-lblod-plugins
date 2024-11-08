@@ -94,7 +94,10 @@
               @config={{this.config.mandateeTable.config}}
             />
             <Sidebar as |Sidebar|>
-              <Sidebar.Collapsible @title='Structures' @expandedInitially={{true}}>
+              <Sidebar.Collapsible
+                @title='Structures'
+                @expandedInitially={{true}}
+              >
                 <this.InsertArticle @controller={{this.controller}} />
                 <this.InsertArticle
                   @controller={{this.controller}}
