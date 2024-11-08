@@ -269,7 +269,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'https://data.lblod.info/sparql',
       },
       lmb: {
-        endpoint: 'http://localhost/vendor-proxy/query',
+        endpoint: 'https://dev.gelinkt-notuleren.lblod.info/sparql',
       },
       lpdc: {
         // Needs to be exposed locally without authentication as otherwise calls fail
