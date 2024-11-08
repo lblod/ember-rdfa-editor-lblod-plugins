@@ -4,12 +4,7 @@ import { tracked } from 'tracked-built-ins';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
-import {
-  NodeType,
-  Plugin,
-  SayController,
-  Schema,
-} from '@lblod/ember-rdfa-editor';
+import { Plugin, PNode, SayController, Schema } from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
@@ -114,6 +109,8 @@ import {
 import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
+import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -234,8 +231,15 @@ export default class BesluitSampleController extends Controller {
     return {
       citation: {
         type: 'nodes',
-        activeInNodeTypes(schema: Schema): Set<NodeType> {
-          return new Set<NodeType>([schema.nodes.motivering]);
+        activeInNode(node: PNode): boolean {
+          const { attrs } = node;
+          if (!isRdfaAttrs(attrs)) {
+            return false;
+          }
+          const match = attrs.backlinks.find((bl) =>
+            BESLUIT('motivering').matches(bl.predicate),
+          );
+          return Boolean(match);
         },
         endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
         decisionsEndpoint:

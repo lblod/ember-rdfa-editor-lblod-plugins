@@ -119,12 +119,20 @@ interface CitationPluginState {
 
 export type CitationPlugin = ProsePlugin<CitationPluginState>;
 
-export interface CitationPluginNodeConfig {
+export type CitationPluginNodeConfig = {
   type: 'nodes';
   regex?: RegExp;
-
-  activeInNodeTypes(schema: Schema, state: EditorState): Set<NodeType>;
-}
+} & (
+  | {
+      /**
+       * @deprecated use the `activeInNode` property instead
+       */
+      activeInNodeTypes(schema: Schema, state: EditorState): Set<NodeType>;
+    }
+  | {
+      activeInNode(node: PNode, state?: EditorState): boolean;
+    }
+);
 
 export interface CitationPluginRangeConfig {
   type: 'ranges';
@@ -186,11 +194,20 @@ function calculateCitationPluginState(
     );
     highlights = calculatedDecs.decorations;
   } else {
-    const nodes = config.activeInNodeTypes(schema, state);
+    let condition: (node: PNode) => boolean;
+    if ('activeInNodeTypes' in config) {
+      const nodeTypes = config.activeInNodeTypes(schema, state);
+      condition = (node) => {
+        return nodeTypes.has(node.type);
+      };
+    } else {
+      condition = (node) => config.activeInNode(node, state);
+    }
+
     const calculatedDecs = calculateDecorationsInNodes(
       config,
       schema,
-      nodes,
+      condition,
       doc,
       oldState?.doc,
       oldDecs,
@@ -207,7 +224,7 @@ function calculateCitationPluginState(
 function calculateDecorationsInNodes(
   config: CitationPluginConfig,
   schema: CitationSchema,
-  nodes: Set<NodeType>,
+  condition: (node: PNode) => boolean,
   newDoc: PNode,
   oldDoc?: PNode,
   oldDecorations?: DecorationSet,
@@ -223,7 +240,7 @@ function calculateDecorationsInNodes(
     decsToRemove,
     oldDecorations,
   );
-  if (nodes.has(newDoc.type)) {
+  if (condition(newDoc)) {
     oldDoc
       ? changedDescendants(oldDoc, newDoc, 0, collector)
       : newDoc.descendants(collector);
@@ -236,7 +253,7 @@ function calculateDecorationsInNodes(
           0,
 
           (node, pos) => {
-            if (nodes.has(node.type)) {
+            if (condition(node)) {
               node.nodesBetween(0, node.nodeSize - 2, collector, pos + 1);
               activeRanges.push([pos, pos + node.nodeSize]);
               return false;
@@ -245,7 +262,7 @@ function calculateDecorationsInNodes(
           },
         )
       : newDoc.descendants((node, pos) => {
-          if (nodes.has(node.type)) {
+          if (condition(node)) {
             node.nodesBetween(0, node.nodeSize - 2, collector, pos + 1);
             activeRanges.push([pos, pos + node.nodeSize]);
             return false;

@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   Fragment,
+  PNode,
   SayController,
   Slice,
   Transaction,
@@ -14,7 +15,7 @@ import {
   LEGISLATION_TYPES,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/types';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 import { Article } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/article';
 import { LegalDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
@@ -62,10 +63,9 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
       return true;
     }
     const { selection } = this.controller.mainEditorState;
-    if (this.config.type === 'ranges') {
-      const ranges = this.config.activeInRanges(
-        this.controller.mainEditorState,
-      );
+    const config = this.config;
+    if (config.type === 'ranges') {
+      const ranges = config.activeInRanges(this.controller.mainEditorState);
       for (const range of ranges) {
         if (selection.from > range[0] && selection.from < range[1]) {
           return false;
@@ -73,17 +73,22 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
       }
       return true;
     } else {
-      const nodeTypes = this.config.activeInNodeTypes(
-        this.controller.schema,
-        this.controller.mainEditorState,
-      );
-      // if the doc node is included, the button should always be active
-      // the findParentNodeOfType util we import does NOT consider the doc node
-      // in its search.
-      if (nodeTypes.has(this.controller.schema.nodes.doc)) {
+      let condition: (node: PNode) => boolean;
+      if ('activeInNodeTypes' in config) {
+        const nodeTypes = config.activeInNodeTypes(
+          this.controller.schema,
+          this.controller.mainEditorState,
+        );
+        condition = (node) => nodeTypes.has(node.type);
+      } else {
+        condition = (node) =>
+          config.activeInNode(node, this.controller.mainEditorState);
+      }
+
+      if (condition(this.controller.mainEditorState.doc)) {
         return false;
       }
-      return !findParentNodeOfType([...nodeTypes])(selection);
+      return !findParentNode(condition)(selection);
     }
   }
 
