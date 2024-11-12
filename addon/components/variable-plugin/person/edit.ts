@@ -61,14 +61,9 @@ export default class PersonEditComponent extends Component<Args> {
   @action
   onInsert(mandatee: Mandatee) {
     const personNode = this.selectedPersonNode as PersonNode;
-    this.controller.withTransaction((tr) => {
-      tr.setNodeAttribute(personNode.pos, 'mandatee', mandatee);
-      return tr.setNodeAttribute(
-        personNode.pos,
-        'content',
-        mandatee.mandateeUri,
-      );
-    });
+    this.controller.withTransaction((tr) =>
+      tr.setNodeAttribute(personNode.pos, 'mandatee', mandatee),
+    );
     this.closeModal();
   }
 }

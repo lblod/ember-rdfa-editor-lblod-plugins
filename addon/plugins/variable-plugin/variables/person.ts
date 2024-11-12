@@ -90,9 +90,6 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    content: {
-      default: null,
-    },
     mandatee: {
       default: null,
     },
