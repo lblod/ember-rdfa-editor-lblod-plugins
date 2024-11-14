@@ -10,6 +10,7 @@ common:
     sort: Sort
     asc: Sort ascending
     desc: Sort descending
+  not-applicable: 'N/A'
 
 structure-plugin:
   move-up: 'Move {structureName} up'

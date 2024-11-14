@@ -34,7 +34,13 @@
         {{#each @services.value.results as |row|}}
           <tr>
             <td>{{row.fullName}}</td>
-            <td>{{row.kandidatenlijst}}</td>
+            <td>
+              {{#if row.kandidatenlijst}}
+                {{row.kandidatenlijst}}
+              {{else}}
+                <span class='au-u-italic'>{{t 'common.not-applicable' }}</span>
+              {{/if}}
+            </td>
             <td class='au-u-text-center'>
               <AuButton {{on 'click' (fn @insert row)}}>
                 {{t 'lmb-plugin.modal.insert'}}
@@ -44,7 +50,7 @@
         {{/each}}
       {{else}}
         <tr>
-          <td colspan="100%">
+          <td colspan='100%'>
             {{t 'common.search.no-results'}}
           </td>
         </tr>

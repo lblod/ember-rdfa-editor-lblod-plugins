@@ -10,6 +10,7 @@ common:
     sort: Sorteren
     asc: Oplopend sorteren
     desc: Aflopend sorteren
+  not-applicable: 'n.v.t.'
 
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
