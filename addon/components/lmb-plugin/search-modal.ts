@@ -6,24 +6,24 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
-import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
+import Electee from '@lblod/ember-rdfa-editor-lblod-plugins/models/electee';
 import {
   FetchMandateesArgs,
-  fetchMandatees,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchMandatees';
+  fetchElectees,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchElectees';
 import {
   BESTUURSPERIODES,
   BestuursperiodeLabel,
   BestuursperiodeURI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isSome } from '@lblod/ember-rdfa-editor/utils/_private/option';
-export type SearchSort = [keyof Mandatee, 'ASC' | 'DESC'] | false;
+export type SearchSort = [keyof Electee, 'ASC' | 'DESC'] | false;
 
 interface Args {
   config: LmbPluginConfig;
   open: boolean;
   closeModal: () => void;
-  onInsert: (mandatee: Mandatee) => void;
+  onInsert: (electee: Electee) => void;
 }
 interface AdminPeriodOption {
   label: BestuursperiodeLabel;
@@ -118,7 +118,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       }
 
       try {
-        const result = await fetchMandatees({
+        const result = await fetchElectees({
           endpoint,
           searchString,
           page,
@@ -127,14 +127,14 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
           period,
           adminUnitSearch,
         });
-        const { count, mandatees } = result;
+        const { count, electees } = result;
 
         return {
-          results: mandatees,
+          results: electees,
           totalCount: count,
         };
       } catch (err) {
-        console.error('Got an error fetching LMB data', err);
+        console.error('Got an error fetching electees', err);
         this.error = err;
       }
       return {
@@ -182,8 +182,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     ++this.pageNumber;
   }
   @action
-  async onInsert(mandatee: Mandatee) {
-    this.args.onInsert(mandatee);
+  async onInsert(electee: Electee) {
+    this.args.onInsert(electee);
     await this.closeModal();
   }
 }

@@ -451,9 +451,9 @@ worship-plugin:
 
 lmb-plugin:
   insert:
-    title: Mandataris van LMB invoegen
+    title: Verkozene invoegen
   modal:
-    title: Kies een mandataris
+    title: Kies een verkozene
     insert: Invoegen
     search:
       title: Filter op
@@ -463,9 +463,7 @@ lmb-plugin:
       placeholder: bv. Gent, Aalst...
     fields:
       name: Naam
-      status: Status
-      fractie: Fractie
-      role: Rol
+      kandidatenlijst: Kandidatenlijst
       period: Bestuursperiode
       adminUnit: Bestuurseenheid
 

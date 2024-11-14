@@ -452,23 +452,23 @@ worship-plugin:
 
 lmb-plugin:
   insert:
-    title: Insert mandatee from LMB service
+    title: Insert electee
   modal:
-    title: Choose a mandatee
+    title: Choose an electee
     insert: Insert
     search:
       title: Filter on
     nameSearch:
       placeholder: Search by name...
-    adminUnitSeach:
-      placeholder: Administrative Unit...
+    adminUnitSearch:
+      placeholder: e.g. Gent, Aalst...
     fields:
       name: Name
       status: Status
-      fractie: Fractie
+      kandidatenlijst: Candidate list
       role: Role
       period: Administrative Period
-      adminUnit: e.g. Gent, Aalst...
+      adminUnit: Administrative unit
 
 location-plugin:
   modal:
