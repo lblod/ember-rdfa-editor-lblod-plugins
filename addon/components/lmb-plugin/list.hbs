@@ -23,7 +23,7 @@
   <:body>
     {{#if @services.isRunning}}
       <tr>
-        <td colspan='5'>
+        <td colspan='100%'>
           <AuLoader @centered={{true}}>
             {{t 'common.search.loading'}}
           </AuLoader>
@@ -42,6 +42,12 @@
             </td>
           </tr>
         {{/each}}
+      {{else}}
+        <tr>
+          <td colspan="100%">
+            {{t 'common.search.no-results'}}
+          </td>
+        </tr>
       {{/if}}
     {{/if}}
   </:body>
