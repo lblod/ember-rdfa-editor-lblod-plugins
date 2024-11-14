@@ -192,7 +192,7 @@
     "@appuniversum/ember-appuniversum": "^3.4.1",
     "@ember/string": "3.x",
     "@glint/template": "^1.4.0",
-    "@lblod/ember-rdfa-editor": "10.7.3",
+    "@lblod/ember-rdfa-editor": "^10.7.3",
     "ember-concurrency": "^3.1.0",
     "ember-element-helper": "^0.8.6",
     "ember-intl": "^7.0.0",
