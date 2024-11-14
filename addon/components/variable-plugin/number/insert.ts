@@ -85,9 +85,9 @@ export default class NumberInsertComponent extends Component<Args> {
   insert() {
     if (this.numberVariableError !== '') return;
 
-    const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
+    const mappingResource = `http://data.lblod.info/mappings/--ref-uuid4-${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/--ref-uuid4-${uuidv4()}`;
     const subject = mappingResource;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
 
     const defaultLabel = this.intl.t('variable.number.label', {
       locale: this.documentLanguage,
