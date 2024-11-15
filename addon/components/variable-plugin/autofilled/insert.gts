@@ -23,6 +23,7 @@ import LabelInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/variab
 
 type Args = {
   controller: SayController;
+  templateMode?: boolean;
 };
 
 export default class AutoFilledVariableInsertComponent extends Component<Args> {
@@ -60,8 +61,12 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingSubject = `http://data.lblod.info/mappings/--ref-uuid4-${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/--ref-uuid4-${uuidv4()}`;
+    const mappingSubject = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const variableId = uuidv4();
 
     const placeholder = this.intl.t('variable.autofilled.label', {

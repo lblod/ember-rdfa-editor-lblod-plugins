@@ -10,9 +10,14 @@ import { v4 as uuidv4 } from 'uuid';
 export function replaceSelectionWithAddress(
   controller: SayController,
   label?: string,
+  templateMode?: boolean,
 ) {
-  const mappingResource = `http://data.lblod.info/mappings/--ref-uuid4-${uuidv4()}`;
-  const variableInstance = `http://data.lblod.info/variables/--ref-uuid4-${uuidv4()}`;
+  const mappingResource = `http://data.lblod.info/mappings/${
+    templateMode ? '--ref-uuid4-' : ''
+  }${uuidv4()}`;
+  const variableInstance = `http://data.lblod.info/variables/${
+    templateMode ? '--ref-uuid4-' : ''
+  }${uuidv4()}`;
 
   controller.withTransaction((tr) => {
     tr.replaceSelectionWith(

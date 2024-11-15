@@ -17,6 +17,7 @@ import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblo
 
 type Args = {
   controller: SayController;
+  templateMode?: boolean;
 };
 
 export default class NumberInsertComponent extends Component<Args> {
@@ -85,8 +86,12 @@ export default class NumberInsertComponent extends Component<Args> {
   insert() {
     if (this.numberVariableError !== '') return;
 
-    const mappingResource = `http://data.lblod.info/mappings/--ref-uuid4-${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/--ref-uuid4-${uuidv4()}`;
+    const mappingResource = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const subject = mappingResource;
 
     const defaultLabel = this.intl.t('variable.number.label', {

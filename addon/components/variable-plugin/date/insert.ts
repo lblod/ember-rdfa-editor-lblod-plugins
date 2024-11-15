@@ -15,6 +15,7 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 type Args = {
   controller: SayController;
+  templateMode?: boolean;
 };
 
 export default class DateInsertComponent extends Component<Args> {
@@ -36,8 +37,12 @@ export default class DateInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingResource = `http://data.lblod.info/mappings/--ref-uuid4-${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/--ref-uuid4-${uuidv4()}`;
+    const mappingResource = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const defaultLabel = this.intl.t('variable.date.label', {
       locale: this.documentLanguage,
     });
