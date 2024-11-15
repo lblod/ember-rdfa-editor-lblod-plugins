@@ -51,18 +51,22 @@ const parseDOM = [
         }
         let value: Person | undefined;
         if (node.dataset.value) {
-          value = JSON.parse(node.dataset.value) as Person;
+          value = JSON.parse(node.dataset.value) as Person | undefined;
         } else if (node.dataset.mandatee) {
-          const mandatee = JSON.parse(node.dataset.mandatee) as {
-            personUri: string;
-            firstName: string;
-            lastName: string;
-          };
-          value = {
-            uri: mandatee.personUri,
-            firstName: mandatee.firstName,
-            lastName: mandatee.lastName,
-          };
+          const mandatee = JSON.parse(node.dataset.mandatee) as
+            | {
+                personUri: string;
+                firstName: string;
+                lastName: string;
+              }
+            | undefined;
+          if (mandatee) {
+            value = {
+              uri: mandatee.personUri,
+              firstName: mandatee.firstName,
+              lastName: mandatee.lastName,
+            };
+          }
         }
         return {
           ...attrs,
