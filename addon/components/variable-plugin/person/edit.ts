@@ -45,7 +45,7 @@ export default class PersonEditComponent extends Component<Args> {
 
   get isEditing() {
     const personNode = this.selectedPersonNode;
-    return !!personNode?.node.attrs.electee;
+    return !!personNode?.node.attrs.value;
   }
 
   @action
