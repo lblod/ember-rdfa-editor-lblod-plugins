@@ -72,7 +72,6 @@ function recreateUuidsOnNode(node: Node, schema: Schema) {
   const attrs = { ...node.attrs };
 
   attrs.properties = (attrs.properties as OutgoingTriple[]).map((prop) => {
-    console.log(prop);
     if (prop.predicate === EXT('instance').full) {
       let recreatedUri;
       if (
