@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 25.2.2
+
+### Patch Changes
+
+- [`7a31422`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7a314220944f266566efced7343d630810fc0247) Thanks [@abeforgit](https://github.com/abeforgit)! - loosen editor peerdep
+
+- [`1c165af`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1c165afcf6793c6ec96c40a902d90bdcac60900c) Thanks [@abeforgit](https://github.com/abeforgit)! - bump editor to [v10.7.4](https://github.com/lblod/ember-rdfa-editor/releases/tag/v10.7.4)
+
 ## 25.2.1
 
 ### Patch Changes
