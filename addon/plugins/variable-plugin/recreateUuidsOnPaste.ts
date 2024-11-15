@@ -70,7 +70,11 @@ function recreateUuidsOnNode(node: Node, schema: Schema) {
   }
 
   const attrs = { ...node.attrs };
-
+  if (attrs.subject.includes('http://data.lblod.info/mappings/--ref-uuid4-')) {
+    attrs.subject = `http://data.lblod.info/mappings/--ref-uuid4-${uuidv4()}`;
+  } else {
+    attrs.subject = `http://data.lblod.info/mappings/${uuidv4()}`;
+  }
   attrs.properties = (attrs.properties as OutgoingTriple[]).map((prop) => {
     if (prop.predicate === EXT('instance').full) {
       let recreatedUri;
