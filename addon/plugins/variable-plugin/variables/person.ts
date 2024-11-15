@@ -83,7 +83,6 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      ...node.attrs,
       'data-value': JSON.stringify(person),
     },
     content: person
