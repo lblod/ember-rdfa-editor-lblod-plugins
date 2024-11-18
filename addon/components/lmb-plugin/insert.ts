@@ -21,6 +21,7 @@ import { Person } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-
 interface Args {
   controller: SayController;
   config: LmbPluginConfig;
+  templateMode?: boolean;
 }
 
 export default class LmbPluginInsertComponent extends Component<Args> {
@@ -46,8 +47,12 @@ export default class LmbPluginInsertComponent extends Component<Args> {
 
   @action
   onInsert(electee: Electee) {
-    const mappingSubject = `http://data.lblod.info/mappings/${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+    const mappingSubject = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const variableId = uuidv4();
 
     const person: Person = {

@@ -8,6 +8,7 @@ import IntlService from 'ember-intl/services/intl';
 
 type Args = {
   controller: SayController;
+  templateMode?: boolean;
 };
 
 export default class VariablePluginAddressInsertVariableComponent extends Component<Args> {
@@ -35,6 +36,7 @@ export default class VariablePluginAddressInsertVariableComponent extends Compon
         this.intl.t('variable.address.label', {
           locale: this.documentLanguage,
         }),
+      this.args.templateMode,
     );
   }
 }

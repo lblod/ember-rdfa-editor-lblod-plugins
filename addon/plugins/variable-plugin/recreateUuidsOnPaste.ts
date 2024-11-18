@@ -73,11 +73,19 @@ function recreateUuidsOnNode(node: Node, schema: Schema) {
 
   attrs.properties = (attrs.properties as OutgoingTriple[]).map((prop) => {
     if (prop.predicate === EXT('instance').full) {
+      let recreatedUri;
+      if (
+        prop.object.value.includes(
+          'http://data.lblod.info/variables/--ref-uuid4-',
+        )
+      ) {
+        recreatedUri = `http://data.lblod.info/variables/--ref-uuid4-${uuidv4()}`;
+      } else {
+        recreatedUri = `http://data.lblod.info/variables/${uuidv4()}`;
+      }
       return {
         predicate: prop.predicate,
-        object: sayDataFactory.namedNode(
-          `http://data.lblod.info/variables/${uuidv4()}`,
-        ),
+        object: sayDataFactory.namedNode(recreatedUri),
       };
     }
 
