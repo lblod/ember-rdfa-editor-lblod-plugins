@@ -548,5 +548,5 @@ mandatee-table-plugin:
       label: Title
       placeholder: Title
   node:
-    warning: Information which you enter below may be removed upon
+    warning: Information which you enter below will be removed upon
       synchronisation of the inauguration meeting.

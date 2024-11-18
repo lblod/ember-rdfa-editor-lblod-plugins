@@ -9,12 +9,15 @@
     cursor: default;
   }
 
-  p.say-mandatee-table__warning {
-    margin-top: 0;
+  .say-mandatee-table__warning {
+    .au-c-alert__content {
+      margin-top: 0;
+    }
   }
 
   .say-mandatee-table-content {
     padding: 1.2rem;
+    margin-top: 0;
   }
 
   .say-mandatee-table__title {
