@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.0.1
+
+### Patch Changes
+
+- [#507](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/507) [`d7bf867`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d7bf867860134c38aff2ab7bb6a3431c0546e354) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/template-uuid-instantiator` to version [1.0.3](https://github.com/lblod/template-uuid-instantiator/releases/tag/v1.0.3)
+
 ## 26.0.0
 
 ### Major Changes
