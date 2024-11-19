@@ -20,6 +20,7 @@ import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const TRANSLATION_FALLBACKS = {
   nodeview_placeholder: 'persoon',
@@ -105,8 +106,7 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline variable',
   content: 'inline*',
   atom: true,
-  recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   editable: true,

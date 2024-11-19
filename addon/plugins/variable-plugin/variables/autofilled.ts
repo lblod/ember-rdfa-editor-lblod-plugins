@@ -27,6 +27,7 @@ import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -144,8 +145,7 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline variable',
   content: 'inline*',
   atom: true,
-  recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   editable: true,

@@ -42,6 +42,7 @@ import {
   Place,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { NodeContentsUtils } from './node-contents';
+import { recreateVariableUris } from '../variable-plugin/utils/recreate-variable-uris';
 
 export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
@@ -193,8 +194,7 @@ const emberNodeConfig = (config: LocationPluginConfig): EmberNodeConfig => ({
   group: 'inline variable',
   atom: true,
   editable: true,
-  recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   selectable: true,

@@ -99,7 +99,6 @@ import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-nod
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 import applyDevTools from 'prosemirror-dev-tools';
-import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { getOwner } from '@ember/application';
 import {
@@ -119,6 +118,7 @@ import {
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;

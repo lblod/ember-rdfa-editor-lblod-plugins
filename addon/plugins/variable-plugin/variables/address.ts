@@ -52,6 +52,7 @@ import {
   parseLambert72GMLString,
   parseLambert72WKTString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const rdfaAware = true;
 
@@ -387,7 +388,7 @@ const emberNodeConfig: EmberNodeConfig = {
   atom: true,
   editable: true,
   recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   selectable: true,
