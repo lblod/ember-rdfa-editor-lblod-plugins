@@ -46,18 +46,6 @@
   }
 }
 
-.say-structure__content.say-empty {
-  [data-ember-node-content] {
-    p::before {
-      color: var(--au-gray-400);
-      content: 'Fill in content...';
-      float: left;
-      height: 0;
-      pointer-events: none;
-    }
-  }
-}
-
 .ember-node.say-active:has(> .say-structure) {
   outline: none;
 }
