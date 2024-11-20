@@ -2,8 +2,9 @@ import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { v4 as uuidv4 } from 'uuid';
+import { Attrs } from '@lblod/ember-rdfa-editor';
 
-export function recreateVariableUris(nodeAttrs: any) {
+export function recreateVariableUris(nodeAttrs: Attrs) {
   const attrs = { ...nodeAttrs };
   if (
     attrs.subject &&
