@@ -2,7 +2,10 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { setExternalTriples } from '@lblod/ember-rdfa-editor/utils/external-triple-utils';
+import {
+  setExternalTriples,
+  transformExternalTriples,
+} from '@lblod/ember-rdfa-editor/utils/external-triple-utils';
 import { trackedFunction } from 'reactiveweb/function';
 import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
@@ -160,9 +163,14 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
           predicate: ELI(ELI_SUBJECT).full,
           object: factory.namedNode(topic.uri),
         }));
-        const res = setExternalTriples(newTriples)(
-          this.controller.mainEditorState,
-        );
+        const res = transformExternalTriples((oldTriples) => {
+          const notOurTriples = oldTriples.filter(
+            (trip) =>
+              trip.subject.value !== decisionUri ||
+              !ELI(ELI_SUBJECT).matches(trip.predicate),
+          );
+          return notOurTriples.concat(newTriples);
+        })(this.controller.mainEditorState);
         if (res.result) {
           this.controller.mainEditorView.dispatch(res.transaction);
         }
