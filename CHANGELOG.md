@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.0.2
+
+### Patch Changes
+
+- [#511](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/511) [`4237506`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4237506d5bd6659786a50a14b89a8febe590eedb) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Implement new recreateUuids plugin
+
 ## 26.0.1
 
 ### Patch Changes
