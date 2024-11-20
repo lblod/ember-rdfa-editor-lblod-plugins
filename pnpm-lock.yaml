@@ -169,8 +169,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.7.4-dev.7d5e99197b82c0af0b665bc7df234e1b8fc5e264
-        version: 10.7.4-dev.7d5e99197b82c0af0b665bc7df234e1b8fc5e264(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.8.0
+        version: 10.8.0(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1595,8 +1595,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.7.4-dev.7d5e99197b82c0af0b665bc7df234e1b8fc5e264':
-    resolution: {integrity: sha512-AS/xF2sTlQwz1erODsnPbRUBXPKGXzxJ6DRXMGZ9nvJnPYQtVuPx8I+I5gJOMGuzFPyNPCnZG91bd+EIZgmXYg==}
+  '@lblod/ember-rdfa-editor@10.8.0':
+    resolution: {integrity: sha512-Xmcs8+e5sC9aDKz6hB5PslIePKizvh294O9A1JpKx00TzZhIFVBZeyW2baKiBpKpMjR/SyXj4WyryUKLYDldWw==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -10738,7 +10738,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.7.4-dev.7d5e99197b82c0af0b665bc7df234e1b8fc5e264(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.8.0(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
@@ -10790,7 +10790,7 @@ snapshots:
       prosemirror-schema-basic: 1.2.3
       prosemirror-schema-list: 1.4.1
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
       rdf-data-factory: 1.1.2
       relative-to-absolute-iri: 1.0.7
@@ -11184,7 +11184,7 @@ snapshots:
       prosemirror-keymap: 1.2.2
       prosemirror-model: 1.21.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
 
   '@simple-dom/document@1.4.0':
@@ -18306,20 +18306,20 @@ snapshots:
   prosemirror-dropcursor@1.8.1:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
 
   prosemirror-history@1.4.1:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
       rope-sequence: 1.3.4
 
   prosemirror-inputrules@1.4.0:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
 
   prosemirror-keymap@1.2.2:
     dependencies:
@@ -18338,7 +18338,7 @@ snapshots:
     dependencies:
       prosemirror-model: 1.21.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
 
   prosemirror-state@1.4.3:
     dependencies:
