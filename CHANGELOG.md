@@ -1,5 +1,47 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.0.1
+
+### Patch Changes
+
+- [#507](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/507) [`d7bf867`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d7bf867860134c38aff2ab7bb6a3431c0546e354) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/template-uuid-instantiator` to version [1.0.3](https://github.com/lblod/template-uuid-instantiator/releases/tag/v1.0.3)
+
+## 26.0.0
+
+### Major Changes
+
+- [#504](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/504) [`82dd848`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/82dd848062665bf907055d47231beaa156ec243c) Thanks [@elpoelma](https://github.com/elpoelma)! - Adjustments to `lmb-plugin`:
+
+  - Rework `fetchMandatees` queries into `fetchElectees`
+    - Fetches all electees for a certain legislation period + all non-elected people with a mandate
+    - Replace `Mandatee` model by simpler `Electee` model
+  - Adjust UI components to reflect the `Mandatee` to `Electee` change
+
+- [#504](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/504) [`82dd848`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/82dd848062665bf907055d47231beaa156ec243c) Thanks [@elpoelma](https://github.com/elpoelma)! - Adjustments to `person` variable:
+  - Removal of unused `content` attribute
+  - Removal of `mandatee` attribute. Replaced by `value` attribute which contains an object of type `Person`.
+    ```ts
+    type Person = {
+      uri: string;
+      firstName: string;
+      lastName: string;
+    };
+    ```
+  - Adjust parsing rules of `person_variable` nodespec to work with old and new serializations
+  - Is now more generic, instead of relying on `Mandatee` instances
+
+### Minor Changes
+
+- [#509](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/509) [`092cc56`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/092cc569ef130e65611bb6de0e45c6d73f9c3718) Thanks [@elpoelma](https://github.com/elpoelma)! - Mandatee table plugin: ensure synchronisation warning shown in mandatee tables is clearer/more explicit
+
+### Patch Changes
+
+- [#504](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/504) [`c5d4e05`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c5d4e05c9b1e7a37bba6f79df862d5505aebbd47) Thanks [@elpoelma](https://github.com/elpoelma)! - person-variable plugin: remove unused `content` node-attribute
+
+- [#505](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/505) [`0cb4f55`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0cb4f555effe599d6e481d14bfcb6de7ac15fb66) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Use new template uris on variables
+
+- [#508](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/508) [`05f5e77`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/05f5e7711f7062132f1912f6675b8fd440d54daf) Thanks [@elpoelma](https://github.com/elpoelma)! - Decision article structures: remove unnecessary css placeholder from content section
+
 ## 25.2.2
 
 ### Patch Changes

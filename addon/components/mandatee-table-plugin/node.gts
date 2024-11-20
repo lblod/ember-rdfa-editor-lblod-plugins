@@ -1,4 +1,6 @@
+import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 
 import { UserIcon } from '@appuniversum/ember-appuniversum/components/icons/user';
 import { service } from '@ember/service';
@@ -45,12 +47,19 @@ export default class MandateeTableNode extends Component<Sig> {
         />
         <div>
           <h6 class='say-mandatee-table__title'>{{this.title}}</h6>
-          <p class='say-mandatee-table__warning'>
-            {{this.warning}}
-          </p>
         </div>
       </div>
-      <div class='say-mandatee-table-content'>{{yield}}</div>
+      <div class='say-mandatee-table-content'>
+        <AuAlert
+          class='say-mandatee-table__warning'
+          @icon={{AlertTriangleIcon}}
+          @skin='warning'
+          @size='small'
+        >
+          {{this.warning}}
+        </AuAlert>
+        {{yield}}
+      </div>
     </div>
   </template>
 }
