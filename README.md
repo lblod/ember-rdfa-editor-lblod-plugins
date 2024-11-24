@@ -438,7 +438,7 @@ You will need to set the following configuration in the config object
 
 ```js
 {
-  endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+  endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
   imageBaseUrl: 'https://register.mobiliteit.vlaanderen.be/',
 }
 ```
@@ -652,14 +652,14 @@ get variableTypes() {
       label: 'location',
       component: LocationInsertComponent,
       options: {
-        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
       },
     },
     {
       label: 'codelist',
       component: CodelistInsertComponent,
       options: {
-        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
       },
     },
     {
@@ -747,7 +747,7 @@ Where `this.locationEditOptions` is a `LocationEditOptions` object used to confi
 ```js
 get locationEditOptions() {
   return {
-      endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch location values if the location variable has no `source` attribute
+      endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch location values if the location variable has no `source` attribute
       zonalLocationCodelistUri:
         'http://lblod.data.gift/concept-schemes/62331E6900730AE7B99DF7EF', //the uri the edit component should search for if the location variable is included in a zonal traffic measure
       nonZonalLocationCodelistUri:
@@ -773,7 +773,7 @@ Where `this.codelistEditOptions` is a `CodelistEditOptions` object used to confi
 ```js
 get codelistEditOptions() {
   return {
-      endpoint: 'https://dev.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch codelist values if the codelist variable has no `source` attribute
+      endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql', //the fallback endpoint the edit component should use to fetch codelist values if the codelist variable has no `source` attribute
     };
 }
 ```
