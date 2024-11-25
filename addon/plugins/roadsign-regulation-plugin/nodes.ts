@@ -1,4 +1,9 @@
-import { getRdfaAttrs, NodeSpec, rdfaAttrSpec } from '@lblod/ember-rdfa-editor';
+import {
+  getRdfaAttrs,
+  NodeSpec,
+  rdfaAttrSpec,
+  PNode,
+} from '@lblod/ember-rdfa-editor';
 import {
   DCT,
   EXT,
@@ -6,6 +11,7 @@ import {
   PROV,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = `div[property~='${
   DCT('description').full
@@ -23,7 +29,8 @@ export const roadsign_regulation: NodeSpec = {
       default: false,
     },
   },
-  toDOM(node) {
+  classNames: ['say-roadsign-regulation'],
+  toDOM(node: PNode) {
     const { resourceUri, measureUri, zonality, temporal } = node.attrs;
     return [
       'div',
@@ -31,6 +38,7 @@ export const roadsign_regulation: NodeSpec = {
         property: MOBILITEIT('heeftVerkeersmaatregel'),
         typeof: MOBILITEIT('Mobiliteitsmaatregel'),
         resource: resourceUri as string,
+        class: getClassnamesFromNode(node),
       },
       [
         'span',

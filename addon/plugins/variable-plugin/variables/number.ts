@@ -37,6 +37,7 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
 import { createNumberVariableAttrs } from '../actions/create-number-variable';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const rdfaAware = true;
 const parseDOM: TagParseRule[] = [
@@ -187,6 +188,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
+      class: getClassnamesFromNode(node),
     },
     content: humanReadableContent.toString(),
   });
@@ -214,6 +216,7 @@ const emberNodeConfig: EmberNodeConfig = {
     const { value } = node.attrs;
     return value as string;
   },
+  classNames: ['say-number-variable'],
   parseDOM: [...parseDOM, ...parseDOMLegacy],
   serialize,
 };

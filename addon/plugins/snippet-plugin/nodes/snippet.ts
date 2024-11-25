@@ -181,6 +181,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   },
   component: SnippetComponent,
   content: options.allowedContent || DEFAULT_CONTENT_STRING,
+  classNames: ['say-snippet'],
   serialize(node) {
     const listNames = node.attrs.snippetListNames as string[];
     return renderRdfaAware({
@@ -192,6 +193,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
+        class: getClassnamesFromNode(node),
       },
       content: 0,
     });
