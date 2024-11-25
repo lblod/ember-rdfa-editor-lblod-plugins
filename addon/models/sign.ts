@@ -17,20 +17,15 @@ export default class Sign {
       unwrap(binding['imageBaseUrl']?.value),
     );
 
-    const uri = unwrap(binding['uri']?.value);
-    const order = unwrap(binding['order']?.value);
+    const uri = unwrap(binding['relatedTrafficSignConcepts']?.value);
+    // const order = unwrap(binding['order']?.value);
 
     const classifications = binding['classifications']?.value.split('|') ?? [];
     const zonality = binding['zonality']?.value;
-    return new Sign(code, image, classifications, uri, order, zonality);
+    return new Sign(code, image, classifications, uri, '', zonality);
   }
 
-  static processImage(url: string, imageBaseUrl: string) {
-    const isAbsoluteRegex = new RegExp('^(?:[a-z]+:)?//', 'i');
-    if (isAbsoluteRegex.test(url)) {
-      return url;
-    } else {
-      return `${imageBaseUrl}${url}`;
-    }
+  static processImage(imageId: string, imageBaseUrl: string) {
+    return `${imageBaseUrl}/files/${imageId}/download`;
   }
 }
