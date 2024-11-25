@@ -70,7 +70,8 @@ WHERE {
          mobiliteit:template ?template.
          ?template ext:annotated ?annotatedTemplate;
                    prov:value ?basicTemplate.
-    ?signUri a mobiliteit:Verkeerstekenconcept;
+    ?signUri a  ?signType;
+                dct:type ?signClassification;
                 mobiliteit:heeftMaatregelconcept ?uri;
                 skos:prefLabel ?signCode.
 

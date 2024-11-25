@@ -38,10 +38,9 @@ export default class RoadsignRegistryService extends Service {
     const result = await this.executeQuery.perform(
       `
     SELECT DISTINCT ?classificationUri ?classificationLabel  WHERE {
-      ?measure ext:relation/ext:concept ?signUri.
-      ?signUri org:classification ?classificationUri.
-      ?classificationUri a mobiliteit:Verkeersbordcategorie;
-        skos:prefLabel ?classificationLabel.
+      ?signUri mobiliteit:heeftMaatregelconcept ?measure.
+      ?signUri dct:type ?classificationUri.
+      ?classificationUri skos:prefLabel ?classificationLabel.
     }
 `,
       endpoint,
@@ -56,7 +55,6 @@ export default class RoadsignRegistryService extends Service {
   getInstructionsForMeasure = task(
     async (uri: string, endpoint: string): Promise<Instruction[]> => {
       if (this.instructions.has(uri)) {
-        console.log("instructions", this.instructions);
         return unwrap(this.instructions.get(uri));
       } else {
         const instructions = await this.fetchInstructionsForMeasure.perform(
@@ -260,7 +258,6 @@ export default class RoadsignRegistryService extends Service {
 `;
       const result = await this.executeQuery.perform(query, endpoint);
       const signs = [];
-      console.log(result.results);
       for (const binding of result.results.bindings) {
         const sign = Sign.fromBinding({
           ...binding,
