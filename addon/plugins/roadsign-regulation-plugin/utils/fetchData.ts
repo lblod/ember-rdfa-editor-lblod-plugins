@@ -25,7 +25,7 @@ function buildFilters({
         ${codes
           .map(
             (uri) => `
-              ?uri ext:relation/ext:concept <${uri}>.
+              <${uri}> mobiliteit:heeftMaatregelconcept ?uri.
             `,
           )
           .join(' ')}

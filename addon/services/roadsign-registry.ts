@@ -84,7 +84,7 @@ export default class RoadsignRegistryService extends Service {
       let signFilter = '';
       if (combinedSigns.length > 0) {
         signFilter = combinedSigns
-          .map((sign) => `?measure ext:relation/ext:concept <${sign}>.`)
+          .map((sign) => `<${sign}>  mobiliteit:heeftMaatregelconcept ?measure.`)
           .join('\n');
         signFilter += '\n';
         const commaSeperatedSigns = combinedSigns
@@ -95,7 +95,7 @@ export default class RoadsignRegistryService extends Service {
 
       const query = `
       SELECT DISTINCT ?signUri ?signCode WHERE {
-        ?measure ext:relation/ext:concept ?signUri.
+        ?signUri mobiliteit:heeftMaatregelconcept ?measure.
         ?signUri a ${type ? `<${type}>` : '?signType'};
           skos:prefLabel ?signCode;
           ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
