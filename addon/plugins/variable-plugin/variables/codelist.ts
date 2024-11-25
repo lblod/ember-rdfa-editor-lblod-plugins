@@ -33,6 +33,7 @@ import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/co
 import type { ComponentLike } from '@glint/template';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -150,6 +151,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     renderable: node,
     attrs: {
       'data-selection-style': selectionStyle as string,
+      class: getClassnamesFromNode(node),
     },
     tag: 'span',
     content: 0,
@@ -174,6 +176,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
+  classNames: ['say-codelist-variable'],
   toDOM,
   parseDOM,
 };

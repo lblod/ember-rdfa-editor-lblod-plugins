@@ -37,6 +37,7 @@ import {
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const TRANSLATION_FALLBACKS = {
   insertDate: 'Datum invoegen',
@@ -242,6 +243,7 @@ const serialize = (node: PNode, state: EditorState) => {
     'data-format': format as string,
     'data-custom': custom ? 'true' : 'false',
     'data-custom-allowed': customAllowed ? 'true' : 'false',
+    class: getClassnamesFromNode(node),
   };
   return renderRdfaAware({
     renderable: node,
@@ -295,6 +297,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
 
     return humanReadableDate;
   },
+  classNames: ['say-date-variable'],
   serialize,
   parseDOM,
 });

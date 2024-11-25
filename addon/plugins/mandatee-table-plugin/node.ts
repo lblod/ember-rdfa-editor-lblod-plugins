@@ -5,6 +5,8 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import MandateeTableNode from '@lblod/ember-rdfa-editor-lblod-plugins/components/mandatee-table-plugin/node';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
+import { PNode } from '@lblod/ember-rdfa-editor';
 
 export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
@@ -24,7 +26,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
         default: 'Mandatarissen',
       },
     },
-    serialize(node) {
+    classNames: ['say-mandatee-table-node'],
+    serialize(node: PNode) {
       const tag = node.attrs.tag as string;
       const title = node.attrs.title as string;
       return [
@@ -33,7 +36,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           'data-say-mandatee-table': true,
           'data-say-mandatee-table-tag': tag,
           'data-say-mandatee-table-title': title,
-          class: 'say-mandatee-table-node',
+          class: getClassnamesFromNode(node),
         },
         [
           'div',

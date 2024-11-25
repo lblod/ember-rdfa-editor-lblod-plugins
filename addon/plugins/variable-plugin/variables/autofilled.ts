@@ -28,6 +28,7 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -133,6 +134,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
       'data-initialized': node.attrs.initialized,
+      class: getClassnamesFromNode(node),
     },
     content: 0,
   });
@@ -162,6 +164,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: false,
     },
   },
+  classNames: ['say-autofilled-variable'],
   toDOM,
   parseDOM,
 };

@@ -63,7 +63,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     isolating: true,
     atom: false,
     editable: rdfaAware,
-
+    classNames: ['say-structure'],
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
 
@@ -176,6 +176,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
           'data-say-header-tag': tag,
           'data-say-number': number,
           'data-say-is-only-article': isOnlyArticle,
+          class: getClassnamesFromNode(node),
         },
         content: [
           'div',

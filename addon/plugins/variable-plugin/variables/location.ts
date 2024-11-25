@@ -23,6 +23,7 @@ import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-ou
 import NodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -64,6 +65,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     mappingResource,
     {
       'data-label': label as string,
+      class: getClassnamesFromNode(node),
     },
     instanceSpan(variableInstance),
     typeSpan('location'),
@@ -91,6 +93,7 @@ const emberNodeConfig: EmberNodeConfig = {
     },
     label: { default: null },
   },
+  classNames: ['say-location-variable'],
   toDOM,
   parseDOM,
 };

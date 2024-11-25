@@ -89,6 +89,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     tag: 'span',
     attrs: {
       'data-value': JSON.stringify(person),
+      class: getClassnamesFromNode(node),
     },
     content: person
       ? `${person.firstName} ${person.lastName}`
@@ -117,6 +118,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
+  classNames: ['say-person-variable'],
   serialize,
   parseDOM,
 };

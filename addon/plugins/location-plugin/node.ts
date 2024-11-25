@@ -43,6 +43,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { NodeContentsUtils } from './node-contents';
 import { recreateVariableUris } from '../variable-plugin/utils/recreate-variable-uris';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
@@ -184,6 +185,9 @@ const serialize =
       renderable: node,
       tag: 'span',
       content: contentNode,
+      attrs: {
+        class: getClassnamesFromNode(node),
+      },
     });
   };
 
@@ -204,6 +208,7 @@ const emberNodeConfig = (config: LocationPluginConfig): EmberNodeConfig => ({
       default: null,
     },
   },
+  classNames: ['say-oslo-location'],
   serialize: serialize(config),
   parseDOM: parseDOM(config),
 });
