@@ -17,6 +17,7 @@ import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 type Args = {
   getPos: () => number | undefined;
@@ -158,5 +159,8 @@ export default class NumberNodeviewComponent extends Component<Args> {
       }
       this.args.updateAttribute('properties', newProperties);
     }
+  }
+  get class() {
+    return getClassnamesFromNode(this.node);
   }
 }

@@ -189,7 +189,7 @@ const emberNodeConfig: EmberNodeConfig = {
     const { value } = node.attrs;
     return value as string;
   },
-  classNames: ['say-number-variable'],
+  classNames: ['say-pill', 'say-number-variable'],
   parseDOM,
   serialize,
 };

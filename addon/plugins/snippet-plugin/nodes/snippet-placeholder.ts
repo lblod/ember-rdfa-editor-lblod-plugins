@@ -114,7 +114,7 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
     },
   },
   component: SnippetComponent,
-  classNames: ['say-snippet-placeholder-node'],
+  classNames: ['say-snippet'],
   serialize(node, editorState) {
     const t = getTranslationFunction(editorState);
     const listNames = node.attrs.snippetListNames as string[];
@@ -122,7 +122,7 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
       renderable: node,
       tag: 'div',
       attrs: {
-        class: getClassnamesFromNode(node),
+        class: `${getClassnamesFromNode(node)} say-snippet-placeholder`,
         'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,

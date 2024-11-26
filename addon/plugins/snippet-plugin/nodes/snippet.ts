@@ -36,6 +36,7 @@ import {
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { tripleForSnippetListId } from '../utils/rdfa-predicate';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 function outgoingFromBacklink(
   backlink: IncomingTriple,

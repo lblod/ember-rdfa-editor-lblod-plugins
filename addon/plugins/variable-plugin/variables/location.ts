@@ -93,7 +93,7 @@ const emberNodeConfig: EmberNodeConfig = {
     },
     label: { default: null },
   },
-  classNames: ['say-location-variable'],
+  classNames: ['say-pill', 'say-location-variable'],
   toDOM,
   parseDOM,
 };

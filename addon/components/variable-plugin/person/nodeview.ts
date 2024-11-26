@@ -4,6 +4,7 @@ import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { Person } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 type Args = {
   getPos: () => number | undefined;
@@ -39,5 +40,8 @@ export default class PersonNodeviewComponent extends Component<Args> {
     } else {
       return this.label;
     }
+  }
+  get class() {
+    return getClassnamesFromNode(this.node);
   }
 }

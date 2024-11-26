@@ -21,6 +21,7 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const TRANSLATION_FALLBACKS = {
   nodeview_placeholder: 'persoon',
@@ -118,7 +119,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  classNames: ['say-person-variable'],
+  classNames: ['say-pill', 'say-person-variable'],
   serialize,
   parseDOM,
 };

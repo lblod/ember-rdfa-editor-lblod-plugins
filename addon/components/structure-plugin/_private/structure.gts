@@ -27,6 +27,7 @@ import {
   StructureType,
   getNameForStructureType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -93,6 +94,10 @@ export default class Structure extends Component<Sig> {
 
   get structureType() {
     return this.node.attrs.structureType as StructureType;
+  }
+
+  get class() {
+    return getClassnamesFromNode(this.node);
   }
 
   get structureName() {

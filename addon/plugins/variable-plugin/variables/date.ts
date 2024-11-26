@@ -297,7 +297,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
 
     return humanReadableDate;
   },
-  classNames: ['say-date-variable'],
+  classNames: ['say-pill', 'say-date-variable'],
   serialize,
   parseDOM,
 });

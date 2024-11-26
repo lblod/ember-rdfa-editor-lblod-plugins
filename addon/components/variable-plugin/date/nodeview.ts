@@ -11,6 +11,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 type Args = {
   getPos: () => number | undefined;
@@ -42,6 +43,10 @@ export default class DateNodeviewComponent extends Component<Args> {
     } else {
       return this.label;
     }
+  }
+
+  get class() {
+    return getClassnamesFromNode(this.args.node);
   }
 
   get label() {
