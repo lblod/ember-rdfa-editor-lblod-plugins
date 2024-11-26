@@ -4,7 +4,7 @@
   @offsetOptions={{hash mainAxis=3}}
   as |velcro|
 >
-  <AuPill class='say-pill atomic' {{velcro.hook}} {{on 'click' @selectNode}}>
+  <AuPill class='{{this.class}} atomic' {{velcro.hook}} {{on 'click' @selectNode}}>
     <span class='{{unless this.filled "unfilled-variable"}}'>
       {{this.content}}
     </span>

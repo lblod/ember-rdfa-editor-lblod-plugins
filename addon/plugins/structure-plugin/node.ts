@@ -30,6 +30,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import IntlService from 'ember-intl/services/intl';
 import { romanize, romanToInt } from './utils/romanize';
 import {

@@ -257,7 +257,7 @@ const emberNodeConfig = (config: LocationPluginConfig): EmberNodeConfig => ({
       default: null,
     },
   },
-  classNames: ['say-oslo-location'],
+  classNames: ['say-pill', 'say-oslo-location'],
   serialize: serialize(config),
   parseDOM: parseDOM(config),
 });

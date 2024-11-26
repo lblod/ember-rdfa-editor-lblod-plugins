@@ -39,6 +39,7 @@ import {
   tripleForSnippetListUri,
   tripleForSnippetListId,
 } from '../utils/rdfa-predicate';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 function outgoingFromBacklink(
   backlink: IncomingTriple,

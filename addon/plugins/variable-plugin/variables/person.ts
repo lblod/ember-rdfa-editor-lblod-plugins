@@ -168,7 +168,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  classNames: ['say-person-variable'],
+  classNames: ['say-pill', 'say-person-variable'],
   serialize,
   parseDOM,
 };

@@ -1,6 +1,6 @@
 {{! @glint-nocheck: not typesafe yet }}
 <AuPill
-  class='say-pill'
+  class={{this.class}}
   {{on 'click' this.onClick}}
   {{on 'focusout' this.resetVariable}}
 >
