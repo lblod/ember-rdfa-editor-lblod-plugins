@@ -53,7 +53,7 @@ export default class SnippetListSelect extends Component<Signature> {
     return getSnippetListIdsProperties(this.args.node.value);
   }
 
-  get assignedSnippetListsIds(): string[] {
+  get snippetListIds(): string[] {
     return getAssignedSnippetListsIdsFromProperties(
       this.snippetListIdsProperties,
     );
@@ -99,7 +99,7 @@ export default class SnippetListSelect extends Component<Signature> {
 
       <SnippetListModal
         @config={{@config}}
-        @assignedSnippetListsIds={{this.assignedSnippetListsIds}}
+        @snippetListIds={{this.snippetListIds}}
         @onSaveSnippetLists={{this.onSaveSnippetLists}}
         @allowMultipleSnippets={{this.allowMultipleSnippets}}
         @open={{this.showModal}}

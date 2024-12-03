@@ -6,7 +6,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
-type Filter = { name?: string; assignedSnippetListIds?: string[] };
+type Filter = { name?: string; snippetListIds?: string[] };
 export type OrderBy =
   | 'label'
   | 'created-on'
@@ -16,7 +16,7 @@ export type OrderBy =
   | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
-const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
+const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
   return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
@@ -42,8 +42,8 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
               : ''
           }
           ${
-            assignedSnippetListIds && assignedSnippetListIds.length
-              ? `FILTER (?snippetListId IN (${assignedSnippetListIds
+            snippetListIds && snippetListIds.length
+              ? `FILTER (?snippetListId IN (${snippetListIds
                   .map((from) => sparqlEscapeString(from))
                   .join(', ')}))`
               : ''
@@ -69,7 +69,7 @@ const buildSnippetCountQuery = ({ name, assignedSnippetListIds }: Filter) => {
 // };
 
 const buildSnippetFetchQuery = ({
-  filter: { name, assignedSnippetListIds },
+  filter: { name, snippetListIds },
   pagination: { pageSize, pageNumber },
 }: {
   filter: Filter;
@@ -106,8 +106,8 @@ const buildSnippetFetchQuery = ({
               : ''
           }
           ${
-            assignedSnippetListIds && assignedSnippetListIds.length
-              ? `FILTER (?snippetListId IN (${assignedSnippetListIds
+            snippetListIds && snippetListIds.length
+              ? `FILTER (?snippetListId IN (${snippetListIds
                   .map((from) => sparqlEscapeString(from))
                   .join(', ')}))`
               : ''
@@ -173,7 +173,7 @@ export const fetchSnippets = async ({
   filter: Filter;
   pagination: Pagination;
 }) => {
-  if (!filter.assignedSnippetListIds?.length) {
+  if (!filter.snippetListIds?.length) {
     return { totalCount: 0, results: [] };
   }
 

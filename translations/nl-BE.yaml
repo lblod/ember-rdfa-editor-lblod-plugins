@@ -1,7 +1,7 @@
 common:
   insert: Voeg in
   search:
-    loading: Laden…
+    loading: Aan het laden…
     no-results: Geen resultaten gevonden
     error-title: Probleem bij het laden
     error-intro: 'Er is een fout opgetreden tijdens het laden van de resultaten:'
@@ -10,6 +10,7 @@ common:
     sort: Sorteren
     asc: Oplopend sorteren
     desc: Aflopend sorteren
+  not-applicable: 'n.v.t.'
 
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
@@ -201,8 +202,8 @@ date-plugin:
     long-month-content: Januari, Februari, ..., December
     long-year: Jaar
   insert:
-    date: 'Datum invoegen'
-    datetime: 'Datum en tijd invoegen'
+    date: 'Datum'
+    datetime: 'Datum en tijd'
   card:
     title: 'Datum'
     insert-date: 'Datum invoegen'
@@ -236,7 +237,7 @@ table-of-contents-plugin:
 
 variable:
   number:
-    placeholder: Voeg getal in
+    placeholder: Getal
     label: nummer
     type-number: typ een nummer...
     error-not-integer: Enkel gehele getallen zijn toegelaten
@@ -276,7 +277,7 @@ variable-plugin:
     to: tot
   person:
     card-title: Persoon invoegen
-    nodeview-placeholder: Voeg persoon in
+    nodeview-placeholder: Persoon
   autofill:
     autofillKey: Sleutelwaarde
     convertToString: Vervang variabele door platte tekst bij invoegen
@@ -300,10 +301,10 @@ snippet-plugin:
   placeholder:
     title-single: Fragment uit de lijst "{listName}"
     title-multiple: Fragment uit meerdere lijsten
-    text: Selecteer dit en voeg het gewenste fragment in
+    button: Selecteer het gewenste fragment
     active-lists: 'Actieve lijsten:'
   modal:
-    title: Kies een fragment
+    title: Kies een fragment uit {snippetListNames}
     preview-button:
       title: Preview van fragment tonen
     select-button:
@@ -429,7 +430,7 @@ editor-plugins:
         projection-error: 'Kan locatiecoördinaten niet converteren: {coords}'
         contact: Bij blijvende problemen, contacteer <a href="mailto:{email}">{email}</a>.
     nodeview:
-      placeholder: Voeg adres in
+      placeholder: Adres
 
 confidentiality-plugin:
   redact: Redigeren
@@ -451,17 +452,21 @@ worship-plugin:
 
 lmb-plugin:
   insert:
-    title: Mandataris van LMB invoegen
+    title: Verkozene invoegen
   modal:
-    title: Kies een mandataris
+    title: Kies een verkozene
     insert: Invoegen
     search:
       title: Filter op
+    nameSearch:
+      placeholder: Zoek op naam...
+    adminUnitSearch:
+      placeholder: bv. Gent, Aalst...
     fields:
       name: Naam
-      status: Status
-      fractie: Fractie
-      role: Rol
+      kandidatenlijst: Kandidatenlijst
+      period: Bestuursperiode
+      adminUnit: Bestuurseenheid
 
 location-plugin:
   modal:
@@ -540,5 +545,4 @@ mandatee-table-plugin:
       label: Titel
       placeholder: Titel
   node:
-    warning: Informatie die u hieronder manueel ingeeft, wordt mogelijks
-      verwijderd bij synchronisatie van de installatievergadering.
+    warning: Informatie die u hieronder manueel ingeeft, wordt verwijderd bij synchronisatie van de installatievergadering.

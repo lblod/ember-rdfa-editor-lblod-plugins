@@ -29,6 +29,9 @@ importers:
       '@lblod/marawa':
         specifier: 0.8.0-beta.6
         version: 0.8.0-beta.6
+      '@lblod/template-uuid-instantiator':
+        specifier: 1.0.3
+        version: 1.0.3
       '@rdfjs/data-model':
         specifier: ^2.0.2
         version: 2.0.2
@@ -166,8 +169,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.4.0
-        version: 10.4.0(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.8.0
+        version: 10.8.0(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1592,8 +1595,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.4.0':
-    resolution: {integrity: sha512-rmSMmJj6Xbxg2v1xHo3wtJbfpwzrzm1mmKRc2vTsG3ho64V4QQE7IWD2PdnutEMYVYEQKet0W653tHAT8Em/1w==}
+  '@lblod/ember-rdfa-editor@10.8.0':
+    resolution: {integrity: sha512-Xmcs8+e5sC9aDKz6hB5PslIePKizvh294O9A1JpKx00TzZhIFVBZeyW2baKiBpKpMjR/SyXj4WyryUKLYDldWw==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -1604,7 +1607,7 @@ packages:
       ember-intl: ^6.4.0 || ^7.0.2
       ember-modifier: ^4.1.0
       ember-power-select: ^7.1.0
-      ember-source: ^4.12.0
+      ember-source: ~4.12.0
       ember-template-imports: ^4.1.1
       ember-truth-helpers: ^4.0.3
     peerDependenciesMeta:
@@ -1617,6 +1620,9 @@ packages:
 
   '@lblod/marawa@0.8.0-beta.6':
     resolution: {integrity: sha512-BW3yCpeQlk9EPnQAEQnM9uViA8RC5DkuoiaPJzbuhMcLvKHfI4cjc6dTg9i8qAijbL/xObmQ/Aexko2Xcj9ktw==}
+
+  '@lblod/template-uuid-instantiator@1.0.3':
+    resolution: {integrity: sha512-l+q8MxBHPM2vp3eDEWxOy8b9BtHBbIRVlIuyLHqaxRMlx/rb/lx5WuWQYvvI0vVwvSVimDYro2VHzpTILaX8bA==}
 
   '@lezer/common@1.2.1':
     resolution: {integrity: sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ==}
@@ -3894,8 +3900,8 @@ packages:
     resolution: {integrity: sha512-jnjyiM6eRyZl2H+W8Q/zLMA481hzi0eszAaBUzIVnmYVDBbnLxVNnfu1HgEBvCbL+71FrxMl3E6lpKH7Ge3OXA==}
     engines: {node: '>=0.4', npm: '>=1.2'}
 
-  dompurify@3.1.7:
-    resolution: {integrity: sha512-VaTstWtsneJY8xzy7DekmYWEOZcmzIe3Qb3zPd4STve1OBTa+e+WmS1ITQec1fZYXI3HCsOZZiSMpG6oxoWMWQ==}
+  dompurify@3.2.0:
+    resolution: {integrity: sha512-AMdOzK44oFWqHEi0wpOqix/fUNY707OmoeFDnbi3Q5I8uOpy21ufUA5cDJPr0bosxrflOVD/H2DMSvuGKJGfmQ==}
 
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
@@ -4968,7 +4974,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -6010,8 +6016,8 @@ packages:
   linkify-it@4.0.1:
     resolution: {integrity: sha512-C7bfi1UZmoj8+PQx22XyeXCuBlokoyWQL5pWSP+EI6nzRylyThouddufc2c1NDIcP9k5agmN9fLpA7VNJfIiqw==}
 
-  linkifyjs@4.1.3:
-    resolution: {integrity: sha512-auMesunaJ8yfkHvK4gfg1K0SaKX/6Wn9g2Aac/NwX+l5VdmFZzo/hdPGxEOETj+ryRa4/fiOPjeeKURSAJx1sg==}
+  linkifyjs@4.1.4:
+    resolution: {integrity: sha512-0/NxkHNpiJ0k9VrYCkAn9OtU1eu8xEr1tCCpDtSsVRm/SF0xAak2Gzv3QimSfgUgqLBCDlfhMbu73XvaEHUTPQ==}
 
   livereload-js@3.4.1:
     resolution: {integrity: sha512-5MP0uUeVCec89ZbNOT/i97Mc+q3SxXmiUGhRFOTmhrGPn//uWVQdCvcLJDy64MSBR5MidFdOR7B9viumoavy6g==}
@@ -7270,8 +7276,8 @@ packages:
   property-expr@2.0.6:
     resolution: {integrity: sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==}
 
-  prosemirror-commands@1.6.0:
-    resolution: {integrity: sha512-xn1U/g36OqXn2tn5nGmvnnimAj/g1pUx2ypJJIe8WkVX83WyJVC5LTARaxZa2AtQRwntu9Jc5zXs9gL9svp/mg==}
+  prosemirror-commands@1.6.2:
+    resolution: {integrity: sha512-0nDHH++qcf/BuPLYvmqZTUUsPJUCPBUXt0J1ErTcDIS369CTp773itzLGIgIXG4LJXOlwYCr44+Mh4ii6MP1QA==}
 
   prosemirror-dev-tools@4.1.0:
     resolution: {integrity: sha512-TqMyXLiY8EUoq4f4LV+8dQVuRejwGfeOJdJWjrHNXR9ttKy3MVYBCqmiu3CDULgjv8gtLsqoZY6+ab6BZRmr1g==}
@@ -7303,6 +7309,9 @@ packages:
 
   prosemirror-state@1.4.3:
     resolution: {integrity: sha512-goFKORVbvPuAQaXhpbemJFRKJ2aixr+AZMGiquiqKxaucC6hlpHNZHWgz5R7dS4roHiwq9vDctE//CZ++o0W1Q==}
+
+  prosemirror-transform@1.10.2:
+    resolution: {integrity: sha512-2iUq0wv2iRoJO/zj5mv8uDUriOHWzXRnOTVgCzSXnktS/2iQRa3UUQwVlkBlYZFtygw6Nh1+X4mGqoYBINn5KQ==}
 
   prosemirror-transform@1.9.0:
     resolution: {integrity: sha512-5UXkr1LIRx3jmpXXNKDhv8OyAOeLTGuXNwdVfg8x27uASna/wQkr9p6fD3eupGOi4PLJfbezxTyi/7fSJypXHg==}
@@ -10729,7 +10738,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.4.0(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.8.0(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7
@@ -10752,7 +10761,7 @@ snapshots:
       common-tags: 1.8.2
       crypto-browserify: 3.12.0
       debug: 4.3.5
-      dompurify: 3.1.7
+      dompurify: 3.2.0
       ember-auto-import: 2.7.4(@glint/template@1.4.0)(webpack@5.92.1)
       ember-changeset: 4.1.2(@glint/template@1.4.0)(webpack@5.92.1)
       ember-cli-babel: 8.2.0(@babel/core@7.24.7)
@@ -10769,10 +10778,10 @@ snapshots:
       handlebars-loader: 1.7.3(handlebars@4.7.8)
       iter-tools: 7.5.3
       js-beautify: 1.15.1
-      linkifyjs: 4.1.3
+      linkifyjs: 4.1.4
       mdn-polyfills: 5.20.0
       process: 0.11.10
-      prosemirror-commands: 1.6.0
+      prosemirror-commands: 1.6.2
       prosemirror-dropcursor: 1.8.1
       prosemirror-history: 1.4.1
       prosemirror-inputrules: 1.4.0
@@ -10781,7 +10790,7 @@ snapshots:
       prosemirror-schema-basic: 1.2.3
       prosemirror-schema-list: 1.4.1
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
       rdf-data-factory: 1.1.2
       relative-to-absolute-iri: 1.0.7
@@ -10803,6 +10812,10 @@ snapshots:
     dependencies:
       '@rdfjs/data-model': 1.3.4
       '@rdfjs/dataset': 1.1.1
+
+  '@lblod/template-uuid-instantiator@1.0.3':
+    dependencies:
+      uuid: 9.0.1
 
   '@lezer/common@1.2.1': {}
 
@@ -11171,7 +11184,7 @@ snapshots:
       prosemirror-keymap: 1.2.2
       prosemirror-model: 1.21.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
 
   '@simple-dom/document@1.4.0':
@@ -13781,7 +13794,7 @@ snapshots:
 
   domain-browser@1.2.0: {}
 
-  dompurify@3.1.7: {}
+  dompurify@3.2.0: {}
 
   dot-case@3.0.4:
     dependencies:
@@ -16964,7 +16977,7 @@ snapshots:
     dependencies:
       uc.micro: 1.0.6
 
-  linkifyjs@4.1.3: {}
+  linkifyjs@4.1.4: {}
 
   livereload-js@3.4.1: {}
 
@@ -18256,11 +18269,11 @@ snapshots:
 
   property-expr@2.0.6: {}
 
-  prosemirror-commands@1.6.0:
+  prosemirror-commands@1.6.2:
     dependencies:
       prosemirror-model: 1.21.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
 
   prosemirror-dev-tools@4.1.0(@babel/core@7.24.7)(@babel/template@7.24.7)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -18293,20 +18306,20 @@ snapshots:
   prosemirror-dropcursor@1.8.1:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
 
   prosemirror-history@1.4.1:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
       prosemirror-view: 1.33.8
       rope-sequence: 1.3.4
 
   prosemirror-inputrules@1.4.0:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
 
   prosemirror-keymap@1.2.2:
     dependencies:
@@ -18325,13 +18338,17 @@ snapshots:
     dependencies:
       prosemirror-model: 1.21.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.9.0
+      prosemirror-transform: 1.10.2
 
   prosemirror-state@1.4.3:
     dependencies:
       prosemirror-model: 1.21.3
       prosemirror-transform: 1.9.0
       prosemirror-view: 1.33.8
+
+  prosemirror-transform@1.10.2:
+    dependencies:
+      prosemirror-model: 1.21.3
 
   prosemirror-transform@1.9.0:
     dependencies:

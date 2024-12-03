@@ -3,7 +3,10 @@
   class='snippet-modal'
   @modalOpen={{@open}}
   @closeModal={{this.closeModal}}
-  @title={{t 'snippet-plugin.modal.title'}}
+  @title={{t
+    'snippet-plugin.modal.title'
+    snippetListNames=this.snippetListNames
+  }}
   @size='large'
   @padding='none'
   as |modal|

@@ -8,8 +8,16 @@
     padding: 0.6rem 0.6rem 0.6rem 0.6rem;
     cursor: default;
   }
+
+  .say-mandatee-table__warning {
+    .au-c-alert__content {
+      margin-top: 0;
+    }
+  }
+
   .say-mandatee-table-content {
     padding: 1.2rem;
+    margin-top: 0;
   }
 
   .say-mandatee-table__title {

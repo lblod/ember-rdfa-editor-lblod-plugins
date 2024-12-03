@@ -36,6 +36,7 @@ import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const rdfaAware = true;
 const parseDOM: TagParseRule[] = [
@@ -171,8 +172,7 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline variable',
   content: 'inline*',
   atom: true,
-  recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   editable: true,
   draggable: false,
   needsFFKludge: true,

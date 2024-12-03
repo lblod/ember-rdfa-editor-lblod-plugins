@@ -15,6 +15,7 @@ import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblo
 
 type Args = {
   controller: SayController;
+  templateMode?: boolean;
 };
 
 export default class TextVariableInsertComponent extends Component<Args> {
@@ -40,8 +41,12 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingSubject = `http://data.lblod.info/mappings/${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+    const mappingSubject = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const variableId = uuidv4();
 
     const placeholder = this.intl.t('variable.text.label', {
@@ -78,7 +83,7 @@ export default class TextVariableInsertComponent extends Component<Args> {
         ],
       },
       this.schema.node('placeholder', {
-        placeholderText: 'text',
+        placeholderText: label,
       }),
     );
 

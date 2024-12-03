@@ -54,6 +54,7 @@ interface Signature {
     controller: SayController;
     config: LocationPluginConfig;
     defaultMunicipality?: string;
+    templateMode?: boolean;
   };
   Element: HTMLLIElement;
 }
@@ -194,6 +195,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         this.intl.t('location-plugin.default-label', {
           locale: this.documentLanguage,
         }),
+        this.args.templateMode,
       );
     }
     this.modalOpen = true;

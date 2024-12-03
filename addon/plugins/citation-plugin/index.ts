@@ -119,21 +119,31 @@ interface CitationPluginState {
 
 export type CitationPlugin = ProsePlugin<CitationPluginState>;
 
-export interface CitationPluginNodeConfig {
+export type CitationPluginNodeConfig = CitationPluginBaseConfig & {
   type: 'nodes';
-  regex?: RegExp;
+} & (
+    | {
+        /**
+         * @deprecated use the `activeInNode` property instead
+         */
+        activeInNodeTypes(schema: Schema, state: EditorState): Set<NodeType>;
+      }
+    | {
+        activeInNode(node: PNode, state?: EditorState): boolean;
+      }
+  );
 
-  activeInNodeTypes(schema: Schema, state: EditorState): Set<NodeType>;
-}
-
-export interface CitationPluginRangeConfig {
+export type CitationPluginRangeConfig = CitationPluginBaseConfig & {
   type: 'ranges';
-  regex?: RegExp;
-
   activeInRanges(state: EditorState): [number, number][];
-}
+};
+
+export type CitationPluginBaseConfig = {
+  regex?: RegExp;
+};
 
 export type CitationPluginConfig =
+  | CitationPluginBaseConfig
   | CitationPluginNodeConfig
   | CitationPluginRangeConfig;
 
@@ -176,21 +186,43 @@ function calculateCitationPluginState(
   const { doc, schema } = state;
   let activeRanges;
   let highlights;
-  if (config.type === 'ranges') {
-    activeRanges = config.activeInRanges(state);
-    const calculatedDecs = calculateDecorationsInRanges(
-      config,
-      schema,
-      doc,
-      activeRanges,
-    );
-    highlights = calculatedDecs.decorations;
+  if ('type' in config) {
+    if (config.type === 'ranges') {
+      activeRanges = config.activeInRanges(state);
+      const calculatedDecs = calculateDecorationsInRanges(
+        config,
+        schema,
+        doc,
+        activeRanges,
+      );
+      highlights = calculatedDecs.decorations;
+    } else {
+      let condition: (node: PNode) => boolean;
+      if ('activeInNodeTypes' in config) {
+        const nodeTypes = config.activeInNodeTypes(schema, state);
+        condition = (node) => {
+          return nodeTypes.has(node.type);
+        };
+      } else {
+        condition = (node) => config.activeInNode(node, state);
+      }
+
+      const calculatedDecs = calculateDecorationsInNodes(
+        config,
+        schema,
+        condition,
+        doc,
+        oldState?.doc,
+        oldDecs,
+      );
+      activeRanges = calculatedDecs.activeRanges;
+      highlights = calculatedDecs.decorations;
+    }
   } else {
-    const nodes = config.activeInNodeTypes(schema, state);
     const calculatedDecs = calculateDecorationsInNodes(
       config,
       schema,
-      nodes,
+      () => true,
       doc,
       oldState?.doc,
       oldDecs,
@@ -198,6 +230,7 @@ function calculateCitationPluginState(
     activeRanges = calculatedDecs.activeRanges;
     highlights = calculatedDecs.decorations;
   }
+
   return {
     highlights,
     activeRanges,
@@ -207,7 +240,7 @@ function calculateCitationPluginState(
 function calculateDecorationsInNodes(
   config: CitationPluginConfig,
   schema: CitationSchema,
-  nodes: Set<NodeType>,
+  condition: (node: PNode) => boolean,
   newDoc: PNode,
   oldDoc?: PNode,
   oldDecorations?: DecorationSet,
@@ -223,7 +256,7 @@ function calculateDecorationsInNodes(
     decsToRemove,
     oldDecorations,
   );
-  if (nodes.has(newDoc.type)) {
+  if (condition(newDoc)) {
     oldDoc
       ? changedDescendants(oldDoc, newDoc, 0, collector)
       : newDoc.descendants(collector);
@@ -236,7 +269,7 @@ function calculateDecorationsInNodes(
           0,
 
           (node, pos) => {
-            if (nodes.has(node.type)) {
+            if (condition(node)) {
               node.nodesBetween(0, node.nodeSize - 2, collector, pos + 1);
               activeRanges.push([pos, pos + node.nodeSize]);
               return false;
@@ -245,7 +278,7 @@ function calculateDecorationsInNodes(
           },
         )
       : newDoc.descendants((node, pos) => {
-          if (nodes.has(node.type)) {
+          if (condition(node)) {
             node.nodesBetween(0, node.nodeSize - 2, collector, pos + 1);
             activeRanges.push([pos, pos + node.nodeSize]);
             return false;

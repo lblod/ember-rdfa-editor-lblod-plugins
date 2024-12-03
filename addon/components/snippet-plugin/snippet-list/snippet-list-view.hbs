@@ -53,7 +53,7 @@
             <AuCheckbox
               id={{row.label}}
               @onChange={{fn this.onChange row.id}}
-              @checked={{in-array @assignedSnippetListsIds row.id}}
+              @checked={{in-array @snippetListIds row.id}}
             />
           </td>
           <td>{{row.label}}</td>

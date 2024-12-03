@@ -51,9 +51,9 @@ export default class DateTimePickerComponent extends Component<Args> {
         this.date = new Date();
         this.date.setHours(0, 0, 0, 0);
       }
-      this.date.setDate(date.getDate());
-      this.date.setMonth(date.getMonth());
       this.date.setFullYear(date.getFullYear());
+      this.date.setMonth(date.getMonth());
+      this.date.setDate(date.getDate());
       this.args.onChange(this.date);
     }
   }

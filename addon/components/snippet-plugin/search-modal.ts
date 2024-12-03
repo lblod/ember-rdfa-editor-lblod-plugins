@@ -11,7 +11,8 @@ import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plug
 
 interface Args {
   config: SnippetPluginConfig;
-  assignedSnippetListsIds: string[] | undefined;
+  snippetListIds: string[] | undefined;
+  snippetListNames: string[] | undefined;
   closeModal: () => void;
   open: boolean;
   onInsert: (content: string, title: string) => void;
@@ -35,6 +36,10 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
 
   get searchText() {
     return this.inputSearchText;
+  }
+
+  get snippetListNames() {
+    return this.args.snippetListNames?.map((name) => `"${name}"`).join(', ');
   }
 
   @action
@@ -64,8 +69,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
         abortSignal: abortController.signal,
         filter: {
           name: this.inputSearchText ?? undefined,
-          assignedSnippetListIds:
-            this.args.assignedSnippetListsIds ?? undefined,
+          snippetListIds: this.args.snippetListIds ?? undefined,
         },
         pagination: {
           pageNumber: this.pageNumber,
@@ -88,7 +92,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
     this.inputSearchText,
     this.pageNumber,
     this.pageSize,
-    this.args.assignedSnippetListsIds,
+    this.args.snippetListIds,
   ]);
 
   @action

@@ -11,24 +11,8 @@
       </th>
       <th>
         <Common::Sort::SortableTableHeader
-          @field='status'
-          @label={{t 'lmb-plugin.modal.fields.status'}}
-          @sort={{@sort}}
-          @setSort={{@setSort}}
-        />
-      </th>
-      <th>
-        <Common::Sort::SortableTableHeader
-          @field='fractie'
-          @label={{t 'lmb-plugin.modal.fields.fractie'}}
-          @sort={{@sort}}
-          @setSort={{@setSort}}
-        />
-      </th>
-      <th>
-        <Common::Sort::SortableTableHeader
-          @field='role'
-          @label={{t 'lmb-plugin.modal.fields.role'}}
+          @field='kandidatenlijst'
+          @label={{t 'lmb-plugin.modal.fields.kandidatenlijst'}}
           @sort={{@sort}}
           @setSort={{@setSort}}
         />
@@ -37,14 +21,26 @@
     </tr>
   </:header>
   <:body>
-    {{#unless @services.isRunning}}
+    {{#if @services.isRunning}}
+      <tr>
+        <td colspan='100%'>
+          <AuLoader @centered={{true}}>
+            {{t 'common.search.loading'}}
+          </AuLoader>
+        </td>
+      </tr>
+    {{else}}
       {{#if @services.value.totalCount}}
         {{#each @services.value.results as |row|}}
           <tr>
             <td>{{row.fullName}}</td>
-            <td>{{row.status}}</td>
-            <td>{{row.fractie}}</td>
-            <td>{{row.role}}</td>
+            <td>
+              {{#if row.kandidatenlijst}}
+                {{row.kandidatenlijst}}
+              {{else}}
+                <span class='au-u-italic'>{{t 'common.not-applicable'}}</span>
+              {{/if}}
+            </td>
             <td class='au-u-text-center'>
               <AuButton {{on 'click' (fn @insert row)}}>
                 {{t 'lmb-plugin.modal.insert'}}
@@ -52,7 +48,13 @@
             </td>
           </tr>
         {{/each}}
+      {{else}}
+        <tr>
+          <td colspan='100%'>
+            {{t 'common.search.no-results'}}
+          </td>
+        </tr>
       {{/if}}
-    {{/unless}}
+    {{/if}}
   </:body>
 </AuTable>

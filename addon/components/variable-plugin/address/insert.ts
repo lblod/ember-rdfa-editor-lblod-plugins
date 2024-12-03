@@ -9,6 +9,7 @@ import { replaceSelectionWithAddress } from './utils';
 
 type Args = {
   controller: SayController;
+  templateMode?: boolean;
 };
 
 export default class InsertAddressComponent extends Component<Args> {
@@ -31,6 +32,7 @@ export default class InsertAddressComponent extends Component<Args> {
       this.intl.t('variable.address.label', {
         locale: this.documentLanguage,
       }),
+      this.args.templateMode,
     );
   }
 

@@ -10,6 +10,7 @@ common:
     sort: Sort
     asc: Sort ascending
     desc: Sort descending
+  not-applicable: 'N/A'
 
 structure-plugin:
   move-up: 'Move {structureName} up'
@@ -201,8 +202,8 @@ date-plugin:
     long-month-content: January, February, ..., December
     long-year: Long year
   insert:
-    date: 'Insert date'
-    datetime: 'Insert date and time'
+    date: 'Date'
+    datetime: 'Date and time'
   card:
     title: 'Date'
     insert-date: 'Insert date'
@@ -232,7 +233,7 @@ document-title-plugin:
 
 variable:
   number:
-    placeholder: Insert number
+    placeholder: Number
     label: number
     type-number: Type a number...
     error-not-integer: Only integers are allowed
@@ -272,7 +273,7 @@ variable-plugin:
     to: to
   person:
     card-title: Insert person
-    nodeview-placeholder: Insert person
+    nodeview-placeholder: Person
   autofill:
     autofillKey: Autofill Key
     convertToString: Replace variable node with plain text on text insertion
@@ -301,10 +302,10 @@ snippet-plugin:
   placeholder:
     title-single: Snippet from the list "{listName}"
     title-multiple: Snippet from multiple lists
-    text: Select this then insert the desired snippet
+    button: Select the desired snippet
     active-lists: 'Active lists:'
   modal:
-    title: Choose a snippet
+    title: Choose a snippet from {snippetListNames}
     preview-button:
       title: Show snippet preview
     select-button:
@@ -430,7 +431,7 @@ editor-plugins:
         projection-error: 'Unable to convert location coordinates: {coords}'
         contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
     nodeview:
-      placeholder: Insert address
+      placeholder: Address
 
 confidentiality-plugin:
   redact: Redact
@@ -452,17 +453,23 @@ worship-plugin:
 
 lmb-plugin:
   insert:
-    title: Insert mandatee from LMB service
+    title: Insert electee
   modal:
-    title: Choose a mandatee
+    title: Choose an electee
     insert: Insert
     search:
       title: Filter on
+    nameSearch:
+      placeholder: Search by name...
+    adminUnitSearch:
+      placeholder: e.g. Gent, Aalst...
     fields:
       name: Name
       status: Status
-      fractie: Fractie
+      kandidatenlijst: Candidate list
       role: Role
+      period: Administrative Period
+      adminUnit: Administrative unit
 
 location-plugin:
   modal:
@@ -541,5 +548,5 @@ mandatee-table-plugin:
       label: Title
       placeholder: Title
   node:
-    warning: Information which you enter below may be removed upon
+    warning: Information which you enter below will be removed upon
       synchronisation of the inauguration meeting.

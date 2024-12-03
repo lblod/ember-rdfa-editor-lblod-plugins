@@ -43,11 +43,11 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
     allowMultipleSnippets: boolean,
   ) {
     if (lists) {
-      const node = createSnippetPlaceholder(
+      const node = createSnippetPlaceholder({
         lists,
-        this.args.controller.schema,
+        schema: this.args.controller.schema,
         allowMultipleSnippets,
-      );
+      });
 
       this.args.controller.withTransaction(
         (tr) => {
@@ -72,7 +72,7 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
     </li>
     <SnippetListModal
       @config={{@config}}
-      @assignedSnippetListsIds={{empty}}
+      @snippetListIds={{empty}}
       @allowMultipleSnippets={{false}}
       @onSaveSnippetLists={{this.insertPlaceholder}}
       @open={{this.isModalOpen}}

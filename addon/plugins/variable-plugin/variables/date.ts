@@ -36,6 +36,7 @@ import {
   RdfaAttrs,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const TRANSLATION_FALLBACKS = {
   insertDate: 'Datum invoegen',
@@ -259,6 +260,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   selectable: true,
   draggable: false,
   atom: true,
+  recreateUriFunction: recreateVariableUris,
   defining: false,
   options,
   attrs: {

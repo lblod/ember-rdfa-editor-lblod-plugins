@@ -5,15 +5,12 @@ import {
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
-import IntlService from 'ember-intl/services/intl';
-import { service } from '@ember/service';
 import {
   formatDate,
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { PencilIcon } from '@appuniversum/ember-appuniversum/components/icons/pencil';
 
 type Args = {
   getPos: () => number | undefined;
@@ -26,16 +23,10 @@ type Args = {
 };
 
 export default class DateNodeviewComponent extends Component<Args> {
-  PencilIcon = PencilIcon;
-
-  @service declare intl: IntlService;
-
-  get controller() {
-    return this.args.controller;
-  }
-
-  get documentLanguage() {
-    return this.controller.documentLanguage;
+  get filled() {
+    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
+      ?.object.value;
+    return !!value;
   }
 
   get humanReadableDate() {
@@ -49,20 +40,11 @@ export default class DateNodeviewComponent extends Component<Args> {
         return 'Ongeldig formaat';
       }
     } else {
-      return (this.args.node.attrs.onlyDate as boolean)
-        ? this.intl.t('date-plugin.insert.date', {
-            locale: this.documentLanguage,
-          })
-        : this.intl.t('date-plugin.insert.datetime', {
-            locale: this.documentLanguage,
-          });
+      return this.label;
     }
   }
 
   get label() {
-    const value = getOutgoingTriple(this.args.node.attrs, EXT('content'))
-      ?.object.value;
-    if (value) return '';
     return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
   }
 }

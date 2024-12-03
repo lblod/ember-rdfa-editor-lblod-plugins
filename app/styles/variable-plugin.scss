@@ -49,39 +49,34 @@
   }
 }
 
+.ember-node.say-active:has(> .say-pill) {
+  outline: none;
+}
+
 .ember-node {
   white-space: normal !important;
-  .variable {
-    min-height: 30px;
-    [contenteditable] {
-      white-space: break-spaces;
-      word-break: break-all;
-      word-wrap: break-word;
-      outline: 0px;
-      padding: 2px;
+  .say-pill [contenteditable].mark-highlight-manual {
+    color: var(--au-orange-700);
+    &.ProseMirror-selectednode {
+      background-color: var(--au-blue-300);
+      outline: none;
     }
-    .label {
-      font-size: var(--au-tiny);
-      color: var(--au-blue-700);
-      user-select: none;
-      margin: 0.3rem;
-    }
-    .au-c-icon {
-      margin: 0;
-    }
+  }
+  .unfilled-variable {
+    color: var(--au-orange-700);
+    background-color: var(--au-orange-300);
+    font-style: italic;
+    line-height: 1.2rem;
+    padding: 0.3rem;
   }
 }
 
 .ember-node.ProseMirror-selectednode {
-  > .variable {
-    &.atomic {
-      background-color: var(--au-blue-200);
-    }
-    outline: 2px solid var(--au-blue-500);
-
-    ::selection {
-      background-color: var(--au-blue-300);
-    }
+  > .say-pill.atomic {
+    background-color: var(--au-blue-200);
+  }
+  .unfilled-variable {
+    background-color: var(--au-blue-200);
   }
 }
 

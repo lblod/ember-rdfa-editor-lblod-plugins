@@ -24,7 +24,11 @@ export default function insertArticleContainer({
     const nodeToInsert = schema.node(
       'block_rdfa',
       { rdfaNodeType: 'literal', __rdfaId: articleContainerId },
-      buildArticleStructure(schema, articleUriGenerator),
+      buildArticleStructure(
+        schema,
+        articleUriGenerator,
+        decisionLocation.node.attrs.subject,
+      ),
     );
 
     const tr = state.tr;
