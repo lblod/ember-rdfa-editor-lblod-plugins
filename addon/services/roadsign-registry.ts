@@ -19,7 +19,9 @@ PREFIX oslo: <http://data.vlaanderen.be/ns#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
-`;
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX mu: <http://mu.semte.ch/vocabularies/core/>`;
 
 const DEBOUNCE_MS = 100;
 
@@ -36,10 +38,9 @@ export default class RoadsignRegistryService extends Service {
     const result = await this.executeQuery.perform(
       `
     SELECT DISTINCT ?classificationUri ?classificationLabel  WHERE {
-      ?measure ext:relation/ext:concept ?signUri.
-      ?signUri org:classification ?classificationUri.
-      ?classificationUri a mobiliteit:Verkeersbordcategorie;
-        skos:prefLabel ?classificationLabel.
+      ?signUri mobiliteit:heeftMaatregelconcept ?measure.
+      ?signUri dct:type ?classificationUri.
+      ?classificationUri skos:prefLabel ?classificationLabel.
     }
 `,
       endpoint,
@@ -83,7 +84,7 @@ export default class RoadsignRegistryService extends Service {
       let signFilter = '';
       if (combinedSigns.length > 0) {
         signFilter = combinedSigns
-          .map((sign) => `?measure ext:relation/ext:concept <${sign}>.`)
+          .map((sign) => `<${sign}>  mobiliteit:heeftMaatregelconcept ?measure.`)
           .join('\n');
         signFilter += '\n';
         const commaSeperatedSigns = combinedSigns
@@ -94,7 +95,7 @@ export default class RoadsignRegistryService extends Service {
 
       const query = `
       SELECT DISTINCT ?signUri ?signCode WHERE {
-        ?measure ext:relation/ext:concept ?signUri.
+        ?signUri mobiliteit:heeftMaatregelconcept ?measure.
         ?signUri a ${type ? `<${type}>` : '?signType'};
           skos:prefLabel ?signCode;
           ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
@@ -240,22 +241,20 @@ export default class RoadsignRegistryService extends Service {
   fetchSignsForMeasure = task(
     async (uri: string, endpoint: string, imageBaseUrl: string) => {
       const query = `
-SELECT ?uri ?code ?image ?zonality ?order (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
-WHERE {
-  <${uri}> ext:relation ?relation.
-  ?relation a ext:MustUseRelation;
-            <http://purl.org/linked-data/cube#order> ?order;
-            ext:concept ?uri.
-  ?uri a ?type;
-        skos:prefLabel ?code;
-        mobiliteit:grafischeWeergave ?image.
-  OPTIONAL {
-      ?uri ext:zonality ?zonality.
-  }
-  OPTIONAL {
-    ?uri org:classification/skos:prefLabel ?classification.
-  }
-  } ORDER BY ASC(?order)
+        SELECT ?relatedTrafficSignConcepts ?code ?image ?zonality  (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
+          WHERE {
+              ?relatedTrafficSignConcepts mobiliteit:heeftMaatregelconcept <${uri}>.
+              ?relatedTrafficSignConcepts a mobiliteit:Verkeerstekenconcept;
+                        skos:prefLabel ?code;
+                        mobiliteit:grafischeWeergave ?imageSrc.
+              ?imageSrc ext:hasFile/mu:uuid ?image.
+              OPTIONAL {
+                  ?relatedTrafficSignConcepts ext:zonality ?zonality.
+              }
+              OPTIONAL {
+                ?relatedTrafficSignConcepts dct:type/skos:prefLabel ?classification.
+              }
+       }
 `;
       const result = await this.executeQuery.perform(query, endpoint);
       const signs = [];
