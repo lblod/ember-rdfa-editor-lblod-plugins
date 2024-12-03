@@ -8,6 +8,12 @@ import {
   isSome,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { findParentNode } from '@curvenote/prosemirror-utils';
+import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  BESLUIT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export interface InsertSnippetCommandArgs {
   content: string;
@@ -38,16 +44,41 @@ const insertSnippet = ({
     };
 
     if (documentDiv) {
+      // TODO: remove this. It's a workaround if not all importedResources are connected
+      const listPropertiesWithFallback = {
+        ...listProperties,
+        importedResources: { ...listProperties.importedResources },
+      };
+      const decision = findParentNode((parent) => {
+        return (
+          parent.type === schema.nodes.block_rdfa &&
+          hasOutgoingNamedNodeTriple(
+            parent.attrs,
+            RDF('type'),
+            BESLUIT('Besluit'),
+          )
+        );
+      })(state.selection);
+      if (decision) {
+        for (const key of Object.keys(
+          listPropertiesWithFallback.importedResources,
+        )) {
+          if (!listPropertiesWithFallback.importedResources[key]) {
+            listPropertiesWithFallback.importedResources[key] =
+              decision.node.attrs.subject;
+          }
+        }
+      }
       const [snippet, importedTriples] = createSnippet({
         schema: state.schema,
         content,
         title,
-        listProperties,
+        listProperties: listPropertiesWithFallback,
         allowMultipleSnippets,
       });
 
       const addImportedResourceProperties = Object.values(
-        listProperties.importedResources ?? {},
+        listPropertiesWithFallback.importedResources ?? {},
       )
         .map((linked) => {
           const newProperties =
