@@ -14,6 +14,7 @@ export type LocationInsertOptions = {
 type Args = {
   controller: SayController;
   options: LocationInsertOptions;
+  templateMode?: boolean;
 };
 
 export default class LocationInsertComponent extends Component<Args> {
@@ -44,22 +45,28 @@ export default class LocationInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+    const mappingResource = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
 
     const placeholder = this.intl.t('variable.location.label', {
       locale: this.documentLanguage,
     });
 
+    const label = this.label ?? placeholder;
+
     const node = this.schema.nodes.location.create(
       {
         mappingResource,
         variableInstance,
-        label: this.label ?? placeholder,
+        label: label,
         source: this.endpoint,
       },
       this.schema.node('placeholder', {
-        placeholderText: placeholder,
+        placeholderText: label,
       }),
     );
 

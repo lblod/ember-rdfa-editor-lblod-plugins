@@ -1,22 +1,23 @@
 import { SayController } from '@lblod/ember-rdfa-editor';
-import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
+import { BestuursperiodeLabel } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { Person } from '../variable-plugin/variables';
 
 export type LmbPluginConfig = {
   endpoint: string;
+  defaultPeriod?: BestuursperiodeLabel;
+  defaultAdminUnit?: string;
 };
 
-export function createMandateeNode(
-  controller: SayController,
-  mandatee: Mandatee,
-) {
+export function createPersonNode(controller: SayController, person: Person) {
   const schema = controller.schema;
-  const mandateeNode = schema.node(
+  const fullName = `${person.firstName} ${person.lastName}`;
+  const electeeNode = schema.node(
     'inline_rdfa',
     {
       rdfaNodeType: 'resource',
-      subject: mandatee.mandateeUri,
+      subject: person.uri,
     },
-    [schema.text(`${mandatee.fullName}`)],
+    [schema.text(`${fullName}`)],
   );
-  return mandateeNode;
+  return electeeNode;
 }

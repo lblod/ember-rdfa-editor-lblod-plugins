@@ -94,7 +94,10 @@
               @config={{this.config.mandateeTable.config}}
             />
             <Sidebar as |Sidebar|>
-              <Sidebar.Collapsible @title='Structures'>
+              <Sidebar.Collapsible
+                @title='Structures'
+                @expandedInitially={{true}}
+              >
                 <this.InsertArticle @controller={{this.controller}} />
                 <this.InsertArticle
                   @controller={{this.controller}}
@@ -102,7 +105,7 @@
                   @options={{hash insertFreely=true}}
                 />
               </Sidebar.Collapsible>
-              <Sidebar.Collapsible @title='Insert'>
+              <Sidebar.Collapsible @title='Insert' @expandedInitially={{true}}>
                 <CitationPlugin::CitationInsert
                   @controller={{this.controller}}
                   @config={{this.config.citation}}

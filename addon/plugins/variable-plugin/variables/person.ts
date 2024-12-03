@@ -19,11 +19,17 @@ import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/comp
 import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
-import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const TRANSLATION_FALLBACKS = {
   nodeview_placeholder: 'persoon',
+};
+
+export type Person = {
+  uri: string;
+  firstName: string;
+  lastName: string;
 };
 
 const rdfaAware = true;
@@ -44,9 +50,28 @@ const parseDOM = [
         if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
+        let value: Person | undefined;
+        if (node.dataset.value) {
+          value = JSON.parse(node.dataset.value) as Person | undefined;
+        } else if (node.dataset.mandatee) {
+          const mandatee = JSON.parse(node.dataset.mandatee) as
+            | {
+                personUri: string;
+                firstName: string;
+                lastName: string;
+              }
+            | undefined;
+          if (mandatee) {
+            value = {
+              uri: mandatee.personUri,
+              firstName: mandatee.firstName,
+              lastName: mandatee.lastName,
+            };
+          }
+        }
         return {
           ...attrs,
-          mandatee: JSON.parse(node.getAttribute('data-mandatee') ?? '{}'),
+          value,
         };
       }
 
@@ -58,16 +83,15 @@ const parseDOM = [
 
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
-  const mandatee = node.attrs.mandatee as Mandatee;
+  const person = node.attrs.value as Person | undefined;
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
     attrs: {
-      ...node.attrs,
-      'data-mandatee': JSON.stringify(mandatee),
+      'data-value': JSON.stringify(person),
     },
-    content: mandatee
-      ? `${mandatee.fullName}`
+    content: person
+      ? `${person.firstName} ${person.lastName}`
       : t(
           'variable-plugin.person.nodeview-placeholder',
           TRANSLATION_FALLBACKS.nodeview_placeholder,
@@ -82,18 +106,14 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline variable',
   content: 'inline*',
   atom: true,
-  recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   editable: true,
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    content: {
-      default: null,
-    },
-    mandatee: {
+    value: {
       default: null,
     },
   },

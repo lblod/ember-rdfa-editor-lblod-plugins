@@ -21,16 +21,42 @@
               {{t 'lmb-plugin.modal.search.title'}}
             </AuHeading>
             <AuLabel class='au-margin-bottom-small' for='searchTerm'>
-              {{t 'worship-plugin.modal.fields.name'}}
+              {{t 'lmb-plugin.modal.fields.name'}}
             </AuLabel>
             <AuNativeInput
               @type='text'
               @width='block'
               id='searchTerm'
               value={{this.searchText}}
-              placeholder={{t 'worship-plugin.modal.search.placeholder'}}
+              placeholder={{t 'lmb-plugin.modal.nameSearch.placeholder'}}
               {{on 'input' this.setInputSearchText}}
             />
+            <AuLabel class='au-margin-bottom-small' for='periodSelect'>
+              {{t 'lmb-plugin.modal.fields.period'}}
+            </AuLabel>
+            <PowerSelect
+              @allowClear={{false}}
+              @searchEnabled={{false}}
+              @options={{this.adminPeriods}}
+              @selected={{this.selectedAdminPeriod}}
+              @onChange={{this.selectAdminPeriod}}
+              as |period|
+            >
+              {{period.label}}
+            </PowerSelect>
+
+            <AuLabel class='au-margin-bottom-small' for='searchAdminUnit'>
+              {{t 'lmb-plugin.modal.fields.adminUnit'}}
+            </AuLabel>
+            <AuNativeInput
+              @type='text'
+              @width='block'
+              id='searchAdminUnit'
+              value={{this.adminUnitSearch}}
+              placeholder={{t 'lmb-plugin.modal.adminUnitSearch.placeholder'}}
+              {{on 'input' this.setAdminUnitSearch}}
+            />
+
           </div>
         </div>
       </mc.sidebar>

@@ -26,6 +26,7 @@ export type CodelistInsertOptions = {
 type Args = {
   controller: SayController;
   options: CodelistInsertOptions;
+  templateMode?: boolean;
 };
 
 interface SelectStyle {
@@ -88,8 +89,12 @@ export default class CodelistInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+    const mappingResource = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const codelistResource = this.selectedCodelist?.uri;
     const label =
       this.label ??
@@ -137,7 +142,7 @@ export default class CodelistInsertComponent extends Component<Args> {
         ],
       },
       this.schema.node('placeholder', {
-        placeholderText: this.selectedCodelist?.label,
+        placeholderText: label,
       }),
     );
 

@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { SayView, Schema } from '@lblod/ember-rdfa-editor';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin';
 import NestedProsemirror from '@lblod/ember-rdfa-editor-lblod-plugins/utils/nested-prosemirror';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
 import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
 import {
@@ -73,20 +72,6 @@ export default class Structure extends Component<Sig> {
 
   get node() {
     return this.args.node;
-  }
-
-  get isEmpty() {
-    if (this.node.childCount > 1) {
-      return false;
-    }
-    const firstChild = unwrap(this.node.firstChild);
-    if (!firstChild.isTextblock) {
-      return false;
-    }
-    if (firstChild.childCount > 0) {
-      return false;
-    }
-    return true;
   }
 
   get tag() {
@@ -188,7 +173,7 @@ export default class Structure extends Component<Sig> {
           </Tag>
         {{/let}}
       </div>
-      <div class='say-structure__content {{if this.isEmpty "say-empty" ""}}'>
+      <div class='say-structure__content'>
         {{yield}}
       </div>
     </div>

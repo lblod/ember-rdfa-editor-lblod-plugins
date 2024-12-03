@@ -1,5 +1,126 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.0.2
+
+### Patch Changes
+
+- [#511](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/511) [`4237506`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4237506d5bd6659786a50a14b89a8febe590eedb) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Implement new recreateUuids plugin
+
+## 26.0.1
+
+### Patch Changes
+
+- [#507](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/507) [`d7bf867`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d7bf867860134c38aff2ab7bb6a3431c0546e354) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/template-uuid-instantiator` to version [1.0.3](https://github.com/lblod/template-uuid-instantiator/releases/tag/v1.0.3)
+
+## 26.0.0
+
+### Major Changes
+
+- [#504](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/504) [`82dd848`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/82dd848062665bf907055d47231beaa156ec243c) Thanks [@elpoelma](https://github.com/elpoelma)! - Adjustments to `lmb-plugin`:
+
+  - Rework `fetchMandatees` queries into `fetchElectees`
+    - Fetches all electees for a certain legislation period + all non-elected people with a mandate
+    - Replace `Mandatee` model by simpler `Electee` model
+  - Adjust UI components to reflect the `Mandatee` to `Electee` change
+
+- [#504](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/504) [`82dd848`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/82dd848062665bf907055d47231beaa156ec243c) Thanks [@elpoelma](https://github.com/elpoelma)! - Adjustments to `person` variable:
+  - Removal of unused `content` attribute
+  - Removal of `mandatee` attribute. Replaced by `value` attribute which contains an object of type `Person`.
+    ```ts
+    type Person = {
+      uri: string;
+      firstName: string;
+      lastName: string;
+    };
+    ```
+  - Adjust parsing rules of `person_variable` nodespec to work with old and new serializations
+  - Is now more generic, instead of relying on `Mandatee` instances
+
+### Minor Changes
+
+- [#509](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/509) [`092cc56`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/092cc569ef130e65611bb6de0e45c6d73f9c3718) Thanks [@elpoelma](https://github.com/elpoelma)! - Mandatee table plugin: ensure synchronisation warning shown in mandatee tables is clearer/more explicit
+
+### Patch Changes
+
+- [#504](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/504) [`c5d4e05`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c5d4e05c9b1e7a37bba6f79df862d5505aebbd47) Thanks [@elpoelma](https://github.com/elpoelma)! - person-variable plugin: remove unused `content` node-attribute
+
+- [#505](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/505) [`0cb4f55`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0cb4f555effe599d6e481d14bfcb6de7ac15fb66) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Use new template uris on variables
+
+- [#508](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/508) [`05f5e77`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/05f5e7711f7062132f1912f6675b8fd440d54daf) Thanks [@elpoelma](https://github.com/elpoelma)! - Decision article structures: remove unnecessary css placeholder from content section
+
+## 25.2.2
+
+### Patch Changes
+
+- [`7a31422`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7a314220944f266566efced7343d630810fc0247) Thanks [@abeforgit](https://github.com/abeforgit)! - loosen editor peerdep
+
+- [`1c165af`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1c165afcf6793c6ec96c40a902d90bdcac60900c) Thanks [@abeforgit](https://github.com/abeforgit)! - bump editor to [v10.7.4](https://github.com/lblod/ember-rdfa-editor/releases/tag/v10.7.4)
+
+## 25.2.1
+
+### Patch Changes
+
+- [#497](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/497) [`2b4b401`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2b4b4011e3d66c23f232bf6690ca80a5b0a90298) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign variable pills
+
+- [#497](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/497) [`2b4b401`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2b4b4011e3d66c23f232bf6690ca80a5b0a90298) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Bump ember-rdfa-editor to 10.7.3
+
+## 25.2.0
+
+### Minor Changes
+
+- [#496](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/496) [`2e3c09f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2e3c09f95db40967caaceaa791e7eefd6187c5e4) Thanks [@piemonkey](https://github.com/piemonkey)! - Redesign snippet placeholder to have more intuitive UX
+
+- [#503](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/503) [`37ba9c3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/37ba9c3ecd2c0452fb49ea1d0bb2704e6e716d05) Thanks [@elpoelma](https://github.com/elpoelma)! - Extension of configuration options of `citation-plugin`.
+  The `CitationPluginNodeConfig` is extended to allow for a `activeInNode` condition.
+  This allows you to specify a condition which an active/context node needs to satisfy.
+
+  ```ts
+  interface CitationPluginNodeConditionConfig {
+    type: 'nodes';
+    regex?: RegExp;
+
+    activeInNode(node: PNode, state?: EditorState): boolean;
+  }
+  ```
+
+  The previously expected `activeInNodeTypes` option is marked as deprecated and will be removed in a future release.
+
+- [#501](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/501) [`997fa98`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/997fa986a7094349ad368d291cb8364e5c50a140) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add snippet list names to the modal title
+
+## 25.1.0
+
+### Minor Changes
+
+- [#502](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/502) [`9beff10`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9beff10b99a5825a4eb9be94128c2efb822ac982) Thanks [@abeforgit](https://github.com/abeforgit)! - Improved LMB-plugin
+
+  - Fixes missing data due to 10000 triple limit of query
+  - does all pagination, sorting and searching through the query
+  - adds filters for administrative period and unit
+
+## 25.0.0
+
+### Major Changes
+
+- [#499](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/499) [`3255c70`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3255c7021008a801eb5b07ebd49a6e557467b4ba) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/ember-rdfa-editor` peerdep requirement to version [10.7.2](https://github.com/lblod/ember-rdfa-editor/releases/tag/v10.7.2)
+
+### Minor Changes
+
+- [#495](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/495) [`046b6b7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/046b6b7c65b1e9144b7c469bbb2d968652639117) Thanks [@piemonkey](https://github.com/piemonkey)! - When removing last snippet of a 'group', replace the placeholder instead of completely deleting
+
+### Patch Changes
+
+- [#495](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/495) [`6547270`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/65472703c65a05feb6793a973e3785228822e1a1) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix bug with snippet list names containing a `,` displaying as multiple lists
+
+- [#499](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/499) [`3255c70`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3255c7021008a801eb5b07ebd49a6e557467b4ba) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix margins of mandatee table warning message
+
+- [#500](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/500) [`0b336ad`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0b336addbf4287620d471515aa75c2d62dc2627d) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix bug when setting a date with a day bigger than the number of days in the current month
+
+## 24.3.2
+
+### Patch Changes
+
+- [#498](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/498) [`2f0c6fa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2f0c6fa7bb8db188849b5331892eb16d7d692f44) Thanks [@piemonkey](https://github.com/piemonkey)! - Correctly instantiate placeholder URIs in snippets when inserting
+
 ## 24.3.1
 
 ### Patch Changes

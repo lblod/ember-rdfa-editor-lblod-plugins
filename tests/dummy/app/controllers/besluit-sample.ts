@@ -4,12 +4,7 @@ import { tracked } from 'tracked-built-ins';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
-import {
-  NodeType,
-  Plugin,
-  SayController,
-  Schema,
-} from '@lblod/ember-rdfa-editor';
+import { Plugin, PNode, SayController, Schema } from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
@@ -104,7 +99,6 @@ import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-nod
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 import applyDevTools from 'prosemirror-dev-tools';
-import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/recreateUuidsOnPaste';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { getOwner } from '@ember/application';
 import {
@@ -113,6 +107,18 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin/node';
 import { MANDATEE_TABLE_SAMPLE_CONFIG } from '../config/mandatee-table-sample-config';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
+import {
+  snippetPlaceholder,
+  snippetPlaceholderView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
+import {
+  snippet,
+  snippetView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
+import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
+import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -184,6 +190,8 @@ export default class BesluitSampleController extends Controller {
         invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
         inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
         link: link(this.config.link),
+        snippet_placeholder: snippetPlaceholder(this.config.snippet),
+        snippet: snippet(this.config.snippet),
       },
       marks: {
         em,
@@ -233,8 +241,15 @@ export default class BesluitSampleController extends Controller {
     return {
       citation: {
         type: 'nodes',
-        activeInNodeTypes(schema: Schema): Set<NodeType> {
-          return new Set<NodeType>([schema.nodes.motivering]);
+        activeInNode(node: PNode): boolean {
+          const { attrs } = node;
+          if (!isRdfaAttrs(attrs)) {
+            return false;
+          }
+          const match = attrs.backlinks.find((bl) =>
+            BESLUIT('motivering').matches(bl.predicate),
+          );
+          return Boolean(match);
         },
         endpoint: 'https://codex.opendata.api.vlaanderen.be:8888/sparql',
         decisionsEndpoint:
@@ -268,7 +283,7 @@ export default class BesluitSampleController extends Controller {
         endpoint: 'https://data.lblod.info/sparql',
       },
       lmb: {
-        endpoint: 'http://localhost/vendor-proxy/query',
+        endpoint: 'https://dev.gelinkt-notuleren.lblod.info/sparql',
       },
       lpdc: {
         // Needs to be exposed locally without authentication as otherwise calls fail
@@ -292,6 +307,9 @@ export default class BesluitSampleController extends Controller {
           administrativeUnit: 'Geemente Aalst',
           dateRightNow: new Date().toLocaleString(),
         },
+      },
+      snippet: {
+        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       },
     };
   }
@@ -323,6 +341,11 @@ export default class BesluitSampleController extends Controller {
       structure: structureView(controller),
       mandatee_table: mandateeTableView(controller),
       autofilled_variable: autofilledVariableView(controller),
+      snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
+        controller,
+      ),
+      snippet: snippetView(this.config.snippet)(controller),
+      block_rdfa: (node) => new BlockRDFaView(node),
     } satisfies Record<string, SayNodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [

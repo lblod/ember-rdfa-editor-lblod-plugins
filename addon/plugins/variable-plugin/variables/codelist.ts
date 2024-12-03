@@ -32,6 +32,7 @@ import {
 import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
@@ -163,8 +164,7 @@ const emberNodeConfig: EmberNodeConfig = {
   content: 'inline*',
   atom: true,
   editable: true,
-  recreateUri: true,
-  uriAttributes: ['variableInstance'],
+  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   selectable: true,

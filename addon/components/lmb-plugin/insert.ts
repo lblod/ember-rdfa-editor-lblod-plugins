@@ -5,7 +5,7 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
-import Mandatee from '@lblod/ember-rdfa-editor-lblod-plugins/models/mandatee';
+import Electee from '@lblod/ember-rdfa-editor-lblod-plugins/models/electee';
 import { v4 as uuidv4 } from 'uuid';
 import {
   DCT,
@@ -16,10 +16,12 @@ import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblo
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { Person } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
 interface Args {
   controller: SayController;
   config: LmbPluginConfig;
+  templateMode?: boolean;
 }
 
 export default class LmbPluginInsertComponent extends Component<Args> {
@@ -44,10 +46,20 @@ export default class LmbPluginInsertComponent extends Component<Args> {
   }
 
   @action
-  onInsert(mandatee: Mandatee) {
-    const mappingSubject = `http://data.lblod.info/mappings/${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${uuidv4()}`;
+  onInsert(electee: Electee) {
+    const mappingSubject = `http://data.lblod.info/mappings/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
+    const variableInstance = `http://data.lblod.info/variables/${
+      this.args.templateMode ? '--ref-uuid4-' : ''
+    }${uuidv4()}`;
     const variableId = uuidv4();
+
+    const person: Person = {
+      uri: electee.uri,
+      firstName: electee.firstName,
+      lastName: electee.lastName,
+    };
 
     const label = this.intl.t('variable.person.label', {
       locale: this.controller.documentLanguage,
@@ -56,7 +68,7 @@ export default class LmbPluginInsertComponent extends Component<Args> {
       subject: mappingSubject,
       rdfaNodeType: 'resource',
       __rdfaId: variableId,
-      mandatee,
+      value: person,
       properties: [
         {
           predicate: RDF('type').full,
