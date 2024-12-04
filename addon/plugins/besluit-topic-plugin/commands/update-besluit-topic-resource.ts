@@ -2,9 +2,13 @@ import { BesluitTopic } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/bes
 import { Command } from '@lblod/ember-rdfa-editor';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  DCT,
+  ELI,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
-export const ELI_SUBJECT = 'is_about';
+export const TOPIC_PREDICATE = DCT('subject');
+export const TOPIC_PREDICATE_DEPRECATED = ELI('is_about');
 
 export const updateBesluitTopicResource = ({
   resource,
@@ -24,16 +28,18 @@ export const updateBesluitTopicResource = ({
         previousTopics.forEach((uri) => {
           newState = state.apply(transaction);
 
-          removeProperty({
-            resource,
-            property: {
-              predicate: ELI(ELI_SUBJECT).full,
-              object: sayDataFactory.namedNode(uri),
-            },
-            transaction,
-          })(newState, (newTransaction) => {
-            transaction = newTransaction;
-          });
+          [TOPIC_PREDICATE, TOPIC_PREDICATE_DEPRECATED].forEach((PREDICATE) =>
+            removeProperty({
+              resource,
+              property: {
+                predicate: PREDICATE.full,
+                object: sayDataFactory.namedNode(uri),
+              },
+              transaction,
+            })(newState, (newTransaction) => {
+              transaction = newTransaction;
+            }),
+          );
         });
       }
 
@@ -43,7 +49,7 @@ export const updateBesluitTopicResource = ({
         addProperty({
           resource,
           property: {
-            predicate: ELI(ELI_SUBJECT).full,
+            predicate: TOPIC_PREDICATE.full,
             object: sayDataFactory.namedNode(besluitTopic.uri),
           },
           transaction,

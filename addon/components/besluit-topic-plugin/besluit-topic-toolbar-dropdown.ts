@@ -3,7 +3,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'reactiveweb/function';
-import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
@@ -18,7 +17,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import {
   updateBesluitTopicResource,
-  ELI_SUBJECT,
+  TOPIC_PREDICATE,
+  TOPIC_PREDICATE_DEPRECATED,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/commands/update-besluit-topic-resource';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
@@ -82,10 +82,16 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
       return;
     }
 
-    const outgoingBesluitTopics = getOutgoingTripleList(
+    let outgoingBesluitTopics = getOutgoingTripleList(
       this.decisionRange.node.attrs,
-      ELI(ELI_SUBJECT),
+      TOPIC_PREDICATE,
     );
+    if (outgoingBesluitTopics.length === 0) {
+      outgoingBesluitTopics = getOutgoingTripleList(
+        this.decisionRange.node.attrs,
+        TOPIC_PREDICATE_DEPRECATED,
+      );
+    }
 
     const besluitTopicsRelevant = outgoingBesluitTopics.filter(
       (topic) =>
