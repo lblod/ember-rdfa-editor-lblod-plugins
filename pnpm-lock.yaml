@@ -169,8 +169,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 10.8.0-dev.5f9a670327c741d4d5d3e975477993886a24efde
-        version: 10.8.0-dev.5f9a670327c741d4d5d3e975477993886a24efde(2ef3gpurqxbttnmniw6grhzpuy)
+        specifier: 10.9.0
+        version: 10.9.0(2ef3gpurqxbttnmniw6grhzpuy)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1595,8 +1595,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@10.8.0-dev.5f9a670327c741d4d5d3e975477993886a24efde':
-    resolution: {integrity: sha512-rxxbDufr28sGjOfpUp+3ihqdWhSLoGPozNdbHbjpjwzz3rB1NM/yvQrca61RI3gH+wSPz12m4oo7Mn5uJrTQjw==}
+  '@lblod/ember-rdfa-editor@10.9.0':
+    resolution: {integrity: sha512-FHCV9/yYosA9c/dU1zQkHhscsysv5MuUQEZCZ3mayrVFN7EQyerJutC/apej0pqHx+dBL6HHtV+nTv3O3q8FSQ==}
     engines: {node: 16.* || 18.* || >= 20}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.4.2
@@ -10738,7 +10738,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@10.8.0-dev.5f9a670327c741d4d5d3e975477993886a24efde(2ef3gpurqxbttnmniw6grhzpuy)':
+  '@lblod/ember-rdfa-editor@10.9.0(2ef3gpurqxbttnmniw6grhzpuy)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.4.2(yenc6o4wruytt4u2jbwlbsqcl4)
       '@babel/core': 7.24.7

@@ -2,12 +2,8 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import {
-  setExternalTriples,
-  transformExternalTriples,
-} from '@lblod/ember-rdfa-editor/utils/external-triple-utils';
+import { transformExternalTriples } from '@lblod/ember-rdfa-editor/utils/external-triple-utils';
 import { trackedFunction } from 'reactiveweb/function';
-import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
@@ -22,7 +18,8 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import {
   updateBesluitTopicResource,
-  ELI_SUBJECT,
+  TOPIC_PREDICATE,
+  TOPIC_PREDICATE_DEPRECATED,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/commands/update-besluit-topic-resource';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -72,9 +69,8 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
 
   get currentTopicUris() {
     if (this.decisionRange) {
-      const triples: OutgoingTriple[] = getOutgoingTripleList(
+      const triples: OutgoingTriple[] = this.findTopicTriples(
         this.decisionRange.node.attrs,
-        ELI(ELI_SUBJECT),
       );
       const topicTriples = triples.filter(
         (topic) =>
@@ -115,6 +111,23 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
 
     return topics.filter((besluitTopic) => uris.includes(besluitTopic.uri));
   }
+  findTopicTriples(attrs?: Record<string, unknown>): OutgoingTriple[] {
+    if (!attrs) {
+      return [];
+    }
+    const result = getOutgoingTripleList(attrs, TOPIC_PREDICATE);
+    if (result) {
+      return result;
+    }
+    return getOutgoingTripleList(attrs, TOPIC_PREDICATE_DEPRECATED);
+  }
+  matchTopicPredicate = (predicate: string): boolean => {
+    const newMatch = TOPIC_PREDICATE.matches(predicate);
+    if (newMatch) {
+      return newMatch;
+    }
+    return TOPIC_PREDICATE_DEPRECATED.matches(predicate);
+  };
 
   @action
   updateBesluitTopic() {
@@ -160,14 +173,14 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
         const decisionUri = this.decisionUri;
         const newTriples = this.besluitTopicsSelected.map((topic) => ({
           subject: factory.namedNode(decisionUri),
-          predicate: ELI(ELI_SUBJECT).full,
+          predicate: TOPIC_PREDICATE.full,
           object: factory.namedNode(topic.uri),
         }));
         const res = transformExternalTriples((oldTriples) => {
           const notOurTriples = oldTriples.filter(
             (trip) =>
               trip.subject.value !== decisionUri ||
-              !ELI(ELI_SUBJECT).matches(trip.predicate),
+              !this.matchTopicPredicate(trip.predicate),
           );
           return notOurTriples.concat(newTriples);
         })(this.controller.mainEditorState);
