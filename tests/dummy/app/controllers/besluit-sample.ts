@@ -267,6 +267,8 @@ export default class BesluitSampleController extends Controller {
       },
       besluitTopic: {
         endpoint: 'https://data.vlaanderen.be/sparql',
+        // uncomment to test external triple mode
+        // decisionUri: 'http://example.org/1',
       },
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',

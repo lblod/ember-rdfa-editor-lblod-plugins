@@ -2,6 +2,7 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { transformExternalTriples } from '@lblod/ember-rdfa-editor/utils/external-triple-utils';
 import { trackedFunction } from 'reactiveweb/function';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
@@ -21,6 +22,11 @@ import {
   TOPIC_PREDICATE_DEPRECATED,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/commands/update-besluit-topic-resource';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  FullTriple,
+  OutgoingTriple,
+} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type Args = {
   controller: SayController;
@@ -52,9 +58,43 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   }
 
   get showCard() {
-    return !!this.decisionRange;
+    return this.decisionUri || this.decisionRange;
+  }
+  get options() {
+    return this.args.options;
+  }
+  get decisionUri() {
+    return this.options.decisionUri;
   }
 
+  get currentTopicUris() {
+    if (this.decisionRange) {
+      const triples: OutgoingTriple[] = this.findTopicTriples(
+        this.decisionRange.node.attrs,
+      );
+      const topicTriples = triples.filter(
+        (topic) =>
+          topic.object.termType === 'NamedNode' &&
+          topic.object.value.includes(
+            'https://data.vlaanderen.be/id/concept/BesluitThema/',
+          ),
+      );
+      return topicTriples.map((topic) => topic.object.value);
+    } else if (this.decisionUri) {
+      const triples: FullTriple[] = this.doc.attrs['externalTriples'];
+      const topicTriples = triples.filter(
+        (topic) =>
+          topic.subject.value === this.decisionUri &&
+          topic.object.termType === 'NamedNode' &&
+          topic.object.value.includes(
+            'https://data.vlaanderen.be/id/concept/BesluitThema/',
+          ),
+      );
+      return topicTriples.map((topic) => topic.object.value);
+    } else {
+      return [];
+    }
+  }
   topics = trackedFunction(this, async () => {
     const result = await fetchBesluitTopics({
       config: { endpoint: this.args.options.endpoint },
@@ -71,10 +111,27 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
 
     return topics.filter((besluitTopic) => uris.includes(besluitTopic.uri));
   }
+  findTopicTriples(attrs?: Record<string, unknown>): OutgoingTriple[] {
+    if (!attrs) {
+      return [];
+    }
+    const result = getOutgoingTripleList(attrs, TOPIC_PREDICATE);
+    if (result) {
+      return result;
+    }
+    return getOutgoingTripleList(attrs, TOPIC_PREDICATE_DEPRECATED);
+  }
+  matchTopicPredicate = (predicate: string): boolean => {
+    const newMatch = TOPIC_PREDICATE.matches(predicate);
+    if (newMatch) {
+      return newMatch;
+    }
+    return TOPIC_PREDICATE_DEPRECATED.matches(predicate);
+  };
 
   @action
   updateBesluitTopic() {
-    if (!this.topics.isFinished || !this.decisionRange) {
+    if (!this.topics.isFinished || !this.showCard) {
       return;
     }
     if (!this.topics.value) {
@@ -82,33 +139,10 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
       return;
     }
 
-    let outgoingBesluitTopics = getOutgoingTripleList(
-      this.decisionRange.node.attrs,
-      TOPIC_PREDICATE,
-    );
-    if (outgoingBesluitTopics.length === 0) {
-      outgoingBesluitTopics = getOutgoingTripleList(
-        this.decisionRange.node.attrs,
-        TOPIC_PREDICATE_DEPRECATED,
-      );
-    }
+    const besluitTopics = this.findBesluitTopicsByUris(this.currentTopicUris);
 
-    const besluitTopicsRelevant = outgoingBesluitTopics.filter(
-      (topic) =>
-        topic.object.termType === 'NamedNode' &&
-        topic.object.value.includes(
-          'https://data.vlaanderen.be/id/concept/BesluitThema/',
-        ),
-    );
-
-    const outgoingUris = besluitTopicsRelevant.map(
-      (topic) => topic.object.value,
-    );
-
-    const besluitTopics = this.findBesluitTopicsByUris(outgoingUris);
-
-    if (besluitTopicsRelevant && besluitTopics) {
-      this.previousBesluitTopics = outgoingUris;
+    if (this.currentTopicUris && besluitTopics) {
+      this.previousBesluitTopics = this.currentTopicUris;
 
       this.besluitTopicsSelected = besluitTopics;
     } else {
@@ -120,19 +154,40 @@ export default class BesluitTopicToolbarDropdownComponent extends Component<Args
   upsertBesluitTopic(selected: BesluitTopic[]) {
     this.besluitTopicsSelected = selected;
 
-    const resource = getCurrentBesluitURI(this.controller);
-
-    if (this.besluitTopicsSelected && resource) {
-      this.controller.doCommand(
-        updateBesluitTopicResource({
-          resource,
-          previousTopics: this.previousBesluitTopics,
-          newTopics: this.besluitTopicsSelected,
-        }),
-        {
-          view: this.args.controller.mainEditorView,
-        },
-      );
+    if (this.besluitTopicsSelected) {
+      const resource = getCurrentBesluitURI(this.controller);
+      if (resource) {
+        this.controller.doCommand(
+          updateBesluitTopicResource({
+            resource,
+            previousTopics: this.previousBesluitTopics,
+            newTopics: this.besluitTopicsSelected,
+          }),
+          {
+            view: this.args.controller.mainEditorView,
+          },
+        );
+      } else if (this.decisionUri) {
+        const factory = new SayDataFactory();
+        // locking it in for the closure
+        const decisionUri = this.decisionUri;
+        const newTriples = this.besluitTopicsSelected.map((topic) => ({
+          subject: factory.namedNode(decisionUri),
+          predicate: TOPIC_PREDICATE.full,
+          object: factory.namedNode(topic.uri),
+        }));
+        const res = transformExternalTriples((oldTriples) => {
+          const notOurTriples = oldTriples.filter(
+            (trip) =>
+              trip.subject.value !== decisionUri ||
+              !this.matchTopicPredicate(trip.predicate),
+          );
+          return notOurTriples.concat(newTriples);
+        })(this.controller.mainEditorState);
+        if (res.result) {
+          this.controller.mainEditorView.dispatch(res.transaction);
+        }
+      }
     }
   }
 
