@@ -1,5 +1,23 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.1.0
+
+### Minor Changes
+
+- [#514](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/514) [`21dcb88`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/21dcb88270ef5c4b43492db987811603aa996af5) Thanks [@piemonkey](https://github.com/piemonkey)! - Change predicate used for decision theme to match application profile
+
+- [#515](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/515) [`e1f4791`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e1f47919b3f6af6300bbf4b6ea2e418240220666) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Allow the user to select how they want the article titles
+
+- [#510](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/510) [`ffe23cb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ffe23cb7501a94ee7a10839eac363ddae0b5d2b6) Thanks [@abeforgit](https://github.com/abeforgit)! - Make the decision-topic plugin useable outside decisions
+
+### Patch Changes
+
+- [#487](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/487) [`1c95c0f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1c95c0fbf3e9433ab5e1b0610e9c592f5fddb80b) Thanks [@andreo141](https://github.com/andreo141)! - Change the IRGN plugin to prefix the sign code with the traffic sign type in the outputted HTML of a measure.
+
+- [#513](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/513) [`90615a4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/90615a4c6d0daa6509a7d08cc6126c74a4a6ee26) Thanks [@elpoelma](https://github.com/elpoelma)! - bugfix: ensure that an http://data.europa.eu/eli/ontology#has_part relationship is created between the article and decision when inserting an article container/block
+
+- [#516](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/516) [`a51ff27`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a51ff279e4a2b808081fb2eb192f4071eccbc14a) Thanks [@elpoelma](https://github.com/elpoelma)! - Execute `recalculateNumbers` transaction-monad when inserting article container
+
 ## 26.0.2
 
 ### Patch Changes
