@@ -91,8 +91,8 @@ import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
 import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
 import {
-  structure,
-  structureView,
+  structureWithConfig,
+  structureViewWithConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
@@ -153,7 +153,7 @@ export default class BesluitSampleController extends Controller {
       nodes: {
         doc: docWithConfig({ rdfaAware: true }),
         paragraph,
-        structure,
+        structure: structureWithConfig(this.config.structure),
 
         repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
 
@@ -313,6 +313,10 @@ export default class BesluitSampleController extends Controller {
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
       },
+      structure: {
+        fullLengthArticles: false,
+        onlyArticleSpecialName: true,
+      },
     };
   }
 
@@ -340,7 +344,7 @@ export default class BesluitSampleController extends Controller {
       date: dateView(this.dateOptions)(controller),
       oslo_location: osloLocationView(this.config.location)(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
-      structure: structureView(controller),
+      structure: structureViewWithConfig(this.config.structure)(controller),
       mandatee_table: mandateeTableView(controller),
       autofilled_variable: autofilledVariableView(controller),
       snippet_placeholder: snippetPlaceholderView(this.config.snippet)(

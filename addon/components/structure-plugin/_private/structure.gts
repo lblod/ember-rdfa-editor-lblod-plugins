@@ -95,12 +95,17 @@ export default class Structure extends Component<Sig> {
     return this.node.attrs.structureType as StructureType;
   }
 
+  get fullLengthArticles() {
+    return this.node.attrs.fullLengthArticles as boolean;
+  }
+
   get structureName() {
     const docLang = this.controller.mainEditorState.doc.attrs.lang;
     if (this.displayStructureName) {
       return getNameForStructureType(
         this.structureType,
         this.number,
+        this.fullLengthArticles,
         this.intl,
         docLang,
       );
@@ -113,7 +118,10 @@ export default class Structure extends Component<Sig> {
   }
 
   get title() {
-    if (this.node.attrs.isOnlyArticle) {
+    if (
+      this.node.attrs.isOnlyArticle &&
+      this.node.attrs.onlyArticleSpecialName
+    ) {
       const docLang = this.controller.mainEditorState.doc.attrs.lang;
       return this.intl.t('structure-plugin.only-article-title', {
         locale: docLang,

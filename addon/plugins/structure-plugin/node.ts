@@ -30,11 +30,12 @@ const rdfaAware = true;
 export function getNameForStructureType(
   structureType: StructureType,
   number: number,
+  fullLengthArticles?: boolean,
   intl?: IntlService,
   locale?: string,
 ) {
   if (intl?.exists(`structure-plugin.types.${structureType}`, locale)) {
-    if (structureType === 'article' && number !== 1) {
+    if (structureType === 'article' && number !== 1 && !fullLengthArticles) {
       return intl?.t(`structure-plugin.shortened-article`, { locale });
     } else {
       return intl?.t(`structure-plugin.types.${structureType}`, { locale });
@@ -51,7 +52,14 @@ export type StructureType =
   | 'subsection'
   | 'paragraph';
 
-export const emberNodeConfig: () => EmberNodeConfig = () => {
+type StructureConfig = {
+  fullLengthArticles?: boolean;
+  onlyArticleSpecialName?: boolean;
+};
+
+export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
+  config,
+) => {
   return {
     name: 'structure',
     component: Structure as unknown as ComponentLike,
@@ -88,6 +96,13 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
       },
 
       sayRenderAs: { default: 'structure' },
+      fullLengthArticles: { default: config?.fullLengthArticles },
+      onlyArticleSpecialName: {
+        default:
+          config?.onlyArticleSpecialName === undefined
+            ? true
+            : config?.onlyArticleSpecialName,
+      },
     },
     serialize(node: PNode, state: EditorState) {
       const parser = new DOMParser();
@@ -106,6 +121,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
         ? getNameForStructureType(
             structureType,
             number,
+            node.attrs.fullLengthArticles,
             intlService,
             state.doc.attrs.lang,
           )
@@ -117,6 +133,8 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
             locale: state.doc.attrs.lang,
           })
         : structureName;
+      const displayOnlyArticle =
+        isOnlyArticle && node.attrs.onlyArticleSpecialName;
       if (titleHTML) {
         headerSpec = [
           tag,
@@ -149,20 +167,20 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
                 [
                   'span',
                   { 'data-say-structure-header-name': true },
-                  `${isOnlyArticle ? onlyArticleTitle : structureName} `,
+                  `${displayOnlyArticle ? onlyArticleTitle : structureName} `,
                 ],
               ]
             : []),
           [
             'span',
             {
-              style: isOnlyArticle ? 'display: none;' : '',
+              style: displayOnlyArticle ? 'display: none;' : '',
               'data-say-structure-header-number': true,
               property: ELI('number').full,
             },
             number.toString(),
           ],
-          isOnlyArticle ? '' : '.',
+          displayOnlyArticle ? '' : '.',
         ];
       }
       return renderRdfaAware({
@@ -297,3 +315,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
 };
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());
+export const structureWithConfig = (config?: StructureConfig) =>
+  createEmberNodeSpec(emberNodeConfig(config));
+export const structureViewWithConfig = (config?: StructureConfig) =>
+  createEmberNodeView(emberNodeConfig(config));
