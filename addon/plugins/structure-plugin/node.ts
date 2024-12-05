@@ -53,8 +53,8 @@ export type StructureType =
   | 'paragraph';
 
 type StructureConfig = {
-  fullLenghtArticles: boolean;
-  onlyArticleSpecialName: boolean;
+  fullLenghtArticles?: boolean;
+  onlyArticleSpecialName?: boolean;
 };
 
 export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
