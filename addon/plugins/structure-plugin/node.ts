@@ -30,12 +30,12 @@ const rdfaAware = true;
 export function getNameForStructureType(
   structureType: StructureType,
   number: number,
-  fullLenghtArticles?: boolean,
+  fullLengthArticles?: boolean,
   intl?: IntlService,
   locale?: string,
 ) {
   if (intl?.exists(`structure-plugin.types.${structureType}`, locale)) {
-    if (structureType === 'article' && number !== 1 && !fullLenghtArticles) {
+    if (structureType === 'article' && number !== 1 && !fullLengthArticles) {
       return intl?.t(`structure-plugin.shortened-article`, { locale });
     } else {
       return intl?.t(`structure-plugin.types.${structureType}`, { locale });
@@ -53,7 +53,7 @@ export type StructureType =
   | 'paragraph';
 
 type StructureConfig = {
-  fullLenghtArticles?: boolean;
+  fullLengthArticles?: boolean;
   onlyArticleSpecialName?: boolean;
 };
 
@@ -96,7 +96,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
       },
 
       sayRenderAs: { default: 'structure' },
-      fullLenghtArticles: { default: config?.fullLenghtArticles },
+      fullLengthArticles: { default: config?.fullLengthArticles },
       onlyArticleSpecialName: {
         default:
           config?.onlyArticleSpecialName === undefined
@@ -121,7 +121,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         ? getNameForStructureType(
             structureType,
             number,
-            node.attrs.fullLenghtArticles,
+            node.attrs.fullLengthArticles,
             intlService,
             state.doc.attrs.lang,
           )

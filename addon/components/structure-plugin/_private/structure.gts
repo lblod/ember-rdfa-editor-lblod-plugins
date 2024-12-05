@@ -95,8 +95,8 @@ export default class Structure extends Component<Sig> {
     return this.node.attrs.structureType as StructureType;
   }
 
-  get fullLenghtArticles() {
-    return this.node.attrs.fullLenghtArticles as boolean;
+  get fullLengthArticles() {
+    return this.node.attrs.fullLengthArticles as boolean;
   }
 
   get structureName() {
@@ -105,7 +105,7 @@ export default class Structure extends Component<Sig> {
       return getNameForStructureType(
         this.structureType,
         this.number,
-        this.fullLenghtArticles,
+        this.fullLengthArticles,
         this.intl,
         docLang,
       );
