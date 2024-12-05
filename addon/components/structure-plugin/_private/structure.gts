@@ -120,7 +120,7 @@ export default class Structure extends Component<Sig> {
   get title() {
     if (
       this.node.attrs.isOnlyArticle &&
-      !this.node.attrs.disableOnlyArticleSpecialName
+      this.node.attrs.onlyArticleSpecialName
     ) {
       const docLang = this.controller.mainEditorState.doc.attrs.lang;
       return this.intl.t('structure-plugin.only-article-title', {

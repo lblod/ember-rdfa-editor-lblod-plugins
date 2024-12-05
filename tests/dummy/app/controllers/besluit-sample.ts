@@ -313,7 +313,7 @@ export default class BesluitSampleController extends Controller {
       },
       structure: {
         fullLenghtArticles: false,
-        disableOnlyArticleSpecialName: false,
+        onlyArticleSpecialName: true,
       },
     };
   }

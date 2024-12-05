@@ -54,7 +54,7 @@ export type StructureType =
 
 type StructureConfig = {
   fullLenghtArticles: boolean;
-  disableOnlyArticleSpecialName: boolean;
+  onlyArticleSpecialName: boolean;
 };
 
 export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
@@ -97,8 +97,11 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
 
       sayRenderAs: { default: 'structure' },
       fullLenghtArticles: { default: config?.fullLenghtArticles },
-      disableOnlyArticleSpecialName: {
-        default: config?.disableOnlyArticleSpecialName,
+      onlyArticleSpecialName: {
+        default:
+          config?.onlyArticleSpecialName === undefined
+            ? true
+            : config?.onlyArticleSpecialName,
       },
     },
     serialize(node: PNode, state: EditorState) {
@@ -131,7 +134,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
           })
         : structureName;
       const displayOnlyArticle =
-        isOnlyArticle && !node.attrs.disableOnlyArticleSpecialName;
+        isOnlyArticle && node.attrs.onlyArticleSpecialName;
       if (titleHTML) {
         headerSpec = [
           tag,
