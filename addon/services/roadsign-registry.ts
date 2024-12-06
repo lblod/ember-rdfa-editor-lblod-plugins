@@ -84,7 +84,9 @@ export default class RoadsignRegistryService extends Service {
       let signFilter = '';
       if (combinedSigns.length > 0) {
         signFilter = combinedSigns
-          .map((sign) => `<${sign}>  mobiliteit:heeftMaatregelconcept ?measure.`)
+          .map(
+            (sign) => `<${sign}>  mobiliteit:heeftMaatregelconcept ?measure.`,
+          )
           .join('\n');
         signFilter += '\n';
         const commaSeperatedSigns = combinedSigns
@@ -166,12 +168,10 @@ export default class RoadsignRegistryService extends Service {
     async (uri: string, endpoint: string): Promise<Instruction[]> => {
       const query = `SELECT ?name ?template ?annotatedTemplate
            WHERE {
-            <${uri}> ext:template/ext:mapping ?mapping.
-          ?mapping ext:variableType 'instruction';
-            ext:variable ?name;
-            ext:instructionVariable ?instructionVariable.
-          ?instructionVariable ext:annotated ?annotatedTemplate;
-            ext:value ?template.
+            <${uri}> mobiliteit:template ?template.
+             ?template mobiliteit:variabele ?variable; ext:annotated ?annotatedTemplate.
+             ?variable rdfs:value ?name;
+             dct:type "instruction".
           }
           `;
       const result = await this.executeQuery.perform(query, endpoint);
