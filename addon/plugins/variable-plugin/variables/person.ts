@@ -99,7 +99,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   });
 };
 
-function generatePersonHtml(person: Person) {
+function generatePersonHtml(person: Person): DOMOutputSpec {
   return [
     'span',
     {
