@@ -38,6 +38,9 @@ export function replaceSelectionWithLocation(
       resourceToLink = findAncestors(
         controller.mainEditorState.selection.$from,
         (node) => {
+          if ('typeof' in node.attrs) {
+            return subjectType.matches(node.attrs.typeof);
+          }
           return hasOutgoingNamedNodeTriple(
             node.attrs,
             RDF('type'),
