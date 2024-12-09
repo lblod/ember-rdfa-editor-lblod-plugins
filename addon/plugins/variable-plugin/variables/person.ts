@@ -3,6 +3,7 @@ import {
   FOAF,
   RDF,
   PERSOON,
+  PERSON,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -56,7 +57,7 @@ const parseDOM = [
         const contentNode = node.querySelector(
           '[data-content-container="true"]',
         );
-        const aboutNode = contentNode?.querySelector('[about]');
+        const aboutNode = contentNode?.querySelector('[resource]');
         if (aboutNode) {
           const firstNameNode = aboutNode.querySelector(
             `[property="${FOAF('gebruikteVoornaam').full}"],[property="${FOAF('gebruikteVoornaam').prefixed}"]`,
@@ -65,7 +66,7 @@ const parseDOM = [
             `[property="${PERSOON('familyName').full}"],[property="${PERSOON('familyName').prefixed}"]`,
           );
           value = {
-            uri: aboutNode.getAttribute('about') || '',
+            uri: aboutNode.getAttribute('resource') || '',
             firstName: firstNameNode?.textContent || '',
             lastName: lastNameNode?.textContent || '',
           };
@@ -102,7 +103,8 @@ function generatePersonHtml(person: Person) {
   return [
     'span',
     {
-      about: person.uri,
+      resource: person.uri,
+      typeof: PERSON('Person').full,
     },
     [
       'span',
