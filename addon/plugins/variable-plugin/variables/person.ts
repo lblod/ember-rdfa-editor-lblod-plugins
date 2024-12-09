@@ -59,10 +59,10 @@ const parseDOM = [
         const aboutNode = contentNode?.querySelector('[about]');
         if (aboutNode) {
           const firstNameNode = aboutNode.querySelector(
-            `[property="${FOAF('gebruikteVoornaam').full}"]`,
+            `[property="${FOAF('gebruikteVoornaam').full}"],[property="${FOAF('gebruikteVoornaam').prefixed}"]`,
           );
           const lastNameNode = aboutNode.querySelector(
-            `[property="${PERSOON('familyName').full}"]`,
+            `[property="${PERSOON('familyName').full}"],[property="${PERSOON('familyName').prefixed}"]`,
           );
           value = {
             uri: aboutNode.getAttribute('about') || '',
