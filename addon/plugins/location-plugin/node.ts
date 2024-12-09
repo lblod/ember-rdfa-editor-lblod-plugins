@@ -168,11 +168,11 @@ const serialize =
       // it for now
       // const type = getOutgoingTriple(node.attrs, RDF('type'));
       if (value instanceof Address) {
-        contentNode = nodeContentsUtils.address.construct(value);
+        contentNode = nodeContentsUtils.address.construct(value, node);
       } else if (value instanceof Place) {
-        contentNode = nodeContentsUtils.place.construct(value);
+        contentNode = nodeContentsUtils.place.construct(value, node);
       } else if (value instanceof Area) {
-        contentNode = nodeContentsUtils.area.construct(value);
+        contentNode = nodeContentsUtils.area.construct(value, node);
       }
     }
     if (!contentNode) {

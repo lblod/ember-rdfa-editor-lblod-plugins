@@ -13,8 +13,10 @@ import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location
 import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
+import { PNode } from '@lblod/ember-rdfa-editor';
+import { IncomingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
-export const constructAddressSpec = (address: Address) => {
+export const constructAddressSpec = (address: Address, node: PNode) => {
   const housenumberNode = address.housenumber
     ? [
         ' ',
@@ -41,22 +43,26 @@ export const constructAddressSpec = (address: Address) => {
         }),
       ]
     : [];
-  // TODO Should dump and use spatial properly, but need to actually link into document...
+  const linkingSpans = ((node.attrs.backlinks as IncomingTriple[]) ?? []).map(
+    (bl) =>
+      span({
+        about: bl.subject.value,
+        property: bl.predicate,
+        resource: address.uri,
+      }),
+  );
+  // TODO Should dump the 'typeof', etc. as this is a hangover from being a variable
   return contentSpan(
     { resource: address.uri, typeof: LOCN('Address').full },
+    ...linkingSpans,
     span(
       {
-        property: DCT('spatial').full,
+        property: LOCN('thoroughfare').full,
       },
-      span(
-        {
-          property: LOCN('thoroughfare').full,
-        },
-        address.street,
-      ),
-      ...housenumberNode,
-      ...busnumberNode,
+      address.street,
     ),
+    ...housenumberNode,
+    ...busnumberNode,
     ', ',
     span(
       {
@@ -147,11 +153,10 @@ export const parseAddressElement =
       'property',
       ADRES('verwijstNaar'),
     )?.getAttribute('content');
-    const spatialNode = findChildWithRdfaAttribute(
-      addressNode,
-      'property',
-      DCT('spatial'),
-    );
+    // This node is no longer added, but we keep this lookup for compatibility
+    const spatialNode =
+      findChildWithRdfaAttribute(addressNode, 'property', DCT('spatial')) ||
+      addressNode;
     const street =
       spatialNode &&
       findChildWithRdfaAttribute(spatialNode, 'property', LOCN('thoroughfare'))
