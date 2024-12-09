@@ -32,6 +32,7 @@ import {
 import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
+  Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
@@ -48,6 +49,7 @@ export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
   defaultPlaceUriRoot: string;
   defaultPointUriRoot: string;
+  subjectTypesToLinkTo?: Resource[];
 }
 
 const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
@@ -166,11 +168,11 @@ const serialize =
       // it for now
       // const type = getOutgoingTriple(node.attrs, RDF('type'));
       if (value instanceof Address) {
-        contentNode = nodeContentsUtils.address.construct(value);
+        contentNode = nodeContentsUtils.address.construct(value, node);
       } else if (value instanceof Place) {
-        contentNode = nodeContentsUtils.place.construct(value);
+        contentNode = nodeContentsUtils.place.construct(value, node);
       } else if (value instanceof Area) {
-        contentNode = nodeContentsUtils.area.construct(value);
+        contentNode = nodeContentsUtils.area.construct(value, node);
       }
     }
     if (!contentNode) {

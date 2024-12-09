@@ -24,7 +24,7 @@ import {
   Point,
   Polygon,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
-import { replaceSelectionWithAddress } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
+import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import { NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import Edit from './edit';
@@ -190,12 +190,13 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   @action
   insertOrEditAddress() {
     if (!this.selectedLocationNode) {
-      replaceSelectionWithAddress(
+      replaceSelectionWithLocation(
         this.controller,
         this.intl.t('location-plugin.default-label', {
           locale: this.documentLanguage,
         }),
         this.args.templateMode,
+        this.args.config.subjectTypesToLinkTo,
       );
     }
     this.modalOpen = true;
