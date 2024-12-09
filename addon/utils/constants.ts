@@ -46,6 +46,10 @@ export const SRO = namespace(
   'https://data.vlaanderen.be/ns/slimmeraadpleegomgeving#',
   'sro',
 );
+export const PERSOON = namespace(
+  'http://data.vlaanderen.be/ns/persoon#',
+  'persoon',
+);
 export const BESTUURSPERIODES = {
   '2012-2019':
     'http://data.lblod.info/id/concept/Bestuursperiode/845dbc7f-139e-4632-b200-f90e180f1dba',

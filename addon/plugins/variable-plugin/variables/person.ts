@@ -1,6 +1,8 @@
 import {
   EXT,
+  FOAF,
   RDF,
+  PERSOON,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -51,23 +53,22 @@ const parseDOM = [
           return false;
         }
         let value: Person | undefined;
-        if (node.dataset.value) {
-          value = JSON.parse(node.dataset.value) as Person | undefined;
-        } else if (node.dataset.mandatee) {
-          const mandatee = JSON.parse(node.dataset.mandatee) as
-            | {
-                personUri: string;
-                firstName: string;
-                lastName: string;
-              }
-            | undefined;
-          if (mandatee) {
-            value = {
-              uri: mandatee.personUri,
-              firstName: mandatee.firstName,
-              lastName: mandatee.lastName,
-            };
-          }
+        const contentNode = node.querySelector(
+          '[data-content-container="true"]',
+        );
+        const aboutNode = contentNode?.querySelector('[about]');
+        if (aboutNode) {
+          const firstNameNode = aboutNode.querySelector(
+            `[property="${FOAF('gebruikteVoornaam').full}"]`,
+          );
+          const lastNameNode = aboutNode.querySelector(
+            `[property="${PERSOON('familyName').full}"]`,
+          );
+          value = {
+            uri: aboutNode.getAttribute('about') || '',
+            firstName: firstNameNode?.textContent || '',
+            lastName: lastNameNode?.textContent || '',
+          };
         }
         return {
           ...attrs,
@@ -87,17 +88,38 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: {
-      'data-value': JSON.stringify(person),
-    },
+    attrs: {},
     content: person
-      ? `${person.firstName} ${person.lastName}`
+      ? generatePersonHtml(person)
       : t(
           'variable-plugin.person.nodeview-placeholder',
           TRANSLATION_FALLBACKS.nodeview_placeholder,
         ),
   });
 };
+
+function generatePersonHtml(person: Person) {
+  return [
+    'span',
+    {
+      about: person.uri,
+    },
+    [
+      'span',
+      {
+        property: FOAF('gebruikteVoornaam').full,
+      },
+      person.firstName,
+    ],
+    [
+      'span',
+      {
+        property: PERSOON('familyName').full,
+      },
+      person.lastName,
+    ],
+  ];
+}
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'person-variable',
