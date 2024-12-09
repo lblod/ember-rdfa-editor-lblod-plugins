@@ -32,6 +32,7 @@ import {
 import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
+  Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
@@ -48,6 +49,7 @@ export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
   defaultPlaceUriRoot: string;
   defaultPointUriRoot: string;
+  subjectTypesToLinkTo?: Resource[];
 }
 
 const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
