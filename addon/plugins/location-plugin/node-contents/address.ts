@@ -5,18 +5,13 @@ import {
   LOCN,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import {
-  contentSpan,
-  span,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
+import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
-import { PNode } from '@lblod/ember-rdfa-editor';
-import { IncomingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
-export const constructAddressSpec = (address: Address, node: PNode) => {
+export const constructAddressSpec = (address: Address) => {
   const housenumberNode = address.housenumber
     ? [
         ' ',
@@ -43,18 +38,8 @@ export const constructAddressSpec = (address: Address, node: PNode) => {
         }),
       ]
     : [];
-  const linkingSpans = ((node.attrs.backlinks as IncomingTriple[]) ?? []).map(
-    (bl) =>
-      span({
-        about: bl.subject.value,
-        property: bl.predicate,
-        resource: address.uri,
-      }),
-  );
-  // TODO Should dump the 'typeof', etc. as this is a hangover from being a variable
-  return contentSpan(
+  return span(
     { resource: address.uri, typeof: LOCN('Address').full },
-    ...linkingSpans,
     span(
       {
         property: LOCN('thoroughfare').full,

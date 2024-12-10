@@ -1,8 +1,5 @@
-import { PNode } from '@lblod/ember-rdfa-editor';
-import { IncomingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   LOCN,
-  PROV,
   RDFS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -14,21 +11,12 @@ import {
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 
-export const constructPlaceSpec = (place: Place, node: PNode) => {
-  const linkingSpans = ((node.attrs.backlinks as IncomingTriple[]) ?? []).map(
-    (bl) =>
-      span({
-        rev: bl.predicate,
-        resource: bl.subject.value,
-      }),
-  );
+export const constructPlaceSpec = (place: Place) => {
   return span(
     {
       resource: place.uri,
       typeof: LOCN('Location').full,
-      property: PROV('atLocation').full,
     },
-    ...linkingSpans,
     span(
       {
         property: RDFS('label').full,
@@ -41,12 +29,7 @@ export const constructPlaceSpec = (place: Place, node: PNode) => {
 
 export const parsePlaceElement =
   (nodeContentsUtils: NodeContentsUtils) =>
-  (element: Element): Place | undefined => {
-    const placeNode = findChildWithRdfaAttribute(
-      element,
-      'typeof',
-      LOCN('Location'),
-    );
+  (placeNode: Element): Place | undefined => {
     const placeResource = placeNode?.getAttribute('resource');
     const label =
       placeNode &&

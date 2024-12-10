@@ -1,8 +1,6 @@
 import { SayController, NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
-  DCT,
-  EXT,
   PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -12,6 +10,8 @@ import {
   Resource,
   hasOutgoingNamedNodeTriple,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { Area, Place } from './geo-helpers';
+import { Address } from './address-helpers';
 
 /**
  * Creates an 'OSLO location' node in place of the selection, along with the RDFa to create a triple
@@ -20,16 +20,14 @@ import {
  * clean up the RDFa structure inherited from variables and to make it work well with 'undo', this
  * work was put off until then.
  * @param controller - SayController
- * @param label - label to add to the node
- * @param templateMode - Whether to create template URIs in place of 'real' URIs
+ * @param toInsert - The object representing the location to insert
  * @param subjectTypes - A list of Resources, each will be looked at in turn to compare the
  * `rdf:type` of the resource, if no parent is found matching the first, then the second will be
  * used, etc.
  */
 export function replaceSelectionWithLocation(
   controller: SayController,
-  label?: string,
-  templateMode?: boolean,
+  toInsert: Place | Address | Area,
   subjectTypes?: Resource[],
 ) {
   let resourceToLink: { pos: number; node: PNode } | undefined;
@@ -61,36 +59,14 @@ export function replaceSelectionWithLocation(
         },
       ];
 
-  const mappingResource = `http://data.lblod.info/mappings/${
-    templateMode ? '--ref-uuid4-' : ''
-  }$${uuidv4()}`;
-  const variableInstance = `http://data.lblod.info/variables/${
-    templateMode ? '--ref-uuid4-' : ''
-  }$${uuidv4()}`;
   controller.withTransaction((tr) => {
     tr.replaceSelectionWith(
       controller.schema.node('oslo_location', {
-        subject: mappingResource,
+        subject: toInsert.uri,
         rdfaNodeType: 'resource',
         __rdfaId: uuidv4(),
-        properties: [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(variableInstance),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('address'),
-          },
-          {
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label || ''),
-          },
-        ],
+        value: toInsert,
+        properties: [],
         backlinks,
       }),
     );
