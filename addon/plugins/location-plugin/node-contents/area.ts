@@ -1,5 +1,4 @@
 import {
-  DCT,
   LOCN,
   RDFS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -17,7 +16,6 @@ export const constructAreaSpec = (area: Area) => {
     {
       resource: area.uri,
       typeof: LOCN('Location').full,
-      property: DCT('spatial').full,
     },
     span(
       {
@@ -31,12 +29,7 @@ export const constructAreaSpec = (area: Area) => {
 
 export const parseAreaElement =
   (nodeContentsUtils: NodeContentsUtils) =>
-  (element: Element): Area | undefined => {
-    const placeNode = findChildWithRdfaAttribute(
-      element,
-      'typeof',
-      LOCN('Location'),
-    );
+  (placeNode: Element): Area | undefined => {
     const placeResource = placeNode?.getAttribute('resource');
     const label =
       placeNode &&

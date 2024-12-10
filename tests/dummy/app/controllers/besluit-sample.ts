@@ -298,6 +298,7 @@ export default class BesluitSampleController extends Controller {
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/plaats/',
         defaultAddressUriRoot:
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
+        subjectTypesToLinkTo: [BESLUIT('Artikel'), BESLUIT('Besluit')],
       },
       mandateeTable: {
         config: MANDATEE_TABLE_SAMPLE_CONFIG,

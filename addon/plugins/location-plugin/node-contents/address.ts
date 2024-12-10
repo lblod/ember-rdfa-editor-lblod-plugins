@@ -5,10 +5,7 @@ import {
   LOCN,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import {
-  contentSpan,
-  span,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
+import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
@@ -41,22 +38,16 @@ export const constructAddressSpec = (address: Address) => {
         }),
       ]
     : [];
-  // TODO Should dump and use spatial properly, but need to actually link into document...
-  return contentSpan(
+  return span(
     { resource: address.uri, typeof: LOCN('Address').full },
     span(
       {
-        property: DCT('spatial').full,
+        property: LOCN('thoroughfare').full,
       },
-      span(
-        {
-          property: LOCN('thoroughfare').full,
-        },
-        address.street,
-      ),
-      ...housenumberNode,
-      ...busnumberNode,
+      address.street,
     ),
+    ...housenumberNode,
+    ...busnumberNode,
     ', ',
     span(
       {
@@ -147,11 +138,10 @@ export const parseAddressElement =
       'property',
       ADRES('verwijstNaar'),
     )?.getAttribute('content');
-    const spatialNode = findChildWithRdfaAttribute(
-      addressNode,
-      'property',
-      DCT('spatial'),
-    );
+    // This node is no longer added, but we keep this lookup for compatibility
+    const spatialNode =
+      findChildWithRdfaAttribute(addressNode, 'property', DCT('spatial')) ||
+      addressNode;
     const street =
       spatialNode &&
       findChildWithRdfaAttribute(spatialNode, 'property', LOCN('thoroughfare'))
