@@ -57,7 +57,9 @@ const parseDOM = [
         const contentNode = node.querySelector(
           '[data-content-container="true"]',
         );
-        const aboutNode = contentNode?.querySelector('[resource]');
+        const aboutNode = contentNode?.querySelector(
+          `[property="${EXT('content').full}"],[property="${EXT('content').prefixed}]`,
+        );
         if (aboutNode) {
           const firstNameNode = aboutNode.querySelector(
             `[property="${FOAF('gebruikteVoornaam').full}"],[property="${FOAF('gebruikteVoornaam').prefixed}"]`,
@@ -70,6 +72,26 @@ const parseDOM = [
             firstName: firstNameNode?.textContent || '',
             lastName: lastNameNode?.textContent || '',
           };
+        } else {
+          // Backwards compatibility
+          if (node.dataset.value) {
+            value = JSON.parse(node.dataset.value) as Person | undefined;
+          } else if (node.dataset.mandatee) {
+            const mandatee = JSON.parse(node.dataset.mandatee) as
+              | {
+                  personUri: string;
+                  firstName: string;
+                  lastName: string;
+                }
+              | undefined;
+            if (mandatee) {
+              value = {
+                uri: mandatee.personUri,
+                firstName: mandatee.firstName,
+                lastName: mandatee.lastName,
+              };
+            }
+          }
         }
         return {
           ...attrs,
@@ -103,6 +125,7 @@ function generatePersonHtml(person: Person): DOMOutputSpec {
   return [
     'span',
     {
+      property: EXT('content').full,
       resource: person.uri,
       typeof: PERSON('Person').full,
     },
