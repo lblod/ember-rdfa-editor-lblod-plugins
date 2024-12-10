@@ -321,7 +321,7 @@ export async function resolveAddress(
         busnumber: result.busnummer,
         zipcode: result.postinfo.objectId,
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
-        uri: result.identificator.id,
+        uri: nodeContentsUtils.fallbackAddressUri(),
         location: new Point({
           uri: `${result.identificator.id}/1`,
           location: {
