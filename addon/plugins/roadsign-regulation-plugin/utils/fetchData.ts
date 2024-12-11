@@ -23,12 +23,12 @@ function buildFilters({
   if (codes) {
     filters.push(`
         ${codes
-          .map(
-            (uri) => `
+        .map(
+          (uri) => `
               <${uri}> mobiliteit:heeftMaatregelconcept ?uri.
             `,
-          )
-          .join(' ')}
+        )
+        .join(' ')}
     `);
   }
   if (category) {
@@ -58,11 +58,10 @@ export function generateMeasuresQuery({
     pagination = `LIMIT 10 OFFSET ${pageStart}`;
   }
   const query = `
-SELECT ${
-    count
+SELECT ${count
       ? '(COUNT(DISTINCT(?template)) AS ?count)'
       : '?uri ?label ?basicTemplate ?annotatedTemplate ?zonality ?temporal'
-  }
+    }
 WHERE {
     ?uri a mobiliteit:Mobiliteitmaatregelconcept;
          skos:prefLabel ?label;
@@ -77,17 +76,16 @@ WHERE {
 
     ${filters.join('\n')}
   OPTIONAL {
-    ?uri ext:temporal ?temporal.
+    ?uri mobiliteit:variabeleSignalisatie ?temporal.
   }
   OPTIONAL {
-    ?signUri org:classification ?signClassification.
+    ?signUri dct:type ?signClassification.
   }
 }
-${
-  count
-    ? ''
-    : `GROUP BY ?uri ?label ?template ?zonality\n ORDER BY ASC(strlen(str(?label))) ASC(?label)`
-}
+${count
+      ? ''
+      : `GROUP BY ?uri ?label ?template ?zonality\n ORDER BY ASC(strlen(str(?label))) ASC(?label)`
+    }
 ${pagination}
 `;
   return query;

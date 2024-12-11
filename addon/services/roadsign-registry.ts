@@ -101,11 +101,10 @@ export default class RoadsignRegistryService extends Service {
         ?signUri a ${type ? `<${type}>` : '?signType'};
           skos:prefLabel ?signCode;
           ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
-        ${category ? `?signUri org:classification <${category}>` : ''}
-        ${
-          type
-            ? ''
-            : `
+        ${category ? `?signUri dct:type <${category}>` : ''}
+        ${type
+          ? ''
+          : `
           VALUES ?signType {
             <https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept>
             <https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept>
@@ -114,10 +113,9 @@ export default class RoadsignRegistryService extends Service {
         `
         }
         ${signFilter}
-        ${
-          codeString
-            ? `FILTER(CONTAINS(LCASE(?signCode), ${sparqlEscapeString(codeString.toLowerCase())}))`
-            : ''
+        ${codeString
+          ? `FILTER(CONTAINS(LCASE(?signCode), ${sparqlEscapeString(codeString.toLowerCase())}))`
+          : ''
         }
       }
       ORDER BY ASC(?signCode)
