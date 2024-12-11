@@ -11,6 +11,10 @@ type Args = {
   templateMode?: boolean;
 };
 
+/**
+ * @deprecated Use oslo_location node instead which inserts valid OSLO model RDFa and supports
+ * linking to the document it is in.
+ */
 export default class VariablePluginAddressInsertVariableComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked label?: string;

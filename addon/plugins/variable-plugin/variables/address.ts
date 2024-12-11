@@ -402,5 +402,13 @@ const emberNodeConfig: EmberNodeConfig = {
   parseDOM,
 };
 
+/**
+ * @deprecated Use oslo_location node instead which inserts valid OSLO model RDFa and supports
+ * linking to the document it is in.
+ */
 export const address = createEmberNodeSpec(emberNodeConfig);
+/**
+ * @deprecated Use oslo_location node instead which inserts valid OSLO model RDFa and supports
+ * linking to the document it is in.
+ */
 export const addressView = createEmberNodeView(emberNodeConfig);
