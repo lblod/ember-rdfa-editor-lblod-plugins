@@ -34,7 +34,7 @@ export const constructAddressSpec = (address: Address) => {
     ? [
         span({
           property: ADRES('verwijstNaar').full,
-          content: address.belgianAddressUri,
+          resource: address.belgianAddressUri,
         }),
       ]
     : [];
@@ -138,12 +138,17 @@ export const parseAddressElement =
     if (!addressNode) return undefined;
 
     let uri = addressNode.getAttribute('resource');
+    const belgianAddressNode = findChildWithRdfaAttribute(
+      addressNode,
+      'property',
+      ADRES('verwijstNaar'),
+    );
+    // In the past this was stored as a string relationship, which matches the example in the model
+    // docs but not the diagram, so look for either here
     const belgianAddressUri =
-      findChildWithRdfaAttribute(
-        addressNode,
-        'property',
-        ADRES('verwijstNaar'),
-      )?.getAttribute('content') ?? undefined;
+      belgianAddressNode?.getAttribute('resource') ??
+      belgianAddressNode?.getAttribute('content') ??
+      undefined;
     if (uri === belgianAddressUri) {
       // An older version of this code mistakenly used the belgian address URI as the resource URI,
       // so if they are the same, generate a new one

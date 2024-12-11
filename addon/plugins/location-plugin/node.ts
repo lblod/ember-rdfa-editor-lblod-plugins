@@ -18,6 +18,7 @@ import {
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import {
+  ADRES,
   DCT,
   EXT,
   LOCN,
@@ -76,8 +77,16 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
             nodeContentsUtils.place.parse(contentContainer.children[0]) ||
             nodeContentsUtils.area.parse(contentContainer.children[0]);
           if (location) {
+            // In the past this was stored as a string relationship, which matches the example in the model
+            // docs but not the diagram, so correct it to a URI here
+            const properties = attrs.properties?.filter(
+              (prop) =>
+                !ADRES('verwijstNaar').matches(prop.predicate) ||
+                prop.object.termType === 'NamedNode',
+            );
             return {
               ...attrs,
+              properties,
               value: location,
             };
           }
