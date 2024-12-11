@@ -107,6 +107,7 @@ type AddressDetailResult = {
 
 export class Address {
   declare uri: string;
+  declare belgianAddressUri?: string;
   declare street: string;
   declare zipcode: string;
   declare municipality: string;
@@ -123,6 +124,7 @@ export class Address {
       | 'uri'
       | 'busnumber'
       | 'location'
+      | 'belgianAddressUri'
     >,
   ) {
     Object.assign(this, args);
@@ -264,6 +266,7 @@ export async function resolveStreet(
     if (streetinfo) {
       return new Address({
         uri: nodeContentsUtils.fallbackAddressUri(),
+        belgianAddressUri: `https://data.vlaanderen.be/id/straatnaam/${streetinfo.ID}`,
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
@@ -322,6 +325,7 @@ export async function resolveAddress(
         zipcode: result.postinfo.objectId,
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
         uri: nodeContentsUtils.fallbackAddressUri(),
+        belgianAddressUri: result.identificator.id,
         location: new Point({
           uri: `${result.identificator.id}/1`,
           location: {
