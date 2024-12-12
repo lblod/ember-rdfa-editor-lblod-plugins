@@ -100,7 +100,7 @@ export default class RoadsignRegistryService extends Service {
         ?signUri mobiliteit:heeftMaatregelconcept ?measure.
         ?signUri a ${type ? `<${type}>` : '?signType'};
           skos:prefLabel ?signCode;
-          ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
+            ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
         ${category ? `?signUri dct:type <${category}>` : ''}
         ${type
           ? ''

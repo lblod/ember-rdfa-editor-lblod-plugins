@@ -70,7 +70,6 @@ WHERE {
          ?template ext:annotated ?annotatedTemplate;
                    prov:value ?basicTemplate.
     ?signUri a  ?signType;
-                dct:type ?signClassification;
                 mobiliteit:heeftMaatregelconcept ?uri;
                 skos:prefLabel ?signCode.
 
@@ -79,7 +78,7 @@ WHERE {
     ?uri mobiliteit:variabeleSignalisatie ?temporal.
   }
   OPTIONAL {
-    ?signUri dct:type ?signClassification.
+              ?signUri  dct:type ?signClassification.
   }
 }
 ${count
