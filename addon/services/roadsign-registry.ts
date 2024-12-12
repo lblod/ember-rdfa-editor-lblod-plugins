@@ -168,7 +168,7 @@ export default class RoadsignRegistryService extends Service {
            WHERE {
             <${uri}> mobiliteit:template ?template.
              ?template mobiliteit:variabele ?variable; ext:annotated ?annotatedTemplate.
-             ?variable rdfs:value ?name;
+             ?variable rdf:value ?name;
              dct:type "instruction".
           }
           `;
