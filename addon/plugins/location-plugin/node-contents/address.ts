@@ -15,8 +15,6 @@ import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 
 export const constructAddressSpec = (address: Address) => {
-  const shouldIncludeCity = address.includeCityAndPostcode;
-
   const housenumberNode = address.housenumber
     ? [
         ' ',
