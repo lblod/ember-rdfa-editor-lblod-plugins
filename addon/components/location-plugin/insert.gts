@@ -209,6 +209,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   @action
   setAddressToInsert(address: Address) {
     this.addressToInsert = address;
+    console.log('this.addressToInsert', this.addressToInsert);
   }
 
   @action
