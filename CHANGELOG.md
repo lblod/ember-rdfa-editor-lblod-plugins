@@ -1,5 +1,19 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.2.0
+
+### Minor Changes
+
+- [#517](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/517) [`88cb173`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/88cb173d67ddc613ace5cc8c4c595d26e7497306) Thanks [@piemonkey](https://github.com/piemonkey)! - Add configuration option to location plugin to automatically link to resources in the wider document
+
+- [#517](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/517) [`42b04a7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/42b04a7414e40adf20dff16d76bdf1edff8ea5ff) Thanks [@piemonkey](https://github.com/piemonkey)! - Use prov:atLocation predicate for locations instead of dct:spatial
+
+- [#517](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/517) [`eaf74bc`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/eaf74bc9e20a9e5922f7fa76e486d3aba3dc2881) Thanks [@piemonkey](https://github.com/piemonkey)! - Remove vestigual 'mapping' RDFa from oslo location nodes as they are no longer 'variables' so no longer need it
+
+### Patch Changes
+
+- [#519](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/519) [`b864e08`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b864e08ff36349331169fb3ec0c45a754ee8038d) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix oslo location addresses to have correct RDFa by generating a URI instead of misusing the vlaanderen address uri
+
 ## 26.1.0
 
 ### Minor Changes
