@@ -19,6 +19,8 @@ import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
 import AuFieldset from '@appuniversum/ember-appuniversum/components/au-fieldset';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
+import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox';
+import AuHelptext from '@appuniversum/ember-appuniversum/components/au-help-text';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CheckIcon } from '@appuniversum/ember-appuniversum/components/icons/check';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
@@ -460,6 +462,12 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           {{/if}}
         </div>
       </AuFormRow>
+      <AuCheckbox @onChange={{this.addFullAddress}}>{{t
+          'location-plugin.modal.checkbox-message'
+        }}</AuCheckbox>
+      <AuHelptext @skin='tertiary'>{{t
+          'location-plugin.modal.checkbox-helptext'
+        }}</AuHelptext>
 
       {{#if this.message}}
         <AuAlert
