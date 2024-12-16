@@ -24,7 +24,7 @@ import {
   Point,
   Polygon,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
-import { replaceSelectionWithAddress } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
+import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import { NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import Edit from './edit';
@@ -153,13 +153,11 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   get disableConfirm() {
     switch (this.locationType) {
       case 'place':
-        return (
-          !this.selectedLocationNode || !this.placeName || !this.chosenPoint
-        );
+        return !this.placeName || !this.chosenPoint;
       case 'address':
-        return !this.selectedLocationNode || !this.addressToInsert;
+        return !this.addressToInsert;
       default:
-        return !this.selectedLocationNode || !this.placeName || !this.savedArea;
+        return !this.placeName || !this.savedArea;
     }
   }
 
@@ -189,15 +187,6 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   @action
   insertOrEditAddress() {
-    if (!this.selectedLocationNode) {
-      replaceSelectionWithAddress(
-        this.controller,
-        this.intl.t('location-plugin.default-label', {
-          locale: this.documentLanguage,
-        }),
-        this.args.templateMode,
-      );
-    }
     this.modalOpen = true;
   }
 
@@ -221,48 +210,47 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
   @action
   confirmLocation() {
-    if (this.selectedLocationNode) {
-      let toInsert: Address | Place | Area | undefined;
-      const { pos } = this.selectedLocationNode;
-      if (this.locationType === 'address' && this.addressToInsert) {
-        toInsert = this.addressToInsert;
-      } else if (
-        this.locationType === 'place' &&
-        this.chosenPoint?.global &&
-        this.placeName
-      ) {
-        toInsert = new Place({
-          uri: this.nodeContentsUtils.fallbackPlaceUri(),
-          name: this.placeName,
-          location: new Point({
-            uri: this.nodeContentsUtils.fallbackGeometryUri(),
-            location: {
-              lambert: convertWGS84CoordsToLambert(this.chosenPoint.global),
-              global: this.chosenPoint?.global,
-            },
-          }),
-        });
-        this.chosenPoint = undefined;
-      } else if (
-        this.locationType === 'area' &&
-        this.savedArea &&
-        this.placeName
-      ) {
-        toInsert = new Area({
-          uri: this.nodeContentsUtils.fallbackPlaceUri(),
-          name: this.placeName,
-          shape: new Polygon({
-            uri: this.nodeContentsUtils.fallbackGeometryUri(),
-            locations: this.savedArea,
-          }),
-        });
-      }
-      if (toInsert) {
-        this.controller.withTransaction((tr) => {
-          return tr.setNodeAttribute(pos, 'value', toInsert);
-        });
-        this.modalOpen = false;
-      }
+    let toInsert: Address | Place | Area | undefined;
+    if (this.locationType === 'address' && this.addressToInsert) {
+      toInsert = this.addressToInsert;
+    } else if (
+      this.locationType === 'place' &&
+      this.chosenPoint?.global &&
+      this.placeName
+    ) {
+      toInsert = new Place({
+        uri: this.nodeContentsUtils.fallbackPlaceUri(),
+        name: this.placeName,
+        location: new Point({
+          uri: this.nodeContentsUtils.fallbackGeometryUri(),
+          location: {
+            lambert: convertWGS84CoordsToLambert(this.chosenPoint.global),
+            global: this.chosenPoint?.global,
+          },
+        }),
+      });
+      this.chosenPoint = undefined;
+    } else if (
+      this.locationType === 'area' &&
+      this.savedArea &&
+      this.placeName
+    ) {
+      toInsert = new Area({
+        uri: this.nodeContentsUtils.fallbackPlaceUri(),
+        name: this.placeName,
+        shape: new Polygon({
+          uri: this.nodeContentsUtils.fallbackGeometryUri(),
+          locations: this.savedArea,
+        }),
+      });
+    }
+    if (toInsert) {
+      replaceSelectionWithLocation(
+        this.controller,
+        toInsert,
+        this.args.config.subjectTypesToLinkTo,
+      );
+      this.modalOpen = false;
     }
   }
 
