@@ -113,7 +113,6 @@ export class Address {
   declare housenumber?: string;
   declare busnumber?: string;
   declare location: Point;
-  declare includeCityAndPostcode?: boolean;
   constructor(
     args: Pick<
       Address,
@@ -124,7 +123,6 @@ export class Address {
       | 'uri'
       | 'busnumber'
       | 'location'
-      | 'includeCityAndPostcode'
     >,
   ) {
     Object.assign(this, args);
