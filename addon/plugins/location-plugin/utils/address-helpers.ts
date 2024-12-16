@@ -132,11 +132,11 @@ export class Address {
 
   get formatted() {
     if (this.housenumber && this.busnumber) {
-      return `${this.street} ${this.housenumber} bus ${this.busnumber}`;
+      return `${this.street} ${this.housenumber} bus ${this.busnumber}, ${this.zipcode} ${this.municipality}`;
     } else if (this.housenumber) {
-      return `${this.street} ${this.housenumber}`;
+      return `${this.street} ${this.housenumber}, ${this.zipcode} ${this.municipality}`;
     } else {
-      return `${this.street}`;
+      return `${this.street}, ${this.zipcode} ${this.municipality}`;
     }
   }
 
