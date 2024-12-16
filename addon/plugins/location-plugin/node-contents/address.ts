@@ -44,20 +44,6 @@ export const constructAddressSpec = (address: Address) => {
       ]
     : [];
 
-  const cityAndPostcodeNode = shouldIncludeCity
-    ? [
-        span({ property: LOCN('postcode').full }, address.zipcode),
-        ' ',
-        span(
-          {
-            property: ADRES('gemeentenaam').full,
-            language: 'nl',
-          },
-          address.municipality,
-        ),
-      ]
-    : [];
-
   // TODO Should dump and use spatial properly, but need to actually link into document...
   return contentSpan(
     { resource: address.uri, typeof: LOCN('Address').full },
@@ -67,7 +53,6 @@ export const constructAddressSpec = (address: Address) => {
       ...housenumberNode,
       ...busnumberNode,
     ),
-    ...cityAndPostcodeNode,
     ...idNode,
     constructGeometrySpec(address.location, ADRES('positie')),
   );
