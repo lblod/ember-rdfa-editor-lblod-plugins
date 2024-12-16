@@ -37,6 +37,7 @@ import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/locat
 import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import { type LocationType } from './map';
 import { type SafeString } from '@ember/template';
+import { tracked } from '@glimmer/tracking';
 
 interface Message {
   skin: AuAlertSignature['Args']['skin'];
@@ -63,6 +64,7 @@ type Signature = {
 
 export default class LocationPluginEditComponent extends Component<Signature> {
   @service declare intl: IntlService;
+  @tracked fullAddressRequired = false;
 
   @trackedReset({
     memo: 'currentAddress',
@@ -316,6 +318,11 @@ export default class LocationPluginEditComponent extends Component<Signature> {
     this.args.setPlaceName((event.target as HTMLInputElement).value);
   }
 
+  @action
+  insertFullAddress(event: InputEvent) {
+    this.fullAddressRequired = event as HTMLFormElement;
+  }
+
   searchMunicipality = restartableTask(async (term: string) => {
     await timeout(200);
     return fetchMunicipalities(term);
@@ -462,7 +469,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           {{/if}}
         </div>
       </AuFormRow>
-      <AuCheckbox @onChange={{this.addFullAddress}}>{{t
+      <AuCheckbox @onChange={{this.insertFullAddress}}>{{t
           'location-plugin.modal.checkbox-message'
         }}</AuCheckbox>
       <AuHelptext @skin='tertiary'>{{t
