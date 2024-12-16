@@ -1,6 +1,7 @@
 import {
   DCT,
   EXT,
+  MOBILITEIT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   getOutgoingTriple,
@@ -9,7 +10,8 @@ import {
 import { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 
 export function isVariable(element: HTMLElement) {
-  return hasRDFaAttribute(element, 'typeof', EXT('Mapping'));
+  const hasAttr = hasRDFaAttribute(element, 'typeof', MOBILITEIT('Variabele'));
+  return hasAttr;
 }
 
 export function parseVariableType(variableNode: HTMLElement) {

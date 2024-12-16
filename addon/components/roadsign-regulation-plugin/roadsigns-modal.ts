@@ -264,28 +264,30 @@ export default class RoadsignsModal extends Component<Args> {
     zonalityValue: string,
     temporalValue: string,
   ) {
+    console.log(measure.annotatedTemplate);
     const instructions =
       await this.roadsignRegistry.fetchInstructionsForMeasure.perform(
         measure.uri,
         this.endpoint,
       );
+    console.log('instructions', instructions);
     const zonality = zonalityValue ? zonalityValue : measure.zonality;
     const html = includeInstructions(
       measure.annotatedTemplate,
       instructions,
       true,
     );
-
     const signsHTML = measure.signs
       .map((sign) => {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();
         const trafficSignPrefix = this.addTrafficSignPrefix(sign);
         return `<li style="margin-bottom:1rem;">
         <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
+
         <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
           sign.uri
         }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
-          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;"> ${trafficSignPrefix} ${
+          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${trafficSignPrefix} ${
             sign.code
           }</span>
           <span style="margin-left:0;margin-top:0;">${
