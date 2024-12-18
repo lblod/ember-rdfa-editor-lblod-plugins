@@ -7,6 +7,7 @@ import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   DCT,
   EXT,
+  MOBILITEIT,
   RDF,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -24,6 +25,7 @@ import {
 import {
   hasRdfaVariableType,
   isVariable,
+  isVariableNewModel,
   parseLabel,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
@@ -215,6 +217,81 @@ const parseDOM = [
       return false;
     },
   },
+
+  {
+    /**
+     * Parses dates in the 2nd (variable) format (pre-RDFa rework) e.g.
+     * <span resource="http://data.lblod.info/mappings/81190ceb-9ed0-4708-a344-99ba0bf039c5" typeof="ext:Mapping" class="date" data-label="datum">
+     *   <span property="dct:type" content="date"></span>
+     *   <span property="ext:content" datatype="xsd:date" data-format="dd/MM/yy" data-custom="false" data-custom-allowed="true" content="2024-02-12T23:00:00.000Z">
+     *     13/02/24
+     *   </span>
+     * </span>
+     */
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      if (isVariableNewModel(node) && parseVariableType(node) === 'date') {
+        const mappingSubject =
+          node.getAttribute('subject') ??
+          node.getAttribute('resource') ??
+          node.getAttribute('about');
+        if (!mappingSubject) {
+          return false;
+        }
+        const onlyDate = !![...node.children].find((el) =>
+          hasRDFaAttribute(el, 'datatype', XSD('date')),
+        );
+        const datatype = onlyDate ? XSD('date') : XSD('dateTime');
+        const dateNode = [...node.children].find((el) =>
+          hasRDFaAttribute(el, 'property', RDF('value')),
+        ) as HTMLElement | undefined;
+        const value = dateNode?.getAttribute('content');
+        const format = dateNode?.dataset.format;
+        const label = parseLabel(node);
+        const properties = [
+          {
+            predicate: RDF('type').full,
+            object: sayDataFactory.namedNode(MOBILITEIT('Variabele').full),
+          },
+          {
+            predicate: EXT('instance').full,
+            object: sayDataFactory.namedNode(
+              `http://data.lblod.info/variables/${uuidv4()}`,
+            ),
+          },
+          {
+            predicate: DCT('type').full,
+            object: sayDataFactory.literal('date'),
+          },
+        ];
+        if (label) {
+          properties.push({
+            predicate: EXT('label').full,
+            object: sayDataFactory.literal(label),
+          });
+        }
+        if (value) {
+          properties.push({
+            predicate: RDF('value').full,
+            object: sayDataFactory.literal(value, datatype.namedNode),
+          });
+        }
+        return {
+          ...getRdfaAttrs(node, { rdfaAware }),
+          onlyDate,
+          format: format,
+          custom: dateNode?.dataset.custom === 'true',
+          customAllowed: dateNode?.dataset.customAllowed !== 'false',
+          rdfaNodeType: 'resource',
+          subject: mappingSubject,
+          __rdfaId: uuidv4(),
+          properties,
+        };
+      }
+
+      return false;
+    },
+  },
 ];
 
 const serialize = (node: PNode, state: EditorState) => {
@@ -289,9 +366,9 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
       : onlyDate
         ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
         : t(
-            'date-plugin.insert.datetime',
-            TRANSLATION_FALLBACKS.insertDateTime,
-          );
+          'date-plugin.insert.datetime',
+          TRANSLATION_FALLBACKS.insertDateTime,
+        );
 
     return humanReadableDate;
   },
