@@ -264,13 +264,11 @@ export default class RoadsignsModal extends Component<Args> {
     zonalityValue: string,
     temporalValue: string,
   ) {
-    console.log(measure.annotatedTemplate);
     const instructions =
       await this.roadsignRegistry.fetchInstructionsForMeasure.perform(
         measure.uri,
         this.endpoint,
       );
-    console.log('instructions', instructions);
     const zonality = zonalityValue ? zonalityValue : measure.zonality;
     const html = includeInstructions(
       measure.annotatedTemplate,
@@ -284,16 +282,13 @@ export default class RoadsignsModal extends Component<Args> {
         return `<li style="margin-bottom:1rem;">
         <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
 
-        <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
-          sign.uri
-        }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
-          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${trafficSignPrefix} ${
-            sign.code
+        <span property="mobiliteit:heeftVerkeersbordconcept" resource="${sign.uri
+          }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
+          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${trafficSignPrefix} ${sign.code
           }</span>
-          <span style="margin-left:0;margin-top:0;">${
-            sign.zonality === POTENTIALLY_ZONAL_URI && zonality === ZONAL_URI
-              ? ' met zonale geldigheid'
-              : ''
+          <span style="margin-left:0;margin-top:0;">${sign.zonality === POTENTIALLY_ZONAL_URI && zonality === ZONAL_URI
+            ? ' met zonale geldigheid'
+            : ''
           }
           </span>
           </span>
@@ -302,9 +297,8 @@ export default class RoadsignsModal extends Component<Args> {
       })
       .join('\n');
     const regulationHTML = `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-                            <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-                              measure.uri
-                            }">&nbsp;</span>
+                            <span style="display:none;" property="prov:wasDerivedFrom" resource="${measure.uri
+      }">&nbsp;</span>
                             <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
                             <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
                               <div property="dct:description">
@@ -313,11 +307,10 @@ export default class RoadsignsModal extends Component<Args> {
                                 <ul style="list-style:none;">
                                   ${signsHTML}
                                 </ul>
-                                ${
-                                  temporalValue === 'true'
-                                    ? 'Deze signalisatie is dynamisch.'
-                                    : ''
-                                }
+                                ${temporalValue === 'true'
+        ? 'Deze signalisatie is dynamisch.'
+        : ''
+      }
                               </div>
                             </div>
                           `;

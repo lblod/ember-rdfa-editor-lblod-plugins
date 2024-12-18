@@ -10,8 +10,11 @@ import {
 import { RdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 
 export function isVariable(element: HTMLElement) {
-  const hasAttr = hasRDFaAttribute(element, 'typeof', MOBILITEIT('Variabele'));
-  return hasAttr;
+  return hasRDFaAttribute(element, 'typeof', EXT('Mapping'));
+}
+
+export function isVariableNewModel(element: HTMLElement) {
+  return hasRDFaAttribute(element, 'typeof', MOBILITEIT('Variabele'));
 }
 
 export function parseVariableType(variableNode: HTMLElement) {

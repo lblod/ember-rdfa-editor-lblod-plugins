@@ -7,7 +7,6 @@ export default function includeInstructions(
 ) {
   let finalHtml = html;
   for (const instruction of instructions) {
-    console.log('name instr', instruction.name);
     finalHtml = finalHtml.replaceAll(
       `\${${instruction.name ?? ''}}`,
       annotated ? instruction.annotatedTemplate : instruction.template,
