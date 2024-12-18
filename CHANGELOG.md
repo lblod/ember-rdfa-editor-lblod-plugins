@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.2.1
+
+### Patch Changes
+
+- [#520](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/520) [`e184b29`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e184b294e10124f868c2ef2aaf411563f67c3985) Thanks [@piemonkey](https://github.com/piemonkey)! - Consistently round corners of ember nodes
+
 ## 26.2.0
 
 ### Minor Changes
