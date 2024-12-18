@@ -11,7 +11,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import {
   CitationDecoration,
-  CitationPlugin,
   CitationPluginEmberComponentConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
@@ -36,7 +35,6 @@ import { citationPluginKey } from '@lblod/ember-rdfa-editor-lblod-plugins/plugin
 
 interface Args {
   controller: SayController;
-  plugin: CitationPlugin;
   config: CitationPluginEmberComponentConfig;
 }
 
