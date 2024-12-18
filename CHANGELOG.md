@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.2.2
+
+### Patch Changes
+
+- [#522](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/522) [`2332962`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/23329624b10c10128c4b6cc438c2c5231579ab80) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Convert citation into a keyed plugin
+
+- [#518](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/518) [`3188ea3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3188ea3ce4723f188854e8c66b37b44b1790a62c) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add rdfa to the person variable
+
 ## 26.2.1
 
 ### Patch Changes
