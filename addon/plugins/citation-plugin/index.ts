@@ -9,6 +9,7 @@ import {
   ProsePlugin,
   ResolvedPos,
   Schema,
+  PluginKey,
 } from '@lblod/ember-rdfa-editor';
 import processMatch, {
   RegexpMatchArrayWithIndices,
@@ -112,7 +113,7 @@ export interface CitationDecoration extends Decoration {
   spec: CitationDecorationSpec;
 }
 
-interface CitationPluginState {
+export interface CitationPluginState {
   highlights: DecorationSet;
   activeRanges: [number, number][];
 }
@@ -153,8 +154,13 @@ export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
   defaultDecisionsGovernmentName?: string;
 };
 
+export const citationPluginKey: PluginKey<CitationPluginState> = new PluginKey(
+  'say-citation-plugin',
+);
+
 export function citationPlugin(config: CitationPluginConfig): CitationPlugin {
   const citation: CitationPlugin = new ProsePlugin({
+    key: citationPluginKey,
     state: {
       init(stateConfig: EditorStateConfig, state: EditorState) {
         return calculateCitationPluginState(state, config);
