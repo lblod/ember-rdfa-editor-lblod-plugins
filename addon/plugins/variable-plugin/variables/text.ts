@@ -1,6 +1,7 @@
 import {
   DCT,
   EXT,
+  MOBILITEIT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -18,6 +19,7 @@ import {
 import {
   hasRdfaVariableType,
   isVariable,
+  isVariableNewModel,
   parseLabel,
   parseVariableInstance,
   parseVariableType,
@@ -31,6 +33,8 @@ import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
+const CONTENT_SELECTOR_NEW_MODEL = `span[property~='${RDF('value').prefixed}'],
+                          span[property~='${RDF('value').full}']`;
 const rdfaAware = true;
 const parseDOM = [
   {
@@ -85,7 +89,7 @@ const parseDOM = [
               predicate: EXT('instance').full,
               object: sayDataFactory.namedNode(
                 variableInstance ??
-                  `http://data.lblod.info/variables/${uuidv4()}`,
+                `http://data.lblod.info/variables/${uuidv4()}`,
               ),
             },
             {
@@ -107,6 +111,59 @@ const parseDOM = [
       return false;
     },
     contentElement: CONTENT_SELECTOR,
+  },
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      if (
+        isVariableNewModel(node) &&
+        node.querySelector(CONTENT_SELECTOR_NEW_MODEL) &&
+        parseVariableType(node) === 'text'
+      ) {
+        const mappingSubject =
+          node.getAttribute('subject') ||
+          node.getAttribute('resource') ||
+          node.getAttribute('about');
+        if (!mappingSubject) {
+          return false;
+        }
+        const variableInstance = parseVariableInstance(node);
+        const label = parseLabel(node);
+        return {
+          __rdfaId: uuidv4(),
+          subject: mappingSubject,
+          rdfaNodeType: 'resource',
+          properties: [
+            {
+              predicate: RDF('type').full,
+              object: sayDataFactory.namedNode(MOBILITEIT('Variabele').full),
+            },
+            {
+              predicate: EXT('instance').full,
+              object: sayDataFactory.namedNode(
+                variableInstance ??
+                `http://data.lblod.info/variables/${uuidv4()}`,
+              ),
+            },
+            {
+              predicate: EXT('label').full,
+              object: sayDataFactory.literal(label || ''),
+            },
+            {
+              predicate: DCT('type').full,
+              object: sayDataFactory.literal('text'),
+            },
+            {
+              predicate: RDF('value').full,
+              object: sayDataFactory.contentLiteral(),
+            },
+          ],
+        };
+      }
+
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR_NEW_MODEL,
   },
 ];
 
