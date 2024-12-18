@@ -136,6 +136,7 @@ function generatePersonHtml(person: Person): DOMOutputSpec {
       },
       person.firstName,
     ],
+    ' ',
     [
       'span',
       {
