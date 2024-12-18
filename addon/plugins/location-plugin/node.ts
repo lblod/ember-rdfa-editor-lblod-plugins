@@ -18,8 +18,10 @@ import {
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import {
+  ADRES,
   DCT,
   EXT,
+  LOCN,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -32,6 +34,7 @@ import {
 import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
+  Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
@@ -41,6 +44,7 @@ import {
   Area,
   Place,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { NodeContentsUtils } from './node-contents';
 import { recreateVariableUris } from '../variable-plugin/utils/recreate-variable-uris';
 
@@ -48,11 +52,49 @@ export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
   defaultPlaceUriRoot: string;
   defaultPointUriRoot: string;
+  subjectTypesToLinkTo?: Resource[];
 }
 
 const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
   const nodeContentsUtils = new NodeContentsUtils(config);
   return [
+    {
+      tag: 'span',
+      getAttrs(node: HTMLElement) {
+        const attrs = getRdfaAttrs(node, { rdfaAware: true });
+        if (!attrs) {
+          return false;
+        }
+        const contentContainer = node.querySelector(
+          '[data-content-container="true"]',
+        );
+        if (attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+        if (contentContainer) {
+          const location =
+            nodeContentsUtils.address.parse(contentContainer.children[0]) ||
+            nodeContentsUtils.place.parse(contentContainer.children[0]) ||
+            nodeContentsUtils.area.parse(contentContainer.children[0]);
+          if (location) {
+            // In the past this was stored as a string relationship, which matches the example in the model
+            // docs but not the diagram, so correct it to a URI here
+            const properties = attrs.properties?.filter(
+              (prop) =>
+                !ADRES('verwijstNaar').matches(prop.predicate) ||
+                prop.object.termType === 'NamedNode',
+            );
+            return {
+              ...attrs,
+              properties,
+              value: location,
+            };
+          }
+        }
+        return false;
+      },
+    },
+    // Match 'variable style' node, with additional 'mapping' wrapper
     {
       tag: 'span',
       getAttrs(node: HTMLElement) {
@@ -80,10 +122,20 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
           const addressNode = [...dataContainer.children].find((el) =>
             hasRDFaAttribute(el, 'property', EXT('content')),
           );
-          const location =
-            nodeContentsUtils.address.parse(addressNode) ||
-            nodeContentsUtils.place.parse(dataContainer) ||
-            nodeContentsUtils.area.parse(dataContainer);
+          let location: Place | Area | Address | undefined =
+            nodeContentsUtils.address.parse(addressNode);
+          if (addressNode && !location) {
+            const placeNode = findChildWithRdfaAttribute(
+              addressNode,
+              'typeof',
+              LOCN('Location'),
+            );
+            if (placeNode) {
+              location =
+                nodeContentsUtils.place.parse(placeNode) ||
+                nodeContentsUtils.area.parse(placeNode);
+            }
+          }
           return {
             ...attrs,
             value:
@@ -161,10 +213,6 @@ const serialize =
     const { value } = node.attrs;
     let contentNode: DOMOutputSpec | undefined;
     if (value) {
-      // TODO we should be setting the type properly rather than using the address placeholder which
-      // does not have the correct RDFa properties but that's a bigger change, so just hack around
-      // it for now
-      // const type = getOutgoingTriple(node.attrs, RDF('type'));
       if (value instanceof Address) {
         contentNode = nodeContentsUtils.address.construct(value);
       } else if (value instanceof Place) {

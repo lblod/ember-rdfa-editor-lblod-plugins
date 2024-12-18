@@ -75,6 +75,10 @@ import {
   autofilled_variable,
   autofilledVariableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import {
+  osloLocation,
+  osloLocationView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
   templateComment,
@@ -126,6 +130,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -172,13 +177,14 @@ export default class RegulatoryStatementSampleController extends Controller {
         tableGroup: 'block',
         cellContent: 'block+',
       }),
-      address,
       date: date(this.dateOptions),
       text_variable,
       person_variable,
       autofilled_variable,
       number,
       location,
+      oslo_location: osloLocation(this.config.location),
+      address,
       codelist,
       ...STRUCTURE_NODES,
       heading: headingWithConfig({ rdfaAware: false }),
@@ -330,6 +336,20 @@ export default class RegulatoryStatementSampleController extends Controller {
       autofilledVariable: {
         autofilledValues: {},
       },
+      location: {
+        defaultPointUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/geometrie/',
+        defaultPlaceUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/plaats/',
+        defaultAddressUriRoot:
+          'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
+        subjectTypesToLinkTo: [
+          SAY('Article'),
+          SAY('Subsection'),
+          SAY('Section'),
+          SAY('Chapter'),
+        ],
+      },
     };
   }
 
@@ -354,6 +374,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       text_variable: textVariableView(controller),
       person_variable: personVariableView(controller),
       location: locationView(controller),
+      oslo_location: osloLocationView(this.config.location)(controller),
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
       address: addressView(controller),

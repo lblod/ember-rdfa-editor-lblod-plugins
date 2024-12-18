@@ -111,6 +111,7 @@ import {
   snippetView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
+import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetListSelect = SnippetListSelect;
@@ -287,6 +288,7 @@ export default class RegulatoryStatementSampleController extends Controller {
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/plaats/',
         defaultAddressUriRoot:
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
+        subjectTypesToLinkTo: [BESLUIT('Artikel'), BESLUIT('Besluit')],
       },
       snippet: {
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',

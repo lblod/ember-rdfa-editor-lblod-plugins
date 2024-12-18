@@ -5,10 +5,7 @@ import {
   LOCN,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import {
-  contentSpan,
-  span,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
+import { span } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
@@ -33,30 +30,24 @@ export const constructAddressSpec = (address: Address) => {
         ),
       ]
     : [];
-  const idNode = address.uri
+  const belgianUriNode = address.belgianAddressUri
     ? [
         span({
           property: ADRES('verwijstNaar').full,
-          content: address.uri,
+          resource: address.belgianAddressUri,
         }),
       ]
     : [];
-  // TODO Should dump and use spatial properly, but need to actually link into document...
-  return contentSpan(
+  return span(
     { resource: address.uri, typeof: LOCN('Address').full },
     span(
       {
-        property: DCT('spatial').full,
+        property: LOCN('thoroughfare').full,
       },
-      span(
-        {
-          property: LOCN('thoroughfare').full,
-        },
-        address.street,
-      ),
-      ...housenumberNode,
-      ...busnumberNode,
+      address.street,
     ),
+    ...housenumberNode,
+    ...busnumberNode,
     ', ',
     span(
       {
@@ -72,7 +63,7 @@ export const constructAddressSpec = (address: Address) => {
       },
       address.municipality,
     ),
-    ...idNode,
+    ...belgianUriNode,
     constructGeometrySpec(address.location, ADRES('positie')),
   );
 };
@@ -81,7 +72,10 @@ export const constructAddressSpec = (address: Address) => {
 export const parseOldAddressElement =
   (nodeContentsUtils: NodeContentsUtils) =>
   (addressNode: Element): Address | undefined => {
-    const uri = addressNode.getAttribute('resource');
+    // Belgian address URI was incorrectly used as the resource URI, so we correct that by
+    // generating a new one
+    const uri = nodeContentsUtils.fallbackAddressUri();
+    const belgianAddressUri = addressNode.getAttribute('resource') ?? undefined;
     const street = findChildWithRdfaAttribute(
       addressNode,
       'property',
@@ -124,7 +118,8 @@ export const parseOldAddressElement =
 
     if (street && municipality && zipcode && location) {
       return new Address({
-        uri: uri ?? nodeContentsUtils.fallbackAddressUri(),
+        uri,
+        belgianAddressUri,
         street,
         housenumber: housenumber ?? undefined,
         zipcode,
@@ -142,16 +137,27 @@ export const parseAddressElement =
   (addressNode: Element | undefined): Address | undefined => {
     if (!addressNode) return undefined;
 
-    const uri = findChildWithRdfaAttribute(
+    let uri = addressNode.getAttribute('resource');
+    const belgianAddressNode = findChildWithRdfaAttribute(
       addressNode,
       'property',
       ADRES('verwijstNaar'),
-    )?.getAttribute('content');
-    const spatialNode = findChildWithRdfaAttribute(
-      addressNode,
-      'property',
-      DCT('spatial'),
     );
+    // In the past this was stored as a string relationship, which matches the example in the model
+    // docs but not the diagram, so look for either here
+    const belgianAddressUri =
+      belgianAddressNode?.getAttribute('resource') ??
+      belgianAddressNode?.getAttribute('content') ??
+      undefined;
+    if (uri === belgianAddressUri) {
+      // An older version of this code mistakenly used the belgian address URI as the resource URI,
+      // so if they are the same, generate a new one
+      uri = nodeContentsUtils.fallbackAddressUri();
+    }
+    // This node is no longer added, but we keep this lookup for compatibility
+    const spatialNode =
+      findChildWithRdfaAttribute(addressNode, 'property', DCT('spatial')) ||
+      addressNode;
     const street =
       spatialNode &&
       findChildWithRdfaAttribute(spatialNode, 'property', LOCN('thoroughfare'))
@@ -191,6 +197,7 @@ export const parseAddressElement =
     if (street && municipality && zipcode && location instanceof Point) {
       return new Address({
         uri: uri ?? nodeContentsUtils.fallbackAddressUri(),
+        belgianAddressUri,
         street,
         housenumber: housenumber ?? undefined,
         zipcode,
