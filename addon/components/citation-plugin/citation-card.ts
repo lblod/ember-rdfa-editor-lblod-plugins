@@ -12,9 +12,11 @@ import {
 import {
   CitationDecoration,
   CitationPluginEmberComponentConfig,
+  CitationPluginState,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   DecorationSet,
+  PluginKey,
   SayController,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
@@ -75,7 +77,7 @@ export default class CitationCardComponent extends Component<Args> {
     return !this.controller.inEmbeddedView && this.activeDecoration;
   }
 
-  get plugin() {
+  get plugin(): PluginKey<CitationPluginState> {
     return citationPluginKey;
   }
 

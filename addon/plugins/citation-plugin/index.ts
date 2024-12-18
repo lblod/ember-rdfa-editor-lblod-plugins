@@ -15,6 +15,7 @@ import processMatch, {
   RegexpMatchArrayWithIndices,
 } from './utils/process-match';
 import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/changed-descendants';
+import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -112,7 +113,7 @@ export interface CitationDecoration extends Decoration {
   spec: CitationDecorationSpec;
 }
 
-interface CitationPluginState {
+export interface CitationPluginState {
   highlights: DecorationSet;
   activeRanges: [number, number][];
 }
