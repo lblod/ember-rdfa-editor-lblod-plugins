@@ -32,6 +32,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 import { cleanCaches } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cache';
 import { SearchIcon } from '@appuniversum/ember-appuniversum/components/icons/search';
+import { citationPluginKey } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
 interface Args {
   controller: SayController;
@@ -77,7 +78,7 @@ export default class CitationCardComponent extends Component<Args> {
   }
 
   get plugin() {
-    return this.args.plugin;
+    return citationPluginKey;
   }
 
   get config() {

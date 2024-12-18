@@ -58,8 +58,6 @@ export default class LegalDocumentDetailComponent extends Component<Args> {
       });
       this.totalCount = results.totalCount;
 
-      console.log({ result: results.articles });
-
       return results.articles;
     } catch (e) {
       console.warn(e); // eslint-ignore-line no-console

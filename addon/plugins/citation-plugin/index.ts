@@ -15,6 +15,7 @@ import processMatch, {
 } from './utils/process-match';
 import { changedDescendants } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/changed-descendants';
 import { findParentNodeOfTypeClosestToPos } from '@curvenote/prosemirror-utils';
+import { PluginKey } from 'prosemirror-state';
 
 const BASIC_MULTIPLANE_CHARACTER = '\u0021-\uFFFF'; // most of the characters used around the world
 
@@ -153,8 +154,11 @@ export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
   defaultDecisionsGovernmentName?: string;
 };
 
+export const citationPluginKey = new PluginKey('say-citation-plugin');
+
 export function citationPlugin(config: CitationPluginConfig): CitationPlugin {
   const citation: CitationPlugin = new ProsePlugin({
+    key: citationPluginKey,
     state: {
       init(stateConfig: EditorStateConfig, state: EditorState) {
         return calculateCitationPluginState(state, config);
