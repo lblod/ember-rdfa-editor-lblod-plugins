@@ -476,7 +476,7 @@ location-plugin:
     insert: Insert location
     edit: Edit location
     confirm: Set location
-    checkbox-message: Insert full address?
+    checkbox-message: Truncate address?
     checkbox-helptext: Checking this will add the postcode and municipalty to the address output.
   nodeview:
     placeholder: Insert location

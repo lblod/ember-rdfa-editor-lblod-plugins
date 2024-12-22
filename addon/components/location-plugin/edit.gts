@@ -37,7 +37,6 @@ import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/locat
 import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import { type LocationType } from './map';
 import { type SafeString } from '@ember/template';
-import { tracked } from '@glimmer/tracking';
 
 interface Message {
   skin: AuAlertSignature['Args']['skin'];
@@ -64,7 +63,6 @@ type Signature = {
 
 export default class LocationPluginEditComponent extends Component<Signature> {
   @service declare intl: IntlService;
-  @tracked fullAddressRequired = false;
 
   @trackedReset({
     memo: 'currentAddress',
@@ -100,6 +98,14 @@ export default class LocationPluginEditComponent extends Component<Signature> {
     },
   })
   newBusnumber?: string;
+
+  @trackedReset({
+    memo: 'currentAddress',
+    update(component: LocationPluginEditComponent) {
+      return component.currentTruncateAddressValue;
+    },
+  })
+  newTruncateAddressValue?: boolean;
 
   get message(): Message | undefined {
     const value = this.newAddress.value as Address | undefined;
@@ -186,6 +192,14 @@ export default class LocationPluginEditComponent extends Component<Signature> {
     }
   }
 
+  get currentTruncateAddressValue() {
+    if (this.currentAddress instanceof Address) {
+      return this.currentAddress.truncateAddressValue;
+    } else {
+      return undefined;
+    }
+  }
+
   get canUpdateStreet() {
     return !!this.newMunicipality;
   }
@@ -211,14 +225,20 @@ export default class LocationPluginEditComponent extends Component<Signature> {
   }
 
   resolveAddressTask = restartableTask(async () => {
-    const { newStreetName, newMunicipality, newHousenumber, newBusnumber } =
-      this;
+    const {
+      newStreetName,
+      newMunicipality,
+      newHousenumber,
+      newBusnumber,
+      newTruncateAddressValue,
+    } = this;
     if (
       this.currentAddress &&
       newStreetName === this.currentAddress.street &&
       newMunicipality === this.currentAddress.municipality &&
       newHousenumber === this.currentAddress.housenumber &&
-      newBusnumber === this.currentAddress.busnumber
+      newBusnumber === this.currentAddress.busnumber &&
+      newTruncateAddressValue === this.currentAddress.truncateAddressValue
     ) {
       // No need to re-search, nothing has changed
       return;
@@ -232,6 +252,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
             municipality: newMunicipality,
             busnumber: newBusnumber,
             housenumber: newHousenumber,
+            truncateAddressValue: newTruncateAddressValue,
           })
         ) {
           return this.currentAddress;
@@ -244,6 +265,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
                 municipality: newMunicipality,
                 housenumber: newHousenumber,
                 busnumber: newBusnumber,
+                truncateAddressValue: newTruncateAddressValue,
               },
               this.args.nodeContentsUtils,
             );
@@ -254,6 +276,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
               {
                 street: newStreetName,
                 municipality: newMunicipality,
+                truncateAddressValue: newTruncateAddressValue,
               },
               this.args.nodeContentsUtils,
             );
@@ -272,7 +295,18 @@ export default class LocationPluginEditComponent extends Component<Signature> {
         this.args.setIsLoading?.(false);
       }
     } else {
-      return;
+      const address = await resolveAddress(
+        {
+          street: newStreetName,
+          municipality: newMunicipality,
+          housenumber: newHousenumber,
+          busnumber: newBusnumber,
+          truncateAddressValue: true,
+        },
+        this.args.nodeContentsUtils,
+      );
+      this.args.setAddressToInsert(address);
+      return address;
     }
   });
 
@@ -284,6 +318,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
       this.newStreetName,
       this.newHousenumber,
       this.newBusnumber,
+      this.newTruncateAddressValue,
     ],
   );
 
@@ -319,8 +354,9 @@ export default class LocationPluginEditComponent extends Component<Signature> {
   }
 
   @action
-  insertFullAddress(event: InputEvent) {
-    this.fullAddressRequired = event as HTMLFormElement;
+  truncateAddress(value: boolean) {
+    this.newTruncateAddressValue = value;
+    console.log('this.newTruncateAddressValue', this.newTruncateAddressValue);
   }
 
   searchMunicipality = restartableTask(async (term: string) => {
@@ -469,12 +505,15 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           {{/if}}
         </div>
       </AuFormRow>
-      <AuCheckbox @onChange={{this.insertFullAddress}}>{{t
-          'location-plugin.modal.checkbox-message'
-        }}</AuCheckbox>
-      <AuHelptext @skin='tertiary'>{{t
-          'location-plugin.modal.checkbox-helptext'
-        }}</AuHelptext>
+      {{#if this.newStreetName}}
+        <AuCheckbox
+          @checked={{this.newTruncateAddressValue}}
+          @onChange={{this.truncateAddress}}
+        >{{t 'location-plugin.modal.checkbox-message'}}</AuCheckbox>
+        <AuHelptext @skin='tertiary'>{{t
+            'location-plugin.modal.checkbox-helptext'
+          }}</AuHelptext>
+      {{/if}}
 
       {{#if this.message}}
         <AuAlert

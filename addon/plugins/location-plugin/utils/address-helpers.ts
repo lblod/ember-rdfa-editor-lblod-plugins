@@ -114,6 +114,8 @@ export class Address {
   declare housenumber?: string;
   declare busnumber?: string;
   declare location: Point;
+  declare truncateAddressValue: boolean;
+
   constructor(
     args: Pick<
       Address,
@@ -125,18 +127,29 @@ export class Address {
       | 'busnumber'
       | 'location'
       | 'belgianAddressUri'
+      | 'truncateAddressValue'
     >,
   ) {
     Object.assign(this, args);
   }
 
   get formatted() {
-    if (this.housenumber && this.busnumber) {
-      return `${this.street} ${this.housenumber} bus ${this.busnumber}, ${this.zipcode} ${this.municipality}`;
-    } else if (this.housenumber) {
-      return `${this.street} ${this.housenumber}, ${this.zipcode} ${this.municipality}`;
+    if (this.truncateAddressValue) {
+      if (this.housenumber && this.busnumber) {
+        return `${this.street} ${this.housenumber} bus ${this.busnumber}`;
+      } else if (this.housenumber) {
+        return `${this.street} ${this.housenumber}`;
+      } else {
+        return `${this.street}`;
+      }
     } else {
-      return `${this.street}, ${this.zipcode} ${this.municipality}`;
+      if (this.housenumber && this.busnumber) {
+        return `${this.street} ${this.housenumber} bus ${this.busnumber}, ${this.zipcode} ${this.municipality}`;
+      } else if (this.housenumber) {
+        return `${this.street} ${this.housenumber}, ${this.zipcode} ${this.municipality}`;
+      } else {
+        return `${this.street}, ${this.zipcode} ${this.municipality}`;
+      }
     }
   }
 
@@ -270,6 +283,7 @@ export async function resolveStreet(
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
+        truncateAddressValue: false,
         location: new Point({
           uri: nodeContentsUtils.fallbackGeometryUri(),
           location: {
@@ -326,6 +340,7 @@ export async function resolveAddress(
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
         uri: nodeContentsUtils.fallbackAddressUri(),
         belgianAddressUri: result.identificator.id,
+        truncateAddressValue: false,
         location: new Point({
           uri: `${result.identificator.id}/1`,
           location: {

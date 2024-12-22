@@ -473,7 +473,7 @@ location-plugin:
     insert: locatie invoegen
     edit: Bewerk locatie
     confirm: Locatie instellen
-    checkbox-message: Volledig adres invoegen?
+    checkbox-message: Verkort adres tonen?
     checkbox-helptext: Aanvinken voegt de postcode en gemeente toe aan de output van het adres.
   nodeview:
     placeholder: Voeg locatie in
