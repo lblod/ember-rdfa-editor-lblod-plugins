@@ -8,6 +8,7 @@ import t from 'ember-intl/helpers/t';
 import AuIcon, {
   type AuIconSignature,
 } from '@appuniversum/ember-appuniversum/components/au-icon';
+import AuBadge from '@appuniversum/ember-appuniversum/components/au-badge';
 import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
@@ -219,7 +220,12 @@ export default class SnippetNode extends Component<Signature> {
       />
     {{else}}
       <div class='say-snippet-card'>
-        <div class='say-snippet-title'>{{this.node.attrs.title}}</div>
+        <div class='say-snippet-title'>
+          <span class='au-c-badge au-c-badge--small say-snippet-title-icon'>
+            <AuIcon @icon='plus-text' />
+          </span>
+          {{this.node.attrs.title}}
+        </div>
         <div class='say-snippet-content'>{{yield}}</div>
         <div class='say-snippet-icons' contenteditable='false'>
           <SnippetButton
