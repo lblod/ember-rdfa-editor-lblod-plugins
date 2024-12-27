@@ -95,7 +95,7 @@
     font-size: 1.6rem;
     font-weight: var(--au-medium);
     padding: 5px;
-    border-bottom: 1px solid  var(--au-blue-300);
+    border-bottom: 1px solid var(--au-blue-300);
     color: var(--au-blue-700);
     .say-snippet-title-icon {
       background-color: var(--au-blue-300);
@@ -150,15 +150,14 @@
   }
 }
 
-
 .ember-node.say-active:has(> .say-snippet-card) {
   outline: none;
 }
 
-.ember-node.say-active > .say-snippet-card{
+.ember-node.say-active > .say-snippet-card {
   border-color: var(--au-blue-700);
   border-width: 0.2rem;
-  > .say-snippet-title{
+  > .say-snippet-title {
     border-bottom-color: var(--au-blue-700);
     border-bottom-width: 0.2rem;
   }
