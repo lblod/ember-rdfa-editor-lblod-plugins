@@ -225,29 +225,31 @@ export default class SnippetNode extends Component<Signature> {
           </span>
           {{this.node.attrs.title}}
         </div>
-        <div class='say-snippet-content'>{{yield}}</div>
-        <div class='say-snippet-icons' contenteditable='false'>
-          <SnippetButton
-            @icon={{SynchronizeIcon}}
-            @helpText='snippet-plugin.snippet-node.change-fragment'
-            {{on 'click' this.editFragment}}
-            @isActive={{this.isActive}}
-          />
-          <SnippetButton
-            @icon={{BinIcon}}
-            @helpText='snippet-plugin.snippet-node.remove-fragment'
-            {{on 'click' this.deleteFragment}}
-            @isActive={{this.isActive}}
-            class='say-snippet-remove-button'
-          />
-          {{#if this.allowMultipleSnippets}}
+        <div class='say-snippet-content'>
+          {{yield}}
+          <div class='say-snippet-icons' contenteditable='false'>
             <SnippetButton
-              @icon={{AddIcon}}
-              @helpText='snippet-plugin.snippet-node.add-fragment'
-              {{on 'click' this.addFragment}}
+              @icon={{SynchronizeIcon}}
+              @helpText='snippet-plugin.snippet-node.change-fragment'
+              {{on 'click' this.editFragment}}
               @isActive={{this.isActive}}
             />
-          {{/if}}
+            <SnippetButton
+              @icon={{BinIcon}}
+              @helpText='snippet-plugin.snippet-node.remove-fragment'
+              {{on 'click' this.deleteFragment}}
+              @isActive={{this.isActive}}
+              class='say-snippet-remove-button'
+            />
+            {{#if this.allowMultipleSnippets}}
+              <SnippetButton
+                @icon={{AddIcon}}
+                @helpText='snippet-plugin.snippet-node.add-fragment'
+                {{on 'click' this.addFragment}}
+                @isActive={{this.isActive}}
+              />
+            {{/if}}
+          </div>
         </div>
 
       </div>
