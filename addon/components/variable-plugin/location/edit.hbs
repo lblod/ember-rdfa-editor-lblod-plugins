@@ -22,7 +22,8 @@
         <PowerSelectMultiple
           id='location-select'
           @allowClear={{false}}
-          @searchEnabled={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
           @options={{this.locationOptions.value.options}}
           @selected={{this.selectedLocationOption}}
           @onChange={{this.updateLocationOption}}
@@ -34,7 +35,8 @@
         <PowerSelect
           id='location-select'
           @allowClear={{false}}
-          @searchEnabled={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
           @options={{this.locationOptions.value.options}}
           @selected={{this.selectedLocationOption}}
           @onChange={{this.updateLocationOption}}
