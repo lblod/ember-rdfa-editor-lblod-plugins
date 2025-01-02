@@ -90,22 +90,31 @@
   border: 1px solid var(--au-blue-300);
   border-radius: var(--au-radius);
   .say-snippet-title {
-    background-color: var(--au-blue-300);
+    background-color: var(--au-gray-100);
+    border-radius: 0.1em 0.1em 0 0;
     font-size: 1.6rem;
     font-weight: var(--au-medium);
     padding: 5px;
+    border-bottom: 1px solid var(--au-blue-300);
+    color: var(--au-blue-700);
+    .say-snippet-title-icon {
+      background-color: var(--au-blue-300);
+      color: black;
+    }
   }
   .say-snippet-content {
     padding: 20px;
     min-height: 100px;
-    padding-right: 44px;
+    padding-right: 50px;
+    margin-top: 0;
   }
   .say-snippet-icons {
     display: flex;
     width: fit-content;
     position: absolute !important;
     right: 5px;
-    bottom: 5px;
+    top: 0;
+    margin-top: 0;
     flex-direction: column;
     .say-snippet-button {
       height: 32px;
@@ -140,6 +149,19 @@
         display: flex;
       }
     }
+  }
+}
+
+.ember-node.say-active:has(> .say-snippet-card) {
+  outline: none;
+}
+
+.ember-node.say-active > .say-snippet-card {
+  border-color: var(--au-blue-700);
+  border-width: 0.2rem;
+  > .say-snippet-title {
+    border-bottom-color: var(--au-blue-700);
+    border-bottom-width: 0.2rem;
   }
 }
 
