@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.3.0
+
+### Minor Changes
+
+- [#523](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/523) [`062c765`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/062c765ac0d45deacd81d63752660fc56eefffa0) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign of fragment nodes
+
+- [#524](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/524) [`d43b3aa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d43b3aae98f3c30ee62f3a15a32e73adca33baa6) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add search to codelist variable
+
 ## 26.2.2
 
 ### Patch Changes
