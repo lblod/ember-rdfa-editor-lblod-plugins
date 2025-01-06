@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.3.1
+
+### Patch Changes
+
+- [`18068ff`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/18068ffae2fda5ba4f34568d9e03c06ffe7b4b2f) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Trigger release because of a npm error
+
 ## 26.3.0
 
 ### Minor Changes
