@@ -32,7 +32,7 @@ import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
 import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
 import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
-import { getSnippetListIdsFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { getSnippetListUrisFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
 interface ButtonSig {
   Args: {
@@ -130,7 +130,7 @@ export default class SnippetNode extends Component<Signature> {
         const node = createSnippetPlaceholder({
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
-            listIds: getSnippetListIdsFromNode(this.node),
+            listUris: getSnippetListUrisFromNode(this.node),
             names: this.node.attrs.snippetListNames,
             importedResources: this.node.attrs.importedResources,
           },
@@ -202,7 +202,7 @@ export default class SnippetNode extends Component<Signature> {
         title,
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
-          listIds: getSnippetListIdsFromNode(this.node),
+          listUris: getSnippetListUrisFromNode(this.node),
           names: this.node.attrs.snippetListNames,
           importedResources: this.node.attrs.importedResources,
         },
@@ -261,7 +261,7 @@ export default class SnippetNode extends Component<Signature> {
       @closeModal={{this.closeModal}}
       @config={{this.node.attrs.config}}
       @onInsert={{this.onInsert}}
-      @snippetListIds={{getSnippetListIdsFromNode this.node}}
+      @snippetListUris={{getSnippetListUrisFromNode this.node}}
       @snippetListNames={{this.node.attrs.snippetListNames}}
     />
   </template>

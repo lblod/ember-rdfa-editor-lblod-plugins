@@ -6,7 +6,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
-type Filter = { name?: string; snippetListIds?: string[] };
+type Filter = { name?: string; snippetListUris?: string[] };
 export type OrderBy =
   | 'label'
   | 'created-on'
@@ -16,7 +16,7 @@ export type OrderBy =
   | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
-const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
+const buildSnippetCountQuery = ({ name, snippetListUris }: Filter) => {
   return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
@@ -32,7 +32,6 @@ const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
           ?snippet a say:Snippet;
                    pav:hasCurrentVersion ?snippetVersion;
                    ^say:hasSnippet ?snippetList.
-          ?snippetList mu:uuid ?snippetListId.
           ?snippetVersion dct:title ?title.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
@@ -42,9 +41,10 @@ const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
               : ''
           }
           ${
-            snippetListIds && snippetListIds.length
-              ? `FILTER (?snippetListId IN (${snippetListIds
-                  .map((from) => sparqlEscapeString(from))
+            //TODO: Find sparqlEscapeUri
+            snippetListUris && snippetListUris.length
+              ? `FILTER (?snippetList IN (${snippetListUris
+                  .map((from) => `<${from}>`)
                   .join(', ')}))`
               : ''
           }
@@ -69,7 +69,7 @@ const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
 // };
 
 const buildSnippetFetchQuery = ({
-  filter: { name, snippetListIds },
+  filter: { name, snippetListUris },
   pagination: { pageSize, pageNumber },
 }: {
   filter: Filter;
@@ -106,9 +106,9 @@ const buildSnippetFetchQuery = ({
               : ''
           }
           ${
-            snippetListIds && snippetListIds.length
-              ? `FILTER (?snippetListId IN (${snippetListIds
-                  .map((from) => sparqlEscapeString(from))
+            snippetListUris && snippetListUris.length
+              ? `FILTER (?snippetList IN (${snippetListUris
+                  .map((from) => `<${from}>`)
                   .join(', ')}))`
               : ''
           }
@@ -173,7 +173,7 @@ export const fetchSnippets = async ({
   filter: Filter;
   pagination: Pagination;
 }) => {
-  if (!filter.snippetListIds?.length) {
+  if (!filter.snippetListUris?.length) {
     return { totalCount: 0, results: [] };
   }
 

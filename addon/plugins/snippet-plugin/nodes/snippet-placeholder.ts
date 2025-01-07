@@ -58,7 +58,7 @@ export function createSnippetPlaceholder({
   ...args
 }: CreateSnippetPlaceholderArgs) {
   let additionalProperties: OutgoingTriple[];
-  let listProps: Omit<SnippetListProperties, 'listIds'>;
+  let listProps: Omit<SnippetListProperties, 'listUris'>;
   if ('lists' in args) {
     listProps = {
       // This is a completely new placeholder, so new id
@@ -72,7 +72,7 @@ export function createSnippetPlaceholder({
   } else {
     // Replacing the last snippet, so keep the id
     listProps = args.listProperties;
-    additionalProperties = args.listProperties.listIds.map(
+    additionalProperties = args.listProperties.listUris.map(
       tripleForSnippetListId,
     );
   }

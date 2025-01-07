@@ -38,7 +38,7 @@ export type ImportedResourceMap = Record<string, Option<string>>;
 
 export type SnippetListProperties = {
   placeholderId: string;
-  listIds: string[];
+  listUris: string[];
   names: string[];
   importedResources: ImportedResourceMap;
 };

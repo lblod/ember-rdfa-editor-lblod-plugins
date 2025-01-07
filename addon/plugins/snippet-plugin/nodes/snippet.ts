@@ -86,7 +86,7 @@ export function createSnippet({
   title,
   allowMultipleSnippets,
   listProperties: {
-    listIds,
+    listUris,
     names: snippetListNames,
     importedResources,
     placeholderId,
@@ -110,7 +110,7 @@ export function createSnippet({
   });
   const properties = [
     ...defaultProperties,
-    ...listIds.map(tripleForSnippetListId),
+    ...listUris.map(tripleForSnippetListId),
   ];
   const node = schema.node(
     'snippet',
@@ -207,14 +207,14 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
           // risking having no ability to insert another snippet.
           const placeholderId =
             node.getAttribute('data-snippet-placeholder-id') || uuidv4();
-          const legacySnippetListIds = node
+          const legacySnippetListUris = node
             .getAttribute('data-assigned-snippet-ids')
             ?.split(',');
-          const properties = !legacySnippetListIds
+          const properties = !legacySnippetListUris
             ? rdfaAttrs.properties
             : [
                 ...rdfaAttrs.properties,
-                ...legacySnippetListIds.map(tripleForSnippetListId),
+                ...legacySnippetListUris.map(tripleForSnippetListId),
               ];
           return {
             ...rdfaAttrs,

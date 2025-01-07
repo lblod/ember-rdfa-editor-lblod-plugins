@@ -31,7 +31,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
     return this.args.controller;
   }
   get disabled() {
-    return (this.args.listProperties?.listIds.length ?? 0) === 0;
+    return (this.args.listProperties?.listUris.length ?? 0) === 0;
   }
 
   @action
@@ -88,7 +88,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @closeModal={{this.closeModal}}
       @config={{@config}}
       @onInsert={{this.onInsert}}
-      @snippetListIds={{@listProperties.listIds}}
+      @snippetListUris={{@listProperties.listUris}}
       @snippetListNames={{@listProperties.names}}
     />
   </template>
