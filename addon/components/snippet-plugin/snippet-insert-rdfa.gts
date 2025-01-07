@@ -23,6 +23,7 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
   get listProperties(): SnippetListProperties | undefined {
     const activeNode = this.args.node.value;
     const listIds = getSnippetListIdsFromNode(activeNode);
+    console.log(listIds);
 
     if (listIds.length > 0) {
       return {

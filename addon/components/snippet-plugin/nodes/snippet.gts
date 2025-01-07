@@ -126,6 +126,7 @@ export default class SnippetNode extends Component<Signature> {
           )([recalculateNumbers]).transaction;
         });
       } else {
+        console.log(getSnippetListIdsFromNode(this.node));
         const node = createSnippetPlaceholder({
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
@@ -194,6 +195,7 @@ export default class SnippetNode extends Component<Signature> {
       start = pos;
       end = pos + this.node.nodeSize;
     }
+    console.log(getSnippetListIdsFromNode(this.node));
     this.controller.doCommand(
       insertSnippet({
         content,

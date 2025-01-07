@@ -29,9 +29,7 @@ export const getAssignedSnippetListsIdsFromProperties = (
 ) => {
   return snippetListIdsProperty
     .map((property) => property.object.value)
-    .filter((object) => object !== undefined)
-    .map(getSnippetIdFromUri)
-    .filter((id) => id !== undefined);
+    .filter((object) => object !== undefined);
 };
 
 export const getSnippetListIdsFromNode = (node: PNode) =>
