@@ -147,7 +147,7 @@ const buildSnippetListFetchQuery = ({
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX say: <https://say.data.gift/ns/>
 
-        SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
+        SELECT (?snippetLists as ?uri) ?label ?createdOn ?importedResources WHERE {
           ?snippetLists a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
@@ -241,13 +241,13 @@ export const fetchSnippetLists = async ({
   const results = [
     ...queryResult.results.bindings
       .map((binding) => ({
-        id: binding.id?.value,
+        uri: binding.uri?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
         importedResources: binding.importedResources?.value,
       }))
       .reduce((mappedResults, bindings) => {
-        const existing = mappedResults.get(bindings.id) ?? {
+        const existing = mappedResults.get(bindings.uri) ?? {
           ...bindings,
           importedResources: [],
         };
@@ -257,7 +257,7 @@ export const fetchSnippetLists = async ({
             bindings.importedResources,
           ];
         }
-        return mappedResults.set(bindings.id, existing);
+        return mappedResults.set(bindings.uri, existing);
       }, new Map<string, SnippetListArgs>())
       .values(),
   ].map((slArgs) => new SnippetList(slArgs));

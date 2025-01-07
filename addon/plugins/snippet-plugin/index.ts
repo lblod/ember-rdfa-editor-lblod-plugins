@@ -44,20 +44,20 @@ export type SnippetListProperties = {
 };
 
 export type SnippetListArgs = {
-  id: string;
+  uri: string;
   label: string;
   createdOn: string;
   importedResources: string[];
 };
 
 export class SnippetList {
-  id: string;
+  uri: string;
   label: string;
   createdOn: string | null;
   importedResources: string[];
 
-  constructor({ id, label, createdOn, importedResources }: SnippetListArgs) {
-    this.id = getSnippetIdFromUri(id);
+  constructor({ uri, label, createdOn, importedResources }: SnippetListArgs) {
+    this.uri = uri;
     this.label = label;
     this.createdOn = dateValue(createdOn);
     this.importedResources = importedResources;

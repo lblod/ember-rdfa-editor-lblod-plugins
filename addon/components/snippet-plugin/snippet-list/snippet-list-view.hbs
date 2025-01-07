@@ -52,8 +52,8 @@
           <td class='snippet-list-table-select-column'>
             <AuCheckbox
               id={{row.label}}
-              @onChange={{fn this.onChange row.id}}
-              @checked={{in-array @snippetListUris row.id}}
+              @onChange={{fn this.onChange row.uri}}
+              @checked={{in-array @snippetListUris row.uri}}
             />
           </td>
           <td>{{row.label}}</td>

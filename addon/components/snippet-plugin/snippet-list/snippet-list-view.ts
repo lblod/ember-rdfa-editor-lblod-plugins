@@ -12,15 +12,15 @@ interface Args {
 
 export default class SnippetListViewComponent extends Component<Args> {
   @action
-  onChange(snippetId: string, isSelected: boolean) {
+  onChange(snippetUri: string, isSelected: boolean) {
     if (isSelected) {
-      const newSnippetListUris = [...this.args.snippetListUris, snippetId];
+      const newSnippetListUris = [...this.args.snippetListUris, snippetUri];
 
       return this.args.onChange(newSnippetListUris);
     }
 
     const newSnippetListUris = this.args.snippetListUris.filter(
-      (id) => id !== snippetId,
+      (uri) => uri !== snippetUri,
     );
 
     return this.args.onChange(newSnippetListUris);
@@ -40,15 +40,15 @@ export default class SnippetListViewComponent extends Component<Args> {
       return;
     }
 
-    const snippetListId = snippetList.id;
+    const snippetListUri = snippetList.uri;
 
-    if (!snippetListId) {
+    if (!snippetListUri) {
       return;
     }
 
-    const isSelected = this.args.snippetListUris.includes(snippetListId);
+    const isSelected = this.args.snippetListUris.includes(snippetListUri);
 
-    this.onChange(snippetListId, !isSelected);
+    this.onChange(snippetListUri, !isSelected);
   }
 
   get snippetLists() {

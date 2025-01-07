@@ -8,15 +8,13 @@ export const SNIPPET_LIST_RDFA_PREDICATE = SAY('allowedSnippetList');
 
 const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
 
-export const getSnippetUriFromId = (id: string) => `${snippetListBase}${id}`;
-
 export const getSnippetIdFromUri = (uri: string) =>
   uri.replace(snippetListBase, '');
 
-export function tripleForSnippetListId(id: string) {
+export function tripleForSnippetListUri(uri: string) {
   return {
     predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-    object: sayDataFactory.namedNode(getSnippetUriFromId(id)),
+    object: sayDataFactory.namedNode(uri),
   };
 }
 

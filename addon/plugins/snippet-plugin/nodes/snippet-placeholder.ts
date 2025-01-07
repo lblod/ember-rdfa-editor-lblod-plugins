@@ -25,7 +25,7 @@ import {
   type SnippetList,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { tripleForSnippetListId } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { tripleForSnippetListUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 export function importedResourcesFromSnippetLists(
@@ -67,13 +67,13 @@ export function createSnippetPlaceholder({
       importedResources: importedResourcesFromSnippetLists(args.lists),
     };
     additionalProperties = args.lists.map((list) =>
-      tripleForSnippetListId(list.id),
+      tripleForSnippetListUri(list.uri),
     );
   } else {
     // Replacing the last snippet, so keep the id
     listProps = args.listProperties;
     additionalProperties = args.listProperties.listUris.map(
-      tripleForSnippetListId,
+      tripleForSnippetListUri,
     );
   }
   const mappingResource = `http://example.net/lblod-snippet-placeholder/${uuidv4()}`;

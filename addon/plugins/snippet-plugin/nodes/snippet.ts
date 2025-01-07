@@ -35,7 +35,7 @@ import {
   SnippetListProperties,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { tripleForSnippetListId } from '../utils/rdfa-predicate';
+import { tripleForSnippetListUri } from '../utils/rdfa-predicate';
 
 function outgoingFromBacklink(
   backlink: IncomingTriple,
@@ -110,7 +110,7 @@ export function createSnippet({
   });
   const properties = [
     ...defaultProperties,
-    ...listUris.map(tripleForSnippetListId),
+    ...listUris.map(tripleForSnippetListUri),
   ];
   const node = schema.node(
     'snippet',
@@ -214,7 +214,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
             ? rdfaAttrs.properties
             : [
                 ...rdfaAttrs.properties,
-                ...legacySnippetListUris.map(tripleForSnippetListId),
+                ...legacySnippetListUris.map(tripleForSnippetListUri),
               ];
           return {
             ...rdfaAttrs,
