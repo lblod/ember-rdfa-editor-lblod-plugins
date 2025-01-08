@@ -56,6 +56,7 @@ export default function insertArticle({
     }
 
     const decision = args.decisionLocation;
+
     if (!decision) {
       return false;
     }
