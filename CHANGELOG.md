@@ -1,5 +1,33 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.3.1
+
+### Patch Changes
+
+- [`18068ff`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/18068ffae2fda5ba4f34568d9e03c06ffe7b4b2f) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Trigger release because of a npm error
+
+## 26.3.0
+
+### Minor Changes
+
+- [#523](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/523) [`062c765`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/062c765ac0d45deacd81d63752660fc56eefffa0) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Redesign of fragment nodes
+
+- [#524](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/524) [`d43b3aa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d43b3aae98f3c30ee62f3a15a32e73adca33baa6) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add search to codelist variable
+
+## 26.2.2
+
+### Patch Changes
+
+- [#522](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/522) [`2332962`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/23329624b10c10128c4b6cc438c2c5231579ab80) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Convert citation into a keyed plugin
+
+- [#518](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/518) [`3188ea3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3188ea3ce4723f188854e8c66b37b44b1790a62c) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add rdfa to the person variable
+
+## 26.2.1
+
+### Patch Changes
+
+- [#520](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/520) [`e184b29`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e184b294e10124f868c2ef2aaf411563f67c3985) Thanks [@piemonkey](https://github.com/piemonkey)! - Consistently round corners of ember nodes
+
 ## 26.2.0
 
 ### Minor Changes

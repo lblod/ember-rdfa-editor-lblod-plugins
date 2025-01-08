@@ -11,11 +11,12 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import {
   CitationDecoration,
-  CitationPlugin,
   CitationPluginEmberComponentConfig,
+  CitationPluginState,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
   DecorationSet,
+  PluginKey,
   SayController,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
@@ -32,10 +33,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/legal-documents';
 import { cleanCaches } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin/utils/cache';
 import { SearchIcon } from '@appuniversum/ember-appuniversum/components/icons/search';
+import { citationPluginKey } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
 interface Args {
   controller: SayController;
-  plugin: CitationPlugin;
   config: CitationPluginEmberComponentConfig;
 }
 
@@ -76,8 +77,8 @@ export default class CitationCardComponent extends Component<Args> {
     return !this.controller.inEmbeddedView && this.activeDecoration;
   }
 
-  get plugin() {
-    return this.args.plugin;
+  get plugin(): PluginKey<CitationPluginState> {
+    return citationPluginKey;
   }
 
   get config() {

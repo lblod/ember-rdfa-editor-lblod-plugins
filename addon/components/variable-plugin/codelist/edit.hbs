@@ -22,7 +22,8 @@
         <PowerSelectMultiple
           id='codelist-select'
           @allowClear={{false}}
-          @searchEnabled={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
           @options={{this.codelistOptions.value.options}}
           @selected={{this.selectedCodelistOption}}
           @onChange={{this.updateCodelistOption}}
@@ -34,7 +35,8 @@
         <PowerSelect
           id='codelist-select'
           @allowClear={{false}}
-          @searchEnabled={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
           @options={{this.codelistOptions.value.options}}
           @selected={{this.selectedCodelistOption}}
           @onChange={{this.updateCodelistOption}}
