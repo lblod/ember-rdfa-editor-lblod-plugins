@@ -16,7 +16,7 @@ import {
   type SnippetList,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
-  getAssignedSnippetListsIdsFromProperties,
+  getAssignedSnippetListsUrisFromProperties,
   getSnippetListUrisProperties,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { updateSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands';
@@ -54,7 +54,7 @@ export default class SnippetListSelect extends Component<Signature> {
   }
 
   get snippetListUris(): string[] {
-    return getAssignedSnippetListsIdsFromProperties(
+    return getAssignedSnippetListsUrisFromProperties(
       this.snippetListUrisProperties,
     );
   }

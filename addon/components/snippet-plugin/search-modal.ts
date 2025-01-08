@@ -59,7 +59,6 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   }
 
   snippetsSearch = restartableTask(async () => {
-    console.log(this.args.snippetListUris);
     await timeout(500);
 
     const abortController = new AbortController();

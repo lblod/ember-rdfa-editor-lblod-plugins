@@ -42,7 +42,6 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
     lists: SnippetList[] | undefined,
     allowMultipleSnippets: boolean,
   ) {
-    console.log(lists);
     if (lists) {
       const node = createSnippetPlaceholder({
         lists,

@@ -94,8 +94,7 @@ const buildSnippetFetchQuery = ({
           OPTIONAL {
             ?snippet schema:position ?position.
           }
-          ?snippetList mu:uuid ?snippetListId;
-                       pav:createdOn ?snippetListCreatedOn.
+          ?snippetList pav:createdOn ?snippetListCreatedOn.
           ?snippetVersion dct:title ?title ;
                           ext:editorDocumentContent ?content.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
