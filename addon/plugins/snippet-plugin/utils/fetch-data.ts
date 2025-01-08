@@ -3,6 +3,7 @@ import {
   executeCountQuery,
   executeQuery,
   sparqlEscapeString,
+  sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
@@ -41,10 +42,9 @@ const buildSnippetCountQuery = ({ name, snippetListUris }: Filter) => {
               : ''
           }
           ${
-            //TODO: Find sparqlEscapeUri
             snippetListUris && snippetListUris.length
               ? `FILTER (?snippetList IN (${snippetListUris
-                  .map((from) => `<${from}>`)
+                  .map(sparqlEscapeUri)
                   .join(', ')}))`
               : ''
           }
@@ -107,7 +107,7 @@ const buildSnippetFetchQuery = ({
           ${
             snippetListUris && snippetListUris.length
               ? `FILTER (?snippetList IN (${snippetListUris
-                  .map((from) => `<${from}>`)
+                  .map(sparqlEscapeUri)
                   .join(', ')}))`
               : ''
           }
