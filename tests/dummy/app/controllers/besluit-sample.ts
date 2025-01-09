@@ -240,7 +240,6 @@ export default class BesluitSampleController extends Controller {
   get config() {
     return {
       citation: {
-        type: 'nodes',
         activeInNode(node: PNode): boolean {
           const { attrs } = node;
           if (!isRdfaAttrs(attrs)) {
