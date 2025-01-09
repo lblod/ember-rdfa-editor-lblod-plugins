@@ -78,10 +78,9 @@
     </c.content>
     <c.footer class='au-u-background-gray-100 au-u-padding-none'>
       {{#if this.legalDocumentsResource.isRunning}}
-        <AuLoader />
-        <span class='au-u-hidden-visually'>{{t
+        <AuLoader @hideMessage={{true}}>{{t
             'citaten-plugin.alert.loading'
-          }}</span>
+          }}</AuLoader>
       {{else}}
         {{#if this.error}}
           <Common::Search::AlertLoadError
