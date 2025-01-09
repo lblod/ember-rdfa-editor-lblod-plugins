@@ -10,29 +10,28 @@ const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
 
 export const getSnippetUriFromId = (id: string) => `${snippetListBase}${id}`;
 
-export const getSnippetIdFromUri = (uri: string) =>
-  uri.replace(snippetListBase, '');
-
 export function tripleForSnippetListId(id: string) {
+  return tripleForSnippetListUri(getSnippetUriFromId(id));
+}
+
+export function tripleForSnippetListUri(uri: string) {
   return {
     predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
-    object: sayDataFactory.namedNode(getSnippetUriFromId(id)),
+    object: sayDataFactory.namedNode(uri),
   };
 }
 
-export const getSnippetListIdsProperties = (node: PNode) => {
+export const getSnippetListUrisProperties = (node: PNode) => {
   return getOutgoingTripleList(node.attrs, SNIPPET_LIST_RDFA_PREDICATE);
 };
 
-export const getAssignedSnippetListsIdsFromProperties = (
-  snippetListIdsProperty: OutgoingTriple[] | undefined = [],
+export const getAssignedSnippetListsUrisFromProperties = (
+  snippetListUrisProperty: OutgoingTriple[] | undefined = [],
 ) => {
-  return snippetListIdsProperty
+  return snippetListUrisProperty
     .map((property) => property.object.value)
-    .filter((object) => object !== undefined)
-    .map(getSnippetIdFromUri)
-    .filter((id) => id !== undefined);
+    .filter((object) => object !== undefined);
 };
 
-export const getSnippetListIdsFromNode = (node: PNode) =>
-  getAssignedSnippetListsIdsFromProperties(getSnippetListIdsProperties(node));
+export const getSnippetListUrisFromNode = (node: PNode) =>
+  getAssignedSnippetListsUrisFromProperties(getSnippetListUrisProperties(node));

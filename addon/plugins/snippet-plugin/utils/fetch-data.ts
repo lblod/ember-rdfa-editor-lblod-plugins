@@ -3,10 +3,11 @@ import {
   executeCountQuery,
   executeQuery,
   sparqlEscapeString,
+  sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
-type Filter = { name?: string; snippetListIds?: string[] };
+type Filter = { name?: string; snippetListUris?: string[] };
 export type OrderBy =
   | 'label'
   | 'created-on'
@@ -16,7 +17,7 @@ export type OrderBy =
   | null;
 type Pagination = { pageNumber: number; pageSize: number };
 
-const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
+const buildSnippetCountQuery = ({ name, snippetListUris }: Filter) => {
   return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
@@ -32,7 +33,6 @@ const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
           ?snippet a say:Snippet;
                    pav:hasCurrentVersion ?snippetVersion;
                    ^say:hasSnippet ?snippetList.
-          ?snippetList mu:uuid ?snippetListId.
           ?snippetVersion dct:title ?title.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
           FILTER(!BOUND(?validThrough) || xsd:dateTime(?validThrough) > now())
@@ -42,9 +42,9 @@ const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
               : ''
           }
           ${
-            snippetListIds && snippetListIds.length
-              ? `FILTER (?snippetListId IN (${snippetListIds
-                  .map((from) => sparqlEscapeString(from))
+            snippetListUris && snippetListUris.length
+              ? `FILTER (?snippetList IN (${snippetListUris
+                  .map(sparqlEscapeUri)
                   .join(', ')}))`
               : ''
           }
@@ -69,7 +69,7 @@ const buildSnippetCountQuery = ({ name, snippetListIds }: Filter) => {
 // };
 
 const buildSnippetFetchQuery = ({
-  filter: { name, snippetListIds },
+  filter: { name, snippetListUris },
   pagination: { pageSize, pageNumber },
 }: {
   filter: Filter;
@@ -94,8 +94,7 @@ const buildSnippetFetchQuery = ({
           OPTIONAL {
             ?snippet schema:position ?position.
           }
-          ?snippetList mu:uuid ?snippetListId;
-                       pav:createdOn ?snippetListCreatedOn.
+          ?snippetList pav:createdOn ?snippetListCreatedOn.
           ?snippetVersion dct:title ?title ;
                           ext:editorDocumentContent ?content.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
@@ -106,9 +105,9 @@ const buildSnippetFetchQuery = ({
               : ''
           }
           ${
-            snippetListIds && snippetListIds.length
-              ? `FILTER (?snippetListId IN (${snippetListIds
-                  .map((from) => sparqlEscapeString(from))
+            snippetListUris && snippetListUris.length
+              ? `FILTER (?snippetList IN (${snippetListUris
+                  .map(sparqlEscapeUri)
                   .join(', ')}))`
               : ''
           }
@@ -147,7 +146,7 @@ const buildSnippetListFetchQuery = ({
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX say: <https://say.data.gift/ns/>
 
-        SELECT (?snippetLists as ?id) ?label ?createdOn ?importedResources WHERE {
+        SELECT (?snippetLists as ?uri) ?label ?createdOn ?importedResources WHERE {
           ?snippetLists a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
@@ -173,7 +172,7 @@ export const fetchSnippets = async ({
   filter: Filter;
   pagination: Pagination;
 }) => {
-  if (!filter.snippetListIds?.length) {
+  if (!filter.snippetListUris?.length) {
     return { totalCount: 0, results: [] };
   }
 
@@ -241,13 +240,13 @@ export const fetchSnippetLists = async ({
   const results = [
     ...queryResult.results.bindings
       .map((binding) => ({
-        id: binding.id?.value,
+        uri: binding.uri?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
         importedResources: binding.importedResources?.value,
       }))
       .reduce((mappedResults, bindings) => {
-        const existing = mappedResults.get(bindings.id) ?? {
+        const existing = mappedResults.get(bindings.uri) ?? {
           ...bindings,
           importedResources: [],
         };
@@ -257,7 +256,7 @@ export const fetchSnippetLists = async ({
             bindings.importedResources,
           ];
         }
-        return mappedResults.set(bindings.id, existing);
+        return mappedResults.set(bindings.uri, existing);
       }, new Map<string, SnippetListArgs>())
       .values(),
   ].map((slArgs) => new SnippetList(slArgs));

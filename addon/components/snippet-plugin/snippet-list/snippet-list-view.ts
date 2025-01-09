@@ -4,26 +4,26 @@ import { SnippetList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snip
 
 interface Args {
   snippetLists: SnippetList[];
-  snippetListIds: string[];
+  snippetListUris: string[];
   listNameFilter: string | null;
   isLoading: boolean;
-  onChange: (snippetListIds: string[]) => void;
+  onChange: (snippetListUris: string[]) => void;
 }
 
 export default class SnippetListViewComponent extends Component<Args> {
   @action
-  onChange(snippetId: string, isSelected: boolean) {
+  onChange(snippetUri: string, isSelected: boolean) {
     if (isSelected) {
-      const newSnippetListIds = [...this.args.snippetListIds, snippetId];
+      const newSnippetListUris = [...this.args.snippetListUris, snippetUri];
 
-      return this.args.onChange(newSnippetListIds);
+      return this.args.onChange(newSnippetListUris);
     }
 
-    const newSnippetListIds = this.args.snippetListIds.filter(
-      (id) => id !== snippetId,
+    const newSnippetListUris = this.args.snippetListUris.filter(
+      (uri) => uri !== snippetUri,
     );
 
-    return this.args.onChange(newSnippetListIds);
+    return this.args.onChange(newSnippetListUris);
   }
 
   @action
@@ -40,15 +40,15 @@ export default class SnippetListViewComponent extends Component<Args> {
       return;
     }
 
-    const snippetListId = snippetList.id;
+    const snippetListUri = snippetList.uri;
 
-    if (!snippetListId) {
+    if (!snippetListUri) {
       return;
     }
 
-    const isSelected = this.args.snippetListIds.includes(snippetListId);
+    const isSelected = this.args.snippetListUris.includes(snippetListUri);
 
-    this.onChange(snippetListId, !isSelected);
+    this.onChange(snippetListUri, !isSelected);
   }
 
   get snippetLists() {

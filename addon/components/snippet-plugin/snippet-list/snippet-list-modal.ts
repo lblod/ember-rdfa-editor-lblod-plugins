@@ -23,7 +23,7 @@ interface Signature {
       lists: SnippetList[],
       allowMultipleSnippets: boolean,
     ) => void;
-    snippetListIds: string[] | undefined;
+    snippetListUris: string[] | undefined;
     closeModal: () => void;
     open: boolean;
     allowMultipleSnippets?: boolean;
@@ -40,8 +40,8 @@ export default class SnippetListModalComponent extends Component<Signature> {
   // Display
   @tracked error: unknown;
 
-  @trackedReset('args.snippetListIds')
-  snippetListIds: string[] = [...(this.args.snippetListIds ?? [])];
+  @trackedReset('args.snippetListUris')
+  snippetListUris: string[] = [...(this.args.snippetListUris ?? [])];
 
   @localCopy('args.allowMultipleSnippets') allowMultipleSnippets = false;
 
@@ -63,7 +63,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
   @action
   saveAndClose() {
     const snippetLists = this.snippetListResource.value?.filter((snippetList) =>
-      this.snippetListIds.includes(snippetList.id),
+      this.snippetListUris.includes(snippetList.uri),
     );
     this.args.onSaveSnippetLists(
       snippetLists || [],
@@ -71,7 +71,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
     );
     this.args.closeModal();
     // Clear selection for next time
-    this.snippetListIds = [];
+    this.snippetListUris = [];
   }
 
   snippetListSearch = restartableTask(async () => {
@@ -105,7 +105,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
   );
 
   @action
-  onChange(snippetListIds: string[]) {
-    this.snippetListIds = snippetListIds;
+  onChange(snippetListUris: string[]) {
+    this.snippetListUris = snippetListUris;
   }
 }

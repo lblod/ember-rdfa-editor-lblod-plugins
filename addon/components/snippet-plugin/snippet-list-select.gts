@@ -16,8 +16,8 @@ import {
   type SnippetList,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
-  getAssignedSnippetListsIdsFromProperties,
-  getSnippetListIdsProperties,
+  getAssignedSnippetListsUrisFromProperties,
+  getSnippetListUrisProperties,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { updateSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands';
 
@@ -49,13 +49,13 @@ export default class SnippetListSelect extends Component<Signature> {
     return isResourceNode(this.args.node.value);
   }
 
-  get snippetListIdsProperties(): OutgoingTriple[] {
-    return getSnippetListIdsProperties(this.args.node.value);
+  get snippetListUrisProperties(): OutgoingTriple[] {
+    return getSnippetListUrisProperties(this.args.node.value);
   }
 
-  get snippetListIds(): string[] {
-    return getAssignedSnippetListsIdsFromProperties(
-      this.snippetListIdsProperties,
+  get snippetListUris(): string[] {
+    return getAssignedSnippetListsUrisFromProperties(
+      this.snippetListUrisProperties,
     );
   }
 
@@ -73,7 +73,7 @@ export default class SnippetListSelect extends Component<Signature> {
       this.args.controller?.doCommand(
         updateSnippetPlaceholder({
           resource: this.currentResource,
-          oldSnippetProperties: this.snippetListIdsProperties ?? [],
+          oldSnippetProperties: this.snippetListUrisProperties ?? [],
           newSnippetLists: lists,
           oldImportedResources: this.imported,
           node: this.args.node,
@@ -99,7 +99,7 @@ export default class SnippetListSelect extends Component<Signature> {
 
       <SnippetListModal
         @config={{@config}}
-        @snippetListIds={{this.snippetListIds}}
+        @snippetListUris={{this.snippetListUris}}
         @onSaveSnippetLists={{this.onSaveSnippetLists}}
         @allowMultipleSnippets={{this.allowMultipleSnippets}}
         @open={{this.showModal}}

@@ -35,7 +35,10 @@ import {
   SnippetListProperties,
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import { tripleForSnippetListId } from '../utils/rdfa-predicate';
+import {
+  tripleForSnippetListUri,
+  tripleForSnippetListId,
+} from '../utils/rdfa-predicate';
 
 function outgoingFromBacklink(
   backlink: IncomingTriple,
@@ -86,7 +89,7 @@ export function createSnippet({
   title,
   allowMultipleSnippets,
   listProperties: {
-    listIds,
+    listUris,
     names: snippetListNames,
     importedResources,
     placeholderId,
@@ -110,7 +113,7 @@ export function createSnippet({
   });
   const properties = [
     ...defaultProperties,
-    ...listIds.map(tripleForSnippetListId),
+    ...listUris.map(tripleForSnippetListUri),
   ];
   const node = schema.node(
     'snippet',

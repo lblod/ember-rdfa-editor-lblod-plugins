@@ -7,7 +7,7 @@ import {
   type SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
-import { getSnippetListIdsFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { getSnippetListUrisFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import SnippetInsert from './snippet-insert';
 
@@ -22,11 +22,11 @@ interface Sig {
 export default class SnippetInsertRdfaComponent extends Component<Sig> {
   get listProperties(): SnippetListProperties | undefined {
     const activeNode = this.args.node.value;
-    const listIds = getSnippetListIdsFromNode(activeNode);
+    const listUris = getSnippetListUrisFromNode(activeNode);
 
-    if (listIds.length > 0) {
+    if (listUris.length > 0) {
       return {
-        listIds,
+        listUris,
         placeholderId: activeNode.attrs.placeholderId,
         names: activeNode.attrs.snippetListNames,
         importedResources: activeNode.attrs.importedResources,
@@ -44,11 +44,11 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
       isResourceNode(node),
     );
     while (parentNode) {
-      const listIds = getSnippetListIdsFromNode(parentNode.node);
+      const listUris = getSnippetListUrisFromNode(parentNode.node);
 
-      if (listIds.length > 0) {
+      if (listUris.length > 0) {
         return {
-          listIds,
+          listUris,
           placeholderId: parentNode.node.attrs.placeholderId,
           names: parentNode.node.attrs.snippetListNames,
           importedResources: parentNode.node.attrs.importedResources,
