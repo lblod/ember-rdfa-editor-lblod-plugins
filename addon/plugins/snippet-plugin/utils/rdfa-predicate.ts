@@ -6,6 +6,14 @@ import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/ut
 
 export const SNIPPET_LIST_RDFA_PREDICATE = SAY('allowedSnippetList');
 
+const snippetListBase = 'http://lblod.data.gift/snippet-lists/';
+
+export const getSnippetUriFromId = (id: string) => `${snippetListBase}${id}`;
+
+export function tripleForSnippetListId(id: string) {
+  return tripleForSnippetListUri(getSnippetUriFromId(id));
+}
+
 export function tripleForSnippetListUri(uri: string) {
   return {
     predicate: SNIPPET_LIST_RDFA_PREDICATE.full,
