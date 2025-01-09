@@ -170,8 +170,8 @@ function calculateCitationPluginState(
 ) {
   const { doc, schema } = state;
   let activeRanges: [number, number][] = [];
-  let highlights: DecorationSet = DecorationSet.create(doc, []);
-  if ('activeInRanges' in config) {
+  let highlights: DecorationSet | undefined;
+  if (config.activeInRanges) {
     activeRanges = config.activeInRanges(state);
     const calculatedDecs = calculateDecorationsInRanges(
       config,
@@ -181,19 +181,19 @@ function calculateCitationPluginState(
     );
     highlights = calculatedDecs.decorations;
   }
-  if ('activeInNodeTypes' in config || 'activeInNode' in config) {
+  if (config.activeInNodeTypes || config.activeInNode) {
     let condition: (node: PNode) => boolean = (node) => false;
-    if ('activeInNodeTypes' in config && 'activeInNode' in config) {
+    if (config.activeInNodeTypes && config.activeInNode) {
       const nodeTypes = config.activeInNodeTypes(schema, state);
       condition = (node) => {
         return nodeTypes.has(node.type) || config.activeInNode(node, state);
       };
-    } else if ('activeInNodeTypes' in config) {
+    } else if (config.activeInNodeTypes) {
       const nodeTypes = config.activeInNodeTypes(schema, state);
       condition = (node) => {
         return nodeTypes.has(node.type);
       };
-    } else if ('activeInNode' in config) {
+    } else if (config.activeInNode) {
       condition = (node) => config.activeInNode(node, state);
     }
 
@@ -209,8 +209,8 @@ function calculateCitationPluginState(
     highlights = calculatedDecs.decorations;
   }
   if (
-    !('activeInRanges' in config) &&
-    !('activeInNodeTypes' in config || 'activeInNode' in config)
+    !config.activeInRanges &&
+    !(config.activeInNodeTypes || config.activeInNode)
   ) {
     const calculatedDecs = calculateDecorationsInNodes(
       config,
@@ -223,7 +223,9 @@ function calculateCitationPluginState(
     activeRanges = calculatedDecs.activeRanges;
     highlights = calculatedDecs.decorations;
   }
-
+  if (!highlights) {
+    highlights = DecorationSet.create(doc, []);
+  }
   return {
     highlights,
     activeRanges,
