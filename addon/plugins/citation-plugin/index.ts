@@ -120,33 +120,12 @@ export interface CitationPluginState {
 
 export type CitationPlugin = ProsePlugin<CitationPluginState>;
 
-export type CitationPluginNodeConfig = CitationPluginBaseConfig & {
-  type: 'nodes';
-} & (
-    | {
-        /**
-         * @deprecated use the `activeInNode` property instead
-         */
-        activeInNodeTypes(schema: Schema, state: EditorState): Set<NodeType>;
-      }
-    | {
-        activeInNode(node: PNode, state?: EditorState): boolean;
-      }
-  );
-
-export type CitationPluginRangeConfig = CitationPluginBaseConfig & {
-  type: 'ranges';
-  activeInRanges(state: EditorState): [number, number][];
-};
-
-export type CitationPluginBaseConfig = {
+export type CitationPluginConfig = {
   regex?: RegExp;
+  activeInRanges?(state: EditorState): [number, number][];
+  activeInNodeTypes?(schema: Schema, state: EditorState): Set<NodeType>;
+  activeInNode?(node: PNode, state?: EditorState): boolean;
 };
-
-export type CitationPluginConfig =
-  | CitationPluginBaseConfig
-  | CitationPluginNodeConfig
-  | CitationPluginRangeConfig;
 
 export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
   endpoint: string;
@@ -190,41 +169,49 @@ function calculateCitationPluginState(
   oldDecs?: DecorationSet,
 ) {
   const { doc, schema } = state;
-  let activeRanges;
-  let highlights;
-  if ('type' in config) {
-    if (config.type === 'ranges') {
-      activeRanges = config.activeInRanges(state);
-      const calculatedDecs = calculateDecorationsInRanges(
-        config,
-        schema,
-        doc,
-        activeRanges,
-      );
-      highlights = calculatedDecs.decorations;
-    } else {
-      let condition: (node: PNode) => boolean;
-      if ('activeInNodeTypes' in config) {
-        const nodeTypes = config.activeInNodeTypes(schema, state);
-        condition = (node) => {
-          return nodeTypes.has(node.type);
-        };
-      } else {
-        condition = (node) => config.activeInNode(node, state);
-      }
-
-      const calculatedDecs = calculateDecorationsInNodes(
-        config,
-        schema,
-        condition,
-        doc,
-        oldState?.doc,
-        oldDecs,
-      );
-      activeRanges = calculatedDecs.activeRanges;
-      highlights = calculatedDecs.decorations;
+  let activeRanges: [number, number][] = [];
+  let highlights: DecorationSet | undefined;
+  if (config.activeInRanges) {
+    activeRanges = config.activeInRanges(state);
+    const calculatedDecs = calculateDecorationsInRanges(
+      config,
+      schema,
+      doc,
+      activeRanges,
+    );
+    highlights = calculatedDecs.decorations;
+  }
+  if (config.activeInNodeTypes || config.activeInNode) {
+    let condition: (node: PNode) => boolean = () => false;
+    if (config.activeInNodeTypes && config.activeInNode) {
+      const nodeTypes = config.activeInNodeTypes(schema, state);
+      condition = (node) => {
+        return nodeTypes.has(node.type) || config.activeInNode(node, state);
+      };
+    } else if (config.activeInNodeTypes) {
+      const nodeTypes = config.activeInNodeTypes(schema, state);
+      condition = (node) => {
+        return nodeTypes.has(node.type);
+      };
+    } else if (config.activeInNode) {
+      condition = (node) => config.activeInNode(node, state);
     }
-  } else {
+
+    const calculatedDecs = calculateDecorationsInNodes(
+      config,
+      schema,
+      condition,
+      doc,
+      oldState?.doc,
+      highlights || oldDecs,
+    );
+    activeRanges = calculatedDecs.activeRanges;
+    highlights = calculatedDecs.decorations;
+  }
+  if (
+    !config.activeInRanges &&
+    !(config.activeInNodeTypes || config.activeInNode)
+  ) {
     const calculatedDecs = calculateDecorationsInNodes(
       config,
       schema,
@@ -236,7 +223,9 @@ function calculateCitationPluginState(
     activeRanges = calculatedDecs.activeRanges;
     highlights = calculatedDecs.decorations;
   }
-
+  if (!highlights) {
+    highlights = DecorationSet.create(doc, []);
+  }
   return {
     highlights,
     activeRanges,

@@ -326,7 +326,6 @@ Make `this.citationPlugin` a tracked reference to the plugin created with the fu
   import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
   @tracked citationPlugin = citationPlugin({
-    type: 'nodes',
     activeInNodeTypes(schema) {
       return new Set([schema.nodes.motivering]);
     },
@@ -335,10 +334,10 @@ Make `this.citationPlugin` a tracked reference to the plugin created with the fu
 
 Configuration:
 
-- type (optional): it can either be 'nodes', or 'ranges'
-  * if 'nodes' is selected, you are expected to pass the `activeInNode` function. It's a function which expects an instance of a prosemirror node and returns whether it should be active in that node. The previously expected `activeInNodeTypes` is marked as deprecated and will be removed in a future release.
-  * if 'ranges' is selected, you are expected to pass the `activeInRanges` function. It's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`
-  * if no type is provided, the citation plugin will be activated document-wide
+- You are expected to set one of two functions
+  * `activeInNode` function. It's a function which expects an instance of a prosemirror node and returns whether it should be active in that node.
+  * `activeInRanges` function. It's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`.
+  * If no function is provided, the citation plugin will be activated document-wide, if both are provided, it will try to do it best in combining the two but this is not encouraged.
 
 - regex: you can provide your custom regex to detect citations, if not the default one will be used
 
@@ -348,14 +347,12 @@ A common usecase is to have the plugin active in the entire document. Here's how
 import { citationPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 
 const configA = {
-  type: 'nodes',
   activeInNode(node, state) {
     return node.type === state.schema.nodes.doc;
   },
 };
 
 const configB = {
-  type: 'ranges',
   activeInRanges(state) {
     // a node's nodeSize follows the Prosemirror definition
     // a non-leaf node's size is the sum of its children's sizes + 2
