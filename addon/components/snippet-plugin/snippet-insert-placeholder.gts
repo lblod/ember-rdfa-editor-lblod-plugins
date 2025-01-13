@@ -64,7 +64,7 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
         @icon={{AddIcon}}
         @iconAlignment='left'
         @skin='link'
-        @disabled={{(not this.placeholderNode)}}
+        @disabled={{not this.placeholderNode}}
         {{on 'click' this.openModal}}
       >
         {{t 'snippet-plugin.insert.placeholder'}}
