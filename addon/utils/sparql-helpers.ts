@@ -20,6 +20,16 @@ interface QueryConfig {
 export const sparqlEscapeString = (value: string) =>
   '"""' + value.replace(/[\\"]/g, (match) => '\\' + match) + '"""';
 
+export const sparqlEscapeUri = (value: string) => {
+  return (
+    '<' +
+    value.replace(/[\\"<>]/g, function (match) {
+      return '\\' + match;
+    }) +
+    '>'
+  );
+};
+
 export async function executeQuery<Binding = Record<string, RDF.Term>>({
   query,
   endpoint,
