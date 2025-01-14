@@ -171,7 +171,46 @@ function calculateCitationPluginState(
   const { doc, schema } = state;
   let activeRanges: [number, number][] = [];
   let highlights: DecorationSet | undefined;
-  if (config.activeInRanges) {
+
+  if (config.activeInNodeTypes || config.activeInNode) {
+    let condition: (node: PNode) => boolean = () => false;
+    const { activeInNode, activeInNodeTypes } = config;
+    if (activeInNodeTypes && activeInNode) {
+      const nodeTypes = activeInNodeTypes(schema, state);
+      condition = (node) => {
+        return nodeTypes.has(node.type) || activeInNode(node, state);
+      };
+    } else if (activeInNodeTypes) {
+      const nodeTypes = activeInNodeTypes(schema, state);
+      condition = (node) => {
+        return nodeTypes.has(node.type);
+      };
+    } else if (activeInNode) {
+      condition = (node) => activeInNode(node, state);
+    }
+    if (config.activeInRanges) {
+      activeRanges = config.activeInRanges(state);
+      const calculatedDecs = calculateDecorationsInRanges(
+        config,
+        schema,
+        doc,
+        activeRanges,
+        condition,
+      );
+      highlights = calculatedDecs.decorations;
+    } else {
+      const calculatedDecs = calculateDecorationsInNodes(
+        config,
+        schema,
+        condition,
+        doc,
+        oldState?.doc,
+        highlights || oldDecs,
+      );
+      activeRanges = calculatedDecs.activeRanges;
+      highlights = calculatedDecs.decorations;
+    }
+  } else if (config.activeInRanges) {
     activeRanges = config.activeInRanges(state);
     const calculatedDecs = calculateDecorationsInRanges(
       config,
@@ -180,38 +219,7 @@ function calculateCitationPluginState(
       activeRanges,
     );
     highlights = calculatedDecs.decorations;
-  }
-  if (config.activeInNodeTypes || config.activeInNode) {
-    let condition: (node: PNode) => boolean = () => false;
-    if (config.activeInNodeTypes && config.activeInNode) {
-      const nodeTypes = config.activeInNodeTypes(schema, state);
-      condition = (node) => {
-        return nodeTypes.has(node.type) || config.activeInNode(node, state);
-      };
-    } else if (config.activeInNodeTypes) {
-      const nodeTypes = config.activeInNodeTypes(schema, state);
-      condition = (node) => {
-        return nodeTypes.has(node.type);
-      };
-    } else if (config.activeInNode) {
-      condition = (node) => config.activeInNode(node, state);
-    }
-
-    const calculatedDecs = calculateDecorationsInNodes(
-      config,
-      schema,
-      condition,
-      doc,
-      oldState?.doc,
-      highlights || oldDecs,
-    );
-    activeRanges = calculatedDecs.activeRanges;
-    highlights = calculatedDecs.decorations;
-  }
-  if (
-    !config.activeInRanges &&
-    !(config.activeInNodeTypes || config.activeInNode)
-  ) {
+  } else {
     const calculatedDecs = calculateDecorationsInNodes(
       config,
       schema,
@@ -294,6 +302,7 @@ function calculateDecorationsInRanges(
   schema: CitationSchema,
   doc: PNode,
   activeRanges: [number, number][],
+  condition?: (node: PNode) => boolean,
 ): { decorations: DecorationSet; activeRanges: [number, number][] } {
   const decorationsToAdd: Decoration[] = [];
   const collector = collectDecorations(
@@ -304,7 +313,12 @@ function calculateDecorationsInRanges(
   );
 
   for (const [start, end] of activeRanges) {
-    doc.nodesBetween(start, end, collector);
+    doc.nodesBetween(start, end, (node, pos) => {
+      if (condition && !condition(node)) {
+        return false;
+      }
+      return collector(node, pos);
+    });
   }
   return {
     decorations: DecorationSet.create(doc, decorationsToAdd),
