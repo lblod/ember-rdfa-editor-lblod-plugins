@@ -122,9 +122,9 @@ export type CitationPlugin = ProsePlugin<CitationPluginState>;
 
 export type CitationPluginConfig = {
   regex?: RegExp;
-  activeInRanges?(state: EditorState): [number, number][];
-  activeInNodeTypes?(schema: Schema, state: EditorState): Set<NodeType>;
-  activeInNode?(node: PNode, state?: EditorState): boolean;
+  activeInRanges?: (state: EditorState) => [number, number][];
+  activeInNodeTypes?: (schema: Schema, state: EditorState) => Set<NodeType>;
+  activeInNode?: (node: PNode, state?: EditorState) => boolean;
 };
 
 export type CitationPluginEmberComponentConfig = CitationPluginConfig & {
