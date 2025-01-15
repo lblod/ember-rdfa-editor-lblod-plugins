@@ -64,35 +64,43 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
     }
     const { selection } = this.controller.mainEditorState;
     const config = this.config;
-    if (!('type' in config)) {
-      // Enable plugin document wide
-      return false;
-    }
-    if (config.type === 'ranges') {
+    if (config.activeInRanges) {
+      let activeInRange;
       const ranges = config.activeInRanges(this.controller.mainEditorState);
       for (const range of ranges) {
         if (selection.from > range[0] && selection.from < range[1]) {
-          return false;
+          activeInRange = true;
         }
       }
-      return true;
-    } else {
-      let condition: (node: PNode) => boolean;
-      if ('activeInNodeTypes' in config) {
-        const nodeTypes = config.activeInNodeTypes(
-          this.controller.schema,
-          this.controller.mainEditorState,
-        );
-        condition = (node) => nodeTypes.has(node.type);
-      } else {
-        condition = (node) =>
-          config.activeInNode(node, this.controller.mainEditorState);
-      }
+      if (!activeInRange) return true;
+    }
+    let condition: ((node: PNode) => boolean) | undefined;
+    const { activeInNode, activeInNodeTypes } = config;
+    if (activeInNodeTypes && activeInNode) {
+      const nodeTypes = activeInNodeTypes(
+        this.controller.schema,
+        this.controller.mainEditorState,
+      );
+      condition = (node) =>
+        nodeTypes.has(node.type) &&
+        activeInNode(node, this.controller.mainEditorState);
+    } else if (activeInNodeTypes) {
+      const nodeTypes = activeInNodeTypes(
+        this.controller.schema,
+        this.controller.mainEditorState,
+      );
+      condition = (node) => nodeTypes.has(node.type);
+    } else if (activeInNode) {
+      condition = (node) => activeInNode(node, this.controller.mainEditorState);
+    }
 
+    if (condition) {
       if (condition(this.controller.mainEditorState.doc)) {
         return false;
       }
       return !findParentNode(condition)(selection);
+    } else {
+      return false;
     }
   }
 
