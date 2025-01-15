@@ -71,6 +71,9 @@ importers:
       ember-cli-htmlbars:
         specifier: ^6.3.0
         version: 6.3.0
+      ember-cli-version-checker:
+        specifier: ^5.1.2
+        version: 5.1.2
       ember-concurrency:
         specifier: ^3.1.1
         version: 3.1.1(@babel/core@7.26.0)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))
