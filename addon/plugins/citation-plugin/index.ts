@@ -205,7 +205,7 @@ function calculateCitationPluginState(
         condition,
         doc,
         oldState?.doc,
-        highlights || oldDecs,
+        oldDecs,
       );
       activeRanges = calculatedDecs.activeRanges;
       highlights = calculatedDecs.decorations;
