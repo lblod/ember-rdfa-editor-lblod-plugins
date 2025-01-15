@@ -6,7 +6,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { SafeString } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
-import { getSnippetIdFromUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 
 export const DEFAULT_CONTENT_STRING = 'block+';
 
@@ -38,26 +37,26 @@ export type ImportedResourceMap = Record<string, Option<string>>;
 
 export type SnippetListProperties = {
   placeholderId: string;
-  listIds: string[];
+  listUris: string[];
   names: string[];
   importedResources: ImportedResourceMap;
 };
 
 export type SnippetListArgs = {
-  id: string;
+  uri: string;
   label: string;
   createdOn: string;
   importedResources: string[];
 };
 
 export class SnippetList {
-  id: string;
+  uri: string;
   label: string;
   createdOn: string | null;
   importedResources: string[];
 
-  constructor({ id, label, createdOn, importedResources }: SnippetListArgs) {
-    this.id = getSnippetIdFromUri(id);
+  constructor({ uri, label, createdOn, importedResources }: SnippetListArgs) {
+    this.uri = uri;
     this.label = label;
     this.createdOn = dateValue(createdOn);
     this.importedResources = importedResources;
