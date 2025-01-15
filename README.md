@@ -337,7 +337,7 @@ Configuration:
 - You are expected to set one of two functions
   * `activeInNode` function. It's a function which expects an instance of a prosemirror node and returns whether it should be active in that node.
   * `activeInRanges` function. It's a function that gets the state of the actual instance of the editor and returns an array of ranges for the plugin to be active in, for example `[[0,50], [70,100]]`.
-  * If no function is provided, the citation plugin will be activated document-wide, if both are provided, it will try to do it best in combining the two but this is not encouraged.
+  * If no function is provided, the citation plugin will be activated document-wide, if both are provided, it will use the range function first and then narrow it down using the node functions given the ranges but this is not encouraged.
 
 - regex: you can provide your custom regex to detect citations, if not the default one will be used
 
