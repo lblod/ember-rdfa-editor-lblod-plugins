@@ -6,7 +6,6 @@ import { trackedReset } from 'tracked-toolbox';
 import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { service } from '@ember/service';
 import { on } from '@ember/modifier';
-import type { SafeString } from '@ember/template/-private/handlebars';
 import not from 'ember-truth-helpers/helpers/not';
 import eq from 'ember-truth-helpers/helpers/eq';
 import IntlService from 'ember-intl/services/intl';
@@ -35,6 +34,7 @@ import {
 import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import { type LocationType } from './map';
+import { SafeString } from '@ember/template';
 
 interface Message {
   skin: AuAlertSignature['Args']['skin'];

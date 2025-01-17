@@ -189,69 +189,6 @@ importers:
       '@types/debug':
         specifier: ^4.1.12
         version: 4.1.12
-      '@types/ember':
-        specifier: ^4.0.11
-        version: 4.0.11(@babel/core@7.26.0)
-      '@types/ember__application':
-        specifier: ^4.0.11
-        version: 4.0.11(@babel/core@7.26.0)
-      '@types/ember__array':
-        specifier: ^4.0.10
-        version: 4.0.10(@babel/core@7.26.0)
-      '@types/ember__component':
-        specifier: ^4.0.22
-        version: 4.0.22(@babel/core@7.26.0)
-      '@types/ember__controller':
-        specifier: ^4.0.12
-        version: 4.0.12(@babel/core@7.26.0)
-      '@types/ember__debug':
-        specifier: ^4.0.8
-        version: 4.0.8(@babel/core@7.26.0)
-      '@types/ember__destroyable':
-        specifier: ^4.0.5
-        version: 4.0.5
-      '@types/ember__engine':
-        specifier: ^4.0.11
-        version: 4.0.11(@babel/core@7.26.0)
-      '@types/ember__error':
-        specifier: ^4.0.6
-        version: 4.0.6
-      '@types/ember__helper':
-        specifier: ^4.0.8
-        version: 4.0.8(@babel/core@7.26.0)
-      '@types/ember__modifier':
-        specifier: ^4.0.9
-        version: 4.0.9(@babel/core@7.26.0)
-      '@types/ember__object':
-        specifier: ^4.0.12
-        version: 4.0.12(@babel/core@7.26.0)
-      '@types/ember__owner':
-        specifier: ^4.0.9
-        version: 4.0.9
-      '@types/ember__polyfills':
-        specifier: ^4.0.6
-        version: 4.0.6
-      '@types/ember__routing':
-        specifier: ^4.0.22
-        version: 4.0.22(@babel/core@7.26.0)
-      '@types/ember__runloop':
-        specifier: ^4.0.10
-        version: 4.0.10(@babel/core@7.26.0)
-      '@types/ember__service':
-        specifier: ^4.0.9
-        version: 4.0.9(@babel/core@7.26.0)
-      '@types/ember__string':
-        specifier: ^3.16.3
-        version: 3.16.3
-      '@types/ember__template':
-        specifier: ^4.0.7
-        version: 4.0.7
-      '@types/ember__test':
-        specifier: ^4.0.6
-        version: 4.0.6(@babel/core@7.26.0)
-      '@types/ember__utils':
-        specifier: ^4.0.7
-        version: 4.0.7(@babel/core@7.26.0)
       '@types/leaflet':
         specifier: ^1.9.12
         version: 1.9.12
@@ -2083,9 +2020,6 @@ packages:
 
   '@types/ember__debug@4.0.8':
     resolution: {integrity: sha512-9wF7STmDHDsUxSjyCq2lpMq/03QOPkBQMGJnV8yOBnVZxB6f+FJH/kxaCprdMkUe7iwAPNEC2zrFFx1tzH75Kg==}
-
-  '@types/ember__destroyable@4.0.5':
-    resolution: {integrity: sha512-spJyZxpvecssbXkaOQYcbnlWgb+TasFaKrgAYVbykZY6saMwUdMOGDDoW6uP/y/+A8Jj/fUIatPWJLepeSfgww==}
 
   '@types/ember__engine@4.0.11':
     resolution: {integrity: sha512-ryR4Q1Xm3kQ3Ap58w10CxV3+vb3hs1cJqi7UZ5IlSdLRql7AbpS6hIjxSQ3EQ4zadeeJ6/D8JJcSwqR7eX3PFA==}
@@ -10567,6 +10501,7 @@ snapshots:
       '@glimmer/interfaces': 0.92.0
       '@glimmer/util': 0.92.0
       '@glimmer/vm': 0.92.0
+    optional: true
 
   '@glimmer/debug@0.92.4':
     dependencies:
@@ -10580,6 +10515,7 @@ snapshots:
       '@glimmer/global-context': 0.92.0
       '@glimmer/interfaces': 0.92.0
       '@glimmer/util': 0.92.0
+    optional: true
 
   '@glimmer/destroyable@0.92.3':
     dependencies:
@@ -10594,6 +10530,7 @@ snapshots:
     dependencies:
       '@glimmer/interfaces': 0.92.0
       '@glimmer/vm': 0.92.0
+    optional: true
 
   '@glimmer/encoder@0.92.3':
     dependencies:
@@ -10606,7 +10543,8 @@ snapshots:
     dependencies:
       '@glimmer/env': 0.1.7
 
-  '@glimmer/global-context@0.92.0': {}
+  '@glimmer/global-context@0.92.0':
+    optional: true
 
   '@glimmer/global-context@0.92.3': {}
 
@@ -10633,6 +10571,7 @@ snapshots:
       '@glimmer/util': 0.92.0
       '@glimmer/validator': 0.92.0
       '@glimmer/vm': 0.92.0
+    optional: true
 
   '@glimmer/manager@0.92.4':
     dependencies:
@@ -10665,6 +10604,7 @@ snapshots:
       '@glimmer/util': 0.92.0
       '@glimmer/vm': 0.92.0
       '@glimmer/wire-format': 0.92.0
+    optional: true
 
   '@glimmer/opcode-compiler@0.92.4':
     dependencies:
@@ -10682,6 +10622,7 @@ snapshots:
   '@glimmer/owner@0.92.0':
     dependencies:
       '@glimmer/util': 0.92.0
+    optional: true
 
   '@glimmer/owner@0.92.3':
     dependencies:
@@ -10697,6 +10638,7 @@ snapshots:
       '@glimmer/util': 0.92.0
       '@glimmer/vm': 0.92.0
       '@glimmer/wire-format': 0.92.0
+    optional: true
 
   '@glimmer/program@0.92.4':
     dependencies:
@@ -10724,6 +10666,7 @@ snapshots:
       '@glimmer/interfaces': 0.92.0
       '@glimmer/util': 0.92.0
       '@glimmer/validator': 0.92.0
+    optional: true
 
   '@glimmer/reference@0.92.3':
     dependencies:
@@ -10747,6 +10690,7 @@ snapshots:
       '@glimmer/validator': 0.92.0
       '@glimmer/vm': 0.92.0
       '@glimmer/wire-format': 0.92.0
+    optional: true
 
   '@glimmer/runtime@0.92.4':
     dependencies:
@@ -10822,6 +10766,7 @@ snapshots:
       '@glimmer/global-context': 0.92.0
       '@glimmer/interfaces': 0.92.0
       '@glimmer/util': 0.92.0
+    optional: true
 
   '@glimmer/validator@0.92.3':
     dependencies:
@@ -10840,6 +10785,7 @@ snapshots:
     dependencies:
       '@glimmer/interfaces': 0.92.0
       '@glimmer/util': 0.92.0
+    optional: true
 
   '@glimmer/vm@0.92.3':
     dependencies:
@@ -11535,6 +11481,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__application@4.0.11(@babel/core@7.26.0)':
     dependencies:
@@ -11547,6 +11494,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__array@4.0.10(@babel/core@7.26.0)':
     dependencies:
@@ -11555,6 +11503,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__component@4.0.22(@babel/core@7.26.0)':
     dependencies:
@@ -11563,6 +11512,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__controller@4.0.12(@babel/core@7.26.0)':
     dependencies:
@@ -11570,6 +11520,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__debug@4.0.8(@babel/core@7.26.0)':
     dependencies:
@@ -11578,8 +11529,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-
-  '@types/ember__destroyable@4.0.5': {}
+    optional: true
 
   '@types/ember__engine@4.0.11(@babel/core@7.26.0)':
     dependencies:
@@ -11588,8 +11538,10 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
-  '@types/ember__error@4.0.6': {}
+  '@types/ember__error@4.0.6':
+    optional: true
 
   '@types/ember__helper@4.0.8(@babel/core@7.26.0)':
     dependencies:
@@ -11599,6 +11551,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__modifier@4.0.9(@babel/core@7.26.0)':
     dependencies:
@@ -11607,6 +11560,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__object@4.0.12(@babel/core@7.26.0)':
     dependencies:
@@ -11615,10 +11569,13 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
-  '@types/ember__owner@4.0.9': {}
+  '@types/ember__owner@4.0.9':
+    optional: true
 
-  '@types/ember__polyfills@4.0.6': {}
+  '@types/ember__polyfills@4.0.6':
+    optional: true
 
   '@types/ember__routing@4.0.22(@babel/core@7.26.0)':
     dependencies:
@@ -11629,6 +11586,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__runloop@4.0.10(@babel/core@7.26.0)':
     dependencies:
@@ -11636,6 +11594,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__service@4.0.9(@babel/core@7.26.0)':
     dependencies:
@@ -11643,12 +11602,15 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__string@3.16.3':
     dependencies:
       '@types/ember__template': 4.0.7
+    optional: true
 
-  '@types/ember__template@4.0.7': {}
+  '@types/ember__template@4.0.7':
+    optional: true
 
   '@types/ember__test@4.0.6(@babel/core@7.26.0)':
     dependencies:
@@ -11656,6 +11618,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/ember__utils@4.0.7(@babel/core@7.26.0)':
     dependencies:
@@ -11663,6 +11626,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
 
   '@types/eslint-scope@3.7.7':
     dependencies:
