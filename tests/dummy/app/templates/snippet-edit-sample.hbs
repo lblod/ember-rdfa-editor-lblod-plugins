@@ -9,10 +9,7 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa=true
           editRdfa=this.editableNodes
-          showRdfaHighlight=true
-          showRdfaHover=true
           showPaper=true
           showToolbarBottom=null
         }}
@@ -78,9 +75,6 @@
                 <Tb.Spacer />
                 <Tb.Group>
                   <TableOfContentsPlugin::ToolbarButton
-                    @controller={{this.controller}}
-                  />
-                  <Plugins::RdfaBlockRender::RdfaBlocksToggle
                     @controller={{this.controller}}
                   />
                   <div class='say-rdfa-toggle'>
