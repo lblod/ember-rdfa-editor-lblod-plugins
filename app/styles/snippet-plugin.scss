@@ -218,8 +218,3 @@ div[typeof='besluitpublicatie:Documentonderdeel']
   .say-snippet-placeholder-node {
   background-color: var(--au-gray-300);
 }
-
-.rdfa-annotations
-  [typeof]:not([typeof='foaf:Document']).say-snippet-placeholder-node {
-  padding-bottom: 2rem;
-}
