@@ -4,7 +4,11 @@ import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/n
 
 export const redacted: MarkSpec = {
   toDOM(_node) {
-    return ['span', { property: EXT('redacted').prefixed }, ['del', {}, 0]];
+    return [
+      'span',
+      { class: 'say-redacted', property: EXT('redacted').prefixed },
+      ['del', {}, 0],
+    ];
   },
   parseDOM: [
     {
