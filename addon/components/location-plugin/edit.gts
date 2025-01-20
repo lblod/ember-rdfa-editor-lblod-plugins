@@ -34,7 +34,7 @@ import {
 import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import { type LocationType } from './map';
-import { SafeString } from '@ember/template';
+import { type SafeString } from '@ember/template';
 
 interface Message {
   skin: AuAlertSignature['Args']['skin'];
