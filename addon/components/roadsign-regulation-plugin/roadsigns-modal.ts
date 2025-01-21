@@ -295,45 +295,68 @@ export default class RoadsignsModal extends Component<Args> {
       .map((sign) => {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();
         const trafficSignPrefix = this.addTrafficSignPrefix(sign);
-        return `<li style="margin-bottom:1rem;">
-        <span property="mobiliteit:wordtAangeduidDoor" resource=${roadSignUri} typeof="mobiliteit:Verkeersbord-Verkeersteken">
-        <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
-          sign.uri
-        }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
-          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${trafficSignPrefix} ${
-            sign.code
-          }</span>
-          <span style="margin-left:0;margin-top:0;">${
-            sign.zonality === POTENTIALLY_ZONAL_URI && zonality === ZONAL_URI
-              ? ' met zonale geldigheid'
-              : ''
-          }
+        return /** html */ `
+        <li style="margin-bottom:1rem;">
+          <span
+            property="mobiliteit:wordtAangeduidDoor"
+            resource=${roadSignUri}
+            typeof="mobiliteit:Verkeersbord-Verkeersteken"
+          >
+            <span
+              property="mobiliteit:heeftVerkeersbordconcept"
+              resource="${sign.uri}"
+              typeof="mobiliteit:Verkeersbordconcept"
+              style="display:flex;align-items:center;"
+            >
+              <span
+                property="skos:prefLabel"
+                style="padding-bottom:0;margin-left:0;margin-right:.4rem;"
+              >
+                ${trafficSignPrefix} ${sign.code}
+              </span>
+              <span style="margin-left:0;margin-top:0;">
+                ${
+                  sign.zonality === POTENTIALLY_ZONAL_URI &&
+                  zonality === ZONAL_URI
+                    ? ' met zonale geldigheid'
+                    : ''
+                }
+              </span>
+            </span>
           </span>
-          </span>
-        </span>
-      </li>`;
+        </li>`;
       })
       .join('\n');
-    const regulationHTML = `<div property="mobiliteit:heeftVerkeersmaatregel" typeof="mobiliteit:Mobiliteitsmaatregel" resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}">
-                            <span style="display:none;" property="prov:wasDerivedFrom" resource="${
-                              measure.uri
-                            }">&nbsp;</span>
-                            <span style="display:none;" property="ext:zonality" resource="${zonality}"></span>
-                            <span style="display:none;" property="ext:temporal" value="${measure.temporal.toString()}"></span>
-                              <div property="dct:description">
-                                ${html}
-                                <p>Dit wordt aangeduid door verkeerstekens:</p>
-                                <ul style="list-style:none;">
-                                  ${signsHTML}
-                                </ul>
-                                ${
-                                  temporalValue === 'true'
-                                    ? 'Deze signalisatie is dynamisch.'
-                                    : ''
-                                }
-                              </div>
-                            </div>
-                          `;
+    const regulationHTML = `<div
+        property="mobiliteit:heeftVerkeersmaatregel"
+        resource="http://data.lblod.info/mobiliteitsmaatregels/${uuid()}"
+        typeof="mobiliteit:Mobiliteitsmaatregel"
+      >
+        <span
+          style="display:none;"
+          property="prov:wasDerivedFrom"
+          resource="${measure.uri}"
+        />
+        <span
+          style="display:none;"
+          property="ext:zonality"
+          resource="${zonality}"
+        />
+        <span
+          style="display:none;"
+          property="ext:temporal"
+          value="${measure.temporal.toString()}"
+        />
+        <div property="dct:description">
+          ${html}
+          <p>Dit wordt aangeduid door verkeerstekens:</p>
+          <ul style="list-style:none;">
+            ${signsHTML}
+          </ul>
+          ${temporalValue === 'true' ? 'Deze signalisatie is dynamisch.' : ''}
+        </div>
+      </div>
+    `;
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
     const passedDecisionUri = this.args.options.decisionContext?.decisionUri;
