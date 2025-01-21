@@ -114,7 +114,7 @@ export class Address {
   declare housenumber?: string;
   declare busnumber?: string;
   declare location: Point;
-  declare truncateAddressValue: boolean;
+  declare truncated: boolean;
 
   constructor(
     args: Pick<
@@ -127,14 +127,14 @@ export class Address {
       | 'busnumber'
       | 'location'
       | 'belgianAddressUri'
-      | 'truncateAddressValue'
+      | 'truncated'
     >,
   ) {
     Object.assign(this, args);
   }
 
   get formatted() {
-    if (this.truncateAddressValue) {
+    if (this.truncated) {
       if (this.housenumber && this.busnumber) {
         return `${this.street} ${this.housenumber} bus ${this.busnumber}`;
       } else if (this.housenumber) {
@@ -283,7 +283,7 @@ export async function resolveStreet(
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
-        truncateAddressValue: false,
+        truncated: false,
         location: new Point({
           uri: nodeContentsUtils.fallbackGeometryUri(),
           location: {
@@ -340,7 +340,7 @@ export async function resolveAddress(
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
         uri: nodeContentsUtils.fallbackAddressUri(),
         belgianAddressUri: result.identificator.id,
-        truncateAddressValue: false,
+        truncated: false,
         location: new Point({
           uri: `${result.identificator.id}/1`,
           location: {

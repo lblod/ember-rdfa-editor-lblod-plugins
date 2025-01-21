@@ -194,7 +194,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
 
   get currentTruncateAddressValue() {
     if (this.currentAddress instanceof Address) {
-      return this.currentAddress.truncateAddressValue;
+      return this.currentAddress.truncated;
     } else {
       return undefined;
     }
@@ -238,7 +238,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
       newMunicipality === this.currentAddress.municipality &&
       newHousenumber === this.currentAddress.housenumber &&
       newBusnumber === this.currentAddress.busnumber &&
-      newTruncateAddressValue === this.currentAddress.truncateAddressValue
+      newTruncateAddressValue === this.currentAddress.truncated
     ) {
       // No need to re-search, nothing has changed
       return;
@@ -252,7 +252,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
             municipality: newMunicipality,
             busnumber: newBusnumber,
             housenumber: newHousenumber,
-            truncateAddressValue: newTruncateAddressValue,
+            truncated: newTruncateAddressValue,
           })
         ) {
           return this.currentAddress;
@@ -265,7 +265,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
                 municipality: newMunicipality,
                 housenumber: newHousenumber,
                 busnumber: newBusnumber,
-                truncateAddressValue: newTruncateAddressValue,
+                truncated: newTruncateAddressValue,
               },
               this.args.nodeContentsUtils,
             );
@@ -276,7 +276,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
               {
                 street: newStreetName,
                 municipality: newMunicipality,
-                truncateAddressValue: newTruncateAddressValue,
+                truncated: newTruncateAddressValue,
               },
               this.args.nodeContentsUtils,
             );
@@ -301,7 +301,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           municipality: newMunicipality,
           housenumber: newHousenumber,
           busnumber: newBusnumber,
-          truncateAddressValue: true,
+          truncated: true,
         },
         this.args.nodeContentsUtils,
       );
