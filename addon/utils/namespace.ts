@@ -102,7 +102,7 @@ export function findChildWithRdfaAttribute(
   attr: string,
   value: Resource,
 ) {
-  return [...element.children].find((child) => {
+  return Array.from(element.children).find((child) => {
     const result = child.getAttribute(attr)?.split(' ');
     return result?.includes(value.full) || result?.includes(value.prefixed);
   });

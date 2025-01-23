@@ -2,6 +2,7 @@ import {
   ADRES,
   ADRES_TYPO,
   DCT,
+  EXT,
   LOCN,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -12,45 +13,70 @@ import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 
 export const constructAddressSpec = (address: Address) => {
-  const housenumberNode = address.housenumber
-    ? [
-        ' ',
-        span(
-          { property: ADRES('Adresvoorstelling.huisnummer').full },
-          address.housenumber,
-        ),
-      ]
-    : [];
-  const busnumberNode = address.busnumber
-    ? [
-        ' bus ',
-        span(
-          { property: ADRES('Adresvoorstelling.busnummer').full },
-          address.busnumber,
-        ),
-      ]
-    : [];
-  const belgianUriNode = address.belgianAddressUri
-    ? [
-        span({
-          property: ADRES('verwijstNaar').full,
-          resource: address.belgianAddressUri,
-        }),
-      ]
-    : [];
+  const streetNode = span(
+    {
+      property: LOCN('thoroughfare').full,
+    },
+    address.street,
+  );
+  const housenumberNode =
+    address.housenumber &&
+    span(
+      { property: ADRES('Adresvoorstelling.huisnummer').full },
+      address.housenumber,
+    );
+  const busnumberNode =
+    address.busnumber &&
+    span(
+      { property: ADRES('Adresvoorstelling.busnummer').full },
+      address.busnumber,
+    );
+  const zipcodeNode = address.truncated
+    ? span({
+        property: LOCN('postcode').full,
+        content: address.zipcode,
+      })
+    : span(
+        {
+          property: LOCN('postcode').full,
+        },
+        address.zipcode,
+      );
+  const municipalityNode = address.truncated
+    ? span({
+        property: ADRES('gemeentenaam').full,
+        language: 'nl',
+        content: address.municipality,
+      })
+    : span(
+        {
+          property: ADRES('gemeentenaam').full,
+          language: 'nl',
+        },
+        address.municipality,
+      );
+  const belgianUriNode =
+    address.belgianAddressUri &&
+    span({
+      property: ADRES('verwijstNaar').full,
+      resource: address.belgianAddressUri,
+    });
+  const truncatedNode = span({
+    property: EXT('truncated').full,
+    content: address.truncated,
+  });
 
   return span(
     { resource: address.uri, typeof: LOCN('Address').full },
-    span(
-      {
-        property: LOCN('thoroughfare').full,
-      },
-      address.street,
-    ),
-    ...housenumberNode,
-    ...busnumberNode,
-    ', ',
-    ...belgianUriNode,
+    streetNode,
+    ...(housenumberNode ? [' ', housenumberNode] : []),
+    ...(busnumberNode ? [' bus ', busnumberNode] : []),
+    address.truncated ? '' : ', ',
+    zipcodeNode,
+    address.truncated ? '' : ' ',
+    municipalityNode,
+    ...(belgianUriNode ? [belgianUriNode] : []),
+    truncatedNode,
     constructGeometrySpec(address.location, ADRES('positie')),
   );
 };
@@ -113,6 +139,7 @@ export const parseOldAddressElement =
         municipality,
         busnumber: busnumber ?? undefined,
         location,
+        truncated: false,
       });
     } else {
       return;
@@ -163,16 +190,29 @@ export const parseAddressElement =
         'property',
         ADRES('Adresvoorstelling.busnummer'),
       )?.textContent;
-    const zipcode = findChildWithRdfaAttribute(
+    const zipCodeNode = findChildWithRdfaAttribute(
       addressNode,
       'property',
       LOCN('postcode'),
-    )?.textContent;
-    const municipality = findChildWithRdfaAttribute(
+    );
+    const zipcode =
+      zipCodeNode?.getAttribute('content') ?? zipCodeNode?.textContent;
+    const municipalityNode = findChildWithRdfaAttribute(
       addressNode,
       'property',
       ADRES('gemeentenaam'),
-    )?.textContent;
+    );
+
+    const municipality =
+      municipalityNode?.getAttribute('content') ??
+      municipalityNode?.textContent;
+
+    const truncated =
+      findChildWithRdfaAttribute(
+        addressNode,
+        'property',
+        EXT('truncated'),
+      )?.getAttribute('content') === 'true';
 
     const pointNode = findChildWithRdfaAttribute(
       addressNode,
@@ -191,6 +231,7 @@ export const parseAddressElement =
         municipality,
         busnumber: busnumber ?? undefined,
         location,
+        truncated,
       });
     } else {
       return;

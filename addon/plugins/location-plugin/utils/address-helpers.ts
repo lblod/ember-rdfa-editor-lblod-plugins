@@ -156,14 +156,15 @@ export class Address {
   sameAs(
     other?: Pick<
       Address,
-      'street' | 'housenumber' | 'busnumber' | 'municipality'
+      'street' | 'housenumber' | 'busnumber' | 'municipality' | 'truncated'
     > | null,
   ) {
     return (
       this.street === other?.street &&
       this.housenumber === other?.housenumber &&
       this.busnumber === other?.busnumber &&
-      this.municipality === other?.municipality
+      this.municipality === other?.municipality &&
+      this.truncated === other?.truncated
     );
   }
 
@@ -256,6 +257,7 @@ export async function fetchStreets(term: string, municipality: string) {
 type StreetInfo = {
   municipality: string;
   street: string;
+  truncated: boolean;
 };
 
 export async function resolveStreet(
@@ -283,7 +285,7 @@ export async function resolveStreet(
         street: unwrap(streetinfo.Thoroughfarename),
         municipality: streetinfo.Municipality,
         zipcode: unwrap(streetinfo.Zipcode),
-        truncated: false,
+        truncated: info.truncated,
         location: new Point({
           uri: nodeContentsUtils.fallbackGeometryUri(),
           location: {
@@ -317,6 +319,7 @@ type AddressInfo = {
   street: string;
   housenumber: string;
   busnumber?: string;
+  truncated: boolean;
 };
 
 export async function resolveAddress(
@@ -340,7 +343,7 @@ export async function resolveAddress(
         municipality: result.gemeente.gemeentenaam.geografischeNaam.spelling,
         uri: nodeContentsUtils.fallbackAddressUri(),
         belgianAddressUri: result.identificator.id,
-        truncated: false,
+        truncated: info.truncated,
         location: new Point({
           uri: `${result.identificator.id}/1`,
           location: {
@@ -361,6 +364,7 @@ export async function resolveAddress(
       {
         street: info.street,
         municipality: info.municipality,
+        truncated: info.truncated,
       },
       nodeContentsUtils,
     );
