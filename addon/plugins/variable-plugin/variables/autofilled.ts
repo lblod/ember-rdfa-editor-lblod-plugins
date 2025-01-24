@@ -129,7 +129,6 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      ...node.attrs,
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
       'data-initialized': node.attrs.initialized,

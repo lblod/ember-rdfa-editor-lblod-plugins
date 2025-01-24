@@ -114,7 +114,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: node.attrs,
+    attrs: {},
     content: 0,
   });
 };
