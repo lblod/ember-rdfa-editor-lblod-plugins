@@ -296,7 +296,7 @@ export default class RoadsignsModal extends Component<Args> {
         const roadSignUri = 'http://data.lblod.info/verkeerstekens/' + uuid();
         const trafficSignPrefix = this.addTrafficSignPrefix(sign);
         return /** html */ `
-        <li style="margin-bottom:1rem;">
+        <li>
           <span
             property="mobiliteit:wordtAangeduidDoor"
             resource=${roadSignUri}
@@ -306,22 +306,18 @@ export default class RoadsignsModal extends Component<Args> {
               property="mobiliteit:heeftVerkeersbordconcept"
               resource="${sign.uri}"
               typeof="mobiliteit:Verkeersbordconcept"
-              style="display:flex;align-items:center;"
             >
               <span
                 property="skos:prefLabel"
-                style="padding-bottom:0;margin-left:0;margin-right:.4rem;"
               >
                 ${trafficSignPrefix} ${sign.code}
               </span>
-              <span style="margin-left:0;margin-top:0;">
-                ${
-                  sign.zonality === POTENTIALLY_ZONAL_URI &&
-                  zonality === ZONAL_URI
-                    ? ' met zonale geldigheid'
-                    : ''
-                }
-              </span>
+              ${
+                sign.zonality === POTENTIALLY_ZONAL_URI &&
+                zonality === ZONAL_URI
+                  ? ' met zonale geldigheid'
+                  : ''
+              }
             </span>
           </span>
         </li>`;
@@ -333,30 +329,28 @@ export default class RoadsignsModal extends Component<Args> {
         typeof="mobiliteit:Mobiliteitsmaatregel"
       >
         <span
-          style="display:none;"
           property="prov:wasDerivedFrom"
           resource="${measure.uri}"
         />
         <span
-          style="display:none;"
           property="ext:zonality"
           resource="${zonality}"
         />
         <span
-          style="display:none;"
           property="ext:temporal"
           value="${measure.temporal.toString()}"
         />
         <div property="dct:description">
           ${html}
           <p>Dit wordt aangeduid door verkeerstekens:</p>
-          <ul style="list-style:none;">
+          <ul>
             ${signsHTML}
           </ul>
           ${temporalValue === 'true' ? 'Deze signalisatie is dynamisch.' : ''}
         </div>
       </div>
     `;
+    console.log('Regulation to insert: ', regulationHTML);
     const domParser = new DOMParser();
     const htmlNode = domParser.parseFromString(regulationHTML, 'text/html');
     const passedDecisionUri = this.args.options.decisionContext?.decisionUri;
