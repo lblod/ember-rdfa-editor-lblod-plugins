@@ -3,12 +3,12 @@ import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   CodeListOption,
+  CodeListOptions,
   fetchCodeListOptions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'reactiveweb/function';
-import { trackedReset } from 'tracked-toolbox';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -16,6 +16,7 @@ import {
   EXT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { tracked } from '@glimmer/tracking';
 export type CodelistEditOptions = {
   endpoint: string;
 };
@@ -25,9 +26,7 @@ type Args = {
 };
 
 export default class CodelistEditComponent extends Component<Args> {
-  @trackedReset('codelistOptions.value') selectedCodelistOption?:
-    | CodeListOption
-    | CodeListOption[];
+  @tracked selectedCodelistOption?: CodeListOption | CodeListOption[];
 
   get controller() {
     return this.args.controller;
@@ -81,11 +80,12 @@ export default class CodelistEditComponent extends Component<Args> {
   }
 
   codelistOptions = trackedFunction(this, async () => {
+    let result: CodeListOptions | undefined;
     if (this.source && this.codelistUri) {
-      return fetchCodeListOptions(this.source, this.codelistUri);
-    } else {
-      return;
+      result = await fetchCodeListOptions(this.source, this.codelistUri);
     }
+    this.selectedCodelistOption = undefined;
+    return result;
   });
 
   get multiSelect() {

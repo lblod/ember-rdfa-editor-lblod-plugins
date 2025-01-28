@@ -18,36 +18,32 @@
       <AuLabel for='codelist-select'>
         {{this.label}}
       </AuLabel>
-      {{#if this.codelistOptions.isResolved}}
-        {{#if this.multiSelect}}
-          <PowerSelectMultiple
-            id='codelist-select'
-            @allowClear={{false}}
-            @searchEnabled={{true}}
-            @searchField='label'
-            @options={{this.codelistOptions.value.options}}
-            @selected={{this.selectedCodelistOption}}
-            @onChange={{this.updateCodelistOption}}
-            as |option|
-          >
-            {{option.label}}
-          </PowerSelectMultiple>
-        {{else}}
-          <PowerSelect
-            id='codelist-select'
-            @allowClear={{false}}
-            @searchEnabled={{true}}
-            @searchField='label'
-            @options={{this.codelistOptions.value.options}}
-            @selected={{this.selectedCodelistOption}}
-            @onChange={{this.updateCodelistOption}}
-            as |option|
-          >
-            {{option.label}}
-          </PowerSelect>
-        {{/if}}
-      {{else if this.codelistOptions.isLoading}}
-        <AuLoader>{{t 'common.loading'}}</AuLoader>
+      {{#if this.multiSelect}}
+        <PowerSelectMultiple
+          id='codelist-select'
+          @allowClear={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
+          @options={{this.codelistOptions.value.options}}
+          @selected={{this.selectedCodelistOption}}
+          @onChange={{this.updateCodelistOption}}
+          as |option|
+        >
+          {{option.label}}
+        </PowerSelectMultiple>
+      {{else}}
+        <PowerSelect
+          id='codelist-select'
+          @allowClear={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
+          @options={{this.codelistOptions.value.options}}
+          @selected={{this.selectedCodelistOption}}
+          @onChange={{this.updateCodelistOption}}
+          as |option|
+        >
+          {{option.label}}
+        </PowerSelect>
       {{/if}}
       <AuButton
         {{on 'click' this.insert}}
