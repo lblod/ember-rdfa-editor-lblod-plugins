@@ -1,4 +1,5 @@
 common:
+  loading: Aan het laden...
   insert: Voeg in
   search:
     loading: Aan het laden…

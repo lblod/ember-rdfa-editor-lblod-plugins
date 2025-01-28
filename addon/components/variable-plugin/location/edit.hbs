@@ -18,32 +18,36 @@
       <AuLabel for='location-select'>
         {{this.label}}
       </AuLabel>
-      {{#if this.multiSelect}}
-        <PowerSelectMultiple
-          id='location-select'
-          @allowClear={{false}}
-          @searchEnabled={{true}}
-          @searchField='label'
-          @options={{this.locationOptions.value.options}}
-          @selected={{this.selectedLocationOption}}
-          @onChange={{this.updateLocationOption}}
-          as |option|
-        >
-          {{option.label}}
-        </PowerSelectMultiple>
-      {{else}}
-        <PowerSelect
-          id='location-select'
-          @allowClear={{false}}
-          @searchEnabled={{true}}
-          @searchField='label'
-          @options={{this.locationOptions.value.options}}
-          @selected={{this.selectedLocationOption}}
-          @onChange={{this.updateLocationOption}}
-          as |option|
-        >
-          {{option.label}}
-        </PowerSelect>
+      {{#if this.locationOptions.isResolved}}
+        {{#if this.multiSelect}}
+          <PowerSelectMultiple
+            id='location-select'
+            @allowClear={{false}}
+            @searchEnabled={{true}}
+            @searchField='label'
+            @options={{this.locationOptions.value.options}}
+            @selected={{this.selectedLocationOption}}
+            @onChange={{this.updateLocationOption}}
+            as |option|
+          >
+            {{option.label}}
+          </PowerSelectMultiple>
+        {{else}}
+          <PowerSelect
+            id='location-select'
+            @allowClear={{false}}
+            @searchEnabled={{true}}
+            @searchField='label'
+            @options={{this.locationOptions.value.options}}
+            @selected={{this.selectedLocationOption}}
+            @onChange={{this.updateLocationOption}}
+            as |option|
+          >
+            {{option.label}}
+          </PowerSelect>
+        {{/if}}
+      {{else if this.locationOptions.isLoading}}
+        <AuLoader>{{t 'common.loading'}}</AuLoader>
       {{/if}}
       <AuButton
         {{on 'click' this.insert}}
