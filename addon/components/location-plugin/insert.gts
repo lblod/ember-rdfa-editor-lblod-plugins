@@ -245,12 +245,12 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       });
     }
     if (toInsert) {
+      this.modalOpen = false;
       replaceSelectionWithLocation(
         this.controller,
         toInsert,
         this.args.config.subjectTypesToLinkTo,
       );
-      this.modalOpen = false;
     }
   }
 

@@ -100,7 +100,6 @@ import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/compo
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 import applyDevTools from 'prosemirror-dev-tools';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
-import { getOwner } from '@ember/application';
 import {
   mandatee_table,
   mandateeTableView,
@@ -119,6 +118,7 @@ import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
+import { getOwner } from '@ember/owner';
 
 export default class BesluitSampleController extends Controller {
   DebugInfo = DebugInfo;
@@ -366,7 +366,7 @@ export default class BesluitSampleController extends Controller {
       shouldShowInvisibles: false,
     }),
     editableNodePlugin(),
-    emberApplication({ application: getOwner(this) }),
+    emberApplication({ application: unwrap(getOwner(this)) }),
     recreateUuidsOnPaste,
     variableAutofillerPlugin(this.config.autofilledVariable),
   ];

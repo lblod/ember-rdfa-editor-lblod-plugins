@@ -472,7 +472,7 @@ location-plugin:
   modal:
     insert: locatie invoegen
     edit: Bewerk locatie
-    confirm: Ingestelde locatie
+    confirm: Locatie instellen
   nodeview:
     placeholder: Voeg locatie in
   types:

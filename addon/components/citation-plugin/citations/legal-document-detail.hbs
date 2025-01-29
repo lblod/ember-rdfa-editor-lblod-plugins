@@ -61,7 +61,9 @@
     <div>
       {{#if this.articleResource.isRunning}}
         <div class='au-o-box'>
-          <AuLoader @padding='large' />
+          <AuLoader @hideMessage={{true}}>{{t
+              'common.search.loading'
+            }}</AuLoader>
           <span class='au-u-hidden-visually'>{{t
               'citaten-plugin.alert.loading'
             }}</span>

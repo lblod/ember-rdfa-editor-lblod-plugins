@@ -84,7 +84,6 @@ import {
   templateComment,
   templateCommentView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
-import { getOwner } from '@ember/application';
 import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-pressed';
@@ -131,6 +130,7 @@ import {
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { getOwner } from '@ember/owner';
 
 export default class RegulatoryStatementSampleController extends Controller {
   SnippetInsert = SnippetInsertRdfaComponent;
@@ -397,7 +397,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
       shouldShowInvisibles: false,
     }),
-    emberApplication({ application: getOwner(this) }),
+    emberApplication({ application: unwrap(getOwner(this)) }),
     editableNodePlugin(),
     recreateUuidsOnPaste,
     variableAutofillerPlugin(this.config.autofilledVariable),

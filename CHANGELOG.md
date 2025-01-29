@@ -1,5 +1,21 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.4.0
+
+### Minor Changes
+
+- [#528](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/528) [`0a70aed`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0a70aedf1d656d7bf85b0c528317f6bbcac62f37) Thanks [@piemonkey](https://github.com/piemonkey)! - Add support for Ember 5.4+
+
+- [#528](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/528) [`b7f426f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b7f426f3bd174320ee2a4963d1f103d6ab60459f) Thanks [@piemonkey](https://github.com/piemonkey)! - Update test-app to use ember-source 5.12
+
+### Patch Changes
+
+- [#525](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/525) [`f7eb06c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f7eb06c3e134f2b044c6ee73f3652cefc2e7d286) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Convert snippet plugin to use uri instead of id
+
+- [#528](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/528) [`7373171`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/73731715f3ebf2dc949ca361e80e935a85534a9b) Thanks [@piemonkey](https://github.com/piemonkey)! - Add support for ember-concurrency 4 and ember-power-select 8
+
+- [#530](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/530) [`3bf983c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3bf983cc910dfe96a88a669f6da2861bf5891bc2) Thanks [@elpoelma](https://github.com/elpoelma)! - Move to builtin ember.js types
+
 ## 26.3.1
 
 ### Patch Changes

@@ -21,8 +21,9 @@
         {{#if @isLoading}}
           <tr>
             <td colspan='100%' class='is-loading-data'>
-              <AuLoader />
-              <AuHelpText>{{t 'editor-plugins.utils.loading'}}</AuHelpText>
+              <AuLoader>
+                {{t 'editor-plugins.utils.loading'}}
+              </AuLoader>
             </td>
           </tr>
         {{else}}

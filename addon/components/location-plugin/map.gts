@@ -283,7 +283,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           {{#each this.vertices as |vertex index|}}
             <layers.marker
               @location={{vertex}}
-              @onClick={{(fn this.onVertexClick index)}}
+              @onClick={{fn this.onVertexClick index}}
               as |marker|
             >
               {{#if (eq index 0)}}
@@ -300,7 +300,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
         {{/if}}
         {{#if (areaLocations @locationType @existingArea)}}
           <layers.polygon
-            @locations={{(areaLocations @locationType @existingArea)}}
+            @locations={{areaLocations @locationType @existingArea}}
           />
         {{/if}}
       </MapWrapper>
