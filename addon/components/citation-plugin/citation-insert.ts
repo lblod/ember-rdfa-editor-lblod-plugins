@@ -82,7 +82,7 @@ export default class EditorPluginsCitationInsertComponent extends Component<Args
         this.controller.mainEditorState,
       );
       condition = (node) =>
-        nodeTypes.has(node.type) &&
+        nodeTypes.has(node.type) ||
         activeInNode(node, this.controller.mainEditorState);
     } else if (activeInNodeTypes) {
       const nodeTypes = activeInNodeTypes(
