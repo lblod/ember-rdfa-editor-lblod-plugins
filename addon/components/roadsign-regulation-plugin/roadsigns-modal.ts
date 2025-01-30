@@ -324,7 +324,8 @@ export default class RoadsignsModal extends Component<Args> {
     const passedDecisionUri = this.args.options.decisionContext?.decisionUri;
     const article = buildArticleStructure(
       this.controller.activeEditorState.schema,
-      this.args.options.articleUriGenrator,
+      this.args.options.articleUriGenerator ??
+        this.args.options.articleUriGenrator,
       this.args.options.decisionContext?.decisionUri,
     );
     const contentFragment = ProseParser.fromSchema(
