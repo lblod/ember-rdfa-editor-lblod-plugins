@@ -1,4 +1,7 @@
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
@@ -8,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { DOMOutputSpec, PNode } from '@lblod/ember-rdfa-editor';
 import {
   isVariable,
+  isVariableNewModel,
   parseLabel,
   parseVariableInstance,
   parseVariableSource,
@@ -26,6 +30,8 @@ import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
+const CONTENT_SELECTOR_NEW_MODEL = `span[property~='${RDF('value').prefixed}'],
+                          span[property~='${RDF('value').full}']`;
 
 const parseDOM = [
   {
@@ -55,6 +61,34 @@ const parseDOM = [
       return false;
     },
     contentElement: CONTENT_SELECTOR,
+  },
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      if (
+        isVariableNewModel(node) &&
+        node.querySelector(CONTENT_SELECTOR_NEW_MODEL) &&
+        parseVariableType(node) === 'location'
+      ) {
+        const mappingResource = node.getAttribute('resource');
+        if (!mappingResource) {
+          return false;
+        }
+        const variableInstance = parseVariableInstance(node);
+        const source = parseVariableSource(node);
+        const label = parseLabel(node);
+        return {
+          variableInstance:
+            variableInstance ?? `http://data.lblod.info/variables/${uuidv4()}`,
+          mappingResource,
+          source,
+          label: label,
+        };
+      }
+
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR_NEW_MODEL,
   },
 ];
 
