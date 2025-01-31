@@ -12,7 +12,7 @@ function buildFilters({
   type?: string;
   codes?: string[];
   category?: string;
-  template?: { value: string };
+  template?: string;
 }) {
   const filters = [];
   if (zonality) {
@@ -42,7 +42,7 @@ function buildFilters({
     filters.push(
       `
       FILTER(BOUND(?basicTemplate))
-      FILTER(CONTAINS(STR(?basicTemplate), ${sparqlEscapeString(template.value)}))`,
+      FILTER(CONTAINS(UCASE(STR(?basicTemplate)), UCASE(${sparqlEscapeString(template)})))`,
     );
   }
   return filters;
@@ -63,7 +63,7 @@ export function generateMeasuresQuery({
   category?: string;
   pageStart?: number;
   count?: boolean;
-  template?: { value: string };
+  template?: string;
 }) {
   const filters = buildFilters({
     zonality,

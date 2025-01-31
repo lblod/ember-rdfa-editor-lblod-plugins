@@ -88,18 +88,10 @@
             <AuLabel>
               {{t 'editor-plugins.roadsign-regulation.modal.filter.text'}}
             </AuLabel>
-            <PowerSelect
-              @renderInPlace={{true}}
-              @verticalPosition='below'
-              @searchEnabled={{true}}
-              @search={{this.searchTemplateValues}}
-              @selected={{this.selectedTemplate}}
-              @allowClear={{true}}
-              @onChange={{this.changeTemplateValue}}
-              as |option|
-            >
-              {{option.value}}
-            </PowerSelect>
+            <AuInput
+              value={{this.searchQuery}}
+              {{on 'input' this.handleSearch}}
+            />
           </div>
         </div>
       </div>

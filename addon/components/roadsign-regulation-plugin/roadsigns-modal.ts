@@ -54,12 +54,13 @@ export default class RoadsignsModal extends Component<Args> {
   pageSize = PAGE_SIZE;
   @tracked pageNumber = 0;
 
-  @tracked selectedTemplate?: { value: string };
   @tracked selectedZonality?: Zonality;
   @tracked selectedCode?: Code;
   @tracked selectedCodeCombination?: Code[];
   @tracked selectedType?: TypeOption;
   @tracked selectedCategory?: Category;
+
+  @tracked searchQuery?: string;
 
   zonalityOptions: Zonality[] = [
     {
@@ -118,12 +119,6 @@ export default class RoadsignsModal extends Component<Args> {
   }
 
   @action
-  changeTemplateValue(template: { value: string }) {
-    this.selectedTemplate = template;
-    this.resetPagination();
-  }
-
-  @action
   changeCodeCombination(value: Code[]) {
     this.selectedCodeCombination = value;
     this.resetPagination();
@@ -132,6 +127,12 @@ export default class RoadsignsModal extends Component<Args> {
   @action
   changeZonality(value: Zonality) {
     this.selectedZonality = value;
+    this.resetPagination();
+  }
+
+  @action
+  handleSearch(event: InputEvent) {
+    this.searchQuery = (event.target as HTMLInputElement).value;
     this.resetPagination();
   }
 
@@ -149,14 +150,6 @@ export default class RoadsignsModal extends Component<Args> {
       term,
       category,
       type,
-    );
-  }
-
-  @action
-  searchTemplateValues(term: string) {
-    return this.roadsignRegistry.searchTemplateValues.perform(
-      this.endpoint,
-      term,
     );
   }
 
@@ -233,7 +226,7 @@ export default class RoadsignsModal extends Component<Args> {
       this.endpoint,
       this.imageBaseUrl,
       {
-        template: this.selectedTemplate,
+        template: this.searchQuery,
         zonality: this.selectedZonality
           ? this.selectedZonality.value
           : undefined,
