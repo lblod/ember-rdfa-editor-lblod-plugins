@@ -183,7 +183,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
       renderable: node,
       tag: 'div',
       attrs: {
-        ...node.attrs,
         'data-snippet-placeholder-id': node.attrs.placeholderId,
         'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
