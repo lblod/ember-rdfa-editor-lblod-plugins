@@ -477,7 +477,7 @@ location-plugin:
     edit: Edit location
     confirm: Set location
     checkbox-message: Truncate address?
-    checkbox-helptext: Checking this will add the postcode and municipalty to the address output.
+    checkbox-helptext: Checking this will remove the zipcode and municipality from the address.
   nodeview:
     placeholder: Insert location
   types:
