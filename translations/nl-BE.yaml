@@ -373,6 +373,7 @@ editor-plugins:
       filter:
         type: Filter op type
         code: Filter op code
+        text: Filter op tekst
         zonal-validity: Filter op zonale geldigheid
       combine-with-code: Combineer met code
     pagination:

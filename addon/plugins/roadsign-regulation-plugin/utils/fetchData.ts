@@ -1,3 +1,4 @@
+import { sparqlEscapeString } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { POTENTIALLY_ZONAL_URI } from './constants';
 
 function buildFilters({
@@ -5,11 +6,13 @@ function buildFilters({
   type,
   codes,
   category,
+  template,
 }: {
   zonality?: string;
   type?: string;
   codes?: string[];
   category?: string;
+  template?: { value: string };
 }) {
   const filters = [];
   if (zonality) {
@@ -23,16 +26,24 @@ function buildFilters({
   if (codes) {
     filters.push(`
         ${codes
-        .map(
-          (uri) => `
+          .map(
+            (uri) => `
               <${uri}> mobiliteit:heeftMaatregelconcept ?uri.
             `,
-        )
-        .join(' ')}
+          )
+          .join(' ')}
     `);
   }
   if (category) {
     filters.push(`FILTER(?signClassification = <${category}>)`);
+  }
+
+  if (template) {
+    filters.push(
+      `
+      FILTER(BOUND(?basicTemplate))
+      FILTER(CONTAINS(STR(?basicTemplate), ${sparqlEscapeString(template.value)}))`,
+    );
   }
   return filters;
 }
@@ -44,6 +55,7 @@ export function generateMeasuresQuery({
   category,
   pageStart = 0,
   count = false,
+  template,
 }: {
   zonality?: string;
   type?: string;
@@ -51,17 +63,25 @@ export function generateMeasuresQuery({
   category?: string;
   pageStart?: number;
   count?: boolean;
+  template?: { value: string };
 }) {
-  const filters = buildFilters({ zonality, type, codes, category });
+  const filters = buildFilters({
+    zonality,
+    type,
+    codes,
+    category,
+    template,
+  });
   let pagination = '';
   if (!count) {
     pagination = `LIMIT 10 OFFSET ${pageStart}`;
   }
   const query = `
-SELECT ${count
+SELECT ${
+    count
       ? '(COUNT(DISTINCT(?template)) AS ?count)'
       : '?uri ?label ?basicTemplate ?annotatedTemplate ?zonality ?temporal'
-    }
+  }
 WHERE {
     ?uri a mobiliteit:Mobiliteitmaatregelconcept;
          skos:prefLabel ?label;
@@ -81,10 +101,11 @@ WHERE {
               ?signUri  dct:type ?signClassification.
   }
 }
-${count
-      ? ''
-      : `GROUP BY ?uri ?label ?template ?zonality\n ORDER BY ASC(strlen(str(?label))) ASC(?label)`
-    }
+${
+  count
+    ? ''
+    : `GROUP BY ?uri ?label ?template ?zonality\n ORDER BY ASC(strlen(str(?label))) ASC(?label)`
+}
 ${pagination}
 `;
   return query;

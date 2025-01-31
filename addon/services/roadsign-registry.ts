@@ -182,6 +182,28 @@ export default class RoadsignRegistryService extends Service {
     },
   );
 
+  searchTemplateValues = task(
+    { restartable: true },
+    async (endpoint: string, templateValueString: string) => {
+      await timeout(DEBOUNCE_MS);
+      const query = `
+      SELECT ?templateValue WHERE {
+      ?s a mobiliteit:Mobiliteitmaatregelconcept;
+      mobiliteit:template ?o.
+      ?o prov:value ?templateValue
+
+      FILTER(CONTAINS(LCASE(?templateValue), ${sparqlEscapeString(templateValueString.toLowerCase())}))
+      }
+      ORDER BY ASC(?templateValue)
+      `;
+      const result = await this.executeQuery.perform(query, endpoint);
+      const templateValues = result.results.bindings.map(
+        (template) => template.templateValue,
+      );
+      return templateValues;
+    },
+  );
+
   fetchMeasures = task(
     { restartable: true },
     async (
@@ -193,12 +215,14 @@ export default class RoadsignRegistryService extends Service {
         codes,
         category,
         pageStart,
+        template,
       }: {
         zonality?: string;
         type?: string;
         codes?: string[];
         category?: string;
         pageStart?: number;
+        template?: { value: string };
       } = {},
     ) => {
       const selectQuery = generateMeasuresQuery({
@@ -207,6 +231,7 @@ export default class RoadsignRegistryService extends Service {
         codes,
         category,
         pageStart,
+        template,
       });
       const countQuery = generateMeasuresQuery({
         zonality,
@@ -214,6 +239,7 @@ export default class RoadsignRegistryService extends Service {
         codes,
         category,
         count: true,
+        template,
       });
       const countResult = await this.executeQuery.perform(countQuery, endpoint);
 

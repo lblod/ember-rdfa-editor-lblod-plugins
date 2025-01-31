@@ -80,7 +80,7 @@ export default class RoadsignsModal extends Component<Args> {
   @tracked tableData: Measure[] = [];
   @tracked count?: number;
   @tracked pageStart = 0;
-
+  @tracked selectedTemplate?: { value: string };
   get isNotTypeSign() {
     if (!this.typeSelected) return true;
     return this.typeSelected.value !== SIGN_TYPE_URI;
@@ -135,6 +135,12 @@ export default class RoadsignsModal extends Component<Args> {
   }
 
   @action
+  changeTemplateValue(template: { value: string }) {
+    this.selectedTemplate = template;
+    this.search();
+  }
+
+  @action
   changeCodeCombination(value: Code[]) {
     this.selectedCodeCombination = value;
     void this.fetchCodeCombinations();
@@ -177,6 +183,14 @@ export default class RoadsignsModal extends Component<Args> {
       term,
       category,
       type,
+    );
+  }
+
+  @action
+  searchTemplateValues(term: string) {
+    return this.roadsignRegistry.searchTemplateValues.perform(
+      this.endpoint,
+      term,
     );
   }
 
@@ -243,6 +257,7 @@ export default class RoadsignsModal extends Component<Args> {
         this.endpoint,
         this.imageBaseUrl,
         {
+          template: this.selectedTemplate,
           zonality: this.zonalitySelected
             ? this.zonalitySelected.value
             : undefined,
