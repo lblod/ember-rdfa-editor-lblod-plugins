@@ -98,6 +98,9 @@ export default class LocationEditComponent extends Component<Args> {
       label: option.label,
       value: unwrap(option.value),
     }));
+    // This a workaround/hack to be able to reset the `selected` option after the `locationOptions` change.
+    // Normally we'd do this with a `trackedReset`, but this gave us `write-after-read` dev-errors at the time of writing this.
+    // TODO: convert this back to a `trackedReset` (or an alternative) once possible.
     this.selectedLocationOption = undefined;
     return result;
   });

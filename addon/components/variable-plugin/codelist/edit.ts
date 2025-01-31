@@ -84,6 +84,9 @@ export default class CodelistEditComponent extends Component<Args> {
     if (this.source && this.codelistUri) {
       result = await fetchCodeListOptions(this.source, this.codelistUri);
     }
+    // This a workaround/hack to be able to reset the `selected` option after the `codelistOptions` change.
+    // Normally we'd do this with a `trackedReset`, but this gave us `write-after-read` dev-errors at the time of writing this.
+    // TODO: convert this back to a `trackedReset` (or an alternative) once possible.
     this.selectedCodelistOption = undefined;
     return result;
   });
