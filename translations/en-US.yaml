@@ -476,6 +476,8 @@ location-plugin:
     insert: Insert location
     edit: Edit location
     confirm: Set location
+    checkbox-message: Truncate address?
+    checkbox-helptext: Checking this will remove the zipcode and municipality from the address.
   nodeview:
     placeholder: Insert location
   types:
@@ -522,7 +524,6 @@ location-plugin:
       http-error: 'Something went wrong while resolving this address, status code: {status}.'
       projection-error: 'Unable to convert location coordinates: {coords}'
       contact: In case of persisting issues, contact <a href="mailto:{email}">{email}</a>.
-
 lpdc-plugin:
   insert:
     title: Insert LPDC

@@ -19,6 +19,8 @@ import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
 import AuFieldset from '@appuniversum/ember-appuniversum/components/au-fieldset';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
+import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox';
+import AuHelptext from '@appuniversum/ember-appuniversum/components/au-help-text';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { CheckIcon } from '@appuniversum/ember-appuniversum/components/icons/check';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
@@ -96,6 +98,14 @@ export default class LocationPluginEditComponent extends Component<Signature> {
     },
   })
   newBusnumber?: string;
+
+  @trackedReset({
+    memo: 'currentAddress',
+    update(component: LocationPluginEditComponent) {
+      return component.currentTruncatedValue;
+    },
+  })
+  newTruncatedValue?: boolean;
 
   get message(): Message | undefined {
     const value = this.newAddress.value as Address | undefined;
@@ -182,6 +192,10 @@ export default class LocationPluginEditComponent extends Component<Signature> {
     }
   }
 
+  get currentTruncatedValue() {
+    return this.currentAddress?.truncated;
+  }
+
   get canUpdateStreet() {
     return !!this.newMunicipality;
   }
@@ -207,14 +221,20 @@ export default class LocationPluginEditComponent extends Component<Signature> {
   }
 
   resolveAddressTask = restartableTask(async () => {
-    const { newStreetName, newMunicipality, newHousenumber, newBusnumber } =
-      this;
+    const {
+      newStreetName,
+      newMunicipality,
+      newHousenumber,
+      newBusnumber,
+      newTruncatedValue,
+    } = this;
     if (
       this.currentAddress &&
       newStreetName === this.currentAddress.street &&
       newMunicipality === this.currentAddress.municipality &&
       newHousenumber === this.currentAddress.housenumber &&
-      newBusnumber === this.currentAddress.busnumber
+      newBusnumber === this.currentAddress.busnumber &&
+      newTruncatedValue === this.currentAddress.truncated
     ) {
       // No need to re-search, nothing has changed
       return;
@@ -228,6 +248,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
             municipality: newMunicipality,
             busnumber: newBusnumber,
             housenumber: newHousenumber,
+            truncated: newTruncatedValue ?? false,
           })
         ) {
           return this.currentAddress;
@@ -240,6 +261,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
                 municipality: newMunicipality,
                 housenumber: newHousenumber,
                 busnumber: newBusnumber,
+                truncated: newTruncatedValue ?? false,
               },
               this.args.nodeContentsUtils,
             );
@@ -250,6 +272,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
               {
                 street: newStreetName,
                 municipality: newMunicipality,
+                truncated: newTruncatedValue ?? false,
               },
               this.args.nodeContentsUtils,
             );
@@ -280,6 +303,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
       this.newStreetName,
       this.newHousenumber,
       this.newBusnumber,
+      this.newTruncatedValue,
     ],
   );
 
@@ -312,6 +336,11 @@ export default class LocationPluginEditComponent extends Component<Signature> {
   @action
   updatePlaceName(event: InputEvent) {
     this.args.setPlaceName((event.target as HTMLInputElement).value);
+  }
+
+  @action
+  truncateAddress(value: boolean) {
+    this.newTruncatedValue = value;
   }
 
   searchMunicipality = restartableTask(async (term: string) => {
@@ -460,6 +489,15 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           {{/if}}
         </div>
       </AuFormRow>
+      {{#if this.newStreetName}}
+        <AuCheckbox
+          @checked={{this.newTruncatedValue}}
+          @onChange={{this.truncateAddress}}
+        >{{t 'location-plugin.modal.checkbox-message'}}</AuCheckbox>
+        <AuHelptext @skin='tertiary'>{{t
+            'location-plugin.modal.checkbox-helptext'
+          }}</AuHelptext>
+      {{/if}}
 
       {{#if this.message}}
         <AuAlert
