@@ -83,6 +83,23 @@
               {{option.label}}
             </PowerSelect>
           </div>
+          <div class='au-o-grid__item au-u-1-4'>
+            <AuLabel>
+              {{t 'editor-plugins.roadsign-regulation.modal.filter.text'}}
+            </AuLabel>
+            <PowerSelect
+              @renderInPlace={{true}}
+              @verticalPosition='below'
+              @searchEnabled={{true}}
+              @search={{this.searchTemplateValues}}
+              @selected={{this.selectedTemplate}}
+              @allowClear={{true}}
+              @onChange={{this.changeTemplateValue}}
+              as |option|
+            >
+              {{option.value}}
+            </PowerSelect>
+          </div>
         </div>
       </div>
       <div class='au-c-body-container'>
