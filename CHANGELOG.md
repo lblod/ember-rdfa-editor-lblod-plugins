@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.5.0
+
+### Minor Changes
+
+- [#521](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/521) [`a0a4981`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a0a498144a122d26fdd962706ae2c69ce0cbafe0) Thanks [@andreo141](https://github.com/andreo141)! - Add support for inserting truncated addresses
+
+### Patch Changes
+
+- [#531](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/531) [`f9e2dfd`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f9e2dfde6de24fe7859fe5ef3f51937b4017513c) Thanks [@elpoelma](https://github.com/elpoelma)! - Clean-up incorrect attribute serializations
+
+- [#532](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/532) [`0676de4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0676de426b869a425b94450c12ae062157886d6c) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix in codelist and location edit components: only show power-select when underlying data promise is resolved. This prevents a (dev-mode) error thrown related to 'write-after-read' issues
+
 ## 26.4.1
 
 ### Patch Changes
