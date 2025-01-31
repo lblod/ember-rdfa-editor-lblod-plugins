@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 26.4.1
+
+### Patch Changes
+
+- [`cad69a1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cad69a1a1df79da92ccfe0ffe7c07984afa5cb07) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix dutch translation of location-plugin insert button
+
+- [#533](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/533) [`7293871`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7293871a4932ed53656803a0928e6d6f8397045c) Thanks [@elpoelma](https://github.com/elpoelma)! - roadsign-regulation-plugin: deprecate `articleUriGenrator` in favour for `articleUriGenerator` option
+
+- [#527](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/527) [`3afa1e0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3afa1e0cb74abee7d668ef6ca9d9398ba37176bb) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Removed the need of specify the type in the citaten plugin config
+
 ## 26.4.0
 
 ### Minor Changes
