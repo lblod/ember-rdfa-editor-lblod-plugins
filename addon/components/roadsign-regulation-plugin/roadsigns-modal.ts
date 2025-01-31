@@ -285,7 +285,7 @@ export default class RoadsignsModal extends Component<Args> {
         <span property="mobiliteit:heeftVerkeersbordconcept" resource="${
           sign.uri
         }" typeof="mobiliteit:Verkeersbordconcept" style="display:flex;align-items:center;">
-          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;"> ${trafficSignPrefix} ${
+          <span property="skos:prefLabel" style="padding-bottom:0;margin-left:0;margin-right:.4rem;">${trafficSignPrefix} ${
             sign.code
           }</span>
           <span style="margin-left:0;margin-top:0;">${
