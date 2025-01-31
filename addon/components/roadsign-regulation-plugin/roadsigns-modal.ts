@@ -1,7 +1,5 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import { v4 as uuid } from 'uuid';
 import { service } from '@ember/service';
 import includeInstructions from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/includeInstructions';
@@ -11,7 +9,6 @@ import {
   ZONAL_URI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
-import { assert } from '@ember/debug';
 import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
@@ -22,6 +19,8 @@ import insertArticle from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decisi
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
 import Sign from '@lblod/ember-rdfa-editor-lblod-plugins/models/sign';
+import { trackedFunction } from 'reactiveweb/function';
+import { tracked } from 'tracked-built-ins';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =
@@ -30,7 +29,7 @@ const ROAD_MARKING_URI =
   'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept';
 const TRAFFIC_LIGHT_URI =
   'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept';
-const measureTypes = [SIGN_TYPE_URI, ROAD_MARKING_URI, TRAFFIC_LIGHT_URI];
+const MEASURE_TYPES = [SIGN_TYPE_URI, ROAD_MARKING_URI, TRAFFIC_LIGHT_URI];
 
 type Option = {
   label: string;
@@ -49,18 +48,20 @@ type Args = {
 };
 
 export default class RoadsignsModal extends Component<Args> {
-  endpoint: string;
-  imageBaseUrl: string;
-
-  pageSize = PAGE_SIZE;
   @service declare roadsignRegistry: RoadsignRegistryService;
   @service declare intl: IntlService;
 
-  @tracked typeSelected?: TypeOption;
+  pageSize = PAGE_SIZE;
+  @tracked pageNumber = 0;
 
-  @tracked categorySelected?: Category;
+  @tracked selectedTemplate?: { value: string };
+  @tracked selectedZonality?: Zonality;
+  @tracked selectedCode?: Code;
+  @tracked selectedCodeCombination?: Code[];
+  @tracked selectedType?: TypeOption;
+  @tracked selectedCategory?: Category;
 
-  @tracked zonalityOptions: Zonality[] = [
+  zonalityOptions: Zonality[] = [
     {
       label: 'Zonaal',
       value: ZONAL_URI,
@@ -70,36 +71,19 @@ export default class RoadsignsModal extends Component<Args> {
       value: NON_ZONAL_URI,
     },
   ];
-  @tracked zonalitySelected?: Zonality;
 
-  descriptionFilter?: string;
-
-  @tracked selectedCode?: Code;
-  @tracked selectedCodeCombination?: Code[];
-  @tracked codeCombinationOptions: Code[] = [];
-  @tracked tableData: Measure[] = [];
-  @tracked count?: number;
-  @tracked pageStart = 0;
-  @tracked selectedTemplate?: { value: string };
-  get isNotTypeSign() {
-    if (!this.typeSelected) return true;
-    return this.typeSelected.value !== SIGN_TYPE_URI;
+  get endpoint() {
+    return this.args.options.endpoint;
   }
 
-  constructor(parent: unknown, args: Args) {
-    super(parent, args);
-    this.endpoint = args.options.endpoint;
-    this.imageBaseUrl = args.options.imageBaseUrl;
-    this.search();
-    void this.roadsignRegistry.loadClassifications.perform(this.endpoint);
+  get imageBaseUrl() {
+    return this.args.options.imageBaseUrl;
   }
 
-  get schema() {
-    return this.args.controller.schema;
-  }
   get controller() {
     return this.args.controller;
   }
+
   get decisionLocation() {
     const decisionRange = getCurrentBesluitRange(this.controller);
     return decisionRange
@@ -108,65 +92,47 @@ export default class RoadsignsModal extends Component<Args> {
   }
 
   @action
-  selectTypeOrCategory(option: Option) {
+  changeTypeOrCategory(option: Option) {
     if (!option) {
-      this.typeSelected = undefined;
-      this.categorySelected = undefined;
+      this.selectedType = undefined;
+      this.selectedCategory = undefined;
     } else {
-      if (measureTypes.includes(option.value)) {
-        this.typeSelected = option;
-        this.categorySelected = undefined;
+      if (MEASURE_TYPES.includes(option.value)) {
+        this.selectedType = option;
+        this.selectedCategory = undefined;
       } else {
-        this.typeSelected = undefined;
-        this.categorySelected = option;
+        this.selectedType = undefined;
+        this.selectedCategory = option;
       }
     }
     this.selectedCode = undefined;
     this.selectedCodeCombination = undefined;
-    this.search();
+    this.resetPagination();
   }
 
   @action
   changeCode(value: Code) {
     this.selectedCode = value;
     this.selectedCodeCombination = undefined;
-    void this.fetchCodeCombinations();
-    this.search();
+    this.resetPagination();
   }
 
   @action
   changeTemplateValue(template: { value: string }) {
     this.selectedTemplate = template;
-    this.search();
+    this.resetPagination();
   }
 
   @action
   changeCodeCombination(value: Code[]) {
     this.selectedCodeCombination = value;
-    void this.fetchCodeCombinations();
-    this.search();
+    this.resetPagination();
   }
 
   @action
-  changeDescription(event: InputEvent) {
-    assert(
-      'changeDescriptionValue must be bound to an input element',
-      event.target instanceof HTMLInputElement,
-    );
-    this.descriptionFilter = event.target.value;
-    this.search();
-  }
-
-  @action
-  selectCategory(value: Category) {
-    this.categorySelected = value;
-    this.search();
-  }
-
-  @action
-  selectZonality(value: Zonality) {
-    this.zonalitySelected = value;
-    this.search();
+  changeZonality(value: Zonality) {
+    this.selectedZonality = value;
+    this.resetPagination();
   }
 
   @action
@@ -176,8 +142,8 @@ export default class RoadsignsModal extends Component<Args> {
 
   @action
   searchCodes(term: string) {
-    const category = this.categorySelected?.value;
-    const type = this.typeSelected?.value;
+    const category = this.selectedCategory?.value;
+    const type = this.selectedType?.value;
     return this.roadsignRegistry.searchCode.perform(
       this.endpoint,
       term,
@@ -194,23 +160,34 @@ export default class RoadsignsModal extends Component<Args> {
     );
   }
 
-  async fetchCodeCombinations() {
-    const selectedCodeValue = unwrap(this.selectedCode?.value);
-    let signs: string[] = [selectedCodeValue];
-    if (this.selectedCodeCombination) {
-      signs = [
-        selectedCodeValue,
-        ...this.selectedCodeCombination.map((s) => s.value),
-      ];
+  codeCombinationOptionsQuery = trackedFunction(this, async () => {
+    const selectedCode = this.selectedCode;
+    if (!selectedCode) {
+      return [];
     }
-    const codes = await this.roadsignRegistry.searchCode.perform(
+    let signs: string[] = [selectedCode.value];
+    if (this.selectedCodeCombination) {
+      signs = [...signs, ...this.selectedCodeCombination.map((s) => s.value)];
+    }
+    return this.roadsignRegistry.searchCode.perform(
       this.endpoint,
       undefined,
       undefined,
       undefined,
       signs,
     );
-    this.codeCombinationOptions = codes;
+  });
+
+  get codeCombinationOptions() {
+    return this.codeCombinationOptionsQuery.value ?? [];
+  }
+
+  classificationsQuery = trackedFunction(this, async () => {
+    return this.roadsignRegistry.loadClassifications.perform(this.endpoint);
+  });
+
+  get classifications() {
+    return this.classificationsQuery.value ?? [];
   }
 
   get typeOptions(): {
@@ -239,12 +216,12 @@ export default class RoadsignsModal extends Component<Args> {
       },
       {
         groupName: 'Categorieën',
-        options: this.roadsignRegistry.classifications,
+        options: this.classifications,
       },
     ];
   }
 
-  fetchSigns = task({ restartable: true }, async () => {
+  measuresQuery = trackedFunction(this, async () => {
     const codes: Code[] = [];
     if (this.selectedCodeCombination) {
       codes.push(...this.selectedCodeCombination);
@@ -252,26 +229,31 @@ export default class RoadsignsModal extends Component<Args> {
     if (this.selectedCode) {
       codes.push(this.selectedCode);
     }
-    const { measures, count } =
-      await this.roadsignRegistry.fetchMeasures.perform(
-        this.endpoint,
-        this.imageBaseUrl,
-        {
-          template: this.selectedTemplate,
-          zonality: this.zonalitySelected
-            ? this.zonalitySelected.value
-            : undefined,
-          type: this.typeSelected ? this.typeSelected.value : undefined,
-          codes: codes.length ? codes.map((code) => code.value) : undefined,
-          category: this.categorySelected
-            ? this.categorySelected.value
-            : undefined,
-          pageStart: this.pageStart,
-        },
-      );
-    this.tableData = measures;
-    this.count = count;
+    return this.roadsignRegistry.fetchMeasures.perform(
+      this.endpoint,
+      this.imageBaseUrl,
+      {
+        template: this.selectedTemplate,
+        zonality: this.selectedZonality
+          ? this.selectedZonality.value
+          : undefined,
+        type: this.selectedType ? this.selectedType.value : undefined,
+        codes: codes.length ? codes.map((code) => code.value) : undefined,
+        category: this.selectedCategory
+          ? this.selectedCategory.value
+          : undefined,
+        pageStart: this.pageNumber,
+      },
+    );
   });
+
+  get measures() {
+    return this.measuresQuery.value?.measures;
+  }
+
+  get measureCount() {
+    return this.measuresQuery.value?.count;
+  }
 
   @action
   async insertHtml(
@@ -394,13 +376,12 @@ export default class RoadsignsModal extends Component<Args> {
   }
 
   @action
-  goToPage(pageStart: number) {
-    this.pageStart = pageStart;
-    void this.fetchSigns.perform();
+  resetPagination() {
+    this.goToPage(0);
   }
+
   @action
-  search() {
-    this.pageStart = 0;
-    void this.fetchSigns.perform();
+  goToPage(pageStart: number) {
+    this.pageNumber = pageStart;
   }
 }

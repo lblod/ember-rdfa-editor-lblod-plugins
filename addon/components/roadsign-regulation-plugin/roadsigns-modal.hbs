@@ -21,9 +21,9 @@
               @verticalPosition='below'
               @searchEnabled={{true}}
               @searchField='label'
-              @selected={{or this.typeSelected this.categorySelected}}
+              @selected={{or this.selectedType this.selectedCategory}}
               @allowClear={{true}}
-              @onChange={{this.selectTypeOrCategory}}
+              @onChange={{this.changeTypeOrCategory}}
               as |option|
             >
               {{option.label}}
@@ -76,9 +76,9 @@
               @options={{this.zonalityOptions}}
               @verticalPosition='below'
               @searchEnabled={{false}}
-              @selected={{this.zonalitySelected}}
+              @selected={{this.selectedZonality}}
               @allowClear={{true}}
-              @onChange={{this.selectZonality}}
+              @onChange={{this.changeZonality}}
               as |option|
             >
               {{option.label}}
@@ -105,13 +105,13 @@
       </div>
       <div class='au-c-body-container'>
         <RoadsignRegulationPlugin::RoadsignsTable
-          @content={{this.tableData}}
-          @isLoading={{this.fetchSigns.isRunning}}
+          @content={{this.measures}}
+          @isLoading={{this.measuresQuery.isLoading}}
           @insert={{this.insertHtml}}
-          @count={{this.count}}
+          @count={{this.measureCount}}
           @goToPage={{this.goToPage}}
           @pageSize={{this.pageSize}}
-          @pageStart={{this.pageStart}}
+          @pageStart={{this.pageNumber}}
           @options={{@options}}
         />
       </div>

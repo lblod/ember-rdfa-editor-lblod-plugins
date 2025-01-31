@@ -46,7 +46,7 @@ export default class RoadsignRegistryService extends Service {
       endpoint,
     );
     const bindings = result.results.bindings;
-    this.classifications = bindings.map((binding) => ({
+    return bindings.map((binding) => ({
       value: unwrap(binding['classificationUri']?.value),
       label: unwrap(binding['classificationLabel']?.value),
     }));
