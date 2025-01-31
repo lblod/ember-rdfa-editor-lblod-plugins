@@ -1,4 +1,5 @@
 common:
+  loading: Loading...
   insert: Insert
   search:
     loading: Loading…

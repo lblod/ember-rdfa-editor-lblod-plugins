@@ -11,8 +11,8 @@ import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'reactiveweb/function';
-import { trackedReset } from 'tracked-toolbox';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
+import { tracked } from '@glimmer/tracking';
 
 export type LocationEditOptions = {
   endpoint: string;
@@ -24,9 +24,7 @@ type Args = {
   options: LocationEditOptions;
 };
 export default class LocationEditComponent extends Component<Args> {
-  @trackedReset('locationOptions.value') selectedLocationOption?:
-    | CodeListOption
-    | CodeListOption[];
+  @tracked selectedLocationOption?: CodeListOption | CodeListOption[];
 
   get controller() {
     return this.args.controller;
@@ -100,6 +98,10 @@ export default class LocationEditComponent extends Component<Args> {
       label: option.label,
       value: unwrap(option.value),
     }));
+    // This a workaround/hack to be able to reset the `selected` option after the `locationOptions` change.
+    // Normally we'd do this with a `trackedReset`, but this gave us `write-after-read` dev-errors at the time of writing this.
+    // TODO: convert this back to a `trackedReset` (or an alternative) once possible.
+    this.selectedLocationOption = undefined;
     return result;
   });
 
