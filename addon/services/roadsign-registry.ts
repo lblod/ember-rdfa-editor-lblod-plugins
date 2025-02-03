@@ -2,13 +2,13 @@ import Service from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { generateMeasuresQuery } from '../plugins/roadsign-regulation-plugin/utils/fetchData';
-import Instruction from '../models/instruction';
-import Measure from '../models/measure';
-import Sign from '../models/sign';
 import { IBindings } from 'fetch-sparql-endpoint';
 import dataFactory from '@rdfjs/data-model';
 import { optionMapOr, unwrap } from '../utils/option';
 import { sparqlEscapeString } from '../utils/sparql-helpers';
+import Instruction from '../plugins/roadsign-regulation-plugin/models/instruction';
+import Measure from '../plugins/roadsign-regulation-plugin/models/measure';
+import Sign from '../plugins/roadsign-regulation-plugin/models/sign';
 
 const PREFIXES = `
 PREFIX ex: <http://example.org#>

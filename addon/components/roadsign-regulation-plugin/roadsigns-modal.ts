@@ -9,7 +9,6 @@ import {
   ZONAL_URI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import RoadsignRegistryService from '@lblod/ember-rdfa-editor-lblod-plugins/services/roadsign-registry';
-import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
@@ -18,9 +17,10 @@ import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-
 import insertArticle from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-article-command';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
-import Sign from '@lblod/ember-rdfa-editor-lblod-plugins/models/sign';
 import { trackedFunction } from 'reactiveweb/function';
 import { tracked } from 'tracked-built-ins';
+import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/models/measure';
+import Sign from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/models/sign';
 
 const PAGE_SIZE = 10;
 const SIGN_TYPE_URI =

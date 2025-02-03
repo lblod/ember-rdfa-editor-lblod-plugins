@@ -1,4 +1,4 @@
-import Instruction from '@lblod/ember-rdfa-editor-lblod-plugins/models/instruction';
+import Instruction from '../models/instruction';
 
 export default function includeInstructions(
   html: string,

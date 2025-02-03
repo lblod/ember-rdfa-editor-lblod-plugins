@@ -6,7 +6,7 @@ import {
   POTENTIALLY_ZONAL_URI,
   ZONAL_URI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
-import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/models/measure';
+import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/models/measure';
 
 type Args = {
   measure: Measure;

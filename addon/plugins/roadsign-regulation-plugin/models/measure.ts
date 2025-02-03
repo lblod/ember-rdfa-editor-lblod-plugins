@@ -1,7 +1,7 @@
 import { tracked } from '@glimmer/tracking';
 import { IBindings } from 'fetch-sparql-endpoint';
-import { unwrap } from '../utils/option';
 import Sign from './sign';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export default class Measure {
   @tracked signs: Sign[] = [];

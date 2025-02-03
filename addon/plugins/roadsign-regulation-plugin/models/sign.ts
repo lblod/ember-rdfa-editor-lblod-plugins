@@ -1,5 +1,5 @@
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { IBindings } from 'fetch-sparql-endpoint';
-import { unwrap } from '../utils/option';
 
 export default class Sign {
   constructor(
