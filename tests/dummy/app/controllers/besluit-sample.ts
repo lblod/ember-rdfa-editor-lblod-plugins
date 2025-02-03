@@ -256,7 +256,7 @@ export default class BesluitSampleController extends Controller {
         defaultDecisionsGovernmentName: 'Edegem',
       },
       roadsignRegulation: {
-        endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
+        endpoint: 'http://mow.localhost/sparql',
         imageBaseUrl: 'https://dev-vlag.roadsigns.lblod.info',
       },
       besluitType: {
