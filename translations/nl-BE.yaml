@@ -382,7 +382,7 @@ editor-plugins:
       header:
         code: Code
         image: Afbeelding
-        template: Template
+        preview: Preview
         category: Categorie
       content:
         image:

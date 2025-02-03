@@ -226,7 +226,7 @@ export default class RoadsignsModal extends Component<Args> {
       this.endpoint,
       this.imageBaseUrl,
       {
-        template: this.searchQuery,
+        previewSearchString: this.searchQuery,
         zonality: this.selectedZonality
           ? this.selectedZonality.value
           : undefined,
@@ -260,11 +260,7 @@ export default class RoadsignsModal extends Component<Args> {
         this.endpoint,
       );
     const zonality = zonalityValue ? zonalityValue : measure.zonality;
-    const html = includeInstructions(
-      measure.annotatedTemplate,
-      instructions,
-      true,
-    );
+    const html = includeInstructions(measure.preview, instructions, true);
 
     const signsHTML = measure.signs
       .map((sign) => {

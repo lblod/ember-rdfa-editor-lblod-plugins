@@ -383,7 +383,7 @@ editor-plugins:
       header:
         code: Code
         image: Image
-        template: Template
+        preview: Preview
         category: Category
       content:
         image:

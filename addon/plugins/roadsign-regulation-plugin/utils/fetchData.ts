@@ -6,13 +6,13 @@ function buildFilters({
   type,
   codes,
   category,
-  template,
+  previewSearchString,
 }: {
   zonality?: string;
   type?: string;
   codes?: string[];
   category?: string;
-  template?: string;
+  previewSearchString?: string;
 }) {
   const filters = [];
   if (zonality) {
@@ -38,11 +38,11 @@ function buildFilters({
     filters.push(`FILTER(?signClassification = <${category}>)`);
   }
 
-  if (template) {
+  if (previewSearchString) {
     filters.push(
       `
-      FILTER(BOUND(?basicTemplate))
-      FILTER(CONTAINS(UCASE(STR(?basicTemplate)), UCASE(${sparqlEscapeString(template)})))`,
+      FILTER(BOUND(?preview))
+      FILTER(CONTAINS(UCASE(STR(?preview)), UCASE(${sparqlEscapeString(previewSearchString)})))`,
     );
   }
   return filters;
@@ -55,7 +55,7 @@ export function generateMeasuresQuery({
   category,
   pageStart = 0,
   count = false,
-  template,
+  previewSearchString,
 }: {
   zonality?: string;
   type?: string;
@@ -63,14 +63,14 @@ export function generateMeasuresQuery({
   category?: string;
   pageStart?: number;
   count?: boolean;
-  template?: string;
+  previewSearchString?: string;
 }) {
   const filters = buildFilters({
     zonality,
     type,
     codes,
     category,
-    template,
+    previewSearchString,
   });
   let pagination = '';
   if (!count) {
@@ -80,15 +80,15 @@ export function generateMeasuresQuery({
 SELECT ${
     count
       ? '(COUNT(DISTINCT(?template)) AS ?count)'
-      : '?uri ?label ?basicTemplate ?annotatedTemplate ?zonality ?temporal'
+      : '?uri ?label ?template ?preview ?zonality ?temporal'
   }
 WHERE {
     ?uri a mobiliteit:Mobiliteitmaatregelconcept;
          skos:prefLabel ?label;
          ext:zonality ?zonality;
-         mobiliteit:template ?template.
-         ?template ext:annotated ?annotatedTemplate;
-                   prov:value ?basicTemplate.
+         mobiliteit:template ?templateUri.
+         ?templateUri prov:value ?template;
+                      ext:preview ?preview.
     ?signUri a  ?signType;
                 mobiliteit:heeftMaatregelconcept ?uri;
                 skos:prefLabel ?signCode.
@@ -104,7 +104,7 @@ WHERE {
 ${
   count
     ? ''
-    : `GROUP BY ?uri ?label ?template ?zonality\n ORDER BY ASC(strlen(str(?label))) ASC(?label)`
+    : `GROUP BY ?uri ?label ?templateUri ?zonality\n ORDER BY ASC(strlen(str(?label))) ASC(?label)`
 }
 ${pagination}
 `;

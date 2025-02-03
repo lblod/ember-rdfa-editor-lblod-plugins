@@ -11,7 +11,7 @@ export default class Measure {
     readonly uri: string,
     readonly label: string,
     readonly template: string,
-    readonly annotatedTemplate: string,
+    readonly preview: string,
     readonly zonality: string,
     readonly temporal: string | false,
     signs: Sign[] = [],
@@ -22,17 +22,10 @@ export default class Measure {
   static fromBinding(binding: IBindings) {
     const uri = unwrap(binding['uri']?.value);
     const label = unwrap(binding['label']?.value);
-    const template = unwrap(binding['basicTemplate']?.value);
+    const template = unwrap(binding['template']?.value);
     const temporal = binding['temporal']?.value ?? false;
-    const annotatedTemplate = unwrap(binding['annotatedTemplate']?.value);
+    const preview = unwrap(binding['preview']?.value);
     const zonality = unwrap(binding['zonality']?.value);
-    return new Measure(
-      uri,
-      label,
-      template,
-      annotatedTemplate,
-      zonality,
-      temporal,
-    );
+    return new Measure(uri, label, template, preview, zonality, temporal);
   }
 }

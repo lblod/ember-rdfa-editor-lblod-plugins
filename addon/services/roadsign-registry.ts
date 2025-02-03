@@ -193,14 +193,14 @@ export default class RoadsignRegistryService extends Service {
         codes,
         category,
         pageStart,
-        template,
+        previewSearchString,
       }: {
         zonality?: string;
         type?: string;
         codes?: string[];
         category?: string;
         pageStart?: number;
-        template?: string;
+        previewSearchString?: string;
       } = {},
     ) => {
       await timeout(DEBOUNCE_MS);
@@ -210,7 +210,7 @@ export default class RoadsignRegistryService extends Service {
         codes,
         category,
         pageStart,
-        template,
+        previewSearchString,
       });
       const countQuery = generateMeasuresQuery({
         zonality,
@@ -218,7 +218,7 @@ export default class RoadsignRegistryService extends Service {
         codes,
         category,
         count: true,
-        template,
+        previewSearchString,
       });
       const countResult = await this.executeQuery.perform(countQuery, endpoint);
 
