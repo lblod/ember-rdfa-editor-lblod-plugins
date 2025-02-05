@@ -113,7 +113,9 @@ import {
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
-export default class RegulatoryStatementSampleController extends Controller {
+export default class SnippetEditController extends Controller {
+  queryParams = ['editableNodes'];
+
   SnippetListSelect = SnippetListSelect;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;

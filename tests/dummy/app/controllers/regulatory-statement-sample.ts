@@ -133,6 +133,8 @@ import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOwner } from '@ember/owner';
 
 export default class RegulatoryStatementSampleController extends Controller {
+  queryParams = ['editableNodes'];
+
   SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelect;
   DebugInfo = DebugInfo;
