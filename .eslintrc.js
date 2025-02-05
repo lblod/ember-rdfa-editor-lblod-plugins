@@ -119,6 +119,7 @@ module.exports = {
         '@typescript-eslint/restrict-plus-operands': 'error',
         '@typescript-eslint/restrict-template-expressions': 'error',
         '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
+        '@typescript-eslint/no-shadow': 'error',
       },
     },
     {
