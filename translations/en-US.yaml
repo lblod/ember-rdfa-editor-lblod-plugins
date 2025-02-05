@@ -25,6 +25,10 @@ structure-plugin:
     section: Section
     subsection: Subsection
     paragraph: Paragraph
+  format:
+    plain-number: '{number}.'
+    name: '{name} {number}:'
+    section-symbol: '§{number}.'
 
 article-structure-plugin:
   insert:

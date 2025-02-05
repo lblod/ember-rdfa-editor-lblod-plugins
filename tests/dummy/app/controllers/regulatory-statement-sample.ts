@@ -79,6 +79,10 @@ import {
   osloLocation,
   osloLocationView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
+import {
+  structureWithConfig,
+  structureViewWithConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
   templateComment,
@@ -167,6 +171,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         rdfaAware: true,
       }),
       paragraph,
+      structure: structureWithConfig(this.config.structure),
       document_title,
 
       repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
@@ -328,6 +333,10 @@ export default class RegulatoryStatementSampleController extends Controller {
       lmb: {
         endpoint: 'http://localhost/vendor-proxy/query',
       },
+      structure: {
+        fullLengthArticles: false,
+        onlyArticleSpecialName: true,
+      },
       citation: {
         type: 'nodes',
         activeInNode(node: PNode, state: EditorState) {
@@ -381,6 +390,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment: templateCommentView(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
+      structure: structureViewWithConfig(this.config.structure)(controller),
       snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
         controller,
       ),

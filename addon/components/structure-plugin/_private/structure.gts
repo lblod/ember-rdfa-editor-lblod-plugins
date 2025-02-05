@@ -23,10 +23,9 @@ import didUpdate from '@ember/render-modifiers/modifiers/did-update';
 import { element } from 'ember-element-helper';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import {
-  StructureType,
-  getNameForStructureType,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import { getNameForStructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import { StructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -78,17 +77,19 @@ export default class Structure extends Component<Sig> {
     return 'div';
   }
   get titleAttr() {
-    return this.node.attrs.title;
+    return this.node.attrs.title as string;
   }
   get headerTag() {
-    return this.node.attrs.headerTag;
+    return this.node.attrs.headerTag as string;
   }
   get number() {
-    return this.node.attrs.number;
+    return this.node.attrs.number as number;
   }
-
-  get displayStructureName() {
-    return this.node.attrs.displayStructureName as boolean;
+  get romanizeNumber() {
+    return this.node.attrs.romanize as boolean;
+  }
+  get headerFormat() {
+    return this.node.attrs.headerFormat as string;
   }
 
   get structureType() {
@@ -101,7 +102,7 @@ export default class Structure extends Component<Sig> {
 
   get structureName() {
     const docLang = this.controller.mainEditorState.doc.attrs.lang;
-    if (this.displayStructureName) {
+    if (this.headerFormat === 'name') {
       return getNameForStructureType(
         this.structureType,
         this.number,
@@ -118,22 +119,31 @@ export default class Structure extends Component<Sig> {
   }
 
   get title() {
+    const docLang = this.controller.mainEditorState.doc.attrs.lang;
     if (
       this.node.attrs.isOnlyArticle &&
       this.node.attrs.onlyArticleSpecialName
     ) {
-      const docLang = this.controller.mainEditorState.doc.attrs.lang;
       return this.intl.t('structure-plugin.only-article-title', {
         locale: docLang,
       });
     } else {
-      return `${this.structureName} ${this.number}.`;
+      return this.intl.t(
+        `structure-plugin.format.${
+          this.node.attrs.headerFormat || 'plain-number'
+        }`,
+        {
+          locale: docLang,
+          number: this.romanizeNumber ? romanize(this.number) : this.number,
+          name: this.structureName,
+        },
+      );
     }
   }
 
   @action
   onAttrsUpdate() {
-    if (this.titleAttr !== this.innerEditor?.htmlContent) {
+    if (this.titleAttr && this.titleAttr !== this.innerEditor?.htmlContent) {
       this.innerEditor?.setInnerHtmlContent(this.titleAttr);
     }
   }

@@ -11,6 +11,7 @@ import {
   ELI,
   PROV,
   RDF,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getIntlService } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
@@ -25,6 +26,10 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import IntlService from 'ember-intl/services/intl';
+import { romanize } from '../article-structure-plugin/utils/romanize';
+import { StructureType } from './structure-types';
+import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
+
 const rdfaAware = true;
 
 export function getNameForStructureType(
@@ -45,12 +50,13 @@ export function getNameForStructureType(
   }
 }
 
-export type StructureType =
-  | 'article'
-  | 'chapter'
-  | 'section'
-  | 'subsection'
-  | 'paragraph';
+function getNumberForDisplay(number: number, romanizeNumber: boolean): string {
+  if (romanizeNumber) {
+    return romanize(number);
+  } else {
+    return number.toString();
+  }
+}
 
 type StructureConfig = {
   fullLengthArticles?: boolean;
@@ -88,11 +94,14 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         default: false,
       },
       structureType: {},
-      displayStructureName: {
+      headerTag: {
+        default: 'span',
+      },
+      romanize: {
         default: false,
       },
-      headerTag: {
-        default: 'h3',
+      headerFormat: {
+        default: 'plain-number',
       },
 
       sayRenderAs: { default: 'structure' },
@@ -115,17 +124,19 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         ? parser.parseFromString(node.attrs.title, 'text/html').body
             .firstElementChild
         : null;
-      const displayStructureName = node.attrs.displayStructureName as boolean;
+      const headerFormat = node.attrs.headerFormat as string;
+      const romanizeNumber = node.attrs.romanize as boolean;
       const intlService = getIntlService(state);
-      const structureName = displayStructureName
-        ? getNameForStructureType(
-            structureType,
-            number,
-            node.attrs.fullLengthArticles,
-            intlService,
-            state.doc.attrs.lang,
-          )
-        : null;
+      const structureName =
+        headerFormat === 'name'
+          ? getNameForStructureType(
+              structureType,
+              number,
+              node.attrs.fullLengthArticles,
+              intlService,
+              state.doc.attrs.lang,
+            )
+          : null;
       let headerSpec;
 
       const onlyArticleTitle = intlService
@@ -144,19 +155,21 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
                 [
                   'span',
                   { 'data-say-structure-header-name': true },
-                  `${structureName} `,
+                  `${displayOnlyArticle ? onlyArticleTitle : structureName} `,
                 ],
               ]
             : []),
           [
             'span',
             {
+              style: displayOnlyArticle ? 'display: none;' : '',
               'data-say-structure-header-number': true,
               property: ELI('number').full,
+              datatype: XSD('string').full,
             },
-            number.toString(),
+            getNumberForDisplay(number, romanizeNumber),
           ],
-          '. ',
+          displayOnlyArticle || headerFormat === 'name' ? ': ' : '. ',
           ['span', { 'data-say-structure-header-content': true }, titleHTML],
         ];
       } else {
@@ -177,8 +190,9 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
               style: displayOnlyArticle ? 'display: none;' : '',
               'data-say-structure-header-number': true,
               property: ELI('number').full,
+              datatype: XSD('string').full,
             },
-            number.toString(),
+            getNumberForDisplay(number, romanizeNumber),
           ],
           displayOnlyArticle ? '' : '.',
         ];
@@ -190,9 +204,10 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
           'data-say-render-as': 'structure',
           'data-say-has-title': hasTitle,
           'data-say-structure-type': structureType,
-          'data-say-display-structure-name': displayStructureName,
+          'data-say-header-format': headerFormat,
           'data-say-header-tag': tag,
           'data-say-number': number,
+          'data-say-romanize': romanizeNumber,
           'data-say-is-only-article': isOnlyArticle,
         },
         content: [
@@ -215,11 +230,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             attrs.rdfaNodeType === 'resource' &&
             node.dataset.sayRenderAs === 'structure'
           ) {
-            const hasTitle =
-              node.dataset.sayHasTitle && node.dataset.sayHasTitle !== 'false';
-            const isOnlyArticle =
-              node.dataset.sayIsOnlyArticle &&
-              node.dataset.sayIsOnlyArticle !== 'false';
+            const headerFormat = node.dataset.sayHeaderFormat;
             // strict selector here to avoid false positives when structures are nested
             // :scope refers to the element on which we call querySelector
             const titleElement = node.querySelector(
@@ -236,12 +247,16 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             return {
               ...attrs,
               properties: filteredProperties,
-              hasTitle,
+              hasTitle: parseBooleanDatasetAttribute(node, 'sayHasTitle'),
               structureType: node.dataset.sayStructureType,
-              displayStructureName: node.dataset.sayDisplayStructureName,
+              headerFormat,
               headerTag: node.dataset.sayHeaderTag,
               number: Number(node.dataset.sayNumber),
-              isOnlyArticle,
+              romanize: parseBooleanDatasetAttribute(node, 'sayRomanize'),
+              isOnlyArticle: parseBooleanDatasetAttribute(
+                node,
+                'sayIsOnlyArticle',
+              ),
               title,
             };
           }
@@ -293,10 +308,11 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
               ],
               headerTag: 'h5',
               structureType: 'article',
-              displayStructureName: true,
+              headerFormat: 'name',
               hasTitle: false,
               isOnlyArticle,
               number,
+              romanize: false,
             };
           }
           return false;

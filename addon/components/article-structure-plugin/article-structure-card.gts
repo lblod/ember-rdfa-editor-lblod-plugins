@@ -1,10 +1,6 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import {
-  ArticleStructurePluginOptions,
-  StructureSpec,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
@@ -12,36 +8,57 @@ import t from 'ember-intl/helpers/t';
 import { not } from 'ember-truth-helpers';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
-import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
+import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
+import {
+  type StructurePluginOptions,
+  type StructureType,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 
 type Args = {
   controller: SayController;
-  options: ArticleStructurePluginOptions;
+  options: StructurePluginOptions;
 };
+
 export default class EditorPluginsArticleStructureCardComponent extends Component<Args> {
   @service declare intl: IntlService;
 
-  get structureTypes() {
-    return this.args.options;
+  get structureTypes(): StructureType[] {
+    return [
+      'title',
+      'chapter',
+      'section',
+      'subsection',
+      'article',
+      'paragraph',
+    ];
   }
 
   get controller() {
     return this.args.controller;
   }
 
+  getTranslationKey = (type: StructureType) =>
+    `article-structure-plugin.insert.${type}`;
+
   @action
-  insertStructure(spec: StructureSpec) {
-    this.args.controller.doCommand(insertStructure(spec, this.intl), {
-      view: this.controller.mainEditorView,
-    });
+  insertStructure(type: StructureType) {
+    this.args.controller.doCommand(
+      insertStructure(type, this.args.options.uriGenerator),
+      {
+        view: this.controller.mainEditorView,
+      },
+    );
     this.args.controller.focus();
   }
 
-  canInsertStructure = (spec: StructureSpec) =>
-    this.args.controller.checkCommand(insertStructure(spec, this.intl), {
-      view: this.controller.mainEditorView,
-    });
+  canInsertStructure = (type: StructureType) =>
+    this.args.controller.checkCommand(
+      insertStructure(type, this.args.options.uriGenerator),
+      {
+        view: this.controller.mainEditorView,
+      },
+    );
 
   <template>
     <div>
@@ -54,7 +71,7 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
             @disabled={{not (this.canInsertStructure structureType)}}
             {{on 'click' (fn this.insertStructure structureType)}}
           >
-            {{t structureType.translations.insert}}
+            {{t (this.getTranslationKey structureType)}}
           </AuButton>
         </li>
       {{/each}}

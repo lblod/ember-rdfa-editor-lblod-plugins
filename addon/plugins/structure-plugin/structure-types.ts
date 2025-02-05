@@ -1,5 +1,24 @@
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { type Resource } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { type PNode } from '@lblod/ember-rdfa-editor';
+import {
+  RDF,
+  SAY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+  type Resource,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  type Option,
+  optionMap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+
+export type StructurePluginOptions = {
+  uriGenerator:
+    | 'uuid4'
+    | 'template-uuid4'
+    | ((structureType: StructureType) => string);
+};
 
 export type StructureType =
   | 'title'
@@ -81,3 +100,29 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     romanize: false,
   },
 ];
+
+export function isHierarchyNode(node: PNode) {
+  return STRUCTURE_HIERARCHY.some(({ rdfType }) =>
+    hasOutgoingNamedNodeTriple(node.attrs, RDF('type'), rdfType),
+  );
+}
+
+export function findRankInHierarchy(rdfTypeString: string): Option<number> {
+  return STRUCTURE_HIERARCHY.findIndex(({ rdfType }) =>
+    rdfType.matches(rdfTypeString),
+  );
+}
+
+/**
+ * Get the 'rank' of a structure node in the hierarchy. `0` is the top, so a rank of `1` means it
+ * fits inside the structure with rank `0`, etc.
+ */
+export function calculateHierarchyRank(nodePosition: {
+  node: PNode;
+  pos: number;
+}) {
+  const rdfType = getOutgoingTriple(nodePosition.node.attrs, RDF('type'))
+    ?.object.value;
+  const rnk = optionMap(findRankInHierarchy, rdfType);
+  return optionMap((rank) => ({ ...nodePosition, rank }), rnk);
+}

@@ -15,6 +15,7 @@ import IntlService from 'ember-intl/services/intl';
 import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-up';
 import { ChevronDownIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-down';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
+import { STRUCTURE_SPECS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 
 type Args = {
   controller: SayController;
@@ -131,7 +132,7 @@ export default class EditorPluginsStructureCardComponent extends Component<Args>
   };
 
   get structureTypes() {
-    return this.args.options;
+    return STRUCTURE_SPECS;
   }
 
   get structureNodeSpecs() {
