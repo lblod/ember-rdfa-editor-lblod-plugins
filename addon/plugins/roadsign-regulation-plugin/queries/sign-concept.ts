@@ -29,7 +29,7 @@ export async function querySignConcepts(
       ?type
       ?code
       ?zonality
-      (CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files", ?imageId, "/download") AS ?image)
+      (CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
       (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
     WHERE {
       ?uri

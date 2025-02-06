@@ -27,25 +27,25 @@
             </td>
           </tr>
         {{else}}
-          {{#each @content as |measure|}}
+          {{#each @content as |measureConcept|}}
             {{! template-lint-disable require-presentational-children }}
             <tr
               role='button'
               class='au-c-data-table__clickable-row roadsign'
-              {{on 'click' (fn this.selectRow measure.uri)}}
+              {{on 'click' (fn this.selectRow measureConcept.uri)}}
             >
               <td>
-                <p>{{measure.label}}</p>
+                <p>{{measureConcept.label}}</p>
               </td>
               <td>
                 <div class='au-o-grid au-o-grid--tiny'>
-                  {{#each measure.signs as |sign|}}
+                  {{#each measureConcept.signConcepts as |signConcept|}}
                     <div class='au-o-grid__item au-u-1-3'>
                       <img
-                        src={{sign.image}}
+                        src={{signConcept.image}}
                         alt={{t
                           'editor-plugins.roadsign-regulation.table.content.image.alt'
-                          code=sign.code
+                          code=signConcept.code
                         }}
                         class='au-c-data-table__image'
                       />
@@ -56,20 +56,18 @@
               <td>
                 <AuHelpText skin='secondary' class='au-u-margin-none'>
                   <RoadsignRegulationPlugin::MeasurePreview
-                    @concept={{measure}}
+                    @concept={{measureConcept}}
                     @limitText={{true}}
                   />
                 </AuHelpText>
               </td>
               <td>
-                {{#each measure.classifications as |classification|}}
-                  {{#if classification}}
-                    <AuPill @skin='border'>{{classification}}</AuPill>
-                  {{/if}}
+                {{#each (this.categories measureConcept) as |category|}}
+                  <AuPill @skin='border'>{{category}}</AuPill>
                 {{/each}}
               </td>
               <td>
-                {{#if (eq this.selected measure.uri)}}
+                {{#if (eq this.selected measureConcept.uri)}}
                   <AuIcon
                     @icon={{this.NavUpIcon}}
                     @ariaHidden={{true}}
@@ -84,9 +82,9 @@
                 {{/if}}
               </td>
             </tr>
-            {{#if (eq this.selected measure.uri)}}
+            {{#if (eq this.selected measureConcept.uri)}}
               <RoadsignRegulationPlugin::ExpandedMeasure
-                @measure={{measure}}
+                @measure={{measureConcept}}
                 @insert={{@insert}}
                 @selectRow={{this.selectRow}}
                 @endpoint={{@options.endpoint}}
