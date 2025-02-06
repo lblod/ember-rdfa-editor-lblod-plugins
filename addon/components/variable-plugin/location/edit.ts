@@ -8,11 +8,11 @@ import {
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
-import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'reactiveweb/function';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { tracked } from '@glimmer/tracking';
+import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 export type LocationEditOptions = {
   endpoint: string;

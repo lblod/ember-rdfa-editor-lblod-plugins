@@ -1,7 +1,8 @@
 import { tracked } from '@glimmer/tracking';
 import { IBindings } from 'fetch-sparql-endpoint';
-import Sign from './sign';
+import Sign, { SignConceptSchema } from './sign-concept';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { z } from 'zod';
 
 export default class Measure {
   @tracked signs: Sign[] = [];
@@ -29,3 +30,16 @@ export default class Measure {
     return new Measure(uri, label, template, preview, zonality, temporal);
   }
 }
+
+export const MobilityMeasureConceptSchema = z.object({
+  uri: z.string(),
+  label: z.string(),
+  preview: z.string(),
+  zonality: z.string(),
+  temporal: z.boolean().optional(),
+  signConcepts: z.array(SignConceptSchema).default([]),
+});
+
+export type MobilityMeasureConcept = z.infer<
+  typeof MobilityMeasureConceptSchema
+>;

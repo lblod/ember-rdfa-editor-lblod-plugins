@@ -37,7 +37,7 @@
               @renderInPlace={{true}}
               @verticalPosition='below'
               @searchEnabled={{true}}
-              @search={{this.searchCodes}}
+              @search={{this.searchCodes.perform}}
               @selected={{this.selectedCode}}
               @allowClear={{true}}
               @onChange={{this.changeCode}}
@@ -95,38 +95,36 @@
           </div>
         </div>
       </div>
-      <div class='au-c-body-container'>
-        <RoadsignRegulationPlugin::RoadsignsTable
-          @content={{this.measures}}
-          @isLoading={{this.measuresQuery.isLoading}}
-          @insert={{this.insertHtml}}
-          @count={{this.measureCount}}
-          @goToPage={{this.goToPage}}
-          @pageSize={{this.pageSize}}
-          @pageStart={{this.pageNumber}}
-          @options={{@options}}
-        />
-        {{#if this.measureCount}}
-          {{#let
-            (pagination
-              page=this.pageNumber
-              pageSize=this.pageSize
-              count=this.measureCount
-            )
-            as |pg|
-          }}
-            <Pagination::PaginationView
-              @totalCount={{pg.count}}
-              @rangeStart={{pg.pageStart}}
-              @rangeEnd={{pg.pageEnd}}
-              @onNextPage={{this.goToNextPage}}
-              @onPreviousPage={{this.goToPreviousPage}}
-              @isFirstPage={{not pg.hasPreviousPage}}
-              @isLastPage={{not pg.hasNextPage}}
-            />
-          {{/let}}
-        {{/if}}
-      </div>
+      <RoadsignRegulationPlugin::RoadsignsTable
+        @content={{this.measureConcepts}}
+        @isLoading={{this.measureConceptsQuery.isRunning}}
+        @insert={{this.insertHtml}}
+        @count={{this.measureConceptCount}}
+        @goToPage={{this.goToPage}}
+        @pageSize={{this.pageSize}}
+        @pageStart={{this.pageNumber}}
+        @options={{@options}}
+      />
+      {{#if this.measureConceptCount}}
+        {{#let
+          (pagination
+            page=this.pageNumber
+            pageSize=this.pageSize
+            count=this.measureConceptCount
+          )
+          as |pg|
+        }}
+          <Pagination::PaginationView
+            @totalCount={{pg.count}}
+            @rangeStart={{pg.pageStart}}
+            @rangeEnd={{pg.pageEnd}}
+            @onNextPage={{this.goToNextPage}}
+            @onPreviousPage={{this.goToPreviousPage}}
+            @isFirstPage={{not pg.hasPreviousPage}}
+            @isLastPage={{not pg.hasNextPage}}
+          />
+        {{/let}}
+      {{/if}}
     </div>
   </Modal.Body>
 </AuModal>

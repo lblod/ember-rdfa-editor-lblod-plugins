@@ -1,18 +1,18 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import {
   NON_ZONAL_URI,
   POTENTIALLY_ZONAL_URI,
   ZONAL_URI,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
-import Measure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/models/measure';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 type Args = {
-  measure: Measure;
+  measure: MobilityMeasureConcept;
   selectRow: (uri: string) => void;
   insert: (
-    measure: Measure,
+    measure: MobilityMeasureConcept,
     zonalityValue?: string,
     temporalValue?: string,
   ) => void;

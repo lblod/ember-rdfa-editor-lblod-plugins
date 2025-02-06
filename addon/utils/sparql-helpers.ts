@@ -1,7 +1,7 @@
 import * as RDF from '@rdfjs/types';
 import { optionMapOr } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
-export type BindingObject<Obj extends Record<string, string | string[]>> = {
+export type BindingObject<Obj extends Record<string, unknown>> = {
   [Prop in keyof Obj]: { value: string };
 };
 
@@ -63,4 +63,14 @@ export async function executeCountQuery(queryConfig: QueryConfig) {
   );
 
   return optionMapOr(0, parseInt, response.results.bindings[0]?.count.value);
+}
+
+export function objectify<Obj extends Record<string, unknown>>(
+  binding: BindingObject<Obj>,
+) {
+  return Object.fromEntries(
+    Object.entries(binding).map(([key, term]) => [key, term.value]),
+    // TS doesn't give us 'keyof' from Object.entries() as a subclass could have extra fields,
+    // making this technically not true, but for us we don't care as we'll put it through zod
+  ) as { [Prop in keyof Obj]: string };
 }

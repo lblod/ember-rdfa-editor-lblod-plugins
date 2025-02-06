@@ -1,5 +1,6 @@
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { IBindings } from 'fetch-sparql-endpoint';
+import { z } from 'zod';
 
 export default class Sign {
   constructor(
@@ -19,7 +20,7 @@ export default class Sign {
     );
 
     const type = unwrap(binding['type']?.value);
-    const uri = unwrap(binding['relatedTrafficSignConcepts']?.value);
+    const uri = unwrap(binding['uri']?.value);
     // const order = unwrap(binding['order']?.value);
 
     const classifications = binding['classifications']?.value.split('|') ?? [];
@@ -32,3 +33,14 @@ export default class Sign {
     return `${imageBaseUrl}/files/${imageId}/download`;
   }
 }
+
+export const SignConceptSchema = z.object({
+  uri: z.string(),
+  code: z.string(),
+  type: z.string(),
+  image: z.string(),
+  classifications: z.array(z.string()).default([]),
+  zonality: z.string().optional(),
+});
+
+export type SignConcept = z.infer<typeof SignConceptSchema>;
