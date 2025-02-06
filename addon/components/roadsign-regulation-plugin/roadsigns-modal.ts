@@ -99,7 +99,7 @@ export default class RoadsignsModal extends Component<Args> {
       this.selectedType = undefined;
       this.selectedCategory = undefined;
     } else {
-      if (MEASURE_TYPES.includes(option.label)) {
+      if (MEASURE_TYPES.includes(option.uri)) {
         this.selectedType = option;
         this.selectedCategory = undefined;
       } else {
@@ -222,10 +222,10 @@ export default class RoadsignsModal extends Component<Args> {
     const queryOptions = {
       imageBaseUrl: this.imageBaseUrl,
       searchString: this.searchQuery,
-      zonality: this.selectedZonality ? this.selectedZonality.label : undefined,
-      signType: this.selectedType ? this.selectedType.label : undefined,
-      codes: codes.length ? codes.map((code) => code.label) : undefined,
-      category: this.selectedCategory ? this.selectedCategory.label : undefined,
+      zonality: this.selectedZonality ? this.selectedZonality.uri : undefined,
+      signType: this.selectedType ? this.selectedType.uri : undefined,
+      codes: codes.length ? codes.map((code) => code.uri) : undefined,
+      category: this.selectedCategory ? this.selectedCategory.uri : undefined,
       page: this.pageNumber,
       pageSize: PAGE_SIZE,
     };
@@ -234,7 +234,6 @@ export default class RoadsignsModal extends Component<Args> {
       queryMobilityMeasures(this.endpoint, queryOptions),
       countMobilityMeasures(this.endpoint, queryOptions),
     ]);
-    console.log('Measure concept count: ', measureConceptCount);
     return {
       concepts: measureConcepts,
       count: measureConceptCount,
