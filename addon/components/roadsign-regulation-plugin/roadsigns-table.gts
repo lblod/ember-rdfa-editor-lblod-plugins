@@ -7,7 +7,7 @@ import { addAll } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/se
 import ExpandedMeasure from './expanded-measure';
 import MeasurePreview from './measure-preview';
 
-//@ts-expect-error AuDataTable is not yet converted to typescript
+// @ts-expect-error AuDataTable is not yet converted to typescript
 import AuDataTable from '@appuniversum/ember-appuniversum/components/au-data-table';
 import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
 import AuHelpText from '@appuniversum/ember-appuniversum/components/au-help-text';
