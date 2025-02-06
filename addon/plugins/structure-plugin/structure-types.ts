@@ -93,7 +93,7 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
   },
   {
     rdfType: SAY('Paragraph'),
-    hasTitle: true,
+    hasTitle: false,
     structureType: 'paragraph',
     resourceUri: 'http://data.lblod.info/paragraphs/',
     headerFormat: 'section-symbol',

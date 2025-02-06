@@ -39,7 +39,10 @@ export function findHowToInsertStructure(
   const hierarchyRank =
     structConfig && findRankInHierarchy(structConfig.rdfType.full);
   if (!structConfig || isNone(hierarchyRank)) {
-    console.warn('not a structure', structureType);
+    console.warn(
+      "Trying to insert a structure type that isn't valid",
+      structureType,
+    );
     return false;
   }
   let subject: string;

@@ -6,6 +6,7 @@ import {
 } from '../../structure-plugin/structure-types';
 import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import { findHowToInsertStructure } from '../../structure-plugin/insert-structure';
+import { regenerateRdfaLinks } from '../../structure-plugin/regenerate-rdfa-links';
 
 const insertStructure = (
   structureType: StructureType,
@@ -21,7 +22,8 @@ const insertStructure = (
       const { result, transaction } = transactionCombinator(
         state,
         insertStructureTransaction,
-      )([recalculateNumbers]);
+        // Prevent calculations that will not fail, if the command is just being tested
+      )(dispatch ? [recalculateNumbers, regenerateRdfaLinks] : []);
 
       transaction.scrollIntoView();
       if (result.every((ok) => ok)) {
