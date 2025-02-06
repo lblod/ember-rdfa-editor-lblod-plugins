@@ -8,7 +8,15 @@ import {
   RoadSignCategorySchema,
 } from '../schemas/road-sign-category';
 
-export default async function queryRoadSignCategories(endpoint: string) {
+type QueryOptions = {
+  abortSignal?: AbortSignal;
+};
+
+export default async function queryRoadSignCategories(
+  endpoint: string,
+  options: QueryOptions = {},
+) {
+  const { abortSignal } = options;
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -24,6 +32,7 @@ export default async function queryRoadSignCategories(endpoint: string) {
   const queryResult = await executeQuery<BindingObject<RoadSignCategory>>({
     endpoint,
     query,
+    abortSignal,
   });
   const bindings = queryResult.results.bindings;
   return RoadSignCategorySchema.array().parse(bindings.map(objectify));

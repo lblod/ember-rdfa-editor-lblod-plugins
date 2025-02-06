@@ -10,13 +10,14 @@ import { Variable, VariableSchema } from '../schemas/variable';
 type QueryOptions = {
   templateUri?: string;
   type?: Variable['type'];
+  abortSignal?: AbortSignal;
 };
 
 export async function queryVariables(
   endpoint: string,
   options: QueryOptions = {},
 ) {
-  const { templateUri, type } = options;
+  const { templateUri, type, abortSignal } = options;
   const query = /* sparql */ `
     PREFIX variables: <http://lblod.data.gift/vocabularies/variables/>
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
@@ -47,6 +48,7 @@ export async function queryVariables(
   const queryResult = await executeQuery<BindingObject<Variable>>({
     endpoint,
     query,
+    abortSignal,
   });
   const bindings = queryResult.results.bindings;
   return VariableSchema.array().parse(bindings.map(objectify));

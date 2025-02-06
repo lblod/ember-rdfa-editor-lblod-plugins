@@ -154,13 +154,18 @@ export default class RoadsignsModal extends Component<Signature> {
   searchCodes = restartableTask(async (term: string) => {
     const category = this.selectedCategory?.label;
     const type = this.selectedType?.label;
-    await timeout(DEBOUNCE_MS);
     const types = type ? [type] : undefined;
-    return querySignCodes(this.endpoint, {
-      searchString: term,
-      roadSignCategory: category,
-      types,
-    });
+    await timeout(DEBOUNCE_MS);
+    const abortController = new AbortController();
+    try {
+      return querySignCodes(this.endpoint, {
+        searchString: term,
+        roadSignCategory: category,
+        types,
+      });
+    } finally {
+      abortController.abort();
+    }
   });
 
   codeCombinationOptionsQuery = trackedFunction(this, async () => {
@@ -226,7 +231,6 @@ export default class RoadsignsModal extends Component<Signature> {
     if (this.selectedCode) {
       codes.push(this.selectedCode);
     }
-    await timeout(DEBOUNCE_MS);
     const queryOptions = {
       imageBaseUrl: this.imageBaseUrl,
       searchString: this.searchQuery,
@@ -238,14 +242,26 @@ export default class RoadsignsModal extends Component<Signature> {
       pageSize: PAGE_SIZE,
     };
     await timeout(DEBOUNCE_MS);
-    const [measureConcepts, measureConceptCount] = await Promise.all([
-      queryMobilityMeasures(this.endpoint, queryOptions),
-      countMobilityMeasures(this.endpoint, queryOptions),
-    ]);
-    return {
-      concepts: measureConcepts,
-      count: measureConceptCount,
-    };
+
+    const abortController = new AbortController();
+    try {
+      const [measureConcepts, measureConceptCount] = await Promise.all([
+        queryMobilityMeasures(this.endpoint, {
+          ...queryOptions,
+          abortSignal: abortController.signal,
+        }),
+        countMobilityMeasures(this.endpoint, {
+          ...queryOptions,
+          abortSignal: abortController.signal,
+        }),
+      ]);
+      return {
+        concepts: measureConcepts,
+        count: measureConceptCount,
+      };
+    } finally {
+      abortController.abort();
+    }
   });
 
   measureConceptsQuery: TaskInstance<{

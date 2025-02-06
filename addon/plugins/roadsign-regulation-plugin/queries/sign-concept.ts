@@ -10,13 +10,14 @@ import { SignConcept, SignConceptSchema } from '../schemas/sign-concept';
 type QueryOptions = {
   imageBaseUrl?: string;
   measureConceptUri?: string;
+  abortSignal?: AbortSignal;
 };
 
 export async function querySignConcepts(
   endpoint: string,
   options: QueryOptions = {},
 ) {
-  const { imageBaseUrl, measureConceptUri } = options;
+  const { imageBaseUrl, measureConceptUri, abortSignal } = options;
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -59,6 +60,7 @@ export async function querySignConcepts(
   const queryResult = await executeQuery<BindingObject<SignConcept>>({
     query,
     endpoint,
+    abortSignal,
   });
   const bindings = queryResult.results.bindings;
   const processed = bindings.map(objectify).map((binding) => {

@@ -12,13 +12,14 @@ import {
 type QueryOptions = {
   instructionVariableUri?: string;
   measureConceptUri?: string;
+  abortSignal?: AbortSignal;
 };
 
 export async function queryMobilityTemplates(
   endpoint: string,
   options: QueryOptions = {},
 ) {
-  const { instructionVariableUri, measureConceptUri } = options;
+  const { instructionVariableUri, measureConceptUri, abortSignal } = options;
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -47,6 +48,7 @@ export async function queryMobilityTemplates(
   const queryResult = await executeQuery<BindingObject<MobilityTemplate>>({
     query,
     endpoint,
+    abortSignal,
   });
 
   const bindings = queryResult.results.bindings;

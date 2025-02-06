@@ -17,6 +17,7 @@ type QueryOptions = {
   roadSignCategory?: string;
   types?: string | string[];
   combinedWith?: string | string[];
+  abortSignal?: AbortSignal;
 };
 
 function buildFilters({
@@ -24,7 +25,7 @@ function buildFilters({
   roadSignCategory,
   types = DEFAULT_SIGN_TYPES,
   combinedWith,
-}: QueryOptions) {
+}: Omit<QueryOptions, 'abortSignal'>) {
   const categoryFilter = roadSignCategory
     ? `?uri dct:type ${sparqlEscapeUri(roadSignCategory)}`
     : '';
@@ -72,6 +73,7 @@ export default async function querySignCodes(
   endpoint: string,
   options: QueryOptions = {},
 ) {
+  const { abortSignal } = options;
   const filterStatement = buildFilters(options);
 
   const query = /* sparql */ `
@@ -92,7 +94,7 @@ export default async function querySignCodes(
     }
     ORDER BY ASC(?label)
   `;
-  const queryResult = await executeQuery({ endpoint, query });
+  const queryResult = await executeQuery({ endpoint, query, abortSignal });
   const bindings = queryResult.results.bindings;
   return SignCodeSchema.array().parse(bindings.map(objectify));
 }

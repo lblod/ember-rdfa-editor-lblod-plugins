@@ -21,6 +21,7 @@ type QueryOptions<Count extends boolean = boolean> = {
   category?: string;
   page?: number;
   pageSize?: number;
+  abortSignal?: AbortSignal;
   count: Count;
 };
 
@@ -29,7 +30,7 @@ type Result<Count extends boolean> = Count extends true
   : MobilityMeasureConcept[];
 
 function _buildFilters(
-  options: Omit<QueryOptions, 'page' | 'pageSize' | 'count'>,
+  options: Omit<QueryOptions, 'page' | 'pageSize' | 'abortSignal' | 'count'>,
 ) {
   const { zonality, signType, codes, category, searchString } = options;
   const filters = [];
@@ -70,7 +71,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
   endpoint: string,
   options: QueryOptions<Count>,
 ): Promise<Result<Count>> {
-  const { page = 0, pageSize = 10, count, imageBaseUrl } = options;
+  const { page = 0, pageSize = 10, count, imageBaseUrl, abortSignal } = options;
   console.log('Options: ', options);
   const selectStatement = count
     ? /* sparql */ `SELECT (COUNT(DISTINCT(?uri)) AS ?count)`
@@ -120,6 +121,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
   const queryResult = await executeQuery({
     query,
     endpoint,
+    abortSignal,
   });
   const bindings = queryResult.results.bindings;
   if (count) {
