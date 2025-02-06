@@ -235,7 +235,8 @@ export default class RoadsignsModal extends Component<Args> {
         category: this.selectedCategory
           ? this.selectedCategory.value
           : undefined,
-        pageStart: this.pageNumber,
+        pageNumber: this.pageNumber,
+        pageSize: PAGE_SIZE,
       },
     );
   });
@@ -370,7 +371,17 @@ export default class RoadsignsModal extends Component<Args> {
   }
 
   @action
-  goToPage(pageStart: number) {
-    this.pageNumber = pageStart;
+  goToPreviousPage() {
+    this.goToPage(this.pageNumber - 1);
+  }
+
+  @action
+  goToNextPage() {
+    this.goToPage(this.pageNumber + 1);
+  }
+
+  @action
+  goToPage(pageNumber: number) {
+    this.pageNumber = pageNumber;
   }
 }

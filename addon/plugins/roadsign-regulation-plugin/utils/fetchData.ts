@@ -53,7 +53,8 @@ export function generateMeasuresQuery({
   type,
   codes,
   category,
-  pageStart = 0,
+  pageNumber = 0,
+  pageSize = 10,
   count = false,
   previewSearchString,
 }: {
@@ -61,7 +62,8 @@ export function generateMeasuresQuery({
   type?: string;
   codes?: string[];
   category?: string;
-  pageStart?: number;
+  pageSize?: number;
+  pageNumber?: number;
   count?: boolean;
   previewSearchString?: string;
 }) {
@@ -74,7 +76,7 @@ export function generateMeasuresQuery({
   });
   let pagination = '';
   if (!count) {
-    pagination = `LIMIT 10 OFFSET ${pageStart}`;
+    pagination = `LIMIT ${pageSize} OFFSET ${pageNumber * pageSize}`;
   }
   const query = `
 SELECT ${

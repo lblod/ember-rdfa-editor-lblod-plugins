@@ -192,14 +192,16 @@ export default class RoadsignRegistryService extends Service {
         type,
         codes,
         category,
-        pageStart,
+        pageNumber,
+        pageSize,
         previewSearchString,
       }: {
         zonality?: string;
         type?: string;
         codes?: string[];
         category?: string;
-        pageStart?: number;
+        pageNumber?: number;
+        pageSize?: number;
         previewSearchString?: string;
       } = {},
     ) => {
@@ -209,7 +211,8 @@ export default class RoadsignRegistryService extends Service {
         type,
         codes,
         category,
-        pageStart,
+        pageNumber,
+        pageSize,
         previewSearchString,
       });
       const countQuery = generateMeasuresQuery({

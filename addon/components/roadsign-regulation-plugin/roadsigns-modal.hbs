@@ -106,6 +106,26 @@
           @pageStart={{this.pageNumber}}
           @options={{@options}}
         />
+        {{#if this.measureCount}}
+          {{#let
+            (pagination
+              page=this.pageNumber
+              pageSize=this.pageSize
+              count=this.measureCount
+            )
+            as |pg|
+          }}
+            <Pagination::PaginationView
+              @totalCount={{pg.count}}
+              @rangeStart={{pg.pageStart}}
+              @rangeEnd={{pg.pageEnd}}
+              @onNextPage={{this.goToNextPage}}
+              @onPreviousPage={{this.goToPreviousPage}}
+              @isFirstPage={{not pg.hasPreviousPage}}
+              @isLastPage={{not pg.hasNextPage}}
+            />
+          {{/let}}
+        {{/if}}
       </div>
     </div>
   </Modal.Body>
