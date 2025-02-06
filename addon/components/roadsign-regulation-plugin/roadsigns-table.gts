@@ -23,7 +23,7 @@ import { fn } from '@ember/helper';
 type Signature = {
   Args: {
     options: RoadsignRegulationPluginOptions;
-    content: MobilityMeasureConcept[];
+    content?: MobilityMeasureConcept[];
     isLoading?: boolean;
     insert: (
       concept: MobilityMeasureConcept,
