@@ -84,7 +84,7 @@
             </tr>
             {{#if (eq this.selected measureConcept.uri)}}
               <RoadsignRegulationPlugin::ExpandedMeasure
-                @measure={{measureConcept}}
+                @concept={{measureConcept}}
                 @insert={{@insert}}
                 @selectRow={{this.selectRow}}
                 @endpoint={{@options.endpoint}}
