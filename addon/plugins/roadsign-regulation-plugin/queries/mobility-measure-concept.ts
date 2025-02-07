@@ -4,13 +4,13 @@ import {
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { POTENTIALLY_ZONAL_URI } from '../constants';
 import {
   MobilityMeasureConcept,
   MobilityMeasureConceptSchema,
 } from '../schemas/mobility-measure-concept';
 import { z } from 'zod';
 import { querySignConcepts } from './sign-concept';
+import { ZONALITY_OPTIONS } from '../constants';
 
 type QueryOptions<Count extends boolean = boolean> = {
   imageBaseUrl?: string;
@@ -36,7 +36,7 @@ function _buildFilters(
   const filters = [];
   if (zonality) {
     filters.push(
-      `FILTER(?zonality IN (${sparqlEscapeUri(zonality)}, ${sparqlEscapeUri(POTENTIALLY_ZONAL_URI)}))`,
+      `FILTER(?zonality IN (${sparqlEscapeUri(zonality)}, ${sparqlEscapeUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL)}))`,
     );
   }
   if (signType) {

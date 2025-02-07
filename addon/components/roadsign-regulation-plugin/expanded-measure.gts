@@ -2,11 +2,6 @@ import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import {
-  NON_ZONAL_URI,
-  POTENTIALLY_ZONAL_URI,
-  ZONAL_URI,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import t from 'ember-intl/helpers/t';
 import MeasurePreview from './measure-preview';
 import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
@@ -15,6 +10,7 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
+import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 type Signature = {
   Args: {
@@ -34,7 +30,7 @@ export default class ExpandedMeasure extends Component<Signature> {
   @tracked temporalValue?: string;
 
   get isPotentiallyZonal() {
-    return this.args.concept.zonality === POTENTIALLY_ZONAL_URI;
+    return this.args.concept.zonality === ZONALITY_OPTIONS.POTENTIALLY_ZONAL;
   }
 
   get insertButtonDisabled() {
@@ -87,12 +83,12 @@ export default class ExpandedMeasure extends Component<Signature> {
               @onChange={{this.changeZonality}}
               as |Group|
             >
-              <Group.Radio @value={{ZONAL_URI}}>
+              <Group.Radio @value={{ZONALITY_OPTIONS.ZONAL}}>
                 {{t
                   'editor-plugins.roadsign-regulation.expanded-measure.select-zonality.zonal'
                 }}
               </Group.Radio>
-              <Group.Radio @value={{NON_ZONAL_URI}}>
+              <Group.Radio @value={{ZONALITY_OPTIONS.NON_ZONAL}}>
                 {{t
                   'editor-plugins.roadsign-regulation.expanded-measure.select-zonality.non-zonal'
                 }}

@@ -9,10 +9,6 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import {
-  NON_ZONAL_URI,
-  ZONAL_URI,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
-import {
   countMobilityMeasures,
   queryMobilityMeasures,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-measure-concept';
@@ -31,16 +27,10 @@ import RoadSignsTable from './roadsigns-table';
 import PaginationView from '../pagination/pagination-view';
 import { not, or } from 'ember-truth-helpers';
 import { on } from '@ember/modifier';
-
-const DEBOUNCE_MS = 100;
-const PAGE_SIZE = 10;
-const SIGN_TYPE_URI =
-  'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept';
-const ROAD_MARKING_URI =
-  'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept';
-const TRAFFIC_LIGHT_URI =
-  'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept';
-const MEASURE_TYPES = [SIGN_TYPE_URI, ROAD_MARKING_URI, TRAFFIC_LIGHT_URI];
+import {
+  SIGN_CONCEPT_TYPES,
+  ZONALITY_OPTIONS,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 type Option = {
   uri: string;
@@ -51,6 +41,9 @@ type Zonality = Option;
 type TypeOption = Option;
 type Code = Option;
 type Category = Option;
+
+const DEBOUNCE_MS = 100;
+const PAGE_SIZE = 10;
 
 type Signature = {
   Args: {
@@ -74,11 +67,11 @@ export default class RoadsignsModal extends Component<Signature> {
 
   zonalityOptions: Zonality[] = [
     {
-      uri: ZONAL_URI,
+      uri: ZONALITY_OPTIONS.ZONAL,
       label: 'Zonaal',
     },
     {
-      uri: NON_ZONAL_URI,
+      uri: ZONALITY_OPTIONS.NON_ZONAL,
       label: 'Niet zonaal',
     },
   ];
@@ -108,7 +101,11 @@ export default class RoadsignsModal extends Component<Signature> {
       this.selectedType = undefined;
       this.selectedCategory = undefined;
     } else {
-      if (MEASURE_TYPES.includes(option.uri)) {
+      if (
+        (this.signConceptTypes.map((type) => type.uri) as string[]).includes(
+          option.uri,
+        )
+      ) {
         this.selectedType = option;
         this.selectedCategory = undefined;
       } else {
@@ -194,6 +191,21 @@ export default class RoadsignsModal extends Component<Signature> {
     return this.classificationsQuery.value ?? [];
   }
 
+  signConceptTypes = [
+    {
+      label: 'Verkeersborden',
+      uri: SIGN_CONCEPT_TYPES.ROAD_SIGN,
+    },
+    {
+      label: 'Wegmarkeringen',
+      uri: SIGN_CONCEPT_TYPES.ROAD_MARKING,
+    },
+    {
+      label: 'Verkeerslichten',
+      uri: SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT,
+    },
+  ];
+
   get typeOptions(): {
     groupName: string;
     options: TypeOption[];
@@ -201,20 +213,7 @@ export default class RoadsignsModal extends Component<Signature> {
     return [
       {
         groupName: 'Types',
-        options: [
-          {
-            label: 'Verkeersborden',
-            uri: SIGN_TYPE_URI,
-          },
-          {
-            label: 'Wegmarkeringen',
-            uri: 'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept',
-          },
-          {
-            label: 'Verkeerslichten',
-            uri: 'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept',
-          },
-        ],
+        options: this.signConceptTypes,
       },
       {
         groupName: 'Categorieën',

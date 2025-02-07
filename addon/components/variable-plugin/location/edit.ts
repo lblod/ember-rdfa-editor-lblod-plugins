@@ -12,7 +12,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'reactiveweb/function';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { tracked } from '@glimmer/tracking';
-import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 export type LocationEditOptions = {
   endpoint: string;
@@ -84,7 +84,7 @@ export default class LocationEditComponent extends Component<Args> {
     const zonalityUri = roadSignRegulation?.node.attrs.zonality as
       | string
       | undefined;
-    return zonalityUri === ZONAL_URI;
+    return zonalityUri === ZONALITY_OPTIONS.ZONAL;
   }
 
   locationOptions = trackedFunction(this, async () => {
