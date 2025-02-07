@@ -37,6 +37,7 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 const rdfaAware = true;
 const parseDOM: TagParseRule[] = [
@@ -90,7 +91,7 @@ const parseDOM: TagParseRule[] = [
         const minimumValue = node.getAttribute('data-minimum-value');
         const maximumValue = node.getAttribute('data-maximum-value');
 
-        const properties = [
+        const properties: OutgoingTriple[] = [
           {
             predicate: RDF('type').full,
             object: sayDataFactory.namedNode(EXT('Mapping').full),

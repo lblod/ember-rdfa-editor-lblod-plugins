@@ -53,6 +53,7 @@ import {
   parseLambert72WKTString,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 const rdfaAware = true;
 
@@ -321,7 +322,7 @@ const parseDOM: TagParseRule[] = [
           return false;
         }
 
-        const properties = [
+        const properties: OutgoingTriple[] = [
           {
             predicate: RDF('type').full,
             object: sayDataFactory.namedNode(EXT('Mapping').full),
