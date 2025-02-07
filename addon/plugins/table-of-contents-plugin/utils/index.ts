@@ -1,5 +1,5 @@
-import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
 
 export type OutlineEntry = {
   content: string;
@@ -45,7 +45,51 @@ export function createTableOfContents(entries: OutlineEntry[]) {
 
 type Config = { nodeHierarchy: string[] }[];
 
-export function extractOutline({
+export function extractOutline(args: {
+  node: PNode;
+  pos: number;
+  /** @deprecated */
+  config?: Config;
+  state: EditorState;
+}): OutlineEntry[] {
+  const { node, pos, config, state } = args;
+  if (config) {
+    return extractOutlineLegacy({ ...args, config });
+  }
+  let result: OutlineEntry[] = [];
+  let parent: OutlineEntry | undefined;
+  const tocEntry = node.type.spec.tocEntry as
+    | ((node: PNode, state: EditorState) => string)
+    | string
+    | undefined;
+  if (tocEntry) {
+    let entry: string;
+    if (typeof tocEntry === 'function') {
+      entry = tocEntry(node, state);
+    } else {
+      entry = tocEntry;
+    }
+    parent = {
+      pos,
+      content: entry,
+    };
+  }
+  const subResults: OutlineEntry[] = [];
+  node.forEach((child, offset) => {
+    subResults.push(
+      ...extractOutline({ node: child, pos: pos + 1 + offset, config, state }),
+    );
+  });
+  if (parent) {
+    parent.children = subResults;
+    result = [parent];
+  } else {
+    result = subResults;
+  }
+  return result;
+}
+
+function extractOutlineLegacy({
   node,
   pos,
   config,

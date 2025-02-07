@@ -82,6 +82,9 @@ export const emberNodeConfig: (
     isolating: true,
     atom: false,
     editable: rdfaAware,
+    tocEntry: (node: PNode) => {
+      return `${node.attrs.number}. ${node.attrs.title}`;
+    },
 
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
