@@ -42,6 +42,7 @@ export function buildArticleStructure(
           object: factory.contentLiteral(),
         },
       ] satisfies OutgoingTriple[],
+      //TODO: we should move this logic of adding the backlink to the `insertArticle` transaction-monad
       backlinks: !decisionUri
         ? undefined
         : [

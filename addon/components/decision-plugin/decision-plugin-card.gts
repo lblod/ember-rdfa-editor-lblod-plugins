@@ -55,6 +55,10 @@ export default class DecisionPluginCard extends Component<Sig> {
       : null;
   }
 
+  get decisionUri(): string | undefined {
+    return this.decisionNodeLocation?.node.attrs.subject;
+  }
+
   @action
   focus() {
     this.controller.focus();
@@ -141,11 +145,11 @@ export default class DecisionPluginCard extends Component<Sig> {
   }
   @action
   insertArticleBlock() {
-    if (this.decisionNodeLocation) {
+    if (this.decisionUri) {
       this.controller.doCommand(
         insertArticleContainer({
           intl: this.intl,
-          decisionLocation: this.decisionNodeLocation,
+          decisionUri: this.decisionUri,
           articleUriGenerator: this.args.options?.articleUriGenerator,
         }),
         {

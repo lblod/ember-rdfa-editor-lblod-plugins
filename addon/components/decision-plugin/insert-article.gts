@@ -5,11 +5,11 @@ import Component from '@glimmer/component';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
-import insertArticle from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands/insert-article-command';
 import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
 import { not } from 'ember-truth-helpers';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { insertArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/actions/insert-article';
 
 export interface InsertArticleOptions {
   uriGenerator?: () => string;
@@ -47,10 +47,8 @@ export default class InsertArticleComponent extends Component<Sig> {
     return getCurrentBesluitRange(this.controller);
   }
 
-  get decisionLocation() {
-    return this.decisionRange
-      ? { pos: this.decisionRange.from, node: this.decisionRange.node }
-      : null;
+  get decisionUri(): string | undefined {
+    return this.decisionRange?.node.attrs.subject;
   }
 
   get canInsertFreely() {
@@ -66,16 +64,17 @@ export default class InsertArticleComponent extends Component<Sig> {
   }
 
   get canInsertInDecision() {
-    if (!this.decisionLocation) {
+    if (!this.decisionUri) {
       return false;
     }
     const article = buildArticleStructure(
       this.schema,
       this.args.options?.uriGenerator,
     );
-    return this.controller.checkCommand(
-      insertArticle({ node: article, decisionLocation: this.decisionLocation }),
-    );
+    return insertArticle({
+      node: article,
+      decisionUri: this.decisionUri,
+    })(this.controller.mainEditorState).result;
   }
 
   @action
@@ -94,25 +93,32 @@ export default class InsertArticleComponent extends Component<Sig> {
 
   @action
   insertFreely(node: PNode) {
-    this.controller.doCommand(
-      insertArticle({
-        node,
-        insertFreely: true,
-      }),
+    this.controller.withTransaction(
+      () => {
+        return insertArticle({
+          node,
+          insertFreely: true,
+        })(this.controller.mainEditorState).transaction;
+      },
+      { view: this.controller.mainEditorView },
     );
     this.controller.focus();
   }
 
   @action
   insertInDecision(node: PNode) {
-    if (!this.decisionLocation) {
+    const { decisionUri } = this;
+    if (!decisionUri) {
       return;
     }
-    this.controller.doCommand(
-      insertArticle({
-        node,
-        decisionLocation: this.decisionLocation,
-      }),
+    this.controller.withTransaction(
+      () => {
+        return insertArticle({
+          node,
+          decisionUri,
+        })(this.controller.mainEditorState).transaction;
+      },
+      { view: this.controller.mainEditorView },
     );
     this.controller.focus();
   }
