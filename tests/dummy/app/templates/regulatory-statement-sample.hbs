@@ -125,10 +125,7 @@
                 @variableTypes={{this.variableTypes}}
                 @templateMode={{true}}
               />
-              <ArticleStructurePlugin::StructureCard
-                @controller={{this.controller}}
-                @options={{this.config.structures}}
-              />
+              <this.StructureControlCard @controller={{this.controller}} />
               <VariablePlugin::Address::Edit
                 @controller={{this.controller}}
                 @defaultMunicipality='Gent'

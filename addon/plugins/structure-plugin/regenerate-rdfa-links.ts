@@ -65,6 +65,7 @@ function linkAllChildrenToParent(parent: PNode): TransactionMonad<boolean>[] {
   return monads;
 }
 
+// TODO add support for decision structure nodes to this to remove their current manual linking
 export const regenerateRdfaLinks = composeMonads((state) => {
   const monads: TransactionMonad<boolean>[] = [];
   // First find all the nodes that are in the hierarchy, but do not have a parent that is part of
