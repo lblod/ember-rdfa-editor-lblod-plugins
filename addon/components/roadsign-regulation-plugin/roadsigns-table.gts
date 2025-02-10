@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import { addAll } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/set';
-import ExpandedMeasure from './expanded-measure';
+import ExpandedMeasure, { InsertMobilityMeasureTask } from './expanded-measure';
 import MeasurePreview from './measure-preview';
 
 // @ts-expect-error AuDataTable is not yet converted to typescript
@@ -25,11 +25,7 @@ type Signature = {
     options: RoadsignRegulationPluginOptions;
     content?: MobilityMeasureConcept[];
     isLoading?: boolean;
-    insert: (
-      concept: MobilityMeasureConcept,
-      zonalityValue?: string,
-      temporalValue?: string,
-    ) => void;
+    insert: InsertMobilityMeasureTask;
   };
 };
 

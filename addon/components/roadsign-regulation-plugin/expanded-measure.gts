@@ -11,23 +11,30 @@ import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import { Task } from 'ember-concurrency';
 
+export type InsertMobilityMeasureTask = Task<
+  void,
+  [
+    MobilityMeasureConcept,
+    typeof ZONALITY_OPTIONS.ZONAL | typeof ZONALITY_OPTIONS.NON_ZONAL,
+    boolean,
+  ]
+>;
 type Signature = {
   Args: {
     concept: MobilityMeasureConcept;
     selectRow: (uri: string) => void;
-    insert: (
-      concept: MobilityMeasureConcept,
-      zonalityValue?: string,
-      temporalValue?: string,
-    ) => void;
+    insert: InsertMobilityMeasureTask;
     endpoint: string;
   };
 };
 
 export default class ExpandedMeasure extends Component<Signature> {
-  @tracked zonalityValue?: string;
-  @tracked temporalValue?: string;
+  @tracked zonalityValue?:
+    | typeof ZONALITY_OPTIONS.ZONAL
+    | typeof ZONALITY_OPTIONS.NON_ZONAL;
+  @tracked temporalValue?: boolean;
 
   get isPotentiallyZonal() {
     return this.args.concept.zonality === ZONALITY_OPTIONS.POTENTIALLY_ZONAL;
@@ -38,18 +45,26 @@ export default class ExpandedMeasure extends Component<Signature> {
   }
 
   @action
-  changeZonality(zonality: string) {
+  changeZonality(
+    zonality: typeof ZONALITY_OPTIONS.ZONAL | typeof ZONALITY_OPTIONS.NON_ZONAL,
+  ) {
     this.zonalityValue = zonality;
   }
 
   @action
-  changeTemporality(temporality: string) {
-    this.temporalValue = temporality;
+  changeTemporality(temporality: 'true' | 'false') {
+    this.temporalValue = temporality === 'true';
   }
 
   @action
   insert() {
-    this.args.insert(this.args.concept, this.zonalityValue, this.temporalValue);
+    this.args.insert.perform(
+      this.args.concept,
+      (this.zonalityValue ?? this.args.concept.zonality) as
+        | typeof ZONALITY_OPTIONS.ZONAL
+        | typeof ZONALITY_OPTIONS.NON_ZONAL,
+      this.temporalValue ?? false,
+    );
   }
 
   @action
@@ -96,7 +111,7 @@ export default class ExpandedMeasure extends Component<Signature> {
             </AuRadioGroup>
           </div>
         {{/if}}
-        {{#if @concept.temporal}}
+        {{#if @concept.variableSignage}}
           <AuHeading @level='6' @skin='6'>
             {{t
               'editor-plugins.roadsign-regulation.expanded-measure.varying-signalisation.label'
@@ -125,6 +140,8 @@ export default class ExpandedMeasure extends Component<Signature> {
         <AuButtonGroup>
           <AuButton
             {{on 'click' this.insert}}
+            @loading={{@insert.isRunning}}
+            @loadingMessage={{t 'common.loading'}}
             @disabled={{this.insertButtonDisabled}}
           >
             {{t 'editor-plugins.utils.insert'}}

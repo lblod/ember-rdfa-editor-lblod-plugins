@@ -7,7 +7,7 @@ export const MobilityMeasureConceptSchema = z.object({
   label: z.string(),
   preview: z.string(),
   zonality: z.nativeEnum(ZONALITY_OPTIONS),
-  temporal: z.boolean().default(false),
+  variableSignage: z.boolean().default(false),
   signConcepts: z.array(SignConceptSchema).default([]),
 });
 

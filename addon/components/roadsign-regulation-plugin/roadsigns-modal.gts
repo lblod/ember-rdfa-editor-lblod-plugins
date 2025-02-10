@@ -286,44 +286,54 @@ export default class RoadsignsModal extends Component<Signature> {
     return this.measureConceptsQuery.value?.count;
   }
 
-  insertMeasure = task(async (concept: MobilityMeasureConcept) => {
-    if (!this.decisionLocation) {
-      return;
-    }
-    const abortController = new AbortController();
-    try {
-      const decisionUri = this.decisionLocation.node.attrs.subject;
-      const conceptTemplate = (
-        await queryMobilityTemplates(this.endpoint, {
-          measureConceptUri: concept.uri,
-          abortSignal: abortController.signal,
-        })
-      )[0];
-      const resolvedTemplate = await resolveTemplate(
-        this.endpoint,
-        conceptTemplate,
-        {
-          abortSignal: abortController.signal,
-        },
-      );
-      this.controller.withTransaction(
-        () => {
-          return insertMeasure({
-            measureConcept: concept,
-            variables: resolvedTemplate.variables,
-            templateString: resolvedTemplate.templateString,
-            articleUriGenerator: this.args.options.articleUriGenerator,
-            decisionUri,
-          })(this.controller.mainEditorState).transaction;
-        },
-        { view: this.controller.mainEditorView },
-      );
-      console.log('Resolved template: ', resolvedTemplate);
-      this.args.closeModal();
-    } finally {
-      abortController.abort();
-    }
-  });
+  insertMeasure = task(
+    async (
+      concept: MobilityMeasureConcept,
+      zonality:
+        | typeof ZONALITY_OPTIONS.ZONAL
+        | typeof ZONALITY_OPTIONS.NON_ZONAL,
+      temporal: boolean,
+    ) => {
+      if (!this.decisionLocation) {
+        return;
+      }
+      const abortController = new AbortController();
+      try {
+        const decisionUri = this.decisionLocation.node.attrs.subject;
+        const conceptTemplate = (
+          await queryMobilityTemplates(this.endpoint, {
+            measureConceptUri: concept.uri,
+            abortSignal: abortController.signal,
+          })
+        )[0];
+        const resolvedTemplate = await resolveTemplate(
+          this.endpoint,
+          conceptTemplate,
+          {
+            abortSignal: abortController.signal,
+          },
+        );
+        this.controller.withTransaction(
+          () => {
+            return insertMeasure({
+              measureConcept: concept,
+              variables: resolvedTemplate.variables,
+              templateString: resolvedTemplate.templateString,
+              articleUriGenerator: this.args.options.articleUriGenerator,
+              decisionUri,
+              zonality,
+              temporal,
+            })(this.controller.mainEditorState).transaction;
+          },
+          { view: this.controller.mainEditorView },
+        );
+        console.log('Resolved template: ', resolvedTemplate);
+        this.args.closeModal();
+      } finally {
+        abortController.abort();
+      }
+    },
+  );
 
   @action
   resetPagination() {
@@ -452,7 +462,7 @@ export default class RoadsignsModal extends Component<Signature> {
           <RoadSignsTable
             @content={{this.measureConcepts}}
             @isLoading={{this.measureConceptsQuery.isRunning}}
-            @insert={{this.insertMeasure.perform}}
+            @insert={{this.insertMeasure}}
             @options={{@options}}
           />
           {{#if this.measureConceptCount}}

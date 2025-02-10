@@ -72,10 +72,9 @@ async function _queryMobilityMeasures<Count extends boolean>(
   options: QueryOptions<Count>,
 ): Promise<Result<Count>> {
   const { page = 0, pageSize = 10, count, imageBaseUrl, abortSignal } = options;
-  console.log('Options: ', options);
   const selectStatement = count
     ? /* sparql */ `SELECT (COUNT(DISTINCT(?uri)) AS ?count)`
-    : /* sparql */ `SELECT DISTINCT ?uri ?label ?preview ?zonality ?temporal`;
+    : /* sparql */ `SELECT DISTINCT ?uri ?label ?preview ?zonality ?variableSignage`;
 
   const filterStatement = _buildFilters(options).join('\n');
   const orderByStatement = !count
@@ -84,7 +83,6 @@ async function _queryMobilityMeasures<Count extends boolean>(
   const paginationStatement = !count
     ? /* sparql */ `LIMIT ${pageSize} OFFSET ${page}`
     : '';
-  console.log('Pagination statement: ', paginationStatement);
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -107,7 +105,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
         skos:prefLabel ?signCode.
 
       OPTIONAL {
-        ?uri mobiliteit:variabeleSignalisatie ?temporal.
+        ?uri mobiliteit:variabeleSignalisatie ?variableSignage.
       }
       OPTIONAL {
         ?signUri dct:type ?signClassification.
@@ -133,7 +131,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
         const objectified = objectify(binding);
         return {
           ...objectified,
-          temporal: objectified.temporal === 'true',
+          variableSignage: objectified.variableSignage === 'true',
         };
       }),
     );

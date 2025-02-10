@@ -18,10 +18,12 @@ import { Variable } from '../schemas/variable';
 import { buildArticleStructure } from '../../decision-plugin/utils/build-article-structure';
 import { insertArticle } from '../../decision-plugin/actions/insert-article';
 import { SignConcept } from '../schemas/sign-concept';
-import { SIGN_TYPE_MAPPING, SIGN_TYPES } from '../constants';
+import { SIGN_TYPE_MAPPING, SIGN_TYPES, ZONALITY_OPTIONS } from '../constants';
 
 interface InsertMeasureArgs {
   measureConcept: MobilityMeasureConcept;
+  zonality: typeof ZONALITY_OPTIONS.ZONAL | typeof ZONALITY_OPTIONS.NON_ZONAL;
+  temporal: boolean;
   variables: Record<string, Exclude<Variable, { type: 'instruction' }>>;
   templateString: string;
   decisionUri: string;
@@ -30,6 +32,8 @@ interface InsertMeasureArgs {
 
 export default function insertMeasure({
   measureConcept,
+  zonality,
+  temporal,
   variables,
   templateString,
   articleUriGenerator,
@@ -60,7 +64,12 @@ export default function insertMeasure({
       ];
     }
     const measureBody = constructMeasureBody(templateString, variables, schema);
-
+    const temporalNode = temporal
+      ? schema.nodes.paragraph.create(
+          {},
+          schema.text('Deze signalisatie is dynamisch.'),
+        )
+      : undefined;
     const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
     const measureNode = schema.nodes.block_rdfa.create(
       {
@@ -81,11 +90,7 @@ export default function insertMeasure({
           },
           {
             predicate: EXT('zonality').full,
-            object: sayDataFactory.namedNode(measureConcept.zonality),
-          },
-          {
-            predicate: EXT('temporal').full,
-            object: sayDataFactory.literal(measureConcept.temporal.toString()),
+            object: sayDataFactory.namedNode(zonality),
           },
           {
             predicate: DCT('description').full,
@@ -93,7 +98,7 @@ export default function insertMeasure({
           },
         ],
       },
-      [measureBody, ...signSection],
+      [measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
     );
     const articleNode = buildArticleStructure(
       state.schema,
