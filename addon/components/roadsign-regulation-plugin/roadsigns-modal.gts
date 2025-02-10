@@ -290,30 +290,39 @@ export default class RoadsignsModal extends Component<Signature> {
     if (!this.decisionLocation) {
       return;
     }
-    const decisionUri = this.decisionLocation.node.attrs.subject;
-    const conceptTemplate = (
-      await queryMobilityTemplates(this.endpoint, {
-        measureConceptUri: concept.uri,
-      })
-    )[0];
-    const resolvedTemplate = await resolveTemplate(
-      this.endpoint,
-      conceptTemplate,
-    );
-    this.controller.withTransaction(
-      () => {
-        return insertMeasure({
-          measureConcept: concept,
-          variables: resolvedTemplate.variables,
-          templateString: resolvedTemplate.templateString,
-          articleUriGenerator: this.args.options.articleUriGenerator,
-          decisionUri,
-        })(this.controller.mainEditorState).transaction;
-      },
-      { view: this.controller.mainEditorView },
-    );
-    console.log('Resolved template: ', resolvedTemplate);
-    this.args.closeModal();
+    const abortController = new AbortController();
+    try {
+      const decisionUri = this.decisionLocation.node.attrs.subject;
+      const conceptTemplate = (
+        await queryMobilityTemplates(this.endpoint, {
+          measureConceptUri: concept.uri,
+          abortSignal: abortController.signal,
+        })
+      )[0];
+      const resolvedTemplate = await resolveTemplate(
+        this.endpoint,
+        conceptTemplate,
+        {
+          abortSignal: abortController.signal,
+        },
+      );
+      this.controller.withTransaction(
+        () => {
+          return insertMeasure({
+            measureConcept: concept,
+            variables: resolvedTemplate.variables,
+            templateString: resolvedTemplate.templateString,
+            articleUriGenerator: this.args.options.articleUriGenerator,
+            decisionUri,
+          })(this.controller.mainEditorState).transaction;
+        },
+        { view: this.controller.mainEditorView },
+      );
+      console.log('Resolved template: ', resolvedTemplate);
+      this.args.closeModal();
+    } finally {
+      abortController.abort();
+    }
   });
 
   @action
