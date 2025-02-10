@@ -31,7 +31,6 @@
     .say-structure__title {
       flex: 1 1 100%;
 
-
       border: none;
       flex-grow: 1;
       display: inline-block;
@@ -88,11 +87,11 @@
   outline: none;
 }
 
-.ember-node.say-active>.say-structure {
+.ember-node.say-active > .say-structure {
   border-color: var(--au-blue-700);
   border-width: 0.2rem;
 
-  >.say-structure__header {
+  > .say-structure__header {
     border-bottom-color: var(--au-blue-700);
     border-bottom-width: 0.2rem;
   }
