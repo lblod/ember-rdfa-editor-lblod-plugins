@@ -1,5 +1,6 @@
 import {
   Attrs,
+  NodeSelection,
   NodeSpec,
   NodeType,
   PNode,
@@ -255,7 +256,22 @@ export function constructStructureHeaderNodeSpec({
   };
 }
 
+/**
+ * Find an ancestor of the current selection of one of the given nodetypes. Includes the selection
+ * itself if it is a NodeSelection
+ */
 export function findAncestorOfType(selection: Selection, ...types: NodeType[]) {
+  if (
+    selection instanceof NodeSelection &&
+    types.includes(selection.node.type)
+  ) {
+    return {
+      node: selection.node,
+      pos: selection.from,
+      start: selection.from,
+      depth: selection.$from.depth,
+    };
+  }
   const parent = findParentNodeOfType(types)(selection);
   if (parent) {
     return parent;
