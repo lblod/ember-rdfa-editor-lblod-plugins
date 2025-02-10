@@ -15,9 +15,8 @@ import {
 import queryRoadSignCategories from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/road-sign-category';
 import querySignCodes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/sign-codes';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
-import { NotImplementedError } from '@lblod/ember-rdfa-editor/utils/_private/errors';
 import { pagination } from 'dummy/helpers/pagination';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask, task, timeout } from 'ember-concurrency';
 import t from 'ember-intl/helpers/t';
 import PowerSelect from 'ember-power-select/components/power-select';
 import PowerSelectMultiple from 'ember-power-select/components/power-select-multiple';
@@ -31,6 +30,9 @@ import {
   SIGN_CONCEPT_TYPES,
   ZONALITY_OPTIONS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
+import { queryMobilityTemplates } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-template';
+import insertMeasure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/insert-measure';
 
 type Option = {
   uri: string;
@@ -284,14 +286,35 @@ export default class RoadsignsModal extends Component<Signature> {
     return this.measureConceptsQuery.value?.count;
   }
 
-  @action
-  insertHtml(
-    _measure: MobilityMeasureConcept,
-    _zonalityValue: string,
-    _temporalValue: string,
-  ) {
-    throw new NotImplementedError();
-  }
+  insertMeasure = task(async (concept: MobilityMeasureConcept) => {
+    if (!this.decisionLocation) {
+      return;
+    }
+    const decisionUri = this.decisionLocation.node.attrs.subject;
+    const conceptTemplate = (
+      await queryMobilityTemplates(this.endpoint, {
+        measureConceptUri: concept.uri,
+      })
+    )[0];
+    const resolvedTemplate = await resolveTemplate(
+      this.endpoint,
+      conceptTemplate,
+    );
+    this.controller.withTransaction(
+      () => {
+        return insertMeasure({
+          measureConcept: concept,
+          variables: resolvedTemplate.variables,
+          templateString: resolvedTemplate.templateString,
+          articleUriGenerator: this.args.options.articleUriGenerator,
+          decisionUri,
+        })(this.controller.mainEditorState).transaction;
+      },
+      { view: this.controller.mainEditorView },
+    );
+    console.log('Resolved template: ', resolvedTemplate);
+    this.args.closeModal();
+  });
 
   @action
   resetPagination() {
@@ -420,7 +443,7 @@ export default class RoadsignsModal extends Component<Signature> {
           <RoadSignsTable
             @content={{this.measureConcepts}}
             @isLoading={{this.measureConceptsQuery.isRunning}}
-            @insert={{this.insertHtml}}
+            @insert={{this.insertMeasure.perform}}
             @options={{@options}}
           />
           {{#if this.measureConceptCount}}
