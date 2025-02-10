@@ -16,6 +16,8 @@ common:
 structure-plugin:
   move-up: 'Move {structureName} up'
   move-down: 'Move {structureName} down'
+  remove: 'Remove {structureName}'
+  remove-with-content: 'Remove {structureName} with content'
   only-article-title: Only article
   shortened-article: Art.
   types:

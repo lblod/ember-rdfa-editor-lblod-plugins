@@ -16,6 +16,8 @@ common:
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
   move-down: '{structureName} naar beneden verplaatsen'
+  remove: '{structureName} verwijderen'
+  remove-with-content: '{structureName} en inhoud verwijderen'
   only-article-title: Enig artikel
   shortened-article: Art.
   types:
