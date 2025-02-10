@@ -24,9 +24,12 @@ import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/st
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
+import { regenerateRdfaLinks } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/regenerate-rdfa-links';
+
 interface Sig {
   Args: { controller: SayController };
 }
+
 export default class StructureControlCardComponent extends Component<Sig> {
   @service declare intl: IntlService;
   get controller(): SayController {
@@ -71,14 +74,18 @@ export default class StructureControlCardComponent extends Component<Sig> {
       if (withContent) {
         this.controller.withTransaction((tr, state) => {
           tr.replace(pos, pos + node.nodeSize);
-          return transactionCombinator<boolean>(state, tr)([recalculateNumbers])
-            .transaction;
+          return transactionCombinator<boolean>(
+            state,
+            tr,
+          )([recalculateNumbers, regenerateRdfaLinks]).transaction;
         });
       } else {
         this.controller.withTransaction((tr, state) => {
           tr.replaceWith(pos, pos + node.nodeSize, node.content);
-          return transactionCombinator<boolean>(state, tr)([recalculateNumbers])
-            .transaction;
+          return transactionCombinator<boolean>(
+            state,
+            tr,
+          )([recalculateNumbers, regenerateRdfaLinks]).transaction;
         });
       }
     }
@@ -148,7 +155,10 @@ export default class StructureControlCardComponent extends Component<Sig> {
                       {{hover.handleHover}}
                       {{on 'click' (fn this.removeStructure false)}}
                     >
-                      {{t 'article-structure-plugin.remove.article'}}
+                      {{t
+                        'structure-plugin.remove'
+                        structureName=this.structureName
+                      }}
                     </AuButton>
                   </:hover>
                   <:tooltip as |tooltip|>
@@ -170,7 +180,8 @@ export default class StructureControlCardComponent extends Component<Sig> {
                       {{on 'click' (fn this.removeStructure true)}}
                     >
                       {{t
-                        'article-structure-plugin.remove-with-content.article'
+                        'structure-plugin.remove-with-content'
+                        structureName=this.structureName
                       }}
                     </AuButton>
                   </:hover>
