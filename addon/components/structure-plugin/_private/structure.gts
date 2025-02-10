@@ -180,7 +180,9 @@ export default class Structure extends Component<Sig> {
       <div class='say-structure__header' contenteditable='false'>
 
         {{#let (element this.headerTag) as |Tag|}}
-          <Tag>{{this.title}}
+          <Tag class='say-structure__header-element'><span
+              class='say-structure__name'
+            >{{this.title}}</span>
 
             {{#if this.hasTitle}}
               <span

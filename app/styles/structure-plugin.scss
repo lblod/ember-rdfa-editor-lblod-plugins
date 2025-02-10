@@ -6,39 +6,77 @@
   flex-direction: column;
   white-space: normal;
 }
+
 .say-structure__header {
   background-color: var(--au-gray-100);
-  display: flex;
-  gap: 5px;
-  flex-direction: row;
   padding-left: 0.7rem;
   border-bottom: 1px solid var(--au-gray-300);
   border-radius: 0.1em 0.1em 0 0;
 
-  h5 {
+  .say-structure__header-element {
     margin: 0;
     font-weight: var(--au-medium);
-    font-size: var(--au-h-functional);
-  }
-  .say-structure__title {
-    flex-grow: 1;
-  }
-  [contenteditable] {
-    border: none;
-    font-size: var(--au-h4);
-    flex-grow: 1;
-    &:focus {
-      outline: none;
+    /* font-size: var(--au-h-functional); */
+    gap: 5px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    display: flex;
+    width: 100%;
+    align-content: baseline;
+
+    .say-structure__name {
+      flex: 0 0 content;
     }
-    padding: 0;
-    white-space: break-spaces;
-    word-break: break-word;
-    word-wrap: break-word;
+
+    .say-structure__title {
+      flex: 1 1 100%;
+
+
+      border: none;
+      flex-grow: 1;
+      display: inline-block;
+
+      &:focus {
+        outline: none;
+      }
+
+      padding: 0;
+      white-space: break-spaces;
+      word-break: break-word;
+      word-wrap: break-word;
+    }
+  }
+
+  h1.say-structure__header-element {
+    font-size: var(--au-h1);
+  }
+
+  h2.say-structure__header-element {
+    font-size: var(--au-h2);
+  }
+
+  h3.say-structure__header-element {
+    font-size: var(--au-h3);
+  }
+
+  h4.say-structure__header-element {
+    font-size: var(--au-h4);
+  }
+
+  h5.say-structure__header-element {
+    font-size: var(--au-h5);
+  }
+
+  h6.say-structure__header-element {
+    font-size: var(--au-h6);
   }
 }
+
 .say-structure__content {
   padding: 0.7rem;
   padding-right: 3rem;
+  margin-top: 0 !important;
+
   [data-slot] {
     white-space: break-spaces;
     word-break: break-word;
@@ -50,10 +88,11 @@
   outline: none;
 }
 
-.ember-node.say-active > .say-structure {
+.ember-node.say-active>.say-structure {
   border-color: var(--au-blue-700);
   border-width: 0.2rem;
-  > .say-structure__header {
+
+  >.say-structure__header {
     border-bottom-color: var(--au-blue-700);
     border-bottom-width: 0.2rem;
   }
