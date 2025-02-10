@@ -277,7 +277,7 @@ export default class DateEditComponent extends Component<Args> {
         return tr.setNodeAttribute(pos, 'custom', true);
       });
     } else {
-      const format = this.formats.find((format) => format.key === formatKey);
+      const format = this.formats.find((frmt) => frmt.key === formatKey);
       if (format) {
         this.setDateFormat(
           this.onlyDate ? format.dateFormat : format.dateTimeFormat,

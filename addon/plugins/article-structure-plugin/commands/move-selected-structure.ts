@@ -136,11 +136,12 @@ export function calculateInsertionRange(args: {
     }).next().value;
     if (containerRange) {
       const { from, to } = containerRange;
-      const containerNode = doc.nodeAt(from);
-      if (!containerNode) return null;
+      const containerRangeFirstNode = doc.nodeAt(from);
+      if (!containerRangeFirstNode) return null;
       if (
-        containerNode.firstChild?.type === schema.nodes['paragraph'] &&
-        containerNode.firstChild.firstChild?.type ===
+        containerRangeFirstNode.firstChild?.type ===
+          schema.nodes['paragraph'] &&
+        containerRangeFirstNode.firstChild.firstChild?.type ===
           schema.nodes['placeholder']
       ) {
         return { from: from + 1, to: to - 1 };

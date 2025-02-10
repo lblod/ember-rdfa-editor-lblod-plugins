@@ -131,8 +131,10 @@ export function createSnippet({
   // Find all the new backlinks that refer to imported resources and generate OutgoingLinks for them
   const importedTriples: Map<string, OutgoingTriple[]> = new Map();
   if (Object.keys(importedResources ?? {}).length > 0) {
-    contentAsNode.descendants((node) => {
-      const backlinks = node.attrs.backlinks as IncomingTriple[] | undefined;
+    contentAsNode.descendants((descendantNode) => {
+      const backlinks = descendantNode.attrs.backlinks as
+        | IncomingTriple[]
+        | undefined;
       if (backlinks && backlinks.length > 0) {
         for (const imported in importedResources) {
           const linked = importedResources[imported];
@@ -142,7 +144,9 @@ export function createSnippet({
             );
             if (backlink) {
               const collectedLinks = importedTriples.get(linked) || [];
-              collectedLinks.push(outgoingFromBacklink(backlink, node.attrs));
+              collectedLinks.push(
+                outgoingFromBacklink(backlink, descendantNode.attrs),
+              );
               importedTriples.set(linked, collectedLinks);
             }
           }

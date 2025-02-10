@@ -121,6 +121,8 @@ import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuids
 import { getOwner } from '@ember/owner';
 
 export default class BesluitSampleController extends Controller {
+  queryParams = ['editableNodes'];
+
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;

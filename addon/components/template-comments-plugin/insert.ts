@@ -35,6 +35,13 @@ export default class TemplateCommentsPluginInsertCardComponent extends Component
   insertCommand(): Command {
     return (state, dispatch) => {
       if (!this.controller || this.controller.inEmbeddedView) return false;
+      if (this.controller.mainEditorState.doc !== state.doc) {
+        // TODO this shouldn't happen. Maybe we need to include this check in `inEmbeddedView`?
+        console.warn(
+          'Controller thinks we are not in an embedded view, but command was called with a state with a doc that is not the main one',
+        );
+        return false;
+      }
 
       const selection = this.controller.mainEditorState.selection;
       const parent = findParentNode((node) => {

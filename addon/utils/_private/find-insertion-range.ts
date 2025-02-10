@@ -3,7 +3,7 @@ import { NodeType, PNode, ResolvedPos, Schema } from '@lblod/ember-rdfa-editor';
 import { containsOnlyPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
-type Return = {
+type InsertionRange = {
   from: number;
   to: number;
   containerNode: PNode;
@@ -14,7 +14,7 @@ export function findInsertionRange(args: {
   nodeType: NodeType;
   schema: Schema;
   limitTo?: string;
-}): Return | null {
+}): InsertionRange | null {
   const { doc, $from, nodeType, schema, limitTo } = args;
   for (let currentDepth = $from.depth; currentDepth >= 0; currentDepth--) {
     const currentAncestor = $from.node(currentDepth);

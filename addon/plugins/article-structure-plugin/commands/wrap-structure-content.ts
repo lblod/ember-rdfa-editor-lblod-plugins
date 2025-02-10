@@ -175,13 +175,13 @@ function findInsertionContainer(
         let firstOfTypePosition: null | number = null;
         let lastOfTypePosition: null | number = null;
 
-        currentAncestorParent.forEach((node, pos) => {
+        currentAncestorParent.forEach((node, position) => {
           if (node.type === currentAncestor.type) {
             if (!firstOfTypePosition) {
-              firstOfTypePosition = pos;
+              firstOfTypePosition = position;
             }
 
-            lastOfTypePosition = pos;
+            lastOfTypePosition = position;
           }
         });
 

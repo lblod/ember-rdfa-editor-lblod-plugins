@@ -31,9 +31,9 @@ export function moveStructure(direction: 'up' | 'down'): Command {
       }
       const previousStructurePos =
         findNodePosUp(doc, pos, ($pos: ResolvedPos) => {
-          const node = $pos.nodeAfter;
-          if (node) {
-            return node.type.name === 'structure';
+          const nodeAfter = $pos.nodeAfter;
+          if (nodeAfter) {
+            return nodeAfter.type.name === 'structure';
           }
           return false;
         }).next().value ?? null;
