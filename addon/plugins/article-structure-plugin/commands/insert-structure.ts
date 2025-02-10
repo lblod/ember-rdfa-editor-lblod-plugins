@@ -13,27 +13,18 @@ const insertStructure = (
   uriGenerator: StructurePluginOptions['uriGenerator'],
 ): Command => {
   return (state, dispatch) => {
-    const insertStructureTransaction = findHowToInsertStructure(
-      state,
-      structureType,
-      uriGenerator,
-    );
-    if (insertStructureTransaction) {
-      const { result, transaction } = transactionCombinator(
-        state,
-        insertStructureTransaction,
-        // Prevent calculations that will not fail, if the command is just being tested
-      )(dispatch ? [recalculateNumbers, regenerateRdfaLinks] : []);
+    const { result, transaction } = transactionCombinator(state)([
+      findHowToInsertStructure(structureType, uriGenerator),
+      // Prevent calculations that will not fail, if the command is just being tested
+      ...(dispatch ? [recalculateNumbers, regenerateRdfaLinks] : []),
+    ]);
 
-      transaction.scrollIntoView();
-      if (result.every((ok) => ok)) {
-        if (dispatch) {
-          dispatch(transaction);
-        }
-        return true;
-      } else {
-        return false;
+    transaction.scrollIntoView();
+    if (result.every((ok) => ok)) {
+      if (dispatch) {
+        dispatch(transaction);
       }
+      return true;
     } else {
       return false;
     }
