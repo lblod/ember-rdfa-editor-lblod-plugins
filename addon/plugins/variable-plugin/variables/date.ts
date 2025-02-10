@@ -37,6 +37,7 @@ import {
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 const TRANSLATION_FALLBACKS = {
   insertDate: 'Datum invoegen',
@@ -104,7 +105,7 @@ const parseDOM = [
         const datatype = onlyDate ? XSD('date') : XSD('dateTime');
         const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
         const content = node.getAttribute('content');
-        const properties = [
+        const properties: OutgoingTriple[] = [
           {
             predicate: RDF('type').full,
             object: sayDataFactory.namedNode(EXT('Mapping').full),
@@ -171,7 +172,7 @@ const parseDOM = [
         const value = dateNode?.getAttribute('content');
         const format = dateNode?.dataset.format;
         const label = parseLabel(node);
-        const properties = [
+        const properties: OutgoingTriple[] = [
           {
             predicate: RDF('type').full,
             object: sayDataFactory.namedNode(EXT('Mapping').full),

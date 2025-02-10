@@ -1,21 +1,19 @@
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
+import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import RoadsignsModal from './roadsigns-modal';
+import { not } from 'ember-truth-helpers';
+import { on } from '@ember/modifier';
+import t from 'ember-intl/helpers/t';
+import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
-/**
- * Card displaying a hint of the Date plugin
- *
- * @module editor-roadsign-regulation-plugin
- * @class RoadsignRegulationCard
- * @extends Ember.Component
- */
-const acceptedTypes = [
+const ACCEPTED_TYPES = [
   'https://data.vlaanderen.be/id/concept/BesluitType/4d8f678a-6fa4-4d5f-a2a1-80974e43bf34',
   'https://data.vlaanderen.be/id/concept/BesluitType/7d95fd2e-3cc9-4a4c-a58e-0fbc408c2f9b',
   'https://data.vlaanderen.be/id/concept/BesluitType/3bba9f10-faff-49a6-acaa-85af7f2199a3',
@@ -25,14 +23,14 @@ const acceptedTypes = [
   'https://data.vlaanderen.be/id/concept/BesluitType/67378dd0-5413-474b-8996-d992ef81637a',
 ];
 
-type Args = {
-  controller: SayController;
-  options: RoadsignRegulationPluginOptions;
+type Signature = {
+  Args: {
+    controller: SayController;
+    options: RoadsignRegulationPluginOptions;
+  };
 };
 
-export default class RoadsignRegulationCard extends Component<Args> {
-  AddIcon = AddIcon;
-
+export default class RoadsingRegulationCard extends Component<Signature> {
   @tracked modalOpen = false;
 
   @action
@@ -48,10 +46,6 @@ export default class RoadsignRegulationCard extends Component<Args> {
 
   get controller() {
     return this.args.controller;
-  }
-
-  get schema() {
-    return this.args.controller.schema;
   }
 
   get showCard() {
@@ -75,8 +69,28 @@ export default class RoadsignRegulationCard extends Component<Args> {
     }
 
     const decisionHasAcceptedType = decisionTypes.some((type) =>
-      acceptedTypes.includes(type),
+      ACCEPTED_TYPES.includes(type),
     );
     return decisionHasAcceptedType;
   }
+
+  <template>
+    <li class='au-c-list__item'>
+      <AuButton
+        @skin='link'
+        @icon={{AddIcon}}
+        @iconAlignment='left'
+        @disabled={{not this.showCard}}
+        {{on 'click' this.openModal}}
+      >
+        {{t 'editor-plugins.roadsign-regulation.card.insert-measure'}}
+      </AuButton>
+    </li>
+    <RoadsignsModal
+      @modalOpen={{this.modalOpen}}
+      @closeModal={{this.closeModal}}
+      @controller={{@controller}}
+      @options={{@options}}
+    />
+  </template>
 }

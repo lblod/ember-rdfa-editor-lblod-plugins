@@ -7,12 +7,15 @@ import {
 import { Option } from './option';
 import { Attrs } from '@lblod/ember-rdfa-editor';
 
-export class Resource {
-  full: string;
-  prefixed: string;
+export class Resource<
+  Full extends string = string,
+  Prefixed extends string = string,
+> {
+  full: Full;
+  prefixed: Prefixed;
   namedNode: SayNamedNode;
 
-  constructor(full: string, prefixed: string) {
+  constructor(full: Full, prefixed: Prefixed) {
     this.full = full;
     this.prefixed = prefixed;
     this.namedNode = sayDataFactory.namedNode(full);
@@ -27,9 +30,12 @@ export class Resource {
   }
 }
 
-export function namespace(uri: string, prefix: string) {
-  return (s: string): Resource => {
-    return new Resource(uri + s, `${prefix}:${s}`);
+export function namespace<
+  Uri extends string = string,
+  Prefix extends string = string,
+>(uri: Uri, prefix: Prefix) {
+  return <Suffix extends string = string>(s: Suffix) => {
+    return new Resource(`${uri}${s}`, `${prefix}:${s}`);
   };
 }
 
