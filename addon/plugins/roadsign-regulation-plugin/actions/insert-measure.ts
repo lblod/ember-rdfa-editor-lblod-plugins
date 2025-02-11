@@ -145,13 +145,13 @@ function constructMeasureBody(
   variables: Record<string, Exclude<Variable, { type: 'instruction' }>>,
   schema: Schema,
 ) {
-  const parts = templateString.split(/(\$\{.+\})/);
+  const parts = templateString.split(/(\$\{[^{}$]+\})/);
   const nodes = [];
   for (const part of parts) {
     if (!part) {
       continue;
     }
-    const match = /^\$\{(.+)\}$/.exec(part);
+    const match = /^\$\{([^{}$]+)\}$/.exec(part);
     if (match) {
       const variableName = match[1];
       const matchedVariable = variables[variableName];
