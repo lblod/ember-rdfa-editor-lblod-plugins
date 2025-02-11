@@ -24,6 +24,8 @@ import {
   SIGN_TYPES,
   ZONALITY_OPTIONS,
 } from '../constants';
+import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
+import { generateVariableInstanceUri } from '../../variable-plugin/utils/variable-helpers';
 
 interface InsertMeasureArgs {
   measureConcept: MobilityMeasureConcept;
@@ -199,9 +201,16 @@ function constructVariableNode(
   variable: Exclude<Variable, { type: 'instruction' }>,
   schema: Schema,
 ) {
+  const variableInstance = generateVariableInstanceUri();
+  const args = {
+    schema,
+    variable: variable.uri,
+    variableInstance,
+    label: variable.label,
+  };
   switch (variable.type) {
     case 'text':
-      return constructTextVariableNode(variable, schema);
+      return createTextVariable(args);
     case 'number':
       return constructNumberVariableNode(variable, schema);
     case 'date':
@@ -211,16 +220,6 @@ function constructVariableNode(
     case 'location':
       return constructLocationVariableNode(variable, schema);
   }
-}
-
-function constructTextVariableNode(
-  variable: Extract<Variable, { type: 'text' }>,
-  schema: Schema,
-) {
-  return schema.nodes.placeholder.create({
-    placeholderText: variable.label,
-  });
-  return schema.nodes.text_variable.create();
 }
 
 function constructNumberVariableNode(

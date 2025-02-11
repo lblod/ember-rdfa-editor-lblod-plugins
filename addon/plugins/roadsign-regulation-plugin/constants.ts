@@ -34,4 +34,4 @@ export const SIGN_CONCEPT_TYPE_LABELS = {
   [SIGN_CONCEPT_TYPES.ROAD_SIGN]: 'Verkeersbord',
   [SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT]: 'Verkeerslicht',
   [SIGN_CONCEPT_TYPES.ROAD_MARKING]: 'Wegmarkering',
-};
+} as const;
