@@ -13,7 +13,7 @@ import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { trackedReset } from 'tracked-toolbox';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { DCT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory/data-factory';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import LabelInput from '../utils/label-input';
@@ -97,7 +97,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   }
   get labelAttr() {
     if (!this.selectedVariable) return '';
-    return getOutgoingTriple(this.selectedVariable.node.attrs, EXT('label'))
+    return getOutgoingTriple(this.selectedVariable.node.attrs, DCT('title'))
       ?.object.value;
   }
 
@@ -147,10 +147,10 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
           const oldProperties = this.selectedVariable?.node.attrs.properties;
           const newProperties = oldProperties.filter(
             (property: nodeProperty) =>
-              property.predicate !== EXT('label').full,
+              property.predicate !== DCT('title').full,
           );
           newProperties.push({
-            predicate: EXT('label').full,
+            predicate: DCT('title').full,
             object: sayDataFactory.literal(this.label || ''),
           });
           tr.setNodeAttribute(position, 'properties', newProperties);
