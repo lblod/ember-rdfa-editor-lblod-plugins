@@ -26,6 +26,7 @@ import {
 } from '../constants';
 import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
 import { generateVariableInstanceUri } from '../../variable-plugin/utils/variable-helpers';
+import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
 
 interface InsertMeasureArgs {
   measureConcept: MobilityMeasureConcept;
@@ -212,7 +213,7 @@ function constructVariableNode(
     case 'text':
       return createTextVariable(args);
     case 'number':
-      return constructNumberVariableNode(variable, schema);
+      return createNumberVariable(args);
     case 'date':
       return constructDateVariableNode(variable, schema);
     case 'codelist':
@@ -220,16 +221,6 @@ function constructVariableNode(
     case 'location':
       return constructLocationVariableNode(variable, schema);
   }
-}
-
-function constructNumberVariableNode(
-  variable: Extract<Variable, { type: 'number' }>,
-  schema: Schema,
-) {
-  return schema.nodes.placeholder.create({
-    placeholderText: variable.label,
-  });
-  return schema.nodes.number.create();
 }
 
 function constructDateVariableNode(

@@ -17,9 +17,9 @@ import {
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
-  DCT,
   EXT,
   RDF,
+  VARIABLES,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
@@ -30,27 +30,29 @@ import {
   parseVariableInstance,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
-import { v4 as uuidv4 } from 'uuid';
 import NumberNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { generateVariableInstanceUri } from '../utils/variable-helpers';
+import { createNumberVariableAttrs } from '../actions/create-number-variable';
 
 const rdfaAware = true;
 const parseDOM: TagParseRule[] = [
   {
     tag: 'span',
-    getAttrs(node: HTMLElement) {
+    getAttrs: (node: HTMLElement) => {
       const attrs = getRdfaAttrs(node, { rdfaAware });
       if (!attrs) {
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
-        node.querySelector('[data-content-container="true"]') &&
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
         hasRdfaVariableType(attrs, 'number')
       ) {
         if (attrs.rdfaNodeType !== 'resource') {
@@ -70,65 +72,89 @@ const parseDOM: TagParseRule[] = [
       return false;
     },
   },
+];
+
+const parseDOMLegacy: TagParseRule[] = [
+  {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs) {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
+        hasRdfaVariableType(attrs, 'number')
+      ) {
+        if (attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+        const writtenNumber =
+          node.getAttribute('data-written-number') === 'true' ? true : false;
+        const minimumValue = node.dataset.minimumValue
+          ? parseInt(node.dataset.minimumValue)
+          : undefined;
+        const maximumValue = node.dataset.maximumValue
+          ? parseInt(node.dataset.maximumValue)
+          : undefined;
+        const variableUri = attrs.subject;
+        if (!variableUri) {
+          return false;
+        }
+        const variableInstanceUri =
+          getOutgoingTriple(attrs, EXT('instance'))?.object.value ??
+          generateVariableInstanceUri();
+        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+        const value = getOutgoingTriple(attrs, EXT('value'))?.object.value;
+        return createNumberVariableAttrs({
+          variableInstance: variableInstanceUri,
+          variable: variableUri,
+          label,
+          value,
+          maximumValue,
+          minimumValue,
+          writtenNumber,
+        });
+      }
+      return false;
+    },
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'number') {
-        const mappingSubject =
+        const variableUri =
           node.getAttribute('subject') ||
           node.getAttribute('resource') ||
           node.getAttribute('about');
-        if (!mappingSubject) {
+        if (!variableUri) {
           return false;
         }
-        const variableInstance = parseVariableInstance(node);
-        const label = parseLabel(node);
-        const value = [...node.children]
-          .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
-          ?.getAttribute('content');
+        const variableInstanceUri =
+          parseVariableInstance(node) ?? generateVariableInstanceUri();
+        const label = parseLabel(node) ?? undefined;
+        const value =
+          [...node.children]
+            .find((el) => hasRDFaAttribute(el, 'property', EXT('content')))
+            ?.getAttribute('content') ?? undefined;
         const writtenNumber =
           node.getAttribute('data-written-number') === 'true' ? true : false;
-        const minimumValue = node.getAttribute('data-minimum-value');
-        const maximumValue = node.getAttribute('data-maximum-value');
+        const minimumValue = node.dataset.minimumValue
+          ? parseInt(node.dataset.minimumValue)
+          : undefined;
+        const maximumValue = node.dataset.maximumValue
+          ? parseInt(node.dataset.maximumValue)
+          : undefined;
 
-        const properties: OutgoingTriple[] = [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(
-              variableInstance ??
-                `http://data.lblod.info/variables/${uuidv4()}`,
-            ),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('number'),
-          },
-        ];
-        if (label) {
-          properties.push({
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          });
-        }
-        if (value) {
-          properties.push({
-            predicate: EXT('content').full,
-            object: sayDataFactory.literal(value),
-          });
-        }
-        return {
-          writtenNumber,
-          minimumValue,
+        return createNumberVariableAttrs({
+          variableInstance: variableInstanceUri,
+          variable: variableUri,
+          label,
+          value,
           maximumValue,
-          subject: mappingSubject,
-          rdfaNodeType: 'resource',
-          __rdfaId: uuidv4(),
-          properties,
-        };
+          minimumValue,
+          writtenNumber,
+        });
       } else {
         return false;
       }
@@ -188,7 +214,7 @@ const emberNodeConfig: EmberNodeConfig = {
     const { value } = node.attrs;
     return value as string;
   },
-  parseDOM,
+  parseDOM: [...parseDOM, ...parseDOMLegacy],
   serialize,
 };
 

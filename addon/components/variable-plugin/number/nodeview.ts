@@ -15,7 +15,10 @@ import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  DCT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 type Args = {
@@ -55,7 +58,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get number(): string | null | undefined {
-    return getOutgoingTriple(this.node.attrs, EXT('content'))?.object.value;
+    return getOutgoingTriple(this.node.attrs, RDF('value'))?.object.value;
   }
 
   get formattedNumber() {
@@ -96,7 +99,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
   get label(): string | undefined {
     if (this.inputNumber) return '';
-    return getOutgoingTriple(this.args.node.attrs, EXT('label'))?.object.value;
+    return getOutgoingTriple(this.args.node.attrs, DCT('title'))?.object.value;
   }
 
   @action onInputNumberChange(event: InputEvent) {
@@ -148,11 +151,11 @@ export default class NumberNodeviewComponent extends Component<Args> {
           ? attrs.properties
           : [];
       const newProperties = properties.filter((prop) => {
-        return !EXT('content').matches(prop.predicate);
+        return !RDF('value').matches(prop.predicate);
       });
       if (this.inputNumber) {
         newProperties.push({
-          predicate: EXT('content').full,
+          predicate: RDF('value').full,
           object: sayDataFactory.literal(this.inputNumber),
         });
       }
