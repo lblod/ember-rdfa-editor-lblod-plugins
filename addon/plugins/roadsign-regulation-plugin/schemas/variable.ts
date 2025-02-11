@@ -3,6 +3,7 @@ import { z } from 'zod';
 const BaseVariableSchema = z.object({
   uri: z.string(),
   label: z.string(),
+  source: z.string().optional(),
 });
 const TextVariableSchema = BaseVariableSchema.extend({
   type: z.literal('text'),

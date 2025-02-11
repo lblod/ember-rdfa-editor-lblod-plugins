@@ -51,5 +51,9 @@ export async function queryVariables(
     abortSignal,
   });
   const bindings = queryResult.results.bindings;
-  return VariableSchema.array().parse(bindings.map(objectify));
+  return VariableSchema.array().parse(
+    bindings.map((binding) => {
+      return { ...objectify(binding), source: endpoint };
+    }),
+  );
 }

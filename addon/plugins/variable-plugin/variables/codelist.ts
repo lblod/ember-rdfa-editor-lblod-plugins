@@ -1,4 +1,5 @@
 import {
+  getOutgoingTriple,
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -6,25 +7,23 @@ import {
   DCT,
   EXT,
   RDF,
+  VARIABLES,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { v4 as uuidv4 } from 'uuid';
 import {
   DOMOutputSpec,
   PNode,
   getRdfaAttrs,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   hasRdfaVariableType,
   isVariable,
   parseLabel,
-  parseSelectionStyle,
   parseVariableInstance,
   parseVariableSource,
   parseVariableType,
@@ -33,13 +32,45 @@ import VariableNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/co
 import type { ComponentLike } from '@glint/template';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { generateVariableInstanceUri } from '../utils/variable-helpers';
+import { createCodelistVariableAttrs } from '../actions/create-codelist-variable';
 
-const CONTENT_SELECTOR = `span[property~='${EXT('content').prefixed}'],
+const CONTENT_SELECTOR = '[data-content-container="true"]';
+
+const CONTENT_SELECTOR_LEGACY = `span[property~='${EXT('content').prefixed}'],
                           span[property~='${EXT('content').full}']`;
 const rdfaAware = true;
 
 const parseDOM = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs) {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        hasRdfaVariableType(attrs, 'codelist')
+      ) {
+        if (attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+        const selectionStyle = node.dataset.selectionStyle;
+        return { ...attrs, selectionStyle };
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
+];
+
+const parseDOMLegacy = [
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
@@ -49,98 +80,73 @@ const parseDOM = [
       }
       if (
         hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
-        node.querySelector('[data-content-container="true"]') &&
+        node.querySelector(CONTENT_SELECTOR) &&
         hasRdfaVariableType(attrs, 'codelist')
       ) {
         if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
-        const selectionStyle = node.dataset.selectionStyle ?? null;
-
-        return {
-          ...attrs,
+        const variableUri = attrs.subject;
+        const variableInstanceUri =
+          getOutgoingTriple(attrs, EXT('instance'))?.object.value ??
+          generateVariableInstanceUri();
+        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+        const codelistUri = getOutgoingTriple(attrs, EXT('codelist'))?.object
+          .value;
+        const sourceUri = getOutgoingTriple(attrs, DCT('source'))?.object.value;
+        const selectionStyle = node.dataset.selectionStyle;
+        return createCodelistVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          source: sourceUri,
+          codelist: codelistUri,
           selectionStyle,
-        };
+        });
       }
       return false;
     },
-    contentElement: '[data-content-container="true"]',
+    contentElement: CONTENT_SELECTOR,
   },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (
         isVariable(node) &&
-        node.querySelector(CONTENT_SELECTOR) &&
+        node.querySelector(CONTENT_SELECTOR_LEGACY) &&
         parseVariableType(node) === 'codelist'
       ) {
-        const mappingResource = node.getAttribute('resource');
-        if (!mappingResource) {
+        const variableUri = node.getAttribute('resource');
+        if (!variableUri) {
           return false;
         }
-        const variableInstance = parseVariableInstance(node);
+        const variableInstanceUri =
+          parseVariableInstance(node) ?? generateVariableInstanceUri();
 
-        const source = parseVariableSource(node);
-        const label = parseLabel(node);
-        const selectionStyle = parseSelectionStyle(node);
-        const codelistSpan = [...node.children].find((el) =>
+        const source = parseVariableSource(node) ?? undefined;
+        const label = parseLabel(node) ?? undefined;
+        const selectionStyle = node.dataset.selectionStyle;
+        const codelistSpan = Array.from(node.children).find((el) =>
           hasRDFaAttribute(el, 'property', EXT('codelist')),
         );
-        const codelistResource =
+        const codelistUri =
           codelistSpan?.getAttribute('resource') ??
-          codelistSpan?.getAttribute('content');
+          codelistSpan?.getAttribute('content') ??
+          undefined;
 
-        const properties: OutgoingTriple[] = [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(
-              variableInstance ??
-                `http://data.lblod.info/variables/${uuidv4()}`,
-            ),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('codelist'),
-          },
-          {
-            predicate: EXT('content').full,
-            object: sayDataFactory.contentLiteral(),
-          },
-        ];
-        if (label) {
-          properties.push({
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          });
-        }
-        if (codelistResource) {
-          properties.push({
-            predicate: EXT('codelist').full,
-            object: sayDataFactory.namedNode(codelistResource),
-          });
-        }
-        if (source) {
-          properties.push({
-            predicate: DCT('source').full,
-            object: sayDataFactory.namedNode(source),
-          });
-        }
-        return {
+        return createCodelistVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          source,
+          codelist: codelistUri,
           selectionStyle,
-          subject: mappingResource,
-          rdfaNodeType: 'resource',
-          __rdfaId: uuidv4(),
-          properties,
-        };
+        });
       }
 
       return false;
     },
-    contentElement: CONTENT_SELECTOR,
+    contentElement: CONTENT_SELECTOR_LEGACY,
   },
 ];
 
@@ -176,7 +182,7 @@ const emberNodeConfig: EmberNodeConfig = {
     },
   },
   toDOM,
-  parseDOM,
+  parseDOM: [...parseDOM, ...parseDOMLegacy],
 };
 
 export const codelist = createEmberNodeSpec(emberNodeConfig);
