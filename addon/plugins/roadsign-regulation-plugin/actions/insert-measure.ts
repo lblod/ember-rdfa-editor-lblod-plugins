@@ -29,6 +29,7 @@ import { generateVariableInstanceUri } from '../../variable-plugin/utils/variabl
 import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
 import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
+import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 
 interface InsertMeasureArgs {
   measureConcept: MobilityMeasureConcept;
@@ -99,6 +100,7 @@ export default function insertMeasure({
             object: sayDataFactory.namedNode(measureConcept.uri),
           },
           {
+            //TODO: not sure about this predicate...
             predicate: EXT('zonality').full,
             object: sayDataFactory.namedNode(zonality),
           },
@@ -225,16 +227,9 @@ function constructVariableNode(
         codelist: variable.codelistUri,
       });
     case 'location':
-      return constructLocationVariableNode(variable, schema);
+      return createClassicLocationVariable({
+        ...args,
+        source: variable.source,
+      });
   }
-}
-
-function constructLocationVariableNode(
-  variable: Extract<Variable, { type: 'location' }>,
-  schema: Schema,
-) {
-  return schema.nodes.placeholder.create({
-    placeholderText: variable.label,
-  });
-  return schema.nodes.location.create();
 }
