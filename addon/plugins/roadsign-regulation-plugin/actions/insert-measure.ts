@@ -18,7 +18,12 @@ import { Variable } from '../schemas/variable';
 import { buildArticleStructure } from '../../decision-plugin/utils/build-article-structure';
 import { insertArticle } from '../../decision-plugin/actions/insert-article';
 import { SignConcept } from '../schemas/sign-concept';
-import { SIGN_TYPE_MAPPING, SIGN_TYPES, ZONALITY_OPTIONS } from '../constants';
+import {
+  SIGN_CONCEPT_TYPE_LABELS,
+  SIGN_TYPE_MAPPING,
+  SIGN_TYPES,
+  ZONALITY_OPTIONS,
+} from '../constants';
 
 interface InsertMeasureArgs {
   measureConcept: MobilityMeasureConcept;
@@ -164,7 +169,7 @@ function constructMeasureBody(
 
 function constructSignNode(signConcept: SignConcept, schema: Schema) {
   const signUri = `http://data.lblod.info/verkeerstekens/${uuid()}`;
-
+  const prefix = SIGN_CONCEPT_TYPE_LABELS[signConcept.type];
   const node = schema.nodes.inline_rdfa.create(
     {
       rdfaNodeType: 'resource',
@@ -185,7 +190,7 @@ function constructSignNode(signConcept: SignConcept, schema: Schema) {
         },
       ],
     },
-    schema.text(signConcept.code),
+    schema.text(`${prefix} ${signConcept.code}`),
   );
   return node;
 }
