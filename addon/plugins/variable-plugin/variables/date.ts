@@ -3,11 +3,10 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
-  DCT,
   EXT,
   RDF,
+  VARIABLES,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -31,13 +30,16 @@ import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { formatDate, validateDateFormat } from '../utils/date-helpers';
 import DateNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/nodeview';
-import { v4 as uuidv4 } from 'uuid';
 import {
   RdfaAttrs,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import {
+  generateVariableInstanceUri,
+  generateVariableUri,
+} from '../utils/variable-helpers';
+import { createDateVariableAttrs } from '../actions/create-date-variable';
 
 const TRANSLATION_FALLBACKS = {
   insertDate: 'Datum invoegen',
@@ -67,6 +69,40 @@ const parseDOM = [
         return false;
       }
       if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        hasRdfaVariableType(attrs, 'date')
+      ) {
+        if (attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+        const format = node.dataset.format;
+        const custom = node.dataset.custom === 'true';
+        const customAllowed = node.dataset.customAllowed !== 'false';
+
+        return {
+          ...attrs,
+          format,
+          custom,
+          customAllowed,
+        };
+      }
+      return false;
+    },
+  },
+];
+const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs) {
+        return false;
+      }
+      if (
         hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
         node.querySelector('[data-content-container="true"]') &&
         hasRdfaVariableType(attrs, 'date')
@@ -74,16 +110,26 @@ const parseDOM = [
         if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
-
+        const variableUri = attrs.subject;
+        const variableInstanceUri =
+          getOutgoingTriple(attrs, EXT('instance'))?.object.value ??
+          generateVariableInstanceUri();
+        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+        const value = getOutgoingTriple(attrs, EXT('content'))?.object.value;
         const format = node.dataset.format;
+        const custom = node.dataset.custom === 'true';
+        const customAllowed = node.dataset.customAllowed !== 'false';
 
-        return {
-          ...attrs,
+        return createDateVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          value,
           onlyDate: true,
-          format: format,
-          custom: node.dataset.custom === 'true',
-          customAllowed: node.dataset.customAllowed !== 'false',
-        };
+          format,
+          custom,
+          customAllowed,
+        });
       }
       return false;
     },
@@ -102,42 +148,16 @@ const parseDOM = [
         hasRDFaAttribute(node, 'datatype', XSD('dateTime'))
       ) {
         const onlyDate = hasRDFaAttribute(node, 'datatype', XSD('date'));
-        const datatype = onlyDate ? XSD('date') : XSD('dateTime');
-        const mappingResource = `http://data.lblod.info/mappings/${uuidv4()}`;
-        const content = node.getAttribute('content');
-        const properties: OutgoingTriple[] = [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(
-              `http://data.lblod.info/variables/${uuidv4()}`,
-            ),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('date'),
-          },
-        ];
-        if (content) {
-          properties.push({
-            predicate: EXT('content').full,
-            object: sayDataFactory.literal(content, datatype.namedNode),
-          });
-        }
-        return {
-          mappingResource,
-          onlyDate,
+        const content = node.getAttribute('content') ?? undefined;
+        return createDateVariableAttrs({
+          variable: generateVariableUri(),
+          variableInstance: generateVariableInstanceUri(),
           format: node.dataset.format,
           custom: node.dataset.custom === 'true',
           customAllowed: node.dataset.customAllowed !== 'false',
-          rdfaNodeType: 'resource',
-          subject: mappingResource,
-          __rdfaId: uuidv4(),
-          properties,
-        };
+          onlyDate,
+          value: content,
+        });
       }
       return false;
     },
@@ -155,62 +175,32 @@ const parseDOM = [
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
       if (isVariable(node) && parseVariableType(node) === 'date') {
-        const mappingSubject =
+        const variableUri =
           node.getAttribute('subject') ??
           node.getAttribute('resource') ??
           node.getAttribute('about');
-        if (!mappingSubject) {
+        if (!variableUri) {
           return false;
         }
         const onlyDate = !![...node.children].find((el) =>
           hasRDFaAttribute(el, 'datatype', XSD('date')),
         );
-        const datatype = onlyDate ? XSD('date') : XSD('dateTime');
         const dateNode = [...node.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         ) as HTMLElement | undefined;
-        const value = dateNode?.getAttribute('content');
+        const value = dateNode?.getAttribute('content') ?? undefined;
         const format = dateNode?.dataset.format;
-        const label = parseLabel(node);
-        const properties: OutgoingTriple[] = [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(
-              `http://data.lblod.info/variables/${uuidv4()}`,
-            ),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('date'),
-          },
-        ];
-        if (label) {
-          properties.push({
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          });
-        }
-        if (value) {
-          properties.push({
-            predicate: EXT('content').full,
-            object: sayDataFactory.literal(value, datatype.namedNode),
-          });
-        }
-        return {
-          ...getRdfaAttrs(node, { rdfaAware }),
+        const label = parseLabel(node) ?? undefined;
+        return createDateVariableAttrs({
+          variable: variableUri,
+          variableInstance: generateVariableInstanceUri(),
+          format,
+          custom: node.dataset.custom === 'true',
+          customAllowed: node.dataset.customAllowed !== 'false',
           onlyDate,
-          format: format,
-          custom: dateNode?.dataset.custom === 'true',
-          customAllowed: dateNode?.dataset.customAllowed !== 'false',
-          rdfaNodeType: 'resource',
-          subject: mappingSubject,
-          __rdfaId: uuidv4(),
-          properties,
-        };
+          value,
+          label,
+        });
       }
 
       return false;
@@ -220,7 +210,7 @@ const parseDOM = [
 
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
-  const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
+  const value = getOutgoingTriple(node.attrs, RDF('value'))?.object.value;
   // TODO Could remove the custom 'onlyDate' attr and instead use the datatype of the outgoing
   // content triple.
   const { onlyDate, format, custom, customAllowed } = node.attrs;
@@ -281,7 +271,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   },
   outlineText: (node: PNode, state: EditorState) => {
     const t = getTranslationFunction(state);
-    const value = getOutgoingTriple(node.attrs as RdfaAttrs, EXT('content'))
+    const value = getOutgoingTriple(node.attrs as RdfaAttrs, RDF('value'))
       ?.object.value;
     const { onlyDate, format } = node.attrs;
 
@@ -297,7 +287,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     return humanReadableDate;
   },
   serialize,
-  parseDOM,
+  parseDOM: [...parseDOM, ...parseDOMLegacy],
 });
 
 export const date = (options: DateOptions) =>
