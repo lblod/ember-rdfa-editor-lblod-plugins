@@ -51,6 +51,11 @@ export const PERSOON = namespace(
   'persoon',
 );
 export const PERSON = namespace('http://www.w3.org/ns/person#', 'person');
+
+export const VARIABLES = namespace(
+  'http://lblod.data.gift/vocabularies/variables/',
+  'variables',
+);
 export const BESTUURSPERIODES = {
   '2012-2019':
     'http://data.lblod.info/id/concept/Bestuursperiode/845dbc7f-139e-4632-b200-f90e180f1dba',

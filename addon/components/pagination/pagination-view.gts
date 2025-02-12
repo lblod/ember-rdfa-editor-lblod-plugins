@@ -4,8 +4,20 @@ import AuToolbar from '@appuniversum/ember-appuniversum/components/au-toolbar';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { NavLeftIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-left';
 import { NavRightIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-right';
+import { TOC } from '@ember/component/template-only';
 
-<template>
+type Signature = {
+  Args: {
+    rangeStart: number;
+    rangeEnd: number;
+    totalCount: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    onPreviousPage: () => void;
+    onNextPage: () => void;
+  };
+};
+const PaginationView: TOC<Signature> = <template>
   <div class='au-u-background-gray-100'>
     <AuToolbar @border='top' @size='large' @nowrap={{true}}>
       <div class='au-c-pagination'>
@@ -13,36 +25,29 @@ import { NavRightIcon } from '@appuniversum/ember-appuniversum/components/icons/
           <span class='au-u-hidden-visually'>
             {{t 'pagination.results'}}</span>
           <strong>
-            {{! @glint-expect-error: not typesafe yet }}
             {{@rangeStart}}
             -
-            {{! @glint-expect-error: not typesafe yet }}
             {{@rangeEnd}}
           </strong>
           {{t 'pagination.of'}}
-          {{! @glint-expect-error: not typesafe yet }}
           {{@totalCount}}
         </p>
         <div class='au-u-flex'>
-          {{! @glint-expect-error: not typesafe yet }}
           {{#unless @isFirstPage}}
             <AuButton
               @skin='link'
               @icon={{NavLeftIcon}}
               @iconAlignment='left'
-              {{! @glint-expect-error: not typesafe yet }}
               {{on 'click' @onPreviousPage}}
             >
               {{t 'pagination.previous'}}
             </AuButton>
           {{/unless}}
-          {{! @glint-expect-error: not typesafe yet }}
           {{#unless @isLastPage}}
             <AuButton
               @skin='link'
               @icon={{NavRightIcon}}
               @iconAlignment='right'
-              {{! @glint-expect-error: not typesafe yet }}
               {{on 'click' @onNextPage}}
             >
               {{t 'pagination.next'}}
@@ -52,4 +57,6 @@ import { NavRightIcon } from '@appuniversum/ember-appuniversum/components/icons/
       </div>
     </AuToolbar>
   </div>
-</template>
+</template>;
+
+export default PaginationView;

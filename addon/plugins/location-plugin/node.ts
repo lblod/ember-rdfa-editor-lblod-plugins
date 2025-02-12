@@ -47,6 +47,7 @@ import {
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { NodeContentsUtils } from './node-contents';
 import { recreateVariableUris } from '../variable-plugin/utils/recreate-variable-uris';
+import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
@@ -165,7 +166,7 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
             return false;
           }
 
-          const properties = [
+          const properties: OutgoingTriple[] = [
             {
               predicate: RDF('type').full,
               object: sayDataFactory.namedNode(EXT('Mapping').full),

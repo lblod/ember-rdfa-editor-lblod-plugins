@@ -3,15 +3,13 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
-import { v4 as uuidv4 } from 'uuid';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import {
-  DCT,
-  EXT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
+import { createDateVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-date-variable';
+import {
+  generateVariableInstanceUri,
+  generateVariableUri,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Args = {
   controller: SayController;
@@ -37,41 +35,18 @@ export default class DateInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingResource = `http://data.lblod.info/mappings/${
-      this.args.templateMode ? '--ref-uuid4-' : ''
-    }${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${
-      this.args.templateMode ? '--ref-uuid4-' : ''
-    }${uuidv4()}`;
     const defaultLabel = this.intl.t('variable.date.label', {
       locale: this.documentLanguage,
     });
     const label = defaultLabel;
 
-    const variableId = uuidv4();
-    const node = this.schema.nodes.date.create({
-      rdfaNodeType: 'resource',
-      subject: mappingResource,
-      __rdfaId: variableId,
-      properties: [
-        {
-          predicate: RDF('type').full,
-          object: sayDataFactory.namedNode(EXT('Mapping').full),
-        },
-        {
-          predicate: EXT('instance').full,
-          object: sayDataFactory.namedNode(variableInstance),
-        },
-        {
-          predicate: EXT('label').full,
-          object: sayDataFactory.literal(label),
-        },
-        {
-          predicate: DCT('type').full,
-          object: sayDataFactory.literal('date'),
-        },
-      ],
-      backlinks: [],
+    const node = createDateVariable({
+      variable: generateVariableUri(),
+      variableInstance: generateVariableInstanceUri({
+        templateMode: this.args.templateMode,
+      }),
+      schema: this.schema,
+      label,
     });
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,

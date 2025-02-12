@@ -1,27 +1,24 @@
-import { NodeWithPos } from '@curvenote/prosemirror-utils';
-import {
-  Command,
-  EditorState,
-  PNode,
-  TextSelection,
-  Transaction,
-} from '@lblod/ember-rdfa-editor';
-import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { EditorState, PNode, TextSelection } from '@lblod/ember-rdfa-editor';
 import {
   ELI,
   PROV,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  transactionCombinator,
+  type TransactionMonad,
+} from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import {
   addPropertyToNode,
   findNodeByRdfaId,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { getNodesBySubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 
 interface InsertArticleToDecisionArgs {
   node: PNode;
-  decisionLocation: NodeWithPos | null;
+  decisionUri: string;
   insertFreely?: false;
 }
 interface InsertArticleFreelyArgs {
@@ -29,14 +26,11 @@ interface InsertArticleFreelyArgs {
   insertFreely: true;
 }
 
-export default function insertArticle({
-  node,
-  ...args
-}: InsertArticleToDecisionArgs | InsertArticleFreelyArgs): Command {
-  return function (
-    state: EditorState,
-    dispatch?: (tr: Transaction) => void,
-  ): boolean {
+export function insertArticle(
+  args: InsertArticleToDecisionArgs | InsertArticleFreelyArgs,
+): TransactionMonad<boolean> {
+  return function (state: EditorState) {
+    const { node } = args;
     if ('insertFreely' in args) {
       const tr = state.tr;
       const { result, transaction } = transactionCombinator(
@@ -45,22 +39,24 @@ export default function insertArticle({
       )([recalculateNumbers]);
 
       transaction.scrollIntoView();
-      if (result.every((ok) => ok)) {
-        if (dispatch) {
-          dispatch(transaction);
-        }
-        return true;
-      } else {
-        return false;
-      }
+      return {
+        initialState: state,
+        transaction,
+        result: result.every((ok) => ok),
+      };
     }
 
-    const decision = args.decisionLocation;
+    const { decisionUri } = args;
+    const decision = getNodesBySubject(state, decisionUri)[0];
     if (!decision) {
-      return false;
+      return {
+        initialState: state,
+        transaction: state.tr,
+        result: false,
+      };
     }
-    const decisionResource = decision.node.attrs.subject;
-    const container = getOutgoingTriple(decision.node.attrs, PROV('value'));
+    const decisionResource = decision.value.attrs.subject;
+    const container = getOutgoingTriple(decision.value.attrs, PROV('value'));
     if (container) {
       const location = findNodeByRdfaId(state.doc, container.object.value);
       if (location) {
@@ -92,18 +88,23 @@ export default function insertArticle({
         );
 
         transaction.scrollIntoView();
-        if (result.every((ok) => ok)) {
-          if (dispatch) {
-            dispatch(transaction);
-          }
-          return true;
-        } else {
-          return false;
-        }
+        return {
+          initialState: state,
+          transaction,
+          result: result.every((ok) => ok),
+        };
       } else {
-        return false;
+        return {
+          initialState: state,
+          transaction: state.tr,
+          result: false,
+        };
       }
     }
-    return false;
+    return {
+      initialState: state,
+      transaction: state.tr,
+      result: false,
+    };
   };
 }

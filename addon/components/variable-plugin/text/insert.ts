@@ -3,15 +3,13 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { type SayController } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
-import {
-  DCT,
-  EXT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
+import { createTextVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-text-variable';
+import {
+  generateVariableInstanceUri,
+  generateVariableUri,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Args = {
   controller: SayController;
@@ -41,51 +39,22 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingSubject = `http://data.lblod.info/mappings/${
-      this.args.templateMode ? '--ref-uuid4-' : ''
-    }${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${
-      this.args.templateMode ? '--ref-uuid4-' : ''
-    }${uuidv4()}`;
-    const variableId = uuidv4();
+    const variable = generateVariableUri();
+    const variableInstance = generateVariableInstanceUri({
+      templateMode: this.args.templateMode,
+    });
 
     const placeholder = this.intl.t('variable.text.label', {
       locale: this.documentLanguage,
     });
 
     const label = this.label ?? placeholder;
-    const node = this.schema.nodes.text_variable.create(
-      {
-        subject: mappingSubject,
-        rdfaNodeType: 'resource',
-        __rdfaId: variableId,
-        properties: [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(variableInstance),
-          },
-          {
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('text'),
-          },
-          {
-            predicate: EXT('content').full,
-            object: sayDataFactory.contentLiteral(),
-          },
-        ],
-      },
-      this.schema.node('placeholder', {
-        placeholderText: label,
-      }),
-    );
+    const node = createTextVariable({
+      schema: this.schema,
+      variable,
+      variableInstance,
+      label,
+    });
 
     this.label = undefined;
 

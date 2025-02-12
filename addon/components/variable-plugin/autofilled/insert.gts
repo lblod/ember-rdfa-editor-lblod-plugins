@@ -3,14 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { type SayController } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { v4 as uuidv4 } from 'uuid';
 import IntlService from 'ember-intl/services/intl';
-import {
-  DCT,
-  EXT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
@@ -20,6 +13,11 @@ import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import LabelInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/utils/label-input';
+import { createAutofilledVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-autofilled-variable';
+import {
+  generateVariableInstanceUri,
+  generateVariableUri,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Args = {
   controller: SayController;
@@ -61,55 +59,22 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const mappingSubject = `http://data.lblod.info/mappings/${
-      this.args.templateMode ? '--ref-uuid4-' : ''
-    }${uuidv4()}`;
-    const variableInstance = `http://data.lblod.info/variables/${
-      this.args.templateMode ? '--ref-uuid4-' : ''
-    }${uuidv4()}`;
-    const variableId = uuidv4();
-
     const placeholder = this.intl.t('variable.autofilled.label', {
       locale: this.documentLanguage,
     });
 
     const label =
       this.label != '' ? this.label : this.autofillKey || placeholder;
-    const node = this.schema.nodes.autofilled_variable.create(
-      {
-        subject: mappingSubject,
-        rdfaNodeType: 'resource',
-        __rdfaId: variableId,
-        properties: [
-          {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(EXT('Mapping').full),
-          },
-          {
-            predicate: EXT('instance').full,
-            object: sayDataFactory.namedNode(variableInstance),
-          },
-          {
-            predicate: EXT('label').full,
-            object: sayDataFactory.literal(label),
-          },
-          {
-            predicate: DCT('type').full,
-            object: sayDataFactory.literal('autofilled'),
-          },
-          {
-            predicate: EXT('content').full,
-            object: sayDataFactory.contentLiteral(),
-          },
-        ],
-        autofillKey: this.autofillKey,
-        convertToString: this.convertToString,
-      },
-
-      this.schema.node('placeholder', {
-        placeholderText: label,
+    const node = createAutofilledVariable({
+      schema: this.schema,
+      variable: generateVariableUri(),
+      variableInstance: generateVariableInstanceUri({
+        templateMode: this.args.templateMode,
       }),
-    );
+      label,
+      autofillKey: this.autofillKey,
+      convertToString: this.convertToString,
+    });
     this.label = '';
 
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
