@@ -1,6 +1,5 @@
 import { Schema } from '@lblod/ember-rdfa-editor';
 import {
-  BESLUIT,
   ELI,
   PROV,
   RDF,
@@ -11,7 +10,10 @@ import {
 } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuid } from 'uuid';
-import { type StructureConfig } from '../../structure-plugin/structure-types';
+import {
+  DECISION_ARTICLE,
+  type StructureConfig,
+} from '../../structure-plugin/structure-types';
 
 export function generateStructureAttrs({
   config,
@@ -67,15 +69,7 @@ export function buildArticleStructure(
   return schema.node(
     'structure',
     generateStructureAttrs({
-      config: {
-        structureType: 'article',
-        rdfType: BESLUIT('Artikel'),
-        resourceUri: 'http://data.lblod.info/artikels/',
-        hasTitle: false,
-        headerFormat: 'name',
-        romanize: false,
-        headerTag: 'h5',
-      },
+      config: DECISION_ARTICLE,
       subject: articleResource,
       properties: [
         {

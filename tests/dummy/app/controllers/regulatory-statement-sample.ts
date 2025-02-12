@@ -2,6 +2,10 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
+import { getOwner } from '@ember/owner';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import { ComponentLike } from '@glint/template';
 import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
@@ -26,8 +30,6 @@ import {
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
-
-import { service } from '@ember/service';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   tableOfContentsView,
@@ -39,7 +41,6 @@ import {
   STRUCTURE_NODES,
   STRUCTURE_SPECS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
-import IntlService from 'ember-intl/services/intl';
 import {
   bulletListWithConfig,
   listItemWithConfig,
@@ -122,7 +123,6 @@ import {
   editableNodePlugin,
   getActiveEditableNode,
 } from '@lblod/ember-rdfa-editor/plugins/editable-node';
-import { ComponentLike } from '@glint/template';
 import {
   snippetPlaceholder,
   snippetPlaceholderView,
@@ -134,7 +134,7 @@ import {
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { getOwner } from '@ember/owner';
+import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -144,6 +144,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
+  StructureControlCard = StructureControlCardComponent;
   @tracked editableNodes = false;
 
   @action
