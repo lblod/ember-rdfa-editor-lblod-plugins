@@ -1,29 +1,33 @@
+import { v4 as uuidv4 } from 'uuid';
+import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
+import { not, or } from 'ember-truth-helpers';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
+import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import { trackedReset } from 'tracked-toolbox';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuButtonGroup from '@appuniversum/ember-appuniversum/components/au-button-group';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuList from '@appuniversum/ember-appuniversum/components/au-list';
 import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
+import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
+import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
+import AuInput from '@appuniversum/ember-appuniversum/components/au-input';
 import { BinIcon } from '@appuniversum/ember-appuniversum/components/icons/bin';
 import { ChevronDownIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-down';
 import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons/chevron-up';
-import { NodeWithPos } from '@curvenote/prosemirror-utils';
-import Component from '@glimmer/component';
 import { NodeType, SayController, Schema } from '@lblod/ember-rdfa-editor';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import HoverTooltip from '@lblod/ember-rdfa-editor-lblod-plugins/components/hover-tooltip';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import t from 'ember-intl/helpers/t';
-
-import { fn } from '@ember/helper';
-import { on } from '@ember/modifier';
-import { action } from '@ember/object';
-import { not } from 'ember-truth-helpers';
 import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
 import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/move-structure';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { service } from '@ember/service';
-import IntlService from 'ember-intl/services/intl';
 
 interface Sig {
   Args: { controller: SayController };
@@ -95,6 +99,54 @@ export default class StructureControlCardComponent extends Component<Sig> {
       }
     }
   }
+
+  get number() {
+    return this.structure?.node.attrs.number as number | undefined;
+  }
+  @trackedReset({
+    memo: 'structure.pos',
+    update(component: StructureControlCardComponent) {
+      if (!component.structure) {
+        return null;
+      } else {
+        return component.structure.node.attrs.startNumber;
+      }
+    },
+  })
+  startNumber: number | null = null;
+  onStartNumberChange = (event: InputEvent) => {
+    const target = event.target as HTMLInputElement;
+    this.startNumber = parseInt(target.value);
+  };
+  setStartNumber = () => {
+    if (this.structure) {
+      const { pos } = this.structure;
+      this.controller.withTransaction(
+        (tr, state) => {
+          return transactionCombinator<boolean>(
+            state,
+            tr.setNodeAttribute(pos, 'startNumber', this.startNumber),
+          )([recalculateNumbers]).transaction;
+        },
+        { view: this.controller.mainEditorView },
+      );
+    }
+  };
+  resetStartNumber = () => {
+    if (this.structure) {
+      const { pos } = this.structure;
+      this.controller.withTransaction(
+        (tr, state) => {
+          return transactionCombinator<boolean>(
+            state,
+            tr.setNodeAttribute(pos, 'startNumber', null),
+          )([recalculateNumbers]).transaction;
+        },
+        { view: this.controller.mainEditorView },
+      );
+    }
+  };
+
   <template>
     {{#if this.structure}}
       <AuCard
@@ -203,6 +255,41 @@ export default class StructureControlCardComponent extends Component<Sig> {
                   </:tooltip>
                 </HoverTooltip>
               </AuButtonGroup>
+            </Item>
+            <Item class='au-u-padding-left-small'>
+              <AuFormRow @alignment='inline'>
+                {{#let (uuidv4) as |id|}}
+                  <AuLabel for={{id}}>
+                    {{t 'article-structure-plugin.start-number.start-number'}}
+                  </AuLabel>
+                  <AuInput
+                    id={{id}}
+                    value={{or this.startNumber this.number}}
+                    {{on 'change' this.onStartNumberChange}}
+                    placeholder={{t
+                      'article-structure-plugin.start-number.start-number'
+                    }}
+                    type='number'
+                    min='1'
+                  />
+                {{/let}}
+              </AuFormRow>
+              <AuButton
+                @iconAlignment='left'
+                class='au-u-margin-top-tiny'
+                {{on 'click' this.setStartNumber}}
+              >
+                {{t 'article-structure-plugin.start-number.set'}}
+              </AuButton>
+              <AuButton
+                @iconAlignment='left'
+                @skin='secondary'
+                @disabled={{not this.startNumber}}
+                class='au-u-margin-top-tiny'
+                {{on 'click' this.resetStartNumber}}
+              >
+                {{t 'article-structure-plugin.start-number.reset'}}
+              </AuButton>
             </Item>
           </AuList>
         </Card.content>

@@ -19,7 +19,12 @@ export function recalculateNumbers(
       doc.descendants((node, pos) => {
         if (node.type.name === 'structure') {
           if (hasOutgoingNamedNodeTriple(node.attrs, RDF('type'), rdfType)) {
-            counter += 1;
+            const startNumber = node.attrs.startNumber;
+            if (startNumber) {
+              counter = startNumber;
+            } else {
+              counter += 1;
+            }
             lastNodePos = pos;
             if (node.attrs.isOnlyArticle === true) {
               tr.setNodeAttribute(pos, 'isOnlyArticle', false);
