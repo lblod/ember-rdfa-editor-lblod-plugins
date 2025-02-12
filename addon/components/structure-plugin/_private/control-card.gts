@@ -24,7 +24,6 @@ import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/st
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
-import { regenerateRdfaLinks } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/regenerate-rdfa-links';
 
 interface Sig {
   Args: { controller: SayController };
@@ -36,7 +35,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
     return this.args.controller;
   }
   get schema(): Schema {
-    return this.controller.activeEditorState.schema;
+    return this.controller.mainEditorState.schema;
   }
   get structureType(): NodeType | undefined {
     return this.schema.nodes['structure'];
@@ -72,21 +71,27 @@ export default class StructureControlCardComponent extends Component<Sig> {
     if (this.structure) {
       const { pos, node } = this.structure;
       if (withContent) {
-        this.controller.withTransaction((tr, state) => {
-          tr.replace(pos, pos + node.nodeSize);
-          return transactionCombinator<boolean>(
-            state,
-            tr,
-          )([recalculateNumbers, regenerateRdfaLinks]).transaction;
-        });
+        this.controller.withTransaction(
+          (tr, state) => {
+            return transactionCombinator<boolean>(
+              state,
+              tr.replace(pos, pos + node.nodeSize),
+              // Deleting links is taken care of in editor code, so no need to regenerate links
+            )([recalculateNumbers]).transaction;
+          },
+          { view: this.controller.mainEditorView },
+        );
       } else {
-        this.controller.withTransaction((tr, state) => {
-          tr.replaceWith(pos, pos + node.nodeSize, node.content);
-          return transactionCombinator<boolean>(
-            state,
-            tr,
-          )([recalculateNumbers, regenerateRdfaLinks]).transaction;
-        });
+        this.controller.withTransaction(
+          (tr, state) => {
+            return transactionCombinator<boolean>(
+              state,
+              tr.replaceWith(pos, pos + node.nodeSize, node.content),
+              // Deleting links is taken care of in editor code, so no need to regenerate links
+            )([recalculateNumbers]).transaction;
+          },
+          { view: this.controller.mainEditorView },
+        );
       }
     }
   }
