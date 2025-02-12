@@ -1,5 +1,6 @@
 import { type PNode } from '@lblod/ember-rdfa-editor';
 import {
+  BESLUIT,
   RDF,
   SAY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -36,6 +37,11 @@ export interface StructureConfig {
   headerFormat?: 'plain-number' | 'name' | 'section-symbol';
   headerTag?: string;
   romanize: boolean;
+  /**
+   * If numbering is done for the whole document, rather than restarting for each parent structure,
+   * e.g. if false: Chapter 1 > Section 1, Chapter 2 > Section 1
+   */
+  absoluteNumbering: boolean;
 }
 
 export const STRUCTURE_HIERARCHY: StructureConfig[] = [
@@ -49,6 +55,7 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     headerFormat: 'name',
     headerTag: 'h3',
     romanize: false,
+    absoluteNumbering: false,
   },
   {
     rdfType: SAY('Chapter'),
@@ -60,6 +67,7 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     headerFormat: 'name',
     headerTag: 'h4',
     romanize: true,
+    absoluteNumbering: false,
   },
   {
     rdfType: SAY('Section'),
@@ -71,6 +79,7 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     headerFormat: 'name',
     headerTag: 'h5',
     romanize: true,
+    absoluteNumbering: false,
   },
   {
     rdfType: SAY('Subsection'),
@@ -82,6 +91,7 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     headerFormat: 'name',
     headerTag: 'h6',
     romanize: false,
+    absoluteNumbering: false,
   },
   {
     rdfType: SAY('Article'),
@@ -90,6 +100,7 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     resourceUri: 'http://data.lblod.info/articles/',
     headerFormat: 'name',
     romanize: false,
+    absoluteNumbering: true,
   },
   {
     rdfType: SAY('Paragraph'),
@@ -98,8 +109,20 @@ export const STRUCTURE_HIERARCHY: StructureConfig[] = [
     resourceUri: 'http://data.lblod.info/paragraphs/',
     headerFormat: 'section-symbol',
     romanize: false,
+    absoluteNumbering: false,
   },
 ];
+
+export const DECISION_ARTICLE: StructureConfig = {
+  structureType: 'article',
+  rdfType: BESLUIT('Artikel'),
+  resourceUri: 'http://data.lblod.info/artikels/',
+  hasTitle: false,
+  headerFormat: 'name',
+  romanize: false,
+  headerTag: 'h5',
+  absoluteNumbering: true,
+};
 
 export function isHierarchyNode(node: PNode) {
   return STRUCTURE_HIERARCHY.some(({ rdfType }) =>
