@@ -183,7 +183,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             getNumberForDisplay(number, romanizeNumber),
           ],
           displayOnlyArticle || headerFormat === 'name' ? ': ' : '. ',
-          ['span', { 'data-say-structure-header-content': true }, titleHTML],
+          ['span', { property: EXT('title').full }, titleHTML],
         ];
       } else {
         headerSpec = [
@@ -248,8 +248,12 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             const headerFormat = node.dataset.sayHeaderFormat;
             // strict selector here to avoid false positives when structures are nested
             // :scope refers to the element on which we call querySelector
+            // say-structure-header-content data attribute is now deprecated in favour of using an
+            // RDFa link
             const titleElement = node.querySelector(
-              ':scope > div > div > [data-say-structure-header] > [data-say-structure-header-content]',
+              `:scope > div > div > [data-say-structure-header] > [property~='${EXT('title').prefixed}'],
+              :scope > div > div > [data-say-structure-header] > [property~='${EXT('title').full}'],
+              :scope > div > div > [data-say-structure-header] > [data-say-structure-header-content]`,
             );
             let title: string | undefined = undefined;
             if (titleElement) {
