@@ -4,17 +4,18 @@ import {
   ResolvedPos,
   TextSelection,
 } from '@lblod/ember-rdfa-editor';
-import { findAncestorOfType } from '../article-structure-plugin/utils/structure';
 import {
   findNodePosDown,
   findNodePosUp,
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { findAncestorOfType } from '../article-structure-plugin/utils/structure';
 import {
   isNone,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { recalculateNumbers } from './recalculate-structure-numbers';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { regenerateRdfaLinks } from './regenerate-rdfa-links';
 
 export function moveStructure(direction: 'up' | 'down'): Command {
   return (state, dispatch) => {
@@ -33,7 +34,10 @@ export function moveStructure(direction: 'up' | 'down'): Command {
         findNodePosUp(doc, pos, ($pos: ResolvedPos) => {
           const nodeAfter = $pos.nodeAfter;
           if (nodeAfter) {
-            return nodeAfter.type.name === 'structure';
+            return (
+              nodeAfter.type.name === 'structure' &&
+              nodeAfter.attrs.structureType === node.attrs.structureType
+            );
           }
           return false;
         }).next().value ?? null;
@@ -53,7 +57,7 @@ export function moveStructure(direction: 'up' | 'down'): Command {
           const { transaction: newTr } = transactionCombinator(
             state,
             transaction,
-          )([recalculateNumbers]);
+          )([recalculateNumbers, regenerateRdfaLinks]);
 
           // previousStructurePos should now point to the position right before our moved structure
           // so we can simply add 1 to get the first position inside of it, and for the end
@@ -76,7 +80,10 @@ export function moveStructure(direction: 'up' | 'down'): Command {
           doc,
           doc.resolve(pos + node.nodeSize),
           (parent: PNode) => {
-            return parent.type.name === 'structure';
+            return (
+              parent.type.name === 'structure' &&
+              parent.attrs.structureType === node.attrs.structureType
+            );
           },
         ).next().value ?? null;
       if (isNone(nextStructureParentPos)) {
@@ -89,6 +96,9 @@ export function moveStructure(direction: 'up' | 'down'): Command {
       if (dispatch) {
         const transaction = state.tr;
         const $structurePos = doc.resolve(nextStructurePos);
+        if (isNone($structurePos.nodeAfter)) {
+          return false;
+        }
         const nextStructureNode = unwrap($structurePos.nodeAfter);
 
         transaction.delete(pos, pos + node.nodeSize);
@@ -100,7 +110,7 @@ export function moveStructure(direction: 'up' | 'down'): Command {
         const { transaction: newTr } = transactionCombinator(
           state,
           transaction,
-        )([recalculateNumbers]);
+        )([recalculateNumbers, regenerateRdfaLinks]);
 
         // since we've deleted something before the insert position, we have to map
         // the positions through the transaction to find the moved node's new position
