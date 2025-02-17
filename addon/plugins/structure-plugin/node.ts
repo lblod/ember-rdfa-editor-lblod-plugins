@@ -207,6 +207,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         attrs: {
           'data-say-render-as': 'structure',
           'data-say-has-title': hasTitle,
+          // Should we use the RDFa type instead of a data attribute for this?
           'data-say-structure-type': structureType,
           'data-say-header-format': headerFormat,
           'data-say-header-tag': tag,

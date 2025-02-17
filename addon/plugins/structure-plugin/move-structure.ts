@@ -34,7 +34,10 @@ export function moveStructure(direction: 'up' | 'down'): Command {
         findNodePosUp(doc, pos, ($pos: ResolvedPos) => {
           const nodeAfter = $pos.nodeAfter;
           if (nodeAfter) {
-            return nodeAfter.type.name === 'structure';
+            return (
+              nodeAfter.type.name === 'structure' &&
+              nodeAfter.attrs.structureType === node.attrs.structureType
+            );
           }
           return false;
         }).next().value ?? null;
@@ -77,7 +80,10 @@ export function moveStructure(direction: 'up' | 'down'): Command {
           doc,
           doc.resolve(pos + node.nodeSize),
           (parent: PNode) => {
-            return parent.type.name === 'structure';
+            return (
+              parent.type.name === 'structure' &&
+              parent.attrs.structureType === node.attrs.structureType
+            );
           },
         ).next().value ?? null;
       if (isNone(nextStructureParentPos)) {
