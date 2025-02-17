@@ -228,7 +228,11 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         content: [
           'div',
           headerSpec,
-          ['div', { 'data-say-structure-content': true }, 0],
+          [
+            'div',
+            { property: SAY('body').full, datatype: RDF('XMLLiteral').full },
+            0,
+          ],
         ],
       });
     },
@@ -284,7 +288,10 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
           }
           return false;
         },
-        contentElement: `div[data-say-structure-content]`,
+        // say-structure-content data attribute is now deprecated in favour of using an RDFa link
+        contentElement: `div[data-say-structure-content],
+          div[property~='${SAY('body').prefixed}'],
+          div[property~='${SAY('body').full}']`,
       },
       // Backwards compatibility with structures created by article-structure-plugin
       // This is relatively complex as each of those nodes was in fact 3 nodes...
