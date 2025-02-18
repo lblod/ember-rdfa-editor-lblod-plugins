@@ -381,7 +381,10 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             headerTag: structConfig.headerTag,
             number,
             startNumber,
-            romanize: roman,
+            // Looking at old data, at least some have the wrong numberDisplayStyle in their data
+            // attrs, so while we use the stored value for parsing, we just use the default from the
+            // structure configuration
+            romanize: structConfig.romanize,
             title,
           };
         },
