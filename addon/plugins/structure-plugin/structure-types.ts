@@ -23,13 +23,15 @@ export type StructurePluginOptions = {
   onlyArticleSpecialName?: boolean;
 };
 
-export type StructureType =
-  | 'title'
-  | 'article'
-  | 'chapter'
-  | 'section'
-  | 'subsection'
-  | 'paragraph';
+export const structureTypes = [
+  'title',
+  'article',
+  'chapter',
+  'section',
+  'subsection',
+  'paragraph',
+] as const;
+export type StructureType = (typeof structureTypes)[number];
 
 export interface StructureConfig {
   rdfType: Resource;
