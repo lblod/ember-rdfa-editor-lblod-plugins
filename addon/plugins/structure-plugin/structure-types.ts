@@ -19,6 +19,8 @@ export type StructurePluginOptions = {
     | 'uuid4'
     | 'template-uuid4'
     | ((structureType: StructureType) => string);
+  fullLengthArticles?: boolean;
+  onlyArticleSpecialName?: boolean;
 };
 
 export type StructureType =

@@ -31,11 +31,12 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import IntlService from 'ember-intl/services/intl';
+import { romanize, romanToInt } from './utils/romanize';
 import {
-  romanize,
-  romanToInt,
-} from '../article-structure-plugin/utils/romanize';
-import { STRUCTURE_HIERARCHY, StructureType } from './structure-types';
+  STRUCTURE_HIERARCHY,
+  StructurePluginOptions,
+  StructureType,
+} from './structure-types';
 import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
@@ -67,14 +68,9 @@ function getNumberForDisplay(number: number, romanizeNumber: boolean): string {
   }
 }
 
-type StructureConfig = {
-  fullLengthArticles?: boolean;
-  onlyArticleSpecialName?: boolean;
-};
-
-export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
-  config,
-) => {
+export const emberNodeConfig: (
+  config?: StructurePluginOptions,
+) => EmberNodeConfig = (config) => {
   return {
     name: 'structure',
     component: Structure as unknown as ComponentLike,
@@ -464,7 +460,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
 };
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());
-export const structureWithConfig = (config?: StructureConfig) =>
+export const structureWithConfig = (config?: StructurePluginOptions) =>
   createEmberNodeSpec(emberNodeConfig(config));
-export const structureViewWithConfig = (config?: StructureConfig) =>
+export const structureViewWithConfig = (config?: StructurePluginOptions) =>
   createEmberNodeView(emberNodeConfig(config));

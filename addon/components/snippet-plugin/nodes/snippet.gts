@@ -28,7 +28,7 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/monads/recalculate-structure-numbers';
 import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet-placeholder';
 import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
 import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';

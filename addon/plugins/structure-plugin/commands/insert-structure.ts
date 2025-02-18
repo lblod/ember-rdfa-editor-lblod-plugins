@@ -3,12 +3,12 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 import {
   type StructurePluginOptions,
   type StructureType,
-} from '../../structure-plugin/structure-types';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
-import { findHowToInsertStructure } from '../../structure-plugin/insert-structure';
-import { regenerateRdfaLinks } from '../../structure-plugin/regenerate-rdfa-links';
+} from '../structure-types';
+import { recalculateNumbers } from '../monads/recalculate-structure-numbers';
+import { findHowToInsertStructure } from '../monads/insert-structure';
+import { regenerateRdfaLinks } from '../monads/regenerate-rdfa-links';
 
-const insertStructure = (
+export const insertStructure = (
   structureType: StructureType,
   uriGenerator: Required<StructurePluginOptions>['uriGenerator'],
 ): Command => {
@@ -30,5 +30,3 @@ const insertStructure = (
     }
   };
 };
-
-export default insertStructure;

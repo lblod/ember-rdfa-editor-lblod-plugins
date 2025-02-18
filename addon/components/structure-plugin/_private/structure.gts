@@ -25,7 +25,7 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { getNameForStructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { StructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
-import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/utils/romanize';
 
 interface Sig {
   Args: EmberNodeArgs;

@@ -16,7 +16,7 @@ import {
   findNodeByRdfaId,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
+import { recalculateNumbers } from '../../structure-plugin/monads/recalculate-structure-numbers';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 interface InsertArticleToDecisionArgs {

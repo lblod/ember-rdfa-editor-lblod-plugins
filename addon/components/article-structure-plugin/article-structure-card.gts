@@ -9,7 +9,7 @@ import { not } from 'ember-truth-helpers';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/commands';
+import { insertStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/commands/insert-structure';
 import {
   type StructurePluginOptions,
   type StructureType,

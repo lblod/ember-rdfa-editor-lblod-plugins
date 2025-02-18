@@ -7,17 +7,17 @@ import {
 import { findHowToWrapIncludingParents } from '@lblod/ember-rdfa-editor/utils/wrap-utils';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { type TransactionMonad } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { generateStructureAttrs } from '../decision-plugin/utils/build-article-structure';
+import { generateStructureAttrs } from '../../decision-plugin/utils/build-article-structure';
 import {
   type StructurePluginOptions,
   type StructureType,
-} from './structure-types';
+} from '../structure-types';
 import {
   calculateHierarchyRank,
   findRankInHierarchy,
   isHierarchyNode,
   STRUCTURE_HIERARCHY,
-} from './structure-types';
+} from '../structure-types';
 import {
   isNone,
   isSome,

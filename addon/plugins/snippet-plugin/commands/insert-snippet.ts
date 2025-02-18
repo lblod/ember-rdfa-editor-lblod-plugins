@@ -1,7 +1,7 @@
 import { Command, ProseParser, Schema, Slice } from '@lblod/ember-rdfa-editor';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
+import { recalculateNumbers } from '../../structure-plugin/monads/recalculate-structure-numbers';
 import { createSnippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {

@@ -24,10 +24,10 @@ import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons
 import { NodeType, SayController, Schema } from '@lblod/ember-rdfa-editor';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import HoverTooltip from '@lblod/ember-rdfa-editor-lblod-plugins/components/hover-tooltip';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-ancestor';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
-import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/move-structure';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/monads/recalculate-structure-numbers';
+import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/commands/move-structure';
 
 interface Sig {
   Args: { controller: SayController };

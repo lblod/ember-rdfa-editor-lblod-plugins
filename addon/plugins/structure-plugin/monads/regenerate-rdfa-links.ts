@@ -11,7 +11,7 @@ import {
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { isHierarchyNode } from './structure-types';
+import { isHierarchyNode } from '../structure-types';
 
 function linkAllChildrenToParent(parent: PNode): TransactionMonad<boolean>[] {
   const factory = new SayDataFactory();

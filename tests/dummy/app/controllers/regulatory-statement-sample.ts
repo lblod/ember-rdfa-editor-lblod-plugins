@@ -135,6 +135,9 @@ import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
+import { type StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
+
+const { structure: _, ...structure_nodes } = STRUCTURE_NODES;
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -194,7 +197,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       oslo_location: osloLocation(this.config.location),
       address,
       codelist,
-      ...STRUCTURE_NODES,
+      ...structure_nodes,
       heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
 
@@ -335,9 +338,10 @@ export default class RegulatoryStatementSampleController extends Controller {
         endpoint: 'http://localhost/vendor-proxy/query',
       },
       structure: {
+        uriGenerator: 'template-uuid4',
         fullLengthArticles: false,
         onlyArticleSpecialName: true,
-      },
+      } satisfies StructurePluginOptions,
       citation: {
         type: 'nodes',
         activeInNode(node: PNode, state: EditorState) {
