@@ -15,7 +15,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export type StructurePluginOptions = {
-  uriGenerator:
+  uriGenerator?:
     | 'uuid4'
     | 'template-uuid4'
     | ((structureType: StructureType) => string);

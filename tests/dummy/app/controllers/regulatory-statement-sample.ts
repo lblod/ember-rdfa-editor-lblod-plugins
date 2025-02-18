@@ -134,7 +134,7 @@ import {
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
+import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];

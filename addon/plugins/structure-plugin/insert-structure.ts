@@ -30,7 +30,7 @@ import {
  */
 export function findHowToInsertStructure(
   structureType: StructureType,
-  uriGenerator: StructurePluginOptions['uriGenerator'],
+  uriGenerator: Required<StructurePluginOptions>['uriGenerator'],
 ): TransactionMonad<boolean> {
   return (state: EditorState) => {
     let tr = state.tr;

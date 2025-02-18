@@ -10,7 +10,7 @@ import { regenerateRdfaLinks } from '../../structure-plugin/regenerate-rdfa-link
 
 const insertStructure = (
   structureType: StructureType,
-  uriGenerator: StructurePluginOptions['uriGenerator'],
+  uriGenerator: Required<StructurePluginOptions>['uriGenerator'],
 ): Command => {
   return (state, dispatch) => {
     const { result, transaction } = transactionCombinator(state)([

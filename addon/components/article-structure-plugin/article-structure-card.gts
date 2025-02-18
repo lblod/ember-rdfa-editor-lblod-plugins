@@ -37,24 +37,24 @@ export default class EditorPluginsArticleStructureCardComponent extends Componen
   get controller() {
     return this.args.controller;
   }
+  get uriGenerator() {
+    return this.args.options.uriGenerator ?? 'uuid4';
+  }
 
   getTranslationKey = (type: StructureType) =>
     `article-structure-plugin.insert.${type}`;
 
   @action
   insertStructure(type: StructureType) {
-    this.args.controller.doCommand(
-      insertStructure(type, this.args.options.uriGenerator),
-      {
-        view: this.controller.mainEditorView,
-      },
-    );
+    this.args.controller.doCommand(insertStructure(type, this.uriGenerator), {
+      view: this.controller.mainEditorView,
+    });
     this.args.controller.focus();
   }
 
   canInsertStructure = (type: StructureType) =>
     this.args.controller.checkCommand(
-      insertStructure(type, this.args.options.uriGenerator),
+      insertStructure(type, this.uriGenerator),
       {
         view: this.controller.mainEditorView,
       },
