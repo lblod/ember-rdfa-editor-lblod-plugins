@@ -112,6 +112,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { structureViewWithConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 
 export default class SnippetEditController extends Controller {
   queryParams = ['editableNodes'];
@@ -172,6 +173,8 @@ export default class SnippetEditController extends Controller {
       person_variable,
       number,
       codelist,
+      // TODO switch this for using structureWithConfig directly. This is left here for now to show
+      // the 'backwards compatible' move away from the article-structure-plugin...
       ...STRUCTURE_NODES,
       heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
@@ -341,6 +344,9 @@ export default class SnippetEditController extends Controller {
       ),
       snippet: snippetView(this.config.snippet)(controller),
       block_rdfa: (node) => new BlockRDFaView(node),
+      // This is the only addition needed to move away from article-structure-plugin without other
+      // configuration changes
+      structure: structureViewWithConfig()(controller),
     };
   };
   @tracked plugins: Plugin[] = [

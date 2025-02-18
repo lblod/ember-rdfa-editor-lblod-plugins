@@ -54,7 +54,6 @@ import SayEditor from '@lblod/ember-rdfa-editor/core/say-editor';
 import { link } from '@lblod/ember-rdfa-editor/nodes/link';
 
 import { table_of_contents } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
-import { STRUCTURE_NODES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
   codelist,
@@ -67,12 +66,12 @@ import { templateComment } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 import { inlineRdfaWithConfig } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+import { structureWithConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 
 export const SAMPLE_SCHEMA = new Schema({
   nodes: {
     doc: docWithConfig({
-      content:
-        'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+      content: 'table_of_contents? document_title? block+',
       rdfaAware: true,
     }),
     paragraph,
@@ -104,7 +103,7 @@ export const SAMPLE_SCHEMA = new Schema({
     location,
     codelist,
     address,
-    ...STRUCTURE_NODES,
+    structure: structureWithConfig(),
     heading: headingWithConfig({ rdfaAware: false }),
     blockquote,
     horizontal_rule,

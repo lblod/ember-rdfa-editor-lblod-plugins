@@ -38,10 +38,6 @@ import {
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
 import {
-  STRUCTURE_NODES,
-  STRUCTURE_SPECS,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
-import {
   bulletListWithConfig,
   listItemWithConfig,
   orderedListWithConfig,
@@ -137,8 +133,6 @@ import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
 import { type StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 
-const { structure: _, ...structure_nodes } = STRUCTURE_NODES;
-
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
 
@@ -170,8 +164,7 @@ export default class RegulatoryStatementSampleController extends Controller {
   schema = new Schema({
     nodes: {
       doc: docWithConfig({
-        content:
-          'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+        content: 'table_of_contents? document_title? block+',
         rdfaAware: true,
       }),
       paragraph,
@@ -197,7 +190,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       oslo_location: osloLocation(this.config.location),
       address,
       codelist,
-      ...structure_nodes,
       heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
 
@@ -320,14 +312,12 @@ export default class RegulatoryStatementSampleController extends Controller {
         nonZonalLocationCodelistUri:
           'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2',
       },
-      structures: STRUCTURE_SPECS,
       link: {
         interactive: true,
         rdfaAware: true,
       },
       snippet: {
-        allowedContent:
-          'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+        allowedContent: 'document_title? block+',
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
         hidePlaceholderInsertButton: true,
       },
