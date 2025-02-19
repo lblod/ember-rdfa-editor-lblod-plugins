@@ -7,6 +7,7 @@ import {
 import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import { findHowToInsertStructure } from '../../structure-plugin/insert-structure';
 import { regenerateRdfaLinks } from '../../structure-plugin/regenerate-rdfa-links';
+import { closeHistory } from '@lblod/ember-rdfa-editor/plugins/history';
 
 const insertStructure = (
   structureType: StructureType,
@@ -22,6 +23,9 @@ const insertStructure = (
     transaction.scrollIntoView();
     if (result.every((ok) => ok)) {
       if (dispatch) {
+        // makes sure each structure insertion is undoable, even when quickly
+        // creating a bunch of them
+        closeHistory(transaction);
         dispatch(transaction);
       }
       return true;

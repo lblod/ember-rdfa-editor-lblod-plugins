@@ -26,6 +26,7 @@ import IntlService from 'ember-intl/services/intl';
 import { getNameForStructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { StructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
+import { Transaction } from '@lblod/ember-rdfa-editor';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -60,6 +61,11 @@ export default class Structure extends Component<Sig> {
   });
   @tracked titleContent = this.titleAttr;
   @tracked innerView?: SayView;
+  /**
+   * A time counter to store the last time an update to the title was added to
+   * the history
+   * */
+  @tracked historyTimeStamp: number = 0;
   innerEditor: NestedProsemirror | null = null;
 
   get showPlaceholder() {
@@ -148,8 +154,21 @@ export default class Structure extends Component<Sig> {
     }
   }
 
-  onTitleUpdate = (content: string) => {
-    this.args.updateAttribute('title', content);
+  onTitleUpdate = (content: string, tr: Transaction) => {
+    let addToHistory = false;
+    // every character typed would normally trigger a history event
+    // in normal editor operation, this is ok, as the history plugin is smart
+    // enough to group adjacent edits made in a short timespan (default 500ms)
+    //
+    // but since we trigger an attribute update, the history plugin can no
+    // longer recognize these edits as adjacent, so each character triggers
+    // a history event. This makes undoing title edits tedious, so we mimic the
+    // grouping here using the transaction timestamp
+    if (tr.time - this.historyTimeStamp > 500) {
+      addToHistory = true;
+      this.historyTimeStamp = tr.time;
+    }
+    this.args.updateAttribute('title', content, !addToHistory);
   };
   onInnerEditorFocus = (view: SayView) => {
     this.controller.setActiveView(view);
