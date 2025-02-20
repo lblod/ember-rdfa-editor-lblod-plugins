@@ -1,4 +1,10 @@
-import { EditorState, Fragment, PNode, Schema } from '@lblod/ember-rdfa-editor';
+import {
+  EditorState,
+  Fragment,
+  PNode,
+  Schema,
+  Selection,
+} from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import {
@@ -116,8 +122,15 @@ export default function insertMeasure({
       state.schema,
       articleUriGenerator,
     ).copy(Fragment.from(measureNode));
-    const { transaction, result } = transactionCombinator(state)([
-      insertArticle({ node: articleNode, decisionUri }),
+    const initialTransaction = insertArticle({
+      node: articleNode,
+      decisionUri,
+    })(state).transaction;
+    const resultingSelection = initialTransaction.selection;
+    const { transaction, result } = transactionCombinator(
+      state,
+      initialTransaction,
+    )([
       addPropertyToNode({
         resource: articleNode.attrs.subject as string,
         property: {
@@ -139,6 +152,9 @@ export default function insertMeasure({
         }),
       ),
     ]);
+    transaction.setSelection(
+      Selection.fromJSON(transaction.doc, resultingSelection.toJSON()),
+    );
     return {
       initialState: state,
       transaction,
