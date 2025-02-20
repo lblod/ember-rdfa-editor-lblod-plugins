@@ -12,6 +12,7 @@ import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuid } from 'uuid';
 import {
   DECISION_ARTICLE,
+  type StructurePluginOptions,
   type StructureConfig,
 } from '../../structure-plugin/structure-types';
 
@@ -47,9 +48,11 @@ export function generateStructureAttrs({
   };
 }
 
+// TODO this should be done using linking tools rather than manually creating properties and
+// backlinks. This would bring it more in line with the article-structure structures.
 export function buildArticleStructure(
   schema: Schema,
-  uriGenerator?: () => string,
+  uriGenerator: StructurePluginOptions['uriGenerator'] = 'template-uuid4',
   /**
    * Adds a backlink to this resource instead of relying on being linked to the decision after
    * creation.
@@ -60,11 +63,11 @@ export function buildArticleStructure(
 ) {
   const factory = new SayDataFactory();
   let articleResource: string;
-  if (uriGenerator) {
-    articleResource = uriGenerator();
+  if (typeof uriGenerator === 'function') {
+    articleResource = uriGenerator('article');
   } else {
     const articleId = uuid();
-    articleResource = `http://data.lblod.info/artikels/--ref-uuid4-${articleId}`;
+    articleResource = `http://data.lblod.info/artikels/${uriGenerator === 'template-uuid4' ? '--ref-uuid4-' : ''}${articleId}`;
   }
   return schema.node(
     'structure',

@@ -24,10 +24,10 @@ import { ChevronUpIcon } from '@appuniversum/ember-appuniversum/components/icons
 import { NodeType, SayController, Schema } from '@lblod/ember-rdfa-editor';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import HoverTooltip from '@lblod/ember-rdfa-editor-lblod-plugins/components/hover-tooltip';
-import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
+import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-ancestor';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/recalculate-structure-numbers';
-import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/move-structure';
+import { recalculateNumbers } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/monads/recalculate-structure-numbers';
+import { moveStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/commands/move-structure';
 
 interface Sig {
   Args: { controller: SayController };
@@ -160,7 +160,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
       >
         <Card.header>
           <AuHeading @level='3' @skin='6'>{{t
-              'article-structure-plugin.title.structure-card'
+              'structure-plugin.control-card.title'
             }}</AuHeading>
         </Card.header>
         <Card.content>
@@ -220,7 +220,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
                   </:hover>
                   <:tooltip as |tooltip|>
                     <AuPill id='remove-tooltip' role='tooltip' {{tooltip}}>
-                      {{t 'article-structure-plugin.remove.help-text'}}
+                      {{t 'structure-plugin.help-text.remove'}}
                     </AuPill>
                   </:tooltip>
                 </HoverTooltip>
@@ -248,9 +248,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
                       role='tooltip'
                       {{tooltip}}
                     >
-                      {{t
-                        'article-structure-plugin.remove-with-content.help-text'
-                      }}
+                      {{t 'structure-plugin.help-text.remove-with-content'}}
                     </AuPill>
                   </:tooltip>
                 </HoverTooltip>
@@ -260,14 +258,14 @@ export default class StructureControlCardComponent extends Component<Sig> {
               <AuFormRow @alignment='inline'>
                 {{#let (uuidv4) as |id|}}
                   <AuLabel for={{id}}>
-                    {{t 'article-structure-plugin.start-number.start-number'}}
+                    {{t 'structure-plugin.control-card.start-number'}}
                   </AuLabel>
                   <AuInput
                     id={{id}}
                     value={{or this.startNumber this.number}}
                     {{on 'change' this.onStartNumberChange}}
                     placeholder={{t
-                      'article-structure-plugin.start-number.start-number'
+                      'structure-plugin.control-card.start-number'
                     }}
                     type='number'
                     min='1'
@@ -279,7 +277,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
                 class='au-u-margin-top-tiny'
                 {{on 'click' this.setStartNumber}}
               >
-                {{t 'article-structure-plugin.start-number.set'}}
+                {{t 'structure-plugin.control-card.set'}}
               </AuButton>
               <AuButton
                 @iconAlignment='left'
@@ -288,7 +286,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
                 class='au-u-margin-top-tiny'
                 {{on 'click' this.resetStartNumber}}
               >
-                {{t 'article-structure-plugin.start-number.reset'}}
+                {{t 'structure-plugin.control-card.reset'}}
               </AuButton>
             </Item>
           </AuList>

@@ -4,14 +4,14 @@ import {
   type StructurePluginOptions,
   type StructureType,
 } from '../../structure-plugin/structure-types';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
-import { findHowToInsertStructure } from '../../structure-plugin/insert-structure';
-import { regenerateRdfaLinks } from '../../structure-plugin/regenerate-rdfa-links';
+import { recalculateNumbers } from '../monads/recalculate-structure-numbers';
+import { findHowToInsertStructure } from '../monads/insert-structure';
+import { regenerateRdfaLinks } from '../monads/regenerate-rdfa-links';
 import { closeHistory } from '@lblod/ember-rdfa-editor/plugins/history';
 
-const insertStructure = (
+export const insertStructure = (
   structureType: StructureType,
-  uriGenerator: StructurePluginOptions['uriGenerator'],
+  uriGenerator: Required<StructurePluginOptions>['uriGenerator'],
 ): Command => {
   return (state, dispatch) => {
     const { result, transaction } = transactionCombinator(state)([
@@ -34,5 +34,3 @@ const insertStructure = (
     }
   };
 };
-
-export default insertStructure;

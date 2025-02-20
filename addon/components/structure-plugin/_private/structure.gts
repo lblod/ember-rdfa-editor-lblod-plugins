@@ -25,7 +25,7 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { getNameForStructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { StructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
-import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/romanize';
+import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/utils/romanize';
 import { Transaction } from '@lblod/ember-rdfa-editor';
 
 interface Sig {
@@ -59,7 +59,6 @@ export default class Structure extends Component<Sig> {
       redacted,
     },
   });
-  @tracked titleContent = this.titleAttr;
   @tracked innerView?: SayView;
   /**
    * A time counter to store the last time an update to the title was added to
@@ -149,7 +148,7 @@ export default class Structure extends Component<Sig> {
 
   @action
   onAttrsUpdate() {
-    if (this.titleAttr && this.titleAttr !== this.innerEditor?.htmlContent) {
+    if (this.titleAttr !== this.innerEditor?.htmlContent) {
       this.innerEditor?.setInnerHtmlContent(this.titleAttr);
     }
   }
@@ -183,7 +182,7 @@ export default class Structure extends Component<Sig> {
       controller: this.controller,
       onFocus: this.onInnerEditorFocus,
       onUpdateContent: this.onTitleUpdate,
-      initialContent: this.titleContent,
+      initialContent: this.titleAttr,
     });
   }
   @action

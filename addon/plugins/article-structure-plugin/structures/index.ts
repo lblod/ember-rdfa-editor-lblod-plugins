@@ -1,44 +1,37 @@
 import { ArticleStructurePluginOptions } from '..';
-import { article, articleSpec, article_body, article_header } from './article';
-import {
-  articleParagraphSpec,
-  article_paragraph,
-  article_paragraph_number,
-  article_paragraph_body,
-} from './article-paragraph';
-import { chapterSpec, chapter, chapter_body } from './chapter';
-import { titleSpec, title, title_body } from './title';
-import { sectionSpec, section, section_body } from './section';
-import { structure_header } from './structure-header';
-import { structure_header_title } from './structure-header-title';
-import { structure_header_number } from './structure-header-number';
-import { subsectionSpec, subsection, subsection_body } from './subsection';
+import { structureWithConfig } from '../../structure-plugin/node';
 
-export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [
-  titleSpec,
-  chapterSpec,
-  sectionSpec,
-  subsectionSpec,
-  articleSpec,
-  articleParagraphSpec,
-];
+/** @deprecated Is now just an empty array, move to using structure-plugin */
+export const STRUCTURE_SPECS: ArticleStructurePluginOptions = [];
 
+/** @deprecated Use the structure-plugin nodes and nodeviews directly */
 export const STRUCTURE_NODES = {
-  structure_header,
-  title,
-  title_body,
-  chapter,
-  chapter_body,
-  section,
-  section_body,
-  subsection,
-  subsection_body,
-  article,
-  article_header,
-  article_body,
-  article_paragraph,
-  article_paragraph_number,
-  article_paragraph_body,
-  structure_header_title,
-  structure_header_number,
+  structure: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
+  title: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
+  chapter: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
+  section: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
+  subsection: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
+  article: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
+  article_paragraph: structureWithConfig({
+    onlyArticleSpecialName: false,
+    fullLengthArticles: true,
+  }),
 };

@@ -1,7 +1,14 @@
 import { findParentNodeClosestToPos } from '@curvenote/prosemirror-utils';
 import { NodeType, PNode, ResolvedPos, Schema } from '@lblod/ember-rdfa-editor';
-import { containsOnlyPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/utils/structure';
 import { findNodes } from '@lblod/ember-rdfa-editor/utils/position-utils';
+
+function containsOnlyPlaceholder(schema: Schema, node: PNode) {
+  return (
+    node.childCount === 1 &&
+    node.firstChild?.type === schema.nodes['paragraph'] &&
+    node.firstChild.firstChild?.type === schema.nodes['placeholder']
+  );
+}
 
 type InsertionRange = {
   from: number;

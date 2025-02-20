@@ -15,19 +15,23 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export type StructurePluginOptions = {
-  uriGenerator:
+  uriGenerator?:
     | 'uuid4'
     | 'template-uuid4'
     | ((structureType: StructureType) => string);
+  fullLengthArticles?: boolean;
+  onlyArticleSpecialName?: boolean;
 };
 
-export type StructureType =
-  | 'title'
-  | 'article'
-  | 'chapter'
-  | 'section'
-  | 'subsection'
-  | 'paragraph';
+export const structureTypes = [
+  'title',
+  'article',
+  'chapter',
+  'section',
+  'subsection',
+  'paragraph',
+] as const;
+export type StructureType = (typeof structureTypes)[number];
 
 export interface StructureConfig {
   rdfType: Resource;
