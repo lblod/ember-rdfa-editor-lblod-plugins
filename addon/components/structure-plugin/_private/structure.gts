@@ -82,7 +82,7 @@ export default class Structure extends Component<Sig> {
     return 'div';
   }
   get titleAttr() {
-    return this.node.attrs.title as string;
+    return this.node.attrs.title as string | null;
   }
   get headerTag() {
     return this.node.attrs.headerTag as string;
@@ -149,7 +149,7 @@ export default class Structure extends Component<Sig> {
   @action
   onAttrsUpdate() {
     if (this.titleAttr !== this.innerEditor?.htmlContent) {
-      this.innerEditor?.setInnerHtmlContent(this.titleAttr);
+      this.innerEditor?.setInnerHtmlContent(this.titleAttr ?? '');
     }
   }
 
@@ -182,7 +182,7 @@ export default class Structure extends Component<Sig> {
       controller: this.controller,
       onFocus: this.onInnerEditorFocus,
       onUpdateContent: this.onTitleUpdate,
-      initialContent: this.titleAttr,
+      initialContent: this.titleAttr ?? '',
     });
   }
   @action
