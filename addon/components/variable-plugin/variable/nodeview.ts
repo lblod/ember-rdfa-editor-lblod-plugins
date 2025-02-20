@@ -6,7 +6,7 @@ import { action } from '@ember/object';
 
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { DCT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export default class VariableNodeViewComponent extends Component<EmberNodeArgs> {
   @tracked innerView?: SayView;
@@ -48,7 +48,7 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
     }
   }
   get label() {
-    const labelTriple = getOutgoingTriple(this.args.node.attrs, EXT('label'));
+    const labelTriple = getOutgoingTriple(this.args.node.attrs, DCT('title'));
     if (labelTriple) {
       return labelTriple.object.value;
     } else {

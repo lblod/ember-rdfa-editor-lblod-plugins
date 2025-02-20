@@ -87,7 +87,8 @@
     "stream-browserify": "^3.0.0",
     "tracked-built-ins": "^3.3.0",
     "tracked-toolbox": "^2.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "~3.4.2",
@@ -183,7 +184,7 @@
     "ember-leaflet": "^5.1.3",
     "ember-modifier": "^4.0.0",
     "ember-power-select": "^7.1.0 || ^8.0.0",
-    "ember-source": "^4.12.0 || ^5.4.0",
+    "ember-source": "^4.12.0 || >5.4.0",
     "ember-template-imports": "^4.1.1",
     "ember-truth-helpers": "^4.0.3",
     "leaflet": "^1.9.4"

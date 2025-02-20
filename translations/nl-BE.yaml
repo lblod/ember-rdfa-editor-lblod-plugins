@@ -321,6 +321,7 @@ editor-plugins:
       filter:
         type: Filter op type
         code: Filter op code
+        text: Filter op tekst
         zonal-validity: Filter op zonale geldigheid
       combine-with-code: Combineer met code
     pagination:
@@ -329,7 +330,7 @@ editor-plugins:
       header:
         code: Code
         image: Afbeelding
-        template: Template
+        preview: Preview
         category: Categorie
       content:
         image:

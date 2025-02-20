@@ -6,13 +6,24 @@ import {
   fetchCodeListOptions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/fetch-data';
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
-import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
+import { findParentNode } from '@curvenote/prosemirror-utils';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
-import { ZONAL_URI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'reactiveweb/function';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { tracked } from '@glimmer/tracking';
+import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  DCT,
+  EXT,
+  MOBILITEIT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { Option } from '@lblod/ember-rdfa-editor/utils/_private/option';
 
 export type LocationEditOptions = {
   endpoint: string;
@@ -66,10 +77,15 @@ export default class LocationEditComponent extends Component<Args> {
   }
 
   get source() {
-    return (
-      (this.selectedLocation?.node.attrs.source as string | undefined) ??
-      this.args.options.endpoint
-    );
+    if (this.selectedLocation) {
+      const { node } = this.selectedLocation;
+      const source = getOutgoingTriple(node.attrs, DCT('source'))?.object
+        .value as Option<string>;
+      if (source) {
+        return source;
+      }
+    }
+    return this.args.options.endpoint;
   }
 
   get label() {
@@ -78,13 +94,24 @@ export default class LocationEditComponent extends Component<Args> {
 
   get isZonal() {
     const { selection } = this.controller.mainEditorState;
-    const roadSignRegulation = findParentNodeOfType(
-      this.controller.schema.nodes.roadsign_regulation,
-    )(selection);
-    const zonalityUri = roadSignRegulation?.node.attrs.zonality as
-      | string
-      | undefined;
-    return zonalityUri === ZONAL_URI;
+    const mobilityMeasureNode = findParentNode((node) =>
+      hasOutgoingNamedNodeTriple(
+        node.attrs,
+        RDF('type'),
+        MOBILITEIT('Mobiliteitsmaatregel'),
+      ),
+    )(selection)?.node;
+    if (!mobilityMeasureNode) {
+      return false;
+    }
+    const zonalityTriple = getOutgoingTriple(
+      mobilityMeasureNode.attrs,
+      EXT('zonality'),
+    );
+    if (!zonalityTriple) {
+      return false;
+    }
+    return zonalityTriple.object.value === ZONALITY_OPTIONS.ZONAL;
   }
 
   locationOptions = trackedFunction(this, async () => {

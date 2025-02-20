@@ -13,7 +13,7 @@ import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
   DCT,
-  EXT,
+  MOBILITEIT,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { tracked } from '@glimmer/tracking';
@@ -62,8 +62,8 @@ export default class CodelistEditComponent extends Component<Args> {
   get codelistUri() {
     if (this.selectedCodelist) {
       const { node } = this.selectedCodelist;
-      const codelistUri = getOutgoingTriple(node.attrs, EXT('codelist'))?.object
-        .value as Option<string>;
+      const codelistUri = getOutgoingTriple(node.attrs, MOBILITEIT('codelijst'))
+        ?.object.value as Option<string>;
       if (codelistUri) {
         return codelistUri;
       }
