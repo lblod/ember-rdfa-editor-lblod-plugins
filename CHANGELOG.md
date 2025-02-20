@@ -1,5 +1,146 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 27.0.0
+
+### Major Changes
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: adjustments to `roadsign-regulation-plugin/roadsigns-table` component
+
+  - converted to `gts` format
+  - component signature changed to:
+    ```ts
+    type Signature = {
+      Args: {
+        options: RoadsignRegulationPluginOptions;
+        content?: MobilityMeasureConcept[];
+        isLoading?: boolean;
+        insert: InsertMobilityMeasureTask;
+      };
+    };
+    ```
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: adjustments to `roadsign-regulation-plugin/roadsigns-modal` component
+
+  - converted to `gts` format
+  - usage of more modern data-fetching practices (using `ember-concurrency` and `reactiveweb`)
+  - rewired to use new query functions and `zod` schemas
+  - inclusion of search on the content of mobility measure concepts
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`e07b07b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e07b07baa5d1f2da1186059c119a5fd050d8b5b2) Thanks [@elpoelma](https://github.com/elpoelma)! - Rework pagination of `roadsign-regulation` plugin:
+
+  - Removal of `roadsign-regulation-plugin/roadsigns-pagination` components.
+    This component has been replaced by the more generic `pagination/pagination-view` component.
+  - Slightly rework the pagination of the `fetchMeasures` task:
+    - It accepts an (optional) `pageNumber` instead of a `pageStart` argument
+    - It accepts an (optional) `pageSize` argument (default: 10)
+
+- [#542](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/542) [`ac240e5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ac240e5246e7c1e611718e1ff8804d8a9023a5f4) Thanks [@piemonkey](https://github.com/piemonkey)! - Update to Ember v2 addon version of @lblod/ember-rdfa-editor
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `variables` plugin: follow new data model defined at https://data.test-vlaanderen.be/doc/applicatieprofiel/besluit-mobiliteit/#Variabele
+  Variable types/node-specs included are:
+
+  - `text_variable`
+  - `number`
+  - `date`
+  - `autofilled`
+  - `codelist`
+  - `location`
+
+  Additionally, some internal improvements are added to make maintainability of variables easier.
+  Older variable formats are automatically converted to the new format.
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`8259870`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8259870261f988183db032f75f347fe0c8856112) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove `insertArticle` prosemirror command in favour of `insertArticle` transaction-monad
+
+- [#529](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/529) [`728b90e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/728b90ee4c49548207935cbbb6d9977cbdd9f5cf) Thanks [@elpoelma](https://github.com/elpoelma)! - Adapt `confidentiality-plugin` SASS stylesheet:
+
+  - Remove dependency on legacy 'rdfa-annotation' system
+  - Introduction of 'say-redacted' class
+
+- [#529](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/529) [`1ecae64`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1ecae645888566e79c805fc67d6a8eb5d0e945d4) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete/unused `article-structure-plugin` SASS stylesheet
+  This obsolete stylesheet was used with the (older) `article-structure-plugin` and relied on the legacy 'rdfa-annotation' system.
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: adjustments to `roadsign-regulation-plugin/measure-template` component
+
+  - converted to `gts` format
+  - renamed to `roadsign-regulation-plugin/measure-preview`
+  - component signature has changed to:
+    ```ts
+    type Args = {
+      concept: MobilityMeasureConcept;
+      limitText?: boolean;
+    };
+    ```
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: reworked data-fetching logic
+
+  - removal of obsolete `roadsign-registry` ember service
+  - introduction of seperate SPARQL queries to fetch necessary resources/data
+  - introduction of [zod](https://zod.dev/) schemas to replace previously used `model` definitions
+  - follows new datamodel defined at https://data.test-vlaanderen.be/doc/applicatieprofiel/besluit-mobiliteit/
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: reworked mobility measure node
+
+  - `roadsign_regulation` node is no longer used (but still supported for legacy reasons)
+  - mobility measure is now represented by generic `block_rdfa` and `inline_rdfa` nodes
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: adjustments to `roadsign-regulation-plugin/expanded-measure` component
+
+  - converted to the `gts` format
+  - component signature has changed to:
+    ```ts
+    type Signature = {
+      Args: {
+        concept: MobilityMeasureConcept;
+        selectRow: (uri: string) => void;
+        insert: InsertMobilityMeasureTask;
+        endpoint: string;
+      };
+    };
+    ```
+
+- [#535](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/535) [`8a014cc`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8a014ccdde85c4797f376f638ff422658f4a1210) Thanks [@piemonkey](https://github.com/piemonkey)! - Update `@lblod/ember-rdfa-editor` peerdependency requirement to `^11.0.0`
+
+- [#529](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/529) [`695d57b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/695d57ba0344e6bc5c4cad2f5f133998003322c0) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete `document-title-plugin` SASS stylesheet
+  This stylesheet relied on the legacy rdfa-annotations system
+
+- [#529](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/529) [`aadb6a5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/aadb6a512aba9ff98cf974fe5160d2374d144915) Thanks [@elpoelma](https://github.com/elpoelma)! - Adapt `snippet-plugin` SASS stylesheet:
+
+  - Remove dependency on legacy 'rdfa-annotation' system
+
+- [#529](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/529) [`75ccd64`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/75ccd64fb0042014d947147dc38f2f2302d001c8) Thanks [@elpoelma](https://github.com/elpoelma)! - Adapt `citation-plugin` SASS stylesheet:
+
+  - Remove dependency on legacy 'rdfa-annotation' system
+  - Introduction of `say-citation-hint` class
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`d9b41c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d9b41c088a3c8cbc1ba78bd75adb08105b8611bc) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign-regulation` plugin: reworked to follow new `mobiliteit` data model defined at https://data.test-vlaanderen.be/doc/applicatieprofiel/besluit-mobiliteit/
+  The rework includes:
+  - adjustments to data fetching
+  - adjustments to mobility measure editor node
+  - adjustments to inner workings of the related ember components
+
+### Minor Changes
+
+- [#535](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/535) [`fec93c3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/fec93c3f34c09dae564d22a4b9b843c839190458) Thanks [@piemonkey](https://github.com/piemonkey)! - Move article structure plugin to use the structure plugin
+
+- [#538](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/538) [`53bec98`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/53bec988d44c6324b2770b748d2f3d35e2f21d1d) Thanks [@piemonkey](https://github.com/piemonkey)! - Migrate use of article-structure-plugin to structure-plugin if that plugin is present (and has higher priority in the list of node specs in the schema).
+
+- [#539](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/539) [`b1e8d74`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b1e8d74f12088bcbb5072f786114fb498fe2e505) Thanks [@piemonkey](https://github.com/piemonkey)! - Remove unused code from article-structure-plugin
+  :warning: breaks the functionality of the table-of-contents-plugin
+
+- [#539](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/539) [`826b697`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/826b69736e87cab82c9d08860eace57681cb0ab9) Thanks [@piemonkey](https://github.com/piemonkey)! - Move use of article-structure control-card to use the structure-plugin equivalent
+
+### Patch Changes
+
+- [#537](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/537) [`1f6b492`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1f6b492123687269e731af84fa498aa6246b7dc4) Thanks [@piemonkey](https://github.com/piemonkey)! - Include ability to modify start numbers in structure plugin
+
+- [#540](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/540) [`5d29b74`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/5d29b7435fb064d2eb9c3bbd69ce93617bbcc2d1) Thanks [@abeforgit](https://github.com/abeforgit)! - Fix history and rendering issues when inserting structures
+
+- [#536](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/536) [`63a569a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/63a569a57b83e8b74ebfb9d31ebfaaf4026adac3) Thanks [@abeforgit](https://github.com/abeforgit)! - Rework the css of the structures to make their behavior more intuitive
+
+- [#537](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/537) [`671a822`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/671a8229a88702f3098f5efc005f170ac5557333) Thanks [@piemonkey](https://github.com/piemonkey)! - Add support for moving article structures to generic structure plugin
+
+- [#534](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/534) [`be3ea0c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/be3ea0cd4638918df2dff8912b78cfd28366137d) Thanks [@elpoelma](https://github.com/elpoelma)! - internal: modernize roadsigns-modal component using `trackedFunction`
+
 ## 26.5.0
 
 ### Minor Changes
