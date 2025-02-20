@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 27.0.1
+
+### Patch Changes
+
+- [`6dc79bf`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6dc79bf752061cd2526db500c6b1c9a77136be5e) Thanks [@elpoelma](https://github.com/elpoelma)! - `structure-plugin`: fix order of structure types
+
+- [`ed12bc5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ed12bc51e5b26855a31a3c980378f7e876cf6c29) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsigns-modal` component: fix incorrect import of `pagination` helper
+
 ## 27.0.0
 
 ### Major Changes
