@@ -47,160 +47,18 @@
   font-family: var(--au-font-tertiary);
 }
 
-// Start: Styling the highlight when detecting search term inside the editor
-@mixin hints($before, $after) {
-  .rdfa-annotations.show-rdfa-blocks [data-editor-highlight='true'] {
-    &:before {
-      content: '#{$before}';
-    }
+.say-citation-hint {
+  background-color: var(--au-gray-100);
+  border-bottom: 0.2rem dotted var(--au-gray-300);
+  padding-bottom: 0.2rem;
+  transition: background-color var(--au-transition);
 
-    &:not([contenteditable='']):after {
-      content: '#{$after}';
-    }
+  &::selection {
+    background-color: var(--au-gray-300);
+  }
+
+  &:hover {
+    background-color: var(--au-gray-200);
+    border-bottom-color: tint($au-gray-600, 20);
   }
 }
-
-.rdfa-annotations {
-  &.show-rdfa-blocks {
-    [data-editor-highlight='true'] {
-      position: relative;
-      border: 1px solid var(--au-gray-200);
-      display: block !important; // Override inline styles
-      margin: $au-unit-tiny;
-      padding: 0;
-
-      &:before {
-        @include au-font-size(1.2rem, 1.2);
-        font-family: var(--au-font);
-        font-weight: var(--au-medium);
-        letter-spacing: 0.01rem;
-        color: var(--au-gray-600);
-        text-transform: uppercase;
-        pointer-events: none;
-        content: attr(property) ' ' attr(typeof) ' ' attr(data-type);
-        position: relative;
-        right: auto;
-        top: 0;
-        left: 0;
-        display: block;
-        width: 100%;
-        padding: $au-unit-tiny * 0.5;
-        transition: none;
-        border-bottom: 1px solid var(--au-gray-200);
-        background-color: var(--au-gray-100);
-        opacity: 1;
-      }
-
-      &:after {
-        @include au-font-size($say-smallest-font-size, 1.2);
-        font-family: var(--au-font);
-        font-weight: var(--au-regular);
-        letter-spacing: 0.01rem;
-        color: var(--au-gray-600);
-        text-transform: uppercase;
-        pointer-events: none;
-        position: relative;
-        right: auto;
-        bottom: 0;
-        left: 0;
-        display: block;
-        width: 100%;
-        padding: $au-unit-tiny * 0.5;
-        transition: none;
-        border-top: 1px solid var(--au-gray-200);
-        background-color: var(--au-white);
-        opacity: 1;
-        margin: 0;
-      }
-    }
-  }
-
-  [data-editor-highlight='true'] {
-    &:not([contenteditable='']) {
-      background-color: var(--au-gray-100);
-      border-bottom: 0.2rem dotted var(--au-gray-300);
-      padding-bottom: 0.2rem;
-      transition: background-color var(--au-transition);
-
-      &::selection {
-        background-color: var(--au-gray-300);
-      }
-
-      &:hover {
-        background-color: var(--au-gray-200);
-      }
-    }
-  }
-}
-
-@include hints('Selecteer de juiste optie', 'Actie nodig');
-
-[data--language='en'],
-[lang='en'] {
-  @include hints('Select the correct option', 'Action required');
-}
-
-.rdfa-annotations-hover:not(.show-rdfa-blocks) {
-  [data-editor-highlight='true'] {
-    &:not(ol):not(ul):not(li):not(span) {
-      position: relative;
-
-      &:before {
-        height: 100%;
-        top: 0;
-      }
-    }
-
-    &:not([contenteditable='']) {
-      &:hover {
-        border-bottom-color: tint($au-gray-600, 20);
-      }
-
-      &:before {
-        @include au-font-size(1.2rem, 1.2);
-        position: absolute;
-        transition:
-          opacity $au-easing 0.5s,
-          left $au-easing 0.2s;
-        right: calc(100% + #{$au-unit-large});
-        opacity: 0;
-        display: block;
-        margin-top: 0.2rem;
-        padding-right: $au-unit + $au-unit-small;
-        margin-right: -$au-unit + $au-unit-tiny;
-        width: $au-unit-huge * 1.5;
-        font-family: var(--au-font);
-        font-weight: var(--au-medium);
-        letter-spacing: 0.01rem;
-        text-transform: uppercase;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: var(--au-gray-600);
-        pointer-events: none;
-        overflow: hidden;
-        min-height: 2rem;
-        border-right: 1px dashed var(--au-gray-300);
-        border-top: 1px dashed var(--au-gray-300);
-        z-index: var(--au-z-index-gamma);
-        background: var(--au-white)
-          linear-gradient(
-            to right,
-            $au-white,
-            $au-white calc(100% - #{$au-unit + $au-unit-tiny}),
-            transparent calc(100% - #{$au-unit + $au-unit-tiny}),
-            transparent 100%
-          );
-      }
-    }
-  }
-
-  @include mq($until: 1280px) {
-    [data-editor-highlight='true'] {
-      &:before {
-        display: none !important;
-      }
-    }
-  }
-}
-
-// End: Styling the highlight when detecting search term inside the editor
