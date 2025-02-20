@@ -30,11 +30,11 @@ export const emberNodeConfig: (
     serialize(node, state) {
       const t = getTranslationFunction(state);
 
-      const { config } = node.attrs;
+      const { config: configToSerialize } = node.attrs;
       const entries = extractOutline({
         node: unwrap(state).doc,
         pos: -1,
-        config: config as TableOfContentsConfig,
+        config: configToSerialize as TableOfContentsConfig,
         state: unwrap(state),
       });
 

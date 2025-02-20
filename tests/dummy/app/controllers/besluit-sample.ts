@@ -97,7 +97,7 @@ import {
 import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
-import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/_private/control-card';
+import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
 import applyDevTools from 'prosemirror-dev-tools';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import {
@@ -121,6 +121,8 @@ import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuids
 import { getOwner } from '@ember/owner';
 
 export default class BesluitSampleController extends Controller {
+  queryParams = ['editableNodes'];
+
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;

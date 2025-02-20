@@ -1,7 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { SayController } from '@lblod/ember-rdfa-editor/addon';
-import { TextSelection } from '@lblod/ember-rdfa-editor';
+import { SayController, TextSelection } from '@lblod/ember-rdfa-editor';
 import {
   findParentNodeOfType,
   hasParentNodeOfType,

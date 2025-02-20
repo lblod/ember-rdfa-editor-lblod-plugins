@@ -6,8 +6,8 @@ import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { buildArticleStructure } from '../utils/build-article-structure';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import { insertArticle } from '../actions/insert-article';
+import { recalculateNumbers } from '../../structure-plugin/monads/recalculate-structure-numbers';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;

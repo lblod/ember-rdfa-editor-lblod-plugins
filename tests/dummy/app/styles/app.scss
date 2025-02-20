@@ -3,16 +3,14 @@
    ================================== */
 
 @import '@appuniversum/ember-appuniversum/styles';
-@import 'ember-rdfa-editor';
-@import 'ember-rdfa-editor/c-dummy';
+@import '@lblod/ember-rdfa-editor';
+// @import 'test-app/c-dummy';
 @import 'citaten-plugin';
 @import 'date-plugin';
 @import 'variable-plugin';
 @import 'besluit-plugin';
-@import 'article-structure-plugin';
 @import 'address-plugin';
 @import 'generic-rdfa-variable';
-@import 'document-title-plugin';
 @import 'snippet-plugin';
 @import 'template-comments-plugin';
 @import 'confidentiality-plugin';

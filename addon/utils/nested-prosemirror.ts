@@ -1,4 +1,5 @@
 import {
+  keymap,
   EditorState,
   NodeSelection,
   ProseParser,
@@ -8,6 +9,8 @@ import {
   Transaction,
   Selection,
 } from '@lblod/ember-rdfa-editor';
+import { undo, redo } from '@lblod/ember-rdfa-editor/plugins/history';
+import { embeddedEditorBaseKeymap } from '@lblod/ember-rdfa-editor/core/keymap';
 import { htmlToDoc } from '@lblod/ember-rdfa-editor/utils/_private/html-utils';
 export interface NestedProsemirrorArgs {
   target: HTMLElement;
@@ -16,16 +19,18 @@ export interface NestedProsemirrorArgs {
   getPos: () => number | undefined;
   controller: SayController;
   onFocus: (view: SayView) => void;
-  onUpdateContent: (newContent: string) => void;
+  onUpdateContent: (newContent: string, tr: Transaction) => void;
   initialContent: string;
 }
+
 export default class NestedProsemirror {
   view: SayView;
   outerView: SayView;
   getPos: () => number | undefined;
   controller: SayController;
   onFocus: (view: SayView) => void;
-  onUpdateContent: (newContent: string) => void;
+  onUpdateContent: (newContent: string, tr: Transaction) => void;
+  initializing = false;
   constructor({
     target,
     schema,
@@ -38,7 +43,19 @@ export default class NestedProsemirror {
   }: NestedProsemirrorArgs) {
     const state = EditorState.create({ schema });
     const parser = ProseParser.fromSchema(schema);
+
     this.outerView = outerView;
+
+    const historyKeymap = {
+      'Mod-z': () =>
+        undo(this.outerView.state, this.outerView.dispatch.bind(this)),
+      'Mod-Z': () =>
+        undo(this.outerView.state, this.outerView.dispatch.bind(this)),
+      'Mod-y': () =>
+        redo(this.outerView.state, this.outerView.dispatch.bind(this)),
+      'Mod-Y': () =>
+        redo(this.outerView.state, this.outerView.dispatch.bind(this)),
+    };
     this.getPos = getPos;
     this.controller = controller;
     this.onFocus = onFocus;
@@ -50,6 +67,7 @@ export default class NestedProsemirror {
         state,
         domParser: parser,
         dispatchTransaction: this.dispatch,
+        plugins: [keymap({ ...embeddedEditorBaseKeymap, ...historyKeymap })],
         handleDOMEvents: {
           mousedown: () => {
             // Kludge to prevent issues due to the fact that the whole
@@ -66,6 +84,7 @@ export default class NestedProsemirror {
                 this.outerView.state.doc.resolve(pos),
               );
               outerSelectionTr.setSelection(outerSelection);
+              outerSelectionTr.setMeta('addToHistory', false);
               this.outerView.dispatch(outerSelectionTr);
             }
 
@@ -78,7 +97,15 @@ export default class NestedProsemirror {
       },
     );
     if (initialContent) {
-      this.view.setHtmlContent(initialContent);
+      // avoid sending unnecessary transactions to the outer state when the
+      // ember component renders (the outer state has just caused the node to
+      // rerender, so it already knows its state)
+      // this avoids spurious history entries
+      this.initializing = true;
+      // "shouldFocus: false" here is very important, it avoids an avalanche of
+      // transactions every time a structure is rendered
+      this.view.setHtmlContent(initialContent, { shouldFocus: false });
+      this.initializing = false;
     }
   }
 
@@ -86,8 +113,8 @@ export default class NestedProsemirror {
     if (this.view) {
       const newState = this.view.state.apply(tr);
       this.view.updateState(newState);
-      if (!tr.getMeta('fromOutside')) {
-        this.onUpdateContent(this.view.htmlContent);
+      if (!tr.getMeta('fromOutside') && !this.initializing) {
+        this.onUpdateContent(this.view.htmlContent, tr);
       }
     }
   };

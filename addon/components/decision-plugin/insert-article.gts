@@ -10,13 +10,13 @@ import { not } from 'ember-truth-helpers';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { insertArticle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/actions/insert-article';
+import { StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 
-export interface InsertArticleOptions {
-  uriGenerator?: () => string;
+export type InsertArticleOptions = StructurePluginOptions & {
   insertFreely?: boolean;
   /** Pass a decision URI instead of finding one in the document. Implies `insertFreely`. */
   decisionUri?: string;
-}
+};
 interface Sig {
   Args: {
     controller: SayController;
@@ -24,6 +24,7 @@ interface Sig {
     options?: InsertArticleOptions;
   };
 }
+
 export default class InsertArticleComponent extends Component<Sig> {
   @service declare intl: IntlService;
 

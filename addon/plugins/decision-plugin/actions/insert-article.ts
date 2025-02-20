@@ -8,13 +8,13 @@ import {
   transactionCombinator,
   type TransactionMonad,
 } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { recalculateNumbers } from '../../structure-plugin/recalculate-structure-numbers';
 import {
   addPropertyToNode,
   findNodeByRdfaId,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { getNodesBySubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
+import { recalculateNumbers } from '../../structure-plugin/monads/recalculate-structure-numbers';
 
 interface InsertArticleToDecisionArgs {
   node: PNode;

@@ -2,6 +2,10 @@ import Controller from '@ember/controller';
 import applyDevTools from 'prosemirror-dev-tools';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
+import { getOwner } from '@ember/owner';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import { ComponentLike } from '@glint/template';
 import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Schema, Plugin } from '@lblod/ember-rdfa-editor';
 import {
@@ -26,8 +30,6 @@ import {
   tablePlugin,
 } from '@lblod/ember-rdfa-editor/plugins/table';
 import { link, linkView } from '@lblod/ember-rdfa-editor/nodes/link';
-
-import { service } from '@ember/service';
 import ImportRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   tableOfContentsView,
@@ -35,11 +37,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/table-of-contents-plugin/nodes';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { NodeViewConstructor } from '@lblod/ember-rdfa-editor';
-import {
-  STRUCTURE_NODES,
-  STRUCTURE_SPECS,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/article-structure-plugin/structures';
-import IntlService from 'ember-intl/services/intl';
 import {
   bulletListWithConfig,
   listItemWithConfig,
@@ -79,6 +76,10 @@ import {
   osloLocation,
   osloLocationView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
+import {
+  structureWithConfig,
+  structureViewWithConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { VariableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/insert-variable-card';
 import {
   templateComment,
@@ -118,7 +119,6 @@ import {
   editableNodePlugin,
   getActiveEditableNode,
 } from '@lblod/ember-rdfa-editor/plugins/editable-node';
-import { ComponentLike } from '@glint/template';
 import {
   snippetPlaceholder,
   snippetPlaceholderView,
@@ -130,14 +130,18 @@ import {
 import { variableAutofillerPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/plugins/autofiller';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { getOwner } from '@ember/owner';
+import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
+import { type StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 
 export default class RegulatoryStatementSampleController extends Controller {
+  queryParams = ['editableNodes'];
+
   SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelect;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
   RdfaEditor = RdfaEditor;
+  StructureControlCard = StructureControlCardComponent;
   @tracked editableNodes = false;
 
   @action
@@ -160,11 +164,11 @@ export default class RegulatoryStatementSampleController extends Controller {
   schema = new Schema({
     nodes: {
       doc: docWithConfig({
-        content:
-          'table_of_contents? document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+        content: 'table_of_contents? document_title? block+',
         rdfaAware: true,
       }),
       paragraph,
+      structure: structureWithConfig(this.config.structure),
       document_title,
 
       repaired_block: repairedBlockWithConfig({ rdfaAware: true }),
@@ -186,7 +190,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       oslo_location: osloLocation(this.config.location),
       address,
       codelist,
-      ...STRUCTURE_NODES,
       heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
 
@@ -309,14 +312,12 @@ export default class RegulatoryStatementSampleController extends Controller {
         nonZonalLocationCodelistUri:
           'http://lblod.data.gift/concept-schemes/62331FDD00730AE7B99DF7F2',
       },
-      structures: STRUCTURE_SPECS,
       link: {
         interactive: true,
         rdfaAware: true,
       },
       snippet: {
-        allowedContent:
-          'document_title? ((block|chapter)+|(block|title)+|(block|article)+)',
+        allowedContent: 'document_title? block+',
         endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
         hidePlaceholderInsertButton: true,
       },
@@ -326,6 +327,11 @@ export default class RegulatoryStatementSampleController extends Controller {
       lmb: {
         endpoint: 'http://localhost/vendor-proxy/query',
       },
+      structure: {
+        uriGenerator: 'template-uuid4',
+        fullLengthArticles: false,
+        onlyArticleSpecialName: true,
+      } satisfies StructurePluginOptions,
       citation: {
         type: 'nodes',
         activeInNode(node: PNode, state: EditorState) {
@@ -379,6 +385,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       templateComment: templateCommentView(controller),
       address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
+      structure: structureViewWithConfig(this.config.structure)(controller),
       snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
         controller,
       ),

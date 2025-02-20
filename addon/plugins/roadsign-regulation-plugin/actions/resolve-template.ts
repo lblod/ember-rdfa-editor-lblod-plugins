@@ -42,7 +42,7 @@ export async function resolveTemplate(
       if (variable.type !== 'instruction') {
         continue;
       }
-      const template = (
+      const instructionTemplate = (
         await queryMobilityTemplates(endpoint, {
           instructionVariableUri: variable.uri,
           abortSignal,
@@ -51,7 +51,7 @@ export async function resolveTemplate(
       const {
         templateString: instructionTemplateString,
         variables: instructionTemplateVariables,
-      } = await resolveTemplate(endpoint, template, options);
+      } = await resolveTemplate(endpoint, instructionTemplate, options);
       Object.assign(variablesObject, instructionTemplateVariables);
       templateString = templateString.replaceAll(
         `\${${variable.label}}`,
