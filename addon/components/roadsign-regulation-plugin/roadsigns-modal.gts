@@ -167,6 +167,8 @@ export default class RoadsignsModal extends Component<Signature> {
     }
   });
 
+  // Note: this code does not fully work/is not fully reactive with ember 5.6+
+  // Check-out https://github.com/universal-ember/reactiveweb/issues/110 for more information
   codeCombinationOptionsQuery = trackedFunction(this, async () => {
     const selectedCode = this.selectedCode;
     if (!selectedCode) {
