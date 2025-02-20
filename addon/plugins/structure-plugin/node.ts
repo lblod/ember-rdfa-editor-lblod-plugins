@@ -245,7 +245,9 @@ export const emberNodeConfig: (
             attrs.rdfaNodeType === 'resource' &&
             node.dataset.sayRenderAs === 'structure'
           ) {
-            const headerFormat = node.dataset.sayHeaderFormat;
+            // Since there are existing decision articles with no sayHeaderFormat, the default if
+            // unset is the default for these structures, 'name'
+            const headerFormat = node.dataset.sayHeaderFormat ?? 'name';
             // strict selector here to avoid false positives when structures are nested
             // :scope refers to the element on which we call querySelector
             // say-structure-header-content data attribute is now deprecated in favour of using an
