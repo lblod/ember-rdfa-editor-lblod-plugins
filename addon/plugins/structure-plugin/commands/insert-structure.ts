@@ -3,10 +3,11 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 import {
   type StructurePluginOptions,
   type StructureType,
-} from '../structure-types';
+} from '../../structure-plugin/structure-types';
 import { recalculateNumbers } from '../monads/recalculate-structure-numbers';
 import { findHowToInsertStructure } from '../monads/insert-structure';
 import { regenerateRdfaLinks } from '../monads/regenerate-rdfa-links';
+import { closeHistory } from '@lblod/ember-rdfa-editor/plugins/history';
 
 export const insertStructure = (
   structureType: StructureType,
@@ -22,6 +23,9 @@ export const insertStructure = (
     transaction.scrollIntoView();
     if (result.every((ok) => ok)) {
       if (dispatch) {
+        // makes sure each structure insertion is undoable, even when quickly
+        // creating a bunch of them
+        closeHistory(transaction);
         dispatch(transaction);
       }
       return true;

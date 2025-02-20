@@ -369,6 +369,7 @@ function collectDecorations(
               decorationEnd,
 
               {
+                class: 'say-citation-hint',
                 'data-editor-highlight': 'true',
               },
               {
