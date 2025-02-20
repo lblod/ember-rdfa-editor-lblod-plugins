@@ -2,10 +2,10 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { tracked } from 'tracked-built-ins';
-import { basicSetup, EditorView } from 'codemirror';
+import { basicSetup } from 'codemirror';
 import { EditorState } from '@codemirror/state';
 import { html } from '@codemirror/lang-html';
-import { tooltips } from '@codemirror/view';
+import { EditorView, tooltips } from '@codemirror/view';
 import { HtmlPlusIcon } from '@appuniversum/ember-appuniversum/components/icons/html-plus';
 
 import { insertGenericRdfa } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/generic-rdfa-variable/commands/insert-generic-rdfa';
