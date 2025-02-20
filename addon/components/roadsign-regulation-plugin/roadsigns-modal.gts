@@ -412,22 +412,48 @@ export default class RoadsignsModal extends Component<Signature> {
                     'editor-plugins.roadsign-regulation.modal.combine-with-code'
                   }}
                 </AuLabel>
-                {{! @glint-expect-error some type issue of ember-power-select }}
-                <PowerSelectMultiple
+
+                {{! WARNING: this explicit if/else works around a bug in either power-select or ember-source
+                    possibly related to https://github.com/universal-ember/reactiveweb/issues/110
+                    DO NOT optimize this unless you know what you're doing
+                    It may seem like we can just pass codeCombinationOptions to the options
+                    argument of powerselect here, but the reactivity will break and the options
+                    will NOT recalculate when the main sign is selected. We have to explicitly
+                    consume the value in the template and force powerselect to rerender.
+                    Other tricks such as #let bindings also do not work. }}
+                {{#if this.codeCombinationOptions.length}}
                   {{! @glint-expect-error some type issue of ember-power-select }}
-                  @renderInPlace={{true}}
-                  @verticalPosition='below'
-                  @searchEnabled={{true}}
-                  @searchField='label'
-                  @selected={{this.selectedCodeCombination}}
-                  @allowClear={{true}}
-                  @onChange={{this.changeCodeCombination}}
-                  @options={{this.codeCombinationOptions}}
-                  @disabled={{not this.selectedCode}}
-                  as |option|
-                >
-                  {{option.label}}
-                </PowerSelectMultiple>
+                  <PowerSelectMultiple
+                    {{! @glint-expect-error some type issue of ember-power-select }}
+                    @renderInPlace={{true}}
+                    @verticalPosition='below'
+                    @searchEnabled={{true}}
+                    @searchField='label'
+                    @selected={{this.selectedCodeCombination}}
+                    @allowClear={{true}}
+                    @onChange={{this.changeCodeCombination}}
+                    @options={{this.codeCombinationOptions}}
+                    @disabled={{false}}
+                    as |option|
+                  >
+                    {{option.label}}
+                  </PowerSelectMultiple>
+                {{else}}
+                  {{! @glint-expect-error some type issue of ember-power-select }}
+                  <PowerSelectMultiple
+                    {{! @glint-expect-error some type issue of ember-power-select }}
+                    @renderInPlace={{true}}
+                    @verticalPosition='below'
+                    @searchEnabled={{false}}
+                    @selected={{this.selectedCodeCombination}}
+                    @allowClear={{true}}
+                    @onChange={{this.changeCodeCombination}}
+                    @disabled={{true}}
+                    as |option|
+                  >
+                    {{option.label}}
+                  </PowerSelectMultiple>
+                {{/if}}
               </div>
               <div class='au-o-grid__item au-u-1-4'>
                 <AuLabel>
