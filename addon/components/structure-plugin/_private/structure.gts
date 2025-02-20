@@ -27,6 +27,9 @@ import { getNameForStructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/
 import { StructureType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 import { romanize } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/utils/romanize';
 import { Transaction } from '@lblod/ember-rdfa-editor';
+import { v4 as uuid } from 'uuid';
+import { setCompositionID } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/transaction-utils';
+import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -64,7 +67,9 @@ export default class Structure extends Component<Sig> {
    * A time counter to store the last time an update to the title was added to
    * the history
    * */
-  @tracked historyTimeStamp: number = 0;
+  historyTimeStamp: number = 0;
+  currentCompositionID?: string;
+
   innerEditor: NestedProsemirror | null = null;
 
   get showPlaceholder() {
@@ -154,7 +159,10 @@ export default class Structure extends Component<Sig> {
   }
 
   onTitleUpdate = (content: string, tr: Transaction) => {
-    let addToHistory = false;
+    const pos = this.args.getPos();
+    if (isNone(pos)) {
+      return;
+    }
     // every character typed would normally trigger a history event
     // in normal editor operation, this is ok, as the history plugin is smart
     // enough to group adjacent edits made in a short timespan (default 500ms)
@@ -162,12 +170,19 @@ export default class Structure extends Component<Sig> {
     // but since we trigger an attribute update, the history plugin can no
     // longer recognize these edits as adjacent, so each character triggers
     // a history event. This makes undoing title edits tedious, so we mimic the
-    // grouping here using the transaction timestamp
-    if (tr.time - this.historyTimeStamp > 500) {
-      addToHistory = true;
+    // grouping here using the transaction timestamp and compositionID
+    if (tr.time - this.historyTimeStamp > 500 || !this.currentCompositionID) {
       this.historyTimeStamp = tr.time;
+      this.currentCompositionID = uuid();
     }
-    this.args.updateAttribute('title', content, !addToHistory);
+
+    this.controller.withTransaction(
+      (tr) => {
+        setCompositionID(tr, this.currentCompositionID);
+        return tr.setNodeAttribute(pos, 'title', content);
+      },
+      { view: this.args.view },
+    );
   };
   onInnerEditorFocus = (view: SayView) => {
     this.controller.setActiveView(view);
