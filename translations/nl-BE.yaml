@@ -16,6 +16,7 @@ common:
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
   move-down: '{structureName} naar beneden verplaatsen'
+  insert: '{structureName} invoegen'
   remove: '{structureName} verwijderen'
   remove-with-content: '{structureName} en inhoud verwijderen'
   only-article-title: Enig artikel
@@ -31,73 +32,14 @@ structure-plugin:
     plain-number: '{number}.'
     name: '{name} {number}:'
     section-symbol: '§{number}.'
-
-article-structure-plugin:
-  insert:
-    paragraph: Paragraaf invoegen
-    article: Artikel invoegen
-    title: Titel invoegen
-    chapter: Hoofdstuk invoegen
-    section: Afdeling invoegen
-    subsection: Onderafdeling invoegen
-  move-up:
-    paragraph: Paragraaf naar boven verplaatsen
-    article: Artikel naar boven verplaatsen
-    title: Titel naar boven verplaatsen
-    chapter: Hoofdstuk naar boven verplaatsen
-    section: Afdeling naar boven verplaatsen
-    subsection: Onderafdeling naar boven verplaatsen
-    default: Structuur naar boven verplaatsen
-  move-down:
-    paragraph: Paragraaf naar beneden verplaatsen
-    article: Artikel naar beneden verplaatsen
-    title: Titel naar beneden verplaatsen
-    chapter: Hoofdstuk naar beneden verplaatsen
-    section: Afdeling naar beneden verplaatsen
-    subsection: Onderafdeling naar beneden verplaatsen
-    default: Structuur naar beneden verplaatsen
-  start-number:
+  control-card:
+    title: Structuur card
     start-number: Startnummer
     set: Startnummer instellen
     reset: Resetten
-  title:
-    structure-card: Structuur card
-  remove:
-    default: Structuur verwijderen
-    article: Artikel verwijderen
-    paragraph: Paragraaf verwijderen
-    subsection: Onderafdeling verwijderen
-    section: Afdeling verwijderen
-    chapter: Hoofdstuk verwijderen
-    title: Titel verwijderen
-    help-text: Verwijder de hoofding, maar behoud de inhoud
-  remove-with-content:
-    default: Structuur verwijderen met inhoud
-    article: Artikel en inhoud verwijderen
-    subsection: Onderafdeling en inhoud verwijderen
-    section: Afdeling en inhoud verwijderen
-    chapter: Hoofdstuk en inhoud verwijderen
-    title: Titel en inhoud verwijderen
-    paragraph: Paragraaf en inhoud verwijderen
-    help-text: Verwijder de hoofding, en alle inhoud tot aan de volgende hoofding van hetzelfde niveau
-  placeholder:
-    generic:
-      heading: Voeg titel in
-      body: Voeg inhoud in
-    chapter:
-      heading: Voeg hoofdstuk in
-      body: Voeg inhoud hoofdstuk in
-    section:
-      heading: Voeg afdeling in
-      body: Voeg inhoud afdeling in
-    subsection:
-      heading: Voeg onderafdeling in
-      body: Voeg inhoud onderafdeling in
-    article:
-      heading: Voeg artikel in
-      body: Voeg inhoud artikel in
-    paragraph:
-      body: Voeg inhoud paragraaf in
+  help-text:
+    remove: Verwijder de hoofding, maar behoud de inhoud
+    remove-with-content: Verwijder de hoofding, en alle inhoud tot aan de volgende hoofding van hetzelfde niveau
 
 citaten-plugin:
   card:

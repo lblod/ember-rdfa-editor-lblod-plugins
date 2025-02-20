@@ -5,7 +5,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import type { TransactionMonadResult } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { DECISION_ARTICLE, STRUCTURE_HIERARCHY } from './structure-types';
+import { DECISION_ARTICLE, STRUCTURE_HIERARCHY } from '../structure-types';
 
 export function recalculateNumbers(
   state: EditorState,

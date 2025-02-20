@@ -9,13 +9,13 @@ import {
   findNodePosUp,
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { findAncestorOfType } from '../article-structure-plugin/utils/structure';
+import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-ancestor';
 import {
   isNone,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { recalculateNumbers } from './recalculate-structure-numbers';
-import { regenerateRdfaLinks } from './regenerate-rdfa-links';
+import { recalculateNumbers } from '../monads/recalculate-structure-numbers';
+import { regenerateRdfaLinks } from '../monads/regenerate-rdfa-links';
 
 export function moveStructure(direction: 'up' | 'down'): Command {
   return (state, dispatch) => {
