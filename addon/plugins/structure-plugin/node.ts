@@ -90,6 +90,9 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
       number: {
         default: 1,
       },
+      startNumber: {
+        default: null,
+      },
       isOnlyArticle: {
         default: false,
       },
@@ -118,6 +121,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
       const number = node.attrs.number as number;
+      const startNumber = node.attrs.startNumber as number | null;
       const isOnlyArticle = node.attrs.isOnlyArticle as boolean;
       const hasTitle = node.attrs.hasTitle as boolean;
       const titleHTML = hasTitle
@@ -203,10 +207,12 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         attrs: {
           'data-say-render-as': 'structure',
           'data-say-has-title': hasTitle,
+          // Should we use the RDFa type instead of a data attribute for this?
           'data-say-structure-type': structureType,
           'data-say-header-format': headerFormat,
           'data-say-header-tag': tag,
           'data-say-number': number,
+          'data-say-start-number': startNumber,
           'data-say-romanize': romanizeNumber,
           'data-say-is-only-article': isOnlyArticle,
         },
@@ -252,6 +258,9 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
               headerFormat,
               headerTag: node.dataset.sayHeaderTag,
               number: Number(node.dataset.sayNumber),
+              startNumber:
+                node.dataset.sayStartNumber &&
+                Number(node.dataset.sayStartNumber),
               romanize: parseBooleanDatasetAttribute(node, 'sayRomanize'),
               isOnlyArticle: parseBooleanDatasetAttribute(
                 node,
