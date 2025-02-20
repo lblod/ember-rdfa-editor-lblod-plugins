@@ -25,10 +25,10 @@ export type StructurePluginOptions = {
 
 export const structureTypes = [
   'title',
-  'article',
   'chapter',
   'section',
   'subsection',
+  'article',
   'paragraph',
 ] as const;
 export type StructureType = (typeof structureTypes)[number];
