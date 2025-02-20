@@ -9,10 +9,16 @@ import Structure from '@lblod/ember-rdfa-editor-lblod-plugins/components/structu
 import {
   BESLUIT,
   ELI,
+  EXT,
   PROV,
   RDF,
+  SAY,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getIntlService } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
@@ -25,6 +31,15 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import IntlService from 'ember-intl/services/intl';
+import { romanize, romanToInt } from './utils/romanize';
+import {
+  STRUCTURE_HIERARCHY,
+  StructurePluginOptions,
+  StructureType,
+} from './structure-types';
+import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
+import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+
 const rdfaAware = true;
 
 export function getNameForStructureType(
@@ -45,21 +60,17 @@ export function getNameForStructureType(
   }
 }
 
-export type StructureType =
-  | 'article'
-  | 'chapter'
-  | 'section'
-  | 'subsection'
-  | 'paragraph';
+function getNumberForDisplay(number: number, romanizeNumber: boolean): string {
+  if (romanizeNumber) {
+    return romanize(number);
+  } else {
+    return number.toString();
+  }
+}
 
-type StructureConfig = {
-  fullLengthArticles?: boolean;
-  onlyArticleSpecialName?: boolean;
-};
-
-export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
-  config,
-) => {
+export const emberNodeConfig: (
+  config?: StructurePluginOptions,
+) => EmberNodeConfig = (config) => {
   return {
     name: 'structure',
     component: Structure as unknown as ComponentLike,
@@ -76,23 +87,29 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
       ...rdfaAttrSpec({ rdfaAware }),
 
       hasTitle: {
-        default: true,
+        default: false,
       },
       title: {
-        default: 'title',
+        default: null,
       },
       number: {
         default: 1,
+      },
+      startNumber: {
+        default: null,
       },
       isOnlyArticle: {
         default: false,
       },
       structureType: {},
-      displayStructureName: {
+      headerTag: {
+        default: 'span',
+      },
+      romanize: {
         default: false,
       },
-      headerTag: {
-        default: 'h3',
+      headerFormat: {
+        default: 'plain-number',
       },
 
       sayRenderAs: { default: 'structure' },
@@ -109,23 +126,26 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
       const number = node.attrs.number as number;
+      const startNumber = node.attrs.startNumber as number | null;
       const isOnlyArticle = node.attrs.isOnlyArticle as boolean;
       const hasTitle = node.attrs.hasTitle as boolean;
       const titleHTML = hasTitle
         ? parser.parseFromString(node.attrs.title, 'text/html').body
             .firstElementChild
         : null;
-      const displayStructureName = node.attrs.displayStructureName as boolean;
+      const headerFormat = node.attrs.headerFormat as string;
+      const romanizeNumber = node.attrs.romanize as boolean;
       const intlService = getIntlService(state);
-      const structureName = displayStructureName
-        ? getNameForStructureType(
-            structureType,
-            number,
-            node.attrs.fullLengthArticles,
-            intlService,
-            state.doc.attrs.lang,
-          )
-        : null;
+      const structureName =
+        headerFormat === 'name'
+          ? getNameForStructureType(
+              structureType,
+              number,
+              node.attrs.fullLengthArticles,
+              intlService,
+              state.doc.attrs.lang,
+            )
+          : null;
       let headerSpec;
 
       const onlyArticleTitle = intlService
@@ -144,20 +164,22 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
                 [
                   'span',
                   { 'data-say-structure-header-name': true },
-                  `${structureName} `,
+                  `${displayOnlyArticle ? onlyArticleTitle : structureName} `,
                 ],
               ]
             : []),
           [
             'span',
             {
+              style: displayOnlyArticle ? 'display: none;' : '',
               'data-say-structure-header-number': true,
               property: ELI('number').full,
+              datatype: XSD('string').full,
             },
-            number.toString(),
+            getNumberForDisplay(number, romanizeNumber),
           ],
-          '. ',
-          ['span', { 'data-say-structure-header-content': true }, titleHTML],
+          displayOnlyArticle || headerFormat === 'name' ? ': ' : '. ',
+          ['span', { property: EXT('title').full }, titleHTML],
         ];
       } else {
         headerSpec = [
@@ -177,8 +199,9 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
               style: displayOnlyArticle ? 'display: none;' : '',
               'data-say-structure-header-number': true,
               property: ELI('number').full,
+              datatype: XSD('string').full,
             },
-            number.toString(),
+            getNumberForDisplay(number, romanizeNumber),
           ],
           displayOnlyArticle ? '' : '.',
         ];
@@ -189,16 +212,23 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
         attrs: {
           'data-say-render-as': 'structure',
           'data-say-has-title': hasTitle,
+          // Should we use the RDFa type instead of a data attribute for this?
           'data-say-structure-type': structureType,
-          'data-say-display-structure-name': displayStructureName,
+          'data-say-header-format': headerFormat,
           'data-say-header-tag': tag,
           'data-say-number': number,
+          'data-say-start-number': startNumber,
+          'data-say-romanize': romanizeNumber,
           'data-say-is-only-article': isOnlyArticle,
         },
         content: [
           'div',
           headerSpec,
-          ['div', { 'data-say-structure-content': true }, 0],
+          [
+            'div',
+            { property: SAY('body').full, datatype: RDF('XMLLiteral').full },
+            0,
+          ],
         ],
       });
     },
@@ -215,15 +245,15 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             attrs.rdfaNodeType === 'resource' &&
             node.dataset.sayRenderAs === 'structure'
           ) {
-            const hasTitle =
-              node.dataset.sayHasTitle && node.dataset.sayHasTitle !== 'false';
-            const isOnlyArticle =
-              node.dataset.sayIsOnlyArticle &&
-              node.dataset.sayIsOnlyArticle !== 'false';
+            const headerFormat = node.dataset.sayHeaderFormat;
             // strict selector here to avoid false positives when structures are nested
             // :scope refers to the element on which we call querySelector
+            // say-structure-header-content data attribute is now deprecated in favour of using an
+            // RDFa link
             const titleElement = node.querySelector(
-              ':scope > div > div > [data-say-structure-header] > [data-say-structure-header-content]',
+              `:scope > div > div > [data-say-structure-header] > [property~='${EXT('title').prefixed}'],
+              :scope > div > div > [data-say-structure-header] > [property~='${EXT('title').full}'],
+              :scope > div > div > [data-say-structure-header] > [data-say-structure-header-content]`,
             );
             let title: string | undefined = undefined;
             if (titleElement) {
@@ -236,18 +266,132 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
             return {
               ...attrs,
               properties: filteredProperties,
-              hasTitle,
+              hasTitle: parseBooleanDatasetAttribute(node, 'sayHasTitle'),
               structureType: node.dataset.sayStructureType,
-              displayStructureName: node.dataset.sayDisplayStructureName,
+              headerFormat,
               headerTag: node.dataset.sayHeaderTag,
               number: Number(node.dataset.sayNumber),
-              isOnlyArticle,
+              startNumber:
+                node.dataset.sayStartNumber &&
+                Number(node.dataset.sayStartNumber),
+              romanize: parseBooleanDatasetAttribute(node, 'sayRomanize'),
+              isOnlyArticle: parseBooleanDatasetAttribute(
+                node,
+                'sayIsOnlyArticle',
+              ),
               title,
             };
           }
           return false;
         },
-        contentElement: `div[data-say-structure-content]`,
+        // say-structure-content data attribute is now deprecated in favour of using an RDFa link
+        contentElement: `div[data-say-structure-content],
+          div[property~='${SAY('body').prefixed}'],
+          div[property~='${SAY('body').full}']`,
+      },
+      // Backwards compatibility with structures created by article-structure-plugin
+      // This is relatively complex as each of those nodes was in fact 3 nodes...
+      {
+        tag: 'div',
+        getAttrs(node: string | HTMLElement) {
+          if (typeof node === 'string') {
+            return false;
+          }
+          const rdfaAttrs = getRdfaAttrs(node, { rdfaAware });
+          const type = rdfaAttrs && getOutgoingTriple(rdfaAttrs, RDF('type'));
+          const structConfig =
+            type &&
+            STRUCTURE_HIERARCHY.find((struct) =>
+              struct.rdfType.matches(type.object.value),
+            );
+          if (!type || !structConfig || rdfaAttrs.rdfaNodeType !== 'resource') {
+            return false;
+          }
+
+          // Pull attrs out of properties and leave the rest
+          let hasTitle = false;
+          const filteredProperties = rdfaAttrs.properties.filter((prop) => {
+            if (ELI('number').matches(prop.predicate)) return false;
+            if (EXT('title').matches(prop.predicate)) {
+              hasTitle = true;
+              return false;
+            }
+            // TODO Maybe we need to use these when handling correct RDFa output?
+            if (SAY('heading').matches(prop.predicate)) return false;
+            if (SAY('body').matches(prop.predicate)) return false;
+            return true;
+          });
+
+          let headerData:
+            | DOMStringMap
+            | {
+                numberDisplayStyle: string;
+                number: string;
+                startNumber?: string;
+              }
+            | false;
+          const headerElement = getRdfaContentElement(node).children[0];
+          headerData =
+            headerElement instanceof HTMLElement && headerElement.dataset;
+
+          let title: Option<string>;
+          if (hasTitle) {
+            const titleElem = headerElement.querySelector(`
+              span[property~='${EXT('title').prefixed}'],
+              span[property~='${EXT('title').full}']`);
+            title = titleElem && getRdfaContentElement(titleElem)?.textContent;
+          }
+
+          if (['paragraph', 'article'].includes(structConfig.structureType)) {
+            const numberElement = node.querySelector(`
+              span[property~='${ELI('number').prefixed}'],
+              span[property~='${ELI('number').full}']`);
+            const numberContent =
+              numberElement && getRdfaContentElement(numberElement);
+            const headerElementData = {
+              numberDisplayStyle: 'decimal',
+              number: numberContent?.textContent ?? '1',
+            };
+            if (!headerData || headerElementData.number !== headerData.number) {
+              // If we actually successfully managed to get a valid `headerData`, that contains
+              // potentially more information, such as startNumber, so use that. If the number
+              // doesn't match though, then that headerData is likely just a default one, so
+              // ignore it and use our separately parsed one
+              headerData = headerElementData;
+            }
+          }
+          if (!headerData) return false;
+          const roman = headerData.numberDisplayStyle === 'roman';
+          const number =
+            headerData.number &&
+            (roman ? romanToInt(headerData.number) : Number(headerData.number));
+          const startNumber =
+            headerData.startNumber && Number(headerData.startNumber);
+
+          return {
+            ...rdfaAttrs,
+            properties: filteredProperties,
+            hasTitle,
+            structureType: structConfig.structureType,
+            headerFormat: structConfig.headerFormat,
+            headerTag: structConfig.headerTag,
+            number,
+            startNumber,
+            // Looking at old data, at least some have the wrong numberDisplayStyle in their data
+            // attrs, so while we use the stored value for parsing, we just use the default from the
+            // structure configuration
+            romanize: structConfig.romanize,
+            title,
+          };
+        },
+        contentElement(node) {
+          const rdfaContent = getRdfaContentElement(node);
+          // Content is actually within the body node
+          const body = Array.from(rdfaContent.children).find((child) =>
+            SAY('body').matches(child.getAttribute('property') ?? ''),
+          );
+          return (body && getRdfaContentElement(body)) ?? (node as HTMLElement);
+        },
       },
       {
         tag: 'div',
@@ -293,10 +437,11 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
               ],
               headerTag: 'h5',
               structureType: 'article',
-              displayStructureName: true,
+              headerFormat: 'name',
               hasTitle: false,
               isOnlyArticle,
               number,
+              romanize: false,
             };
           }
           return false;
@@ -315,7 +460,7 @@ export const emberNodeConfig: (config?: StructureConfig) => EmberNodeConfig = (
 };
 export const structure = createEmberNodeSpec(emberNodeConfig());
 export const structureView = createEmberNodeView(emberNodeConfig());
-export const structureWithConfig = (config?: StructureConfig) =>
+export const structureWithConfig = (config?: StructurePluginOptions) =>
   createEmberNodeSpec(emberNodeConfig(config));
-export const structureViewWithConfig = (config?: StructureConfig) =>
+export const structureViewWithConfig = (config?: StructurePluginOptions) =>
   createEmberNodeView(emberNodeConfig(config));

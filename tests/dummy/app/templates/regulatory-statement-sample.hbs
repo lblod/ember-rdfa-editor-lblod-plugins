@@ -9,12 +9,10 @@
     <:content>
       <EditorContainer
         @editorOptions={{hash
-          showRdfa=true
-          editRdfa=this.editableNodes
-          showRdfaHighlight=true
-          showRdfaHover=true
           showPaper=true
           showToolbarBottom=null
+          showSidebarLeft=true
+          showSidebarRight=true
         }}
       >
         <:top>
@@ -91,7 +89,7 @@
                 />
                 <ArticleStructurePlugin::ArticleStructureCard
                   @controller={{this.controller}}
-                  @options={{this.config.structures}}
+                  @options={{this.config.structure}}
                 />
                 {{#if this.activeNode}}
                   <this.SnippetInsert
@@ -125,10 +123,7 @@
                 @variableTypes={{this.variableTypes}}
                 @templateMode={{true}}
               />
-              <ArticleStructurePlugin::StructureCard
-                @controller={{this.controller}}
-                @options={{this.config.structures}}
-              />
+              <this.StructureControlCard @controller={{this.controller}} />
               <VariablePlugin::Address::Edit
                 @controller={{this.controller}}
                 @defaultMunicipality='Gent'

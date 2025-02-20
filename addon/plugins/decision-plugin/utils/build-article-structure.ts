@@ -1,17 +1,58 @@
 import { Schema } from '@lblod/ember-rdfa-editor';
 import {
-  BESLUIT,
   ELI,
   PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import {
+  type IncomingTriple,
+  type OutgoingTriple,
+} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { v4 as uuid } from 'uuid';
+import {
+  DECISION_ARTICLE,
+  type StructurePluginOptions,
+  type StructureConfig,
+} from '../../structure-plugin/structure-types';
 
+export function generateStructureAttrs({
+  config,
+  subject,
+  properties = [],
+  backlinks,
+}: {
+  config: StructureConfig;
+  subject: string;
+  // TODO Remove these and also link decision structures using relationship combinators
+  properties?: OutgoingTriple[];
+  backlinks?: IncomingTriple[];
+}) {
+  const factory = new SayDataFactory();
+  return {
+    rdfaNodeType: 'resource',
+    properties: [
+      {
+        predicate: RDF('type').full,
+        object: factory.namedNode(config.rdfType.full),
+      },
+      ...properties,
+    ] satisfies OutgoingTriple[],
+    backlinks,
+    hasTitle: config.hasTitle,
+    structureType: config.structureType,
+    headerTag: config.headerTag,
+    headerFormat: config.headerFormat,
+    romanize: config.romanize,
+    subject,
+  };
+}
+
+// TODO this should be done using linking tools rather than manually creating properties and
+// backlinks. This would bring it more in line with the article-structure structures.
 export function buildArticleStructure(
   schema: Schema,
-  uriGenerator?: () => string,
+  uriGenerator: StructurePluginOptions['uriGenerator'] = 'template-uuid4',
   /**
    * Adds a backlink to this resource instead of relying on being linked to the decision after
    * creation.
@@ -20,42 +61,34 @@ export function buildArticleStructure(
    */
   decisionUri?: string,
 ) {
+  const factory = new SayDataFactory();
   let articleResource: string;
-  if (uriGenerator) {
-    articleResource = uriGenerator();
+  if (typeof uriGenerator === 'function') {
+    articleResource = uriGenerator('article');
   } else {
     const articleId = uuid();
-    articleResource = `http://data.lblod.info/artikels/--ref-uuid4-${articleId}`;
+    articleResource = `http://data.lblod.info/artikels/${uriGenerator === 'template-uuid4' ? '--ref-uuid4-' : ''}${articleId}`;
   }
-  const factory = new SayDataFactory();
   return schema.node(
     'structure',
-    {
-      rdfaNodeType: 'resource',
+    generateStructureAttrs({
+      config: DECISION_ARTICLE,
+      subject: articleResource,
       properties: [
-        {
-          predicate: RDF('type').full,
-          object: factory.namedNode(BESLUIT('Artikel').full),
-        },
         {
           predicate: PROV('value').full,
           object: factory.contentLiteral(),
         },
-      ] satisfies OutgoingTriple[],
+      ],
       backlinks: !decisionUri
         ? undefined
         : [
             {
               subject: factory.resourceNode(decisionUri),
-              predicate: ELI('has_part'),
+              predicate: ELI('has_part').full,
             },
           ],
-      hasTitle: false,
-      structureType: 'article',
-      displayStructureName: true,
-      headerTag: 'h5',
-      subject: articleResource,
-    },
+    }),
     schema.node(
       'paragraph',
       {},
