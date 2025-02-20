@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 27.0.2
+
+### Patch Changes
+
+- [`3ca9431`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3ca9431392d2927d1e5ee868745cda1cf7f78a4d) Thanks [@piemonkey](https://github.com/piemonkey)! - Correct default header format for decision articles in existing documents
+
 ## 27.0.1
 
 ### Patch Changes
