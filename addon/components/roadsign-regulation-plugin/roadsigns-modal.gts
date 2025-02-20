@@ -15,7 +15,7 @@ import {
 import queryRoadSignCategories from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/road-sign-category';
 import querySignCodes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/sign-codes';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
-import { pagination } from 'dummy/helpers/pagination';
+import { pagination } from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/pagination';
 import { restartableTask, task, timeout } from 'ember-concurrency';
 import t from 'ember-intl/helpers/t';
 import PowerSelect from 'ember-power-select/components/power-select';
