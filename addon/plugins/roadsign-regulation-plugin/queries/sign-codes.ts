@@ -1,6 +1,7 @@
 import {
   executeQuery,
   objectify,
+  sparqlEscapeBool,
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
@@ -89,7 +90,7 @@ export default async function querySignCodes(
       ?uri mobiliteit:heeftMaatregelconcept ?measure.
       ?uri a ?signType;
               skos:prefLabel ?label;
-              ext:valid "true"^^<http://mu.semte.ch/vocabularies/typed-literals/boolean>.
+              ext:valid ${sparqlEscapeBool(true)}.
       ${filterStatement}
     }
     ORDER BY ASC(?label)
