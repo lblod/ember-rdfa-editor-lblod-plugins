@@ -108,6 +108,29 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   @action
+  onInputKeydown(event: KeyboardEvent) {
+    if (
+      (event.key === 'Backspace' || event.key === 'Delete') &&
+      !this.inputNumber
+    ) {
+      event.preventDefault();
+      this.remove();
+    }
+  }
+
+  @action
+  remove() {
+    const pos = this.args.getPos();
+    if (pos !== undefined) {
+      this.controller.withTransaction((tr) => {
+        tr.deleteRange(pos, pos + this.node.nodeSize);
+        return tr;
+      });
+      this.controller.focus();
+    }
+  }
+
+  @action
   changeWrittenNumber() {
     this.args.updateAttribute('writtenNumber', !this.writtenNumber);
   }
