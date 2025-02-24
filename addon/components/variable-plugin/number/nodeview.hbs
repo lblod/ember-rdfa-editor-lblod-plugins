@@ -25,6 +25,7 @@
             placeholder={{t 'variable.number.type-number'}}
             {{did-insert this.focus}}
             {{on 'input' this.onInputNumberChange}}
+            {{on 'keydown' this.onInputKeydown}}
             {{leave-with-arrow-keys @controller @getPos}}
             {{leave-on-enter-key @controller @getPos}}
           />
