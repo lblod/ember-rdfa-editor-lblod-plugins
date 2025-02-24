@@ -20,7 +20,8 @@ import {
   type GlobalCoordinates,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 
-export type LocationType = 'address' | 'place' | 'area';
+export const SUPPORTED_LOCATION_TYPES = ['address', 'place', 'area'] as const;
+export type LocationType = (typeof SUPPORTED_LOCATION_TYPES)[number];
 
 const MAP_TILE_ATTRIBUTION =
   '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';

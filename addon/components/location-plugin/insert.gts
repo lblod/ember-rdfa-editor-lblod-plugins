@@ -28,7 +28,10 @@ import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plu
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import { NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import Edit from './edit';
-import LocationMap, { type LocationType } from './map';
+import LocationMap, {
+  SUPPORTED_LOCATION_TYPES,
+  type LocationType,
+} from './map';
 
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
@@ -55,6 +58,7 @@ interface Signature {
     config: LocationPluginConfig;
     defaultMunicipality?: string;
     templateMode?: boolean;
+    locationTypes?: LocationType[];
   };
   Element: HTMLLIElement;
 }
@@ -64,6 +68,10 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   @tracked modalOpen = false;
   @tracked chosenPoint: GeoPos | undefined;
   @tracked isLoading = false;
+
+  get locationTypes() {
+    return this.args.locationTypes ?? SUPPORTED_LOCATION_TYPES;
+  }
 
   @trackedReset({
     memo: 'modalOpen',
@@ -99,11 +107,13 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     update(component: LocationPluginInsertComponent) {
       return (
         updateFromNode(Place, () => 'place')(component) ??
-        updateFromNode(Area, () => 'area', 'address')(component)
+        updateFromNode(Area, () => 'area')(component) ??
+        updateFromNode(Address, () => 'address')(component) ??
+        component.locationTypes[0]
       );
     },
   })
-  locationType: LocationType = 'address';
+  declare locationType: LocationType;
 
   @trackedReset({
     memo: 'controller.activeEditorState',
@@ -284,6 +294,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
             <Edit
               @locationType={{this.locationType}}
               @setLocationType={{this.setLocationType}}
+              @locationTypes={{this.locationTypes}}
               @selectedLocationNode={{this.selectedLocationNode}}
               @setAddressToInsert={{this.setAddressToInsert}}
               @setIsLoading={{this.setIsLoading}}

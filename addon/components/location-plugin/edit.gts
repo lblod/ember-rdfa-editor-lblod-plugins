@@ -35,7 +35,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
-import { type LocationType } from './map';
+import { SUPPORTED_LOCATION_TYPES, type LocationType } from './map';
 import { type SafeString } from '@ember/template';
 
 interface Message {
@@ -47,6 +47,7 @@ interface Message {
 
 type Signature = {
   Args: {
+    locationTypes?: readonly LocationType[];
     locationType: LocationType;
     setLocationType: (type: LocationType) => void;
     defaultMunicipality?: string;
@@ -106,6 +107,31 @@ export default class LocationPluginEditComponent extends Component<Signature> {
     },
   })
   newTruncatedValue?: boolean;
+
+  get locationTypes() {
+    const unsupportedLocationType = this.args.locationTypes?.find(
+      (locationType) => !SUPPORTED_LOCATION_TYPES.includes(locationType),
+    );
+    if (unsupportedLocationType) {
+      throw new Error(
+        `${unsupportedLocationType} is not supported. Supported location types are ${SUPPORTED_LOCATION_TYPES.join(
+          ', ',
+        )}`,
+      );
+    }
+    return this.args.locationTypes ?? SUPPORTED_LOCATION_TYPES;
+  }
+
+  locationTypeLabel = (locationType: LocationType) => {
+    switch (locationType) {
+      case 'address':
+        return this.intl.t('location-plugin.types.address');
+      case 'place':
+        return this.intl.t('location-plugin.types.place');
+      case 'area':
+        return this.intl.t('location-plugin.types.area');
+    }
+  };
 
   get message(): Message | undefined {
     const value = this.newAddress.value as Address | undefined;
@@ -372,15 +398,11 @@ export default class LocationPluginEditComponent extends Component<Signature> {
             @onChange={{@setLocationType}}
             as |Group|
           >
-            <Group.Radio @value='address'>
-              {{t 'location-plugin.types.address'}}
-            </Group.Radio>
-            <Group.Radio @value='place'>
-              {{t 'location-plugin.types.place'}}
-            </Group.Radio>
-            <Group.Radio @value='area'>
-              {{t 'location-plugin.types.area'}}
-            </Group.Radio>
+            {{#each this.locationTypes as |locationType|}}
+              <Group.Radio @value={{locationType}}>
+                {{this.locationTypeLabel locationType}}
+              </Group.Radio>
+            {{/each}}
           </AuRadioGroup>
         </fs.content>
       </AuFieldset>
