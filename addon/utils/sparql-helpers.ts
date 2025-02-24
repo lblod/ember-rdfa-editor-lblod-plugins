@@ -20,6 +20,10 @@ interface QueryConfig {
 export const sparqlEscapeString = (value: string) =>
   '"""' + value.replace(/[\\"]/g, (match) => '\\' + match) + '"""';
 
+export const sparqlEscapeBool = (value: boolean) => {
+  return value ? '"true"^^xsd:boolean' : '"false"^^xsd:boolean';
+};
+
 export const sparqlEscapeUri = (value: string) => {
   return (
     '<' +
