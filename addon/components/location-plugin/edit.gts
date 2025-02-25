@@ -109,16 +109,6 @@ export default class LocationPluginEditComponent extends Component<Signature> {
   newTruncatedValue?: boolean;
 
   get locationTypes() {
-    const unsupportedLocationType = this.args.locationTypes?.find(
-      (locationType) => !SUPPORTED_LOCATION_TYPES.includes(locationType),
-    );
-    if (unsupportedLocationType) {
-      throw new Error(
-        `${unsupportedLocationType} is not supported. Supported location types are ${SUPPORTED_LOCATION_TYPES.join(
-          ', ',
-        )}`,
-      );
-    }
     return this.args.locationTypes ?? SUPPORTED_LOCATION_TYPES;
   }
 

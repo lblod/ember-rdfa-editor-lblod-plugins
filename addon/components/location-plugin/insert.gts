@@ -69,6 +69,20 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   @tracked chosenPoint: GeoPos | undefined;
   @tracked isLoading = false;
 
+  constructor(owner: unknown, args: Signature['Args']) {
+    super(owner, args);
+    const unsupportedLocationType = this.args.locationTypes?.find(
+      (locationType) => !SUPPORTED_LOCATION_TYPES.includes(locationType),
+    );
+    if (unsupportedLocationType) {
+      throw new Error(
+        `${unsupportedLocationType} is not supported. Supported location types are ${SUPPORTED_LOCATION_TYPES.join(
+          ', ',
+        )}`,
+      );
+    }
+  }
+
   get locationTypes() {
     return this.args.locationTypes ?? SUPPORTED_LOCATION_TYPES;
   }
