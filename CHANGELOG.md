@@ -1,5 +1,16 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 27.0.3
+
+### Patch Changes
+
+- [#545](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/545) [`49f902f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/49f902f2b5c89d7799ecd4f0b6732f2e412ee2f5) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove number node when backspacing/deleting inside empty input field
+
+- [#544](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/544) [`4e5edc3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4e5edc35b206847be16b4417d26bac95c6ea7750) Thanks [@elpoelma](https://github.com/elpoelma)! - IRGN plugin: use `xsd:boolean` type instead of custom `mu` boolean type in SPARQL queries.
+  This fixes the functionality of the mobility measure code dropdown.
+
+- [#541](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/541) [`4b7daf7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4b7daf7e212a2f1aea9765908ef5897f49cc9c93) Thanks [@elpoelma](https://github.com/elpoelma)! - Implement quick successive structure title changes using transaction composition
+
 ## 27.0.2
 
 ### Patch Changes
