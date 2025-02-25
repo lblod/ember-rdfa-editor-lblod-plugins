@@ -8,15 +8,11 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
-import {
-  Snippet,
-  SnippetPluginConfig,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { Snippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import t from 'ember-intl/helpers/t';
 
 interface Signature {
   Args: {
-    config: SnippetPluginConfig;
     snippet: Snippet;
     onInsert: (content: string, title: string) => void;
   };
