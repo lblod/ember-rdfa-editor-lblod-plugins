@@ -1,5 +1,21 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 27.1.0
+
+### Minor Changes
+
+- [#546](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/546) [`b3f5a6b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b3f5a6b83ce1e9ce93445756e12e45fb2eb89645) Thanks [@elpoelma](https://github.com/elpoelma)! - Location plugin: add support for configuring the location types to show.
+  The location types may be configured through the `@locationTypes` argument of the `location-plugin/insert` component.
+
+  The `@locationTypes` argument expects an array of `LocationType` values.
+  Supported `LocationType` values are:
+
+  - 'address'
+  - 'place'
+  - 'area'
+
+  By default the value of `@locationTypes` is `['address', 'place', 'area']`
+
 ## 27.0.3
 
 ### Patch Changes
