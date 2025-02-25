@@ -10,7 +10,7 @@ import {
   type SayController,
   Slice,
 } from '@lblod/ember-rdfa-editor';
-import { SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import { Snippet, SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import SearchModal from './search-modal';
@@ -56,13 +56,13 @@ export default class SnippetInsertComponent extends Component<Sig> {
   }
 
   @action
-  onInsert(content: string, title: string) {
+  onInsert(snippet: Snippet) {
     this.closeModal();
     if (this.args.listProperties) {
       this.controller.doCommand(
         insertSnippet({
-          content,
-          title,
+          content: snippet.content?.toHTML() ?? '',
+          title: snippet.title ?? '',
           listProperties: this.args.listProperties,
           allowMultipleSnippets: this.args.allowMultipleSnippets,
         }),

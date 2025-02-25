@@ -6,33 +6,27 @@ import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-
-import { SayController } from '@lblod/ember-rdfa-editor';
-import { Snippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import t from 'ember-intl/helpers/t';
+import { SayController } from '@lblod/ember-rdfa-editor';
+import { PreviewableDocument } from './types';
 
-interface Signature {
+interface Signature<Doc extends PreviewableDocument> {
   Args: {
-    snippet: Snippet;
-    onInsert: (content: string, title: string) => void;
+    doc: Doc;
+    onInsert: (toInsert: Doc) => void;
   };
   Element: HTMLDivElement;
 }
 
-export default class SnippetPreviewComponent extends Component<Signature> {
+export default class DocumentPreview<
+  Doc extends PreviewableDocument,
+> extends Component<Signature<Doc>> {
   @tracked controller?: SayController;
   @tracked isExpanded = false;
 
-  get snippet(): Snippet {
-    return this.args.snippet;
-  }
-
   @action
   onInsert() {
-    this.args.onInsert(
-      this.args.snippet.content?.toHTML() ?? '',
-      this.args.snippet.title ?? '',
-    );
+    this.args.onInsert(this.args.doc);
   }
 
   @action
@@ -61,7 +55,7 @@ export default class SnippetPreviewComponent extends Component<Signature> {
           </AuButton>
           {{! template-lint-disable no-heading-inside-button}}
           <h3 class='snippet-preview__title'>
-            {{@snippet.title}}
+            {{@doc.title}}
           </h3>
         </div>
         <div
@@ -80,8 +74,8 @@ export default class SnippetPreviewComponent extends Component<Signature> {
         <div
           class='say-editor say-content rdfa-annotations rdfa-annotations-highlight rdfa-annotations-hover snippet-preview__content'
         >
-          {{#if @snippet.content}}
-            {{@snippet.content}}
+          {{#if @doc.content}}
+            {{@doc.content}}
           {{else}}
             <p class='au-u-italic'>{{t 'snippet-plugin.modal.no-content'}}</p>
           {{/if}}

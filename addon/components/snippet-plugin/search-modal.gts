@@ -21,7 +21,7 @@ import {
   Snippet,
   SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
-import SnippetList from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippets/snippet-list';
+import PreviewList from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/documents/preview-list';
 import AlertNoItems from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-no-items';
 import PaginationView from '@lblod/ember-rdfa-editor-lblod-plugins/components/pagination/pagination-view';
 
@@ -31,7 +31,7 @@ interface Args {
   snippetListNames: string[] | undefined;
   closeModal: () => void;
   open: boolean;
-  onInsert: (content: string, title: string) => void;
+  onInsert: (snippet: Snippet) => void;
 }
 
 export default class SnippetPluginSearchModalComponent extends Component<Args> {
@@ -178,8 +178,8 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
                   <AlertLoadError @error={{this.error}} />
                 {{else}}
                   {{#if this.snippetsResource.value.length}}
-                    <SnippetList
-                      @snippets={{this.snippetsResource.value}}
+                    <PreviewList
+                      @docs={{this.snippetsResource.value}}
                       @onInsert={{@onInsert}}
                     />
                   {{else}}

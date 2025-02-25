@@ -33,6 +33,7 @@ import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins
 import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
 import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
 import { getSnippetListUrisFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import { Snippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 
 interface ButtonSig {
   Args: {
@@ -177,7 +178,7 @@ export default class SnippetNode extends Component<Signature> {
     return ancestor && ancestor.node === this.node;
   }
   @action
-  onInsert(content: string, title: string) {
+  onInsert(snippet: Snippet) {
     this.closeModal();
     let start = 0;
     let end = 0;
@@ -196,8 +197,8 @@ export default class SnippetNode extends Component<Signature> {
     }
     this.controller.doCommand(
       insertSnippet({
-        content,
-        title,
+        content: snippet.content?.toHTML() ?? '',
+        title: snippet.title ?? '',
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
           listUris: getSnippetListUrisFromNode(this.node),
