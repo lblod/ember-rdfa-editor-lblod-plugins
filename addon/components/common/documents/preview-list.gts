@@ -7,6 +7,8 @@ interface Sig<Doc extends PreviewableDocument> {
   Args: {
     docs: Doc[];
     onInsert: (toInsert: Doc) => void;
+    isFavourite?: (doc: Doc) => boolean;
+    toggleFavourite?: (doc: Doc) => void;
   };
   Element: HTMLDivElement;
 }
@@ -19,7 +21,12 @@ export default class PreviewList<
       <AuList as |Item|>
         {{#each @docs as |doc|}}
           <Item>
-            <Preview @doc={{doc}} @onInsert={{@onInsert}} />
+            <Preview
+              @doc={{doc}}
+              @onInsert={{@onInsert}}
+              @isFavourite={{@isFavourite}}
+              @toggleFavourite={{@toggleFavourite}}
+            />
           </Item>
         {{/each}}
       </AuList>

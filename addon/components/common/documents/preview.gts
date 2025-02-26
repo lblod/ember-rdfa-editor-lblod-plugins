@@ -2,6 +2,7 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import { NavDownIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-down';
 import { NavUpIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-up';
+import { VoteStarFilledIcon } from '@appuniversum/ember-appuniversum/components/icons/vote-star-filled';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -9,11 +10,14 @@ import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { PreviewableDocument } from './types';
+import { VoteStarUnfilledIcon } from '../vote-star-unfilled-icon';
 
 interface Signature<Doc extends PreviewableDocument> {
   Args: {
     doc: Doc;
     onInsert: (toInsert: Doc) => void;
+    isFavourite?: (doc: Doc) => boolean;
+    toggleFavourite?: (doc: Doc) => void;
   };
   Element: HTMLDivElement;
 }
@@ -34,6 +38,14 @@ export default class DocumentPreview<
     this.isExpanded = !this.isExpanded;
   }
 
+  get isFavourite() {
+    return this.args.isFavourite?.(this.args.doc);
+  }
+  toggleFavourite = (event: MouseEvent) => {
+    event.stopPropagation();
+    this.args.toggleFavourite?.(this.args.doc);
+  };
+
   <template>
     <div
       class='snippet-preview {{if this.isExpanded "snippet-preview--expanded"}}'
@@ -53,6 +65,20 @@ export default class DocumentPreview<
               <AuIcon @icon={{NavDownIcon}} @size='large' />
             {{/if}}
           </AuButton>
+          {{#if @isFavourite}}
+            {{#if this.isFavourite}}
+              <AuButton
+                @skin='naked'
+                @icon={{VoteStarFilledIcon}}
+                {{on 'click' this.toggleFavourite}}
+              />
+            {{else}}
+              {{! This is weird but needed to get around the stroke-width styling of svgs in au-icons }}
+              <AuButton @skin='naked' {{on 'click' this.toggleFavourite}}>
+                <VoteStarUnfilledIcon />
+              </AuButton>
+            {{/if}}
+          {{/if}}
           {{! template-lint-disable no-heading-inside-button}}
           <h3 class='snippet-preview__title'>
             {{@doc.title}}

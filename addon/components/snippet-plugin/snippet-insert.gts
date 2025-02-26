@@ -10,7 +10,10 @@ import {
   type SayController,
   Slice,
 } from '@lblod/ember-rdfa-editor';
-import { Snippet, SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  Snippet,
+  SnippetPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
 import SearchModal from './search-modal';
