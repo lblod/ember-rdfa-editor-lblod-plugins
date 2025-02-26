@@ -44,7 +44,9 @@ export function createTableOfContents(entries: OutlineEntry[]) {
 }
 
 type LegacyConfig = { nodeHierarchy: string[] }[];
-type NewConfig = Record<string, never>;
+// the scrollcontainer config isn't used here, so we can use the unknown type
+// cause we don't need any config
+type NewConfig = unknown;
 
 export function extractOutline(args: {
   node: PNode;

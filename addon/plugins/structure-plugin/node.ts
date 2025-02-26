@@ -39,11 +39,9 @@ import {
 } from './structure-types';
 import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
 import {
-  isSome,
   Option,
   optionMapOr,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { unwrapOr } from '@lblod/ember-rdfa-editor/utils/_private/option';
 
 const rdfaAware = true;
 
@@ -162,7 +160,6 @@ export const emberNodeConfig: (
       },
     },
     serialize(node: PNode, state: EditorState) {
-      const parser = new DOMParser();
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
       const number = node.attrs.number as number;

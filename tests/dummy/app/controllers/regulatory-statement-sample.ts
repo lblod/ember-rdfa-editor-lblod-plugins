@@ -359,9 +359,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: SayController,
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      table_of_contents: tableOfContentsView(this.config.tableOfContents)(
-        controller,
-      ),
+      table_of_contents: tableOfContentsView()(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
       number: numberView(controller),
