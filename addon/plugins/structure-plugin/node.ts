@@ -38,7 +38,12 @@ import {
   StructureType,
 } from './structure-types';
 import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
-import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  isSome,
+  Option,
+  optionMapOr,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { unwrapOr } from '@lblod/ember-rdfa-editor/utils/_private/option';
 
 const rdfaAware = true;
 
@@ -68,6 +73,7 @@ function getNumberForDisplay(number: number, romanizeNumber: boolean): string {
   }
 }
 
+const parser = new DOMParser();
 export const emberNodeConfig: (
   config?: StructurePluginOptions,
 ) => EmberNodeConfig = (config) => {
@@ -82,8 +88,39 @@ export const emberNodeConfig: (
     isolating: true,
     atom: false,
     editable: rdfaAware,
-    tocEntry: (node: PNode) => {
-      return `${node.attrs.number}. ${node.attrs.title}`;
+    tocEntry: (node: PNode, state: EditorState) => {
+      const intlService = getIntlService(state);
+
+      const structureType = node.attrs.structureType as StructureType;
+      const number = node.attrs.number as number;
+
+      const headerFormat = node.attrs.headerFormat as string;
+      const structureName =
+        headerFormat === 'name'
+          ? getNameForStructureType(
+              structureType,
+              number,
+              node.attrs.fullLengthArticles,
+              intlService,
+              state.doc.attrs.lang,
+            )
+          : null;
+      const numberString = optionMapOr(
+        '',
+        (num) => ` ${num}`,
+        node.attrs.number,
+      );
+      const titleString = optionMapOr(
+        '',
+        (title) => {
+          const parsed = parser.parseFromString(title, 'text/html');
+
+          return `: ${parsed.body.textContent}`;
+        },
+        node.attrs.title,
+      );
+
+      return `${structureName}${numberString}${titleString}`;
     },
 
     attrs: {

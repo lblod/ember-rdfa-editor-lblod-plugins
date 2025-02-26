@@ -43,17 +43,18 @@ export function createTableOfContents(entries: OutlineEntry[]) {
   return tableOfContents;
 }
 
-type Config = { nodeHierarchy: string[] }[];
+type LegacyConfig = { nodeHierarchy: string[] }[];
+type NewConfig = Record<string, never>;
 
 export function extractOutline(args: {
   node: PNode;
   pos: number;
   /** @deprecated */
-  config?: Config;
+  config?: LegacyConfig | NewConfig;
   state: EditorState;
 }): OutlineEntry[] {
   const { node, pos, config, state } = args;
-  if (config) {
+  if (config && Array.isArray(config)) {
     return extractOutlineLegacy({ ...args, config });
   }
   let result: OutlineEntry[] = [];
@@ -97,7 +98,7 @@ function extractOutlineLegacy({
 }: {
   node: PNode;
   pos: number;
-  config: Config;
+  config: LegacyConfig;
   state: EditorState;
 }): OutlineEntry[] {
   let result: OutlineEntry[] = [];
