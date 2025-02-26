@@ -41,6 +41,7 @@ import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plu
 import {
   Option,
   optionMapOr,
+  isSome,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const rdfaAware = true;
@@ -70,6 +71,44 @@ function getNumberForDisplay(number: number, romanizeNumber: boolean): string {
     return number.toString();
   }
 }
+function buildTocEntry(node: PNode, state: EditorState) {
+  const intlService = getIntlService(state);
+
+  const structureType = node.attrs.structureType as StructureType;
+  const number = node.attrs.number as number;
+
+  const headerFormat = node.attrs.headerFormat as string;
+  const numberString = isSome(number) ? String(number) : '';
+
+  let titleString = '';
+  if (isSome(node.attrs.title)) {
+    const parsed = parser.parseFromString(node.attrs.title, 'text/html');
+    const parsedString = parsed.body.textContent ?? '';
+    if (parsedString.length) {
+      titleString = `: ${parsedString}`;
+    }
+  }
+
+  if (headerFormat === 'name') {
+    const structureName = getNameForStructureType(
+      structureType,
+      number,
+      node.attrs.fullLengthArticles,
+      intlService,
+      state.doc.attrs.lang,
+    );
+    if (numberString.length) {
+      return `${structureName} ${numberString}${titleString}`;
+    } else {
+      return `${structureName}${titleString}`;
+    }
+  } else if (headerFormat === 'section-symbol') {
+    const structureName = '§';
+    return `${structureName}${numberString}${titleString}`;
+  } else {
+    return `${numberString}${titleString}`;
+  }
+}
 
 const parser = new DOMParser();
 export const emberNodeConfig: (
@@ -86,41 +125,7 @@ export const emberNodeConfig: (
     isolating: true,
     atom: false,
     editable: rdfaAware,
-    tocEntry: (node: PNode, state: EditorState) => {
-      const intlService = getIntlService(state);
-
-      const structureType = node.attrs.structureType as StructureType;
-      const number = node.attrs.number as number;
-
-      const headerFormat = node.attrs.headerFormat as string;
-      const structureName =
-        headerFormat === 'name'
-          ? getNameForStructureType(
-              structureType,
-              number,
-              node.attrs.fullLengthArticles,
-              intlService,
-              state.doc.attrs.lang,
-            )
-          : null;
-      const numberString = optionMapOr(
-        '',
-        (num) => ` ${num}`,
-        node.attrs.number,
-      );
-      const titleString = optionMapOr(
-        '',
-        (title) => {
-          const parsed = parser.parseFromString(title, 'text/html');
-
-          return `: ${parsed.body.textContent}`;
-        },
-        node.attrs.title,
-      );
-
-      return `${structureName}${numberString}${titleString}`;
-    },
-
+    tocEntry: buildTocEntry,
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
 
