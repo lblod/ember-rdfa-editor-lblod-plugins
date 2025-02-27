@@ -8,8 +8,8 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
   @service declare intl: IntlService;
-  get config() {
-    return this.args.node.attrs['config'] as TableOfContentsConfig;
+  get config(): TableOfContentsConfig | undefined {
+    return this.args.node.attrs['config'] as TableOfContentsConfig | undefined;
   }
 
   get documentLanguage() {
@@ -49,9 +49,14 @@ export default class TableOfContentsComponent extends Component<EmberNodeArgs> {
         const coords = this.controller.mainEditorView.coordsAtPos(
           selection.from,
         );
-        const config = this.config[0];
+        let config;
+        if (Array.isArray(this.config)) {
+          config = this.config[0];
+        } else {
+          config = this.config;
+        }
         let scrollContainer: HTMLElement | undefined;
-        if (config.scrollContainer) {
+        if (config?.scrollContainer) {
           scrollContainer = config.scrollContainer();
         } else {
           scrollContainer = this.getScrollContainer();

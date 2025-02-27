@@ -72,7 +72,6 @@
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-cli-version-checker": "^5.1.2",
-    "ember-concurrency": "^3.1.1",
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-resources": "^7.0.2",
     "ember-template-imports": "^4.1.1",
@@ -91,7 +90,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "~3.4.2",
+    "@appuniversum/ember-appuniversum": "~3.5.0",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.7",
     "@ember/optional-features": "^2.1.0",
@@ -143,6 +142,7 @@
     "ember-leaflet": "^5.1.3",
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "~4.1.0",
+    "ember-concurrency": "^4.0.2",
     "ember-page-title": "^8.2.3",
     "ember-power-select": "~7.1.0",
     "ember-qunit": "^8.1.0",
@@ -174,11 +174,11 @@
     "webpack": "^5.95.0"
   },
   "peerDependencies": {
-    "@appuniversum/ember-appuniversum": "^3.4.1",
+    "@appuniversum/ember-appuniversum": "^3.5.0",
     "@ember/string": "3.x",
     "@glint/template": "^1.4.0",
     "@lblod/ember-rdfa-editor": "^11.0.0",
-    "ember-concurrency": "^3.1.0 || ^4.0.2",
+    "ember-concurrency": "^4.0.2",
     "ember-element-helper": "^0.8.6",
     "ember-intl": "^7.0.0",
     "ember-leaflet": "^5.1.3",

@@ -14,7 +14,7 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export const emberNodeConfig: (
-  config: TableOfContentsConfig,
+  config?: TableOfContentsConfig,
 ) => EmberNodeConfig = (config) => {
   return {
     name: 'table-of-contents',
@@ -34,7 +34,7 @@ export const emberNodeConfig: (
       const entries = extractOutline({
         node: unwrap(state).doc,
         pos: -1,
-        config: configToSerialize as TableOfContentsConfig,
+        config: configToSerialize,
         state: unwrap(state),
       });
 
@@ -67,7 +67,7 @@ export const emberNodeConfig: (
   };
 };
 
-export const table_of_contents = (config: TableOfContentsConfig) =>
+export const table_of_contents = (config?: TableOfContentsConfig) =>
   createEmberNodeSpec(emberNodeConfig(config));
-export const tableOfContentsView = (config: TableOfContentsConfig) =>
+export const tableOfContentsView = (config?: TableOfContentsConfig) =>
   createEmberNodeView(emberNodeConfig(config));

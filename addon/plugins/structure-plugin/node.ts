@@ -38,7 +38,10 @@ import {
   StructureType,
 } from './structure-types';
 import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
-import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  Option,
+  isSome,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const rdfaAware = true;
 
@@ -67,7 +70,46 @@ function getNumberForDisplay(number: number, romanizeNumber: boolean): string {
     return number.toString();
   }
 }
+function buildTocEntry(node: PNode, state: EditorState) {
+  const intlService = getIntlService(state);
 
+  const structureType = node.attrs.structureType as StructureType;
+  const number = node.attrs.number as number;
+
+  const headerFormat = node.attrs.headerFormat as string;
+  const numberString = isSome(number) ? String(number) : '';
+
+  let titleString = '';
+  if (isSome(node.attrs.title)) {
+    const parsed = parser.parseFromString(node.attrs.title, 'text/html');
+    const parsedString = parsed.body.textContent ?? '';
+    if (parsedString.length) {
+      titleString = `: ${parsedString}`;
+    }
+  }
+
+  if (headerFormat === 'name') {
+    const structureName = getNameForStructureType(
+      structureType,
+      number,
+      node.attrs.fullLengthArticles,
+      intlService,
+      state.doc.attrs.lang,
+    );
+    if (numberString.length) {
+      return `${structureName} ${numberString}${titleString}`;
+    } else {
+      return `${structureName}${titleString}`;
+    }
+  } else if (headerFormat === 'section-symbol') {
+    const structureName = '§';
+    return `${structureName}${numberString}${titleString}`;
+  } else {
+    return `${numberString}${titleString}`;
+  }
+}
+
+const parser = new DOMParser();
 export const emberNodeConfig: (
   config?: StructurePluginOptions,
 ) => EmberNodeConfig = (config) => {
@@ -82,7 +124,7 @@ export const emberNodeConfig: (
     isolating: true,
     atom: false,
     editable: rdfaAware,
-
+    tocEntry: buildTocEntry,
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
 
@@ -122,7 +164,6 @@ export const emberNodeConfig: (
       },
     },
     serialize(node: PNode, state: EditorState) {
-      const parser = new DOMParser();
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
       const number = node.attrs.number as number;
