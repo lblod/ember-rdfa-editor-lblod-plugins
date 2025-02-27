@@ -201,7 +201,7 @@ export default class RegulatoryStatementSampleController extends Controller {
 
       hard_break,
       block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
-      table_of_contents: table_of_contents(this.config.tableOfContents),
+      table_of_contents: table_of_contents(),
       invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
       inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
       link: link(this.config.link),
@@ -293,18 +293,6 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   get config() {
     return {
-      tableOfContents: [
-        {
-          nodeHierarchy: [
-            'title|chapter|section|subsection|article',
-            'structure_header|article_header',
-          ],
-          scrollContainer: () =>
-            document.getElementsByClassName(
-              'say-container__main',
-            )[0] as HTMLElement,
-        },
-      ],
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
         zonalLocationCodelistUri:
@@ -371,9 +359,7 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller: SayController,
   ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
-      table_of_contents: tableOfContentsView(this.config.tableOfContents)(
-        controller,
-      ),
+      table_of_contents: tableOfContentsView()(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),
       number: numberView(controller),
