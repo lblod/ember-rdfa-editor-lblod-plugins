@@ -1,23 +1,32 @@
+import { TemplateOnlyComponent } from '@ember/component/template-only';
 import t from 'ember-intl/helpers/t';
-import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
+import AuAlert, {
+  AuAlertSignature,
+} from '@appuniversum/ember-appuniversum/components/au-alert';
 import AuLinkExternal from '@appuniversum/ember-appuniversum/components/au-link-external';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
 
-<template>
+interface Sig {
+  Args: {
+    error: unknown;
+    fullSize?: boolean;
+  };
+  Element: AuAlertSignature['Element'];
+}
+
+const AlertLoadError: TemplateOnlyComponent<Sig> = <template>
   <AuAlert
     @title={{t 'common.search.error-title'}}
     @skin='error'
     @icon={{AlertTriangleIcon}}
     @closable={{false}}
-    {{! @glint-expect-error: not typesafe yet }}
     @size={{if @fullSize undefined 'small'}}
     class='au-u-margin'
-    {{! @glint-expect-error: not typesafe yet }}
     ...attributes
   >
     <p>{{t 'common.search.error-intro'}}</p>
-    {{! @glint-expect-error: not typesafe yet }}
+    {{! @glint-expect-error: This seems to work... I guess Error has a toString that is called? }}
     <code class='au-u-error error-code'>{{@error}}</code>
     <p>
       {{t 'common.search.error-outro'}}
@@ -31,4 +40,6 @@ import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail
       </AuLinkExternal>.
     </p>
   </AuAlert>
-</template>
+</template>;
+
+export default AlertLoadError;

@@ -1,18 +1,27 @@
+import { TemplateOnlyComponent } from '@ember/component/template-only';
 import t from 'ember-intl/helpers/t';
-import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
+import AuAlert, {
+  AuAlertSignature,
+} from '@appuniversum/ember-appuniversum/components/au-alert';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 
-<template>
+interface Sig {
+  Args: {
+    fullSize?: boolean;
+  };
+  Element: AuAlertSignature['Element'];
+}
+
+const AlertNoItems: TemplateOnlyComponent<Sig> = <template>
   <AuAlert
     @title={{t 'common.search.no-results'}}
     @skin='warning'
     @icon={{CrossIcon}}
-    {{! @glint-expect-error: not typesafe yet }}
     @size={{if @fullSize undefined 'small'}}
     @closable={{false}}
-    {{! @glint-expect-error: not typesafe yet }}
     class={{unless @fullSize 'au-u-margin-small'}}
-    {{! @glint-expect-error: not typesafe yet }}
     ...attributes
   />
-</template>
+</template>;
+
+export default AlertNoItems;
