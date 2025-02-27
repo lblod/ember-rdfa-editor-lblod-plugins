@@ -1,5 +1,6 @@
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
-import { DOMOutputSpec, EditorState, PNode } from '@lblod/ember-rdfa-editor';
+import { LegacyTableOfContentsConfig, TableOfContentsConfig } from '..';
+import { DOMOutputSpec, PNode, EditorState } from '@lblod/ember-rdfa-editor';
 
 export type OutlineEntry = {
   content: string;
@@ -43,16 +44,11 @@ export function createTableOfContents(entries: OutlineEntry[]) {
   return tableOfContents;
 }
 
-type LegacyConfig = { nodeHierarchy: string[] }[];
-// the scrollcontainer config isn't used here, so we can use the unknown type
-// cause we don't need any config
-type NewConfig = unknown;
-
 export function extractOutline(args: {
   node: PNode;
   pos: number;
   /** @deprecated */
-  config?: LegacyConfig | NewConfig;
+  config?: TableOfContentsConfig;
   state: EditorState;
 }): OutlineEntry[] {
   const { node, pos, config, state } = args;
@@ -100,7 +96,7 @@ function extractOutlineLegacy({
 }: {
   node: PNode;
   pos: number;
-  config: LegacyConfig;
+  config: LegacyTableOfContentsConfig;
   state: EditorState;
 }): OutlineEntry[] {
   let result: OutlineEntry[] = [];

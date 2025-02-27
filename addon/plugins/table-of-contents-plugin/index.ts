@@ -1,6 +1,7 @@
+export type LegacyTableOfContentsConfig = {
+  nodeHierarchy: string[];
+  scrollContainer?: () => HTMLElement;
+}[];
 export type TableOfContentsConfig =
-  | {
-      nodeHierarchy: string[];
-      scrollContainer?: () => HTMLElement;
-    }[]
+  | LegacyTableOfContentsConfig
   | { scrollContainer?: () => HTMLElement };

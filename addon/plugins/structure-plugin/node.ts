@@ -40,7 +40,6 @@ import {
 import { parseBooleanDatasetAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-utils';
 import {
   Option,
-  optionMapOr,
   isSome,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
