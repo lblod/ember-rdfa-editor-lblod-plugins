@@ -1,5 +1,21 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 28.0.0
+
+### Major Changes
+
+- [#547](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/547) [`8dc7f0f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8dc7f0f3f57755ae2807e38c7f75a6b6fbff6248) Thanks [@abeforgit](https://github.com/abeforgit)! - Bump peerdeps to be compatible with editor v11
+
+### Minor Changes
+
+- [#547](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/547) [`648e04b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/648e04b4c4d59d717f9e9c2f24a57c22f45c222d) Thanks [@abeforgit](https://github.com/abeforgit)! - Make ToC compatible with new structure nodes
+
+- [#548](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/548) [`9b90845`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9b90845c524d8255dda98b872876b8fbd1728026) Thanks [@piemonkey](https://github.com/piemonkey)! - Convert snippet preview list into a generic component for displaying a list of documents
+
+### Patch Changes
+
+- [#548](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/548) [`704b9b7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/704b9b776ed61e374852c0cdf51fb7330dac557b) Thanks [@piemonkey](https://github.com/piemonkey)! - Add ability to mark favourites in a preview list
+
 ## 27.1.0
 
 ### Minor Changes
