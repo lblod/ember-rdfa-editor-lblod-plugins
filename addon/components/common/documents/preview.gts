@@ -68,7 +68,7 @@ export default class DocumentPreview<
       <div class='snippet-preview__header'>
         <div
           role='button'
-          title={{t 'snippet-plugin.modal.preview-button.title'}}
+          title={{t 'common.preview-list.preview-button.title'}}
           {{on 'click' this.togglePreview}}
           {{! template-lint-disable require-presentational-children}}
         >
@@ -100,12 +100,12 @@ export default class DocumentPreview<
         </div>
         <div
           role='button'
-          title={{t 'snippet-plugin.modal.select-button.title'}}
+          title={{t 'common.preview-list.select-button.title'}}
           {{on 'click' this.onInsert}}
           {{! template-lint-disable require-presentational-children}}
         >
           <AuButton class='snippet-preview__insert-button' @skin='naked'>
-            {{t 'snippet-plugin.modal.select-button.label'}}
+            {{t 'common.preview-list.select-button.label'}}
           </AuButton>
         </div>
 
@@ -121,7 +121,7 @@ export default class DocumentPreview<
               {{t 'common.search.loading'}}
             </AuLoader>
           {{else}}
-            <p class='au-u-italic'>{{t 'snippet-plugin.modal.no-content'}}</p>
+            <p class='au-u-italic'>{{t 'common.preview-list.no-content'}}</p>
           {{/if}}
         </div>
       {{/if}}
