@@ -1,4 +1,5 @@
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import { NavDownIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-down';
 import { NavUpIcon } from '@appuniversum/ember-appuniversum/components/icons/nav-up';
@@ -7,6 +8,8 @@ import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { htmlSafe } from '@ember/template';
+import { task } from 'ember-concurrency';
 import t from 'ember-intl/helpers/t';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { PreviewableDocument } from './types';
@@ -35,6 +38,9 @@ export default class DocumentPreview<
 
   @action
   togglePreview() {
+    if (!this.isExpanded && this.contentTask.isIdle && !this.contentTask.last) {
+      this.contentTask.perform();
+    }
     this.isExpanded = !this.isExpanded;
   }
 
@@ -45,6 +51,14 @@ export default class DocumentPreview<
     event.stopPropagation();
     this.args.toggleFavourite?.(this.args.doc);
   };
+
+  contentTask = task(async () => {
+    const content = await this.args.doc.content;
+    return content && htmlSafe(content);
+  });
+  get content() {
+    return this.contentTask.last?.value;
+  }
 
   <template>
     <div
@@ -100,8 +114,12 @@ export default class DocumentPreview<
         <div
           class='say-editor say-content rdfa-annotations rdfa-annotations-highlight rdfa-annotations-hover snippet-preview__content'
         >
-          {{#if @doc.content}}
-            {{@doc.content}}
+          {{#if this.content}}
+            {{this.content}}
+          {{else if this.contentTask.isRunning}}
+            <AuLoader @hideMessage={{true}}>
+              {{t 'common.search.loading'}}
+            </AuLoader>
           {{else}}
             <p class='au-u-italic'>{{t 'snippet-plugin.modal.no-content'}}</p>
           {{/if}}
