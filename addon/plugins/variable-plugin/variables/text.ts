@@ -1,7 +1,7 @@
 import {
   EXT,
   RDF,
-  VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -44,18 +44,15 @@ const parseDOM = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        hasRdfaVariableType(attrs, 'text')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'text' &&
+        node.querySelector(CONTENT_SELECTOR)
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
-        return attrs;
+        const label = node.dataset.label;
+        return {
+          ...attrs,
+          label,
+        };
       }
       return false;
     },
@@ -144,6 +141,9 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     tag: 'span',
     attrs: {
       class: className,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'text',
+      'data-label': node.attrs['label'],
     },
     content: 0,
   });
@@ -163,6 +163,13 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
+    datatype: {
+      default: XSD('string').full,
+      editable: true,
+    },
   },
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],

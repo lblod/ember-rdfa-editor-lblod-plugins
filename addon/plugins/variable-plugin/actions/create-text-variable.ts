@@ -3,8 +3,11 @@ import {
   DCT,
   RDF,
   VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { AllOrNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
+import { IncomingLiteralNodeTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type CreateTextVariableArgs = {
@@ -24,44 +27,46 @@ export function createTextVariable(args: CreateTextVariableArgs) {
   );
 }
 
-type CreateTextVariableAttrsArgs = {
+type CreateTextVariableAttrsArgs = { label?: string } & AllOrNone<{
   variable: string;
   variableInstance: string;
-  label?: string;
-};
+}>;
 
 export function createTextVariableAttrs({
+  label,
   variable,
   variableInstance,
-  label,
 }: CreateTextVariableAttrsArgs) {
-  const properties: OutgoingTriple[] = [
-    {
-      predicate: RDF('type').full,
-      object: sayDataFactory.namedNode(VARIABLES('VariableInstance').full),
-    },
-    {
-      predicate: VARIABLES('instanceOf').full,
-      object: sayDataFactory.namedNode(variable),
-    },
-    {
-      predicate: DCT('type').full,
-      object: sayDataFactory.literal('text'),
-    },
-    {
+  const externalTriples: FullTriple[] = [];
+  const backlinks: IncomingLiteralNodeTriple[] = [];
+  if (variable) {
+    externalTriples.push(
+      {
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: RDF('type').full,
+        object: sayDataFactory.namedNode(VARIABLES('VariableInstance').full),
+      },
+      {
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: VARIABLES('instanceOf').full,
+        object: sayDataFactory.namedNode(variable),
+      },
+      {
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: DCT('type').full,
+        object: sayDataFactory.literal('text'),
+      },
+    );
+    backlinks.push({
+      subject: sayDataFactory.literalNode(variableInstance),
       predicate: RDF('value').full,
-      object: sayDataFactory.contentLiteral(),
-    },
-  ];
-  if (label) {
-    properties.push({
-      predicate: DCT('title').full,
-      object: sayDataFactory.literal(label),
     });
   }
   return {
-    subject: variableInstance,
-    rdfaNodeType: 'resource',
-    properties,
+    rdfaNodeType: 'literal',
+    datatype: XSD('string').full,
+    label,
+    backlinks,
+    externalTriples,
   };
 }
