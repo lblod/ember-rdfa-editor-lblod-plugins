@@ -6,10 +6,6 @@ import { type SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { createTextVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-text-variable';
-import {
-  generateVariableInstanceUri,
-  generateVariableUri,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Args = {
   controller: SayController;
@@ -39,11 +35,6 @@ export default class TextVariableInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const variable = generateVariableUri();
-    const variableInstance = generateVariableInstanceUri({
-      templateMode: this.args.templateMode,
-    });
-
     const placeholder = this.intl.t('variable.text.label', {
       locale: this.documentLanguage,
     });
@@ -51,8 +42,6 @@ export default class TextVariableInsertComponent extends Component<Args> {
     const label = this.label ?? placeholder;
     const node = createTextVariable({
       schema: this.schema,
-      variable,
-      variableInstance,
       label,
     });
 
