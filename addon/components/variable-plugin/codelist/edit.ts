@@ -10,11 +10,6 @@ import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'reactiveweb/function';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
-import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import {
-  DCT,
-  MOBILITEIT,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { tracked } from '@glimmer/tracking';
 export type CodelistEditOptions = {
@@ -50,8 +45,7 @@ export default class CodelistEditComponent extends Component<Args> {
   get source() {
     if (this.selectedCodelist) {
       const { node } = this.selectedCodelist;
-      const source = getOutgoingTriple(node.attrs, DCT('source'))?.object
-        .value as Option<string>;
+      const source = node.attrs['source'] as Option<string>;
       if (source) {
         return source;
       }
@@ -62,8 +56,7 @@ export default class CodelistEditComponent extends Component<Args> {
   get codelistUri() {
     if (this.selectedCodelist) {
       const { node } = this.selectedCodelist;
-      const codelistUri = getOutgoingTriple(node.attrs, MOBILITEIT('codelijst'))
-        ?.object.value as Option<string>;
+      const codelistUri = node.attrs['codelist'] as Option<string>;
       if (codelistUri) {
         return codelistUri;
       }
