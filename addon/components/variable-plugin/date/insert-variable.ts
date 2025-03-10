@@ -5,10 +5,6 @@ import { service } from '@ember/service';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import IntlService from 'ember-intl/services/intl';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
-import {
-  generateVariableInstanceUri,
-  generateVariableUri,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 import { createDateVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-date-variable';
 
 type Args = {
@@ -45,10 +41,6 @@ export default class DateInsertVariableComponent extends Component<Args> {
     const label = this.label ?? defaultLabel;
 
     const node = createDateVariable({
-      variable: generateVariableUri(),
-      variableInstance: generateVariableInstanceUri({
-        templateMode: this.args.templateMode,
-      }),
       schema: this.schema,
       label,
     });
