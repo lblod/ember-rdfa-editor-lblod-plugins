@@ -1,7 +1,6 @@
 import {
   EXT,
-  RDF,
-  VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -15,7 +14,6 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
-  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableInstance,
@@ -25,7 +23,6 @@ import {
 import NodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { createClassicLocationVariableAttrs } from '../actions/create-classic-location-variable';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
@@ -46,18 +43,13 @@ const parseDOM = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        hasRdfaVariableType(attrs, 'location')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'location' &&
+        node.querySelector(CONTENT_SELECTOR)
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
-        return attrs;
+        const label = node.dataset.label;
+        const source = node.dataset.source;
+        return { ...attrs, label, source };
       }
       return false;
     },
@@ -104,10 +96,15 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     onlyContentType === onlyContentType.schema.nodes['placeholder']
       ? 'say-variable'
       : '';
+  const { label, source } = node.attrs;
   return renderRdfaAware({
     renderable: node,
     attrs: {
       class: className,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'location',
+      'data-label': label,
+      'data-source': source,
     },
     tag: 'span',
     content: 0,
@@ -128,6 +125,14 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
+    source: {},
+    datatype: {
+      default: XSD('string').full,
+      editable: true,
+    },
   },
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
