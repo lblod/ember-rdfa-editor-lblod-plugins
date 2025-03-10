@@ -219,7 +219,7 @@ variable-plugin:
     minimum-placeholder: minimum value
     maximum: Maximum
     maximum-placeholder: maximum value
-    to: to
+    to: to and including
   person:
     card-title: Insert person
     nodeview-placeholder: Person
