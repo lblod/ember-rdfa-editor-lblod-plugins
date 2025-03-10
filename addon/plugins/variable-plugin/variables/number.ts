@@ -19,7 +19,7 @@ import {
 import {
   EXT,
   RDF,
-  VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
@@ -48,22 +48,17 @@ const parseDOM: TagParseRule[] = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        hasRdfaVariableType(attrs, 'number')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'number'
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
+        const label = node.dataset.label;
         const writtenNumber =
           node.getAttribute('data-written-number') === 'true' ? true : false;
         const minimumValue = node.getAttribute('data-minimum-value');
         const maximumValue = node.getAttribute('data-maximum-value');
         return {
           ...attrs,
+          label,
           writtenNumber,
           minimumValue,
           maximumValue,
@@ -185,9 +180,12 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     tag: 'span',
     attrs: {
       class: value ? '' : 'say-variable',
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'number',
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
+      'data-label': node.attrs['label'],
     },
     content: humanReadableContent.toString(),
   });
@@ -207,9 +205,16 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
     writtenNumber: { default: false },
     minimumValue: { default: null },
     maximumValue: { default: null },
+    datatype: {
+      default: XSD('decimal').full,
+      editable: true,
+    },
   },
   leafText: (node: PNode) => {
     const { value } = node.attrs;
