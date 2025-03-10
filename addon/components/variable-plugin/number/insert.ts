@@ -8,10 +8,6 @@ import IntlService from 'ember-intl/services/intl';
 import { modifier } from 'ember-modifier';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { createNumberVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-number-variable';
-import {
-  generateVariableInstanceUri,
-  generateVariableUri,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Args = {
   controller: SayController;
@@ -89,8 +85,6 @@ export default class NumberInsertComponent extends Component<Args> {
     const label = this.label ?? defaultLabel;
     const node = createNumberVariable({
       schema: this.schema,
-      variable: generateVariableUri(),
-      variableInstance: generateVariableInstanceUri(),
       maximumValue: isNumber(this.maximumValue)
         ? Number(this.maximumValue)
         : undefined,
