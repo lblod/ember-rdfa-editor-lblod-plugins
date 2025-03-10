@@ -7,7 +7,7 @@ import {
   DCT,
   EXT,
   RDF,
-  VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -50,19 +50,15 @@ const parseDOM = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        hasRdfaVariableType(attrs, 'codelist')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'codelist' &&
+        node.querySelector(CONTENT_SELECTOR)
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
+        const label = node.dataset.label;
+        const source = node.dataset.source;
+        const codelist = node.dataset.codelist;
         const selectionStyle = node.dataset.selectionStyle;
-        return { ...attrs, selectionStyle };
+        return { ...attrs, label, source, codelist, selectionStyle };
       }
       return false;
     },
@@ -151,7 +147,7 @@ const parseDOMLegacy = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
-  const { selectionStyle } = node.attrs;
+  const { selectionStyle, label, codelist, source } = node.attrs;
   const onlyContentType =
     node.content.size === 1 && node.content.firstChild?.type;
   const className =
@@ -164,7 +160,12 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     renderable: node,
     attrs: {
       class: className,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'codelist',
       'data-selection-style': selectionStyle as string,
+      'data-label': label as string | null,
+      'data-codelist': codelist as string,
+      'data-source': source as string,
     },
     tag: 'span',
     content: 0,
@@ -185,8 +186,17 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
+    codelist: {},
+    source: {},
     selectionStyle: {
       default: null,
+    },
+    datatype: {
+      default: XSD('string').full,
+      editable: true,
     },
   },
   toDOM,
