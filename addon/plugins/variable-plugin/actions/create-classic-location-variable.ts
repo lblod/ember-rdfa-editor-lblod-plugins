@@ -3,8 +3,13 @@ import {
   DCT,
   RDF,
   VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { AllOrNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
+import {
+  FullTriple,
+  IncomingLiteralNodeTriple,
+} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type CreateClassicLocationVariableArgs = {
@@ -28,11 +33,9 @@ export function createClassicLocationVariable(
 }
 
 type CreateClassicLocationVariableAttrsArgs = {
-  variable: string;
-  variableInstance: string;
   label?: string;
   source?: string;
-};
+} & AllOrNone<{ variable: string; variableInstance: string }>;
 
 export function createClassicLocationVariableAttrs({
   variable,
@@ -40,39 +43,44 @@ export function createClassicLocationVariableAttrs({
   label,
   source,
 }: CreateClassicLocationVariableAttrsArgs) {
-  const properties: OutgoingTriple[] = [
-    {
-      predicate: RDF('type').full,
-      object: sayDataFactory.namedNode(VARIABLES('VariableInstance').full),
-    },
-    {
-      predicate: VARIABLES('instanceOf').full,
-      object: sayDataFactory.namedNode(variable),
-    },
-    {
-      predicate: DCT('type').full,
-      object: sayDataFactory.literal('location'),
-    },
-    {
+  const externalTriples: FullTriple[] = [];
+  const backlinks: IncomingLiteralNodeTriple[] = [];
+  if (variable) {
+    externalTriples.push(
+      {
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: RDF('type').full,
+        object: sayDataFactory.namedNode(VARIABLES('VariableInstance').full),
+      },
+      {
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: VARIABLES('instanceOf').full,
+        object: sayDataFactory.namedNode(variable),
+      },
+      {
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: DCT('type').full,
+        object: sayDataFactory.literal('codelist'),
+      },
+    );
+    if (source) {
+      externalTriples.push({
+        subject: sayDataFactory.namedNode(variableInstance),
+        predicate: DCT('source').full,
+        object: sayDataFactory.namedNode(source),
+      });
+    }
+    backlinks.push({
+      subject: sayDataFactory.literalNode(variableInstance),
       predicate: RDF('value').full,
-      object: sayDataFactory.contentLiteral(),
-    },
-  ];
-  if (label) {
-    properties.push({
-      predicate: DCT('title').full,
-      object: sayDataFactory.literal(label),
-    });
-  }
-  if (source) {
-    properties.push({
-      predicate: DCT('source').full,
-      object: sayDataFactory.namedNode(source),
     });
   }
   return {
-    subject: variableInstance,
-    rdfaNodeType: 'resource',
-    properties,
+    rdfaNodeType: 'literal',
+    datatype: XSD('string').full,
+    externalTriples,
+    backlinks,
+    label,
+    source,
   };
 }

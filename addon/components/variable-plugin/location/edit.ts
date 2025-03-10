@@ -18,7 +18,6 @@ import {
   hasOutgoingNamedNodeTriple,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
-  DCT,
   EXT,
   MOBILITEIT,
   RDF,
@@ -79,8 +78,7 @@ export default class LocationEditComponent extends Component<Args> {
   get source() {
     if (this.selectedLocation) {
       const { node } = this.selectedLocation;
-      const source = getOutgoingTriple(node.attrs, DCT('source'))?.object
-        .value as Option<string>;
+      const source = node.attrs.source as Option<string>;
       if (source) {
         return source;
       }
