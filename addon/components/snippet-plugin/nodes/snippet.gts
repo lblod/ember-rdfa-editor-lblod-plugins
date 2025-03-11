@@ -197,7 +197,7 @@ export default class SnippetNode extends Component<Signature> {
     }
     this.controller.doCommand(
       insertSnippet({
-        content: snippet.content?.toHTML() ?? '',
+        content: snippet.content ?? '',
         title: snippet.title ?? '',
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,

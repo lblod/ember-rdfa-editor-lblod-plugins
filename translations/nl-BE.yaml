@@ -12,6 +12,13 @@ common:
     asc: Oplopend sorteren
     desc: Aflopend sorteren
   not-applicable: 'n.v.t.'
+  preview-list:
+    preview-button:
+      title: Preview tonen
+    select-button:
+      label: Selecteer
+      title: Invoegen
+    no-content: Bevat geen inhoud
 
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
@@ -223,7 +230,7 @@ variable-plugin:
     minimum-placeholder: minimumwaarde
     maximum: Maximum
     maximum-placeholder: maximumwaarde
-    to: tot
+    to: tot en met
   person:
     card-title: Persoon invoegen
     nodeview-placeholder: Persoon
@@ -254,16 +261,10 @@ snippet-plugin:
     active-lists: 'Actieve lijsten:'
   modal:
     title: Kies een fragment uit {snippetListNames}
-    preview-button:
-      title: Preview van fragment tonen
-    select-button:
-      label: Selecteer
-      title: Fragment invoegen
     search:
       title: Filter op
       label: Fragmentnaam
       placeholder: Typ iets...
-    no-content: Fragment bevat geen inhoud
   snippet-list:
     open-modal: Fragmentlijsten beheren
     modal:
