@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 28.1.0
+
+### Minor Changes
+
+- [#549](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/549) [`ab33ef7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ab33ef7e9ef6d237457db61d217f5286362ed74d) Thanks [@piemonkey](https://github.com/piemonkey)! - Change preview list to asynchronously load previews
+
+### Patch Changes
+
+- [#551](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/551) [`f88d903`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f88d903697e4f689a09cf2d364bf8c5b81bbbb19) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Change number variable modal to clarify the upper number is also included in the range
+
+- [#552](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/552) [`4cf94fd`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4cf94fd78616a141265f09e8b403923e8018cd05) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Rename "citeeropschrift" to "citaat"
+
 ## 28.0.0
 
 ### Major Changes
