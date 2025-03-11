@@ -43,10 +43,10 @@ structure-plugin:
 
 citaten-plugin:
   card:
-    title: Voeg citeeropschrift toe
+    title: Voeg citaat toe
     suggestions: Suggesties
   insert:
-    title: Citeeropschrift invoegen
+    title: Citaat invoegen
   search:
     term: Zoekterm
     government-search: Filter op bestuursorgaan
@@ -70,7 +70,7 @@ citaten-plugin:
     previous: Vorige pagina
     of: van
   references:
-    insert: Citeeropschrift invoegen
+    insert: Citaat invoegen
     details: Details
     refer-whole: Verwijs naar volledig document
     refer-article: Verwijs naar artikel
