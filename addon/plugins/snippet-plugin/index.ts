@@ -1,11 +1,6 @@
-import { htmlSafe } from '@ember/template';
-
-import {
-  type Option,
-  optionMapOr,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { PreviewableDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/documents/types';
+import { type Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
-import { SafeString } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 
 export const DEFAULT_CONTENT_STRING = 'block+';
 
@@ -21,13 +16,13 @@ interface SnippetArgs {
   content: string | null;
 }
 
-export class Snippet {
-  content: SafeString | null;
+export class Snippet implements PreviewableDocument {
+  content: string | null;
   createdOn: string | null;
   title: string | null;
 
   constructor({ title, createdOn, content }: SnippetArgs) {
-    this.content = optionMapOr(null, htmlSafe, content);
+    this.content = content;
     this.createdOn = dateValue(createdOn ?? undefined);
     this.title = title;
   }

@@ -64,7 +64,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
     if (this.args.listProperties) {
       this.controller.doCommand(
         insertSnippet({
-          content: snippet.content?.toHTML() ?? '',
+          content: snippet.content ?? '',
           title: snippet.title ?? '',
           listProperties: this.args.listProperties,
           allowMultipleSnippets: this.args.allowMultipleSnippets,
