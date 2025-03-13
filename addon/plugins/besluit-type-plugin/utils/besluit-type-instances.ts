@@ -11,22 +11,12 @@ export interface BesluitTypeInstance {
   subSubType?: BesluitType;
 }
 
-/**
- * Finds a decision type in the document and checks that it represents a valid decision type
- * according to the list of types passed in.
- */
-export function checkBesluitTypeInstance(
-  editorState: EditorState,
-  types: BesluitType[],
-): BesluitTypeInstance | false {
+export function extractBesluitTypeUris(editorState: EditorState): string[] {
   const besluitRange = getCurrentBesluitRange(editorState);
   if (!besluitRange) {
-    return false;
+    return [];
   }
-  const besluitTypes = getOutgoingTripleList(
-    besluitRange.node.attrs,
-    RDF('type'),
-  )
+  return getOutgoingTripleList(besluitRange.node.attrs, RDF('type'))
     .filter(
       (type) =>
         type.object.termType === 'NamedNode' &&
@@ -35,6 +25,17 @@ export function checkBesluitTypeInstance(
         ),
     )
     .map((type: NamedNodeTriple) => type?.object.value);
+}
+
+/**
+ * Finds a decision type in the document and checks that it represents a valid decision type
+ * according to the list of types passed in.
+ */
+export function checkBesluitTypeInstance(
+  editorState: EditorState,
+  types: BesluitType[],
+): BesluitTypeInstance | false {
+  const besluitTypes = extractBesluitTypeUris(editorState);
 
   if (besluitTypes.length === 0) {
     return false;

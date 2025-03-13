@@ -13,23 +13,17 @@ import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/i
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
 import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
-import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import fetchBesluitTypes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import {
-  getCurrentBesluitRange,
-  getCurrentBesluitURI,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
 import {
   BesluitTypeInstance,
   checkBesluitTypeInstance,
-  isValidTypeChoice,
   mostSpecificBesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/besluit-type-instances';
 import BesluitTypeForm from '@lblod/ember-rdfa-editor-lblod-plugins/components/besluit-type-plugin/besluit-type-form';
+import { setBesluitType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/set-besluit-type';
 
 type Args = {
   controller: SayController;
@@ -38,7 +32,6 @@ type Args = {
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
   @tracked selectedTypeInstance?: BesluitTypeInstance;
-  @tracked existingInstance?: BesluitTypeInstance;
   @tracked cardExpanded = false;
 
   get controller() {
@@ -55,10 +48,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   get currentBesluitRange() {
     return getCurrentBesluitRange(this.controller);
-  }
-
-  get currentBesluitURI() {
-    return getCurrentBesluitURI(this.controller);
   }
 
   get showCard() {
@@ -94,7 +83,6 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       this.types.value,
     );
     if (typeInstance) {
-      this.existingInstance = typeInstance;
       this.selectedTypeInstance = typeInstance;
       this.cardExpanded = false;
     } else {
@@ -103,40 +91,20 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
   };
 
   insertIfValid() {
-    const resource = this.currentBesluitURI;
-    if (
-      this.selectedTypeInstance &&
-      resource &&
-      isValidTypeChoice(this.selectedTypeInstance)
-    ) {
-      this.cardExpanded = false;
-      if (this.existingInstance) {
-        this.controller.doCommand(
-          removeProperty({
-            resource,
-            property: {
-              predicate: RDF('type').full,
-              object: sayDataFactory.namedNode(
-                mostSpecificBesluitType(this.existingInstance).uri,
-              ),
-            },
-          }),
-          { view: this.controller.mainEditorView },
-        );
+    this.controller.doCommand((state, dispatch) => {
+      if (!this.selectedTypeInstance || !dispatch) {
+        return false;
       }
-      this.controller.doCommand(
-        addProperty({
-          resource,
-          property: {
-            predicate: RDF('type').full,
-            object: sayDataFactory.namedNode(
-              mostSpecificBesluitType(this.selectedTypeInstance).uri,
-            ),
-          },
-        }),
-        { view: this.controller.mainEditorView },
+      const { result, transaction } = setBesluitType(
+        state,
+        this.selectedTypeInstance,
       );
-    }
+      if (result.every((ok) => ok)) {
+        dispatch(transaction);
+        return true;
+      }
+      return false;
+    });
   }
 
   <template>
