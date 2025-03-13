@@ -89,6 +89,7 @@ citaten-plugin:
 
 besluit-type-plugin:
   dt: 'Decision type'
+  sub-type: 'Sub type'
   insert-dt: 'Select a decision type'
   search-message: 'Type to search'
   no-matches-message: 'No results'

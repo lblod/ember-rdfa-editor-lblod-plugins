@@ -39,6 +39,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
   <template>
     <div ...attributes>
       <BesluitTypeSelect
+        @fieldNameTranslation='besluit-type-plugin.dt'
         @besluitTypes={{@types}}
         @onchange={{this.updateParentType}}
         @selected={{@selectedType.parent}}
@@ -46,6 +47,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
       />
       {{#if @selectedType.parent.subTypes.length}}
         <BesluitTypeSelect
+          @fieldNameTranslation='besluit-type-plugin.sub-type'
           @besluitTypes={{@selectedType.parent.subTypes}}
           @onchange={{this.updateSubType}}
           @selected={{@selectedType.subType}}
@@ -54,6 +56,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
       {{/if}}
       {{#if @selectedType.subType.subTypes.length}}
         <BesluitTypeSelect
+          @fieldNameTranslation='besluit-type-plugin.sub-type'
           @besluitTypes={{@selectedType.subType.subTypes}}
           @onchange={{this.updateSubSubType}}
           @selected={{@selectedType.subSubType}}
