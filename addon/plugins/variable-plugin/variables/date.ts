@@ -4,8 +4,10 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
+  DCT,
   EXT,
   RDF,
+  VARIABLES,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -86,7 +88,49 @@ const parseDOM = [
     },
   },
 ];
+
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        hasRdfaVariableType(attrs, 'date')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+        const value = getOutgoingTriple(attrs, RDF('value'))?.object.value;
+
+        const format = node.dataset.format;
+        const custom = node.dataset.custom === 'true';
+        const customAllowed = node.dataset.customAllowed !== 'false';
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+
+        return createDateVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          value,
+          label,
+          format,
+          custom,
+          customAllowed,
+        });
+      }
+      return false;
+    },
+  },
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {

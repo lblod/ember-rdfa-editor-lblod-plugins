@@ -1,5 +1,8 @@
 import {
+  DCT,
   EXT,
+  RDF,
+  VARIABLES,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -14,6 +17,7 @@ import {
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
 import {
+  hasRdfaVariableType,
   isVariable,
   parseLabel,
   parseVariableInstance,
@@ -26,6 +30,10 @@ import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { createClassicLocationVariableAttrs } from '../actions/create-classic-location-variable';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 const CONTENT_SELECTOR = '[data-content-container="true"]';
 
@@ -58,6 +66,44 @@ const parseDOM = [
 ];
 
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        hasRdfaVariableType(attrs, 'location')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+
+        const sourceUri = getOutgoingTriple(attrs, DCT('source'))?.object.value;
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+
+        return createClassicLocationVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          source: sourceUri,
+        });
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {

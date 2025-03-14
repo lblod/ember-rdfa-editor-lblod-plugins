@@ -17,8 +17,10 @@ import {
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
+  DCT,
   EXT,
   RDF,
+  VARIABLES,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
@@ -72,18 +74,26 @@ const parseDOM: TagParseRule[] = [
 const parseDOMLegacy: TagParseRule[] = [
   {
     tag: 'span',
-    getAttrs(node: HTMLElement) {
+    getAttrs: (node: HTMLElement) => {
       const attrs = getRdfaAttrs(node, { rdfaAware });
-      if (!attrs) {
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
         hasRdfaVariableType(attrs, 'number')
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
           return false;
         }
+        const value = getOutgoingTriple(attrs, RDF('value'))?.object.value;
         const writtenNumber =
           node.getAttribute('data-written-number') === 'true' ? true : false;
         const minimumValue = node.dataset.minimumValue
@@ -92,6 +102,31 @@ const parseDOMLegacy: TagParseRule[] = [
         const maximumValue = node.dataset.maximumValue
           ? parseInt(node.dataset.maximumValue)
           : undefined;
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+        return createNumberVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          value,
+          label,
+          writtenNumber,
+          minimumValue,
+          maximumValue,
+        });
+      }
+      return false;
+    },
+  },
+  {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
+        hasRdfaVariableType(attrs, 'number')
+      ) {
         const variableUri = attrs.subject;
         if (!variableUri) {
           return false;
@@ -99,8 +134,19 @@ const parseDOMLegacy: TagParseRule[] = [
         const variableInstanceUri =
           getOutgoingTriple(attrs, EXT('instance'))?.object.value ??
           generateVariableInstanceUri();
-        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+
         const value = getOutgoingTriple(attrs, EXT('value'))?.object.value;
+        const writtenNumber =
+          node.getAttribute('data-written-number') === 'true' ? true : false;
+        const minimumValue = node.dataset.minimumValue
+          ? parseInt(node.dataset.minimumValue)
+          : undefined;
+        const maximumValue = node.dataset.maximumValue
+          ? parseInt(node.dataset.maximumValue)
+          : undefined;
+
+        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+
         return createNumberVariableAttrs({
           variableInstance: variableInstanceUri,
           variable: variableUri,
