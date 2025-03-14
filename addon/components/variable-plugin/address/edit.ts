@@ -22,6 +22,9 @@ type Args = {
   defaultMunicipality?: string;
 };
 
+/**
+ * @deprecated
+ */
 export default class AddressEditComponent extends Component<Args> {
   @service declare intl: IntlService;
 
