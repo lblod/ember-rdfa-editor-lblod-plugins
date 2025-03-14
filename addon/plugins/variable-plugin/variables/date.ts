@@ -259,9 +259,8 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     },
     datatype: {
       default: !formatContainsTime(options.formats[0].dateFormat)
-        ? XSD('date').full
-        : XSD('dateTime').full,
-      editable: true,
+        ? XSD('date').namedNode
+        : XSD('dateTime').namedNode,
     },
   },
   outlineText: (node: PNode, state: EditorState) => {
