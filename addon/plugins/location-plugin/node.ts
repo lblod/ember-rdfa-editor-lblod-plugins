@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import type { ComponentLike } from '@glint/template';
 import {
   createEmberNodeSpec,
@@ -11,15 +10,12 @@ import {
   PNode,
   TagParseRule,
 } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   getRdfaAttrs,
   rdfaAttrSpec,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
 import {
-  ADRES,
-  DCT,
   EXT,
   LOCN,
   RDF,
@@ -27,8 +23,6 @@ import {
 import {
   hasRdfaVariableType,
   isVariable,
-  parseLabel,
-  parseVariableInstance,
   parseVariableType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import {
@@ -46,7 +40,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { NodeContentsUtils } from './node-contents';
-import { recreateVariableUris } from '../variable-plugin/utils/recreate-variable-uris';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
 export interface LocationPluginConfig {
@@ -72,19 +65,19 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
         if (attrs.rdfaNodeType !== 'resource') {
           return false;
         }
+
+        // Do not parse if using old 'variable style'
+        if (hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping'))) {
+          return false;
+        }
         if (contentContainer) {
           const location =
             nodeContentsUtils.address.parse(contentContainer.children[0]) ||
             nodeContentsUtils.place.parse(contentContainer.children[0]) ||
             nodeContentsUtils.area.parse(contentContainer.children[0]);
           if (location) {
-            // In the past this was stored as a string relationship, which matches the example in the model
-            // docs but not the diagram, so correct it to a URI here
-            const properties = attrs.properties?.filter(
-              (prop) =>
-                !ADRES('verwijstNaar').matches(prop.predicate) ||
-                prop.object.termType === 'NamedNode',
-            );
+            // Ignore the properties for now, we handle these ourselves
+            const properties: OutgoingTriple[] = [];
             return {
               ...attrs,
               properties,
@@ -114,11 +107,6 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
           if (attrs.rdfaNodeType !== 'resource') {
             return false;
           }
-          // Filter out properties with content predicate,
-          // as we handle this ourselves with the `value` attribute
-          attrs.properties = attrs.properties.filter((prop) => {
-            return !EXT('content').matches(prop.predicate);
-          });
 
           const addressNode = [...dataContainer.children].find((el) =>
             hasRDFaAttribute(el, 'property', EXT('content')),
@@ -137,11 +125,18 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
                 nodeContentsUtils.area.parse(placeNode);
             }
           }
+          const value =
+            location ??
+            nodeContentsUtils.address.parseOld(addressNode || dataContainer);
+          if (!value) {
+            return false;
+          }
           return {
-            ...attrs,
-            value:
-              location ??
-              nodeContentsUtils.address.parseOld(addressNode || dataContainer),
+            rdfaNodeType: 'resource',
+            subject: value.uri,
+            value,
+            backlinks: [],
+            properties: [],
           };
         }
         return false;
@@ -156,8 +151,6 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
           if (!mappingResource) {
             return false;
           }
-          const variableInstance = parseVariableInstance(node);
-          const label = parseLabel(node);
 
           const addressNode = [...node.children].find((el) =>
             hasRDFaAttribute(el, 'property', EXT('content')),
@@ -166,36 +159,18 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
             return false;
           }
 
-          const properties: OutgoingTriple[] = [
-            {
-              predicate: RDF('type').full,
-              object: sayDataFactory.namedNode(EXT('Mapping').full),
-            },
-            {
-              predicate: EXT('instance').full,
-              object: sayDataFactory.namedNode(
-                variableInstance ??
-                  `http://data.lblod.info/variables/${uuidv4()}`,
-              ),
-            },
-            {
-              predicate: DCT('type').full,
-              object: sayDataFactory.literal('address'),
-            },
-          ];
-          if (label) {
-            properties.push({
-              predicate: EXT('label').full,
-              object: sayDataFactory.literal(label),
-            });
+          const value = nodeContentsUtils.address.parseOld(addressNode);
+
+          if (!value) {
+            return false;
           }
 
           return {
-            value: nodeContentsUtils.address.parseOld(addressNode),
-            subject: mappingResource,
             rdfaNodeType: 'resource',
-            __rdfaId: uuidv4(),
-            properties,
+            subject: value.uri,
+            value,
+            properties: [],
+            backlinks: [],
           };
         }
 
@@ -246,7 +221,6 @@ const emberNodeConfig = (config: LocationPluginConfig): EmberNodeConfig => ({
   group: 'inline variable',
   atom: true,
   editable: true,
-  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   selectable: true,
