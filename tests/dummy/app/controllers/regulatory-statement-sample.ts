@@ -313,7 +313,7 @@ export default class RegulatoryStatementSampleController extends Controller {
         endpoint: 'https://data.lblod.info/sparql',
       },
       lmb: {
-        endpoint: 'http://localhost/vendor-proxy/query',
+        endpoint: 'https://dev.gelinkt-notuleren.lblod.info/raw-sparql',
       },
       structure: {
         uriGenerator: 'template-uuid4',
