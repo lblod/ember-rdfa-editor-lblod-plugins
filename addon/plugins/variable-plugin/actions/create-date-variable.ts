@@ -73,7 +73,7 @@ export function createDateVariableAttrs({
   let datatype: SayNamedNode | undefined;
   if (format) {
     datatype = !formatContainsTime(format)
-      ? XSD('time').namedNode
+      ? XSD('date').namedNode
       : XSD('dateTime').namedNode;
   }
   return {
