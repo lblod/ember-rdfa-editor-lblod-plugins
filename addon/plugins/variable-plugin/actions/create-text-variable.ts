@@ -6,8 +6,10 @@ import {
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AllOrNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
-import { IncomingLiteralNodeTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import {
+  FullTriple,
+  IncomingTriple,
+} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type CreateTextVariableArgs = {
@@ -38,7 +40,7 @@ export function createTextVariableAttrs({
   variableInstance,
 }: CreateTextVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingLiteralNodeTriple[] = [];
+  const backlinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -58,13 +60,13 @@ export function createTextVariableAttrs({
       },
     );
     backlinks.push({
-      subject: sayDataFactory.literalNode(variableInstance),
+      subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
     });
   }
   return {
     rdfaNodeType: 'literal',
-    datatype: XSD('string').full,
+    datatype: XSD('string').namedNode,
     label,
     backlinks,
     externalTriples,

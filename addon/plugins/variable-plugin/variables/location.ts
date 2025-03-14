@@ -122,8 +122,7 @@ const emberNodeConfig: EmberNodeConfig = {
     },
     source: {},
     datatype: {
-      default: XSD('string').full,
-      editable: true,
+      default: XSD('string').namedNode,
     },
   },
   toDOM,

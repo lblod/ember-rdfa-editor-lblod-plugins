@@ -232,8 +232,8 @@ export default class DateEditComponent extends Component<Args> {
       return;
     }
     const datatype = !formatContainsTime(dateFormat)
-      ? XSD('date').full
-      : XSD('dateTime').full;
+      ? XSD('date').namedNode
+      : XSD('dateTime').namedNode;
     this.controller.withTransaction((tr) => {
       return tr
         .setNodeAttribute(pos, 'format', dateFormat)
@@ -270,8 +270,8 @@ export default class DateEditComponent extends Component<Args> {
     const pos = this.documentDatePos;
     if (isSome(pos) && isSome(format)) {
       const datatype = !formatContainsTime(format)
-        ? XSD('date').full
-        : XSD('dateTime').full;
+        ? XSD('date').namedNode
+        : XSD('dateTime').namedNode;
       this.controller.withTransaction((tr) => {
         return tr
           .setNodeAttribute(pos, 'format', format)

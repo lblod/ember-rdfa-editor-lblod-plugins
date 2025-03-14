@@ -8,7 +8,7 @@ import {
 import { AllOrNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 import {
   FullTriple,
-  IncomingLiteralNodeTriple,
+  IncomingTriple,
 } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
@@ -46,7 +46,7 @@ export function createAutofilledVariableAttrs({
   initialized,
 }: CreateAutofilledVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingLiteralNodeTriple[] = [];
+  const backlinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -66,13 +66,13 @@ export function createAutofilledVariableAttrs({
       },
     );
     backlinks.push({
-      subject: sayDataFactory.literalNode(variableInstance),
+      subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
     });
   }
   return {
     rdfaNodeType: 'literal',
-    datatype: XSD('string').full,
+    datatype: XSD('string').namedNode,
     backlinks,
     label,
     externalTriples,

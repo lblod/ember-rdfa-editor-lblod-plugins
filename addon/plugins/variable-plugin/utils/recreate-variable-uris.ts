@@ -41,8 +41,7 @@ export function recreateVariableUris(attrs: Attrs) {
   const newBacklinks = backlinks?.map((backlink) => {
     const newBacklink = { ...backlink };
     if (backlink.subject.value === variableInstanceUri) {
-      // TODO: change this to namedNode once possible
-      newBacklink.subject = sayDataFactory.literalNode(newInstanceUri);
+      newBacklink.subject = sayDataFactory.resourceNode(newInstanceUri);
     }
     return newBacklink;
   });
