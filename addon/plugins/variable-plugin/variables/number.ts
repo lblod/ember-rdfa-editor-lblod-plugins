@@ -211,8 +211,7 @@ const emberNodeConfig: EmberNodeConfig = {
     minimumValue: { default: null },
     maximumValue: { default: null },
     datatype: {
-      default: XSD('decimal').full,
-      editable: true,
+      default: XSD('decimal').namedNode,
     },
   },
   leafText: (node: PNode) => {

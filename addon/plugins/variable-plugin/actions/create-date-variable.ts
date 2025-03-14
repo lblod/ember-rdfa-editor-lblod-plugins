@@ -8,9 +8,12 @@ import {
 import { AllOrNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 import {
   FullTriple,
-  IncomingLiteralNodeTriple,
+  IncomingTriple,
 } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  sayDataFactory,
+  SayNamedNode,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { formatContainsTime } from '../utils/date-helpers';
 
 type CreateDateVariableArgs = {
@@ -43,7 +46,7 @@ export function createDateVariableAttrs({
   customAllowed,
 }: CreateDateVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingLiteralNodeTriple[] = [];
+  const backlinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -63,15 +66,15 @@ export function createDateVariableAttrs({
       },
     );
     backlinks.push({
-      subject: sayDataFactory.literalNode(variableInstance),
+      subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
     });
   }
-  let datatype: string | undefined;
+  let datatype: SayNamedNode | undefined;
   if (format) {
     datatype = !formatContainsTime(format)
-      ? XSD('time').full
-      : XSD('dateTime').full;
+      ? XSD('time').namedNode
+      : XSD('dateTime').namedNode;
   }
   return {
     rdfaNodeType: 'literal',

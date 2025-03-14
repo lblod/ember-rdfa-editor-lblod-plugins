@@ -136,8 +136,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
     datatype: {
-      default: XSD('string').full,
-      editable: true,
+      default: XSD('string').namedNode,
     },
     autofillKey: {
       default: '',
