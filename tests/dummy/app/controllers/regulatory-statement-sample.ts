@@ -57,8 +57,6 @@ import {
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
-  address,
-  addressView,
   codelist,
   codelistView,
   location,
@@ -100,7 +98,6 @@ import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/
 import LocationInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/location/insert';
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
 import AutofilledInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/autofilled/insert';
-import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 import {
   inlineRdfaWithConfig,
@@ -188,7 +185,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       number,
       location,
       oslo_location: osloLocation(this.config.location),
-      address,
       codelist,
       heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
@@ -274,11 +270,6 @@ export default class RegulatoryStatementSampleController extends Controller {
         label: 'codelist',
         component: CodelistInsertComponent as unknown as ComponentLike,
         options: this.codelistOptions,
-      },
-      {
-        label: 'address',
-        component:
-          VariablePluginAddressInsertVariableComponent as unknown as ComponentLike,
       },
       {
         label: 'person',
@@ -369,7 +360,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       oslo_location: osloLocationView(this.config.location)(controller),
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
-      address: addressView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       structure: structureViewWithConfig(this.config.structure)(controller),
       snippet_placeholder: snippetPlaceholderView(this.config.snippet)(
