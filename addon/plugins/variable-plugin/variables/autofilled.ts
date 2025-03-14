@@ -1,6 +1,8 @@
 import {
+  DCT,
   EXT,
   RDF,
+  VARIABLES,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -62,6 +64,47 @@ const parseDOM = [
 ];
 
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        hasRdfaVariableType(attrs, 'autofilled')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+
+        const autofillKey = node.dataset.autofillKey;
+        const convertToString = node.dataset.convertToString === 'true';
+        const initialized = node.dataset.initialized === 'true';
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+
+        return createAutofilledVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          autofillKey,
+          convertToString,
+          initialized,
+        });
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {

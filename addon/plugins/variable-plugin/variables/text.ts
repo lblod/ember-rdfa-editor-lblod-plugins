@@ -1,6 +1,8 @@
 import {
+  DCT,
   EXT,
   RDF,
+  VARIABLES,
   XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
@@ -61,6 +63,39 @@ const parseDOM = [
 ];
 
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        hasRdfaVariableType(attrs, 'text')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+        return createTextVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+        });
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
