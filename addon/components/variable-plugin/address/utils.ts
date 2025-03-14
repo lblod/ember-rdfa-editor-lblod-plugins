@@ -7,6 +7,9 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { v4 as uuidv4 } from 'uuid';
 
+/**
+ * @deprecated
+ */
 export function replaceSelectionWithAddress(
   controller: SayController,
   label?: string,

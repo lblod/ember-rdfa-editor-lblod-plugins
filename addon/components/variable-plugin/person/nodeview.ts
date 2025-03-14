@@ -2,8 +2,7 @@ import Component from '@glimmer/component';
 
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { Person } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
+import { FOAF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 type Args = {
   getPos: () => number | undefined;
@@ -20,24 +19,24 @@ export default class PersonNodeviewComponent extends Component<Args> {
     return this.args.node;
   }
 
-  get person() {
-    return this.node.attrs.value as Person | null;
+  get firstName() {
+    const firstName = getOutgoingTriple(this.node.attrs, FOAF('givenName'))
+      ?.object.value;
+    return firstName;
   }
 
-  get label() {
-    if (this.person) return '';
-    return getOutgoingTriple(this.node.attrs, EXT('label'))?.object.value;
+  get lastName() {
+    const lastName = getOutgoingTriple(this.node.attrs, FOAF('familyName'))
+      ?.object.value;
+    return lastName;
   }
 
   get filled() {
-    return !!this.person;
+    return Boolean(this.firstName) || Boolean(this.lastName);
   }
 
   get content() {
-    if (this.person) {
-      return `${this.person.firstName} ${this.person.lastName}`;
-    } else {
-      return this.label;
-    }
+    const fullName = [this.firstName, this.lastName].filter(Boolean).join(' ');
+    return fullName || this.node.attrs['label'];
   }
 }

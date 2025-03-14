@@ -11,15 +11,9 @@ import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
 import { isBlank } from '@ember/utils';
 import { Velcro } from 'ember-velcro';
-import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
-import {
-  DCT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 type Args = {
   getPos: () => number | undefined;
@@ -58,7 +52,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get number(): string | null | undefined {
-    return getOutgoingTriple(this.node.attrs, RDF('value'))?.object.value;
+    return this.node.attrs['content'] as Option<string>;
   }
 
   get formattedNumber() {
@@ -99,7 +93,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
 
   get label(): string | undefined {
     if (this.inputNumber) return '';
-    return getOutgoingTriple(this.args.node.attrs, DCT('title'))?.object.value;
+    return this.args.node.attrs['label'] as string | undefined;
   }
 
   @action onInputNumberChange(event: InputEvent) {
@@ -168,21 +162,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   @action
   validateAndSave() {
     if (!this.errorMessage) {
-      const attrs = this.node.attrs;
-      const properties =
-        isRdfaAttrs(attrs) && attrs.rdfaNodeType === 'resource'
-          ? attrs.properties
-          : [];
-      const newProperties = properties.filter((prop) => {
-        return !RDF('value').matches(prop.predicate);
-      });
-      if (this.inputNumber) {
-        newProperties.push({
-          predicate: RDF('value').full,
-          object: sayDataFactory.literal(this.inputNumber),
-        });
-      }
-      this.args.updateAttribute('properties', newProperties);
+      this.args.updateAttribute('content', this.inputNumber);
     }
   }
 }

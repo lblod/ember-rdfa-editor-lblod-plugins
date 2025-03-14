@@ -55,8 +55,6 @@ import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
 import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
 import {
-  address,
-  addressView,
   codelist,
   codelistView,
   date,
@@ -83,7 +81,6 @@ import TextVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/
 import NumberInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/number/insert';
 import DateInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/insert-variable';
 import CodelistInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/insert';
-import VariablePluginAddressInsertVariableComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/address/insert-variable';
 import PersonVariableInsertComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/insert';
 import {
   inlineRdfaWithConfig,
@@ -166,7 +163,6 @@ export default class SnippetEditController extends Controller {
         tableGroup: 'block',
         cellContent: 'block+',
       }),
-      address,
       date: date(this.config.date),
       oslo_location: osloLocation(this.config.location),
       text_variable,
@@ -221,11 +217,6 @@ export default class SnippetEditController extends Controller {
       {
         label: 'number',
         component: NumberInsertComponent as unknown as ComponentLike,
-      },
-      {
-        label: 'address',
-        component:
-          VariablePluginAddressInsertVariableComponent as unknown as ComponentLike,
       },
       {
         label: 'date',
@@ -330,7 +321,6 @@ export default class SnippetEditController extends Controller {
         controller,
       ),
       link: linkView(this.config.link)(controller),
-      address: addressView(controller),
       date: dateView(this.config.date)(controller),
       text_variable: textVariableView(controller),
       number: numberView(controller),
