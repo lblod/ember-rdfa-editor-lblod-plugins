@@ -12,6 +12,9 @@ type Args = {
   templateMode?: boolean;
 };
 
+/**
+ * @deprecated
+ */
 export default class InsertAddressComponent extends Component<Args> {
   AddIcon = AddIcon;
 
