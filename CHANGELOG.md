@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 28.2.0
+
+### Minor Changes
+
+- [#553](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/553) [`50831e0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/50831e01cfa5d8101c72e8cc3d98b304a8b86646) Thanks [@piemonkey](https://github.com/piemonkey)! - Add re-usable component for selecting a decision type
+
+### Patch Changes
+
+- [#553](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/553) [`03f4ce0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/03f4ce0864550cfc947f8ff7504aeac8b0300ae9) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix undo behaviour when changing decision type
+
 ## 28.1.0
 
 ### Minor Changes
