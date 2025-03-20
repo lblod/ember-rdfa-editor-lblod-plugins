@@ -74,7 +74,7 @@
     "ember-cli-version-checker": "^5.1.2",
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-resources": "^7.0.2",
-    "ember-template-imports": "^4.1.1",
+    "ember-template-imports": "^4.3.0",
     "ember-velcro": "^2.2.0",
     "fetch-sparql-endpoint": "^3.3.3",
     "n2words": "^1.21.0",
