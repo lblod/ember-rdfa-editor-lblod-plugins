@@ -50,6 +50,7 @@ module.exports = function (defaults) {
           fallback: {
             stream: require.resolve('stream-browserify'),
             crypto: require.resolve('crypto-browserify'),
+            vm: require.resolve('vm-browserify'),
           },
         },
         plugins: [
