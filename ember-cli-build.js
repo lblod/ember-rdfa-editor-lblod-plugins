@@ -1,6 +1,8 @@
 'use strict';
 
 const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+const webpack = require('webpack');
+
 module.exports = function (defaults) {
   const app = new EmberAddon(defaults, {
     // Add options here
@@ -33,8 +35,31 @@ module.exports = function (defaults) {
 
   const { maybeEmbroider } = require('@embroider/test-setup');
   return maybeEmbroider(app, {
+    staticAddonTestSupportTrees: true,
+    staticAddonTrees: true,
+    staticInvokables: true,
+    staticEmberSource: true,
     packagerOptions: {
-      webpackConfig: require('./webpack-config'),
+      webpackConfig: {
+        node: {
+          global: true,
+          __filename: true,
+          __dirname: true,
+        },
+        resolve: {
+          fallback: {
+            stream: require.resolve('stream-browserify'),
+            crypto: require.resolve('crypto-browserify'),
+          },
+        },
+        plugins: [
+          new webpack.ProvidePlugin({
+            process: 'process/browser.js',
+            Buffer: ['buffer', 'Buffer'],
+          }),
+        ],
+        devtool: 'source-map',
+      },
     },
     skipBabel: [
       {
