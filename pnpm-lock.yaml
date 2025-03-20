@@ -187,8 +187,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 11.3.0-dev.6bdd2ef9d8d8a3d4ca74c9095b8b3c2109ad25a9
-        version: 11.3.0-dev.6bdd2ef9d8d8a3d4ca74c9095b8b3c2109ad25a9(nlq6pvqp7wukmbrtxngdh43tfm)
+        specifier: 12.0.0
+        version: 12.0.0(nlq6pvqp7wukmbrtxngdh43tfm)
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1717,8 +1717,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@lblod/ember-rdfa-editor@11.3.0-dev.6bdd2ef9d8d8a3d4ca74c9095b8b3c2109ad25a9':
-    resolution: {integrity: sha512-77hOw7d42XKX7SDONBeq95faRa2KKBugWy++zfk7MtNyKrRi07v8Cn9DrnF2DvnRf50t1iqa/B3SqeP4rsXK2A==}
+  '@lblod/ember-rdfa-editor@12.0.0':
+    resolution: {integrity: sha512-mRv6p/gFzS8SrS9EAkuez6KQ8RGL5DNIFczAaHFu3vJ4EIcrQEUYflZYw8Aq9CuQUuYDwtxpvYFoSi/4uoNHlA==}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.5.0
       '@ember/test-helpers': ^2.9.4 || ^3.2.1 || ^4.0.2 || ^5.0.0
@@ -12052,7 +12052,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@lblod/ember-rdfa-editor@11.3.0-dev.6bdd2ef9d8d8a3d4ca74c9095b8b3c2109ad25a9(nlq6pvqp7wukmbrtxngdh43tfm)':
+  '@lblod/ember-rdfa-editor@12.0.0(nlq6pvqp7wukmbrtxngdh43tfm)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.5.0(@ember/test-helpers@3.3.1(@babel/core@7.26.0)(@glint/template@1.5.1)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))(webpack@5.97.1))(@glint/environment-ember-loose@1.5.1(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(@types/ember__array@4.0.10(@babel/core@7.26.0))(@types/ember__component@4.0.22(@babel/core@7.26.0))(@types/ember__controller@4.0.12(@babel/core@7.26.0))(@types/ember__object@4.0.12(@babel/core@7.26.0))(@types/ember__routing@4.0.22(@babel/core@7.26.0))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))))(@glint/template@1.5.1)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))(tracked-built-ins@3.3.0)(webpack@5.97.1)
       '@codemirror/commands': 6.6.0
