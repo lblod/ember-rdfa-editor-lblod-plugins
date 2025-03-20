@@ -38,7 +38,7 @@ module.exports = function (defaults) {
     staticAddonTestSupportTrees: true,
     staticAddonTrees: true,
     staticInvokables: true,
-    staticEmberSource: true,
+    // staticEmberSource: true,
     packagerOptions: {
       webpackConfig: {
         node: {
