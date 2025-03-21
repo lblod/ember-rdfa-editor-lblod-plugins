@@ -13,9 +13,6 @@ module.exports = {
       sourceMaps: 'inline',
       plugins: [],
     },
-    autoImport: {
-      webpack: require('./webpack-config'),
-    },
   },
 
   init() {
