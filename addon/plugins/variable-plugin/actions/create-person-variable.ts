@@ -3,7 +3,6 @@ import { FOAF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { Person } from '../variables';
-import { v4 as uuidv4 } from 'uuid';
 
 type CreatePersonVariableArgs = {
   schema: Schema;
@@ -20,8 +19,7 @@ export function createPersonVariableAttrs({
   label,
   value,
 }: CreatePersonVariableAttrsArgs) {
-  const subject =
-    value?.uri ?? `http://example.org/person-placeholder/${uuidv4()}`;
+  const subject = value?.uri ?? null;
   const properties: OutgoingTriple[] = value
     ? [
         {
@@ -35,7 +33,7 @@ export function createPersonVariableAttrs({
       ]
     : [];
   return {
-    rdfaNodeType: 'resource',
+    rdfaNodeType: subject ? 'resource' : 'literal',
     subject,
     properties,
     label,

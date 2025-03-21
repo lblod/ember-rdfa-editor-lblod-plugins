@@ -32,7 +32,7 @@ export default class PersonNodeviewComponent extends Component<Args> {
   }
 
   get filled() {
-    return Boolean(this.firstName) || Boolean(this.lastName);
+    return Boolean(this.node.attrs['subject']);
   }
 
   get content() {
