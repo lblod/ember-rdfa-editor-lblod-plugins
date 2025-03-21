@@ -32,6 +32,8 @@ import LocationMap, {
   SUPPORTED_LOCATION_TYPES,
   type LocationType,
 } from './map';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { updateSubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info/utils';
 
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
@@ -270,11 +272,31 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     }
     if (toInsert) {
       this.modalOpen = false;
-      replaceSelectionWithLocation(
-        this.controller,
-        toInsert,
-        this.args.config.subjectTypesToLinkTo,
-      );
+      if (this.selectedLocationNode) {
+        // Update, while keeping backlinks intact
+        const { pos } = this.selectedLocationNode;
+        this.controller.withTransaction((tr) => {
+          return transactionCombinator(
+            this.controller.activeEditorState,
+            tr.setNodeAttribute(pos, 'value', toInsert),
+          )([
+            updateSubject({
+              pos,
+              targetSubject: toInsert.uri,
+              keepBacklinks: true,
+              keepProperties: false,
+              keepExternalTriples: true,
+            }),
+          ]).transaction;
+        });
+      } else {
+        // Insert
+        replaceSelectionWithLocation(
+          this.controller,
+          toInsert,
+          this.args.config.subjectTypesToLinkTo,
+        );
+      }
     }
   }
 

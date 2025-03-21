@@ -14,10 +14,6 @@ import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import LabelInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/utils/label-input';
 import { createAutofilledVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-autofilled-variable';
-import {
-  generateVariableInstanceUri,
-  generateVariableUri,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Args = {
   controller: SayController;
@@ -67,10 +63,6 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
       this.label != '' ? this.label : this.autofillKey || placeholder;
     const node = createAutofilledVariable({
       schema: this.schema,
-      variable: generateVariableUri(),
-      variableInstance: generateVariableInstanceUri({
-        templateMode: this.args.templateMode,
-      }),
       label,
       autofillKey: this.autofillKey,
       convertToString: this.convertToString,
