@@ -21,6 +21,11 @@
     height: 100%;
   }
 
+  // Override the 'grab' cursor to 'pointer' so we can accurately pick points
+  .map-cursor-pointer > .leaflet-grab {
+    cursor: pointer;
+  }
+
   .leaflet-container {
     height: 100%;
   }
