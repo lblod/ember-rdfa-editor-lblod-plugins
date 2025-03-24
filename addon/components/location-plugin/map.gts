@@ -281,7 +281,11 @@ export default class LocationPluginMapComponent extends Component<Signature> {
   }
 
   <template>
-    <div class='map-wrapper' ...attributes>
+    <div
+      class='map-wrapper
+        {{unless (eq @locationType "address") "map-cursor-pointer"}}'
+      ...attributes
+    >
       <MapWrapper
         @mapStart={{this.mapLocation}}
         @onClick={{this.onMapClick}}
