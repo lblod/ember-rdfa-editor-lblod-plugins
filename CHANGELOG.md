@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 28.2.2
+
+### Patch Changes
+
+- [`261f2a3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/261f2a39b5b67c6ba373e3b35a91c242d27a4277) Thanks [@piemonkey](https://github.com/piemonkey)! - Bundle location plugin marker icons to avoid issues when bundling the code for embeddable
+
 ## 28.2.1
 
 ### Patch Changes
