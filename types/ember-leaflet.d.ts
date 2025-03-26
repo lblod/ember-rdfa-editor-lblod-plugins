@@ -120,6 +120,7 @@ declare module 'ember-leaflet' {
         },
       ];
     };
+    Element: HTMLDivElement;
   }
   export class LeafletMap extends Component<LeafletMapSig> {}
 
