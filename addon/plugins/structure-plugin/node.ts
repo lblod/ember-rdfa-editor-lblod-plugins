@@ -219,7 +219,7 @@ export const emberNodeConfig: (
             },
             getNumberForDisplay(number, romanizeNumber),
           ],
-          displayOnlyArticle || headerFormat === 'name' ? ': ' : '. ',
+          displayOnlyArticle || '. ',
           ['span', { property: EXT('title').full }, titleHTML],
         ];
       } else {

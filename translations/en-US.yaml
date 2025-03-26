@@ -37,7 +37,7 @@ structure-plugin:
     paragraph: Paragraph
   format:
     plain-number: '{number}.'
-    name: '{name} {number}:'
+    name: '{name} {number}.'
     section-symbol: '§{number}.'
   control-card:
     title: Structure Card
