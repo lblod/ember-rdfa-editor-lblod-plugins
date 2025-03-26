@@ -6,6 +6,7 @@ import and from 'ember-truth-helpers/helpers/and';
 import eq from 'ember-truth-helpers/helpers/eq';
 import t from 'ember-intl/helpers/t';
 import {
+  Leaflet,
   LeafletMap,
   type LeafletMapSig,
   type LeafletMapStart,
@@ -19,6 +20,38 @@ import {
   GeoPos,
   type GlobalCoordinates,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+
+// Taken from Leaflet's default icon, with the viewbox tweaked (from 0 0 500 820), so that the icon
+// is a whole number of pixels in size, to make positioning the point easy.
+const ICON_HTML = `<svg viewBox="0 0 500 800" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+     style="fill-rule: evenodd; clip-rule: evenodd; stroke-linecap: round;">
+    <defs>
+        <linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.30025e-15,-37.566,37.566,2.30025e-15,416.455,540.999)" id="map-marker-38-f">
+            <stop offset="0" stop-color="rgb(18,111,198)"/>
+            <stop offset="1" stop-color="rgb(76,156,209)"/>
+        </linearGradient>
+        <linearGradient x1="0" y1="0" x2="1" y2="0"
+                        gradientUnits="userSpaceOnUse"
+                        gradientTransform="matrix(1.16666e-15,-19.053,19.053,1.16666e-15,414.482,522.486)"
+                        id="map-marker-38-s">
+            <stop offset="0" stop-color="rgb(46,108,151)"/>
+            <stop offset="1" stop-color="rgb(56,131,183)"/>
+        </linearGradient>
+    </defs>
+    <g transform="matrix(19.5417,0,0,19.5417,-7889.1,-9807.44)">
+        <path fill="#FFFFFF" d="M421.2,515.5c0,2.6-2.1,4.7-4.7,4.7c-2.6,0-4.7-2.1-4.7-4.7c0-2.6,2.1-4.7,4.7-4.7 C419.1,510.8,421.2,512.9,421.2,515.5z"/>
+        <path d="M416.544,503.612C409.971,503.612 404.5,509.303 404.5,515.478C404.5,518.256 406.064,521.786 407.194,524.224L416.5,542.096L425.762,524.224C426.892,521.786 428.5,518.433 428.5,515.478C428.5,509.303 423.117,503.612 416.544,503.612ZM416.544,510.767C419.128,510.784 421.223,512.889 421.223,515.477C421.223,518.065 419.128,520.14 416.544,520.156C413.96,520.139 411.865,518.066 411.865,515.477C411.865,512.889 413.96,510.784 416.544,510.767Z" stroke-width="1.1px" fill="url(#map-marker-38-f)" stroke="url(#map-marker-38-s)"/>
+    </g>
+</svg>`;
+// We use Leaflet.divIcon directly, as passing arguments to the ember-leaflet helper seems to be
+// broken
+const MARKER_ICON = Leaflet.divIcon({
+  html: ICON_HTML,
+  // This prevents the default class from being applied, along with the default styling
+  className: '',
+  iconAnchor: [15, 48],
+  iconSize: [30, 48],
+});
 
 export const SUPPORTED_LOCATION_TYPES = ['address', 'place', 'area'] as const;
 export type LocationType = (typeof SUPPORTED_LOCATION_TYPES)[number];
@@ -248,7 +281,11 @@ export default class LocationPluginMapComponent extends Component<Signature> {
   }
 
   <template>
-    <div class='map-wrapper' ...attributes>
+    <div
+      class='map-wrapper
+        {{unless (eq @locationType "address") "map-cursor-pointer"}}'
+      ...attributes
+    >
       <MapWrapper
         @mapStart={{this.mapLocation}}
         @onClick={{this.onMapClick}}
@@ -259,7 +296,11 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           @attribution={{MAP_TILE_ATTRIBUTION}}
         />
         {{#if (and @address (eq @locationType 'address') this.foundAddress)}}
-          <layers.marker @location={{this.foundAddress}} as |marker|>
+          <layers.marker
+            @location={{this.foundAddress}}
+            @icon={{MARKER_ICON}}
+            as |marker|
+          >
             <marker.tooltip>
               {{@address.formatted}}
             </marker.tooltip>
@@ -269,6 +310,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           <layers.marker
             @opacity={{if @location 0.3 1}}
             @location={{this.existingLocationCoords}}
+            @icon={{MARKER_ICON}}
             as |marker|
           >
             <marker.tooltip>
@@ -277,7 +319,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           </layers.marker>
         {{/if}}
         {{#if (and @location (eq @locationType 'place'))}}
-          <layers.marker @location={{@location.global}} />
+          <layers.marker @location={{@location.global}} @icon={{MARKER_ICON}} />
         {{/if}}
         {{#if (eq @locationType 'area')}}
           <layers.polyline @locations={{this.vertices}} />
@@ -285,6 +327,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
             <layers.marker
               @location={{vertex}}
               @onClick={{fn this.onVertexClick index}}
+              @icon={{MARKER_ICON}}
               as |marker|
             >
               {{#if (eq index 0)}}
