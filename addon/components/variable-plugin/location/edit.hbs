@@ -27,6 +27,7 @@
           @options={{this.locationOptions.value.options}}
           @selected={{this.selectedLocationOption}}
           @onChange={{this.updateLocationOption}}
+          @verticalPosition="above"
           as |option|
         >
           {{option.label}}
@@ -34,12 +35,14 @@
       {{else}}
         <PowerSelect
           id='location-select'
+          @dropdownClass="location-select-dropdown"
           @allowClear={{false}}
           @searchEnabled={{true}}
           @searchField='label'
           @options={{this.locationOptions.value.options}}
           @selected={{this.selectedLocationOption}}
           @onChange={{this.updateLocationOption}}
+
           as |option|
         >
           {{option.label}}
