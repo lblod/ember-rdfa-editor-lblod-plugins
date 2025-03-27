@@ -141,7 +141,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: false,
     },
   },
-  classNames: ['say-pill', 'say-autofilled-variable'],
+  classNames: ['say-autofilled-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

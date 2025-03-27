@@ -156,7 +156,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
   },
-  classNames: ['say-pill', 'say-text-variable'],
+  classNames: ['say-text-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

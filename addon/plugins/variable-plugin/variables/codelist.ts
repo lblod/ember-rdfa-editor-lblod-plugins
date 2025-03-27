@@ -183,7 +183,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  classNames: ['say-pill', 'say-codelist-variable'],
+  classNames: ['say-codelist-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

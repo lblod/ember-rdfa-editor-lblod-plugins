@@ -403,7 +403,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  classNames: ['say-pill', 'say-address-variable'],
+  classNames: ['say-address-variable'],
   serialize,
   parseDOM,
 };
