@@ -156,6 +156,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     attrs: {
+      class: 'say-variable',
       'data-selection-style': selectionStyle as string,
     },
     tag: 'span',

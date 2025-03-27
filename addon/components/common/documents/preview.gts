@@ -111,9 +111,7 @@ export default class DocumentPreview<
 
       </div>
       {{#if this.isExpanded}}
-        <div
-          class='say-editor say-content rdfa-annotations rdfa-annotations-highlight rdfa-annotations-hover snippet-preview__content'
-        >
+        <div class='say-editor say-content snippet-preview__content'>
           {{#if this.content}}
             {{this.content}}
           {{else if this.contentTask.isRunning}}
