@@ -157,8 +157,8 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     attrs: {
-      'data-selection-style': selectionStyle as string,
       class: getClassnamesFromNode(node),
+      'data-selection-style': selectionStyle as string,
     },
     tag: 'span',
     content: 0,
@@ -183,7 +183,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  classNames: ['say-codelist-variable'],
+  classNames: ['say-variable', 'say-codelist-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

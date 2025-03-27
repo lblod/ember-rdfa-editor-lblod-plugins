@@ -185,10 +185,10 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
+      class: getClassnamesFromNode(node),
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
-      class: getClassnamesFromNode(node),
     },
     content: humanReadableContent.toString(),
   });
@@ -216,7 +216,7 @@ const emberNodeConfig: EmberNodeConfig = {
     const { value } = node.attrs;
     return value as string;
   },
-  classNames: ['say-number-variable'],
+  classNames: ['say-variable', 'say-number-variable'],
   parseDOM: [...parseDOM, ...parseDOMLegacy],
   serialize,
 };

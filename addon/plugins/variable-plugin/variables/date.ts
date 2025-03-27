@@ -231,10 +231,10 @@ const serialize = (node: PNode, state: EditorState) => {
       : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
   }
   const dateAttrs = {
+    class: getClassnamesFromNode(node),
     'data-format': format as string,
     'data-custom': custom ? 'true' : 'false',
     'data-custom-allowed': customAllowed ? 'true' : 'false',
-    class: getClassnamesFromNode(node),
   };
   return renderRdfaAware({
     renderable: node,
@@ -288,7 +288,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
 
     return humanReadableDate;
   },
-  classNames: ['say-date-variable'],
+  classNames: ['say-variable', 'say-date-variable'],
   serialize,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 });

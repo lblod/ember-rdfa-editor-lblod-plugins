@@ -108,10 +108,10 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
+      class: getClassnamesFromNode(node),
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
       'data-initialized': node.attrs.initialized,
-      class: getClassnamesFromNode(node),
     },
     content: 0,
   });
@@ -141,7 +141,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: false,
     },
   },
-  classNames: ['say-autofilled-variable'],
+  classNames: ['say-variable', 'say-autofilled-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

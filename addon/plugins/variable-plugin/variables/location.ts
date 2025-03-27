@@ -123,7 +123,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
   },
-  classNames: ['say-location-variable'],
+  classNames: ['say-variable', 'say-location-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };
