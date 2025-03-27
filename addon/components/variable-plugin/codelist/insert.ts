@@ -11,10 +11,6 @@ import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'reactiveweb/function';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { createCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-codelist-variable';
-import {
-  generateVariableInstanceUri,
-  generateVariableUri,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 export type CodelistInsertOptions = {
   publisher?: string;
@@ -97,10 +93,6 @@ export default class CodelistInsertComponent extends Component<Args> {
     const source = this.endpoint;
     const node = createCodelistVariable({
       schema: this.schema,
-      variable: generateVariableUri(),
-      variableInstance: generateVariableInstanceUri({
-        templateMode: this.args.templateMode,
-      }),
       selectionStyle: this.selectedStyleValue,
       codelist: codelistResource,
       source,

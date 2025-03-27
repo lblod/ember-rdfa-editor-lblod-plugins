@@ -6,10 +6,6 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { createClassicLocationVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-classic-location-variable';
-import {
-  generateVariableInstanceUri,
-  generateVariableUri,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 export type LocationInsertOptions = {
   endpoint: string;
@@ -57,10 +53,6 @@ export default class LocationInsertComponent extends Component<Args> {
 
     const node = createClassicLocationVariable({
       schema: this.schema,
-      variable: generateVariableUri(),
-      variableInstance: generateVariableInstanceUri({
-        templateMode: this.args.templateMode,
-      }),
       label,
       source: this.endpoint,
     });
