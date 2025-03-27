@@ -132,7 +132,7 @@
   }
 }
 
-.say-variable {
+.say-variable:not(.say-pill) {
   color: var(--au-orange-700);
   background-color: var(--au-orange-300);
   font-style: italic;

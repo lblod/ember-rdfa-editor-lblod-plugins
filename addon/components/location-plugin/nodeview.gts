@@ -51,7 +51,7 @@ export default class AddressNodeviewComponent extends Component<Signature> {
 
   <template>
     <AuPill
-      class='{{this.class}} atomic'
+      class='{{this.class}} say-pill atomic'
       ...attributes
       {{on 'click' @selectNode}}
     >
