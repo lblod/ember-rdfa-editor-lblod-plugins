@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 29.0.1
+
+### Patch Changes
+
+- Use the correct predicate for serializing variables
+
 ## 28.2.3
 
 ### Patch Changes
