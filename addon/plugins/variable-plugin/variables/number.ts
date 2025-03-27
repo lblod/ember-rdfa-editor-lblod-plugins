@@ -166,7 +166,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
   const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
+  const value = getOutgoingTriple(node.attrs, RDF('value'))?.object.value;
 
   let humanReadableContent: string;
 
