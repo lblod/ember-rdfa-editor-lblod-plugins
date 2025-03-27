@@ -23,6 +23,7 @@ import type { ComponentLike } from '@glint/template';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 
 const TRANSLATION_FALLBACKS = {
@@ -112,7 +113,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: 'say-variable',
+      class: getClassnamesFromNode(node),
     },
     content: person
       ? generatePersonHtml(person)
@@ -167,6 +168,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
+  classNames: ['say-variable', 'say-person-variable'],
   serialize,
   parseDOM,
 };

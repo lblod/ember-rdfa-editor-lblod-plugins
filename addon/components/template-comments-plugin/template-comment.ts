@@ -3,6 +3,7 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import { CircleInfoIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-info';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 export default class TemplateCommentsPluginTemplateCommentComponent extends Component<EmberNodeArgs> {
   CircleInfoIcon = CircleInfoIcon;
@@ -33,5 +34,8 @@ export default class TemplateCommentsPluginTemplateCommentComponent extends Comp
       selectPos > nodePos &&
       selectPos < nodePos + this.args.node.nodeSize;
     return startSelectionInsideNode;
+  }
+  get class() {
+    return getClassnamesFromNode(this.args.node);
   }
 }

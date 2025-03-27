@@ -48,6 +48,7 @@ import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { NodeContentsUtils } from './node-contents';
 import { recreateVariableUris } from '../variable-plugin/utils/recreate-variable-uris';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
@@ -234,7 +235,7 @@ const serialize =
       tag: 'span',
       content: contentNode,
       attrs: {
-        class: 'say-variable',
+        class: getClassnamesFromNode(node),
       },
     });
   };
@@ -256,6 +257,7 @@ const emberNodeConfig = (config: LocationPluginConfig): EmberNodeConfig => ({
       default: null,
     },
   },
+  classNames: ['say-variable', 'say-oslo-location'],
   serialize: serialize(config),
   parseDOM: parseDOM(config),
 });

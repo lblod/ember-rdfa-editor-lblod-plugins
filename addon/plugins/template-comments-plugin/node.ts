@@ -30,6 +30,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
     isolating: true,
     atom: false,
     attrs: {},
+    classNames: ['say-template-comment'],
     serialize(_, state) {
       const t = getTranslationFunction(state);
       const heading = t('template-comments-plugin.title', 'Toelichting');

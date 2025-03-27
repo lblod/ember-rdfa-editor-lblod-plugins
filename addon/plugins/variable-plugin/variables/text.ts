@@ -29,6 +29,7 @@ import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
 import { createTextVariableAttrs } from '../actions/create-text-variable';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const rdfaAware = true;
 
@@ -135,9 +136,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: {
-      class: 'say-variable',
-    },
+    attrs: { class: getClassnamesFromNode(node) },
     content: 0,
   });
 };
@@ -157,6 +156,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
   },
+  classNames: ['say-variable', 'say-text-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

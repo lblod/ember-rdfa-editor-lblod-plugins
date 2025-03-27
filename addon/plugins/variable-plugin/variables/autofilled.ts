@@ -25,6 +25,7 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
 import { createAutofilledVariableAttrs } from '../actions/create-autofilled-variable';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = '[data-content-container="true"]';
 
@@ -107,7 +108,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: 'say-variable',
+      class: getClassnamesFromNode(node),
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
       'data-initialized': node.attrs.initialized,
@@ -140,6 +141,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: false,
     },
   },
+  classNames: ['say-variable', 'say-autofilled-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

@@ -29,6 +29,7 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { createClassicLocationVariableAttrs } from '../actions/create-classic-location-variable';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = '[data-content-container="true"]';
 
@@ -100,7 +101,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     attrs: {
-      class: 'say-variable',
+      class: getClassnamesFromNode(node),
     },
     tag: 'span',
     content: 0,
@@ -122,6 +123,7 @@ const emberNodeConfig: EmberNodeConfig = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
   },
+  classNames: ['say-variable', 'say-location-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };
