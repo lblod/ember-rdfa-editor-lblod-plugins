@@ -99,7 +99,9 @@ const parseDOMLegacy = [
 const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
-    attrs: {},
+    attrs: {
+      class: 'say-variable',
+    },
     tag: 'span',
     content: 0,
   });

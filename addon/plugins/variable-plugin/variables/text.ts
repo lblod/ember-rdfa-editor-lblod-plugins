@@ -135,7 +135,9 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: {},
+    attrs: {
+      class: 'say-variable',
+    },
     content: 0,
   });
 };

@@ -111,7 +111,9 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: {},
+    attrs: {
+      class: 'say-variable',
+    },
     content: person
       ? generatePersonHtml(person)
       : t(
