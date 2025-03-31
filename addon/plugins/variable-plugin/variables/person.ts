@@ -112,7 +112,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: 'say-variable',
+      class: person ? '' : 'say-variable',
     },
     content: person
       ? generatePersonHtml(person)

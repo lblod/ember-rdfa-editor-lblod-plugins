@@ -379,7 +379,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     tag: 'span',
     content: contentNode,
     attrs: {
-      class: 'say-variable',
+      class: value ? '' : 'say-variable',
     },
   });
 };

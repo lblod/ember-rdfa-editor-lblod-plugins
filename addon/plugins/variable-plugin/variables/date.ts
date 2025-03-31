@@ -230,7 +230,7 @@ const serialize = (node: PNode, state: EditorState) => {
       : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
   }
   const dateAttrs = {
-    class: 'say-variable',
+    class: value ? '' : 'say-variable',
     'data-format': format as string,
     'data-custom': custom ? 'true' : 'false',
     'data-custom-allowed': customAllowed ? 'true' : 'false',

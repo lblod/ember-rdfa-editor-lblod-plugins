@@ -103,11 +103,18 @@ const parseDOMLegacy = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
+  const onlyContentType =
+    node.content.size === 1 && node.content.firstChild?.type;
+  const className =
+    onlyContentType &&
+    onlyContentType === onlyContentType.schema.nodes['placeholder']
+      ? 'say-variable'
+      : '';
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
     attrs: {
-      class: 'say-variable',
+      class: className,
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
       'data-initialized': node.attrs.initialized,
