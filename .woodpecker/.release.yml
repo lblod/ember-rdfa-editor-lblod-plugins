@@ -10,12 +10,15 @@ steps:
       token:
         from_secret: npm_access_token
   push-tagged-build:
-    image: plugins/docker
+    image: woodpeckerci/plugin-docker-buildx
     settings:
       repo: lblod/ember-rdfa-editor-lblod-plugins
       tags: '${CI_COMMIT_TAG##v}'
       purge: true
-    secrets: [docker_username, docker_password]
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
 when:
-  event: tag
-  ref: refs/tags/v*
+  - event: tag
+    ref: refs/tags/v*
