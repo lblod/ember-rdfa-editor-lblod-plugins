@@ -132,10 +132,19 @@ const parseDOMLegacy = [
 ];
 
 const toDOM = (node: PNode): DOMOutputSpec => {
+  const onlyContentType =
+    node.content.size === 1 && node.content.firstChild?.type;
+  const className =
+    onlyContentType &&
+    onlyContentType === onlyContentType.schema.nodes['placeholder']
+      ? 'say-variable'
+      : '';
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
-    attrs: {},
+    attrs: {
+      class: className,
+    },
     content: 0,
   });
 };
