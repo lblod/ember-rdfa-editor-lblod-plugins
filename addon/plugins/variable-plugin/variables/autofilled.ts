@@ -1,7 +1,9 @@
 import {
+  DCT,
   EXT,
   RDF,
   VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -39,21 +41,21 @@ const parseDOM = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        hasRdfaVariableType(attrs, 'autofilled')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'autofilled' &&
+        node.querySelector(CONTENT_SELECTOR)
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
+        const label = node.dataset.label;
         const autofillKey = node.dataset.autofillKey;
         const convertToString = node.dataset.convertToString === 'true';
         const initialized = node.dataset.initialized === 'true';
-        return { ...attrs, autofillKey, convertToString, initialized };
+        return {
+          ...attrs,
+          label,
+          autofillKey,
+          convertToString,
+          initialized,
+        };
       }
       return false;
     },
@@ -62,6 +64,47 @@ const parseDOM = [
 ];
 
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        hasRdfaVariableType(attrs, 'autofilled')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+
+        const autofillKey = node.dataset.autofillKey;
+        const convertToString = node.dataset.convertToString === 'true';
+        const initialized = node.dataset.initialized === 'true';
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+
+        return createAutofilledVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          autofillKey,
+          convertToString,
+          initialized,
+        });
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -115,9 +158,12 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     tag: 'span',
     attrs: {
       class: className,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'autofilled',
       'data-autofill-key': node.attrs.autofillKey,
       'data-convert-to-string': node.attrs.convertToString,
       'data-initialized': node.attrs.initialized,
+      'data-label': node.attrs['label'],
     },
     content: 0,
   });
@@ -137,6 +183,12 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
+    datatype: {
+      default: XSD('string').namedNode,
+    },
     autofillKey: {
       default: '',
     },

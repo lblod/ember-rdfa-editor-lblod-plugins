@@ -17,9 +17,11 @@ import {
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
+  DCT,
   EXT,
   RDF,
   VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
@@ -48,22 +50,17 @@ const parseDOM: TagParseRule[] = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        hasRdfaVariableType(attrs, 'number')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'number'
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
+        const label = node.dataset.label;
         const writtenNumber =
           node.getAttribute('data-written-number') === 'true' ? true : false;
         const minimumValue = node.getAttribute('data-minimum-value');
         const maximumValue = node.getAttribute('data-maximum-value');
         return {
           ...attrs,
+          label,
           writtenNumber,
           minimumValue,
           maximumValue,
@@ -77,18 +74,26 @@ const parseDOM: TagParseRule[] = [
 const parseDOMLegacy: TagParseRule[] = [
   {
     tag: 'span',
-    getAttrs(node: HTMLElement) {
+    getAttrs: (node: HTMLElement) => {
       const attrs = getRdfaAttrs(node, { rdfaAware });
-      if (!attrs) {
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
         hasRdfaVariableType(attrs, 'number')
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
           return false;
         }
+        const value = getOutgoingTriple(attrs, RDF('value'))?.object.value;
         const writtenNumber =
           node.getAttribute('data-written-number') === 'true' ? true : false;
         const minimumValue = node.dataset.minimumValue
@@ -97,6 +102,31 @@ const parseDOMLegacy: TagParseRule[] = [
         const maximumValue = node.dataset.maximumValue
           ? parseInt(node.dataset.maximumValue)
           : undefined;
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+        return createNumberVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          value,
+          label,
+          writtenNumber,
+          minimumValue,
+          maximumValue,
+        });
+      }
+      return false;
+    },
+  },
+  {
+    tag: 'span',
+    getAttrs(node: HTMLElement) {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(attrs, RDF('type'), EXT('Mapping')) &&
+        hasRdfaVariableType(attrs, 'number')
+      ) {
         const variableUri = attrs.subject;
         if (!variableUri) {
           return false;
@@ -104,8 +134,19 @@ const parseDOMLegacy: TagParseRule[] = [
         const variableInstanceUri =
           getOutgoingTriple(attrs, EXT('instance'))?.object.value ??
           generateVariableInstanceUri();
-        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+
         const value = getOutgoingTriple(attrs, EXT('value'))?.object.value;
+        const writtenNumber =
+          node.getAttribute('data-written-number') === 'true' ? true : false;
+        const minimumValue = node.dataset.minimumValue
+          ? parseInt(node.dataset.minimumValue)
+          : undefined;
+        const maximumValue = node.dataset.maximumValue
+          ? parseInt(node.dataset.maximumValue)
+          : undefined;
+
+        const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
+
         return createNumberVariableAttrs({
           variableInstance: variableInstanceUri,
           variable: variableUri,
@@ -165,16 +206,15 @@ const parseDOMLegacy: TagParseRule[] = [
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
-  const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getOutgoingTriple(node.attrs, RDF('value'))?.object.value;
+  const { writtenNumber, content, minimumValue, maximumValue } = node.attrs;
 
   let humanReadableContent: string;
 
-  if (isNumber(value)) {
+  if (isNumber(content)) {
     if (writtenNumber) {
-      humanReadableContent = numberToWords(Number(value), { lang: docLang });
+      humanReadableContent = numberToWords(Number(content), { lang: docLang });
     } else {
-      humanReadableContent = value as string;
+      humanReadableContent = content as string;
     }
   } else {
     humanReadableContent = t('variable.number.placeholder', 'Voeg getal in');
@@ -184,10 +224,13 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: value ? '' : 'say-variable',
+      class: content ? '' : 'say-variable',
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'number',
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
+      'data-label': node.attrs['label'],
     },
     content: humanReadableContent.toString(),
   });
@@ -207,9 +250,15 @@ const emberNodeConfig: EmberNodeConfig = {
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
     writtenNumber: { default: false },
     minimumValue: { default: null },
     maximumValue: { default: null },
+    datatype: {
+      default: XSD('decimal').namedNode,
+    },
   },
   leafText: (node: PNode) => {
     const { value } = node.attrs;

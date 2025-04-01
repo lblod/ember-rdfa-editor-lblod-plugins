@@ -4,6 +4,7 @@ import {
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
+  DCT,
   EXT,
   RDF,
   VARIABLES,
@@ -28,12 +29,13 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import type { ComponentLike } from '@glint/template';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { formatDate, validateDateFormat } from '../utils/date-helpers';
-import DateNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/nodeview';
 import {
-  RdfaAttrs,
-  renderRdfaAware,
-} from '@lblod/ember-rdfa-editor/core/schema';
+  formatContainsTime,
+  formatDate,
+  validateDateFormat,
+} from '../utils/date-helpers';
+import DateNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/nodeview';
+import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import {
   generateVariableInstanceUri,
@@ -68,23 +70,15 @@ const parseDOM = [
       if (!attrs) {
         return false;
       }
-      if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        hasRdfaVariableType(attrs, 'date')
-      ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
+      if (node.dataset.sayVariable && node.dataset.sayVariableType === 'date') {
+        const label = node.dataset.label;
         const format = node.dataset.format;
         const custom = node.dataset.custom === 'true';
         const customAllowed = node.dataset.customAllowed !== 'false';
 
         return {
           ...attrs,
+          label,
           format,
           custom,
           customAllowed,
@@ -94,7 +88,49 @@ const parseDOM = [
     },
   },
 ];
+
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        hasRdfaVariableType(attrs, 'date')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+        const value = getOutgoingTriple(attrs, RDF('value'))?.object.value;
+
+        const format = node.dataset.format;
+        const custom = node.dataset.custom === 'true';
+        const customAllowed = node.dataset.customAllowed !== 'false';
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+
+        return createDateVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          value,
+          label,
+          format,
+          custom,
+          customAllowed,
+        });
+      }
+      return false;
+    },
+  },
   {
     tag: 'span',
     getAttrs(node: HTMLElement) {
@@ -125,7 +161,6 @@ const parseDOMLegacy = [
           variableInstance: variableInstanceUri,
           label,
           value,
-          onlyDate: true,
           format,
           custom,
           customAllowed,
@@ -147,7 +182,6 @@ const parseDOMLegacy = [
         hasRDFaAttribute(node, 'datatype', XSD('date')) ||
         hasRDFaAttribute(node, 'datatype', XSD('dateTime'))
       ) {
-        const onlyDate = hasRDFaAttribute(node, 'datatype', XSD('date'));
         const content = node.getAttribute('content') ?? undefined;
         return createDateVariableAttrs({
           variable: generateVariableUri(),
@@ -155,7 +189,6 @@ const parseDOMLegacy = [
           format: node.dataset.format,
           custom: node.dataset.custom === 'true',
           customAllowed: node.dataset.customAllowed !== 'false',
-          onlyDate,
           value: content,
         });
       }
@@ -182,9 +215,6 @@ const parseDOMLegacy = [
         if (!variableUri) {
           return false;
         }
-        const onlyDate = !![...node.children].find((el) =>
-          hasRDFaAttribute(el, 'datatype', XSD('date')),
-        );
         const dateNode = [...node.children].find((el) =>
           hasRDFaAttribute(el, 'property', EXT('content')),
         ) as HTMLElement | undefined;
@@ -197,7 +227,6 @@ const parseDOMLegacy = [
           format,
           custom: node.dataset.custom === 'true',
           customAllowed: node.dataset.customAllowed !== 'false',
-          onlyDate,
           value,
           label,
         });
@@ -210,14 +239,11 @@ const parseDOMLegacy = [
 
 const serialize = (node: PNode, state: EditorState) => {
   const t = getTranslationFunction(state);
-  const value = getOutgoingTriple(node.attrs, RDF('value'))?.object.value;
-  // TODO Could remove the custom 'onlyDate' attr and instead use the datatype of the outgoing
-  // content triple.
-  const { onlyDate, format, custom, customAllowed } = node.attrs;
+  const { format, custom, customAllowed, content } = node.attrs;
   let humanReadableDate: string;
-  if (value) {
+  if (content) {
     if (validateDateFormat(format).type === 'ok') {
-      humanReadableDate = formatDate(new Date(value), format);
+      humanReadableDate = formatDate(new Date(content), format);
     } else {
       humanReadableDate = t(
         'date-plugin.validation.unknown',
@@ -225,15 +251,18 @@ const serialize = (node: PNode, state: EditorState) => {
       );
     }
   } else {
-    humanReadableDate = (onlyDate as boolean)
+    humanReadableDate = !formatContainsTime(format)
       ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
       : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
   }
   const dateAttrs = {
-    class: value ? '' : 'say-variable',
+    class: content ? '' : 'say-variable',
+    'data-say-variable': 'true',
+    'data-say-variable-type': 'date',
     'data-format': format as string,
     'data-custom': custom ? 'true' : 'false',
     'data-custom-allowed': customAllowed ? 'true' : 'false',
+    'data-label': node.attrs['label'],
   };
   return renderRdfaAware({
     renderable: node,
@@ -256,6 +285,10 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   defining: false,
   options,
   attrs: {
+    ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
     format: {
       default: options.formats[0].dateFormat,
     },
@@ -268,22 +301,23 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
     customAllowed: {
       default: options.allowCustomFormat,
     },
-    ...rdfaAttrSpec({ rdfaAware }),
+    datatype: {
+      default: !formatContainsTime(options.formats[0].dateFormat)
+        ? XSD('date').namedNode
+        : XSD('dateTime').namedNode,
+    },
   },
   outlineText: (node: PNode, state: EditorState) => {
     const t = getTranslationFunction(state);
-    const value = getOutgoingTriple(node.attrs as RdfaAttrs, RDF('value'))
-      ?.object.value;
-    const { onlyDate, format } = node.attrs;
+    const { format, content } = node.attrs;
 
-    const humanReadableDate = value
-      ? formatDate(new Date(value), format)
-      : onlyDate
-        ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
-        : t(
-            'date-plugin.insert.datetime',
-            TRANSLATION_FALLBACKS.insertDateTime,
-          );
+    const placeholder = !formatContainsTime(format)
+      ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
+      : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
+
+    const humanReadableDate = content
+      ? formatDate(new Date(content), format)
+      : placeholder;
 
     return humanReadableDate;
   },

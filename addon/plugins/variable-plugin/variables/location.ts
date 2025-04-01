@@ -1,7 +1,9 @@
 import {
+  DCT,
   EXT,
   RDF,
   VARIABLES,
+  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -25,10 +27,13 @@ import {
 import NodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/variable/nodeview';
 import type { ComponentLike } from '@glint/template';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { createClassicLocationVariableAttrs } from '../actions/create-classic-location-variable';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
 const CONTENT_SELECTOR = '[data-content-container="true"]';
 
@@ -46,18 +51,13 @@ const parseDOM = [
         return false;
       }
       if (
-        hasOutgoingNamedNodeTriple(
-          attrs,
-          RDF('type'),
-          VARIABLES('VariableInstance'),
-        ) &&
-        node.querySelector(CONTENT_SELECTOR) &&
-        hasRdfaVariableType(attrs, 'location')
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'location' &&
+        node.querySelector(CONTENT_SELECTOR)
       ) {
-        if (attrs.rdfaNodeType !== 'resource') {
-          return false;
-        }
-        return attrs;
+        const label = node.dataset.label;
+        const source = node.dataset.source;
+        return { ...attrs, label, source };
       }
       return false;
     },
@@ -66,6 +66,44 @@ const parseDOM = [
 ];
 
 const parseDOMLegacy = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs || attrs.rdfaNodeType !== 'resource') {
+        return false;
+      }
+
+      if (
+        hasOutgoingNamedNodeTriple(
+          attrs,
+          RDF('type'),
+          VARIABLES('VariableInstance'),
+        ) &&
+        node.querySelector(CONTENT_SELECTOR) &&
+        hasRdfaVariableType(attrs, 'location')
+      ) {
+        const variableInstanceUri = attrs.subject;
+        const variableUri = getOutgoingTriple(attrs, VARIABLES('instanceOf'))
+          ?.object.value;
+        if (!variableInstanceUri || !variableUri) {
+          return false;
+        }
+
+        const sourceUri = getOutgoingTriple(attrs, DCT('source'))?.object.value;
+        const label = getOutgoingTriple(attrs, DCT('title'))?.object.value;
+
+        return createClassicLocationVariableAttrs({
+          variable: variableUri,
+          variableInstance: variableInstanceUri,
+          label,
+          source: sourceUri,
+        });
+      }
+      return false;
+    },
+    contentElement: CONTENT_SELECTOR,
+  },
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -104,10 +142,15 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     onlyContentType === onlyContentType.schema.nodes['placeholder']
       ? 'say-variable'
       : '';
+  const { label, source } = node.attrs;
   return renderRdfaAware({
     renderable: node,
     attrs: {
       class: className,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'location',
+      'data-label': label,
+      'data-source': source,
     },
     tag: 'span',
     content: 0,
@@ -128,6 +171,13 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+    label: {
+      default: null,
+    },
+    source: {},
+    datatype: {
+      default: XSD('string').namedNode,
+    },
   },
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
