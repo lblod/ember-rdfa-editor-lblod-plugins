@@ -233,6 +233,9 @@ const serialize =
       renderable: node,
       tag: 'span',
       content: contentNode,
+      attrs: {
+        class: value ? '' : 'say-variable',
+      },
     });
   };
 

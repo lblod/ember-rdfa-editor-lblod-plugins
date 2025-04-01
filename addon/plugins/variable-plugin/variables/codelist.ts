@@ -152,10 +152,18 @@ const parseDOMLegacy = [
 
 const toDOM = (node: PNode): DOMOutputSpec => {
   const { selectionStyle } = node.attrs;
+  const onlyContentType =
+    node.content.size === 1 && node.content.firstChild?.type;
+  const className =
+    onlyContentType &&
+    onlyContentType === onlyContentType.schema.nodes['placeholder']
+      ? 'say-variable'
+      : '';
 
   return renderRdfaAware({
     renderable: node,
     attrs: {
+      class: className,
       'data-selection-style': selectionStyle as string,
     },
     tag: 'span',

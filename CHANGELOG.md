@@ -1,5 +1,31 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 29.0.1
+
+### Patch Changes
+
+- Use the correct predicate for serializing variables
+
+## 28.2.3
+
+### Patch Changes
+
+- [#558](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/558) [`83e7e3f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/83e7e3f35ac79ccd86dfa3c172d0ae777470499a) Thanks [@abeforgit](https://github.com/abeforgit)! - Use the correct predicate for serializing variables
+
+## 29.0.0
+
+### Major Changes
+
+- [#554](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/554) [`91e5c25`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/91e5c2540fb66aa4a8356a0e3977ff7ab7655440) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete `webpack-config.js`. This config is solely needed for the tests, and is now inlined in the `ember-cli-build` file of the test-app
+
+### Patch Changes
+
+- [#556](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/556) [`aa0c182`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/aa0c1824811712fa6052f5962a2b8473d0bab7a4) Thanks [@piemonkey](https://github.com/piemonkey)! - Bundle location plugin marker icons to avoid issues when bundling the code for embeddable
+
+- [`867ca46`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/867ca46b680b2fdc8c5c41481a839f43968ebfd5) Thanks [@abeforgit](https://github.com/abeforgit)! - Always render a period after structure names, it should never be a colon
+
+- [#554](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/554) [`bc1a294`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/bc1a29474c4fd09367bfc08c8e97439cbba27198) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `ember-template-imports` to version 4.3.0 . This version unlocks `.gts`/`.gjs` sourcemaps.
+
 ## 28.2.2
 
 ### Patch Changes
