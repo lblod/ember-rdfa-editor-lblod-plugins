@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 29.1.0
+
+### Minor Changes
+
+- [#559](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/559) [`34a85e1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/34a85e14cf9ba4b4996e49c476a775afbe3ab6ac) Thanks [@piemonkey](https://github.com/piemonkey)! - Add style to highlight variables in serialized HTML
+
+- [#555](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/555) [`da5057a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/da5057ae7cc279c4b3214fd49370e82325ccd9de) Thanks [@elpoelma](https://github.com/elpoelma)! - `roadsign_regulation` node: introduce parse-rule which converts classic `roadsign_regulation` nodes to `block_rdfa` nodes
+
+### Patch Changes
+
+- [#557](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/557) [`710302b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/710302bf659028ae8c0e0cb665a5b414dd9f5b17) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Solves bug with powerselect dropdown not displaying in place
+
 ## 29.0.1
 
 ### Patch Changes
