@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 29.1.1
+
+### Patch Changes
+
+- [#562](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/562) [`fc24ae5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/fc24ae53b956a69d6df861427d085da209756a00) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete `fetch-sparql-endpoint` dependency. This dependency requires node.js polyfills, which we are no longer providing with this package. This caused an issue in some applications using the `besluit-type` plugin.
+
 ## 29.1.0
 
 ### Minor Changes
