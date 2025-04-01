@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "29.1.0",
+  "version": "29.1.1",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -76,7 +76,6 @@
     "ember-resources": "^7.0.2",
     "ember-template-imports": "^4.3.0",
     "ember-velcro": "^2.2.0",
-    "fetch-sparql-endpoint": "^3.3.3",
     "n2words": "^1.21.0",
     "process": "0.11.10",
     "proj4": "^2.11.0",

@@ -86,9 +86,6 @@ importers:
       ember-velcro:
         specifier: ^2.2.0
         version: 2.2.0(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1)))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))
-      fetch-sparql-endpoint:
-        specifier: ^3.3.3
-        version: 3.3.3
       n2words:
         specifier: ^1.21.0
         version: 1.21.0
@@ -2304,9 +2301,6 @@ packages:
 
   '@types/sinonjs__fake-timers@8.1.5':
     resolution: {integrity: sha512-mQkU2jY8jJEF7YHjHvsQO8+3ughTL1mcnn96igfhONmR+fUPSKIkefQYpSe8bsly2Ep7oQbn/6VG5/9/0qcArQ==}
-
-  '@types/sparqljs@3.1.10':
-    resolution: {integrity: sha512-rqMpUhl/d8B+vaACa6ZVdwPQ1JXw+KxiCc0cndgn/V6moRG3WjUAgoBnhSwfKtXD98wgMThDsc6R1+yRUuMsAg==}
 
   '@types/supports-color@8.1.3':
     resolution: {integrity: sha512-Hy6UMpxhE3j1tLpl27exp1XqHD7n8chAiNPzWfz16LPZoMMoSc4dzLl6w9qijkEb/r5O1ozdu1CWGA2L83ZeZg==}
@@ -5020,10 +5014,6 @@ packages:
     resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
     engines: {node: ^12.20 || >= 14.13}
 
-  fetch-sparql-endpoint@3.3.3:
-    resolution: {integrity: sha512-5ZNesFhFMcsEiSaCyg36L5VU7YP7xMJogc5i0n00nFNFZzrfGJ4Cm8LGrzXI6eySkb7QmaRyNWJGk5btAOjniA==}
-    hasBin: true
-
   figgy-pudding@3.5.2:
     resolution: {integrity: sha512-0btnI/H8f2pavGMN8w40mlSKOfTK2SVJmBfBeVIj3kNw0swwgzyRq0d5TJVOwodFmtvpPeWPN/MCcfuWF0Ezbw==}
     deprecated: This module is no longer supported.
@@ -7538,9 +7528,6 @@ packages:
     resolution: {integrity: sha512-3npG2NGhTc8BWBolLLf8l/92OxMGaRLbqvIh9wjCHhDXNvk4zsxaTaCpiCunW09qWPrN2zeNSNwRLVBrQQtutA==}
     engines: {node: 10.* || >= 12.*}
 
-  promise-polyfill@1.1.6:
-    resolution: {integrity: sha512-7rrONfyLkDEc7OJ5QBkqa4KI4EBhCd340xRuIUPGCfu13znS+vx+VDdrT9ODAJHlXm7w4lbxN3DRjyv58EuzDg==}
-
   promise.allsettled@1.0.7:
     resolution: {integrity: sha512-hezvKvQQmsFkOdrZfYxUxkyxl8mgFQeT259Ajj9PXdbg9VzBCWrItOev72JyWxkCD5VSSqAeHmlN3tWx4DlmsA==}
     engines: {node: '>= 0.4'}
@@ -7726,9 +7713,6 @@ packages:
   rdf-literal@1.3.2:
     resolution: {integrity: sha512-79Stlu3sXy0kq9/decHFLf3xNPuY6sfhFPhd/diWErgaFr0Ekyg38Vh9bnVcqDYu48CFRi0t+hrFii49n92Hbw==}
 
-  rdf-string@1.6.3:
-    resolution: {integrity: sha512-HIVwQ2gOqf+ObsCLSUAGFZMIl3rh9uGcRf1KbM85UDhKqP+hy6qj7Vz8FKt3GA54RiThqK3mNcr66dm1LP0+6g==}
-
   rdf-validate-datatype@0.1.5:
     resolution: {integrity: sha512-gU+cD+AT1LpFwbemuEmTDjwLyFwJDiw21XHyIofKhFnEpXODjShBuxhgDGnZqW3qIEwu/vECjOecuD60e5ngiQ==}
     engines: {node: '>=10.4'}
@@ -7789,10 +7773,6 @@ packages:
   readable-stream@4.5.2:
     resolution: {integrity: sha512-yjavECdqeZ3GLXNgRXgeQEdz9fvDDkNKyHnbHRFtOr7/LcfgBcmct7t/ET+HaCTqfh06OzoAxrkN/IfjJBVe+g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  readable-web-to-node-stream@3.0.2:
-    resolution: {integrity: sha512-ePeK6cc1EcKLEhJFt/AebMCLL+GgSKhuygrZ/GLaKZYEecIgIECf4UaUuaByiGtzckwR4ain9VzUh95T1exYGw==}
-    engines: {node: '>=8'}
 
   readdirp@2.2.1:
     resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==}
@@ -8372,17 +8352,6 @@ packages:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
 
-  sparqljs@3.7.1:
-    resolution: {integrity: sha512-I1jYMtcwDkgCEqQ4eQuQIhB8hFAlRAJ6YDXDcV54XztaJaYRFqJlidHt77S3j8Mfh6kY6GK04dXPEIopxbEeuQ==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    hasBin: true
-
-  sparqljson-parse@2.2.0:
-    resolution: {integrity: sha512-2TfvNvUsaJyWfCrq3ExdDdbF9LBLzIUCricg+D1YCYbbmyTzscgCtRk4KcIyJF178DtfCt4BkKzbKl8IXMHp8w==}
-
-  sparqlxml-parse@2.1.1:
-    resolution: {integrity: sha512-71sltShF6gDAzuKWEHNeij7r0Mv5VqRrvJing6W4WHJ12GRe6+t1IRTv6MeqxYN3XJmKevs7B3HCBUo7wceeJQ==}
-
   spawn-args@0.2.0:
     resolution: {integrity: sha512-73BoniQDcRWgnLAf/suKH6V5H54gd1KLzwYN9FB6J/evqTV33htH9xwV/4BHek+++jzxpVlZQKKZkqstPQPmQg==}
 
@@ -8450,9 +8419,6 @@ packages:
 
   stream-shift@1.0.3:
     resolution: {integrity: sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==}
-
-  stream-to-string@1.2.1:
-    resolution: {integrity: sha512-WsvTDNF8UYs369Yko3pcdTducQtYpzEZeOV7cTuReyFvOoA9S/DLJ6sYK+xPafSPHhUMpaxiljKYnT6JSFztIA==}
 
   string-template@0.2.1:
     resolution: {integrity: sha512-Yptehjogou2xm4UJbxJ4CxgZx12HBfeystp0y3x7s4Dj32ltVVG1Gg8YhKjHZkHicuKpZX/ffilA8505VbUbpw==}
@@ -12950,10 +12916,6 @@ snapshots:
 
   '@types/sinonjs__fake-timers@8.1.5': {}
 
-  '@types/sparqljs@3.1.10':
-    dependencies:
-      '@rdfjs/types': 1.1.0
-
   '@types/supports-color@8.1.3': {}
 
   '@types/symlink-or-copy@1.2.2': {}
@@ -17089,25 +17051,6 @@ snapshots:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
 
-  fetch-sparql-endpoint@3.3.3:
-    dependencies:
-      '@rdfjs/types': 1.1.0
-      '@types/readable-stream': 2.3.15
-      '@types/sparqljs': 3.1.10
-      abort-controller: 3.0.0
-      cross-fetch: 3.1.8
-      is-stream: 2.0.1
-      minimist: 1.2.8
-      n3: 1.17.4
-      rdf-string: 1.6.3
-      readable-web-to-node-stream: 3.0.2
-      sparqljs: 3.7.1
-      sparqljson-parse: 2.2.0
-      sparqlxml-parse: 2.1.1
-      stream-to-string: 1.2.1
-    transitivePeerDependencies:
-      - encoding
-
   figgy-pudding@3.5.2: {}
 
   figures@2.0.0:
@@ -19807,8 +19750,6 @@ snapshots:
 
   promise-map-series@0.3.0: {}
 
-  promise-polyfill@1.1.6: {}
-
   promise.allsettled@1.0.7:
     dependencies:
       array.prototype.map: 1.0.7
@@ -20096,11 +20037,6 @@ snapshots:
       '@rdfjs/types': 1.1.0
       rdf-data-factory: 1.1.2
 
-  rdf-string@1.6.3:
-    dependencies:
-      '@rdfjs/types': 1.1.0
-      rdf-data-factory: 1.1.2
-
   rdf-validate-datatype@0.1.5:
     dependencies:
       '@rdfjs/namespace': 1.1.0
@@ -20225,10 +20161,6 @@ snapshots:
       events: 3.3.0
       process: 0.11.10
       string_decoder: 1.3.0
-
-  readable-web-to-node-stream@3.0.2:
-    dependencies:
-      readable-stream: 3.6.2
 
   readdirp@2.2.1:
     dependencies:
@@ -20905,27 +20837,6 @@ snapshots:
 
   sourcemap-codec@1.4.8: {}
 
-  sparqljs@3.7.1:
-    dependencies:
-      rdf-data-factory: 1.1.2
-
-  sparqljson-parse@2.2.0:
-    dependencies:
-      '@bergos/jsonparse': 1.4.1
-      '@rdfjs/types': 1.1.0
-      '@types/readable-stream': 2.3.15
-      rdf-data-factory: 1.1.2
-      readable-stream: 4.5.2
-
-  sparqlxml-parse@2.1.1:
-    dependencies:
-      '@rdfjs/types': 1.1.0
-      '@rubensworks/saxes': 6.0.1
-      '@types/readable-stream': 2.3.15
-      buffer: 6.0.3
-      rdf-data-factory: 1.1.2
-      readable-stream: 4.5.2
-
   spawn-args@0.2.0: {}
 
   spawn-command@0.0.2: {}
@@ -21001,10 +20912,6 @@ snapshots:
       xtend: 4.0.2
 
   stream-shift@1.0.3: {}
-
-  stream-to-string@1.2.1:
-    dependencies:
-      promise-polyfill: 1.1.6
 
   string-template@0.2.1: {}
 
