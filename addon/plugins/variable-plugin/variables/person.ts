@@ -131,27 +131,27 @@ const parseDOMLegacy = [
 ];
 
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
+  const { subject } = node.attrs;
   const t = getTranslationFunction(state);
   const firstName = getOutgoingTriple(node.attrs, FOAF('givenName'))?.object
     .value;
   const lastName = getOutgoingTriple(node.attrs, FOAF('familyName'))?.object
     .value;
-  const fullName = [firstName, lastName].filter(Boolean).join(' ');
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
     attrs: {
-      class: fullName ? '' : 'say-variable',
+      class: subject ? '' : 'say-variable',
       'data-say-variable': 'true',
       'data-say-variable-type': 'person',
       'data-label': node.attrs['label'],
     },
-    content:
-      fullName ??
-      t(
-        'variable-plugin.person.nodeview-placeholder',
-        TRANSLATION_FALLBACKS.nodeview_placeholder,
-      ),
+    content: subject
+      ? [firstName, lastName].filter(Boolean).join(' ')
+      : t(
+          'variable-plugin.person.nodeview-placeholder',
+          TRANSLATION_FALLBACKS.nodeview_placeholder,
+        ),
   });
 };
 
