@@ -206,16 +206,15 @@ const parseDOMLegacy: TagParseRule[] = [
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
-  const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getOutgoingTriple(node.attrs, RDF('value'))?.object.value;
+  const { writtenNumber, content, minimumValue, maximumValue } = node.attrs;
 
   let humanReadableContent: string;
 
-  if (isNumber(value)) {
+  if (isNumber(content)) {
     if (writtenNumber) {
-      humanReadableContent = numberToWords(Number(value), { lang: docLang });
+      humanReadableContent = numberToWords(Number(content), { lang: docLang });
     } else {
-      humanReadableContent = value as string;
+      humanReadableContent = content as string;
     }
   } else {
     humanReadableContent = t('variable.number.placeholder', 'Voeg getal in');
@@ -225,7 +224,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: value ? '' : 'say-variable',
+      class: content ? '' : 'say-variable',
       'data-say-variable': 'true',
       'data-say-variable-type': 'number',
       'data-written-number': String(writtenNumber ?? false),
