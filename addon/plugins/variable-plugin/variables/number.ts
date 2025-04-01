@@ -166,7 +166,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   const t = getTranslationFunction(state);
   const docLang = state.doc.attrs.lang as string;
   const { writtenNumber, minimumValue, maximumValue } = node.attrs;
-  const value = getOutgoingTriple(node.attrs, EXT('content'))?.object.value;
+  const value = getOutgoingTriple(node.attrs, RDF('value'))?.object.value;
 
   let humanReadableContent: string;
 
@@ -184,6 +184,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
+      class: value ? '' : 'say-variable',
       'data-written-number': String(writtenNumber ?? false),
       'data-minimum-value': (minimumValue as string) ?? null,
       'data-maximum-value': (maximumValue as string) ?? null,
