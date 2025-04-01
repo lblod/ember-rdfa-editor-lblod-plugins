@@ -1,4 +1,5 @@
-import { IBindings, SparqlEndpointFetcher } from 'fetch-sparql-endpoint';
+import { executeQuery } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
+import { Term } from '@rdfjs/types';
 
 export type BesluitType = {
   uri: string;
@@ -47,28 +48,16 @@ export default async function fetchBesluitTypes(
       }
     }
   `;
-  const typeFetcher = new SparqlEndpointFetcher({
-    method: 'POST',
-  });
-  const bindingStream = await typeFetcher.fetchBindings(endpoint, query);
-  const validBesluitTriples: IBindings[] = [];
-  bindingStream.on('data', (triple: IBindings) => {
-    validBesluitTriples.push(triple);
-  });
-  return new Promise<IBindings[]>((resolve, reject) => {
-    bindingStream.on('error', reject);
-    bindingStream.on('end', () => {
-      resolve(validBesluitTriples);
-    });
-  }).then(quadsToBesluitTypeObjects);
+  const bindings = (await executeQuery({ query, endpoint })).results.bindings;
+  return bindingsToBesluitTypeObjects(bindings);
 }
 
-function quadsToBesluitTypeObjects(triples: IBindings[]) {
+function bindingsToBesluitTypeObjects(bindings: Record<string, Term>[]) {
   const besluitTypes = new Map<string, BesluitType>();
-  triples.forEach((triple) => {
-    const subject = triple['s'];
-    const predicate = triple['p'];
-    const object = triple['o'];
+  bindings.forEach((binding) => {
+    const subject = binding['s'];
+    const predicate = binding['p'];
+    const object = binding['o'];
     const existing =
       besluitTypes.get(subject.value) ||
       ({
