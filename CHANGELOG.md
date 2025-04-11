@@ -1,5 +1,81 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 30.0.0
+
+### Major Changes
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `text` variable to smart variable system
+
+  - Fully rdfa-aware
+  - Literal node
+  - `xsd:string` datatype
+  - May optionally contain MOW-variable information in external-triples, but is decoupled from this info and does not depend on it
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `number` variable to smart variable system
+
+  - Fully rdfa-aware
+  - Literal node
+  - `xsd:decimal` datatype
+  - May optionally contain MOW-variable information in external-triples, but is decoupled from this info and does not depend on it
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `date` variable to smart variable system
+
+  - Fully rdfa-aware
+  - Literal node
+  - `xsd:date` or `xsd:dateTime` datatype
+  - May optionally contain MOW-variable information in external-triples, but is decoupled from this info and does not depend on it
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `autofilled` variable to smart variable system
+
+  - Fully rdfa-aware
+  - Literal node
+  - `xsd:string` datatype
+  - May optionally contain MOW-variable information in external-triples, but is decoupled from this info and does not depend on it
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `location` (classic) variable to smart variable system
+
+  - Fully rdfa-aware
+  - Literal node
+  - `xsd:string` datatype
+  - May optionally contain MOW-variable information in external-triples, but is decoupled from this info and does not depend on it
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `codelist` variable to smart variable system
+
+  - Fully rdfa-aware
+  - Literal node
+  - `xsd:string` datatype
+  - May optionally contain MOW-variable information in external-triples, but is decoupled from this info and does not depend on it
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `person` variable to smart variable system
+
+  - Resource node
+  - Is not configured to be able to contain MOW-variable information (but this would not be hard to add, due to it's decoupled nature)
+  - If empty, contains a placeholder subject. Subject changes every time the person contained changes. Backlinks and external triples are kept when person contained changes, properties are not.
+  - Fully rdfa-aware
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Convert `oslo_location` variable to smart variable system
+
+  - Resource node
+  - Is not configured to be able to contain MOW-variable information (but this would not be hard to add, due to it's decoupled nature)
+  - May not be empty
+  - Subject changes every time the person contained changes. Backlinks and external triples are kept when location contained changes, properties are not.
+  - Partially rdfa-aware: backlinks and external-triples, but properties are ignored (this variable uses it's own value attribute which overrides the properties)
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`66b37d1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/66b37d1d044d1e3d9cac6bfc1667627e14d1ebc4) Thanks [@elpoelma](https://github.com/elpoelma)! - Update `@lblod/ember-rdfa-editor` peerdependency to version 12.1.0
+
+### Minor Changes
+
+- [#550](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/550) [`246039b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/246039b84a7e619dcb534175aec845d606d3709e) Thanks [@elpoelma](https://github.com/elpoelma)! - Introduce 'smart variable' system:
+  - Decoupled from the MOW variable namespace
+  - Mostly literal nodes
+  - Supports multiple backlinks and external triples
+
+### Patch Changes
+
+- [#563](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/563) [`4ca46ea`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4ca46ea39b10dedc794770fcf202fb89b6e0a16e) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Improve the title of the structure card
+
+- [`ef03e44`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ef03e4417126d169c61ece7e55243caa54f35ff1) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete `fetch-sparql-endpoint` dependency. This dependency requires node.js polyfills, which we are no longer providing with this package. This caused an issue in some applications using the `besluit-type` plugin.
+
 ## 29.1.1
 
 ### Patch Changes
