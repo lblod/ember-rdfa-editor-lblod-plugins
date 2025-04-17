@@ -290,7 +290,7 @@ export default class BesluitSampleController extends Controller {
       },
       lpdc: {
         // Needs to be exposed locally without authentication as otherwise calls fail
-        endpoint: 'http://localhost/lpdc-service',
+        endpoint: 'http://localhost/lpdc-service/doc/instantie',
       },
       location: {
         defaultPointUriRoot:

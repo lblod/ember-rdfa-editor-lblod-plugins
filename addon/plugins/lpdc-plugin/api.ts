@@ -60,7 +60,7 @@ export const fetchLpdcs = async ({
     };
   };
 }> => {
-  const endpoint = `${config?.endpoint}/doc/instantie`;
+  const endpoint = `${config?.endpoint}`;
 
   const url = endpoint.startsWith('/')
     ? new URL(endpoint, window.location.origin)
