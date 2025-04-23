@@ -45,6 +45,8 @@ import {
 
 const rdfaAware = true;
 
+const PARAGRAPH_SYMBOL = '§';
+
 export function getNameForStructureType(
   structureType: StructureType,
   number: number,
@@ -102,7 +104,7 @@ function buildTocEntry(node: PNode, state: EditorState) {
       return `${structureName}${titleString}`;
     }
   } else if (headerFormat === 'section-symbol') {
-    const structureName = '§';
+    const structureName = PARAGRAPH_SYMBOL;
     return `${structureName}${numberString}${titleString}`;
   } else {
     return `${numberString}${titleString}`;
@@ -209,6 +211,7 @@ export const emberNodeConfig: (
                 ],
               ]
             : []),
+          headerFormat === 'section-symbol' ? PARAGRAPH_SYMBOL : '',
           [
             'span',
             {
@@ -235,6 +238,7 @@ export const emberNodeConfig: (
                 ],
               ]
             : []),
+          headerFormat === 'section-symbol' ? PARAGRAPH_SYMBOL : '',
           [
             'span',
             {
