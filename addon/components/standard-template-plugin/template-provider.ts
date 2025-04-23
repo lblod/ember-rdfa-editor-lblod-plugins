@@ -13,6 +13,7 @@ import {
   hasOutgoingNamedNodeTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import templateUuidInstantiator from '@lblod/template-uuid-instantiator';
 
 type Args = {
   controller: SayController;
@@ -120,7 +121,10 @@ export default class TemplateProviderComponent extends Component<Args> {
     }
     this.controller.doCommand(
       insertHtml(
-        instantiateUuids(template.body),
+        // TODO: we run both UUID regenerators for safety, but we should
+        // deprecate and remove the instantiateUuids function after we check
+        // there are no more templates that use that syntax.
+        instantiateUuids(templateUuidInstantiator(template.body)),
         insertRange.from,
         insertRange.to,
         undefined,
