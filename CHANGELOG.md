@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.0.2
+
+### Patch Changes
+
+- [`ba86e30`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ba86e302023cba073eece24ce378de7d2ee6decf) Thanks [@abeforgit](https://github.com/abeforgit)! - CI: fix the docker settings
+
 ## 31.0.1
 
 ### Patch Changes
