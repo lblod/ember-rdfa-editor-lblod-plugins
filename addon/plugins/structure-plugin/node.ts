@@ -201,7 +201,7 @@ export const emberNodeConfig: (
       if (titleHTML) {
         headerSpec = [
           tag,
-          { 'data-say-structure-header': true },
+          { 'data-say-structure-header': true, property: ELI('title').full },
           ...(structureName
             ? [
                 [
@@ -228,6 +228,7 @@ export const emberNodeConfig: (
       } else {
         headerSpec = [
           tag,
+          { property: ELI('title').full },
           ...(structureName
             ? [
                 [
