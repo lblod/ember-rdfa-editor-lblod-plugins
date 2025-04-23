@@ -11446,7 +11446,7 @@ snapshots:
       '@types/ember__object': 4.0.12(@babel/core@7.26.0)
       '@types/ember__polyfills': 4.0.6
       '@types/ember__routing': 4.0.22(@babel/core@7.26.0)
-      '@types/ember__runloop': 4.0.10(@babel/core@7.26.0)
+      '@types/ember__runloop': 4.0.10
       '@types/ember__service': 4.0.9(@babel/core@7.26.0)
       '@types/ember__string': 3.16.3
       '@types/ember__template': 4.0.7
@@ -11582,6 +11582,11 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
+    optional: true
+
+  '@types/ember__runloop@4.0.10':
+    dependencies:
+      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__runloop@4.0.10(@babel/core@7.26.0)':
