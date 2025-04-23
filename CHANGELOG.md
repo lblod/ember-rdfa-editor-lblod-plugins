@@ -1,5 +1,44 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.0.0
+
+### Major Changes
+
+- [#564](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/564) [`d1c6b1e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d1c6b1e7a625a1ceaa6bae3b49359b33075f49f0) Thanks [@lagartoverde](https://github.com/lagartoverde)! - BREAKING: changed the endpoint config on lpdc plugin so you can specify if you want instances or concepts.
+  The config of the lpdc plugin should go from:
+
+  ```
+  lpdc: {
+    endpoint: '/lpdc-service',
+  },
+  ```
+
+  to
+
+  ```
+  lpdc: {
+    endpoint: '/lpdc-service/doc/instantie',
+  },
+  ```
+
+  To maintain the same functionality or
+
+  ```
+  lpdc: {
+    endpoint: '/lpdc-service/doc/concept',
+  },
+  ```
+
+  To fetch the concepts instead of the instances
+
+### Patch Changes
+
+- [#567](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/567) [`04c249c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/04c249c10a0cf0c67e3f947f5d21008ccefc1268) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add eli:title to structure titles
+
+- [#565](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/565) [`6d321ab`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6d321abda33b6324d911643ca82938e086bdb2e3) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove unsupported `keyboardInstruction` property from `AuDatePicker` `localization` argument
+
+- [#566](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/566) [`ae9d297`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ae9d297de3a4f5b1c828a9f2e36483d8c680a6a3) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Include paragraph symbol in the serialization of the node
+
 ## 30.0.0
 
 ### Major Changes
