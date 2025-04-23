@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.0.1
+
+### Patch Changes
+
+- [`e1b625a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e1b625a1ece4b6a329527951ee2c9c7654874778) Thanks [@abeforgit](https://github.com/abeforgit)! - Merge hotfix [28.2.4](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/releases/tag/v28.2.4)
+
 ## 28.2.3
 
 ### Patch Changes
