@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 28.2.4
+
+### Patch Changes
+
+- [#568](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/568) [`798a608`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/798a6086811e93d19fac18405519f345b106f20e) Thanks [@abeforgit](https://github.com/abeforgit)! - HOTFIX: Instantiate template uris in standard template plugin
+
 ## 28.2.3
 
 ### Patch Changes
