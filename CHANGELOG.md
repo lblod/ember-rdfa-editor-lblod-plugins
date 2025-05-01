@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.0.3
+
+### Patch Changes
+
+- [#569](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/569) [`7ddd1fa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7ddd1fa67e75cb5952929d7569cfae3c71d52c8a) Thanks [@elpoelma](https://github.com/elpoelma)! - `date` variable: fix date-picker styling when having `@appuniversum/ember-appuniversum` version 3.6.0 or up installed
+
 ## 31.0.2
 
 ### Patch Changes
