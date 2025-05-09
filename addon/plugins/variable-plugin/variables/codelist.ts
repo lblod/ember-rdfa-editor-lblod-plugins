@@ -36,6 +36,7 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
 import { createCodelistVariableAttrs } from '../actions/create-codelist-variable';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const CONTENT_SELECTOR = '[data-content-container="true"]';
 
@@ -198,13 +199,13 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   const className =
     onlyContentType &&
     onlyContentType === onlyContentType.schema.nodes['placeholder']
-      ? 'say-variable'
+      ? ' say-variable'
       : '';
 
   return renderRdfaAware({
     renderable: node,
     attrs: {
-      class: className,
+      class: `${getClassnamesFromNode(node)}${className}`,
       'data-say-variable': 'true',
       'data-say-variable-type': 'codelist',
       'data-selection-style': selectionStyle as string,
@@ -243,6 +244,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: XSD('string').namedNode,
     },
   },
+  classNames: ['say-codelist-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };

@@ -16,6 +16,7 @@ import {
   PNode,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import {
   hasRdfaVariableType,
   isVariable,
@@ -140,13 +141,13 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   const className =
     onlyContentType &&
     onlyContentType === onlyContentType.schema.nodes['placeholder']
-      ? 'say-variable'
+      ? ' say-variable'
       : '';
   const { label, source } = node.attrs;
   return renderRdfaAware({
     renderable: node,
     attrs: {
-      class: className,
+      class: `${getClassnamesFromNode(node)}${className}`,
       'data-say-variable': 'true',
       'data-say-variable-type': 'location',
       'data-label': label,
@@ -179,6 +180,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: XSD('string').namedNode,
     },
   },
+  classNames: ['say-location-variable'],
   toDOM,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };
