@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.1.1
+
+### Patch Changes
+
+- [`9f2a193`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9f2a1930fd1d9471f446852f9bd2a5bcf4c75cd8) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete `application` serializer
+
 ## 31.1.0
 
 ### Minor Changes
