@@ -380,7 +380,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     tag: 'span',
     content: contentNode,
     attrs: {
-      class: getClassnamesFromNode(node),
+      class: `${getClassnamesFromNode(node)}${value ? '' : ' say-variable'}`,
     },
   });
 };
@@ -403,7 +403,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
-  classNames: ['say-variable', 'say-address-variable'],
+  classNames: ['say-address-variable'],
   serialize,
   parseDOM,
 };

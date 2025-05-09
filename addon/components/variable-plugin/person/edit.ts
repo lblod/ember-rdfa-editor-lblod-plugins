@@ -5,7 +5,14 @@ import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { tracked } from '@glimmer/tracking';
 import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Electee from '@lblod/ember-rdfa-editor-lblod-plugins/models/electee';
-import { Person } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/person';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import {
+  addPropertyToNode,
+  updateSubject,
+} from '@lblod/ember-rdfa-editor/plugins/rdfa-info/utils';
+import { FOAF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type Args = {
   controller: SayController;
@@ -59,16 +66,33 @@ export default class PersonEditComponent extends Component<Args> {
     this.showModal = false;
   }
   @action
-  onInsert(electee: Electee) {
-    const personNode = this.selectedPersonNode as PersonNode;
-    const person: Person = {
-      uri: electee.uri,
-      firstName: electee.firstName,
-      lastName: electee.lastName,
-    };
-    this.controller.withTransaction((tr) =>
-      tr.setNodeAttribute(personNode.pos, 'value', person),
-    );
+  onUpdate(electee: Electee) {
+    const personNode = unwrap(this.selectedPersonNode);
+    this.controller.withTransaction(() => {
+      return transactionCombinator(this.controller.activeEditorState)([
+        updateSubject({
+          pos: personNode.pos,
+          targetSubject: electee.uri,
+          keepBacklinks: true,
+          keepProperties: false,
+          keepExternalTriples: true,
+        }),
+        addPropertyToNode({
+          resource: electee.uri,
+          property: {
+            predicate: FOAF('givenName').full,
+            object: sayDataFactory.literal(electee.firstName),
+          },
+        }),
+        addPropertyToNode({
+          resource: electee.uri,
+          property: {
+            predicate: FOAF('familyName').full,
+            object: sayDataFactory.literal(electee.lastName),
+          },
+        }),
+      ]).transaction;
+    });
     this.closeModal();
   }
 }

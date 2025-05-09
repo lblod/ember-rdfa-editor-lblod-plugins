@@ -12,16 +12,17 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 const CONTENT_SELECTOR = `div[property~='${
   DCT('description').full
 }'],div[property~='${DCT('description').prefixed}']`;
-const rdfaAware = false;
+
 export const roadsign_regulation: NodeSpec = {
   content: 'block+',
   group: 'block',
   attrs: {
-    ...rdfaAttrSpec({ rdfaAware }),
+    ...rdfaAttrSpec({ rdfaAware: false }),
     resourceUri: {},
     measureUri: {},
     zonality: {},
@@ -69,7 +70,12 @@ export const roadsign_regulation: NodeSpec = {
   parseDOM: [
     {
       tag: 'div',
+      node: 'block_rdfa',
       getAttrs(node: HTMLElement) {
+        const attrs = getRdfaAttrs(node, { rdfaAware: true });
+        if (!attrs || attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
         if (
           hasRDFaAttribute(
             node,
@@ -79,7 +85,7 @@ export const roadsign_regulation: NodeSpec = {
           node.querySelector(CONTENT_SELECTOR)
         ) {
           const resourceUri = node.getAttribute('resource');
-          const measureUri = node
+          const measureConceptUri = node
             .querySelector(
               `span[property~='${PROV('wasDerivedFrom').prefixed}'],
              span[property~='${PROV('wasDerivedFrom').full}']`,
@@ -91,21 +97,24 @@ export const roadsign_regulation: NodeSpec = {
            span[property~='${EXT('zonality').full}']`,
             )
             ?.getAttribute('resource');
-          if (!resourceUri || !measureUri || !zonality) {
+          if (!resourceUri || !measureConceptUri || !zonality) {
             return false;
           }
-          const temporal = node
-            .querySelector(
-              `span[property~='${EXT('temporal').prefixed}'],
-           span[property~='${EXT('temporal').full}']`,
-            )
-            ?.getAttribute('value');
+          const { rdfaNodeType, properties, backlinks, __rdfaId } = attrs;
+          // We need to ensure that a content-literal for the description is added
+          const propertiesFiltered = properties.filter(
+            (prop) => !DCT('description').matches(prop.predicate),
+          );
+          propertiesFiltered.push({
+            predicate: DCT('description').full,
+            object: sayDataFactory.contentLiteral(),
+          });
           return {
-            resourceUri,
-            measureUri,
-            zonality,
-            temporal,
-            ...getRdfaAttrs(node, { rdfaAware }),
+            rdfaNodeType,
+            __rdfaId,
+            properties: propertiesFiltered,
+            backlinks,
+            label: `Mobiliteitsmaatregel`,
           };
         }
         return false;

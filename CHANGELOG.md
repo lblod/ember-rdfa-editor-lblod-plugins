@@ -1,10 +1,40 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
-## 29.0.1
+## 31.1.1
 
 ### Patch Changes
 
-- Use the correct predicate for serializing variables
+- [`9f2a193`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9f2a1930fd1d9471f446852f9bd2a5bcf4c75cd8) Thanks [@elpoelma](https://github.com/elpoelma)! - Remove obsolete `application` serializer
+
+## 31.1.0
+
+### Minor Changes
+
+- [#570](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/570) [`0fc7169`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0fc7169d71bb1dac3acaa4031abf970349d4470f) Thanks [@piemonkey](https://github.com/piemonkey)! - Remove ember-changeset dependency
+
+## 31.0.4
+
+### Patch Changes
+
+- [#571](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/571) [`1d1f381`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1d1f3816089d2b570218c8365d8d3d688ecf2790) Thanks [@elpoelma](https://github.com/elpoelma)! - Use `absolute` positioning for ember-velcro pop-ups/tooltips
+
+## 31.0.3
+
+### Patch Changes
+
+- [#569](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/569) [`7ddd1fa`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7ddd1fa67e75cb5952929d7569cfae3c71d52c8a) Thanks [@elpoelma](https://github.com/elpoelma)! - `date` variable: fix date-picker styling when having `@appuniversum/ember-appuniversum` version 3.6.0 or up installed
+
+## 31.0.2
+
+### Patch Changes
+
+- [`ba86e30`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ba86e302023cba073eece24ce378de7d2ee6decf) Thanks [@abeforgit](https://github.com/abeforgit)! - CI: fix the docker settings
+
+## 31.0.1
+
+### Patch Changes
+
+- [`e1b625a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e1b625a1ece4b6a329527951ee2c9c7654874778) Thanks [@abeforgit](https://github.com/abeforgit)! - Merge hotfix [28.2.4](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/releases/tag/v28.2.4)
 
 ## 28.2.3
 

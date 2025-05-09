@@ -1,4 +1,4 @@
-import { IBindings } from 'fetch-sparql-endpoint';
+import { Term } from '@rdfjs/types';
 import { unwrap } from '../utils/option';
 
 export default class Electee {
@@ -8,7 +8,7 @@ export default class Electee {
     readonly lastName: string,
     readonly kandidatenlijst?: string,
   ) {}
-  static fromBinding(binding: IBindings) {
+  static fromBinding(binding: Record<string, Term>) {
     const uri = unwrap(binding['person'].value);
     const firstName = unwrap(binding['firstName'].value);
     const lastName = unwrap(binding['lastName'].value);

@@ -53,12 +53,7 @@ function outgoingFromBacklink(
   } else {
     return {
       predicate: backlink.predicate,
-      object: sayDataFactory.literalNode(
-        attrs.__rdfaId,
-        ('language' in backlink.subject && backlink.subject.language) ||
-          ('datatype' in backlink.subject && backlink.subject.datatype) ||
-          '',
-      ),
+      object: sayDataFactory.literalNode(attrs.__rdfaId),
     };
   }
 }

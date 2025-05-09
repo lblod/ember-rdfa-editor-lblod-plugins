@@ -12,6 +12,9 @@ type Args = {
   controller: SayController;
 };
 
+/**
+ * @deprecated
+ */
 export default class AddressNodeviewComponent extends Component<Args> {
   get node() {
     return this.args.node;

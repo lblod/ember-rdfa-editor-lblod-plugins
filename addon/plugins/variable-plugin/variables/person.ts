@@ -3,7 +3,6 @@ import {
   FOAF,
   RDF,
   PERSOON,
-  PERSON,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
   createEmberNodeSpec,
@@ -17,14 +16,17 @@ import {
   PNode,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import { hasRdfaVariableType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/nodeview';
 import type { ComponentLike } from '@glint/template';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
-import { recreateVariableUris } from '../utils/recreate-variable-uris';
+import { createPersonVariableAttrs } from '../actions/create-person-variable';
 
 const TRANSLATION_FALLBACKS = {
   nodeview_placeholder: 'persoon',
@@ -37,7 +39,30 @@ export type Person = {
 };
 
 const rdfaAware = true;
+
 const parseDOM = [
+  {
+    tag: 'span',
+    getAttrs: (node: HTMLElement) => {
+      const attrs = getRdfaAttrs(node, { rdfaAware });
+      if (!attrs) {
+        return false;
+      }
+      if (
+        node.dataset.sayVariable &&
+        node.dataset.sayVariableType === 'person'
+      ) {
+        const label = node.dataset.label;
+        return {
+          ...attrs,
+          label,
+        };
+      }
+      return false;
+    },
+  },
+];
+const parseDOMLegacy = [
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
@@ -94,10 +119,10 @@ const parseDOM = [
             }
           }
         }
-        return {
-          ...attrs,
+        return createPersonVariableAttrs({
+          label: getOutgoingTriple(attrs, EXT('label'))?.object.value,
           value,
-        };
+        });
       }
 
       return false;
@@ -107,48 +132,29 @@ const parseDOM = [
 ];
 
 const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
+  const { subject } = node.attrs;
   const t = getTranslationFunction(state);
-  const person = node.attrs.value as Person | undefined;
+  const firstName = getOutgoingTriple(node.attrs, FOAF('givenName'))?.object
+    .value;
+  const lastName = getOutgoingTriple(node.attrs, FOAF('familyName'))?.object
+    .value;
   return renderRdfaAware({
     renderable: node,
     tag: 'span',
     attrs: {
-      class: getClassnamesFromNode(node),
+      class: `${getClassnamesFromNode(node)}${subject ? '' : ' say-variable'}`,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'person',
+      'data-label': node.attrs['label'],
     },
-    content: person
-      ? generatePersonHtml(person)
+    content: subject
+      ? [firstName, lastName].filter(Boolean).join(' ')
       : t(
           'variable-plugin.person.nodeview-placeholder',
           TRANSLATION_FALLBACKS.nodeview_placeholder,
         ),
   });
 };
-
-function generatePersonHtml(person: Person): DOMOutputSpec {
-  return [
-    'span',
-    {
-      property: EXT('content').full,
-      resource: person.uri,
-      typeof: PERSON('Person').full,
-    },
-    [
-      'span',
-      {
-        property: FOAF('gebruikteVoornaam').full,
-      },
-      person.firstName,
-    ],
-    ' ',
-    [
-      'span',
-      {
-        property: PERSOON('familyName').full,
-      },
-      person.lastName,
-    ],
-  ];
-}
 
 const emberNodeConfig: EmberNodeConfig = {
   name: 'person-variable',
@@ -157,20 +163,19 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline variable',
   content: 'inline*',
   atom: true,
-  recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
   editable: true,
   selectable: true,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
-    value: {
+    label: {
       default: null,
     },
   },
-  classNames: ['say-variable', 'say-person-variable'],
+  classNames: ['say-person-variable'],
   serialize,
-  parseDOM,
+  parseDOM: [...parseDOM, ...parseDOMLegacy],
 };
 
 export const person_variable = createEmberNodeSpec(emberNodeConfig);

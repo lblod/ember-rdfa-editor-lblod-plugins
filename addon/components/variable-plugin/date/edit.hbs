@@ -1,7 +1,7 @@
 {{! @glint-nocheck: not typesafe yet }}
 <div>
   {{#if this.showCard}}
-    <AuCard @shadow={{true}} @size='flush' as |c|>
+    <this.AuCard @shadow={{true}} @size='flush' as |c|>
       <c.header class='au-u-hidden-visually'>
         <AuHeading @level='3' @skin='6'>{{t
             'date-plugin.card.title'
@@ -28,6 +28,7 @@
               {{#if this.isCustom}}
                 <this.Velcro
                   @placement='top'
+                  @strategy='absolute'
                   @offsetOptions={{hash mainAxis=10}}
                   as |velcro|
                 >
@@ -97,7 +98,7 @@
           {{/if}}
         </div>
       </c.content>
-    </AuCard>
+    </this.AuCard>
   {{/if}}
 </div>
 <VariablePlugin::Date::HelpModal

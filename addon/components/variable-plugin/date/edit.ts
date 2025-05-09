@@ -7,7 +7,6 @@ import {
   Transaction,
 } from '@lblod/ember-rdfa-editor';
 import { NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import {
@@ -28,14 +27,11 @@ import {
   validateDateFormat,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/date-helpers';
 import { Velcro } from 'ember-velcro';
-import {
-  RDF,
-  XSD,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+
 import { InfoCircleIcon } from '@appuniversum/ember-appuniversum/components/icons/info-circle';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
+import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import AuCard from '../../_private/appuniversum-overrides/au-card';
 
 type Args = {
   controller: SayController;
@@ -46,6 +42,7 @@ export default class DateEditComponent extends Component<Args> {
   CrossIcon = CrossIcon;
   InfoCircleIcon = InfoCircleIcon;
   Velcro = Velcro;
+  AuCard = AuCard;
 
   @service
   declare intl: IntlService;
@@ -79,10 +76,7 @@ export default class DateEditComponent extends Component<Args> {
 
   get documentDate(): Option<Date> {
     if (this.selectedDateNode) {
-      const dateVal = getOutgoingTriple(
-        this.selectedDateNode.attrs,
-        RDF('value'),
-      )?.object.value as Option<string>;
+      const dateVal = this.selectedDateNode.attrs['content'] as Option<string>;
       if (dateVal) {
         return new Date(dateVal);
       }
@@ -214,26 +208,7 @@ export default class DateEditComponent extends Component<Args> {
     const pos = this.documentDatePos;
     if (pos) {
       this.controller.withTransaction((tr: Transaction) => {
-        const node = tr.doc.nodeAt(pos);
-        if (!node) {
-          return tr;
-        }
-        const properties = node.attrs.properties as OutgoingTriple[];
-        const newProperties = properties.filter((prop) => {
-          return !(
-            prop.object.termType === 'Literal' &&
-            RDF('value').matches(prop.predicate)
-          );
-        });
-        const datatype = this.onlyDate ? XSD('date') : XSD('dateTime');
-        newProperties.push({
-          predicate: RDF('value').full,
-          object: sayDataFactory.literal(
-            date.toISOString(),
-            datatype.namedNode,
-          ),
-        });
-        return tr.setNodeAttribute(pos, 'properties', newProperties);
+        return tr.setNodeAttribute(pos, 'content', date.toISOString());
       });
     }
   }
@@ -258,11 +233,14 @@ export default class DateEditComponent extends Component<Args> {
     if (isNone(pos)) {
       return;
     }
+    const datatype = !formatContainsTime(dateFormat)
+      ? XSD('date').namedNode
+      : XSD('dateTime').namedNode;
     this.controller.withTransaction((tr) => {
       return tr
         .setNodeAttribute(pos, 'format', dateFormat)
         .setNodeAttribute(pos, 'custom', custom)
-        .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(dateFormat));
+        .setNodeAttribute(pos, 'datatype', datatype);
     });
   }
 
@@ -293,10 +271,13 @@ export default class DateEditComponent extends Component<Args> {
 
     const pos = this.documentDatePos;
     if (isSome(pos) && isSome(format)) {
+      const datatype = !formatContainsTime(format)
+        ? XSD('date').namedNode
+        : XSD('dateTime').namedNode;
       this.controller.withTransaction((tr) => {
         return tr
           .setNodeAttribute(pos, 'format', format)
-          .setNodeAttribute(pos, 'onlyDate', !formatContainsTime(format));
+          .setNodeAttribute(pos, 'datatype', datatype);
       });
     }
   }
