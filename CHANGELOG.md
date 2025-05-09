@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.1.0
+
+### Minor Changes
+
+- [#570](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/570) [`0fc7169`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0fc7169d71bb1dac3acaa4031abf970349d4470f) Thanks [@piemonkey](https://github.com/piemonkey)! - Remove ember-changeset dependency
+
 ## 31.0.4
 
 ### Patch Changes
