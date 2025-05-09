@@ -5,33 +5,17 @@ related to the LBLOD Project.
 
 ## Compatibility
 
-- Ember.js 4.8+
-  The 5.x range is currently untested and not officially supported, but we accept issues and PRs to do so.
+- Ember.js 5.4+ (or 4.12+)
+  4.12 is no longer tested and not officially supported, but should still work for now.
 
 - Embroider or ember-auto-import v2
-- Node 18 or above
+- Node 18 or above (20+ recommended)
 
 ## Installation
 
 ```
 ember install ember-rdfa-editor-lblod-plugins
 ```
-
-If you are using the location-plugin, you should also add the following configuration to your `ember-cli-build.js` file:
-```js
-fingerprint: {
-  exclude: [
-    'images/layers-2x.png',
-    'images/layers.png',
-    'images/marker-icon-2x.png',
-    'images/marker-icon.png',
-    'images/marker-shadow.png'
-  ]
-}
-```
-This ensures the map-view behaves as expected in production builds.
-
-Check-out https://github.com/miguelcobain/ember-leaflet?tab=readme-ov-file#production-builds for more information.
 
 ## General addon information
 
@@ -80,6 +64,11 @@ You can configure your editor like this:
 
 You will have 2 anchor points where to put your plugins: `top` for a toolbar, and `aside` for plugin cards.
 
+## Styling
+
+Most custom nodespecs defined by plugins define specific CSS classes to allow for them to be styled by a consuming app.
+These can be augmented by adding custom classes when adding nodespecs to the schema, [in the way defined in the ember-rdfa-editor repo](https://github.com/lblod/ember-rdfa-editor#override-node-classes).
+
 ## article-structure plugin
 
 Plugin which allows a user to insert different types of structures, like chapters, sections, articles etc.
@@ -120,6 +109,13 @@ You can add this widget to the sidebar using the following syntax:
 Just like the insertion widget, this widget also accepts the same two properties.
 
 ### Configuring the plugin
+
+This plugin uses the [structure-plugin](docs/plugins/structure-plugin.md) for most of its functionality, so the configuration options are the same as for that plugin.
+
+#### Deprecated configuration options
+
+Previously configuration was done through specifying structure specs.
+This section refers to that and should not be used for new projects.
 
 Both widgets require an `options` property which allows you to configure which type of structures are supported, which is a list of `StructureSpec` objects.
 
