@@ -50,7 +50,7 @@ export default class HoverTooltip extends Component<Sig> {
     this.tooltipOpen = false;
   };
   <template>
-    <Velcro @placement={{this.placement}} as |velcro|>
+    <Velcro @placement={{this.placement}} @strategy='absolute' as |velcro|>
       {{#let velcro.loop as |loop|}}
         {{yield
           (hash velcroHook=velcro.hook handleHover=this.hover)
