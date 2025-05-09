@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 31.0.4
+
+### Patch Changes
+
+- [#571](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/571) [`1d1f381`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1d1f3816089d2b570218c8365d8d3d688ecf2790) Thanks [@elpoelma](https://github.com/elpoelma)! - Use `absolute` positioning for ember-velcro pop-ups/tooltips
+
 ## 31.0.3
 
 ### Patch Changes
