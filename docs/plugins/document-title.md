@@ -10,3 +10,11 @@ This plugin defines the following node-spec, which needs to be added to the Pros
 ```
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 ```
+
+## Styling
+
+Nodes from this plugin can be styled by using the following classes:
+
+| Node | Css class |
+|---|---|
+| document_title | say-document-title |
