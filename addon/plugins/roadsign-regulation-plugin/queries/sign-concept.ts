@@ -6,6 +6,8 @@ import {
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { SignConcept, SignConceptSchema } from '../schemas/sign-concept';
+import queryRoadSignCategories from './road-sign-category';
+import { SIGN_CONCEPT_TYPES } from '../constants';
 
 type QueryOptions = {
   imageBaseUrl?: string;
@@ -31,7 +33,6 @@ export async function querySignConcepts(
       ?code
       ?zonality
       (CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
-      (GROUP_CONCAT(?classification; SEPARATOR="|") AS ?classifications)
     WHERE {
       ?uri
         a mobiliteit:Verkeerstekenconcept;
@@ -43,9 +44,6 @@ export async function querySignConcepts(
 
       OPTIONAL {
         ?uri ext:zonality ?zonality.
-      }
-      OPTIONAL {
-        ?uri dct:type/skos:prefLabel ?classification.
       }
 
       VALUES ?type {
@@ -63,13 +61,21 @@ export async function querySignConcepts(
     abortSignal,
   });
   const bindings = queryResult.results.bindings;
-  const processed = bindings.map(objectify).map((binding) => {
-    return {
-      ...binding,
-      classifications: binding.classifications
-        ? binding.classifications.split('|')
-        : [],
-    };
-  });
-  return SignConceptSchema.array().parse(processed);
+  const concepts = SignConceptSchema.array().parse(bindings.map(objectify));
+  const conceptsWithCategories = await Promise.all(
+    concepts.map(async (concept) => {
+      if (concept.type === SIGN_CONCEPT_TYPES.ROAD_SIGN) {
+        const categories = await queryRoadSignCategories(endpoint, {
+          roadSignConceptUri: concept.uri,
+        });
+        return {
+          ...concept,
+          categories,
+        };
+      } else {
+        return concept;
+      }
+    }),
+  );
+  return conceptsWithCategories;
 }
