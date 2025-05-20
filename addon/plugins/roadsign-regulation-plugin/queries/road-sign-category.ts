@@ -2,6 +2,7 @@ import {
   BindingObject,
   executeQuery,
   objectify,
+  sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import {
   RoadSignCategory,
@@ -10,16 +11,18 @@ import {
 
 type QueryOptions = {
   abortSignal?: AbortSignal;
+  roadSignConceptUri?: string;
 };
 
 export default async function queryRoadSignCategories(
   endpoint: string,
   options: QueryOptions = {},
 ) {
-  const { abortSignal } = options;
+  const { abortSignal, roadSignConceptUri } = options;
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX dct: <http://purl.org/dc/terms/>
 
     SELECT DISTINCT
       ?uri
@@ -27,6 +30,8 @@ export default async function queryRoadSignCategories(
     WHERE {
       ?uri a mobiliteit:Verkeersbordcategorie;
            skos:prefLabel ?label.
+
+      ${roadSignConceptUri ? `${sparqlEscapeUri(roadSignConceptUri)} dct:type ?uri` : ''}
     }
   `;
   const queryResult = await executeQuery<BindingObject<RoadSignCategory>>({
