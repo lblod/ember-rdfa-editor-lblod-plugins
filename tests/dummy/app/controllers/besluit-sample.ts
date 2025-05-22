@@ -90,9 +90,16 @@ import {
   editableNodePlugin,
   getActiveEditableNode,
 } from '@lblod/ember-rdfa-editor/plugins/editable-node';
+
+import VisualiserCard from '@lblod/ember-rdfa-editor/components/_private/rdfa-visualiser/visualiser-card';
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
-import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import NodeControlsCard from '@lblod/ember-rdfa-editor/components/_private/node-controls/card';
+import DocImportedResourceEditorCard from '@lblod/ember-rdfa-editor/components/_private/doc-imported-resource-editor/card';
+import ImportedResourceLinkerCard from '@lblod/ember-rdfa-editor/components/_private/imported-resource-linker/card';
+import ExternalTripleEditorCard from '@lblod/ember-rdfa-editor/components/_private/external-triple-editor/card';
+import RelationshipEditorCard from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/card';
+import { documentConfig } from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/configs';
 import {
   structureWithConfig,
   structureViewWithConfig,
@@ -121,14 +128,21 @@ import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
+
 import { getOwner } from '@ember/owner';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
 
+  VisualiserCard = VisualiserCard;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
-  RdfaEditor = RdfaEditor;
+  NodeControlsCard = NodeControlsCard;
+  DocImportedResourceEditorCard = DocImportedResourceEditorCard;
+  ImportedResourceLinkerCard = ImportedResourceLinkerCard;
+  ExternalTripleEditorCard = ExternalTripleEditorCard;
+  RelationshipEditorCard = RelationshipEditorCard;
+
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
 
@@ -405,6 +419,10 @@ export default class BesluitSampleController extends Controller {
     controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
+  }
+
+  get optionGeneratorConfig() {
+    return this.controller && documentConfig(this.controller);
   }
 
   get standardTemplates() {
