@@ -30,6 +30,7 @@ import { Transaction } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { setCompositionID } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/transaction-utils';
 import { isNone } from '@lblod/ember-rdfa-editor/utils/_private/option';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -108,6 +109,10 @@ export default class Structure extends Component<Sig> {
 
   get fullLengthArticles() {
     return this.node.attrs.fullLengthArticles as boolean;
+  }
+
+  get class() {
+    return getClassnamesFromNode(this.node);
   }
 
   get structureName() {

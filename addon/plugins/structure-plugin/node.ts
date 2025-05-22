@@ -30,6 +30,7 @@ import {
   createEmberNodeView,
   EmberNodeConfig,
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import IntlService from 'ember-intl/services/intl';
 import { romanize, romanToInt } from './utils/romanize';
 import {
@@ -127,6 +128,7 @@ export const emberNodeConfig: (
     atom: false,
     editable: rdfaAware,
     tocEntry: buildTocEntry,
+    classNames: ['say-structure'],
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
 
@@ -266,6 +268,7 @@ export const emberNodeConfig: (
           'data-say-start-number': startNumber,
           'data-say-romanize': romanizeNumber,
           'data-say-is-only-article': isOnlyArticle,
+          class: getClassnamesFromNode(node),
         },
         content: [
           'div',

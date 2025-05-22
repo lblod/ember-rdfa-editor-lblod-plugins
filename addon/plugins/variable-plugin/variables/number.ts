@@ -39,6 +39,7 @@ import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { generateVariableInstanceUri } from '../utils/variable-helpers';
 import { createNumberVariableAttrs } from '../actions/create-number-variable';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const rdfaAware = true;
 const parseDOM: TagParseRule[] = [
@@ -224,7 +225,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: content ? '' : 'say-variable',
+      class: `${getClassnamesFromNode(node)}${content ? '' : ' say-variable'}`,
       'data-say-variable': 'true',
       'data-say-variable-type': 'number',
       'data-written-number': String(writtenNumber ?? false),
@@ -264,6 +265,7 @@ const emberNodeConfig: EmberNodeConfig = {
     const { value } = node.attrs;
     return value as string;
   },
+  classNames: ['say-number-variable'],
   parseDOM: [...parseDOM, ...parseDOMLegacy],
   serialize,
 };

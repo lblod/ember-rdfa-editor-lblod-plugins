@@ -8,6 +8,7 @@ import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import { type SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 interface Signature {
   Args: Pick<EmberNodeArgs, 'node' | 'selectNode'> & {
@@ -40,9 +41,16 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
     }
   }
 
+  get class() {
+    return getClassnamesFromNode(this.node);
+  }
+
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <div class='say-snippet-placeholder' {{on 'click' @selectNode}}>
+    <div
+      class='{{this.class}} say-snippet-placeholder'
+      {{on 'click' @selectNode}}
+    >
       <div class='say-snippet-placeholder__icon'>
         <AuIcon @icon={{PlusTextIcon}} />
       </div>
