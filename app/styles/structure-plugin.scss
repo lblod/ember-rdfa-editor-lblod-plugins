@@ -71,10 +71,11 @@
   }
 }
 
-.say-structure > .say-structure__content {
+.say-structure > [data-slot] {
   margin-top: 0;
 }
 .say-structure__content {
+  margin-top: 0;
   padding: 0.7rem;
   padding-right: 3rem;
 

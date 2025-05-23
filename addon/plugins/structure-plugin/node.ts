@@ -118,6 +118,7 @@ export const emberNodeConfig: (
   return {
     name: 'structure',
     component: Structure as unknown as ComponentLike,
+    contentDomClassNames: ['say-structure__content'],
     inline: false,
     group: 'block structure',
     content: 'block+',

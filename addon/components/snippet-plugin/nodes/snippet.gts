@@ -226,7 +226,7 @@ export default class SnippetNode extends Component<Signature> {
           </span>
           {{this.node.attrs.title}}
         </div>
-        <div class='say-snippet-content'>
+        <div class='say-snippet-body'>
           {{yield}}
           <div class='say-snippet-icons' contenteditable='false'>
             <SnippetButton
