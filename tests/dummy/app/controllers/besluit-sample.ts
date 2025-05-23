@@ -419,12 +419,12 @@ export default class BesluitSampleController extends Controller {
           'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
         ],
         disabledInContexts: [],
-        body: /* HTML */ `<p>
-          <span class="mark-highlight-manual"
+        body: /* HTML */ `<p
+          ><span class="mark-highlight-manual"
             >Vrije tekst voor bijvoorbeeld vraag, antwoord, amendement,
             mededeling of tussenkomst.</span
-          >
-        </p>`,
+          ></p
+        >`,
       },
       {
         id: 'b04fc03e-e8ff-496a-9343-1f07b4f55551',
@@ -456,59 +456,59 @@ export default class BesluitSampleController extends Controller {
                 datatype="xsd:string"
                 data-label="Openbare titel besluit"
               >
-                <h4>
-                  <span class="mark-highlight-manual"
+                <h4
+                  ><span class="mark-highlight-manual"
                     >Geef titel besluit op</span
-                  >
-                </h4>
+                  ></h4
+                >
               </div>
               <div
                 property="eli:description"
                 datatype="xsd:string"
                 data-label="Korte openbare beschrijving"
               >
-                <p>
-                  <span class="mark-highlight-manual"
+                <p
+                  ><span class="mark-highlight-manual"
                     >Geef korte beschrijving op</span
-                  >
-                </p>
+                  ></p
+                >
               </div>
               <div
                 property="besluit:motivering"
                 lang="nl"
                 data-label="Motivering"
               >
-                <p>
-                  <span class="mark-highlight-manual"
+                <p
+                  ><span class="mark-highlight-manual"
                     >geef bestuursorgaan op</span
-                  >,
-                </p>
+                  >,</p
+                >
                 <br />
                 <h5>Bevoegdheid</h5>
                 <ul class="bullet-list">
-                  <li>
-                    <span class="mark-highlight-manual"
+                  <li
+                    ><span class="mark-highlight-manual"
                       >Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span
-                    >
-                  </li>
+                    ></li
+                  >
                 </ul>
                 <br />
                 <h5>Juridische context</h5>
                 <ul class="bullet-list">
-                  <li>
-                    <span class="mark-highlight-manual"
+                  <li
+                    ><span class="mark-highlight-manual"
                       >Voeg juridische context in</span
-                    >
-                  </li>
+                    ></li
+                  >
                 </ul>
                 <br />
                 <h5>Feitelijke context en argumentatie</h5>
                 <ul class="bullet-list">
-                  <li>
-                    <span class="mark-highlight-manual"
+                  <li
+                    ><span class="mark-highlight-manual"
                       >Voeg context en argumentatie in</span
-                    >
-                  </li>
+                    ></li
+                  >
                 </ul>
               </div>
               <br />
@@ -525,10 +525,12 @@ export default class BesluitSampleController extends Controller {
                   typeof="besluit:Artikel"
                   data-say-is-only-article="true"
                 >
-                  <div>
-                    Artikel
-                    <span property="eli:number" datatype="xsd:string">1</span>
-                  </div>
+                  <div
+                    >Artikel
+                    <span property="eli:number" datatype="xsd:string"
+                      >1</span
+                    ></div
+                  >
                   <div property="prov:value" datatype="xsd:string">
                     <span class="mark-highlight-manual">Voer inhoud in</span>
                   </div>
@@ -567,20 +569,22 @@ export default class BesluitSampleController extends Controller {
               datatype="xsd:string"
               data-label="Openbare titel besluit"
             >
-              <h4>
-                <span class="mark-highlight-manual">Geef titel besluit op</span>
-              </h4>
+              <h4
+                ><span class="mark-highlight-manual"
+                  >Geef titel besluit op</span
+                ></h4
+              >
             </div>
             <div
               property="eli:description"
               datatype="xsd:string"
               data-label="Korte openbare beschrijving"
             >
-              <p>
-                <span class="mark-highlight-manual"
+              <p
+                ><span class="mark-highlight-manual"
                   >Geef korte beschrijving op</span
-                >
-              </p>
+                ></p
+              >
             </div>
             <br />
             <div
@@ -588,33 +592,34 @@ export default class BesluitSampleController extends Controller {
               lang="nl"
               data-label="Motivering"
             >
-              <p>
-                <span class="mark-highlight-manual">geef bestuursorgaan op</span
+              <p
+                ><span class="mark-highlight-manual"
+                  >geef bestuursorgaan op</span
                 >,
               </p>
               <br />
               <h5>Bevoegdheid</h5>
               <ul class="bullet-list">
-                <li>
-                  <span class="mark-highlight-manual"
+                <li
+                  ><span class="mark-highlight-manual"
                     >Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span
-                  >
-                </li>
+                  ></li
+                >
               </ul>
               <br />
               <h5>Juridische context</h5>
               <ul class="bullet-list">
-                <li>
-                  <a
+                <li
+                  ><a
                     class="annotation"
                     property="eli:cites"
                     typeof="eli:LegalExpression"
                     href="https://codex.vlaanderen.be/doc/document/1009730"
                     >Nieuwe gemeentewet</a
-                  >&nbsp;(KB 24/06/1988)
-                </li>
-                <li>
-                  decreet
+                  >&nbsp;(KB 24/06/1988)</li
+                >
+                <li
+                  >decreet
                   <a
                     class="annotation"
                     href="https://codex.vlaanderen.be/doc/document/1029017"
@@ -622,10 +627,10 @@ export default class BesluitSampleController extends Controller {
                     typeof="eli:LegalExpression"
                     >over het lokaal bestuur</a
                   >
-                  van 22/12/2017
-                </li>
-                <li>
-                  wet
+                  van 22/12/2017</li
+                >
+                <li
+                  >wet
                   <a
                     class="annotation"
                     href="https://codex.vlaanderen.be/doc/document/1009628"
@@ -633,10 +638,10 @@ export default class BesluitSampleController extends Controller {
                     typeof="eli:LegalExpression"
                     >betreffende de politie over het wegverkeer (wegverkeerswet
                     - Wet van 16 maart 1968)</a
-                  >
-                </li>
-                <li>
-                  wegcode - Koninklijk Besluit
+                  ></li
+                >
+                <li
+                  >wegcode - Koninklijk Besluit
                   <a
                     class="annotation"
                     href="https://codex.vlaanderen.be/doc/document/1036242"
@@ -645,10 +650,10 @@ export default class BesluitSampleController extends Controller {
                     >van 1 december 1975 houdende algemeen reglement op de
                     politie van het wegverkeer en van het gebruik van de
                     openbare weg.</a
-                  >
-                </li>
-                <li>
-                  code van de wegbeheerder -
+                  ></li
+                >
+                <li
+                  >code van de wegbeheerder -
                   <a
                     class="annotation"
                     href="https://codex.vlaanderen.be/doc/document/1035575"
@@ -657,8 +662,8 @@ export default class BesluitSampleController extends Controller {
                     >ministerieel besluit van 11 oktober 1976 houdende de
                     minimumafmetingen en de bijzondere plaatsingsvoorwaarden van
                     de verkeerstekens</a
-                  >
-                </li>
+                  ></li
+                >
               </ul>
               <br />
               <em
@@ -667,8 +672,8 @@ export default class BesluitSampleController extends Controller {
                 permanente of periodieke verkeerssituaties)</em
               >
               <ul class="bullet-list">
-                <li>
-                  decreet
+                <li
+                  >decreet
                   <a
                     class="annotation"
                     href="https://codex.vlaanderen.be/doc/document/1016816"
@@ -676,10 +681,10 @@ export default class BesluitSampleController extends Controller {
                     typeof="eli:LegalExpression"
                     >betreffende de aanvullende reglementen op het wegverkeer en
                     de plaatsing en bekostiging van de verkeerstekens </a
-                  >(16 mei 2008)
-                </li>
-                <li>
-                  Besluit van de Vlaamse Regering
+                  >(16 mei 2008)</li
+                >
+                <li
+                  >Besluit van de Vlaamse Regering
                   <a
                     class="annotation"
                     href="https://codex.vlaanderen.be/doc/document/1017729"
@@ -687,25 +692,25 @@ export default class BesluitSampleController extends Controller {
                     typeof="eli:LegalExpression"
                     >betreffende de aanvullende reglementen en de plaatsing en
                     bekostiging van verkeerstekens</a
-                  >​ van 23 januari 2009
-                </li>
-                <li>
-                  <a
+                  >​ van 23 januari 2009</li
+                >
+                <li
+                  ><a
                     href="https://codex.vlaanderen.be/doc/document/1035938"
                     property="eli:cites"
                     typeof="eli:LegalExpression"
                     >Omzendbrief MOB/2009/01 van 3 april 2009 gemeentelijke
                     aanvullende reglementen op de politie over het wegverkeer</a
-                  >
-                </li>
+                  ></li
+                >
               </ul>
               <h5>Feitelijke context en argumentatie</h5>
               <ul class="bullet-list">
-                <li>
-                  <span class="mark-highlight-manual"
+                <li
+                  ><span class="mark-highlight-manual"
                     >Voeg context en argumentatie in</span
-                  >
-                </li>
+                  ></li
+                >
               </ul>
             </div>
             <br />
@@ -758,49 +763,52 @@ export default class BesluitSampleController extends Controller {
               datatype="xsd:string"
               data-label="Openbare titel besluit"
             >
-              <h5>
-                <span class="mark-highlight-manual">Geef titel besluit op</span>
-              </h5>
+              <h5
+                ><span class="mark-highlight-manual"
+                  >Geef titel besluit op</span
+                ></h5
+              >
             </div>
             <div
               property="eli:description"
               datatype="xsd:string"
               data-label="Korte openbare beschrijving"
             >
-              <p>
-                <span class="mark-highlight-manual"
+              <p
+                ><span class="mark-highlight-manual"
                   >Geef korte beschrijving op</span
-                >
-              </p>
+                ></p
+              >
             </div>
             <div
               property="besluit:motivering"
               lang="nl"
               data-label="Motivering"
             >
-              <p>
-                <span class="mark-highlight-manual">geef bestuursorgaan op</span
-                >,
-              </p>
+              <p
+                ><span class="mark-highlight-manual"
+                  >geef bestuursorgaan op</span
+                >,</p
+              >
               <br />
               <div>
                 <ul class="bullet-list">
-                  <li>
-                    Gelet op
+                  <li
+                    >Gelet op
                     <span class="mark-highlight-manual"
                       >Voeg juridische grond in</span
-                    >;
-                  </li>
+                    >;</li
+                  >
                 </ul>
               </div>
               <br />
               <div>
                 <ul class="bullet-list">
-                  <li>
-                    Overwegende dat
+                  <li
+                    >Overwegende dat
                     <span class="mark-highlight-manual">Voeg motivering in</span
-                    >;
-                  </li>
+                    >;</li
+                  >
                 </ul>
               </div>
             </div>
@@ -854,56 +862,59 @@ export default class BesluitSampleController extends Controller {
               datatype="xsd:string"
               data-label="Openbare titel besluit"
             >
-              <h4>
-                <span class="mark-highlight-manual">Geef titel besluit op</span>
-              </h4>
+              <h4
+                ><span class="mark-highlight-manual"
+                  >Geef titel besluit op</span
+                ></h4
+              >
             </div>
             <div
               property="eli:description"
               datatype="xsd:string"
               data-label="Korte openbare beschrijving"
             >
-              <p>
-                <span class="mark-highlight-manual"
+              <p
+                ><span class="mark-highlight-manual"
                   >Geef korte beschrijving op</span
-                >
-              </p>
+                ></p
+              >
             </div>
             <div
               property="besluit:motivering"
               lang="nl"
               data-label="Motivering"
             >
-              <p>
-                <span class="mark-highlight-manual">geef bestuursorgaan op</span
-                >,
-              </p>
+              <p
+                ><span class="mark-highlight-manual"
+                  >geef bestuursorgaan op</span
+                >,</p
+              >
               <br />
               <h5>Bevoegdheid</h5>
               <ul class="bullet-list">
-                <li>
-                  <span class="mark-highlight-manual"
+                <li
+                  ><span class="mark-highlight-manual"
                     >Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span
-                  >
-                </li>
+                  ></li
+                >
               </ul>
               <br />
               <h5>Juridische context</h5>
               <ul class="bullet-list">
-                <li>
-                  <span class="mark-highlight-manual"
+                <li
+                  ><span class="mark-highlight-manual"
                     >Voeg juridische context in</span
-                  >
-                </li>
+                  ></li
+                >
               </ul>
               <br />
               <h5>Feitelijke context en argumentatie</h5>
               <ul class="bullet-list">
-                <li>
-                  <span class="mark-highlight-manual"
+                <li
+                  ><span class="mark-highlight-manual"
                     >Voeg context en argumentatie in</span
-                  >
-                </li>
+                  ></li
+                >
               </ul>
             </div>
             <br />
@@ -920,10 +931,12 @@ export default class BesluitSampleController extends Controller {
                 typeof="besluit:Artikel"
                 data-say-is-only-article="true"
               >
-                <div>
-                  Artikel
-                  <span property="eli:number" datatype="xsd:string">1</span>
-                </div>
+                <div
+                  >Artikel
+                  <span property="eli:number" datatype="xsd:string"
+                    >1</span
+                  ></div
+                >
                 <div property="prov:value" datatype="xsd:string">
                   <span class="mark-highlight-manual">Voer inhoud in</span>
                 </div>
