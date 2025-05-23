@@ -210,7 +210,7 @@ export default class BesluitSampleController extends Controller {
 
   get codelistOptions() {
     return {
-      endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+      endpoint: 'http://localhost:8890/sparql',
     };
   }
 
