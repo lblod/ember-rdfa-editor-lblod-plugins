@@ -95,7 +95,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
         a mobiliteit:Mobiliteitmaatregelconcept;
         skos:prefLabel ?label;
         ext:zonality ?zonality;
-        mobiliteit:template ?templateUri.
+        mobiliteit:Mobiliteitsmaatregelconcept.template ?templateUri.
 
       ?templateUri ext:preview ?preview.
 
