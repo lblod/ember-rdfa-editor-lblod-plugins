@@ -1,6 +1,3 @@
-// there is some irregular whitespace in one of the templates from the GN
-// database we copied here verbatim
-/* eslint-disable no-irregular-whitespace */
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
@@ -210,7 +207,7 @@ export default class BesluitSampleController extends Controller {
 
   get codelistOptions() {
     return {
-      endpoint: 'http://localhost:8890/sparql',
+      endpoint: 'https://dev.roadsigns.lblod.info/sparql',
     };
   }
 
@@ -261,8 +258,8 @@ export default class BesluitSampleController extends Controller {
         defaultDecisionsGovernmentName: 'Edegem',
       },
       roadsignRegulation: {
-        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
-        imageBaseUrl: 'https://dev.roadsigns.lblod.info',
+        endpoint: 'https://dev-vlag.roadsigns.lblod.info/sparql',
+        imageBaseUrl: 'https://dev-vlag.roadsigns.lblod.info',
       },
       besluitType: {
         endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
@@ -419,12 +416,7 @@ export default class BesluitSampleController extends Controller {
           'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
         ],
         disabledInContexts: [],
-        body: /* HTML */ `<p
-          ><span class="mark-highlight-manual"
-            >Vrije tekst voor bijvoorbeeld vraag, antwoord, amendement,
-            mededeling of tussenkomst.</span
-          ></p
-        >`,
+        body: '<p><span class="mark-highlight-manual">Vrije tekst voor bijvoorbeeld vraag, antwoord, amendement, mededeling of tussenkomst.</span></p>',
       },
       {
         id: 'b04fc03e-e8ff-496a-9343-1f07b4f55551',
@@ -436,109 +428,15 @@ export default class BesluitSampleController extends Controller {
           'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
         ],
         disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
-        body: /* HTML */ `
-          "
-          <div
-            property="prov:generated"
-            resource="http://data.lblod.info/id/besluiten/--ref-uuid4-c10209c0-dfba-46fb-80c7-1c6aedf656e9"
-            typeof="besluit:Besluit ext:BesluitNieuweStijl"
-            data-label="Besluit"
-          >
-            <div style="display: none" data-rdfa-container="true">
-              <span
-                property="eli:language"
-                resource="http://publications.europa.eu/resource/authority/language/NLD"
-              />
-            </div>
-            <div data-content-container="true">
-              <div
-                property="eli:title"
-                datatype="xsd:string"
-                data-label="Openbare titel besluit"
-              >
-                <h4
-                  ><span class="mark-highlight-manual"
-                    >Geef titel besluit op</span
-                  ></h4
-                >
-              </div>
-              <div
-                property="eli:description"
-                datatype="xsd:string"
-                data-label="Korte openbare beschrijving"
-              >
-                <p
-                  ><span class="mark-highlight-manual"
-                    >Geef korte beschrijving op</span
-                  ></p
-                >
-              </div>
-              <div
-                property="besluit:motivering"
-                lang="nl"
-                data-label="Motivering"
-              >
-                <p
-                  ><span class="mark-highlight-manual"
-                    >geef bestuursorgaan op</span
-                  >,</p
-                >
-                <br />
-                <h5>Bevoegdheid</h5>
-                <ul class="bullet-list">
-                  <li
-                    ><span class="mark-highlight-manual"
-                      >Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span
-                    ></li
-                  >
-                </ul>
-                <br />
-                <h5>Juridische context</h5>
-                <ul class="bullet-list">
-                  <li
-                    ><span class="mark-highlight-manual"
-                      >Voeg juridische context in</span
-                    ></li
-                  >
-                </ul>
-                <br />
-                <h5>Feitelijke context en argumentatie</h5>
-                <ul class="bullet-list">
-                  <li
-                    ><span class="mark-highlight-manual"
-                      >Voeg context en argumentatie in</span
-                    ></li
-                  >
-                </ul>
-              </div>
-              <br />
-              <br />
-              <h5>Beslissing</h5>
-              <div
-                property="prov:value"
-                datatype="xsd:string"
-                data-label="Artikels"
-              >
-                <div
-                  property="eli:has_part"
-                  resource="http://data.lblod.info/artikels/--ref-uuid4-7a0552ff-4fb1-4e42-98d6-dd88faf60f0c"
-                  typeof="besluit:Artikel"
-                  data-say-is-only-article="true"
-                >
-                  <div
-                    >Artikel
-                    <span property="eli:number" datatype="xsd:string"
-                      >1</span
-                    ></div
-                  >
-                  <div property="prov:value" datatype="xsd:string">
-                    <span class="mark-highlight-manual">Voer inhoud in</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+        body: `
+          <div property="prov:generated" resource="http://data.lblod.info/id/besluiten/\${generateUuid()}" typeof="besluit:Besluit ext:BesluitNieuweStijl">
+            <p>Openbare titel besluit:</p>
+            <h4 class="h4" property="eli:title" datatype="xsd:string"><span class="mark-highlight-manual">Geef titel besluit op</span></h4>
+            <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
+            <br>
+            <p>Korte openbare beschrijving:</p>
+            <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
           </div>
-          "
         `,
       },
       {
@@ -551,193 +449,64 @@ export default class BesluitSampleController extends Controller {
           'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt',
         ],
         disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
-        body: /* HTML */ `<div
-          property="prov:generated"
-          resource="http://data.lblod.info/id/besluiten/--ref-uuid4-c10209c0-dfba-46fb-80c7-1c6aedf656e9"
-          typeof="besluit:Besluit https://data.vlaanderen.be/id/concept/BesluitType/67378dd0-5413-474b-8996-d992ef81637a ext:BesluitNieuweStijl"
-          data-label="Besluit"
-        >
-          <div style="display: none" data-rdfa-container="true">
-            <span
-              property="eli:language"
-              resource="http://publications.europa.eu/resource/authority/language/NLD"
-            />
-          </div>
-          <div data-content-container="true">
-            <div
-              property="eli:title"
-              datatype="xsd:string"
-              data-label="Openbare titel besluit"
-            >
-              <h4
-                ><span class="mark-highlight-manual"
-                  >Geef titel besluit op</span
-                ></h4
-              >
-            </div>
-            <div
-              property="eli:description"
-              datatype="xsd:string"
-              data-label="Korte openbare beschrijving"
-            >
-              <p
-                ><span class="mark-highlight-manual"
-                  >Geef korte beschrijving op</span
-                ></p
-              >
-            </div>
-            <br />
-            <div
-              property="besluit:motivering"
-              lang="nl"
-              data-label="Motivering"
-            >
-              <p
-                ><span class="mark-highlight-manual"
-                  >geef bestuursorgaan op</span
-                >,
+        body: `
+          <div property="prov:generated" resource="http://data.lblod.info/id/besluiten/\${generateUuid()}" typeof="besluit:Besluit https://data.vlaanderen.be/id/concept/BesluitType/67378dd0-5413-474b-8996-d992ef81637a ext:BesluitNieuweStijl">
+            <p>Openbare titel besluit:</p>
+            <h4 class="h4" property="eli:title" datatype="xsd:string"><span class="mark-highlight-manual">Geef titel besluit op</span></h4>
+            <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
+            <p>Korte openbare beschrijving:</p>
+            <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
+            <br>
+
+            <div property="besluit:motivering" lang="nl">
+              <p>
+                <span class="mark-highlight-manual">geef bestuursorgaan op</span>,
               </p>
-              <br />
+              <br>
+
               <h5>Bevoegdheid</h5>
               <ul class="bullet-list">
-                <li
-                  ><span class="mark-highlight-manual"
-                    >Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span
-                  ></li
-                >
+                <li><span class="mark-highlight-manual">Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span></li>
               </ul>
-              <br />
+              <br>
+
               <h5>Juridische context</h5>
               <ul class="bullet-list">
-                <li
-                  ><a
-                    class="annotation"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    href="https://codex.vlaanderen.be/doc/document/1009730"
-                    >Nieuwe gemeentewet</a
-                  >&nbsp;(KB 24/06/1988)</li
-                >
-                <li
-                  >decreet
-                  <a
-                    class="annotation"
-                    href="https://codex.vlaanderen.be/doc/document/1029017"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >over het lokaal bestuur</a
-                  >
-                  van 22/12/2017</li
-                >
-                <li
-                  >wet
-                  <a
-                    class="annotation"
-                    href="https://codex.vlaanderen.be/doc/document/1009628"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >betreffende de politie over het wegverkeer (wegverkeerswet
-                    - Wet van 16 maart 1968)</a
-                  ></li
-                >
-                <li
-                  >wegcode - Koninklijk Besluit
-                  <a
-                    class="annotation"
-                    href="https://codex.vlaanderen.be/doc/document/1036242"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >van 1 december 1975 houdende algemeen reglement op de
-                    politie van het wegverkeer en van het gebruik van de
-                    openbare weg.</a
-                  ></li
-                >
-                <li
-                  >code van de wegbeheerder -
-                  <a
-                    class="annotation"
-                    href="https://codex.vlaanderen.be/doc/document/1035575"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >ministerieel besluit van 11 oktober 1976 houdende de
-                    minimumafmetingen en de bijzondere plaatsingsvoorwaarden van
-                    de verkeerstekens</a
-                  ></li
-                >
+                <li><a class="annotation" property="eli:cites" typeof="eli:LegalExpression" href="https://codex.vlaanderen.be/doc/document/1009730">Nieuwe gemeentewet</a>&nbsp;(KB 24/06/1988)</li>
+                <li>decreet <a class="annotation" href="https://codex.vlaanderen.be/doc/document/1029017" property="eli:cites" typeof="eli:LegalExpression">over het lokaal bestuur</a> van 22/12/2017</li>
+                <li>wet <a class="annotation" href="https://codex.vlaanderen.be/doc/document/1009628" property="eli:cites" typeof="eli:LegalExpression">betreffende de politie over het wegverkeer (wegverkeerswet - Wet van 16 maart 1968)</a></li>
+                <li>wegcode - Koninklijk Besluit <a class="annotation" href="https://codex.vlaanderen.be/doc/document/1036242" property="eli:cites" typeof="eli:LegalExpression">van 1 december 1975 houdende algemeen reglement op de politie van het wegverkeer en van het gebruik van de openbare weg.</a></li>
+                <li>code van de wegbeheerder - <a class="annotation" href="https://codex.vlaanderen.be/doc/document/1035575" property="eli:cites" typeof="eli:LegalExpression">ministerieel besluit van 11 oktober 1976 houdende de minimumafmetingen en de bijzondere plaatsingsvoorwaarden van de verkeerstekens</a></li>
               </ul>
-              <br />
-              <em
-                >specifiek voor aanvullende reglementen op het wegverkeer (=
-                politieverordeningen m.b.t. het wegverkeer voor wat betreft
-                permanente of periodieke verkeerssituaties)</em
-              >
+              <br>
+              <em>specifiek voor aanvullende reglementen op het wegverkeer  (= politieverordeningen m.b.t. het wegverkeer voor wat betreft permanente of periodieke verkeerssituaties)</em>
               <ul class="bullet-list">
-                <li
-                  >decreet
-                  <a
-                    class="annotation"
-                    href="https://codex.vlaanderen.be/doc/document/1016816"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >betreffende de aanvullende reglementen op het wegverkeer en
-                    de plaatsing en bekostiging van de verkeerstekens </a
-                  >(16 mei 2008)</li
-                >
-                <li
-                  >Besluit van de Vlaamse Regering
-                  <a
-                    class="annotation"
-                    href="https://codex.vlaanderen.be/doc/document/1017729"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >betreffende de aanvullende reglementen en de plaatsing en
-                    bekostiging van verkeerstekens</a
-                  >​ van 23 januari 2009</li
-                >
-                <li
-                  ><a
-                    href="https://codex.vlaanderen.be/doc/document/1035938"
-                    property="eli:cites"
-                    typeof="eli:LegalExpression"
-                    >Omzendbrief MOB/2009/01 van 3 april 2009 gemeentelijke
-                    aanvullende reglementen op de politie over het wegverkeer</a
-                  ></li
-                >
+                <li>decreet <a class="annotation" href="https://codex.vlaanderen.be/doc/document/1016816" property="eli:cites" typeof="eli:LegalExpression">betreffende de aanvullende reglementen op het wegverkeer en de plaatsing en bekostiging van de verkeerstekens </a>(16 mei 2008)</li>
+                <li>Besluit van de Vlaamse Regering <a class="annotation" href="https://codex.vlaanderen.be/doc/document/1017729" property="eli:cites" typeof="eli:LegalExpression">betreffende de aanvullende reglementen en de plaatsing en bekostiging van verkeerstekens</a> van 23 januari 2009</li>
+                    <li><a href="https://codex.vlaanderen.be/doc/document/1035938" property="eli:cites" typeof="eli:LegalExpression">Omzendbrief MOB/2009/01 van 3 april 2009 gemeentelijke aanvullende reglementen op de politie over het wegverkeer</a></li>
               </ul>
+
               <h5>Feitelijke context en argumentatie</h5>
               <ul class="bullet-list">
-                <li
-                  ><span class="mark-highlight-manual"
-                    >Voeg context en argumentatie in</span
-                  ></li
-                >
+                <li><span class="mark-highlight-manual">Voeg context en argumentatie in</span></li>
               </ul>
             </div>
-            <br />
-            <br />
+            <br>
+            <br>
+
             <h5>Beslissing</h5>
-            <div
-              property="prov:value"
-              datatype="xsd:string"
-              data-label="Artikels"
-            >
-              <div
-                property="eli:has_part"
-                resource="http://data.lblod.info/artikels/--ref-uuid4-68c56ef4-8843-4b7f-a72a-9d0038ff723f"
-                typeof="besluit:Artikel"
-                data-say-is-only-article="true"
-              >
-                <div>
-                  Artikel
-                  <span property="eli:number" datatype="xsd:string">1</span>
-                </div>
+
+            <div property="prov:value" datatype="xsd:string">
+              <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel" data-say-is-only-article="true">
+                <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
+                <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
                 <div property="prov:value" datatype="xsd:string">
                   <span class="mark-highlight-manual">Voer inhoud in</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>`,
+        `,
       },
       {
         id: '39c31a7e-2ba9-11e9-88cf-83ebfda837dc',
@@ -745,98 +514,49 @@ export default class BesluitSampleController extends Controller {
         matches: [],
         contexts: [],
         disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
-        body: /* HTML */ `<div
-          property="prov:generated"
-          resource="http://data.lblod.info/id/besluiten/--ref-uuid4-5ab24a9b-4760-4607-81c1-38dd53c13dff"
-          typeof="besluit:Besluit ext:BesluitKlassiekeStijl"
-          data-label="Besluit"
-        >
-          <div style="display: none" data-rdfa-container="true">
-            <span
-              property="eli:language"
-              resource="http://publications.europa.eu/resource/authority/language/NLD"
-            />
-          </div>
-          <div data-content-container="true">
-            <div
-              property="eli:title"
-              datatype="xsd:string"
-              data-label="Openbare titel besluit"
-            >
-              <h5
-                ><span class="mark-highlight-manual"
-                  >Geef titel besluit op</span
-                ></h5
-              >
-            </div>
-            <div
-              property="eli:description"
-              datatype="xsd:string"
-              data-label="Korte openbare beschrijving"
-            >
-              <p
-                ><span class="mark-highlight-manual"
-                  >Geef korte beschrijving op</span
-                ></p
-              >
-            </div>
-            <div
-              property="besluit:motivering"
-              lang="nl"
-              data-label="Motivering"
-            >
-              <p
-                ><span class="mark-highlight-manual"
-                  >geef bestuursorgaan op</span
-                >,</p
-              >
-              <br />
+        body: `
+          <div property="prov:generated" resource="http://data.lblod.info/id/besluiten/\${generateUuid()}" typeof="besluit:Besluit ext:BesluitKlassiekeStijl">
+            <p>Openbare titel besluit:</p>
+            <h5 class="h4" property="eli:title" datatype="xsd:string"><span class="mark-highlight-manual">Geef openbare titel besluit op</span></h5>
+            <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
+            <br>
+            <p>Korte openbare beschrijving:</p>
+            <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
+            <br>
+
+
+            <div property="besluit:motivering" lang="nl">
+              <p>
+                <span class="mark-highlight-manual">geef bestuursorgaan op</span>,
+              </p>
+              <br>
+
               <div>
                 <ul class="bullet-list">
-                  <li
-                    >Gelet op
-                    <span class="mark-highlight-manual"
-                      >Voeg juridische grond in</span
-                    >;</li
-                  >
+                  <li>Gelet op <span class="mark-highlight-manual">Voeg juridische grond in</span>;</li>
                 </ul>
               </div>
-              <br />
+
+              <br>
               <div>
                 <ul class="bullet-list">
-                  <li
-                    >Overwegende dat
-                    <span class="mark-highlight-manual">Voeg motivering in</span
-                    >;</li
-                  >
+                  <li>Overwegende dat <span class="mark-highlight-manual">Voeg motivering in</span>;</li>
                 </ul>
               </div>
             </div>
-            <br />
-            <br />
+            <br>
+            <br>
+
             <p class="u-spacer--small">Beslist,</p>
-            <div
-              property="prov:value"
-              datatype="xsd:string"
-              data-label="Artikels"
-            >
-              <div
-                property="eli:has_part"
-                resource="http://data.lblod.info/artikels/--ref-uuid4-69ba01d6-db79-4b36-8ed4-d824269724df"
-                typeof="besluit:Artikel"
-                data-say-is-only-article="true"
-              >
-                <div>
-                  Artikel
-                  <span property="eli:number" datatype="xsd:string">1</span>
-                </div>
-                <div property="prov:value" datatype="xsd:string">
-                  <span class="mark-highlight-manual">Voer inhoud in</span>
-                </div>
+            <div property="prov:value" datatype="xsd:string">
+              <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel" data-say-is-only-article="true">
+                <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
+                <span style="display:none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
+                <div property="prov:value" datatype="xsd:string"><span class="mark-highlight-manual">Voer inhoud in</span></div>
               </div>
             </div>
           </div>
-        </div>`,
+        `,
       },
       {
         id: '6933312e-2bac-11e9-af69-3baeff70b1a8',
@@ -844,106 +564,44 @@ export default class BesluitSampleController extends Controller {
         matches: [],
         contexts: [],
         disabledInContexts: ['http://data.vlaanderen.be/ns/besluit#Besluit'],
-        body: /* HTML */ `<div
-          property="prov:generated"
-          resource="http://data.lblod.info/id/besluiten/--ref-uuid4-c10209c0-dfba-46fb-80c7-1c6aedf656e9"
-          typeof="besluit:Besluit ext:BesluitNieuweStijl"
-          data-label="Besluit"
-        >
-          <div style="display: none" data-rdfa-container="true">
-            <span
-              property="eli:language"
-              resource="http://publications.europa.eu/resource/authority/language/NLD"
-            />
+        body: `
+          <div property="prov:generated" resource="http://data.lblod.info/id/besluiten/\${generateUuid()}" typeof="besluit:Besluit ext:BesluitNieuweStijl">
+          <p>Openbare titel besluit:</p>
+          <h4 class="h4" property="eli:title" datatype="xsd:string"><span class="mark-highlight-manual">Geef titel besluit op</span></h4>
+          <span style="display: none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span> <br />
+          <p>Korte openbare beschrijving:</p>
+          <p property="eli:description" datatype="xsd:string"><span class="mark-highlight-manual">Geef korte beschrijving op</span></p>
+          <br />
+          <div property="besluit:motivering" lang="nl">
+            <p><span class="mark-highlight-manual">geef bestuursorgaan op</span>,</p>
+            <br />
+            <h5>Bevoegdheid</h5>
+            <ul class="bullet-list">
+              <li><span class="mark-highlight-manual">Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span></li>
+            </ul>
+            <br />
+            <h5>Juridische context</h5>
+            <ul class="bullet-list">
+              <li><span class="mark-highlight-manual">Voeg juridische context in</span></li>
+            </ul>
+            <br />
+            <h5>Feitelijke context en argumentatie</h5>
+            <ul class="bullet-list">
+              <li><span class="mark-highlight-manual">Voeg context en argumentatie in</span></li>
+            </ul>
           </div>
-          <div data-content-container="true">
-            <div
-              property="eli:title"
-              datatype="xsd:string"
-              data-label="Openbare titel besluit"
-            >
-              <h4
-                ><span class="mark-highlight-manual"
-                  >Geef titel besluit op</span
-                ></h4
-              >
-            </div>
-            <div
-              property="eli:description"
-              datatype="xsd:string"
-              data-label="Korte openbare beschrijving"
-            >
-              <p
-                ><span class="mark-highlight-manual"
-                  >Geef korte beschrijving op</span
-                ></p
-              >
-            </div>
-            <div
-              property="besluit:motivering"
-              lang="nl"
-              data-label="Motivering"
-            >
-              <p
-                ><span class="mark-highlight-manual"
-                  >geef bestuursorgaan op</span
-                >,</p
-              >
-              <br />
-              <h5>Bevoegdheid</h5>
-              <ul class="bullet-list">
-                <li
-                  ><span class="mark-highlight-manual"
-                    >Rechtsgrond die bepaalt dat dit orgaan bevoegd is.</span
-                  ></li
-                >
-              </ul>
-              <br />
-              <h5>Juridische context</h5>
-              <ul class="bullet-list">
-                <li
-                  ><span class="mark-highlight-manual"
-                    >Voeg juridische context in</span
-                  ></li
-                >
-              </ul>
-              <br />
-              <h5>Feitelijke context en argumentatie</h5>
-              <ul class="bullet-list">
-                <li
-                  ><span class="mark-highlight-manual"
-                    >Voeg context en argumentatie in</span
-                  ></li
-                >
-              </ul>
-            </div>
-            <br />
-            <br />
-            <h5>Beslissing</h5>
-            <div
-              property="prov:value"
-              datatype="xsd:string"
-              data-label="Artikels"
-            >
-              <div
-                property="eli:has_part"
-                resource="http://data.lblod.info/artikels/--ref-uuid4-7a0552ff-4fb1-4e42-98d6-dd88faf60f0c"
-                typeof="besluit:Artikel"
-                data-say-is-only-article="true"
-              >
-                <div
-                  >Artikel
-                  <span property="eli:number" datatype="xsd:string"
-                    >1</span
-                  ></div
-                >
-                <div property="prov:value" datatype="xsd:string">
-                  <span class="mark-highlight-manual">Voer inhoud in</span>
-                </div>
-              </div>
+          <br />
+          <br />
+          <h5>Beslissing</h5>
+          <div property="prov:value" datatype="xsd:string">
+            <div property="eli:has_part" resource="http://data.lblod.info/artikels/\${generateUuid()}" typeof="besluit:Artikel" data-say-is-only-article="true">
+              <div>Artikel <span property="eli:number" datatype="xsd:string">1</span></div>
+              <span style="display: none;" property="eli:language" resource="http://publications.europa.eu/resource/authority/language/NLD" typeof="skos:Concept">&nbsp;</span>
+              <div property="prov:value" datatype="xsd:string"><span class="mark-highlight-manual">Voer inhoud in</span></div>
             </div>
           </div>
-        </div>`,
+        </div>
+        `,
       },
     ];
   }
