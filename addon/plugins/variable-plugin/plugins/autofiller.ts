@@ -71,7 +71,7 @@ export function variableAutofillerPlugin(config: AutofilledArgs): ProsePlugin {
         }
         return tr;
       }
-      return newState.tr;
+      return null;
     },
   });
 }
