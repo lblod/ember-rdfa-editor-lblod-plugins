@@ -42,8 +42,12 @@ import {
   Option,
   isSome,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { recalculateNumbers } from './monads/recalculate-structure-numbers';
+import { regenerateRdfaLinks } from './monads/regenerate-rdfa-links';
+import { NodeSpecOnChanged } from '@lblod/ember-rdfa-editor/plugins/on-changed/plugin';
 
 const rdfaAware = true;
+const parser = new DOMParser();
 
 const PARAGRAPH_SYMBOL = '§';
 
@@ -111,7 +115,13 @@ function buildTocEntry(node: PNode, state: EditorState) {
   }
 }
 
-const parser = new DOMParser();
+const onChanged: NodeSpecOnChanged = {
+  doOnce: true,
+  monadGenerator: () => {
+    return [recalculateNumbers, regenerateRdfaLinks];
+  },
+};
+
 export const emberNodeConfig: (
   config?: StructurePluginOptions,
 ) => EmberNodeConfig = (config) => {
@@ -166,6 +176,7 @@ export const emberNodeConfig: (
             : config?.onlyArticleSpecialName,
       },
     },
+    onChanged,
     serialize(node: PNode, state: EditorState) {
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
