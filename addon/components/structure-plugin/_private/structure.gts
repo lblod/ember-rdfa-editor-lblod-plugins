@@ -204,14 +204,19 @@ export default class Structure extends Component<Sig> {
   focusInner() {
     this.innerView?.focus();
   }
+
   <template>
     <div
       class='say-structure'
       {{didUpdate this.onAttrsUpdate this.titleAttr}}
       {{on 'focus' this.focusInner}}
     >
-      <div class='say-structure__header' contenteditable='false'>
-
+      <div
+        class='say-structure__header'
+        contenteditable='false'
+        {{! template-lint-disable no-invalid-interactive }}
+        {{on 'click' @selectNode}}
+      >
         {{#let (element this.headerTag) as |Tag|}}
           <Tag class='say-structure__header-element'><span
               class='say-structure__name'
