@@ -204,6 +204,15 @@ export default class Structure extends Component<Sig> {
   focusInner() {
     this.innerView?.focus();
   }
+  selectNode = (event: MouseEvent) => {
+    if (
+      !(event.target instanceof HTMLElement) ||
+      !event.target.classList.contains('say-structure__title')
+    ) {
+      // Only select the node if we're not trying to edit the title...
+      this.args.selectNode();
+    }
+  };
 
   <template>
     <div
@@ -215,7 +224,7 @@ export default class Structure extends Component<Sig> {
         class='say-structure__header'
         contenteditable='false'
         {{! template-lint-disable no-invalid-interactive }}
-        {{on 'click' @selectNode}}
+        {{on 'click' this.selectNode}}
       >
         {{#let (element this.headerTag) as |Tag|}}
           <Tag class='say-structure__header-element'><span
