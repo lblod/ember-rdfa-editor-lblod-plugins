@@ -333,7 +333,8 @@ export default class SnippetEditController extends Controller {
         controller,
       ),
       snippet: snippetView(this.config.snippet)(controller),
-      block_rdfa: (node) => new BlockRDFaView(node),
+      block_rdfa: (...args: Parameters<NodeViewConstructor>) =>
+        new BlockRDFaView(args, controller),
       // This is the only addition needed to move away from article-structure-plugin without other
       // configuration changes
       structure: structureViewWithConfig()(controller),
