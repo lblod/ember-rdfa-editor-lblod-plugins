@@ -22,6 +22,7 @@ export const emberNodeConfig: () => EmberNodeConfig = () => {
   return {
     name: 'template-comment',
     component: TemplateCommentsComponent as unknown as ComponentLike,
+    contentDomClassNames: ['say-template-comment-content'],
     inline: false,
     group: 'block',
     content: 'block+',
