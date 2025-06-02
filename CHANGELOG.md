@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.0.0
+
+### Major Changes
+
+- [#575](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/575) [`30abd63`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/30abd63cf2552a124c4d9168f5e040d4e847cc3d) Thanks [@lagartoverde](https://github.com/lagartoverde)! - BREAKING CHANGE: Adapt roadsign plugin to the new MOW model
+
+### Patch Changes
+
+- [#572](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/572) [`da42a7a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/da42a7afe59b58c12039bbbb7feb714ebd9a35c2) Thanks [@elpoelma](https://github.com/elpoelma)! - IRGN: increase font size of measure preview"
+
 ## 31.1.1
 
 ### Patch Changes
