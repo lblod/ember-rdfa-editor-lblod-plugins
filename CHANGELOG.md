@@ -1,5 +1,26 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.1.0
+
+### Minor Changes
+
+- [#573](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/573) [`be9e2f4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/be9e2f476266037926f43f2729aae7e969c55652) Thanks [@elpoelma](https://github.com/elpoelma)! - Roadsign-regulation-plugin: differentiate between 'Verkeersbord' and 'Onderbord' signs
+
+### Patch Changes
+
+- [#576](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/576) [`c68bef3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c68bef3a3e215e0d721894b72f8e0754b9988ca9) Thanks [@elpoelma](https://github.com/elpoelma)! - Slightly readjust styling of `snippet` and `structure` nodes, to ensure better cursor behaviour in firefox.
+  Note: for the better cursor behaviour in firefox to work as expected, `@lblod/ember-rdfa-editor` version [12.8.0](https://github.com/lblod/ember-rdfa-editor/releases/tag/%40lblod%2Fember-rdfa-editor%4012.8.0) or higher needs to be installed.
+
+## 32.0.0
+
+### Major Changes
+
+- [#575](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/575) [`30abd63`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/30abd63cf2552a124c4d9168f5e040d4e847cc3d) Thanks [@lagartoverde](https://github.com/lagartoverde)! - BREAKING CHANGE: Adapt roadsign plugin to the new MOW model
+
+### Patch Changes
+
+- [#572](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/572) [`da42a7a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/da42a7afe59b58c12039bbbb7feb714ebd9a35c2) Thanks [@elpoelma](https://github.com/elpoelma)! - IRGN: increase font size of measure preview"
+
 ## 31.1.1
 
 ### Patch Changes

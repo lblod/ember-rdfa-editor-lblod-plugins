@@ -25,7 +25,8 @@ import { buildArticleStructure } from '../../decision-plugin/utils/build-article
 import { insertArticle } from '../../decision-plugin/actions/insert-article';
 import { SignConcept } from '../schemas/sign-concept';
 import {
-  SIGN_CONCEPT_TYPE_LABELS,
+  ROAD_SIGN_CATEGORIES,
+  SIGN_CONCEPT_TYPES,
   SIGN_TYPE_MAPPING,
   SIGN_TYPES,
   ZONALITY_OPTIONS,
@@ -190,9 +191,28 @@ function constructMeasureBody(
   return schema.nodes.paragraph.create({}, nodes);
 }
 
+function determineSignLabel(signConcept: SignConcept) {
+  switch (signConcept.type) {
+    case SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT:
+      return 'Verkeerslicht';
+    case SIGN_CONCEPT_TYPES.ROAD_MARKING:
+      return 'Wegmarkering';
+    case SIGN_CONCEPT_TYPES.ROAD_SIGN:
+      if (
+        signConcept.categories
+          .map((cat) => cat.uri)
+          .includes(ROAD_SIGN_CATEGORIES.ONDERBORD)
+      ) {
+        return 'Onderbord';
+      } else {
+        return 'Verkeersbord';
+      }
+  }
+}
+
 function constructSignNode(signConcept: SignConcept, schema: Schema) {
   const signUri = `http://data.lblod.info/verkeerstekens/${uuid()}`;
-  const prefix = SIGN_CONCEPT_TYPE_LABELS[signConcept.type];
+  const prefix = determineSignLabel(signConcept);
   const node = schema.nodes.inline_rdfa.create(
     {
       rdfaNodeType: 'resource',

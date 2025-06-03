@@ -118,6 +118,8 @@ import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { structureViewWithConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
+import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
+import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
 
 export default class SnippetEditController extends Controller {
   queryParams = ['editableNodes'];
@@ -354,6 +356,8 @@ export default class SnippetEditController extends Controller {
     };
   };
   @tracked plugins: Plugin[] = [
+    firefoxCursorFix(),
+    chromeHacksPlugin(),
     ...tablePlugins,
     tableKeymap,
     this.citationPlugin,

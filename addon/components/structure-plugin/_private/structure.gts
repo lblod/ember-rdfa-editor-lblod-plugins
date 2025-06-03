@@ -226,9 +226,7 @@ export default class Structure extends Component<Sig> {
           </Tag>
         {{/let}}
       </div>
-      <div class='say-structure__content'>
-        {{yield}}
-      </div>
+      {{yield}}
     </div>
   </template>
 }

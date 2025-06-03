@@ -102,13 +102,19 @@
       color: black;
     }
   }
-  .say-snippet-content {
+
+  .say-snippet-body {
     position: relative;
+    margin-top: 0;
+  }
+
+  .say-snippet-content {
     padding: 20px;
     min-height: 100px;
     padding-right: 50px;
     margin-top: 0;
   }
+
   .say-snippet-icons {
     display: flex;
     width: fit-content;
