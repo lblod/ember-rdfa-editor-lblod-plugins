@@ -97,6 +97,7 @@
     padding: 5px;
     border-bottom: 1px solid var(--au-blue-300);
     color: var(--au-blue-700);
+    cursor: pointer;
     .say-snippet-title-icon {
       background-color: var(--au-blue-300);
       color: black;
@@ -158,6 +159,18 @@
     }
   }
 }
+.ProseMirror-selectednode {
+  .say-snippet-content {
+    background-color: var(--au-blue-200);
+  }
+  .say-snippet-title {
+    background-color: var(--au-blue-300);
+  }
+  // Only grab if this exact snippet is selected
+  & > .say-snippet-card > .say-snippet-title {
+    cursor: grab;
+  }
+}
 
 .ember-node.say-active:has(> .say-snippet-card) {
   outline: none;
@@ -179,6 +192,7 @@
   background-color: var(--au-orange-300);
   border-radius: var(--au-radius);
   border: 0.1rem solid var(--au-orange-500);
+  cursor: pointer;
 
   .say-snippet-placeholder__icon {
     background-color: var(--au-orange-500);
@@ -210,6 +224,7 @@
 
 .ProseMirror-selectednode > .say-snippet-placeholder {
   background-color: var(--au-blue-200);
+  cursor: grab;
 }
 
 .say-snippet-placeholder-node {

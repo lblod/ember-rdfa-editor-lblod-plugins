@@ -381,7 +381,8 @@ export default class RegulatoryStatementSampleController extends Controller {
       ),
       snippet: snippetView(this.config.snippet)(controller),
       autofilled_variable: autofilledVariableView(controller),
-      block_rdfa: (node) => new BlockRDFaView(node),
+      block_rdfa: (...args: Parameters<NodeViewConstructor>) =>
+        new BlockRDFaView(args, controller),
     };
   };
   @tracked plugins: Plugin[] = [
