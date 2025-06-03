@@ -34,6 +34,7 @@ import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-d
 import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
 import { getSnippetListUrisFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { Snippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 interface ButtonSig {
   Args: {
@@ -210,6 +211,9 @@ export default class SnippetNode extends Component<Signature> {
       }),
     );
   }
+  get class() {
+    return getClassnamesFromNode(this.args.node);
+  }
 
   <template>
     {{#if this.isPlaceholder}}
@@ -219,7 +223,7 @@ export default class SnippetNode extends Component<Signature> {
         @insertSnippet={{this.editFragment}}
       />
     {{else}}
-      <div class='say-snippet-card'>
+      <div class='{{this.class}} say-snippet-card'>
         <div class='say-snippet-title'>
           <span class='au-c-badge au-c-badge--small say-snippet-title-icon'>
             <AuIcon @icon='plus-text' />

@@ -27,6 +27,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { tripleForSnippetListUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 export function importedResourcesFromSnippetLists(
   lists: SnippetList[],
@@ -113,6 +114,7 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
     },
   },
   component: SnippetComponent,
+  classNames: ['say-snippet'],
   serialize(node, editorState) {
     const t = getTranslationFunction(editorState);
     const listNames = node.attrs.snippetListNames as string[];
@@ -120,7 +122,7 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
       renderable: node,
       tag: 'div',
       attrs: {
-        class: 'say-snippet-placeholder-node',
+        class: `${getClassnamesFromNode(node)} say-snippet-placeholder`,
         'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,

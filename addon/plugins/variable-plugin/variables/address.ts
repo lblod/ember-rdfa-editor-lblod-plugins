@@ -54,6 +54,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/address-helpers';
 import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const rdfaAware = true;
 
@@ -379,7 +380,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     tag: 'span',
     content: contentNode,
     attrs: {
-      class: value ? '' : 'say-variable',
+      class: `${getClassnamesFromNode(node)}${value ? '' : ' say-variable'}`,
     },
   });
 };
@@ -402,6 +403,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
+  classNames: ['say-address-variable'],
   serialize,
   parseDOM,
 };

@@ -42,6 +42,7 @@ import {
   generateVariableUri,
 } from '../utils/variable-helpers';
 import { createDateVariableAttrs } from '../actions/create-date-variable';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 const TRANSLATION_FALLBACKS = {
   insertDate: 'Datum invoegen',
@@ -256,7 +257,7 @@ const serialize = (node: PNode, state: EditorState) => {
       : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
   }
   const dateAttrs = {
-    class: content ? '' : 'say-variable',
+    class: `${getClassnamesFromNode(node)}${content ? '' : ' say-variable'}`,
     'data-say-variable': 'true',
     'data-say-variable-type': 'date',
     'data-format': format as string,
@@ -322,6 +323,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
 
     return humanReadableDate;
   },
+  classNames: ['say-date-variable'],
   serialize,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 });
