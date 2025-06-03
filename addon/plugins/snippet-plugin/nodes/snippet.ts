@@ -161,22 +161,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   selectable: true,
   editable: true,
   isolating: true,
-  stopEvent(event) {
-    // Prevent mousedown events from jumping focus inside the ember-node temporarily when
-    // selecting by clicking on the title
-    if (event.type === 'mousedown') {
-      const target = event.target;
-      if (
-        target instanceof Element &&
-        target.className.includes('say-snippet-title')
-      ) {
-        event.preventDefault();
-        return true;
-      }
-    }
-    // Follow default stopEvent logic
-    return null;
-  },
   attrs: {
     ...rdfaAttrSpec({ rdfaAware: true }),
     properties: {
