@@ -117,6 +117,7 @@ import {
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { structureViewWithConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 
 export default class SnippetEditController extends Controller {
   queryParams = ['editableNodes'];
@@ -388,5 +389,11 @@ export default class SnippetEditController extends Controller {
 
   get optionGeneratorConfig() {
     return this.controller && documentConfig(this.controller);
+  }
+
+  get visualizerConfig(): RdfaVisualizerConfig {
+    return {
+      displayConfig: {},
+    };
   }
 }

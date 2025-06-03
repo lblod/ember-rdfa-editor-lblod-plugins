@@ -136,6 +136,7 @@ import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
 import { type StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
+import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -433,5 +434,11 @@ export default class RegulatoryStatementSampleController extends Controller {
 
   get optionGeneratorConfig() {
     return this.controller && documentConfig(this.controller);
+  }
+
+  get visualizerConfig(): RdfaVisualizerConfig {
+    return {
+      displayConfig: {},
+    };
   }
 }

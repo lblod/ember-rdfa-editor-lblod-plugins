@@ -130,6 +130,7 @@ import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants'
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
 
 import { getOwner } from '@ember/owner';
+import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -423,6 +424,12 @@ export default class BesluitSampleController extends Controller {
 
   get optionGeneratorConfig() {
     return this.controller && documentConfig(this.controller);
+  }
+
+  get visualizerConfig(): RdfaVisualizerConfig {
+    return {
+      displayConfig: {},
+    };
   }
 
   get standardTemplates() {
