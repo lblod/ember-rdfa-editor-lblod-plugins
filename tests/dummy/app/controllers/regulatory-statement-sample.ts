@@ -103,9 +103,16 @@ import {
   inlineRdfaWithConfig,
   inlineRdfaWithConfigView,
 } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
+
+import VisualiserCard from '@lblod/ember-rdfa-editor/components/_private/rdfa-visualiser/visualiser-card';
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
-import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import NodeControlsCard from '@lblod/ember-rdfa-editor/components/_private/node-controls/card';
+import DocImportedResourceEditorCard from '@lblod/ember-rdfa-editor/components/_private/doc-imported-resource-editor/card';
+import ImportedResourceLinkerCard from '@lblod/ember-rdfa-editor/components/_private/imported-resource-linker/card';
+import ExternalTripleEditorCard from '@lblod/ember-rdfa-editor/components/_private/external-triple-editor/card';
+import RelationshipEditorCard from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/card';
+import { documentConfig } from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/configs';
 import SnippetInsertRdfaComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-insert-rdfa';
 import SnippetListSelect from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/snippet-list-select';
 import {
@@ -129,15 +136,22 @@ import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
 import { type StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
+import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
 
-  SnippetInsert = SnippetInsertRdfaComponent;
-  SnippetListSelect = SnippetListSelect;
+  VisualiserCard = VisualiserCard;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
-  RdfaEditor = RdfaEditor;
+  NodeControlsCard = NodeControlsCard;
+  DocImportedResourceEditorCard = DocImportedResourceEditorCard;
+  ImportedResourceLinkerCard = ImportedResourceLinkerCard;
+  ExternalTripleEditorCard = ExternalTripleEditorCard;
+  RelationshipEditorCard = RelationshipEditorCard;
+
+  SnippetInsert = SnippetInsertRdfaComponent;
+  SnippetListSelect = SnippetListSelect;
   StructureControlCard = StructureControlCardComponent;
   @tracked editableNodes = false;
 
@@ -416,5 +430,15 @@ export default class RegulatoryStatementSampleController extends Controller {
     controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
+  }
+
+  get optionGeneratorConfig() {
+    return this.controller && documentConfig(this.controller);
+  }
+
+  get visualizerConfig(): RdfaVisualizerConfig {
+    return {
+      displayConfig: {},
+    };
   }
 }
