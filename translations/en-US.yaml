@@ -394,14 +394,16 @@ worship-plugin:
   modal:
     title: Choose a worship service
     insert: Insert
-    search:
-      title: Filter on
-      placeholder: Type something...
-      search: search
-      no results: nothing found
+    filter-on: Filter on
     fields:
-      name: Name
-      admin-unit: Administrative Unit
+      name:
+        label: Name
+        placeholder: Type something
+      admin-unit:
+        label: Administrative Unit
+        placeholder: Select administrative unit
+        search: Type to search
+        no-results: No results
 
 lmb-plugin:
   insert:

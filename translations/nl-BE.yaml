@@ -389,18 +389,20 @@ confidentiality-plugin:
 
 worship-plugin:
   insert:
-    title: Erediensten invoegen
+    title: Eredienst invoegen
   modal:
-    title: Kies een erediensten
+    title: Kies een eredienst
     insert: Invoegen
-    search:
-      title: Filter op
-      placeholder: Typ iets...
-      search: zoeken
-      no results: niets gevonden
+    filter-on: Filter op
     fields:
-      name: Naam
-      admin-unit: Bestuurseenheid
+      name:
+        label: Naam
+        placeholder: Typ om te zoeken
+      admin-unit:
+        label: Bestuurseenheid
+        placeholder: Selecteer bestuurseenheid
+        search: Typ om te zoeken
+        no-results: Geen resultaat
 
 lmb-plugin:
   insert:

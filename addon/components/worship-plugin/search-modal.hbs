@@ -18,21 +18,21 @@
         <div class='au-c-sidebar'>
           <div class='au-c-sidebar__content au-u-padding'>
             <AuHeading @level='3' @skin='4' class='au-u-padding-bottom-small'>
-              {{t 'worship-plugin.modal.search.title'}}
+              {{t 'worship-plugin.modal.filter-on'}}
             </AuHeading>
             <AuLabel class='au-margin-bottom-small' for='searchTerm'>
-              {{t 'worship-plugin.modal.fields.name'}}
+              {{t 'worship-plugin.modal.fields.name.label'}}
             </AuLabel>
             <AuNativeInput
               @type='text'
               @width='block'
               id='searchTerm'
               value={{this.searchText}}
-              placeholder={{t 'worship-plugin.modal.search.placeholder'}}
+              placeholder={{t 'worship-plugin.modal.fields.name.placeholder'}}
               {{on 'input' this.setInputSearchText}}
             />
             <AuLabel class='au-margin-bottom-small' for='admin-unit-select'>
-              {{t 'worship-plugin.modal.fields.admin-unit'}}
+              {{t 'worship-plugin.modal.fields.admin-unit.label'}}
             </AuLabel>
             <WorshipPlugin::AdministrativeUnitPicker
               id='admin-unit-select'
