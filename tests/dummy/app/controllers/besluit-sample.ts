@@ -7,7 +7,13 @@ import { tracked } from 'tracked-built-ins';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
-import { Plugin, PNode, SayController, Schema } from '@lblod/ember-rdfa-editor';
+import {
+  NodeViewConstructor,
+  Plugin,
+  PNode,
+  SayController,
+  Schema,
+} from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
@@ -104,7 +110,6 @@ import {
   structureWithConfig,
   structureViewWithConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
-import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
@@ -353,7 +358,7 @@ export default class BesluitSampleController extends Controller {
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController,
-  ) => Record<string, SayNodeViewConstructor> = (controller) => {
+  ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       text_variable: textVariableView(controller),
       person_variable: personVariableView(controller),
@@ -371,8 +376,9 @@ export default class BesluitSampleController extends Controller {
         controller,
       ),
       snippet: snippetView(this.config.snippet)(controller),
-      block_rdfa: (node) => new BlockRDFaView(node),
-    } satisfies Record<string, SayNodeViewConstructor>;
+      block_rdfa: (...args: Parameters<NodeViewConstructor>) =>
+        new BlockRDFaView(args, controller),
+    } satisfies Record<string, NodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [
     firefoxCursorFix(),
