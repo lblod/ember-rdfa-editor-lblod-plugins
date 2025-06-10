@@ -307,7 +307,7 @@ export const emberNodeConfig: (
           headerSpec,
           [
             'div',
-            { property: SAY('body').full, datatype: RDF('XMLLiteral').full },
+            { property: SAY('body').full, datatype: RDF('HTML').full },
             0,
           ],
         ],
