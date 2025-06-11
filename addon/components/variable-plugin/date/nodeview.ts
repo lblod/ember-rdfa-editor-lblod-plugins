@@ -5,6 +5,7 @@ import {
   SayController,
   SayView,
 } from '@lblod/ember-rdfa-editor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import {
   formatDate,
   validateDateFormat,
@@ -39,6 +40,10 @@ export default class DateNodeviewComponent extends Component<Args> {
     } else {
       return this.label;
     }
+  }
+
+  get class() {
+    return getClassnamesFromNode(this.args.node);
   }
 
   get label() {

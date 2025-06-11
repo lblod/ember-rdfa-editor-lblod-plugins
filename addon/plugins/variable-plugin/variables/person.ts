@@ -16,6 +16,7 @@ import {
   PNode,
   rdfaAttrSpec,
 } from '@lblod/ember-rdfa-editor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import { hasRdfaVariableType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import PersonNodeViewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/person/nodeview';
 import type { ComponentLike } from '@glint/template';
@@ -141,7 +142,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     renderable: node,
     tag: 'span',
     attrs: {
-      class: subject ? '' : 'say-variable',
+      class: `${getClassnamesFromNode(node)}${subject ? '' : ' say-variable'}`,
       'data-say-variable': 'true',
       'data-say-variable-type': 'person',
       'data-label': node.attrs['label'],
@@ -172,6 +173,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
   },
+  classNames: ['say-person-variable'],
   serialize,
   parseDOM: [...parseDOM, ...parseDOMLegacy],
 };
