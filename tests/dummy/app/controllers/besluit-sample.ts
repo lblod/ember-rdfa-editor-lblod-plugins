@@ -7,7 +7,13 @@ import { tracked } from 'tracked-built-ins';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 
-import { Plugin, PNode, SayController, Schema } from '@lblod/ember-rdfa-editor';
+import {
+  NodeViewConstructor,
+  Plugin,
+  PNode,
+  SayController,
+  Schema,
+} from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
@@ -90,14 +96,20 @@ import {
   editableNodePlugin,
   getActiveEditableNode,
 } from '@lblod/ember-rdfa-editor/plugins/editable-node';
+
+import VisualiserCard from '@lblod/ember-rdfa-editor/components/_private/rdfa-visualiser/visualiser-card';
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
 import AttributeEditor from '@lblod/ember-rdfa-editor/components/_private/attribute-editor';
-import RdfaEditor from '@lblod/ember-rdfa-editor/components/_private/rdfa-editor';
+import NodeControlsCard from '@lblod/ember-rdfa-editor/components/_private/node-controls/card';
+import DocImportedResourceEditorCard from '@lblod/ember-rdfa-editor/components/_private/doc-imported-resource-editor/card';
+import ImportedResourceLinkerCard from '@lblod/ember-rdfa-editor/components/_private/imported-resource-linker/card';
+import ExternalTripleEditorCard from '@lblod/ember-rdfa-editor/components/_private/external-triple-editor/card';
+import RelationshipEditorCard from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/card';
+import { documentConfig } from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/configs';
 import {
   structureWithConfig,
   structureViewWithConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
-import { SayNodeViewConstructor } from '@lblod/ember-rdfa-editor/utils/ember-node';
 
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
@@ -121,14 +133,22 @@ import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
 import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
+
 import { getOwner } from '@ember/owner';
+import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
 
+  VisualiserCard = VisualiserCard;
   DebugInfo = DebugInfo;
   AttributeEditor = AttributeEditor;
-  RdfaEditor = RdfaEditor;
+  NodeControlsCard = NodeControlsCard;
+  DocImportedResourceEditorCard = DocImportedResourceEditorCard;
+  ImportedResourceLinkerCard = ImportedResourceLinkerCard;
+  ExternalTripleEditorCard = ExternalTripleEditorCard;
+  RelationshipEditorCard = RelationshipEditorCard;
+
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
 
@@ -338,7 +358,7 @@ export default class BesluitSampleController extends Controller {
   @tracked rdfaEditor?: SayController;
   @tracked nodeViews: (
     controller: SayController,
-  ) => Record<string, SayNodeViewConstructor> = (controller) => {
+  ) => Record<string, NodeViewConstructor> = (controller) => {
     return {
       text_variable: textVariableView(controller),
       person_variable: personVariableView(controller),
@@ -356,8 +376,9 @@ export default class BesluitSampleController extends Controller {
         controller,
       ),
       snippet: snippetView(this.config.snippet)(controller),
-      block_rdfa: (node) => new BlockRDFaView(node),
-    } satisfies Record<string, SayNodeViewConstructor>;
+      block_rdfa: (...args: Parameters<NodeViewConstructor>) =>
+        new BlockRDFaView(args, controller),
+    } satisfies Record<string, NodeViewConstructor>;
   };
   @tracked plugins: Plugin[] = [
     firefoxCursorFix(),
@@ -405,6 +426,16 @@ export default class BesluitSampleController extends Controller {
     controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
+  }
+
+  get optionGeneratorConfig() {
+    return this.controller && documentConfig(this.controller);
+  }
+
+  get visualizerConfig(): RdfaVisualizerConfig {
+    return {
+      displayConfig: {},
+    };
   }
 
   get standardTemplates() {
