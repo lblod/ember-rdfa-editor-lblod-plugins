@@ -97,18 +97,25 @@
     padding: 5px;
     border-bottom: 1px solid var(--au-blue-300);
     color: var(--au-blue-700);
+    cursor: pointer;
     .say-snippet-title-icon {
       background-color: var(--au-blue-300);
       color: black;
     }
   }
-  .say-snippet-content {
+
+  .say-snippet-body {
     position: relative;
+    margin-top: 0;
+  }
+
+  .say-snippet-content {
     padding: 20px;
     min-height: 100px;
     padding-right: 50px;
     margin-top: 0;
   }
+
   .say-snippet-icons {
     display: flex;
     width: fit-content;
@@ -152,6 +159,18 @@
     }
   }
 }
+.ProseMirror-selectednode {
+  .say-snippet-content {
+    background-color: var(--au-blue-200);
+  }
+  .say-snippet-title {
+    background-color: var(--au-blue-300);
+  }
+  // Only grab if this exact snippet is selected
+  & > .say-snippet-card > .say-snippet-title {
+    cursor: grab;
+  }
+}
 
 .ember-node.say-active:has(> .say-snippet-card) {
   outline: none;
@@ -173,6 +192,7 @@
   background-color: var(--au-orange-300);
   border-radius: var(--au-radius);
   border: 0.1rem solid var(--au-orange-500);
+  cursor: pointer;
 
   .say-snippet-placeholder__icon {
     background-color: var(--au-orange-500);
@@ -204,6 +224,7 @@
 
 .ProseMirror-selectednode > .say-snippet.say-snippet-placeholder {
   background-color: var(--au-blue-200);
+  cursor: grab;
 }
 
 div[typeof='besluitpublicatie:Documentonderdeel']

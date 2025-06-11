@@ -43,8 +43,12 @@ import {
   Option,
   isSome,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { recalculateNumbers } from './monads/recalculate-structure-numbers';
+import { regenerateRdfaLinks } from './monads/regenerate-rdfa-links';
+import { NodeSpecOnChanged } from '@lblod/ember-rdfa-editor/plugins/on-changed/plugin';
 
 const rdfaAware = true;
+const parser = new DOMParser();
 
 const PARAGRAPH_SYMBOL = '§';
 
@@ -112,13 +116,20 @@ function buildTocEntry(node: PNode, state: EditorState) {
   }
 }
 
-const parser = new DOMParser();
+const onChanged: NodeSpecOnChanged = {
+  doOnce: true,
+  monadGenerator: () => {
+    return [recalculateNumbers, regenerateRdfaLinks];
+  },
+};
+
 export const emberNodeConfig: (
   config?: StructurePluginOptions,
 ) => EmberNodeConfig = (config) => {
   return {
     name: 'structure',
     component: Structure as unknown as ComponentLike,
+    contentDomClassNames: ['say-structure__content'],
     inline: false,
     group: 'block structure',
     content: 'block+',
@@ -129,6 +140,29 @@ export const emberNodeConfig: (
     editable: rdfaAware,
     tocEntry: buildTocEntry,
     classNames: ['say-structure'],
+    // This stopEvent would prevent the issue where a cursor jumps temporarily inside a structure
+    // when it is selected (unless it's inside one that is already selected).
+    // Unfortunately, this has the side-effect that if a structure title anywhere in the document
+    // is selected, when any structure name is clicked, the selection remains where it is instead
+    // of moving. Due to the complexity of detecting this situation it seems better to leave the
+    // weird visual bug in place.
+    // stopEvent(event) {
+    //   // Prevent mousedown events from jumping focus inside the ember-node temporarily when
+    //   // selecting by clicking on the title
+    //   if (event.type === 'mousedown') {
+    //     const target = event.target;
+    //     if (
+    //       target instanceof HTMLElement &&
+    //       (target.className.includes('say-structure__header') ||
+    //         target.className.includes('say-structure__name'))
+    //     ) {
+    //       event.preventDefault();
+    //       return true;
+    //     }
+    //   }
+    //   // Follow default stopEvent logic
+    //   return null;
+    // },
     attrs: {
       ...rdfaAttrSpec({ rdfaAware }),
 
@@ -167,6 +201,7 @@ export const emberNodeConfig: (
             : config?.onlyArticleSpecialName,
       },
     },
+    onChanged,
     serialize(node: PNode, state: EditorState) {
       const tag = node.attrs.headerTag;
       const structureType = node.attrs.structureType as StructureType;
@@ -275,7 +310,7 @@ export const emberNodeConfig: (
           headerSpec,
           [
             'div',
-            { property: SAY('body').full, datatype: RDF('XMLLiteral').full },
+            { property: SAY('body').full, datatype: RDF('HTML').full },
             0,
           ],
         ],

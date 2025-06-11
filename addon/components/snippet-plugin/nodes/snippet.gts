@@ -224,13 +224,18 @@ export default class SnippetNode extends Component<Signature> {
       />
     {{else}}
       <div class='{{this.class}} say-snippet-card'>
-        <div class='say-snippet-title'>
+        <div
+          class='say-snippet-title'
+          contenteditable='false'
+          {{! template-lint-disable no-invalid-interactive }}
+          {{on 'click' @selectNode}}
+        >
           <span class='au-c-badge au-c-badge--small say-snippet-title-icon'>
             <AuIcon @icon='plus-text' />
           </span>
           {{this.node.attrs.title}}
         </div>
-        <div class='say-snippet-content'>
+        <div class='say-snippet-body'>
           {{yield}}
           <div class='say-snippet-icons' contenteditable='false'>
             <SnippetButton

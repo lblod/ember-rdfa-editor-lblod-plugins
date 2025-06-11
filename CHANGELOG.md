@@ -1,5 +1,44 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.2.0
+
+### Minor Changes
+
+- [#579](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/579) [`88b6a8e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/88b6a8e486ed3470e5739068e73f1322d5f9f5b3) Thanks [@piemonkey](https://github.com/piemonkey)! - Change structure-plugin to output say:body with datatype rdf:HTML instead of rdf:XMLLiteral as it is more correct
+
+- [#577](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/577) [`d3a1901`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d3a19011398e1d95bafda85cd660a4c5a6089a22) Thanks [@piemonkey](https://github.com/piemonkey)! - Move structure-plugin to use on-changed plugin to always keep RDFa and numbering up to date on changes
+
+- [#577](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/577) [`299773f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/299773f4653951112192b30676ad34787fe57b72) Thanks [@piemonkey](https://github.com/piemonkey)! - Move to @lblod/ember-rdfa-editor version 12.9.0 with support for drag-and-drop ember-nodes and on-changed plugin
+
+- [#580](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/580) [`57d72b6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/57d72b6f4f4d02524f5e6e7e1256c11f3ee026d4) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix location plugin to output correct WKT polygons (with matching start and end points) for area locations
+
+### Patch Changes
+
+- [#578](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/578) [`2913a8d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2913a8d9754a7ac3eb99d9663d2730628e84f885) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix missing translations in citation-plugin
+
+- [#578](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/578) [`848ada7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/848ada7597f19d56dc84256b7db42d6876181168) Thanks [@elpoelma](https://github.com/elpoelma)! - Improve translations of worship-plugin (capitalization, add missing translations etc.)
+
+## 32.1.0
+
+### Minor Changes
+
+- [#573](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/573) [`be9e2f4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/be9e2f476266037926f43f2729aae7e969c55652) Thanks [@elpoelma](https://github.com/elpoelma)! - Roadsign-regulation-plugin: differentiate between 'Verkeersbord' and 'Onderbord' signs
+
+### Patch Changes
+
+- [#576](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/576) [`c68bef3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c68bef3a3e215e0d721894b72f8e0754b9988ca9) Thanks [@elpoelma](https://github.com/elpoelma)! - Slightly readjust styling of `snippet` and `structure` nodes, to ensure better cursor behaviour in firefox.
+  Note: for the better cursor behaviour in firefox to work as expected, `@lblod/ember-rdfa-editor` version [12.8.0](https://github.com/lblod/ember-rdfa-editor/releases/tag/%40lblod%2Fember-rdfa-editor%4012.8.0) or higher needs to be installed.
+
+## 32.0.0
+
+### Major Changes
+
+- [#575](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/575) [`30abd63`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/30abd63cf2552a124c4d9168f5e040d4e847cc3d) Thanks [@lagartoverde](https://github.com/lagartoverde)! - BREAKING CHANGE: Adapt roadsign plugin to the new MOW model
+
+### Patch Changes
+
+- [#572](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/572) [`da42a7a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/da42a7afe59b58c12039bbbb7feb714ebd9a35c2) Thanks [@elpoelma](https://github.com/elpoelma)! - IRGN: increase font size of measure preview"
+
 ## 31.1.1
 
 ### Patch Changes

@@ -283,6 +283,7 @@ const emberNodeConfig = (options: DateOptions): EmberNodeConfig => ({
   draggable: false,
   atom: true,
   recreateUriFunction: recreateVariableUris,
+  needsFFKludge: true,
   defining: false,
   options,
   attrs: {

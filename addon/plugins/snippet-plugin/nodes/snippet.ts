@@ -176,6 +176,7 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
     allowMultipleSnippets: { default: false },
   },
   component: SnippetComponent,
+  contentDomClassNames: ['say-snippet-content'],
   content: options.allowedContent || DEFAULT_CONTENT_STRING,
   classNames: ['say-snippet'],
   serialize(node) {

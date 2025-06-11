@@ -4,4 +4,4 @@ export type LegacyTableOfContentsConfig = {
 }[];
 export type TableOfContentsConfig =
   | LegacyTableOfContentsConfig
-  | { scrollContainer?: () => HTMLElement };
+  | { scrollContainer?: () => HTMLElement | undefined };

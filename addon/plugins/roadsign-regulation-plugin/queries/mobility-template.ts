@@ -39,7 +39,7 @@ export async function queryMobilityTemplates(
       }
       ${
         measureConceptUri
-          ? `${sparqlEscapeUri(measureConceptUri)} mobiliteit:template ?uri`
+          ? `${sparqlEscapeUri(measureConceptUri)} mobiliteit:Mobiliteitsmaatregelconcept.template ?uri`
           : ''
       }
     }

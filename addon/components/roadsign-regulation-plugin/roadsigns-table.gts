@@ -19,6 +19,7 @@ import { eq } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
+import { SIGN_CONCEPT_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 type Signature = {
   Args: {
@@ -44,8 +45,10 @@ export default class RoadSignsTable extends Component<Signature> {
   categories = (measureConcept: MobilityMeasureConcept) => {
     const categorySet: Set<string> = new Set();
     for (const signConcept of measureConcept.signConcepts) {
-      const categories = signConcept.classifications;
-      addAll(categorySet, ...categories);
+      if (signConcept.type === SIGN_CONCEPT_TYPES.ROAD_SIGN) {
+        const categoryLabels = signConcept.categories.map((cat) => cat.label);
+        addAll(categorySet, ...categoryLabels);
+      }
     }
     return [...categorySet].sort();
   };
@@ -106,7 +109,11 @@ export default class RoadSignsTable extends Component<Signature> {
                     </div>
                   </td>
                   <td>
-                    <AuHelpText skin='secondary' class='au-u-margin-none'>
+                    <AuHelpText
+                      @size='large'
+                      skin='secondary'
+                      class='au-u-margin-none'
+                    >
                       <MeasurePreview
                         @concept={{measureConcept}}
                         @limitText={{true}}
