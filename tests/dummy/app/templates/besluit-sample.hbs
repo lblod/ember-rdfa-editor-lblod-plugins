@@ -91,6 +91,11 @@
               @controller={{this.controller}}
               @config={{this.config.mandateeTable.config}}
             />
+            <AuButton
+              {{on 'click' this.validateDocument}}
+            >
+              Validate Document
+            </AuButton>
             <Sidebar as |Sidebar|>
               <Sidebar.Collapsible
                 @title='Structures'
@@ -140,6 +145,7 @@
                   @config={{this.config.lpdc}}
                 />
               </Sidebar.Collapsible>
+              <DocumentValidationPlugin::Card @controller={{this.controller}} />
               <this.StructureControlCard @controller={{this.controller}} />
               <DecisionPlugin::DecisionPluginCard
                 @controller={{this.controller}}
