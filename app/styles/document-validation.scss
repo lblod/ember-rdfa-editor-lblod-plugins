@@ -3,10 +3,18 @@
 }
 
 .say-document-validation__icon-success{
-  color: var(--au-green-600)
+  color: var(--au-green-700)
 }
 
 .say-document-validation__error-container {
   display: flex;
   align-items: center;
+}
+
+.say-document-validation__card {
+  background-color: var(--au-orange-300);
+}
+
+.say-document-validation__description {
+  font-weight: 500;
 }

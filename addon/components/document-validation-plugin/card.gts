@@ -3,14 +3,15 @@ import { SayController } from '@lblod/ember-rdfa-editor';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import { documentValidationPluginKey } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
-import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
-import { CircleCheckIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-check';
+import { CloseFilledIcon } from '@appuniversum/ember-appuniversum/components/icons/close-filled';
+import { CheckFilledIcon } from '@appuniversum/ember-appuniversum/components/icons/check-filled';
 import { selectNodeBySubject } from '@lblod/ember-rdfa-editor/commands/_private/rdfa-commands/select-node-by-subject';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/icons/external-link';
 import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
+import t from 'ember-intl/helpers/t';
 
 interface Sig {
   Args: {
@@ -53,6 +54,9 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
   setStatusMessage = (statusMessage) => {
     console.log(statusMessage);
   };
+  get isValidDocument() {
+    return this.documentValidationErrors?.length === 0;
+  }
   <template>
     {{#if this.documentValidationErrors}}
       <AuCard
@@ -62,16 +66,26 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
+        class='say-document-validation__card'
         as |c|
       >
         <c.header>
-          Document Validation
+          <p class='au-u-medium au-u-h6'>
+            {{#if this.isValidDocument}}
+              {{t 'document-validation-plugin.valid-document-title'}}
+            {{else}}
+              {{t 'document-validation-plugin.invalid-document-title'}}
+            {{/if}}
+          </p>
         </c.header>
         <c.content>
+          <p class='au-u-medium au-u-para-small'>{{t
+              'document-validation-plugin.description'
+            }}</p>
           {{#each this.propertiesWithoutErrors as |property|}}
             <div class='say-document-validation__error-container'>
               <AuIcon
-                @icon={{CircleCheckIcon}}
+                @icon={{CheckFilledIcon}}
                 @size='large'
                 @ariaHidden={{true}}
                 class='say-document-validation__icon-success au-u-margin-right-small'
@@ -82,7 +96,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
           {{#each this.documentValidationErrors as |error|}}
             <div class='say-document-validation__error-container'>
               <AuIcon
-                @icon={{CircleXIcon}}
+                @icon={{CloseFilledIcon}}
                 @size='large'
                 @ariaHidden={{true}}
                 class='say-document-validation__icon-error au-u-margin-right-small'
@@ -94,7 +108,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                 @skin='link'
                 title={{error.subject}}
                 {{on 'click' (fn this.goToSubject error.subject)}}
-              >See related node</AuButton>
+              >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
             </div>
           {{/each}}
         </c.content>

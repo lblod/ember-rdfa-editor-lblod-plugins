@@ -91,7 +91,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "~3.5.0",
+    "@appuniversum/ember-appuniversum": "~3.12.0",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.7",
     "@ember/optional-features": "^2.1.0",
@@ -179,7 +179,7 @@
     "webpack": "^5.95.0"
   },
   "peerDependencies": {
-    "@appuniversum/ember-appuniversum": "^3.5.0",
+    "@appuniversum/ember-appuniversum": "^3.12.0",
     "@ember/string": "3.x",
     "@glint/template": "^1.4.0",
     "@lblod/ember-rdfa-editor": "^12.1.0",

@@ -505,3 +505,9 @@ mandatee-table-plugin:
   node:
     warning: Information which you enter below will be removed upon
       synchronisation of the inauguration meeting.
+
+document-validation-plugin:
+  valid-document-title: The document is valid
+  invalid-document-title: The document is not valid
+  see-related-node: See related node
+  description: Some parts are required to allow our system to parse this document.
