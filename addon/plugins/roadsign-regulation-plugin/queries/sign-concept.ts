@@ -13,13 +13,14 @@ type QueryOptions = {
   imageBaseUrl?: string;
   measureConceptUri?: string;
   abortSignal?: AbortSignal;
+  orderBy?: 'code';
 };
 
 export async function querySignConcepts(
   endpoint: string,
   options: QueryOptions = {},
 ) {
-  const { imageBaseUrl, measureConceptUri, abortSignal } = options;
+  const { imageBaseUrl, measureConceptUri, abortSignal, orderBy } = options;
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -54,6 +55,8 @@ export async function querySignConcepts(
 
       ${measureConceptUri ? `?uri mobiliteit:heeftMaatregelconcept ${sparqlEscapeUri(measureConceptUri)}` : ''}
     }
+    ${orderBy ? `ORDER BY ASC(UCASE(?${orderBy}))` : ''}
+
   `;
   const queryResult = await executeQuery<BindingObject<SignConcept>>({
     query,
