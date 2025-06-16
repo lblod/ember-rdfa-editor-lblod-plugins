@@ -207,6 +207,9 @@ importers:
       '@types/leaflet':
         specifier: ^1.9.12
         version: 1.9.12
+      '@types/n3':
+        specifier: ^1.26.0
+        version: 1.26.0
       '@types/proj4':
         specifier: ^2.5.5
         version: 2.5.5
@@ -2347,6 +2350,9 @@ packages:
 
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
+
+  '@types/n3@1.26.0':
+    resolution: {integrity: sha512-ugCaNuBvnSVBE0mEbHQ+2g5dC05EujW/XLhHDvI6a0q6cajJrQosy4CWF+B/O1kxH8lYDR60lBTC0duXXsE+VA==}
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
@@ -12845,7 +12851,7 @@ snapshots:
       '@types/ember__string': 3.16.3
       '@types/ember__template': 4.0.7
       '@types/ember__test': 4.0.6(@babel/core@7.26.0)
-      '@types/ember__utils': 4.0.7
+      '@types/ember__utils': 4.0.7(@babel/core@7.26.0)
       '@types/rsvp': 4.0.9
     optional: true
 
@@ -13015,11 +13021,6 @@ snapshots:
       - supports-color
     optional: true
 
-  '@types/ember__utils@4.0.7':
-    dependencies:
-      '@types/ember': 4.0.11
-    optional: true
-
   '@types/ember__utils@4.0.7(@babel/core@7.26.0)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.26.0)
@@ -13125,6 +13126,11 @@ snapshots:
   '@types/minimatch@5.1.2': {}
 
   '@types/ms@0.7.34': {}
+
+  '@types/n3@1.26.0':
+    dependencies:
+      '@rdfjs/types': 1.1.2
+      '@types/node': 20.14.9
 
   '@types/node@12.20.55': {}
 
