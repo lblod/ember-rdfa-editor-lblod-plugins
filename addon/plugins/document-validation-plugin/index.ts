@@ -90,7 +90,7 @@ async function validationCallback(view: EditorView, documentHtml: string) {
   );
 
   const successMessagePred = sayFactory.namedNode(
-    'http://mu.semte.ch/vocabularies/ext/sucessMessage',
+    'http://mu.semte.ch/vocabularies/ext/successMessage',
   );
   const propertiesWithoutErrors = propertiesWithoutErrorsArray
     .map((propertyNode) => {

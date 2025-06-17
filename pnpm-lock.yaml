@@ -29,6 +29,9 @@ importers:
       '@embroider/macros':
         specifier: ^1.16.5
         version: 1.16.5(@glint/template@1.5.1)
+      '@lblod/lib-decision-shapes':
+        specifier: ^0.0.22
+        version: 0.0.22(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.14.9)(node-notifier@10.0.1))(typescript@5.7.3)
       '@lblod/marawa':
         specifier: 0.8.0-beta.6
         version: 0.8.0-beta.6
@@ -83,9 +86,6 @@ importers:
       ember-velcro:
         specifier: ^2.2.0
         version: 2.2.0(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1)))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))
-      lib-decision-shapes:
-        specifier: ^0.0.16
-        version: 0.0.16(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.14.9)(node-notifier@10.0.1))(typescript@5.7.3)
       n2words:
         specifier: ^1.21.0
         version: 1.21.0
@@ -1826,6 +1826,9 @@ packages:
       '@glint/template':
         optional: true
 
+  '@lblod/lib-decision-shapes@0.0.22':
+    resolution: {integrity: sha512-8jNbj26lp75j1fEdx1PvFDZsEpw2a17unrmzYY4rRTfDqGbVnQwYyJLxfhBEudnMzYmjMXN+lDL00p/lavIW/Q==}
+
   '@lblod/marawa@0.8.0-beta.6':
     resolution: {integrity: sha512-BW3yCpeQlk9EPnQAEQnM9uViA8RC5DkuoiaPJzbuhMcLvKHfI4cjc6dTg9i8qAijbL/xObmQ/Aexko2Xcj9ktw==}
 
@@ -2089,6 +2092,11 @@ packages:
     engines: {node: '>=16'}
     peerDependencies:
       release-it: ^16.0.0
+
+  '@rollup/rollup-linux-x64-gnu@4.43.0':
+    resolution: {integrity: sha512-jAHr/S0iiBtFyzjhOkAics/2SrXE092qyqEg96e90L3t9Op8OTzS6+IX0Fy5wCt2+KqeHAkti+eitV0wvblEoQ==}
+    cpu: [x64]
+    os: [linux]
 
   '@rubensworks/saxes@6.0.1':
     resolution: {integrity: sha512-UW4OTIsOtJ5KSXo2Tchi4lhZqu+tlHrOAs4nNti7CrtB53kAZl3/hyrTi6HkMihxdbDM6m2Zc3swc/ZewEe1xw==}
@@ -6528,9 +6536,6 @@ packages:
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
-
-  lib-decision-shapes@0.0.16:
-    resolution: {integrity: sha512-NUVmpzcSVlnH09NbCBN8Hw7YpmO1fhlhpx7po9p6EeEWk80MmUpaCy4X7DXHihpkAnaq1zyFQQFRmgL2mTXs9Q==}
 
   line-column@1.0.2:
     resolution: {integrity: sha512-Ktrjk5noGYlHsVnYWh62FLVs4hTb8A3e+vucNZMgPeAOITdshMSgv4cCZQeRDjm7+goqmo6+liZwTXo+U3sVww==}
@@ -12327,6 +12332,20 @@ snapshots:
       - eslint
       - supports-color
 
+  '@lblod/lib-decision-shapes@0.0.22(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.14.9)(node-notifier@10.0.1))(typescript@5.7.3)':
+    dependencies:
+      ts-jest: 29.3.4(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.14.9)(node-notifier@10.0.1))(typescript@5.7.3)
+    optionalDependencies:
+      '@rollup/rollup-linux-x64-gnu': 4.43.0
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@jest/transform'
+      - '@jest/types'
+      - babel-jest
+      - esbuild
+      - jest
+      - typescript
+
   '@lblod/marawa@0.8.0-beta.6':
     dependencies:
       '@rdfjs/data-model': 1.3.4
@@ -12707,6 +12726,9 @@ snapshots:
       release-it: 16.3.0(typescript@5.7.3)
       string-template: 1.0.0
 
+  '@rollup/rollup-linux-x64-gnu@4.43.0':
+    optional: true
+
   '@rubensworks/saxes@6.0.1':
     dependencies:
       xmlchars: 2.2.0
@@ -12834,27 +12856,6 @@ snapshots:
     dependencies:
       '@types/ms': 0.7.34
 
-  '@types/ember@4.0.11':
-    dependencies:
-      '@types/ember__application': 4.0.11(@babel/core@7.26.0)
-      '@types/ember__array': 4.0.10(@babel/core@7.26.0)
-      '@types/ember__component': 4.0.22(@babel/core@7.26.0)
-      '@types/ember__controller': 4.0.12(@babel/core@7.26.0)
-      '@types/ember__debug': 4.0.8(@babel/core@7.26.0)
-      '@types/ember__engine': 4.0.11(@babel/core@7.26.0)
-      '@types/ember__error': 4.0.6
-      '@types/ember__object': 4.0.12(@babel/core@7.26.0)
-      '@types/ember__polyfills': 4.0.6
-      '@types/ember__routing': 4.0.22(@babel/core@7.26.0)
-      '@types/ember__runloop': 4.0.10
-      '@types/ember__service': 4.0.9(@babel/core@7.26.0)
-      '@types/ember__string': 3.16.3
-      '@types/ember__template': 4.0.7
-      '@types/ember__test': 4.0.6(@babel/core@7.26.0)
-      '@types/ember__utils': 4.0.7(@babel/core@7.26.0)
-      '@types/rsvp': 4.0.9
-    optional: true
-
   '@types/ember@4.0.11(@babel/core@7.26.0)':
     dependencies:
       '@types/ember__application': 4.0.11(@babel/core@7.26.0)
@@ -12882,7 +12883,7 @@ snapshots:
   '@types/ember__application@4.0.11(@babel/core@7.26.0)':
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.26.0)
-      '@types/ember': 4.0.11
+      '@types/ember': 4.0.11(@babel/core@7.26.0)
       '@types/ember__engine': 4.0.11(@babel/core@7.26.0)
       '@types/ember__object': 4.0.12(@babel/core@7.26.0)
       '@types/ember__owner': 4.0.9
@@ -12982,11 +12983,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
-
-  '@types/ember__runloop@4.0.10':
-    dependencies:
-      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__runloop@4.0.10(@babel/core@7.26.0)':
@@ -19011,18 +19007,6 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
-
-  lib-decision-shapes@0.0.16(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.14.9)(node-notifier@10.0.1))(typescript@5.7.3):
-    dependencies:
-      ts-jest: 29.3.4(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.14.9)(node-notifier@10.0.1))(typescript@5.7.3)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@jest/transform'
-      - '@jest/types'
-      - babel-jest
-      - esbuild
-      - jest
-      - typescript
 
   line-column@1.0.2:
     dependencies:

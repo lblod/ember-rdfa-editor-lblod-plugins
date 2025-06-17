@@ -75,7 +75,7 @@
     "ember-resources": "^7.0.2",
     "ember-template-imports": "^4.3.0",
     "ember-velcro": "^2.2.0",
-    "lib-decision-shapes": "^0.0.16",
+    "@lblod/lib-decision-shapes": "^0.0.22",
     "n2words": "^1.21.0",
     "n3": "^1.26.0",
     "process": "0.11.10",
