@@ -11,8 +11,12 @@
   align-items: center;
 }
 
-.say-document-validation__card {
+.say-document-validation__card-invalid {
   background-color: var(--au-orange-300);
+}
+
+.say-document-validation__card-valid {
+  background-color: var(--au-green-200);
 }
 
 .say-document-validation__description {

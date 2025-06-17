@@ -39,22 +39,10 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     return this.args.controller;
   }
   goToSubject = (subject: string) => {
-    const succesful = this.controller.doCommand(
-      selectNodeBySubject({ subject }),
-      {
-        view: this.controller.mainEditorView,
-      },
-    );
-    if (!succesful) {
-      this.setStatusMessage({
-        type: 'info',
-        message: `Node with subject ${subject} not found`,
-      });
-    }
+    this.controller.doCommand(selectNodeBySubject({ subject }), {
+      view: this.controller.mainEditorView,
+    });
     this.controller.focus();
-  };
-  setStatusMessage = (statusMessage) => {
-    console.log(statusMessage);
   };
   get isValidDocument() {
     return this.documentValidationErrors?.length === 0;
@@ -68,7 +56,11 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
-        class='say-document-validation__card'
+        class={{if
+          this.isValidDocument
+          'say-document-validation__card-valid'
+          'say-document-validation__card-invalid'
+        }}
         as |c|
       >
         <c.header>
