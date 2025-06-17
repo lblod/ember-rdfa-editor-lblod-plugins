@@ -418,6 +418,7 @@ export default class BesluitSampleController extends Controller {
 
   @action
   async validateDocument() {
+    if (!this.controller) return;
     const { validationCallback } = documentValidationPluginKey.getState(
       this.controller.mainEditorView.state,
     );
