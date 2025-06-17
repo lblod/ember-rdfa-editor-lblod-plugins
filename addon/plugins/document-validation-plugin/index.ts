@@ -99,13 +99,14 @@ async function validationCallback(view: EditorView, documentHtml: string) {
       return message ? { message: removeQuotes(message) } : undefined;
     })
     .filter((message) => message);
-  view.dispatch(
-    view.state.tr.setMeta(documentValidationPluginKey, {
-      type: 'setNewReport',
-      report,
-      propertiesWithoutErrors,
-    }),
-  );
+  const transaction = view.state.tr;
+  transaction.setMeta(documentValidationPluginKey, {
+    type: 'setNewReport',
+    report,
+    propertiesWithoutErrors,
+  });
+  transaction.setMeta('addToHistory', false);
+  view.dispatch(transaction);
 }
 
 interface N3Parser {
