@@ -91,9 +91,7 @@
               @controller={{this.controller}}
               @config={{this.config.mandateeTable.config}}
             />
-            <AuButton
-              {{on 'click' this.validateDocument}}
-            >
+            <AuButton {{on 'click' this.validateDocument}}>
               Validate Document
             </AuButton>
             <Sidebar as |Sidebar|>
