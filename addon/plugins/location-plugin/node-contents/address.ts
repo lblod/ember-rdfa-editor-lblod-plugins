@@ -11,8 +11,15 @@ import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location
 import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
+import { NamedNode } from '@rdfjs/types';
 
-export const constructAddressSpec = (address: Address) => {
+type ConstructAddressSpecOptions = {
+  additionalRDFTypes?: NamedNode[];
+};
+export const constructAddressSpec = (
+  address: Address,
+  { additionalRDFTypes = [] }: ConstructAddressSpecOptions = {},
+) => {
   const streetNode = span(
     {
       property: LOCN('thoroughfare').full,
@@ -67,7 +74,13 @@ export const constructAddressSpec = (address: Address) => {
   });
 
   return span(
-    { resource: address.uri, typeof: LOCN('Address').full },
+    {
+      resource: address.uri,
+      typeof: [
+        LOCN('Address').full,
+        ...additionalRDFTypes.map((type) => type.value),
+      ].join(' '),
+    },
     streetNode,
     ...(housenumberNode ? [' ', housenumberNode] : []),
     ...(busnumberNode ? [' bus ', busnumberNode] : []),

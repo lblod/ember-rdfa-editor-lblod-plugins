@@ -41,12 +41,14 @@ import {
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { NodeContentsUtils } from './node-contents';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { NamedNode } from '@rdfjs/types';
 
 export interface LocationPluginConfig {
   defaultAddressUriRoot: string;
   defaultPlaceUriRoot: string;
   defaultPointUriRoot: string;
   subjectTypesToLinkTo?: Resource[];
+  additionalRDFTypes?: NamedNode[];
 }
 
 const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
@@ -190,11 +192,17 @@ const serialize =
     let contentNode: DOMOutputSpec | undefined;
     if (value) {
       if (value instanceof Address) {
-        contentNode = nodeContentsUtils.address.construct(value);
+        contentNode = nodeContentsUtils.address.construct(value, {
+          additionalRDFTypes: config.additionalRDFTypes,
+        });
       } else if (value instanceof Place) {
-        contentNode = nodeContentsUtils.place.construct(value);
+        contentNode = nodeContentsUtils.place.construct(value, {
+          additionalRDFTypes: config.additionalRDFTypes,
+        });
       } else if (value instanceof Area) {
-        contentNode = nodeContentsUtils.area.construct(value);
+        contentNode = nodeContentsUtils.area.construct(value, {
+          additionalRDFTypes: config.additionalRDFTypes,
+        });
       }
     }
     if (!contentNode) {
