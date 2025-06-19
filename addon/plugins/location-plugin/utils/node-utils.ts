@@ -27,7 +27,8 @@ import { Address } from './address-helpers';
  */
 export function replaceSelectionWithLocation(
   controller: SayController,
-  toInsert: Place | Address | Area,
+  subject: string,
+  toInsert?: Place | Address | Area,
   subjectTypes?: Resource[],
 ) {
   let resourceToLink: { pos: number; node: PNode } | undefined;
@@ -62,7 +63,7 @@ export function replaceSelectionWithLocation(
   controller.withTransaction((tr) => {
     tr.replaceSelectionWith(
       controller.schema.node('oslo_location', {
-        subject: toInsert.uri,
+        subject: subject,
         rdfaNodeType: 'resource',
         __rdfaId: uuidv4(),
         value: toInsert,

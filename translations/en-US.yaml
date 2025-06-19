@@ -426,6 +426,7 @@ lmb-plugin:
       adminUnit: Administrative unit
 
 location-plugin:
+  insert-placeholder: Insert location placeholder
   modal:
     insert: Insert location
     edit: Edit location
