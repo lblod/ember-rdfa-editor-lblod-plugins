@@ -58,6 +58,37 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
       tag: 'span',
       getAttrs(node: HTMLElement) {
         const attrs = getRdfaAttrs(node, { rdfaAware: true });
+        if (!attrs || attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+
+        if (
+          node.dataset.sayVariable &&
+          node.dataset.sayVariableType === 'oslo_location'
+        ) {
+          const contentContainer = node.querySelector(
+            '[data-content-container="true"]',
+          );
+          const location =
+            contentContainer &&
+            (nodeContentsUtils.address.parse(contentContainer.children[0]) ||
+              nodeContentsUtils.place.parse(contentContainer.children[0]) ||
+              nodeContentsUtils.area.parse(contentContainer.children[0]));
+          // Ignore the properties for now, we handle these ourselves
+          const properties: OutgoingTriple[] = [];
+          return {
+            ...attrs,
+            properties,
+            value: location,
+          };
+        }
+        return false;
+      },
+    },
+    {
+      tag: 'span',
+      getAttrs(node: HTMLElement) {
+        const attrs = getRdfaAttrs(node, { rdfaAware: true });
         if (!attrs) {
           return false;
         }
@@ -77,15 +108,13 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
             nodeContentsUtils.address.parse(contentContainer.children[0]) ||
             nodeContentsUtils.place.parse(contentContainer.children[0]) ||
             nodeContentsUtils.area.parse(contentContainer.children[0]);
-          if (location) {
-            // Ignore the properties for now, we handle these ourselves
-            const properties: OutgoingTriple[] = [];
-            return {
-              ...attrs,
-              properties,
-              value: location,
-            };
-          }
+          // Ignore the properties for now, we handle these ourselves
+          const properties: OutgoingTriple[] = [];
+          return {
+            ...attrs,
+            properties,
+            value: location,
+          };
         }
         return false;
       },
@@ -207,18 +236,21 @@ const serialize =
     }
     if (!contentNode) {
       const placeholder = t(
-        'editor-plugins.address.nodeview.placeholder',
-        'Voeg adres in',
+        'location-plugin.nodeview.placeholder',
+        'Voeg locatie in',
       );
       contentNode = contentSpan({}, placeholder);
     }
+    const locationAttrs = {
+      class: value ? '' : 'say-variable',
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'oslo_location',
+    };
     return renderRdfaAware({
       renderable: node,
       tag: 'span',
       content: contentNode,
-      attrs: {
-        class: value ? '' : 'say-variable',
-      },
+      attrs: locationAttrs,
     });
   };
 

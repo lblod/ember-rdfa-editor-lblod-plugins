@@ -423,6 +423,7 @@ lmb-plugin:
       adminUnit: Bestuurseenheid
 
 location-plugin:
+  insert-placeholder: Voeg locatie-placeholder in
   modal:
     insert: locatie invoegen
     edit: Bewerk locatie

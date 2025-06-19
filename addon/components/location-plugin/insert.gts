@@ -293,6 +293,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         // Insert
         replaceSelectionWithLocation(
           this.controller,
+          toInsert.uri,
           toInsert,
           this.args.config.subjectTypesToLinkTo,
         );
