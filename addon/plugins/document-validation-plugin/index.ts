@@ -112,12 +112,10 @@ async function validationCallback(view: EditorView, documentHtml: string) {
         : undefined;
     })
     .filter((message) => message);
-  const propertiesWithoutErrorsArray = propertyNodes.filter(
-    (propertyNode) =>
-      !propertiesWithErrors.some(
-        (propertyWithError) =>
-          propertyWithError.sourceShape.value !== propertyNode.value,
-      ),
+  const propertiesWithoutErrorsArray = propertyNodes.filter((propertyNode) =>
+    propertiesWithErrors.some((propertyWithError) => {
+      return propertyWithError.sourceShape.value !== propertyNode.value;
+    }),
   );
 
   const successMessagePred = sayFactory.namedNode(
