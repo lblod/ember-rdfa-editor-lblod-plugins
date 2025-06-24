@@ -22,7 +22,6 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     const { propertiesWithErrors } = documentValidationPluginKey.getState(
       this.controller.mainEditorView.state,
     );
-    console.log(propertiesWithErrors);
     if (!propertiesWithErrors) return undefined;
 
     return propertiesWithErrors;
@@ -37,11 +36,9 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     return this.args.controller;
   }
   goToSubject = (subject: string) => {
-    const result = this.controller.doCommand(selectNodeBySubject({ subject }), {
+    this.controller.doCommand(selectNodeBySubject({ subject }), {
       view: this.controller.mainEditorView,
     });
-    console.log(result);
-    console.log(subject);
     this.controller.focus();
   };
   get isValidDocument() {
