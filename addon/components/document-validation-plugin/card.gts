@@ -10,11 +10,7 @@ import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/icons/external-link';
-import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
 import t from 'ember-intl/helpers/t';
-import type { ShaclValidationReport } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
-import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-
 interface Sig {
   Args: {
     controller: SayController;
@@ -23,11 +19,13 @@ interface Sig {
 
 export default class DocumentValidationPluginCard extends Component<Sig> {
   get documentValidationErrors() {
-    const { report } = documentValidationPluginKey.getState(
+    const { propertiesWithErrors } = documentValidationPluginKey.getState(
       this.controller.mainEditorView.state,
     );
-    if (!report) return undefined;
-    return shaclReportToErrorArray(report);
+    console.log(propertiesWithErrors);
+    if (!propertiesWithErrors) return undefined;
+
+    return propertiesWithErrors;
   }
   get propertiesWithoutErrors() {
     const { propertiesWithoutErrors } = documentValidationPluginKey.getState(
@@ -39,9 +37,11 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     return this.args.controller;
   }
   goToSubject = (subject: string) => {
-    this.controller.doCommand(selectNodeBySubject({ subject }), {
+    const result = this.controller.doCommand(selectNodeBySubject({ subject }), {
       view: this.controller.mainEditorView,
     });
+    console.log(result);
+    console.log(subject);
     this.controller.focus();
   };
   get isValidDocument() {
@@ -110,22 +110,4 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       </AuCard>
     {{/if}}
   </template>
-}
-
-function shaclReportToErrorArray(report: ShaclValidationReport) {
-  let errorArray = [];
-  const factory = new SayDataFactory();
-  for (const r of report.results) {
-    const match = [
-      ...r.dataset.match(
-        r.sourceShape,
-        factory.namedNode('http://www.w3.org/ns/shacl#resultMessage'),
-      ),
-    ][0];
-    errorArray.push({
-      message: removeQuotes(match.object.value),
-      subject: r.focusNode?.value,
-    });
-  }
-  return errorArray;
 }

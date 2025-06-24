@@ -5,9 +5,11 @@ import { RdfaParser } from 'rdfa-streaming-parser';
 import { ProsePlugin, PluginKey, EditorView } from '@lblod/ember-rdfa-editor';
 import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
 import {
+  BlankNode,
   DataFactory,
   DatasetCore,
   DatasetCoreFactory,
+  NamedNode,
   Quad,
 } from '@rdfjs/types';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
@@ -28,6 +30,13 @@ interface documentValidationTransactionMeta {
   type: string;
   report: ValidationReport;
   propertiesWithoutErrors: string[];
+  propertiesWithErrors: (
+    | {
+        message: string;
+        subject: string | undefined;
+      }
+    | undefined
+  )[];
 }
 
 export const documentValidationPlugin = (
@@ -53,6 +62,7 @@ export const documentValidationPlugin = (
               report: pluginTransaction.report,
               propertiesWithoutErrors:
                 pluginTransaction.propertiesWithoutErrors,
+              propertiesWithErrors: pluginTransaction.propertiesWithErrors,
             };
           }
         }
@@ -65,6 +75,7 @@ export const documentValidationPlugin = (
 async function validationCallback(view: EditorView, documentHtml: string) {
   const { documentShape } = documentValidationPluginKey.getState(view.state);
   const rdf = await htmlToRdf(documentHtml);
+
   const shacl = await parse(documentShape);
 
   const validator = new SHACLValidator(shacl, {
@@ -80,13 +91,33 @@ async function validationCallback(view: EditorView, documentHtml: string) {
     ...shacl.match(undefined, propertyPred, undefined),
   ].map((quad: Quad) => quad.object);
 
-  const propertiesWithErrors: string[] = [];
+  const propertiesWithErrors: {
+    sourceShape: BlankNode | NamedNode<string>;
+    focusNode: BlankNode | NamedNode<string> | null;
+  }[] = [];
   for (const r of report.results) {
-    const shapeId = r.sourceShape?.value;
-    if (shapeId) propertiesWithErrors.push(shapeId);
+    const sourceShape = r.sourceShape;
+    if (sourceShape)
+      propertiesWithErrors.push({ sourceShape, focusNode: r.focusNode });
   }
+  const errorMessagePred = sayFactory.namedNode(
+    'http://www.w3.org/ns/shacl#resultMessage',
+  );
+  const propertiesWithErrorsMessages = propertiesWithErrors
+    .map(({ sourceShape, focusNode }) => {
+      const match = shacl.match(sourceShape, errorMessagePred, undefined);
+      const message = [...match][0]?.object.value;
+      return message
+        ? { message: removeQuotes(message), subject: focusNode?.value }
+        : undefined;
+    })
+    .filter((message) => message);
   const propertiesWithoutErrorsArray = propertyNodes.filter(
-    (term) => !propertiesWithErrors.includes(term.value),
+    (propertyNode) =>
+      !propertiesWithErrors.some(
+        (propertyWithError) =>
+          propertyWithError.sourceShape.value !== propertyNode.value,
+      ),
   );
 
   const successMessagePred = sayFactory.namedNode(
@@ -104,6 +135,7 @@ async function validationCallback(view: EditorView, documentHtml: string) {
     type: 'setNewReport',
     report,
     propertiesWithoutErrors,
+    propertiesWithErrors: propertiesWithErrorsMessages,
   });
   transaction.setMeta('addToHistory', false);
   view.dispatch(transaction);
