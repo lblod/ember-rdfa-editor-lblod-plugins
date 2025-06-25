@@ -509,5 +509,6 @@ mandatee-table-plugin:
 document-validation-plugin:
   valid-document-title: The document is valid
   invalid-document-title: The document is not valid
+  document-not-validated-title: The document has not yet been validated
   see-related-node: See related node
   description: Some parts are required to allow our system to parse this document.
