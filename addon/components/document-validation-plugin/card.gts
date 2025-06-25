@@ -22,9 +22,13 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     return this.args.controller;
   }
   get validationState() {
-    const state = documentValidationPluginKey.getState(this.controller.mainEditorState);
+    const state = documentValidationPluginKey.getState(
+      this.controller.mainEditorState,
+    );
     if (!state) {
-      console.warn('DocumentValidationPluginCard needs the documentValidation plugin to function. Is it configured?');
+      console.warn(
+        'DocumentValidationPluginCard needs the documentValidation plugin to function. Is it configured?',
+      );
       return undefined;
     }
     return state;

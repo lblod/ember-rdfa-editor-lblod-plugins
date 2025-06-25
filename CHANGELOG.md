@@ -1,5 +1,23 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.2.0
+
+### Minor Changes
+
+- [#579](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/579) [`88b6a8e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/88b6a8e486ed3470e5739068e73f1322d5f9f5b3) Thanks [@piemonkey](https://github.com/piemonkey)! - Change structure-plugin to output say:body with datatype rdf:HTML instead of rdf:XMLLiteral as it is more correct
+
+- [#577](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/577) [`d3a1901`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d3a19011398e1d95bafda85cd660a4c5a6089a22) Thanks [@piemonkey](https://github.com/piemonkey)! - Move structure-plugin to use on-changed plugin to always keep RDFa and numbering up to date on changes
+
+- [#577](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/577) [`299773f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/299773f4653951112192b30676ad34787fe57b72) Thanks [@piemonkey](https://github.com/piemonkey)! - Move to @lblod/ember-rdfa-editor version 12.9.0 with support for drag-and-drop ember-nodes and on-changed plugin
+
+- [#580](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/580) [`57d72b6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/57d72b6f4f4d02524f5e6e7e1256c11f3ee026d4) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix location plugin to output correct WKT polygons (with matching start and end points) for area locations
+
+### Patch Changes
+
+- [#578](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/578) [`2913a8d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2913a8d9754a7ac3eb99d9663d2730628e84f885) Thanks [@elpoelma](https://github.com/elpoelma)! - Fix missing translations in citation-plugin
+
+- [#578](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/578) [`848ada7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/848ada7597f19d56dc84256b7db42d6876181168) Thanks [@elpoelma](https://github.com/elpoelma)! - Improve translations of worship-plugin (capitalization, add missing translations etc.)
+
 ## 32.1.0
 
 ### Minor Changes

@@ -18,7 +18,7 @@ import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 export const documentValidationPluginKey =
   new PluginKey<DocumentValidationPluginState>('DOCUMENT_VALIDATION');
 
-interface DocumentValidationPluginArgs {
+export interface DocumentValidationPluginArgs {
   documentShape: string;
 }
 
@@ -82,7 +82,15 @@ export const documentValidationPlugin = (
   });
 
 async function validationCallback(view: EditorView, documentHtml: string) {
-  const { documentShape } = documentValidationPluginKey.getState(view.state);
+  const pluginState = documentValidationPluginKey.getState(view.state);
+  if (!pluginState) {
+    console.warn(
+      "Can't validate a document without the documentValidation plugin. Is it configured?",
+    );
+    return;
+  }
+
+  const { documentShape } = pluginState;
   const rdf = await htmlToRdf(documentHtml);
 
   const shacl = await parse(documentShape);

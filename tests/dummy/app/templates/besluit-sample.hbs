@@ -143,47 +143,74 @@
                   @config={{this.config.lpdc}}
                 />
               </Sidebar.Collapsible>
-              <DocumentValidationPlugin::Card @controller={{this.controller}} />
-              <this.StructureControlCard @controller={{this.controller}} />
-              <DecisionPlugin::DecisionPluginCard
-                @controller={{this.controller}}
-              />
-              <CitationPlugin::CitationCard
-                @controller={{this.controller}}
-                @config={{this.config.citation}}
-              />
-              <ImportSnippetPlugin::Card @controller={{this.controller}} />
-              <MandateeTablePlugin::Configure
-                @controller={{this.controller}}
-                @supportedTags={{this.config.mandateeTable.tags}}
-              />
-              <VariablePlugin::Codelist::Edit
-                @controller={{this.controller}}
-                @options={{this.codelistOptions}}
-              />
-              <VariablePlugin::Date::Edit
-                @controller={{this.controller}}
-                @options={{this.dateOptions}}
-              />
-              <VariablePlugin::Location::Edit
-                @controller={{this.controller}}
-                @options={{this.locationOptions}}
-              />
-              <VariablePlugin::Person::Edit
-                @controller={{this.controller}}
-                @config={{this.config.lmb}}
-              />
-              <this.RdfaEditor
-                @node={{this.activeNode}}
-                @controller={{this.controller}}
-              />
-              {{#if this.activeNode}}
-                <this.DebugInfo @node={{this.activeNode}} />
-              {{/if}}
-              <this.AttributeEditor
-                @node={{this.activeNode}}
-                @controller={{this.controller}}
-              />
+              <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
+                <DocumentValidationPlugin::Card
+                  @controller={{this.controller}}
+                />
+                <this.StructureControlCard @controller={{this.controller}} />
+                <DecisionPlugin::DecisionPluginCard
+                  @controller={{this.controller}}
+                />
+                <CitationPlugin::CitationCard
+                  @controller={{this.controller}}
+                  @config={{this.config.citation}}
+                />
+                <ImportSnippetPlugin::Card @controller={{this.controller}} />
+                <MandateeTablePlugin::Configure
+                  @controller={{this.controller}}
+                  @supportedTags={{this.config.mandateeTable.tags}}
+                />
+                <VariablePlugin::Codelist::Edit
+                  @controller={{this.controller}}
+                  @options={{this.codelistOptions}}
+                />
+                <VariablePlugin::Date::Edit
+                  @controller={{this.controller}}
+                  @options={{this.dateOptions}}
+                />
+                <VariablePlugin::Location::Edit
+                  @controller={{this.controller}}
+                  @options={{this.locationOptions}}
+                />
+                <VariablePlugin::Person::Edit
+                  @controller={{this.controller}}
+                  @config={{this.config.lmb}}
+                />
+                {{#if this.editableNodes}}
+                  <this.VisualiserCard
+                    @config={{this.visualizerConfig}}
+                    @controller={{this.controller}}
+                  />
+                  <this.NodeControlsCard
+                    @node={{this.activeNode}}
+                    @controller={{this.controller}}
+                  />
+                  {{#if this.activeNode}}
+                    <this.RelationshipEditorCard
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                    />
+                    <this.DocImportedResourceEditorCard
+                      @controller={{this.controller}}
+                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                    />
+                    <this.ImportedResourceLinkerCard
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                    />
+                    <this.ExternalTripleEditorCard
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                    />
+                    <this.DebugInfo @node={{this.activeNode}} />
+                    <this.AttributeEditor
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                    />
+                  {{/if}}
+                {{/if}}
+              </div>
             </Sidebar>
           {{/if}}
         </:aside>
