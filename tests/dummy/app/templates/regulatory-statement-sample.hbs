@@ -118,57 +118,82 @@
                   @config={{this.config.location}}
                 />
               </Sidebar.Collapsible>
-              <VariablePlugin::InsertVariableCard
-                @controller={{this.controller}}
-                @variableTypes={{this.variableTypes}}
-                @templateMode={{true}}
-              />
-              <this.StructureControlCard @controller={{this.controller}} />
-              <VariablePlugin::Address::Edit
-                @controller={{this.controller}}
-                @defaultMunicipality='Gent'
-              />
-              <VariablePlugin::Codelist::Edit
-                @controller={{this.controller}}
-                @options={{this.codelistOptions}}
-              />
-              <VariablePlugin::Date::Edit
-                @controller={{this.controller}}
-                @options={{this.dateOptions}}
-              />
-              <VariablePlugin::Location::Edit
-                @controller={{this.controller}}
-                @options={{this.locationOptions}}
-              />
-              <VariablePlugin::Person::Edit
-                @controller={{this.controller}}
-                @config={{this.config.lmb}}
-              />
-              <VariablePlugin::Autofilled::Edit
-                @controller={{this.controller}}
-              />
-              <TemplateCommentsPlugin::EditCard
-                @controller={{this.controller}}
-              />
-              <AuHr />
-              {{#if this.activeNode}}
-                <this.SnippetListSelect
-                  @node={{this.activeNode}}
+              <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
+                <VariablePlugin::InsertVariableCard
                   @controller={{this.controller}}
-                  @config={{this.config.snippet}}
+                  @variableTypes={{this.variableTypes}}
+                  @templateMode={{true}}
                 />
-                {{#if this.editableNodes}}
-                  <this.RdfaEditor
+                <this.StructureControlCard @controller={{this.controller}} />
+                <VariablePlugin::Address::Edit
+                  @controller={{this.controller}}
+                  @defaultMunicipality='Gent'
+                />
+                <VariablePlugin::Codelist::Edit
+                  @controller={{this.controller}}
+                  @options={{this.codelistOptions}}
+                />
+                <VariablePlugin::Date::Edit
+                  @controller={{this.controller}}
+                  @options={{this.dateOptions}}
+                />
+                <VariablePlugin::Location::Edit
+                  @controller={{this.controller}}
+                  @options={{this.locationOptions}}
+                />
+                <VariablePlugin::Person::Edit
+                  @controller={{this.controller}}
+                  @config={{this.config.lmb}}
+                />
+                <VariablePlugin::Autofilled::Edit
+                  @controller={{this.controller}}
+                />
+                <TemplateCommentsPlugin::EditCard
+                  @controller={{this.controller}}
+                />
+                <AuHr />
+                {{#if this.activeNode}}
+                  <this.SnippetListSelect
                     @node={{this.activeNode}}
                     @controller={{this.controller}}
-                  />
-                  <this.DebugInfo @node={{this.activeNode}} />
-                  <this.AttributeEditor
-                    @node={{this.activeNode}}
-                    @controller={{this.controller}}
+                    @config={{this.config.snippet}}
                   />
                 {{/if}}
-              {{/if}}
+                {{#if this.editableNodes}}
+                  <this.VisualiserCard
+                    @controller={{this.controller}}
+                    @config={{this.visualizerConfig}}
+                  />
+                  <this.NodeControlsCard
+                    @node={{this.activeNode}}
+                    @controller={{this.controller}}
+                  />
+                  {{#if this.activeNode}}
+                    <this.RelationshipEditorCard
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                    />
+                    <this.DocImportedResourceEditorCard
+                      @controller={{this.controller}}
+                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                    />
+                    <this.ImportedResourceLinkerCard
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                    />
+                    <this.ExternalTripleEditorCard
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                    />
+                    <this.DebugInfo @node={{this.activeNode}} />
+                    <this.AttributeEditor
+                      @node={{this.activeNode}}
+                      @controller={{this.controller}}
+                    />
+                  {{/if}}
+                {{/if}}
+              </div>
             </Sidebar>
           {{/if}}
         </:aside>

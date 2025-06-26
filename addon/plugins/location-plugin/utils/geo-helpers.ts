@@ -18,7 +18,13 @@ export class Polygon {
   declare uri: string;
   declare locations: GeoPos[];
   constructor(args: Omit<Polygon, 'constructor' | 'formatted'>) {
-    Object.assign(this, args);
+    this.uri = args.uri;
+    // The start and end points of a polygon should match
+    if (isSamePos(args.locations[0], args.locations.at(-1))) {
+      this.locations = args.locations;
+    } else {
+      this.locations = [...args.locations, args.locations[0]];
+    }
   }
 
   get formatted() {
@@ -108,6 +114,15 @@ export type GeoPos = {
   global?: GlobalCoordinates;
   lambert: Lambert72Coordinates;
 };
+
+export function isSamePos(
+  a: GeoPos | undefined,
+  b: GeoPos | undefined,
+): boolean {
+  return (
+    !!a && !!b && a.lambert.x === b.lambert.x && a.lambert.y === b.lambert.y
+  );
+}
 
 export function constructLambert72GMLString({ x, y }: Lambert72Coordinates) {
   return `<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/31370" xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>${x} ${y}</gml:pos></gml:Point>`;

@@ -12,6 +12,7 @@
   padding-left: 0.7rem;
   border-bottom: 1px solid var(--au-gray-300);
   border-radius: 0.1em 0.1em 0 0;
+  cursor: pointer;
 
   .say-structure__header-element {
     margin: 0;
@@ -31,6 +32,7 @@
     .say-structure__title {
       flex: 1 1 100%;
 
+      cursor: text;
       border: none;
       flex-grow: 1;
       display: inline-block;
@@ -97,5 +99,22 @@
   > .say-structure__header {
     border-bottom-color: var(--au-blue-700);
     border-bottom-width: 0.2rem;
+  }
+}
+
+// Don't highlight the whole node as selected if we're editing the title
+.ember-node.ProseMirror-selectednode
+  > .say-structure:not(:has(.ProseMirror-focused)) {
+  background-color: var(--au-blue-200);
+
+  > .say-structure__header {
+    background-color: var(--au-blue-300);
+  }
+
+  > .say-structure__header {
+    cursor: grab;
+    .say-structure__header {
+      cursor: text;
+    }
   }
 }
