@@ -92,22 +92,22 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
           }}</p>
         {{#each this.documentValidationErrors as |error|}}
           <div class='say-document-validation__error-container'>
-            <div class='au-u-margin-right-small'>
-              <AuIcon
-                @icon={{CloseFilledIcon}}
-                @size='large'
-                @ariaHidden={{true}}
-                class='say-document-validation__icon-error au-u-margin-right-small'
-              />
+            <AuIcon
+              @icon={{CloseFilledIcon}}
+              @size='large'
+              @ariaHidden={{true}}
+              class='say-document-validation__icon-error au-u-margin-right-small'
+            />
+            <div>
+              {{error.message}}
+              <AuButton
+                class='au-u-padding-left-none au-u-padding-right-none'
+                @icon={{ExternalLinkIcon}}
+                @skin='link'
+                title={{error.subject}}
+                {{on 'click' (fn this.goToSubject error.subject)}}
+              >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
             </div>
-            {{error.message}}
-            <AuButton
-              class='au-u-padding-left-none au-u-padding-right-none'
-              @icon={{ExternalLinkIcon}}
-              @skin='link'
-              title={{error.subject}}
-              {{on 'click' (fn this.goToSubject error.subject)}}
-            >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
           </div>
         {{/each}}
         {{#each this.propertiesWithoutErrors as |property|}}
