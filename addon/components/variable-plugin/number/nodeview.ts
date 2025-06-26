@@ -11,6 +11,7 @@ import intlService from 'ember-intl/services/intl';
 import { localCopy } from 'tracked-toolbox';
 import { isBlank } from '@ember/utils';
 import { Velcro } from 'ember-velcro';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import { isNumber } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
 import { numberToWords } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/number-to-words';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
@@ -164,5 +165,8 @@ export default class NumberNodeviewComponent extends Component<Args> {
     if (!this.errorMessage) {
       this.args.updateAttribute('content', this.inputNumber);
     }
+  }
+  get class() {
+    return getClassnamesFromNode(this.node);
   }
 }

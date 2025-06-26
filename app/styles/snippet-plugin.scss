@@ -185,7 +185,7 @@
   }
 }
 
-.say-snippet-placeholder {
+.say-snippet.say-snippet-placeholder {
   display: flex;
   flex-direction: row;
   padding: $au-unit-small $au-unit-small * 1.5;
@@ -222,21 +222,12 @@
   }
 }
 
-.ProseMirror-selectednode > .say-snippet-placeholder {
+.ProseMirror-selectednode > .say-snippet.say-snippet-placeholder {
   background-color: var(--au-blue-200);
   cursor: grab;
 }
 
-.say-snippet-placeholder-node {
-  background-color: var(--au-orange-200);
-  padding: 2rem;
-
-  div {
-    font-weight: var(--au-medium);
-  }
-}
-
 div[typeof='besluitpublicatie:Documentonderdeel']
-  .say-snippet-placeholder-node {
+  .say-snippet.say-snippet-placeholder {
   background-color: var(--au-gray-300);
 }
