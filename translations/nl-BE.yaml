@@ -506,7 +506,7 @@ mandatee-table-plugin:
 document-validation-plugin:
   valid-document-title: Het document is volledig
   invalid-document-title: Het document is onvolledig
-  document-not-validated-title: Het document is nog niet volledig
-  no-matching-rules: Er is niets om te valideren in het document
+  document-not-validated-title: Dit document werd nog niet gevalideerd
+  no-matching-rules: Er is niets te valideren in dit document
   see-related-node: Zie gerelateerde node
   description: Sommige onderdelen zijn nodig om ons systeem toe te laten dit document te ontleden.
