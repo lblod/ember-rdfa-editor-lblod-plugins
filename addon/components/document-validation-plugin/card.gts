@@ -11,6 +11,8 @@ import { fn } from '@ember/helper';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/icons/external-link';
 import t from 'ember-intl/helpers/t';
+import { eq } from 'ember-truth-helpers';
+
 interface Sig {
   Args: {
     controller: SayController;
@@ -47,11 +49,16 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     });
     this.controller.focus();
   };
-  get hasValidationRun() {
-    return !!this.validationState?.report;
+  get status() {
+    if (!this.validationState?.report) return 'not-run';
+    if (this.documentValidationErrors?.length === 0) {
+      if (this.propertiesWithoutErrors?.length === 0) return 'no-matches';
+      return 'valid';
+    }
+    return 'invalid';
   }
-  get isValidDocument() {
-    return this.hasValidationRun && this.documentValidationErrors?.length === 0;
+  get isSuccesslike() {
+    return ['valid', 'no-matches'].includes(this.status);
   }
 
   <template>
@@ -63,7 +70,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       @shadow={{true}}
       @size='small'
       class={{if
-        this.isValidDocument
+        this.isSuccesslike
         'say-document-validation__card-valid'
         'say-document-validation__card-invalid'
       }}
@@ -71,14 +78,14 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     >
       <c.header>
         <p class='au-u-medium au-u-h6'>
-          {{#if this.hasValidationRun}}
-            {{#if this.isValidDocument}}
-              {{t 'document-validation-plugin.valid-document-title'}}
-            {{else}}
-              {{t 'document-validation-plugin.invalid-document-title'}}
-            {{/if}}
-          {{else}}
+          {{#if (eq this.status 'valid')}}
+            {{t 'document-validation-plugin.valid-document-title'}}
+          {{else if (eq this.status 'invalid')}}
+            {{t 'document-validation-plugin.invalid-document-title'}}
+          {{else if (eq this.status 'not-run')}}
             {{t 'document-validation-plugin.document-not-validated-title'}}
+          {{else if (eq this.status 'no-matches')}}
+            {{t 'document-validation-plugin.no-matching-rules'}}
           {{/if}}
         </p>
       </c.header>
