@@ -15,9 +15,10 @@ import {
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
-export const documentValidationPluginKey = new PluginKey('DOCUMENT_VALIDATION');
+export const documentValidationPluginKey =
+  new PluginKey<DocumentValidationPluginState>('DOCUMENT_VALIDATION');
 
-interface DocumentValidationPluginArgs {
+export interface DocumentValidationPluginArgs {
   documentShape: string;
 }
 
@@ -26,45 +27,53 @@ export type ShaclValidationReport = ValidationReport.ValidationReport<
     DatasetCoreFactory<Quad, Quad, DatasetCore<Quad, Quad>>
 >;
 
-interface documentValidationTransactionMeta {
-  type: string;
-  report: ValidationReport;
-  propertiesWithoutErrors: string[];
+interface DocumentValidationResult {
+  report?: ValidationReport;
+  propertiesWithoutErrors: { message: string }[];
   propertiesWithErrors: (
     | {
         message: string;
         subject: string | undefined;
       }
+    // TODO get rid of this?
     | undefined
   )[];
+}
+export interface DocumentValidationTransactionMeta
+  extends DocumentValidationResult {
+  type: string;
+}
+export interface DocumentValidationPluginState
+  extends DocumentValidationResult {
+  documentShape: string;
+  validationCallback: typeof validationCallback;
 }
 
 export const documentValidationPlugin = (
   options: DocumentValidationPluginArgs,
 ) =>
-  new ProsePlugin({
+  new ProsePlugin<DocumentValidationPluginState>({
     key: documentValidationPluginKey,
     state: {
       init() {
         return {
           validationCallback: validationCallback,
           documentShape: options.documentShape,
+          propertiesWithoutErrors: [],
+          propertiesWithErrors: [],
         };
       },
       apply(tr, state) {
         const pluginTransaction = tr.getMeta(documentValidationPluginKey) as
-          | documentValidationTransactionMeta
+          | DocumentValidationTransactionMeta
           | undefined;
-        if (pluginTransaction) {
-          if (pluginTransaction.type === 'setNewReport') {
-            return {
-              ...state,
-              report: pluginTransaction.report,
-              propertiesWithoutErrors:
-                pluginTransaction.propertiesWithoutErrors,
-              propertiesWithErrors: pluginTransaction.propertiesWithErrors,
-            };
-          }
+        if (pluginTransaction && pluginTransaction.type === 'setNewReport') {
+          return {
+            ...state,
+            report: pluginTransaction.report,
+            propertiesWithoutErrors: pluginTransaction.propertiesWithoutErrors,
+            propertiesWithErrors: pluginTransaction.propertiesWithErrors,
+          };
         }
 
         return state;
@@ -73,7 +82,15 @@ export const documentValidationPlugin = (
   });
 
 async function validationCallback(view: EditorView, documentHtml: string) {
-  const { documentShape } = documentValidationPluginKey.getState(view.state);
+  const pluginState = documentValidationPluginKey.getState(view.state);
+  if (!pluginState) {
+    console.warn(
+      "Can't validate a document without the documentValidation plugin. Is it configured?",
+    );
+    return;
+  }
+
+  const { documentShape } = pluginState;
   const rdf = await htmlToRdf(documentHtml);
 
   const shacl = await parse(documentShape);
