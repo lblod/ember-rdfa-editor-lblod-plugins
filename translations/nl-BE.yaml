@@ -508,5 +508,5 @@ document-validation-plugin:
   invalid-document-title: Het document is onvolledig
   document-not-validated-title: Het document is nog niet volledig
   no-matching-rules: Er is niets om te valideren in het document
-  see-related-node: Zie gerelateerd nodes
+  see-related-node: Zie gerelateerde node
   description: Sommige onderdelen zijn nodig om ons systeem toe te laten dit document te ontleden.
