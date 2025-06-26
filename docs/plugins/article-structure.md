@@ -43,8 +43,9 @@ This plugin uses the [structure-plugin](docs/plugins/structure-plugin.md) for mo
 
 ### Deprecated configuration options
 
-Previously configuration was done through specifying structure specs.
-This section refers to that and should not be used for new projects.
+> [!WARNING]
+> Previously configuration was done through specifying structure specs.
+> This section refers to that and should not be used for new projects.
 
 Both widgets require an `options` property which allows you to configure which type of structures are supported, which is a list of `StructureSpec` objects.
 
