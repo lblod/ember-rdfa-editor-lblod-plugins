@@ -10,12 +10,23 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
+import { NamedNode } from '@rdfjs/types';
 
-export const constructPlaceSpec = (place: Place) => {
+type ConstructPlaceSpecOptions = {
+  additionalRDFTypes?: NamedNode[];
+};
+
+export const constructPlaceSpec = (
+  place: Place,
+  { additionalRDFTypes = [] }: ConstructPlaceSpecOptions = {},
+) => {
   return span(
     {
       resource: place.uri,
-      typeof: LOCN('Location').full,
+      typeof: [
+        LOCN('Location').full,
+        ...additionalRDFTypes.map((type) => type.value),
+      ].join(' '),
     },
     span(
       {
