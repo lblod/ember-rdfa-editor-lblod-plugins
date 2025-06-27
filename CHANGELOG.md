@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.3.0
+
+### Minor Changes
+
+- [#583](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/583) [`4703977`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4703977bcd18e3a08bc1713654b5767a73a0a791) Thanks [@elpoelma](https://github.com/elpoelma)! - location-plugin: add support for `additionalRDFTypes` option
+
+### Patch Changes
+
+- [#560](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/560) [`c02dc06`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c02dc06c264a5fc949af542d5d5c93fc3e09b17f) Thanks [@piemonkey](https://github.com/piemonkey)! - Update documentation to contain information on custom CSS classes
+
 ## 32.2.0
 
 ### Minor Changes
