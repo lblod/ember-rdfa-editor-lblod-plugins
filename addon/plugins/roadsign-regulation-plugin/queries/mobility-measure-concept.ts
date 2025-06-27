@@ -140,6 +140,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
         const signConcepts = await querySignConcepts(endpoint, {
           measureConceptUri: concept.uri,
           imageBaseUrl,
+          orderBy: 'code',
         });
         return {
           ...concept,
