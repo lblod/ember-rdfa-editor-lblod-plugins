@@ -131,7 +131,9 @@ async function _queryMobilityMeasures<Count extends boolean>(
         const objectified = objectify(binding);
         return {
           ...objectified,
-          variableSignage: objectified.variableSignage === 'true',
+          variableSignage:
+            objectified.variableSignage === '1' ||
+            objectified.variableSignage === 'true',
         };
       }),
     );
