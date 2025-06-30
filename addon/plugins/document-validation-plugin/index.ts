@@ -82,7 +82,14 @@ export const documentValidationPlugin = (
   });
 
 async function validationCallback(view: EditorView, documentHtml: string) {
-  const { documentShape } = documentValidationPluginKey.getState(view.state);
+  const documentValidationState = documentValidationPluginKey.getState(
+    view.state,
+  );
+  if (!documentValidationState) {
+    console.warn('No shape found in the document validation plugin');
+    return;
+  }
+  const { documentShape } = documentValidationState;
   const rdf = await htmlToRdf(documentHtml);
 
   const shacl = await parse(documentShape);
