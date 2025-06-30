@@ -41,13 +41,6 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     return this.args.controller;
   }
 
-  get nodeContentsUtils() {
-    return new NodeContentsUtils(this.args.config);
-  }
-
-  get documentLanguage() {
-    return this.controller.documentLanguage;
-  }
   get canInsert() {
     return (
       !!this.controller.activeEditorView.props.nodeViews?.oslo_location &&
