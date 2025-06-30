@@ -504,8 +504,8 @@ mandatee-table-plugin:
     warning: Informatie die u hieronder manueel ingeeft, wordt verwijderd bij synchronisatie van de installatievergadering.
 
 document-validation-plugin:
-  valid-document-title: Het document is volledig
-  invalid-document-title: Het document is onvolledig
+  valid-document-title: Dit document is correct geannoteerd
+  invalid-document-title: Er werden problemen aangetroffen in dit document
   document-not-validated-title: Dit document werd nog niet gevalideerd
   no-matching-rules: Er is niets te valideren in dit document
   see-related-node: Zie gerelateerde node
