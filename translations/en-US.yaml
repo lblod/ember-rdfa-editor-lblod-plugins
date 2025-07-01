@@ -505,3 +505,11 @@ mandatee-table-plugin:
   node:
     warning: Information which you enter below will be removed upon
       synchronisation of the inauguration meeting.
+
+document-validation-plugin:
+  valid-document-title: This document is correctly annotated
+  invalid-document-title: Some problems were found within this document
+  document-not-validated-title: The document has not yet been validated
+  no-matching-rules: There is nothing to validate in the document
+  see-related-node: See related node
+  description: Some parts are required to allow our system to parse this document.
