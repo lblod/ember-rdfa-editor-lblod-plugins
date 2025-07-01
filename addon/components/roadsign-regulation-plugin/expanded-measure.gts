@@ -12,6 +12,7 @@ import { action } from '@ember/object';
 import { on } from '@ember/modifier';
 import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { Task } from 'ember-concurrency';
+import { isSome } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export type InsertMobilityMeasureTask = Task<
   void,
@@ -41,7 +42,10 @@ export default class ExpandedMeasure extends Component<Signature> {
   }
 
   get insertButtonDisabled() {
-    return this.isPotentiallyZonal && !this.zonalityValue;
+    return (
+      (this.isPotentiallyZonal && !this.zonalityValue) ||
+      (this.args.concept.variableSignage && !isSome(this.temporalValue))
+    );
   }
 
   @action
