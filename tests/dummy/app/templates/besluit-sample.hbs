@@ -125,6 +125,11 @@
                   @locationTypes={{array 'place' 'address' 'area'}}
                   @defaultMunicipality='Gent'
                 />
+                <LocationPlugin::InsertLocationPlaceholder
+                  @controller={{this.controller}}
+                  @templateMode={{true}}
+                  @config={{this.config.location}}
+                />
                 <VariablePlugin::Date::Insert @controller={{this.controller}} />
                 <WorshipPlugin::Insert
                   @controller={{this.controller}}

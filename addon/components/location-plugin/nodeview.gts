@@ -42,7 +42,7 @@ export default class AddressNodeviewComponent extends Component<Signature> {
     if (this.filled) {
       return this.address?.formatted;
     } else {
-      return this.label;
+      return this.label ?? this.intl.t('location-plugin.nodeview.placeholder');
     }
   }
   get class() {

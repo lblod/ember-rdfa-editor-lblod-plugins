@@ -33,11 +33,11 @@ import {
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
+import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/address-helpers';
 import {
   Area,
   Place,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/geo-helpers';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { NodeContentsUtils } from './node-contents';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
@@ -55,6 +55,37 @@ export interface LocationPluginConfig {
 const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
   const nodeContentsUtils = new NodeContentsUtils(config);
   return [
+    {
+      tag: 'span',
+      getAttrs(node: HTMLElement) {
+        const attrs = getRdfaAttrs(node, { rdfaAware: true });
+        if (!attrs || attrs.rdfaNodeType !== 'resource') {
+          return false;
+        }
+
+        if (
+          node.dataset.sayVariable &&
+          node.dataset.sayVariableType === 'oslo_location'
+        ) {
+          const contentContainer = node.querySelector(
+            '[data-content-container="true"]',
+          );
+          const location =
+            contentContainer &&
+            (nodeContentsUtils.address.parse(contentContainer.children[0]) ||
+              nodeContentsUtils.place.parse(contentContainer.children[0]) ||
+              nodeContentsUtils.area.parse(contentContainer.children[0]));
+          // Ignore the properties for now, we handle these ourselves
+          const properties: OutgoingTriple[] = [];
+          return {
+            ...attrs,
+            properties,
+            value: location,
+          };
+        }
+        return false;
+      },
+    },
     {
       tag: 'span',
       getAttrs(node: HTMLElement) {
@@ -78,15 +109,13 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
             nodeContentsUtils.address.parse(contentContainer.children[0]) ||
             nodeContentsUtils.place.parse(contentContainer.children[0]) ||
             nodeContentsUtils.area.parse(contentContainer.children[0]);
-          if (location) {
-            // Ignore the properties for now, we handle these ourselves
-            const properties: OutgoingTriple[] = [];
-            return {
-              ...attrs,
-              properties,
-              value: location,
-            };
-          }
+          // Ignore the properties for now, we handle these ourselves
+          const properties: OutgoingTriple[] = [];
+          return {
+            ...attrs,
+            properties,
+            value: location,
+          };
         }
         return false;
       },
@@ -208,18 +237,21 @@ const serialize =
     }
     if (!contentNode) {
       const placeholder = t(
-        'editor-plugins.address.nodeview.placeholder',
-        'Voeg adres in',
+        'location-plugin.nodeview.placeholder',
+        'Voeg locatie in',
       );
       contentNode = contentSpan({}, placeholder);
     }
+    const locationAttrs = {
+      class: `${getClassnamesFromNode(node)}${value ? '' : ' say-variable'}`,
+      'data-say-variable': 'true',
+      'data-say-variable-type': 'oslo_location',
+    };
     return renderRdfaAware({
       renderable: node,
       tag: 'span',
       content: contentNode,
-      attrs: {
-        class: `${getClassnamesFromNode(node)}${value ? '' : ' say-variable'}`,
-      },
+      attrs: locationAttrs,
     });
   };
 
