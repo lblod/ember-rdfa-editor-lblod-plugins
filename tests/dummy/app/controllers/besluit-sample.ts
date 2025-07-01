@@ -136,6 +136,11 @@ import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants'
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
 
 import { getOwner } from '@ember/owner';
+import {
+  documentValidationPlugin,
+  documentValidationPluginKey,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
+import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
@@ -349,6 +354,9 @@ export default class BesluitSampleController extends Controller {
         fullLengthArticles: false,
         onlyArticleSpecialName: true,
       },
+      documentValidation: {
+        documentShape: getShapeOfDocumentType('decision'),
+      },
     };
   }
 
@@ -402,6 +410,7 @@ export default class BesluitSampleController extends Controller {
     emberApplication({ application: unwrap(getOwner(this)) }),
     recreateUuidsOnPaste,
     variableAutofillerPlugin(this.config.autofilledVariable),
+    documentValidationPlugin(this.config.documentValidation),
   ];
 
   @action
@@ -433,6 +442,20 @@ export default class BesluitSampleController extends Controller {
     controller.initialize(presetContent);
     const editorDone = new CustomEvent('editor-done');
     window.dispatchEvent(editorDone);
+  }
+
+  @action
+  async validateDocument() {
+    if (!this.controller) return;
+    const pluginState = documentValidationPluginKey.getState(
+      this.controller.mainEditorView.state,
+    );
+    if (!pluginState) return;
+    const { validationCallback } = pluginState;
+    await validationCallback(
+      this.controller.mainEditorView,
+      this.controller.htmlContent,
+    );
   }
 
   get optionGeneratorConfig() {
