@@ -10,6 +10,7 @@ import { PNode, SayController } from '@lblod/ember-rdfa-editor';
 import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 type Signature = {
   Args: {
@@ -44,9 +45,16 @@ export default class AddressNodeviewComponent extends Component<Signature> {
       return this.label ?? this.intl.t('location-plugin.nodeview.placeholder');
     }
   }
+  get class() {
+    return getClassnamesFromNode(this.args.node);
+  }
 
   <template>
-    <AuPill class='say-pill atomic' ...attributes {{on 'click' @selectNode}}>
+    <AuPill
+      class='{{this.class}} say-pill atomic'
+      ...attributes
+      {{on 'click' @selectNode}}
+    >
       <span class='{{unless this.filled "unfilled-variable"}}'>
         {{this.content}}
       </span>

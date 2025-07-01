@@ -151,7 +151,7 @@ export default class RoadsignsModal extends Component<Signature> {
   }
 
   searchCodes = restartableTask(async (term: string) => {
-    const category = this.selectedCategory?.label;
+    const category = this.selectedCategory?.uri;
     const type = this.selectedType?.label;
     const types = type ? [type] : undefined;
     await timeout(DEBOUNCE_MS);

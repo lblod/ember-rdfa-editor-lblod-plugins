@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import { getOutgoingTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { FOAF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
@@ -38,5 +39,8 @@ export default class PersonNodeviewComponent extends Component<Args> {
   get content() {
     const fullName = [this.firstName, this.lastName].filter(Boolean).join(' ');
     return fullName || this.node.attrs['label'];
+  }
+  get class() {
+    return getClassnamesFromNode(this.node);
   }
 }
