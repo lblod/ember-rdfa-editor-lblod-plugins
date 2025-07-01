@@ -24,7 +24,6 @@ import {
   Point,
   Polygon,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
-import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import { NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import Edit from './edit';
@@ -34,6 +33,7 @@ import LocationMap, {
 } from './map';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { updateSubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info/utils';
+import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/node-utils';
 
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 

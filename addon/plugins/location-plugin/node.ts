@@ -33,11 +33,11 @@ import {
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
 import AddressNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/nodeview';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/address-helpers';
+import { Address } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/address-helpers';
 import {
   Area,
   Place,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/geo-helpers';
 import { findChildWithRdfaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { NodeContentsUtils } from './node-contents';
 import { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';

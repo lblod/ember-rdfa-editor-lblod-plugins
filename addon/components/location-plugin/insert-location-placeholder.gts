@@ -8,9 +8,9 @@ import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
 import { type LocationPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
 import { action } from '@ember/object';
-import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/node-utils';
 import t from 'ember-intl/helpers/t';
 import { v4 as uuidv4 } from 'uuid';
+import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/node-utils';
 
 interface Signature {
   Args: {
