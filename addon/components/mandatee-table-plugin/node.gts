@@ -7,6 +7,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import IntlService from 'ember-intl/services/intl';
+import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 
 interface Sig {
   Args: EmberNodeArgs;
@@ -35,8 +36,12 @@ export default class MandateeTableNode extends Component<Sig> {
     });
   }
 
+  get class() {
+    return getClassnamesFromNode(this.args.node);
+  }
+
   <template>
-    <div class='say-mandatee-table-node'>
+    <div class={{this.class}}>
       <div
         class='say-mandatee-table-header au-u-flex au-u-flex--row au-u-flex--vertical-center au-u-flex--spaced-tiny'
       >

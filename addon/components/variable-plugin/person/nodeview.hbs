@@ -1,5 +1,5 @@
 {{! @glint-nocheck: not typesafe yet }}
-<AuPill class='say-pill atomic' {{on 'click' @selectNode}}>
+<AuPill class='{{this.class}} say-pill atomic' {{on 'click' @selectNode}}>
   <span class='{{unless this.filled "unfilled-variable"}}'>
     {{this.content}}
   </span>

@@ -20,6 +20,7 @@ export const document_title: NodeSpec = {
     datatype: {
       default: 'xsd:string',
     },
+    class: { default: 'say-document-title' },
   },
   toDOM(node) {
     return ['h4', node.attrs, 0];

@@ -80,6 +80,7 @@ import {
   autofilledVariableView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import {
+  LocationPluginConfig,
   osloLocation,
   osloLocationView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node';
@@ -141,6 +142,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
 import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -328,7 +330,12 @@ export default class BesluitSampleController extends Controller {
         defaultAddressUriRoot:
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
         subjectTypesToLinkTo: [BESLUIT('Artikel'), BESLUIT('Besluit')],
-      },
+        additionalRDFTypes: [
+          sayDataFactory.namedNode(
+            'https://data.vlaanderen.be/ns/mobiliteit#Zone',
+          ),
+        ],
+      } satisfies LocationPluginConfig,
       mandateeTable: {
         config: MANDATEE_TABLE_SAMPLE_CONFIG,
         tags: Object.keys(MANDATEE_TABLE_SAMPLE_CONFIG),
