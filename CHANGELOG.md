@@ -1,5 +1,22 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.4.0
+
+### Minor Changes
+
+- [#582](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/582) [`96baaf4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/96baaf43e1a976b167eea65f4d0255b6e74cd85f) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add new plugin for document validation with SHACL
+
+- [#584](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/584) [`b8f445a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b8f445ae720134f2dd579cb7c831812210c7c8f7) Thanks [@elpoelma](https://github.com/elpoelma)! - Add simple placeholder-mode to location variable
+  To correctly identify location placeholder nodes, the `data-say-variable` and `data-say-variable-type: oslo_location` attributes have been added to the serialization of oslo location nodes. This is similar to the approach used by other variable nodes.
+
+### Patch Changes
+
+- [#586](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/586) [`810f867`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/810f86766ac5fbc11e20a68545ab950ec07f61a7) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix bug in roadsign regulation plugin where you couldn't search a sign if you had selected a category
+
+- [#587](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/587) [`d5914c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d5914c0ce63dba5aca15fbb00d634e811ece41b9) Thanks [@elpoelma](https://github.com/elpoelma)! - roadsign-regulation plugin: fix issue where measure could not be inserted as being variable/dynamic
+
+- [#582](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/582) [`b21bd08`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b21bd08744fd58b7e7e7286d9f31da7de692defe) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix missing translations in citation-plugin
+
 ## 32.3.0
 
 ### Minor Changes
