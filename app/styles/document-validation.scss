@@ -1,0 +1,26 @@
+.say-document-validation__icon-error {
+  vertical-align: middle;
+  color: var(--au-red-600);
+}
+
+.say-document-validation__icon-success {
+  vertical-align: middle;
+  color: var(--au-green-700);
+}
+
+.say-document-validation__error-container {
+  display: flex;
+  align-items: center;
+}
+
+.say-document-validation__card-invalid {
+  background-color: var(--au-orange-200);
+}
+
+.say-document-validation__card-valid {
+  background-color: var(--au-green-200);
+}
+
+.say-document-validation__description {
+  font-weight: 500;
+}
