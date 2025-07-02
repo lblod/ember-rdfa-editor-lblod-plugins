@@ -81,7 +81,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
     ? /* sparql */ `ORDER BY ASC(strlen(str(?label))) ASC(?label)`
     : '';
   const paginationStatement = !count
-    ? /* sparql */ `LIMIT ${pageSize} OFFSET ${page}`
+    ? /* sparql */ `LIMIT ${pageSize} OFFSET ${page * pageSize}`
     : '';
   const query = /* sparql */ `
     PREFIX mobiliteit: <https://data.vlaanderen.be/ns/mobiliteit#>
