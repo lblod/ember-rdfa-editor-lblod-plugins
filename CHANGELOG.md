@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.4.1
+
+### Patch Changes
+
+- [#588](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/588) [`159d07b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/159d07bcfedcb0ed393f1edcff889872ce5382b5) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix pagination of traffic measure modal
+
 ## 32.4.0
 
 ### Minor Changes
