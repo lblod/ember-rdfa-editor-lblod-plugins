@@ -140,11 +140,8 @@ import {
   documentValidationPlugin,
   documentValidationPluginKey,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
-import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
-import { insertTitle } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 import {
   insertArticleContainerAtCursor,
   insertDescriptionAtCursor,

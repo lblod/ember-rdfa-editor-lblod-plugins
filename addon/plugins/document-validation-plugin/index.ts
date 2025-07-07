@@ -2,7 +2,12 @@ import factory from '@rdfjs/dataset';
 import SHACLValidator from 'rdf-validate-shacl';
 import { Parser as ParserN3 } from 'n3';
 import { RdfaParser } from 'rdfa-streaming-parser';
-import { ProsePlugin, PluginKey, EditorView } from '@lblod/ember-rdfa-editor';
+import {
+  ProsePlugin,
+  PluginKey,
+  EditorView,
+  SayController,
+} from '@lblod/ember-rdfa-editor';
 import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
 import {
   BlankNode,
@@ -20,13 +25,11 @@ export const documentValidationPluginKey =
 
 interface DocumentValidationPluginArgs {
   documentShape: string;
-  actions: [
-    {
-      shaclRule: string;
-      action: () => void;
-      buttonTitle: string;
-    },
-  ];
+  actions: {
+    shaclRule: string;
+    action: (controller: SayController) => void;
+    buttonTitle: string;
+  }[];
 }
 
 export type ShaclValidationReport = ValidationReport.ValidationReport<
@@ -55,13 +58,11 @@ export interface DocumentValidationPluginState
   extends DocumentValidationResult {
   documentShape: string;
   validationCallback: typeof validationCallback;
-  actions: [
-    {
-      shaclRule: string;
-      action: () => void;
-      buttonTitle: string;
-    },
-  ];
+  actions: {
+    shaclRule: string;
+    action: (controller: SayController) => void;
+    buttonTitle: string;
+  }[];
 }
 
 export const documentValidationPlugin = (

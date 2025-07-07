@@ -41,7 +41,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     if (!propertiesWithErrors) return undefined;
     const documentValidationErrors = propertiesWithErrors.map((property) => {
       const action = actions.find(
-        (action) => property.shape === action.shaclRule,
+        (action) => property?.shape === action.shaclRule,
       );
       return {
         ...property,
