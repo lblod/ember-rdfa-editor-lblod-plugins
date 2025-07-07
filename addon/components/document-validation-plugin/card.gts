@@ -37,10 +37,18 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
   }
   get documentValidationErrors() {
     if (!this.validationState) return [];
-    const { propertiesWithErrors } = this.validationState;
+    const { propertiesWithErrors, actions } = this.validationState;
     if (!propertiesWithErrors) return undefined;
-
-    return propertiesWithErrors;
+    const documentValidationErrors = propertiesWithErrors.map((property) => {
+      const action = actions.find(
+        (action) => property.shape === action.shaclRule,
+      );
+      return {
+        ...property,
+        action,
+      };
+    });
+    return documentValidationErrors;
   }
   get propertiesWithoutErrors() {
     if (!this.validationState) return [];
@@ -114,6 +122,15 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                 title={{error.subject}}
                 {{on 'click' (fn this.goToSubject error.subject)}}
               >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
+              {{#if error.action}}
+                <AuButton
+                  class='au-u-padding-left-none au-u-padding-right-none'
+                  @icon={{ExternalLinkIcon}}
+                  @skin='link'
+                  title={{error.subject}}
+                  {{on 'click' (fn error.action.action this.controller)}}
+                >{{error.action.buttonTitle}}</AuButton>
+              {{/if}}
             </div>
           </div>
         {{/each}}
