@@ -19,7 +19,7 @@ import { eq } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
-import { SIGN_CONCEPT_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
 type Signature = {
   Args: {
@@ -44,9 +44,9 @@ export default class RoadSignsTable extends Component<Signature> {
 
   categories = (measureConcept: MobilityMeasureConcept) => {
     const categorySet: Set<string> = new Set();
-    for (const signConcept of measureConcept.signConcepts) {
-      if (signConcept.type === SIGN_CONCEPT_TYPES.ROAD_SIGN) {
-        const categoryLabels = signConcept.categories.map((cat) => cat.label);
+    for (const signalConcept of measureConcept.trafficSignalConcepts) {
+      if (signalConcept.type === TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN) {
+        const categoryLabels = signalConcept.categories.map((cat) => cat.label);
         addAll(categorySet, ...categoryLabels);
       }
     }
@@ -94,13 +94,16 @@ export default class RoadSignsTable extends Component<Signature> {
                   </td>
                   <td>
                     <div class='au-o-grid au-o-grid--tiny'>
-                      {{#each measureConcept.signConcepts as |signConcept|}}
+                      {{#each
+                        measureConcept.trafficSignalConcepts
+                        as |signalConcept|
+                      }}
                         <div class='au-o-grid__item au-u-1-3'>
                           <img
-                            src={{signConcept.image}}
+                            src={{signalConcept.image}}
                             alt={{t
                               'editor-plugins.roadsign-regulation.table.content.image.alt'
-                              code=signConcept.code
+                              code=signalConcept.code
                             }}
                             class='au-c-data-table__image'
                           />

@@ -23,12 +23,12 @@ import { MobilityMeasureConcept } from '../schemas/mobility-measure-concept';
 import { Variable } from '../schemas/variable';
 import { buildArticleStructure } from '../../decision-plugin/utils/build-article-structure';
 import { insertArticle } from '../../decision-plugin/actions/insert-article';
-import { SignConcept } from '../schemas/sign-concept';
+import { TrafficSignalConcept } from '../schemas/traffic-signal-concept';
 import {
   ROAD_SIGN_CATEGORIES,
-  SIGN_CONCEPT_TYPES,
-  SIGN_TYPE_MAPPING,
-  SIGN_TYPES,
+  TRAFFIC_SIGNAL_CONCEPT_TYPES,
+  TRAFFIC_SIGNAL_TYPE_MAPPING,
+  TRAFFIC_SIGNAL_TYPES,
   ZONALITY_OPTIONS,
 } from '../constants';
 import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
@@ -59,7 +59,7 @@ export default function insertMeasure({
 }: InsertMeasureArgs): TransactionMonad<boolean> {
   return function (state: EditorState) {
     const { schema } = state;
-    const signNodes = measureConcept.signConcepts.map((signConcept) =>
+    const signNodes = measureConcept.trafficSignalConcepts.map((signConcept) =>
       constructSignNode(signConcept, schema),
     );
     let signSection: PNode[] = [];
@@ -191,13 +191,13 @@ function constructMeasureBody(
   return schema.nodes.paragraph.create({}, nodes);
 }
 
-function determineSignLabel(signConcept: SignConcept) {
+function determineSignLabel(signConcept: TrafficSignalConcept) {
   switch (signConcept.type) {
-    case SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT:
+    case TRAFFIC_SIGNAL_CONCEPT_TYPES.TRAFFIC_LIGHT:
       return 'Verkeerslicht';
-    case SIGN_CONCEPT_TYPES.ROAD_MARKING:
+    case TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_MARKING:
       return 'Wegmarkering';
-    case SIGN_CONCEPT_TYPES.ROAD_SIGN:
+    case TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN:
       if (
         signConcept.categories
           .map((cat) => cat.uri)
@@ -210,7 +210,7 @@ function determineSignLabel(signConcept: SignConcept) {
   }
 }
 
-function constructSignNode(signConcept: SignConcept, schema: Schema) {
+function constructSignNode(signConcept: TrafficSignalConcept, schema: Schema) {
   const signUri = `http://data.lblod.info/verkeerstekens/${uuid()}`;
   const prefix = determineSignLabel(signConcept);
   const node = schema.nodes.inline_rdfa.create(
@@ -221,11 +221,13 @@ function constructSignNode(signConcept: SignConcept, schema: Schema) {
       properties: [
         {
           predicate: RDF('type').full,
-          object: sayDataFactory.namedNode(SIGN_TYPES.TRAFFIC_SIGN),
+          object: sayDataFactory.namedNode(TRAFFIC_SIGNAL_TYPES.TRAFFIC_SIGNAL),
         },
         {
           predicate: RDF('type').full,
-          object: sayDataFactory.namedNode(SIGN_TYPE_MAPPING[signConcept.type]),
+          object: sayDataFactory.namedNode(
+            TRAFFIC_SIGNAL_TYPE_MAPPING[signConcept.type],
+          ),
         },
         {
           predicate: MOBILITEIT('heeftVerkeersbordconcept'),
