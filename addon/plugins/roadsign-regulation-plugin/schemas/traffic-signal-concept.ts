@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { SIGN_CONCEPT_TYPES, ZONALITY_OPTIONS } from '../constants';
+import { TRAFFIC_SIGNAL_CONCEPT_TYPES, ZONALITY_OPTIONS } from '../constants';
 import { RoadSignCategorySchema } from './road-sign-category';
 
-export const SignConceptSchema = z
+export const TrafficSignalConceptSchema = z
   .object({
     uri: z.string(),
     code: z.string(),
@@ -12,16 +12,16 @@ export const SignConceptSchema = z
   .and(
     z.discriminatedUnion('type', [
       z.object({
-        type: z.literal(SIGN_CONCEPT_TYPES.ROAD_SIGN),
+        type: z.literal(TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN),
         categories: z.array(RoadSignCategorySchema).default([]),
       }),
       z.object({
         type: z.enum([
-          SIGN_CONCEPT_TYPES.ROAD_MARKING,
-          SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT,
+          TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_MARKING,
+          TRAFFIC_SIGNAL_CONCEPT_TYPES.TRAFFIC_LIGHT,
         ]),
       }),
     ]),
   );
 
-export type SignConcept = z.infer<typeof SignConceptSchema>;
+export type TrafficSignalConcept = z.infer<typeof TrafficSignalConceptSchema>;

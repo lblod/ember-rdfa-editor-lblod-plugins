@@ -13,7 +13,7 @@ import {
   queryMobilityMeasures,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-measure-concept';
 import queryRoadSignCategories from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/road-sign-category';
-import querySignCodes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/sign-codes';
+import queryTrafficSignalCodes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/traffic-signal-codes';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import { pagination } from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/pagination';
 import { restartableTask, task, timeout } from 'ember-concurrency';
@@ -27,7 +27,7 @@ import PaginationView from '../pagination/pagination-view';
 import { not, or } from 'ember-truth-helpers';
 import { on } from '@ember/modifier';
 import {
-  SIGN_CONCEPT_TYPES,
+  TRAFFIC_SIGNAL_CONCEPT_TYPES,
   ZONALITY_OPTIONS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
@@ -104,9 +104,9 @@ export default class RoadsignsModal extends Component<Signature> {
       this.selectedCategory = undefined;
     } else {
       if (
-        (this.signConceptTypes.map((type) => type.uri) as string[]).includes(
-          option.uri,
-        )
+        (
+          this.trafficSignalConceptTypes.map((type) => type.uri) as string[]
+        ).includes(option.uri)
       ) {
         this.selectedType = option;
         this.selectedCategory = undefined;
@@ -157,7 +157,7 @@ export default class RoadsignsModal extends Component<Signature> {
     await timeout(DEBOUNCE_MS);
     const abortController = new AbortController();
     try {
-      return querySignCodes(this.endpoint, {
+      return queryTrafficSignalCodes(this.endpoint, {
         searchString: term,
         roadSignCategory: category,
         types,
@@ -174,12 +174,15 @@ export default class RoadsignsModal extends Component<Signature> {
     if (!selectedCode) {
       return [];
     }
-    let signs: string[] = [selectedCode.uri];
+    let combinedWith: string[] = [selectedCode.uri];
     if (this.selectedCodeCombination) {
-      signs = [...signs, ...this.selectedCodeCombination.map((s) => s.uri)];
+      combinedWith = [
+        ...combinedWith,
+        ...this.selectedCodeCombination.map((s) => s.uri),
+      ];
     }
-    return querySignCodes(this.endpoint, {
-      combinedWith: signs,
+    return queryTrafficSignalCodes(this.endpoint, {
+      combinedWith,
     });
   });
 
@@ -195,18 +198,18 @@ export default class RoadsignsModal extends Component<Signature> {
     return this.classificationsQuery.value ?? [];
   }
 
-  signConceptTypes = [
+  trafficSignalConceptTypes = [
     {
       label: 'Verkeersborden',
-      uri: SIGN_CONCEPT_TYPES.ROAD_SIGN,
+      uri: TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN,
     },
     {
       label: 'Wegmarkeringen',
-      uri: SIGN_CONCEPT_TYPES.ROAD_MARKING,
+      uri: TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_MARKING,
     },
     {
       label: 'Verkeerslichten',
-      uri: SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT,
+      uri: TRAFFIC_SIGNAL_CONCEPT_TYPES.TRAFFIC_LIGHT,
     },
   ];
 
@@ -217,7 +220,7 @@ export default class RoadsignsModal extends Component<Signature> {
     return [
       {
         groupName: 'Types',
-        options: this.signConceptTypes,
+        options: this.trafficSignalConceptTypes,
       },
       {
         groupName: 'Categorieën',

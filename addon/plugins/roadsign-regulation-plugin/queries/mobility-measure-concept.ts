@@ -9,14 +9,14 @@ import {
   MobilityMeasureConceptSchema,
 } from '../schemas/mobility-measure-concept';
 import { z } from 'zod';
-import { querySignConcepts } from './sign-concept';
+import { queryTrafficSignalConcepts } from './traffic-signal-concept';
 import { ZONALITY_OPTIONS } from '../constants';
 
 type QueryOptions<Count extends boolean = boolean> = {
   imageBaseUrl?: string;
   searchString?: string;
   zonality?: string;
-  signType?: string;
+  trafficSignalType?: string;
   codes?: string[];
   category?: string;
   page?: number;
@@ -32,15 +32,18 @@ type Result<Count extends boolean> = Count extends true
 function _buildFilters(
   options: Omit<QueryOptions, 'page' | 'pageSize' | 'abortSignal' | 'count'>,
 ) {
-  const { zonality, signType, codes, category, searchString } = options;
+  const { zonality, trafficSignalType, codes, category, searchString } =
+    options;
   const filters = [];
   if (zonality) {
     filters.push(
       `FILTER(?zonality IN (${sparqlEscapeUri(zonality)}, ${sparqlEscapeUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL)}))`,
     );
   }
-  if (signType) {
-    filters.push(`FILTER(?signType = ${sparqlEscapeUri(signType)})`);
+  if (trafficSignalType) {
+    filters.push(
+      `FILTER(?trafficSignalType = ${sparqlEscapeUri(trafficSignalType)})`,
+    );
   }
   if (codes) {
     filters.push(`
@@ -100,7 +103,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
       ?templateUri ext:preview ?preview.
 
       ?signUri
-        a ?signType;
+        a ?trafficSignalType;
         mobiliteit:heeftMaatregelconcept ?uri;
         skos:prefLabel ?signCode.
 
@@ -139,13 +142,16 @@ async function _queryMobilityMeasures<Count extends boolean>(
     );
     const conceptsWithSigns = await Promise.all(
       concepts.map(async (concept) => {
-        const signConcepts = await querySignConcepts(endpoint, {
-          measureConceptUri: concept.uri,
-          imageBaseUrl,
-        });
+        const trafficSignalConcepts = await queryTrafficSignalConcepts(
+          endpoint,
+          {
+            measureConceptUri: concept.uri,
+            imageBaseUrl,
+          },
+        );
         return {
           ...concept,
-          signConcepts,
+          trafficSignalConcepts,
         };
       }),
     );

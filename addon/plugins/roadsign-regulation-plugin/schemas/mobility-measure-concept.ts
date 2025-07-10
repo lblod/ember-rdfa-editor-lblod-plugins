@@ -1,5 +1,5 @@
 import { ZONALITY_OPTIONS } from '../constants';
-import { SignConceptSchema } from './sign-concept';
+import { TrafficSignalConceptSchema } from './traffic-signal-concept';
 import { z } from 'zod';
 
 export const MobilityMeasureConceptSchema = z.object({
@@ -8,7 +8,7 @@ export const MobilityMeasureConceptSchema = z.object({
   preview: z.string(),
   zonality: z.nativeEnum(ZONALITY_OPTIONS),
   variableSignage: z.boolean().default(false),
-  signConcepts: z.array(SignConceptSchema).default([]),
+  trafficSignalConcepts: z.array(TrafficSignalConceptSchema).default([]),
 });
 
 export type MobilityMeasureConcept = z.infer<

@@ -5,9 +5,9 @@ import {
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { SignCodeSchema } from '../schemas/sign-code';
+import { TrafficSignalCodeSchema } from '../schemas/traffic-signal-code';
 
-const DEFAULT_SIGN_TYPES = [
+const DEFAULT_SIGNAL_TYPES = [
   'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept',
   'https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept',
   'https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept',
@@ -24,7 +24,7 @@ type QueryOptions = {
 function buildFilters({
   searchString,
   roadSignCategory,
-  types = DEFAULT_SIGN_TYPES,
+  types = DEFAULT_SIGNAL_TYPES,
   combinedWith,
 }: Omit<QueryOptions, 'abortSignal'>) {
   const categoryFilter = roadSignCategory
@@ -32,7 +32,7 @@ function buildFilters({
     : '';
   const typesArray = !Array.isArray(types) ? [types] : types;
   const typeFilter = `
-    VALUES ?signType {
+    VALUES ?trafficSignalType {
       ${typesArray.map((type) => sparqlEscapeUri(type)).join(`\n`)}
     }
   `;
@@ -70,7 +70,7 @@ function buildFilters({
   `;
 }
 
-export default async function querySignCodes(
+export default async function queryTrafficSignalCodes(
   endpoint: string,
   options: QueryOptions = {},
 ) {
@@ -88,7 +88,7 @@ export default async function querySignCodes(
       ?label
     WHERE {
       ?uri mobiliteit:heeftMaatregelconcept ?measure.
-      ?uri a ?signType;
+      ?uri a ?trafficSignalType;
               skos:prefLabel ?label;
               ext:valid ${sparqlEscapeBool(true)}.
       ${filterStatement}
@@ -97,5 +97,5 @@ export default async function querySignCodes(
   `;
   const queryResult = await executeQuery({ endpoint, query, abortSignal });
   const bindings = queryResult.results.bindings;
-  return SignCodeSchema.array().parse(bindings.map(objectify));
+  return TrafficSignalCodeSchema.array().parse(bindings.map(objectify));
 }
