@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.5.0
+
+### Minor Changes
+
+- [#590](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/590) [`beb01f5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/beb01f573a2bf1ce42852e7ddb972a4ca01bf724) Thanks [@elpoelma](https://github.com/elpoelma)! - Rename `traffic-sign` to `traffic-signal`
+
 ## 32.4.1
 
 ### Patch Changes
