@@ -18,7 +18,9 @@ import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { pagination } from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/pagination';
 import { restartableTask, task, timeout } from 'ember-concurrency';
 import t from 'ember-intl/helpers/t';
-import PowerSelect from 'ember-power-select/components/power-select';
+import PowerSelect, {
+  Select,
+} from 'ember-power-select/components/power-select';
 import PowerSelectMultiple from 'ember-power-select/components/power-select-multiple';
 import { TaskInstance, trackedTask } from 'reactiveweb/ember-concurrency';
 import { trackedFunction } from 'reactiveweb/function';
@@ -150,6 +152,18 @@ export default class RoadsignsModal extends Component<Signature> {
     this.args.closeModal();
   }
 
+  @action
+  doFirstCodeSearch(select: Select) {
+    if (
+      this.searchCodes.isIdle &&
+      !select.searchText &&
+      // @ts-expect-error not part of the public API... (tested on PS 7 and 8)
+      this.searchCodes.lastSuccessful?.args?.[0] !== ''
+    ) {
+      this.searchCodes.perform('');
+    }
+    return true;
+  }
   searchCodes = restartableTask(async (term: string) => {
     const category = this.selectedCategory?.uri;
     const type = this.selectedType?.label;
@@ -401,9 +415,11 @@ export default class RoadsignsModal extends Component<Signature> {
                   @verticalPosition='below'
                   @searchEnabled={{true}}
                   @search={{this.searchCodes.perform}}
+                  @options={{or this.searchCodes.last.value undefined}}
                   @selected={{this.selectedCode}}
                   @allowClear={{true}}
                   @onChange={{this.changeCode}}
+                  @onOpen={{this.doFirstCodeSearch}}
                   as |option|
                 >
                   {{option.label}}
