@@ -10,6 +10,7 @@ import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import {
   countMobilityMeasures,
+  MobilityMeasureQueryOptions,
   queryMobilityMeasures,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-measure-concept';
 import queryRoadSignCategories from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/road-sign-category';
@@ -166,7 +167,7 @@ export default class RoadsignsModal extends Component<Signature> {
   }
   searchCodes = restartableTask(async (term: string) => {
     const category = this.selectedCategory?.uri;
-    const type = this.selectedType?.label;
+    const type = this.selectedType?.uri;
     const types = type ? [type] : undefined;
     await timeout(DEBOUNCE_MS);
     const abortController = new AbortController();
@@ -251,11 +252,11 @@ export default class RoadsignsModal extends Component<Signature> {
     if (this.selectedCode) {
       codes.push(this.selectedCode);
     }
-    const queryOptions = {
+    const queryOptions: MobilityMeasureQueryOptions = {
       imageBaseUrl: this.imageBaseUrl,
       searchString: this.searchQuery,
       zonality: this.selectedZonality ? this.selectedZonality.uri : undefined,
-      signType: this.selectedType ? this.selectedType.uri : undefined,
+      trafficSignalType: this.selectedType ? this.selectedType.uri : undefined,
       codes: codes.length ? codes.map((code) => code.uri) : undefined,
       category: this.selectedCategory ? this.selectedCategory.uri : undefined,
       page: this.pageNumber,

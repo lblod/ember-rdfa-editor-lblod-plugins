@@ -160,16 +160,21 @@ async function _queryMobilityMeasures<Count extends boolean>(
   }
 }
 
+export type MobilityMeasureQueryOptions = Omit<QueryOptions, 'count'>;
 export async function queryMobilityMeasures(
   endpoint: string,
-  options: Omit<QueryOptions, 'count'> = {},
+  options: MobilityMeasureQueryOptions = {},
 ) {
   return _queryMobilityMeasures(endpoint, { ...options, count: false });
 }
 
+export type MobilityMeasureCountOptions = Omit<
+  QueryOptions,
+  'count' | 'page' | 'pageSize'
+>;
 export function countMobilityMeasures(
   endpoint: string,
-  options: Omit<QueryOptions, 'count' | 'page' | 'pageSize'> = {},
+  options: MobilityMeasureCountOptions = {},
 ) {
   return _queryMobilityMeasures(endpoint, { ...options, count: true });
 }
