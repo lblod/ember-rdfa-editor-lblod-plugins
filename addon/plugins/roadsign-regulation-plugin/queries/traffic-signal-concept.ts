@@ -35,15 +35,17 @@ export async function queryTrafficSignalConcepts(
       ?type
       ?code
       ?zonality
-      (CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
+      ?image
     WHERE {
       ?uri
         a mobiliteit:Verkeerstekenconcept;
         a ?type;
-        skos:prefLabel ?code;
-        mobiliteit:grafischeWeergave ?imageUri.
+        skos:prefLabel ?code.
 
-      ?imageUri ext:hasFile/mu:uuid ?imageId.
+      OPTIONAL {
+        ?uri mobiliteit:grafischeWeergave/ext:hasFile/mu:uuid ?imageId.
+        BIND(CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
+      }
 
       OPTIONAL {
         ?uri ext:zonality ?zonality.
@@ -65,7 +67,13 @@ export async function queryTrafficSignalConcepts(
   });
   const bindings = queryResult.results.bindings;
   const concepts = TrafficSignalConceptSchema.array().parse(
-    bindings.map(objectify),
+    bindings.map((binding) => {
+      const objectified = objectify(binding);
+      return {
+        ...objectified,
+        image: objectified.image ?? '',
+      };
+    }),
   );
   const conceptsWithCategories = await Promise.all(
     concepts.map(async (concept) => {

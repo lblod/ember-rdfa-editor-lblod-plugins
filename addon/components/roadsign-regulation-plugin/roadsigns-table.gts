@@ -99,14 +99,24 @@ export default class RoadSignsTable extends Component<Signature> {
                         as |signalConcept|
                       }}
                         <div class='au-o-grid__item au-u-1-3'>
-                          <img
-                            src={{signalConcept.image}}
-                            alt={{t
-                              'editor-plugins.roadsign-regulation.table.content.image.alt'
-                              code=signalConcept.code
-                            }}
-                            class='au-c-data-table__image'
-                          />
+                          {{#if signalConcept.image}}
+                            <img
+                              src={{signalConcept.image}}
+                              alt={{t
+                                'editor-plugins.roadsign-regulation.table.content.image.alt'
+                                code=signalConcept.code
+                              }}
+                              class='au-c-data-table__image'
+                            />
+                          {{else}}
+                            <AuPill
+                              @skin='border'
+                              @size='small'
+                              @draft={{true}}
+                            >
+                              {{signalConcept.code}}
+                            </AuPill>
+                          {{/if}}
                         </div>
                       {{/each}}
                     </div>
