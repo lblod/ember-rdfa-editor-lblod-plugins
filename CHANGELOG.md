@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.5.1
+
+### Patch Changes
+
+- [#591](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/591) [`7c61649`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7c61649f9396d9a0f9883198dffb34c3d0120b38) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix filtering of traffic measures by type
+
+- [#591](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/591) [`cae41cb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cae41cb4382f3c90008e97cc76cd2cd7ef2745ca) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix type selector in combination with sign code in traffic measure modal
+
 ## 32.5.0
 
 ### Minor Changes
