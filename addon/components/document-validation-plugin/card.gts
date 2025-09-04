@@ -73,6 +73,21 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     return ['valid', 'no-matches'].includes(this.status);
   }
 
+  doActionAndTriggerValidation = async (
+    action: (controller: SayController) => void,
+  ) => {
+    action(this.controller);
+    const pluginState = documentValidationPluginKey.getState(
+      this.controller.mainEditorView.state,
+    );
+    if (!pluginState) return;
+    const { validationCallback } = pluginState;
+    await validationCallback(
+      this.controller.mainEditorView,
+      this.controller.htmlContent,
+    );
+  };
+
   <template>
     <AuCard
       @flex={{true}}
@@ -128,7 +143,10 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                   @icon={{ExternalLinkIcon}}
                   @skin='link'
                   title={{error.subject}}
-                  {{on 'click' (fn error.action.action this.controller)}}
+                  {{on
+                    'click'
+                    (fn this.doActionAndTriggerValidation error.action.action)
+                  }}
                 >{{error.action.buttonTitle}}</AuButton>
               {{/if}}
             </div>
