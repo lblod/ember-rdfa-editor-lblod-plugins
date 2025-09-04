@@ -10,15 +10,18 @@ import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { RoadsignRegulationPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin';
 import {
   countMobilityMeasures,
+  MobilityMeasureQueryOptions,
   queryMobilityMeasures,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-measure-concept';
 import queryRoadSignCategories from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/road-sign-category';
-import querySignCodes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/sign-codes';
+import queryTrafficSignalCodes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/traffic-signal-codes';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import { pagination } from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/pagination';
 import { restartableTask, task, timeout } from 'ember-concurrency';
 import t from 'ember-intl/helpers/t';
-import PowerSelect from 'ember-power-select/components/power-select';
+import PowerSelect, {
+  Select,
+} from 'ember-power-select/components/power-select';
 import PowerSelectMultiple from 'ember-power-select/components/power-select-multiple';
 import { TaskInstance, trackedTask } from 'reactiveweb/ember-concurrency';
 import { trackedFunction } from 'reactiveweb/function';
@@ -27,7 +30,7 @@ import PaginationView from '../pagination/pagination-view';
 import { not, or } from 'ember-truth-helpers';
 import { on } from '@ember/modifier';
 import {
-  SIGN_CONCEPT_TYPES,
+  TRAFFIC_SIGNAL_CONCEPT_TYPES,
   ZONALITY_OPTIONS,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
@@ -104,9 +107,9 @@ export default class RoadsignsModal extends Component<Signature> {
       this.selectedCategory = undefined;
     } else {
       if (
-        (this.signConceptTypes.map((type) => type.uri) as string[]).includes(
-          option.uri,
-        )
+        (
+          this.trafficSignalConceptTypes.map((type) => type.uri) as string[]
+        ).includes(option.uri)
       ) {
         this.selectedType = option;
         this.selectedCategory = undefined;
@@ -150,14 +153,26 @@ export default class RoadsignsModal extends Component<Signature> {
     this.args.closeModal();
   }
 
+  @action
+  doFirstCodeSearch(select: Select) {
+    if (
+      this.searchCodes.isIdle &&
+      !select.searchText &&
+      // @ts-expect-error not part of the public API... (tested on PS 7 and 8)
+      this.searchCodes.lastSuccessful?.args?.[0] !== ''
+    ) {
+      this.searchCodes.perform('');
+    }
+    return true;
+  }
   searchCodes = restartableTask(async (term: string) => {
     const category = this.selectedCategory?.uri;
-    const type = this.selectedType?.label;
+    const type = this.selectedType?.uri;
     const types = type ? [type] : undefined;
     await timeout(DEBOUNCE_MS);
     const abortController = new AbortController();
     try {
-      return querySignCodes(this.endpoint, {
+      return queryTrafficSignalCodes(this.endpoint, {
         searchString: term,
         roadSignCategory: category,
         types,
@@ -174,12 +189,15 @@ export default class RoadsignsModal extends Component<Signature> {
     if (!selectedCode) {
       return [];
     }
-    let signs: string[] = [selectedCode.uri];
+    let combinedWith: string[] = [selectedCode.uri];
     if (this.selectedCodeCombination) {
-      signs = [...signs, ...this.selectedCodeCombination.map((s) => s.uri)];
+      combinedWith = [
+        ...combinedWith,
+        ...this.selectedCodeCombination.map((s) => s.uri),
+      ];
     }
-    return querySignCodes(this.endpoint, {
-      combinedWith: signs,
+    return queryTrafficSignalCodes(this.endpoint, {
+      combinedWith,
     });
   });
 
@@ -195,18 +213,18 @@ export default class RoadsignsModal extends Component<Signature> {
     return this.classificationsQuery.value ?? [];
   }
 
-  signConceptTypes = [
+  trafficSignalConceptTypes = [
     {
       label: 'Verkeersborden',
-      uri: SIGN_CONCEPT_TYPES.ROAD_SIGN,
+      uri: TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN,
     },
     {
       label: 'Wegmarkeringen',
-      uri: SIGN_CONCEPT_TYPES.ROAD_MARKING,
+      uri: TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_MARKING,
     },
     {
       label: 'Verkeerslichten',
-      uri: SIGN_CONCEPT_TYPES.TRAFFIC_LIGHT,
+      uri: TRAFFIC_SIGNAL_CONCEPT_TYPES.TRAFFIC_LIGHT,
     },
   ];
 
@@ -217,7 +235,7 @@ export default class RoadsignsModal extends Component<Signature> {
     return [
       {
         groupName: 'Types',
-        options: this.signConceptTypes,
+        options: this.trafficSignalConceptTypes,
       },
       {
         groupName: 'Categorieën',
@@ -234,11 +252,11 @@ export default class RoadsignsModal extends Component<Signature> {
     if (this.selectedCode) {
       codes.push(this.selectedCode);
     }
-    const queryOptions = {
+    const queryOptions: MobilityMeasureQueryOptions = {
       imageBaseUrl: this.imageBaseUrl,
       searchString: this.searchQuery,
       zonality: this.selectedZonality ? this.selectedZonality.uri : undefined,
-      signType: this.selectedType ? this.selectedType.uri : undefined,
+      trafficSignalType: this.selectedType ? this.selectedType.uri : undefined,
       codes: codes.length ? codes.map((code) => code.uri) : undefined,
       category: this.selectedCategory ? this.selectedCategory.uri : undefined,
       page: this.pageNumber,
@@ -398,9 +416,11 @@ export default class RoadsignsModal extends Component<Signature> {
                   @verticalPosition='below'
                   @searchEnabled={{true}}
                   @search={{this.searchCodes.perform}}
+                  @options={{or this.searchCodes.last.value undefined}}
                   @selected={{this.selectedCode}}
                   @allowClear={{true}}
                   @onChange={{this.changeCode}}
+                  @onOpen={{this.doFirstCodeSearch}}
                   as |option|
                 >
                   {{option.label}}

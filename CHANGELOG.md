@@ -1,5 +1,27 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.5.2
+
+### Patch Changes
+
+- [#593](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/593) [`56039ab`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/56039abb28cb0f78f7fdda7e9a35af603ed427a5) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix inserted text for traffic signals that do not have images
+
+- [#592](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/592) [`641a973`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/641a973b1323404962db1c737274762da0a9c3e6) Thanks [@piemonkey](https://github.com/piemonkey)! - Improve sorting of label filters on 'insert traffic measure' modal
+
+## 32.5.1
+
+### Patch Changes
+
+- [#591](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/591) [`7c61649`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7c61649f9396d9a0f9883198dffb34c3d0120b38) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix filtering of traffic measures by type
+
+- [#591](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/591) [`cae41cb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cae41cb4382f3c90008e97cc76cd2cd7ef2745ca) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix type selector in combination with sign code in traffic measure modal
+
+## 32.5.0
+
+### Minor Changes
+
+- [#590](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/590) [`beb01f5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/beb01f573a2bf1ce42852e7ddb972a4ca01bf724) Thanks [@elpoelma](https://github.com/elpoelma)! - Rename `traffic-sign` to `traffic-signal`
+
 ## 32.4.1
 
 ### Patch Changes

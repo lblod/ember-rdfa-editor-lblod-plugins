@@ -5,9 +5,12 @@ import {
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { SignConcept, SignConceptSchema } from '../schemas/sign-concept';
+import {
+  TrafficSignalConcept,
+  TrafficSignalConceptSchema,
+} from '../schemas/traffic-signal-concept';
 import queryRoadSignCategories from './road-sign-category';
-import { SIGN_CONCEPT_TYPES } from '../constants';
+import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '../constants';
 
 type QueryOptions = {
   imageBaseUrl?: string;
@@ -15,7 +18,7 @@ type QueryOptions = {
   abortSignal?: AbortSignal;
 };
 
-export async function querySignConcepts(
+export async function queryTrafficSignalConcepts(
   endpoint: string,
   options: QueryOptions = {},
 ) {
@@ -32,15 +35,17 @@ export async function querySignConcepts(
       ?type
       ?code
       ?zonality
-      (CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
+      ?image
     WHERE {
       ?uri
         a mobiliteit:Verkeerstekenconcept;
         a ?type;
-        skos:prefLabel ?code;
-        mobiliteit:grafischeWeergave ?imageUri.
+        skos:prefLabel ?code.
 
-      ?imageUri ext:hasFile/mu:uuid ?imageId.
+      OPTIONAL {
+        ?uri mobiliteit:grafischeWeergave/ext:hasFile/mu:uuid ?imageId.
+        BIND(CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
+      }
 
       OPTIONAL {
         ?uri ext:zonality ?zonality.
@@ -55,16 +60,24 @@ export async function querySignConcepts(
       ${measureConceptUri ? `?uri mobiliteit:heeftMaatregelconcept ${sparqlEscapeUri(measureConceptUri)}` : ''}
     }
   `;
-  const queryResult = await executeQuery<BindingObject<SignConcept>>({
+  const queryResult = await executeQuery<BindingObject<TrafficSignalConcept>>({
     query,
     endpoint,
     abortSignal,
   });
   const bindings = queryResult.results.bindings;
-  const concepts = SignConceptSchema.array().parse(bindings.map(objectify));
+  const concepts = TrafficSignalConceptSchema.array().parse(
+    bindings.map((binding) => {
+      const objectified = objectify(binding);
+      return {
+        ...objectified,
+        image: objectified.image ?? '',
+      };
+    }),
+  );
   const conceptsWithCategories = await Promise.all(
     concepts.map(async (concept) => {
-      if (concept.type === SIGN_CONCEPT_TYPES.ROAD_SIGN) {
+      if (concept.type === TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN) {
         const categories = await queryRoadSignCategories(endpoint, {
           roadSignConceptUri: concept.uri,
         });
