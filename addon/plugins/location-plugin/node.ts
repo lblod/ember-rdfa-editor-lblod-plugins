@@ -109,13 +109,15 @@ const parseDOM = (config: LocationPluginConfig): TagParseRule[] => {
             nodeContentsUtils.address.parse(contentContainer.children[0]) ||
             nodeContentsUtils.place.parse(contentContainer.children[0]) ||
             nodeContentsUtils.area.parse(contentContainer.children[0]);
-          // Ignore the properties for now, we handle these ourselves
-          const properties: OutgoingTriple[] = [];
-          return {
-            ...attrs,
-            properties,
-            value: location,
-          };
+          if (location) {
+            // Ignore the properties for now, we handle these ourselves
+            const properties: OutgoingTriple[] = [];
+            return {
+              ...attrs,
+              properties,
+              value: location,
+            };
+          }
         }
         return false;
       },
