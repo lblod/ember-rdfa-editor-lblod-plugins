@@ -423,7 +423,14 @@ export default class BesluitSampleController extends Controller {
 <https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-article-container-validation> sh:name "inhoud" ;
 		sh:description "De beschrijving van de beoogde rechtsgevolgen, het zogenaamde beschikkend gedeelte." ;
 		sh:path <http://www.w3.org/ns/prov#value> ;
-		sh:datatype <http://www.w3.org/2001/XMLSchema#string> ;
+    sh:or (
+      [
+        sh:datatype <http://www.w3.org/2001/XMLSchema#string>;
+      ]
+      [
+        sh:datatype <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>;
+      ]
+    );
 		sh:minCount 1 ;
 		sh:maxCount 1 ;
         sh:resultMessage "Het besluit moet een artikelcontainer hebben.";
@@ -441,7 +448,14 @@ export default class BesluitSampleController extends Controller {
 <https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-title-validation> sh:name "titel" ;
 		sh:description "Titel van de legale verschijningsvorm." ;
 		sh:path <http://data.europa.eu/eli/ontology#title> ;
-		sh:datatype <http://www.w3.org/2001/XMLSchema#string> ;
+		sh:or (
+      [
+        sh:datatype <http://www.w3.org/2001/XMLSchema#string>;
+      ]
+      [
+        sh:datatype <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>;
+      ]
+    );
 		sh:minCount 1 ;
         sh:resultMessage "Het besluit moet minstens één titel hebben.";
         ext:successMessage "De beslissing heeft een titel.".
