@@ -114,6 +114,7 @@ export const roadsign_regulation: NodeSpec = {
             __rdfaId,
             properties: propertiesFiltered,
             backlinks,
+            subject: resourceUri,
             label: `Mobiliteitsmaatregel`,
           };
         }
