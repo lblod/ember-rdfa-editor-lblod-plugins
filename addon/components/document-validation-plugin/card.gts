@@ -93,8 +93,10 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
 
   oldVal: typeof this.documentValidationErrors;
 
-  dedupe = (val: typeof this.documentValidationErrors) => {
-    if (this.myCompare(val, this.oldVal)) {
+  dedupeDocumentValidationErrors = (
+    val: typeof this.documentValidationErrors,
+  ) => {
+    if (this.compareDocumentValidationErrors(val, this.oldVal)) {
       return this.oldVal;
     } else {
       this.oldVal = val;
@@ -102,7 +104,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     }
   };
 
-  myCompare = (
+  compareDocumentValidationErrors = (
     val1: typeof this.documentValidationErrors,
     val2: typeof this.documentValidationErrors,
   ) => {
@@ -151,7 +153,10 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       </c.header>
       <c.content>
         <div>
-          {{#each (this.dedupe this.documentValidationErrors) as |error|}}
+          {{#each
+            (this.dedupeDocumentValidationErrors this.documentValidationErrors)
+            as |error|
+          }}
             <div class='say-document-validation__error-container'>
               <AuIcon
                 @icon={{CloseFilledIcon}}
