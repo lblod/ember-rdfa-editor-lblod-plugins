@@ -415,7 +415,7 @@ export default class BesluitSampleController extends Controller {
 		sh:description "Een beknopte beschrijving van het besluit." ;
 		sh:path <http://data.europa.eu/eli/ontology#description> ;
 		sh:datatype <http://www.w3.org/2001/XMLSchema#string> ;
-        sh:minCount 0 ;
+    sh:minCount 1 ;
 		sh:maxCount 1 ;
         sh:resultMessage "Het besluit mag maximaal één beschrijving hebben.";
     	ext:successMessage "Het besluit heeft een beschrijving.".
