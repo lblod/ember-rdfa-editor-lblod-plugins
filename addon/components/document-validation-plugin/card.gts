@@ -107,6 +107,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     val2: typeof this.documentValidationErrors,
   ) => {
     if (!val1?.length) return false;
+    if (val1.length !== val2?.length) return false;
     for (let i = 0; i < val1.length; i++) {
       if (
         !val1 ||
