@@ -476,7 +476,7 @@ export const emberNodeConfig: (
           const body = Array.from(rdfaContent.children).find((child) =>
             SAY('body').matches(child.getAttribute('property') ?? ''),
           );
-          return (body && getRdfaContentElement(body)) ?? (node as HTMLElement);
+          return (body && getRdfaContentElement(body)) ?? node;
         },
       },
       {
@@ -537,7 +537,7 @@ export const emberNodeConfig: (
           if (bodyNode) {
             return getRdfaContentElement(bodyNode);
           } else {
-            return node as HTMLElement;
+            return node;
           }
         },
       },
