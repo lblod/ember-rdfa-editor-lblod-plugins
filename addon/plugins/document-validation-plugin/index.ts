@@ -27,7 +27,7 @@ interface DocumentValidationPluginArgs {
   documentShape: string;
   actions: {
     shaclRule: string;
-    action: (controller: SayController) => void;
+    action: (controller: SayController, report: ValidationReport) => void;
     buttonTitle: string;
   }[];
 }
@@ -60,7 +60,7 @@ export interface DocumentValidationPluginState
   validationCallback: typeof validationCallback;
   actions: {
     shaclRule: string;
-    action: (controller: SayController) => void;
+    action: (controller: SayController, report: ValidationReport) => void;
     buttonTitle: string;
   }[];
 }

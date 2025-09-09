@@ -12,6 +12,7 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/icons/external-link';
 import t from 'ember-intl/helpers/t';
 import { eq } from 'ember-truth-helpers';
+import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 
 interface Sig {
   Args: {
@@ -76,9 +77,9 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
   }
 
   doActionAndTriggerValidation = async (
-    action: (controller: SayController) => void,
+    action: (controller: SayController, report: ValidationReport) => void,
   ) => {
-    action(this.controller);
+    action(this.controller, this.validationState?.report as ValidationReport);
     const pluginState = documentValidationPluginKey.getState(
       this.controller.mainEditorView.state,
     );
