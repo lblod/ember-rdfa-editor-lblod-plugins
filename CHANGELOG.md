@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.5.3
+
+### Patch Changes
+
+- [#594](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/594) [`b732735`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b732735c373e2cec7bb4ccce6974cc0934ae1f99) Thanks [@abeforgit](https://github.com/abeforgit)! - Fix parsing of articles
+
+- [#595](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/595) [`eb0aea2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/eb0aea28d0887ef5274aba72c6f6a7daa02aca24) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix parsing of oslo locations to no longer incorrectly catch non-locations
+
+- [#596](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/596) [`ece607c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ece607cf50f6480277f9b47893df71fbb85e4b82) Thanks [@piemonkey](https://github.com/piemonkey)! - Correctly parse the subject URI of roadsign_regulation nodes
+
 ## 32.5.2
 
 ### Patch Changes
