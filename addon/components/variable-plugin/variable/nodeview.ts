@@ -28,8 +28,6 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
             this.innerView?.dispatch(tr);
           }
         });
-      } else {
-        this.innerView.focus();
       }
     }
   }
