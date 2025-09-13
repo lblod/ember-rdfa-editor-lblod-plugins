@@ -14,13 +14,13 @@ import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '../constants';
 
 type QueryOptions = {
   imageBaseUrl?: string;
-  measureConceptUri?: string;
+  measureConceptUri: string;
   abortSignal?: AbortSignal;
 };
 
 export async function queryTrafficSignalConcepts(
   endpoint: string,
-  options: QueryOptions = {},
+  options: QueryOptions,
 ) {
   const { imageBaseUrl, measureConceptUri, abortSignal } = options;
   const query = /* sparql */ `
@@ -29,6 +29,7 @@ export async function queryTrafficSignalConcepts(
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    PREFIX schema: <http://schema.org/>
 
     SELECT DISTINCT
       ?uri
@@ -36,11 +37,29 @@ export async function queryTrafficSignalConcepts(
       ?code
       ?zonality
       ?image
+      ?position
     WHERE {
       ?uri
         a mobiliteit:Verkeerstekenconcept;
         a ?type;
         skos:prefLabel ?code.
+      {
+        ${sparqlEscapeUri(measureConceptUri)}
+          mobiliteit:heeftVerkeerstekenLijstItem ?listItem.
+        ?listItem
+          schema:item ?uri;
+          schema:position ?position.
+      }
+      UNION
+      {
+        ?uri mobiliteit:heeftMaatregelconcept ${sparqlEscapeUri(measureConceptUri)}.
+        FILTER NOT EXISTS {
+          ${sparqlEscapeUri(measureConceptUri)}
+            mobiliteit:heeftVerkeerstekenLijstItem ?listItem.
+          ?listItem
+            schema:item ?uri.
+        }
+      }
 
       OPTIONAL {
         ?uri mobiliteit:grafischeWeergave/ext:hasFile/mu:uuid ?imageId.
@@ -56,8 +75,6 @@ export async function queryTrafficSignalConcepts(
         <https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept>
         <https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept>
       }
-
-      ${measureConceptUri ? `?uri mobiliteit:heeftMaatregelconcept ${sparqlEscapeUri(measureConceptUri)}` : ''}
     }
   `;
   const queryResult = await executeQuery<BindingObject<TrafficSignalConcept>>({
