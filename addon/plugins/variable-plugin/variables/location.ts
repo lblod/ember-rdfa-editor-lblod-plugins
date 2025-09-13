@@ -98,7 +98,8 @@ const parseDOMLegacy = [
           variable: variableUri,
           variableInstance: variableInstanceUri,
           label,
-          source: sourceUri,
+          // Default to a blank string so the edit component uses the default
+          source: sourceUri ?? '',
         });
       }
       return false;
