@@ -142,13 +142,12 @@ async function _queryMobilityMeasures<Count extends boolean>(
     );
     const conceptsWithSigns = await Promise.all(
       concepts.map(async (concept) => {
-        const trafficSignalConcepts = await queryTrafficSignalConcepts(
-          endpoint,
-          {
+        const trafficSignalConcepts = (
+          await queryTrafficSignalConcepts(endpoint, {
             measureConceptUri: concept.uri,
             imageBaseUrl,
-          },
-        );
+          })
+        ).sort((a, b) => a.position - b.position);
         return {
           ...concept,
           trafficSignalConcepts,
