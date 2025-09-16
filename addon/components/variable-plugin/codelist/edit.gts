@@ -1,5 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { on } from '@ember/modifier';
+import { eq, not } from 'ember-truth-helpers';
+import t from 'ember-intl/helpers/t';
+import PowerSelect from 'ember-power-select/components/power-select';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import {
   CodeListOption,
@@ -12,15 +16,25 @@ import { trackedFunction } from 'reactiveweb/function';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { tracked } from '@glimmer/tracking';
+import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
+import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
+import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
+import PowerSelectMultiple from 'ember-power-select/components/power-select-multiple';
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
+import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
+
 export type CodelistEditOptions = {
   endpoint: string;
 };
-type Args = {
-  controller: SayController;
-  options: CodelistEditOptions;
+type Sig = {
+  Args: {
+    controller: SayController;
+    options: CodelistEditOptions;
+  };
 };
 
-export default class CodelistEditComponent extends Component<Args> {
+export default class CodelistEditComponent extends Component<Sig> {
   @tracked selectedCodelistOption?: CodeListOption | CodeListOption[];
 
   get controller() {
@@ -46,7 +60,7 @@ export default class CodelistEditComponent extends Component<Args> {
     if (this.selectedCodelist) {
       const { node } = this.selectedCodelist;
       const source = node.attrs['source'] as Option<string>;
-      if (source) {
+      if (source && source !== 'UNKNOWN') {
         return source;
       }
     }
@@ -109,4 +123,68 @@ export default class CodelistEditComponent extends Component<Args> {
   updateCodelistOption(codelistOption: CodeListOption | CodeListOption[]) {
     this.selectedCodelistOption = codelistOption;
   }
+
+  <template>
+    {{#if this.showCard}}
+      <AuCard
+        @flex={{true}}
+        @divided={{true}}
+        @isOpenInitially={{true}}
+        @expandable={{true}}
+        @shadow={{true}}
+        @size='small'
+        as |c|
+      >
+        <c.header>
+          <AuHeading @level='3' @skin='6'>
+            {{t 'variable-plugin.enter-variable-value'}}
+          </AuHeading>
+        </c.header>
+        <c.content>
+          {{#if (eq this.codelistUri 'UNKNOWN')}}
+            <AuAlert @icon={{AlertTriangleIcon}} @skin='warning'>
+              {{t 'variable-plugin.unknown-codelist'}}
+            </AuAlert>
+          {{else}}
+            <AuLabel for='codelist-select'>
+              {{this.label}}
+            </AuLabel>
+            {{#if this.multiSelect}}
+              <PowerSelectMultiple
+                id='codelist-select'
+                @allowClear={{false}}
+                @searchEnabled={{true}}
+                @searchField='label'
+                @options={{this.codelistOptions.value.options}}
+                @selected={{this.selectedCodelistOption}}
+                @onChange={{this.updateCodelistOption}}
+                as |option|
+              >
+                {{option.label}}
+              </PowerSelectMultiple>
+            {{else}}
+              <PowerSelect
+                id='codelist-select'
+                @allowClear={{false}}
+                @searchEnabled={{true}}
+                @searchField='label'
+                @options={{this.codelistOptions.value.options}}
+                @selected={{this.selectedCodelistOption}}
+                @onChange={{this.updateCodelistOption}}
+                as |option|
+              >
+                {{option.label}}
+              </PowerSelect>
+            {{/if}}
+            <AuButton
+              {{on 'click' this.insert}}
+              @disabled={{not this.selectedCodelistOption}}
+            >
+              {{t 'editor-plugins.utils.insert'}}
+            </AuButton>
+          {{/if}}
+        </c.content>
+      </AuCard>
+    {{/if}}
+  </template>
 }

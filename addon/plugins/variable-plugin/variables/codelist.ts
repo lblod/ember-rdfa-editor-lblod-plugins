@@ -104,8 +104,10 @@ const parseDOMLegacy = [
           variable: variableUri,
           variableInstance: variableInstanceUri,
           label,
-          source: sourceUri,
-          codelist: codelistUri,
+          // These attrs are required but it's possible for older documents to get into a broken
+          // state. We mark these as unknown so we can push the user to fix this as we can't do it.
+          source: sourceUri ?? 'UNKNOWN',
+          codelist: codelistUri ?? 'UNKNOWN',
           selectionStyle,
         });
       }

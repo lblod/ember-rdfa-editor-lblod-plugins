@@ -224,6 +224,7 @@ variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in
   enter-variable-value: Selecteer waarde
+  unknown-codelist: Er werden geen mogelijke waarden voor deze codelijst gevonden
   label: Label
   labelPlaceholder: Type iets...
   number:
