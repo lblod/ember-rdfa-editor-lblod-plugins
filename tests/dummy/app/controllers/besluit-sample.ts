@@ -60,7 +60,10 @@ import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-
 
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
-import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
+import {
+  roadsign_regulation,
+  trafficSignalMigration,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   citationPlugin,
   CitationPluginConfig,
@@ -97,7 +100,6 @@ import {
   editableNodePlugin,
   getActiveEditableNode,
 } from '@lblod/ember-rdfa-editor/plugins/editable-node';
-import { isResourceAttrs } from '@lblod/ember-rdfa-editor/core/rdfa-types';
 
 import VisualiserCard from '@lblod/ember-rdfa-editor/components/_private/rdfa-visualiser/visualiser-card';
 import DebugInfo from '@lblod/ember-rdfa-editor/components/_private/debug-info';
@@ -132,15 +134,8 @@ import {
   snippetView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/nodes/snippet';
 import { BlockRDFaView } from '@lblod/ember-rdfa-editor/nodes/block-rdfa';
-import {
-  getRdfaContentElement,
-  isRdfaAttrs,
-} from '@lblod/ember-rdfa-editor/core/schema';
-import {
-  BESLUIT,
-  MOBILITEIT,
-  RDF,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/schema';
+import { BESLUIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import recreateUuidsOnPaste from '@lblod/ember-rdfa-editor/plugins/recreateUuidsOnPaste';
 
 import { getOwner } from '@ember/owner';
@@ -150,12 +145,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
 import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
-import {
-  SayDataFactory,
-  sayDataFactory,
-} from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { TRAFFIC_SIGNAL_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -194,7 +184,6 @@ export default class BesluitSampleController extends Controller {
   };
 
   get schema() {
-    const factory = new SayDataFactory();
     return new Schema({
       nodes: {
         doc: docWithConfig({ rdfaAware: true }),
@@ -236,57 +225,7 @@ export default class BesluitSampleController extends Controller {
         invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
         inline_rdfa: inlineRdfaWithConfig({
           rdfaAware: true,
-          // TODO This should be moved to within the roadsigns plugin and included here so it can be
-          // re-used in client apps. It was put here for convenience and to demonstrate how
-          // migrations work.
-          modelMigrations: (attrs) => {
-            if (
-              isResourceAttrs(attrs) &&
-              hasOutgoingNamedNodeTriple(
-                attrs,
-                RDF('type'),
-                MOBILITEIT('Verkeersbord-Verkeersteken'),
-              )
-            ) {
-              return {
-                getAttrs: () => {
-                  const oldConceptProp = attrs.properties.find(
-                    ({ predicate }) =>
-                      MOBILITEIT('heeftVerkeersbordconcept').matches(predicate),
-                  );
-                  const conceptProp = oldConceptProp && {
-                    predicate: MOBILITEIT('heeftVerkeersbordconcept').full,
-                    object: factory.namedNode(oldConceptProp.object.value),
-                  };
-                  return {
-                    ...attrs,
-                    properties: [
-                      conceptProp,
-                      {
-                        predicate: RDF('type').full,
-                        object: sayDataFactory.namedNode(
-                          TRAFFIC_SIGNAL_TYPES.TRAFFIC_SIGNAL,
-                        ),
-                      },
-                      {
-                        predicate: RDF('type').full,
-                        object: sayDataFactory.namedNode(
-                          TRAFFIC_SIGNAL_TYPES.ROAD_SIGN,
-                        ),
-                      },
-                    ],
-                  };
-                },
-                contentElement: (element) => {
-                  const content = element.querySelector(
-                    '[property="http://www.w3.org/2004/02/skos/core#prefLabel"]',
-                  );
-                  return getRdfaContentElement(content || element);
-                },
-              };
-            }
-            return false;
-          },
+          modelMigrations: [trafficSignalMigration],
         }),
         link: link(this.config.link),
         snippet_placeholder: snippetPlaceholder(this.config.snippet),
