@@ -34,6 +34,7 @@ declare module 'ember-power-select/components/power-select' {
     allowClear?: boolean;
     renderInPlace?: boolean;
     disabled?: boolean;
+    verticalPosition?: 'below' | 'above' | 'auto';
     // END extra args
     highlightOnHover?: boolean;
     placeholderComponent?: string;
