@@ -150,7 +150,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
 import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  SayDataFactory,
+  sayDataFactory,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { TRAFFIC_SIGNAL_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 
@@ -191,6 +194,7 @@ export default class BesluitSampleController extends Controller {
   };
 
   get schema() {
+    const factory = new SayDataFactory();
     return new Schema({
       nodes: {
         doc: docWithConfig({ rdfaAware: true }),
@@ -245,15 +249,19 @@ export default class BesluitSampleController extends Controller {
               )
             ) {
               return {
-                attrs: () => {
+                getAttrs: () => {
+                  const oldConceptProp = attrs.properties.find(
+                    ({ predicate }) =>
+                      MOBILITEIT('heeftVerkeersbordconcept').matches(predicate),
+                  );
+                  const conceptProp = oldConceptProp && {
+                    predicate: MOBILITEIT('heeftVerkeersbordconcept').full,
+                    object: factory.namedNode(oldConceptProp.object.value),
+                  };
                   return {
                     ...attrs,
                     properties: [
-                      attrs.properties.find(({ predicate }) =>
-                        MOBILITEIT('heeftVerkeersbordconcept').matches(
-                          predicate,
-                        ),
-                      ),
+                      conceptProp,
                       {
                         predicate: RDF('type').full,
                         object: sayDataFactory.namedNode(
