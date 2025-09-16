@@ -8,6 +8,7 @@ export const TrafficSignalConceptSchema = z
     code: z.string(),
     image: z.string(),
     zonality: z.nativeEnum(ZONALITY_OPTIONS).optional(),
+    position: z.coerce.number().default(-1),
   })
   .and(
     z.discriminatedUnion('type', [

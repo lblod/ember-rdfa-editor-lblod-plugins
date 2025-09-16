@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.6.0
+
+### Minor Changes
+
+- [#599](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/599) [`532f3d1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/532f3d1a04eba1aa2071ba6154f7b882ea76ae78) Thanks [@elpoelma](https://github.com/elpoelma)! - Order traffic signals of a mobility measure based on their position
+
 ## 32.5.3
 
 ### Patch Changes
