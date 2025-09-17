@@ -32,6 +32,7 @@ import { on } from '@ember/modifier';
 import {
   TRAFFIC_SIGNAL_CONCEPT_TYPES,
   ZONALITY_OPTIONS,
+  type ZonalOrNot,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
 import { queryMobilityTemplates } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-template';
@@ -309,9 +310,7 @@ export default class RoadsignsModal extends Component<Signature> {
   insertMeasure = task(
     async (
       concept: MobilityMeasureConcept,
-      zonality:
-        | typeof ZONALITY_OPTIONS.ZONAL
-        | typeof ZONALITY_OPTIONS.NON_ZONAL,
+      zonality: ZonalOrNot,
       temporal: boolean,
     ) => {
       if (!this.decisionLocation) {

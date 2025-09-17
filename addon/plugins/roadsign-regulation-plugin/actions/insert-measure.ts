@@ -30,6 +30,7 @@ import {
   TRAFFIC_SIGNAL_TYPE_MAPPING,
   TRAFFIC_SIGNAL_TYPES,
   ZONALITY_OPTIONS,
+  ZonalOrNot,
 } from '../constants';
 import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
 import { generateVariableInstanceUri } from '../../variable-plugin/utils/variable-helpers';
@@ -40,7 +41,7 @@ import { createClassicLocationVariable } from '../../variable-plugin/actions/cre
 
 interface InsertMeasureArgs {
   measureConcept: MobilityMeasureConcept;
-  zonality: typeof ZONALITY_OPTIONS.ZONAL | typeof ZONALITY_OPTIONS.NON_ZONAL;
+  zonality: ZonalOrNot;
   temporal: boolean;
   variables: Record<string, Exclude<Variable, { type: 'instruction' }>>;
   templateString: string;
@@ -60,7 +61,7 @@ export default function insertMeasure({
   return function (state: EditorState) {
     const { schema } = state;
     const signNodes = measureConcept.trafficSignalConcepts.map((signConcept) =>
-      constructSignNode(signConcept, schema),
+      constructSignNode(signConcept, schema, zonality),
     );
     let signSection: PNode[] = [];
     if (signNodes.length) {
@@ -210,9 +211,19 @@ function determineSignLabel(signConcept: TrafficSignalConcept) {
   }
 }
 
-function constructSignNode(signConcept: TrafficSignalConcept, schema: Schema) {
+function constructSignNode(
+  signConcept: TrafficSignalConcept,
+  schema: Schema,
+  zonality?: ZonalOrNot,
+) {
   const signUri = `http://data.lblod.info/verkeerstekens/${uuid()}`;
   const prefix = determineSignLabel(signConcept);
+  const zonalityText =
+    !zonality || zonality !== ZONALITY_OPTIONS.ZONAL
+      ? ''
+      : prefix === 'Onderbord'
+        ? ' op het verkeersbord met zonale geldigheid'
+        : ' met zonale geldigheid';
   const node = schema.nodes.inline_rdfa.create(
     {
       rdfaNodeType: 'resource',
@@ -235,7 +246,7 @@ function constructSignNode(signConcept: TrafficSignalConcept, schema: Schema) {
         },
       ],
     },
-    schema.text(`${prefix} ${signConcept.code}`),
+    schema.text(`${prefix} ${signConcept.code}${zonalityText}`),
   );
   return node;
 }

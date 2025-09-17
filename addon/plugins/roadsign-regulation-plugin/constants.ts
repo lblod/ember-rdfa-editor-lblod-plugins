@@ -1,4 +1,5 @@
 import { MOBILITEIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { ValuesOf } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 export const ZONALITY_OPTIONS = {
   POTENTIALLY_ZONAL:
@@ -7,6 +8,11 @@ export const ZONALITY_OPTIONS = {
   NON_ZONAL:
     'http://lblod.data.gift/concepts/b651931b-923c-477c-8da9-fc7dd841fdcc',
 } as const;
+export type ZonalityOption = ValuesOf<typeof ZONALITY_OPTIONS>;
+export type ZonalOrNot = Exclude<
+  ZonalityOption,
+  typeof ZONALITY_OPTIONS.POTENTIALLY_ZONAL
+>;
 
 export const TRAFFIC_SIGNAL_CONCEPT_TYPES = {
   TRAFFIC_SIGNAL: MOBILITEIT('Verkeerstekenconcept').full,
