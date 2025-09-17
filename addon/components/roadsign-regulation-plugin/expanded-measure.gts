@@ -64,6 +64,7 @@ export default class ExpandedMeasure extends Component<Signature> {
   insert() {
     this.args.insert.perform(
       this.args.concept,
+      // POTENTIALLY_ZONAL option is filtered out by requiring a zonalityValue to submit
       (this.zonalityValue ?? this.args.concept.zonality) as
         | typeof ZONALITY_OPTIONS.ZONAL
         | typeof ZONALITY_OPTIONS.NON_ZONAL,
