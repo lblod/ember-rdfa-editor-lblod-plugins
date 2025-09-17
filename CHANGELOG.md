@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.6.1
+
+### Patch Changes
+
+- [#600](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/600) [`93cb522`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/93cb522d59d066a00bb0c3b80f1de251948ad5fa) Thanks [@piemonkey](https://github.com/piemonkey)! - Display a warning for codelist variables with no codelist URI
+
 ## 32.6.0
 
 ### Minor Changes
