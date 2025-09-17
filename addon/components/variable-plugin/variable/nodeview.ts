@@ -16,7 +16,7 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
     return [editableNodePlugin(this.args.getPos)];
   }
   @action
-  onClick() {
+  onClick(event: Event) {
     if (this.innerView) {
       if (this.innerView.state.doc.firstChild?.type.name === 'placeholder') {
         this.innerView.focus();
@@ -28,7 +28,13 @@ export default class VariableNodeViewComponent extends Component<EmberNodeArgs> 
             this.innerView?.dispatch(tr);
           }
         });
-      } else {
+      } else if (
+        event.target instanceof Element &&
+        event.target.classList.contains('say-pill')
+      ) {
+        // When clicking between the nested prosemirror and the border of the pill, we need to
+        // focus the inner view to avoid weird issues with the selection jumping after starting to
+        // type
         this.innerView.focus();
       }
     }
