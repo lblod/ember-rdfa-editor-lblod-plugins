@@ -230,6 +230,83 @@ module('plugin | variable plugin', function () {
     assert.strictEqual(codelistNode?.attrs?.codelist, CODELIST_URI);
   });
 
+  test('it should parse older location variables using the `ext:Mapping` type, lacking a `source` attribute', function (assert) {
+    const { controller } = testEditor(SAMPLE_SCHEMA, SAMPLE_PLUGINS);
+    const htmlContent = `
+    <div lang="nl-BE" data-say-document="true">
+      <span
+        resource="http://data.lblod.info/mappings/123456"
+        typeof="ext:Mapping"
+      >
+        <span
+          property="http://mu.semte.ch/vocabularies/ext/instance"
+          resource="http://data.lblod.info/variable-instance/123456"
+        >
+        </span>
+        <span property="dct:type" content="location">
+        </span>
+        <span property="ext:content">
+          Content
+        </span>
+      </span>
+    </div>
+    `;
+    controller.initialize(htmlContent);
+    const locationNode: PNode | undefined = findNodesOfType(
+      controller.mainEditorState.doc,
+      'location',
+    )[0];
+    assert.strictEqual(locationNode.attrs['source'], '');
+  });
+
+  test('it should parse older codelist variables using the `ext:Mapping` type, lacking a `source` or `codelist` attribute', function (assert) {
+    const { controller } = testEditor(SAMPLE_SCHEMA, SAMPLE_PLUGINS);
+    const htmlContent = `
+      <span
+        about="http://data.lblod.info/mappings/123456"
+        property="http://mu.semte.ch/vocabularies/ext/content"
+        datatype="http://www.w3.org/2001/XMLSchema#string"
+        lang=""
+      >
+        <span
+          style="display: none"
+          data-rdfa-container="true"
+        >
+          <span
+            about="http://data.lblod.info/mappings/123456"
+            property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+            resource="http://mu.semte.ch/vocabularies/ext/Mapping"
+          >
+          </span>
+          <span
+            about="http://data.lblod.info/mappings/123456"
+            property="http://mu.semte.ch/vocabularies/ext/instance"
+            resource="http://data.lblod.info/variable-instance/123456"
+          >
+          </span>
+          <span
+            property="http://purl.org/dc/terms/type"
+            content="codelist"
+            datatype="http://www.w3.org/2001/XMLSchema#string"
+          >
+          </span>
+        </span>
+        <span
+          data-content-container="true"
+        >
+          codelist content
+        </span>
+      </span>
+    `;
+    controller.initialize(htmlContent);
+    const codelistNode: PNode | undefined = findNodesOfType(
+      controller.mainEditorState.doc,
+      'codelist',
+    )[0];
+    assert.strictEqual(codelistNode.attrs['source'], 'UNKNOWN');
+    assert.strictEqual(codelistNode.attrs['codelist'], 'UNKNOWN');
+  });
+
   test('should link mobility regulations with decisions when parsing', function (assert) {
     const DECISION_URI = 'http://data.lblod.info/id/besluiten/12345678';
     const REGULATION_URI =
