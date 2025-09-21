@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.6.2
+
+### Patch Changes
+
+- [#598](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/598) [`4534978`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4534978967ada361779096652ad8570d592320c1) Thanks [@piemonkey](https://github.com/piemonkey)! - Do not auto-focus variables unless they only contain a placeholder
+
+- [#602](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/602) [`9037dd0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9037dd03b02c299e7fe56134fa592af3a3e19af0) Thanks [@elpoelma](https://github.com/elpoelma)! - Add default fallback values for `source` and `codelist` attributes of `location` and `codelist` variables. This ensures that older documents may be parsed without/with less issues/errors
+
 ## 32.6.1
 
 ### Patch Changes
