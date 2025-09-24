@@ -10,17 +10,16 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
-import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import {
+  ZONALITY_OPTIONS,
+  ZonalOrNot,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { Task } from 'ember-concurrency';
 import { isSome } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export type InsertMobilityMeasureTask = Task<
   void,
-  [
-    MobilityMeasureConcept,
-    typeof ZONALITY_OPTIONS.ZONAL | typeof ZONALITY_OPTIONS.NON_ZONAL,
-    boolean,
-  ]
+  [MobilityMeasureConcept, ZonalOrNot, boolean]
 >;
 type Signature = {
   Args: {
@@ -32,9 +31,7 @@ type Signature = {
 };
 
 export default class ExpandedMeasure extends Component<Signature> {
-  @tracked zonalityValue?:
-    | typeof ZONALITY_OPTIONS.ZONAL
-    | typeof ZONALITY_OPTIONS.NON_ZONAL;
+  @tracked zonalityValue?: ZonalOrNot;
   @tracked temporalValue?: boolean;
 
   get isPotentiallyZonal() {
@@ -49,9 +46,7 @@ export default class ExpandedMeasure extends Component<Signature> {
   }
 
   @action
-  changeZonality(
-    zonality: typeof ZONALITY_OPTIONS.ZONAL | typeof ZONALITY_OPTIONS.NON_ZONAL,
-  ) {
+  changeZonality(zonality: ZonalOrNot) {
     this.zonalityValue = zonality;
   }
 
@@ -64,9 +59,8 @@ export default class ExpandedMeasure extends Component<Signature> {
   insert() {
     this.args.insert.perform(
       this.args.concept,
-      (this.zonalityValue ?? this.args.concept.zonality) as
-        | typeof ZONALITY_OPTIONS.ZONAL
-        | typeof ZONALITY_OPTIONS.NON_ZONAL,
+      // POTENTIALLY_ZONAL option is filtered out by requiring a zonalityValue to submit
+      (this.zonalityValue ?? this.args.concept.zonality) as ZonalOrNot,
       this.temporalValue ?? false,
     );
   }
