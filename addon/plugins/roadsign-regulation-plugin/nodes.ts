@@ -9,10 +9,24 @@ import {
   EXT,
   MOBILITEIT,
   PROV,
+  RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  hasOutgoingNamedNodeTriple,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  SayDataFactory,
+  sayDataFactory,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  isResourceAttrs,
+  ModelMigration,
+  ModelMigrationGenerator,
+} from '@lblod/ember-rdfa-editor/core/rdfa-types';
+import { getRdfaContentElement } from '@lblod/ember-rdfa-editor/core/schema';
+import { TRAFFIC_SIGNAL_TYPES } from './constants';
 
 const CONTENT_SELECTOR = `div[property~='${
   DCT('description').full
@@ -123,4 +137,51 @@ export const roadsign_regulation: NodeSpec = {
       contentElement: CONTENT_SELECTOR,
     },
   ],
+};
+
+export const trafficSignalMigration: ModelMigrationGenerator = (attrs) => {
+  const factory = new SayDataFactory();
+  if (
+    isResourceAttrs(attrs) &&
+    hasOutgoingNamedNodeTriple(
+      attrs,
+      RDF('type'),
+      MOBILITEIT('Verkeersbord-Verkeersteken'),
+    )
+  ) {
+    return {
+      getAttrs: () => {
+        const oldConceptProp = attrs.properties.find(({ predicate }) =>
+          MOBILITEIT('heeftVerkeersbordconcept').matches(predicate),
+        );
+        const conceptProp = oldConceptProp && {
+          predicate: MOBILITEIT('heeftVerkeersbordconcept').full,
+          object: factory.namedNode(oldConceptProp.object.value),
+        };
+        return {
+          ...attrs,
+          properties: [
+            ...(conceptProp ? [conceptProp] : []),
+            {
+              predicate: RDF('type').full,
+              object: sayDataFactory.namedNode(
+                TRAFFIC_SIGNAL_TYPES.TRAFFIC_SIGNAL,
+              ),
+            },
+            {
+              predicate: RDF('type').full,
+              object: sayDataFactory.namedNode(TRAFFIC_SIGNAL_TYPES.ROAD_SIGN),
+            },
+          ],
+        };
+      },
+      contentElement: (element) => {
+        const content = element.querySelector(
+          '[property="http://www.w3.org/2004/02/skos/core#prefLabel"]',
+        );
+        return getRdfaContentElement(content || element);
+      },
+    } satisfies ModelMigration;
+  }
+  return false;
 };
