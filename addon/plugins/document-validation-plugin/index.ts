@@ -2,7 +2,12 @@ import factory from '@rdfjs/dataset';
 import SHACLValidator from 'rdf-validate-shacl';
 import { Parser as ParserN3 } from 'n3';
 import { RdfaParser } from 'rdfa-streaming-parser';
-import { ProsePlugin, PluginKey, EditorView } from '@lblod/ember-rdfa-editor';
+import {
+  ProsePlugin,
+  PluginKey,
+  EditorView,
+  SayController,
+} from '@lblod/ember-rdfa-editor';
 import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
 import {
   BlankNode,
@@ -20,6 +25,11 @@ export const documentValidationPluginKey =
 
 interface DocumentValidationPluginArgs {
   documentShape: string;
+  actions: {
+    shaclRule: string;
+    action: (controller: SayController, report: ValidationReport) => void;
+    buttonTitle: string;
+  }[];
 }
 
 export type ShaclValidationReport = ValidationReport.ValidationReport<
@@ -34,6 +44,7 @@ interface DocumentValidationResult {
     | {
         message: string;
         subject: string | undefined;
+        shape: string;
       }
     // TODO get rid of this?
     | undefined
@@ -47,6 +58,11 @@ export interface DocumentValidationPluginState
   extends DocumentValidationResult {
   documentShape: string;
   validationCallback: typeof validationCallback;
+  actions: {
+    shaclRule: string;
+    action: (controller: SayController, report: ValidationReport) => void;
+    buttonTitle: string;
+  }[];
 }
 
 export const documentValidationPlugin = (
@@ -61,6 +77,7 @@ export const documentValidationPlugin = (
           documentShape: options.documentShape,
           propertiesWithoutErrors: [],
           propertiesWithErrors: [],
+          actions: options.actions,
         };
       },
       apply(tr, state) {
@@ -121,17 +138,23 @@ async function validationCallback(view: EditorView, documentHtml: string) {
   );
   const propertiesWithErrorsMessages = propertiesWithErrors
     .map(({ sourceShape, focusNode }) => {
+      console.log(sourceShape);
       const match = shacl.match(sourceShape, errorMessagePred, undefined);
       const message = [...match][0]?.object.value;
       return message
-        ? { message: removeQuotes(message), subject: focusNode?.value }
+        ? {
+            message: removeQuotes(message),
+            subject: focusNode?.value,
+            shape: sourceShape.value,
+          }
         : undefined;
     })
     .filter((message) => message);
   const propertiesWithoutErrorsArray = propertyNodes.filter((propertyNode) =>
-    propertiesWithErrors.some((propertyWithError) => {
-      return propertyWithError.sourceShape.value !== propertyNode.value;
-    }),
+    propertiesWithErrors.every(
+      (propertyWithError) =>
+        propertyWithError.sourceShape.value !== propertyNode.value,
+    ),
   );
 
   const successMessagePred = sayFactory.namedNode(
