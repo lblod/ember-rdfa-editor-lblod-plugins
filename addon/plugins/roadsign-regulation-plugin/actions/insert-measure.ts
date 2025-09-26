@@ -247,7 +247,7 @@ function constructSignNode(
       ],
     },
     schema.text(
-      `${prefix} ${signConcept.irgnName?.length ? signConcept.irgnName : signConcept.code}${zonalityText}`,
+      `${prefix} ${signConcept.irgnName || signConcept.code}${zonalityText}`,
     ),
   );
   return node;
