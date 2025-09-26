@@ -40,47 +40,45 @@ export async function queryTrafficSignalConcepts(
       ?image
       ?position
     WHERE {
-      GRAPH <http://mu.semte.ch/graphs/mow/registry> {
-        ?uri
-          a mobiliteit:Verkeerstekenconcept;
-          a ?type;
-          skos:prefLabel ?code.
-        {
+      ?uri
+        a mobiliteit:Verkeerstekenconcept;
+        a ?type;
+        skos:prefLabel ?code.
+      {
+        ${sparqlEscapeUri(measureConceptUri)}
+          mobiliteit:heeftVerkeerstekenLijstItem ?listItem.
+        ?listItem
+          schema:item ?uri;
+          schema:position ?position.
+      }
+      UNION
+      {
+        ?uri mobiliteit:heeftMaatregelconcept ${sparqlEscapeUri(measureConceptUri)}.
+        FILTER NOT EXISTS {
           ${sparqlEscapeUri(measureConceptUri)}
             mobiliteit:heeftVerkeerstekenLijstItem ?listItem.
           ?listItem
-            schema:item ?uri;
-            schema:position ?position.
+            schema:item ?uri.
         }
-        UNION
-        {
-          ?uri mobiliteit:heeftMaatregelconcept ${sparqlEscapeUri(measureConceptUri)}.
-          FILTER NOT EXISTS {
-            ${sparqlEscapeUri(measureConceptUri)}
-              mobiliteit:heeftVerkeerstekenLijstItem ?listItem.
-            ?listItem
-              schema:item ?uri.
-          }
-        }
+      }
 
-        OPTIONAL {
-          ?uri mobiliteit:grafischeWeergave/ext:hasFile/mu:uuid ?imageId.
-          BIND(CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
-        }
+      OPTIONAL {
+        ?uri mobiliteit:grafischeWeergave/ext:hasFile/mu:uuid ?imageId.
+        BIND(CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
+      }
 
-        OPTIONAL {
-          ?uri ext:zonality ?zonality.
-        }
+      OPTIONAL {
+        ?uri ext:zonality ?zonality.
+      }
 
-        OPTIONAL  {
-          ?uri ext:irgnName ?irgnName.
-        }
+      OPTIONAL  {
+        ?uri ext:irgnName ?irgnName.
+      }
 
-        VALUES ?type {
-          <https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept>
-          <https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept>
-          <https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept>
-        }
+      VALUES ?type {
+        <https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept>
+        <https://data.vlaanderen.be/ns/mobiliteit#Wegmarkeringconcept>
+        <https://data.vlaanderen.be/ns/mobiliteit#Verkeerslichtconcept>
       }
     }
   `;

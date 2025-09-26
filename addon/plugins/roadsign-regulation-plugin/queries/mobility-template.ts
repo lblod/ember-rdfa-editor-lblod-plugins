@@ -28,21 +28,19 @@ export async function queryMobilityTemplates(
       ?uri
       ?value
     WHERE {
-      GRAPH <http://mu.semte.ch/graphs/mow/registry> {
-        ?uri
-          a mobiliteit:Template;
-          rdf:value ?value.
+      ?uri
+        a mobiliteit:Template;
+        rdf:value ?value.
 
-        ${
-          instructionVariableUri
-            ? `${sparqlEscapeUri(instructionVariableUri)} mobiliteit:template ?uri`
-            : ''
-        }
-        ${
-          measureConceptUri
-            ? `${sparqlEscapeUri(measureConceptUri)} mobiliteit:Mobiliteitsmaatregelconcept.template ?uri`
-            : ''
-        }
+      ${
+        instructionVariableUri
+          ? `${sparqlEscapeUri(instructionVariableUri)} mobiliteit:template ?uri`
+          : ''
+      }
+      ${
+        measureConceptUri
+          ? `${sparqlEscapeUri(measureConceptUri)} mobiliteit:Mobiliteitsmaatregelconcept.template ?uri`
+          : ''
       }
     }
   `;
