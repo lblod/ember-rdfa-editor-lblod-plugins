@@ -28,10 +28,12 @@ export default async function queryRoadSignCategories(
       ?uri
       ?label
     WHERE {
-      ?uri a mobiliteit:Verkeersbordcategorie;
-           skos:prefLabel ?label.
+      GRAPH <http://mu.semte.ch/graphs/mow/registry> {
+        ?uri a mobiliteit:Verkeersbordcategorie;
+            skos:prefLabel ?label.
 
-      ${roadSignConceptUri ? `${sparqlEscapeUri(roadSignConceptUri)} dct:type ?uri` : ''}
+        ${roadSignConceptUri ? `${sparqlEscapeUri(roadSignConceptUri)} dct:type ?uri` : ''}
+      }
     }
   `;
   const queryResult = await executeQuery<BindingObject<RoadSignCategory>>({

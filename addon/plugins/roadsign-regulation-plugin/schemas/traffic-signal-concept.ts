@@ -6,6 +6,7 @@ export const TrafficSignalConceptSchema = z
   .object({
     uri: z.string(),
     code: z.string(),
+    irgnName: z.string().optional(),
     image: z.string(),
     zonality: z.nativeEnum(ZONALITY_OPTIONS).optional(),
     position: z.coerce.number().default(-1),

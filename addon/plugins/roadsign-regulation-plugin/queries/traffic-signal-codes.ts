@@ -90,14 +90,16 @@ export default async function queryTrafficSignalCodes(
       ?uri
       ?label
     WHERE {
-      ?uri mobiliteit:heeftMaatregelconcept ?measure.
-      ?uri a ?trafficSignalType;
-              skos:prefLabel ?label;
-              ext:valid ${sparqlEscapeBool(true)}.
-      ${filterStatement}
-      BIND(REPLACE(?label, "^(\\\\D+).*", "$1", "i") AS ?firstLetters)
-      BIND(xsd:decimal(REPLACE(?label, "^\\\\D+(\\\\d*\\\\.?\\\\d*).*", "$1", "i")) AS ?number)
-      BIND(REPLACE(?label, "^\\\\D+\\\\d*\\\\.?\\\\d*(.*)", "$1", "i") AS ?secondLetters)
+      GRAPH <http://mu.semte.ch/graphs/mow/registry> {
+        ?uri mobiliteit:heeftMaatregelconcept ?measure.
+        ?uri a ?trafficSignalType;
+                skos:prefLabel ?label;
+                ext:valid ${sparqlEscapeBool(true)}.
+        ${filterStatement}
+        BIND(REPLACE(?label, "^(\\\\D+).*", "$1", "i") AS ?firstLetters)
+        BIND(xsd:decimal(REPLACE(?label, "^\\\\D+(\\\\d*\\\\.?\\\\d*).*", "$1", "i")) AS ?number)
+        BIND(REPLACE(?label, "^\\\\D+\\\\d*\\\\.?\\\\d*(.*)", "$1", "i") AS ?secondLetters)
+      }
     }
     ORDER BY ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))
   `;

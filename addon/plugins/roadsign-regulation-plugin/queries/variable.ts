@@ -30,19 +30,21 @@ export async function queryVariables(
       ?defaultValue
       ?codelistUri
     WHERE {
-      ?uri
-        a variables:Variable;
-        dct:title ?label;
-        dct:type ?type.
+      GRAPH <http://mu.semte.ch/graphs/mow/registry> {
+        ?uri
+          a variables:Variable;
+          dct:title ?label;
+          dct:type ?type.
 
-      OPTIONAL {
-        ?uri variables:defaultValue ?defaultValue.
+        OPTIONAL {
+          ?uri variables:defaultValue ?defaultValue.
+        }
+        OPTIONAL {
+          ?uri mobiliteit:codelijst ?codelistUri.
+        }
+        ${type ? `FILTER(?type = ${sparqlEscapeString(type)})` : ''}
+        ${templateUri ? `${sparqlEscapeUri(templateUri)} mobiliteit:variabele ?uri.` : ''}
       }
-      OPTIONAL {
-        ?uri mobiliteit:codelijst ?codelistUri.
-      }
-      ${type ? `FILTER(?type = ${sparqlEscapeString(type)})` : ''}
-      ${templateUri ? `${sparqlEscapeUri(templateUri)} mobiliteit:variabele ?uri.` : ''}
     }
   `;
   const queryResult = await executeQuery<BindingObject<Variable>>({
