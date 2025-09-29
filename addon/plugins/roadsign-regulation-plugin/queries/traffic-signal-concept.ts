@@ -35,6 +35,7 @@ export async function queryTrafficSignalConcepts(
       ?uri
       ?type
       ?code
+      ?regulatoryNotation
       ?zonality
       ?image
       ?position
@@ -68,6 +69,10 @@ export async function queryTrafficSignalConcepts(
 
       OPTIONAL {
         ?uri ext:zonality ?zonality.
+      }
+
+      OPTIONAL  {
+        ?uri ext:regulatoryNotation ?regulatoryNotation.
       }
 
       VALUES ?type {

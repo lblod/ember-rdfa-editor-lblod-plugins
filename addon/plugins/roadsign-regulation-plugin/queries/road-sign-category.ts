@@ -29,7 +29,7 @@ export default async function queryRoadSignCategories(
       ?label
     WHERE {
       ?uri a mobiliteit:Verkeersbordcategorie;
-           skos:prefLabel ?label.
+          skos:prefLabel ?label.
 
       ${roadSignConceptUri ? `${sparqlEscapeUri(roadSignConceptUri)} dct:type ?uri` : ''}
     }
