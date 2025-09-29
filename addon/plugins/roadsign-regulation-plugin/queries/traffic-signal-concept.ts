@@ -35,7 +35,7 @@ export async function queryTrafficSignalConcepts(
       ?uri
       ?type
       ?code
-      ?irgnName
+      ?regulatoryNotation
       ?zonality
       ?image
       ?position
@@ -72,7 +72,7 @@ export async function queryTrafficSignalConcepts(
       }
 
       OPTIONAL  {
-        ?uri ext:irgnName ?irgnName.
+        ?uri ext:regulatoryNotation ?regulatoryNotation.
       }
 
       VALUES ?type {
