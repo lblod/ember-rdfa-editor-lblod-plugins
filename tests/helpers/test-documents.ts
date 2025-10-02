@@ -168,7 +168,12 @@ export const mobilityRegulationWithSignals = (
                 ><span
                   about="http://data.lblod.info/verkeerstekens/2a3451ca-e601-44e7-be89-f37aa33ac191"
                   property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-                  resource="https://data.vlaanderen.be/ns/mobiliteit#Verkeersbord-Verkeersteken"
+                  resource="https://data.vlaanderen.be/ns/mobiliteit#Verkeersteken"
+                ></span
+                ><span
+                  about="http://data.lblod.info/verkeerstekens/2a3451ca-e601-44e7-be89-f37aa33ac191"
+                  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                  resource="https://data.vlaanderen.be/ns/mobiliteit#VerkeersbordVerkeersteken"
                 ></span
                 ><span
                   rev="https://data.vlaanderen.be/ns/mobiliteit#wordtAangeduidDoor"
@@ -189,7 +194,7 @@ export const mobilityRegulationWithSignals = (
                       resource="https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept"
                     ></span
                     ><span
-                      rev="https://data.vlaanderen.be/ns/mobiliteit#heeftVerkeersbordconcept"
+                      rev="http://www.w3.org/ns/prov#wasDerivedFrom"
                       resource="http://data.lblod.info/verkeerstekens/2a3451ca-e601-44e7-be89-f37aa33ac191"
                     ></span></span
                   ><span data-content-container="true"
@@ -228,7 +233,12 @@ export const mobilityRegulationWithSignals = (
                 ><span
                   about="http://data.lblod.info/verkeerstekens/e770b0d3-6883-49d8-a9b6-c508d41a51c7"
                   property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-                  resource="https://data.vlaanderen.be/ns/mobiliteit#Verkeersbord-Verkeersteken"
+                  resource="https://data.vlaanderen.be/ns/mobiliteit#VerkeersbordVerkeersteken"
+                ></span
+                ><span
+                  about="http://data.lblod.info/verkeerstekens/e770b0d3-6883-49d8-a9b6-c508d41a51c7"
+                  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                  resource="https://data.vlaanderen.be/ns/mobiliteit#Verkeersteken"
                 ></span
                 ><span
                   rev="https://data.vlaanderen.be/ns/mobiliteit#wordtAangeduidDoor"
@@ -249,7 +259,7 @@ export const mobilityRegulationWithSignals = (
                       resource="https://data.vlaanderen.be/ns/mobiliteit#Verkeersbordconcept"
                     ></span
                     ><span
-                      rev="https://data.vlaanderen.be/ns/mobiliteit#heeftVerkeersbordconcept"
+                      rev="http://www.w3.org/ns/prov#wasDerivedFrom"
                       resource="http://data.lblod.info/verkeerstekens/e770b0d3-6883-49d8-a9b6-c508d41a51c7"
                     ></span></span
                   ><span data-content-container="true"

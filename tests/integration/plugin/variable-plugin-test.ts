@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { PNode } from '@lblod/ember-rdfa-editor';
 import {
-  getOutgoingTriple,
+  getOutgoingTripleList,
   hasOutgoingNamedNodeTriple,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import {
@@ -362,18 +362,27 @@ module('plugin | variable plugin', function () {
       2,
       'measure should have 2 linked signals',
     );
-    const signalTypes = [...linkedSignals.values()].map(([sigNode]) =>
-      getOutgoingTriple(sigNode.attrs, RDF('type')),
+    const signalTypes = [...linkedSignals.values()].map(
+      ([sigNode]) =>
+        new Set(
+          getOutgoingTripleList(sigNode.attrs, RDF('type')).map(
+            (type) => type?.object,
+          ),
+        ),
     );
-    // TODO these are actually old and should ideally be updated...
-    // See https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/597
     assert.deepEqual(
-      signalTypes[0]?.object,
-      MOBILITEIT('Verkeersbord-Verkeersteken').namedNode,
+      signalTypes[0],
+      new Set([
+        MOBILITEIT('Verkeersteken').namedNode,
+        MOBILITEIT('VerkeersbordVerkeersteken').namedNode,
+      ]),
     );
     assert.deepEqual(
-      signalTypes[1]?.object,
-      MOBILITEIT('Verkeersbord-Verkeersteken').namedNode,
+      signalTypes[1],
+      new Set([
+        MOBILITEIT('Verkeersteken').namedNode,
+        MOBILITEIT('VerkeersbordVerkeersteken').namedNode,
+      ]),
     );
   });
 });
