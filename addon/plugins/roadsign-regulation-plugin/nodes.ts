@@ -12,6 +12,7 @@ import {
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import {
+  getOutgoingTriple,
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -139,49 +140,69 @@ export const roadsign_regulation: NodeSpec = {
   ],
 };
 
+const replacements = [
+  [
+    MOBILITEIT('Verkeersbord-Verkeersteken'),
+    MOBILITEIT('VerkeersbordVerkeersteken').full,
+    // Switch to this once we've made the unhyphenated form the default (and similar for other entries
+    // TRAFFIC_SIGNAL_TYPES.ROAD_SIGN,
+  ],
+  [
+    MOBILITEIT('Verkeerslicht-Verkeersteken'),
+    MOBILITEIT('VerkeerslichtVerkeersteken').full,
+  ],
+  [
+    MOBILITEIT('Wegmarkering-Verkeersteken'),
+    MOBILITEIT('WegmarkeringVerkeersteken').full,
+  ],
+] as const;
+/**
+ * Migrates documents from a data model featuring multiple nested inline_rdfa nodes to one that uses
+ * namedNodes to encode everything in one inline_rdfa
+ **/
 export const trafficSignalMigration: ModelMigrationGenerator = (attrs) => {
   const factory = new SayDataFactory();
-  if (
-    isResourceAttrs(attrs) &&
-    hasOutgoingNamedNodeTriple(
+  for (const [source, replacement] of replacements) {
+    const conceptTriple = getOutgoingTriple(
       attrs,
-      RDF('type'),
-      MOBILITEIT('Verkeersbord-Verkeersteken'),
-    )
-  ) {
-    return {
-      getAttrs: () => {
-        const oldConceptProp = attrs.properties.find(({ predicate }) =>
-          MOBILITEIT('heeftVerkeersbordconcept').matches(predicate),
-        );
-        const conceptProp = oldConceptProp && {
-          predicate: MOBILITEIT('heeftVerkeersbordconcept').full,
-          object: factory.namedNode(oldConceptProp.object.value),
-        };
-        return {
-          ...attrs,
-          properties: [
-            ...(conceptProp ? [conceptProp] : []),
-            {
-              predicate: RDF('type').full,
-              object: sayDataFactory.namedNode(
-                TRAFFIC_SIGNAL_TYPES.TRAFFIC_SIGNAL,
-              ),
-            },
-            {
-              predicate: RDF('type').full,
-              object: sayDataFactory.namedNode(TRAFFIC_SIGNAL_TYPES.ROAD_SIGN),
-            },
-          ],
-        };
-      },
-      contentElement: (element) => {
-        const content = element.querySelector(
-          '[property="http://www.w3.org/2004/02/skos/core#prefLabel"]',
-        );
-        return getRdfaContentElement(content || element);
-      },
-    } satisfies ModelMigration;
+      MOBILITEIT('heeftVerkeersbordconcept'),
+    );
+    if (
+      isResourceAttrs(attrs) &&
+      hasOutgoingNamedNodeTriple(attrs, RDF('type'), source) &&
+      conceptTriple
+    ) {
+      return {
+        getAttrs: () => {
+          const conceptProp = {
+            predicate: PROV('wasDerivedFrom').full,
+            object: factory.namedNode(conceptTriple.object.value),
+          };
+          return {
+            ...attrs,
+            properties: [
+              ...(conceptProp ? [conceptProp] : []),
+              {
+                predicate: RDF('type').full,
+                object: sayDataFactory.namedNode(
+                  TRAFFIC_SIGNAL_TYPES.TRAFFIC_SIGNAL,
+                ),
+              },
+              {
+                predicate: RDF('type').full,
+                object: sayDataFactory.namedNode(replacement),
+              },
+            ],
+          };
+        },
+        contentElement: (element) => {
+          const content = element.querySelector(
+            '[property="http://www.w3.org/2004/02/skos/core#prefLabel"]',
+          );
+          return getRdfaContentElement(content || element);
+        },
+      } satisfies ModelMigration;
+    }
   }
   return false;
 };
