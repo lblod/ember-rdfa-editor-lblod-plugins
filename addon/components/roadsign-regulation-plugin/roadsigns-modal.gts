@@ -32,6 +32,7 @@ import { on } from '@ember/modifier';
 import {
   TRAFFIC_SIGNAL_CONCEPT_TYPES,
   ZONALITY_OPTIONS,
+  type ZonalOrNot,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
 import { queryMobilityTemplates } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-template';
@@ -309,9 +310,7 @@ export default class RoadsignsModal extends Component<Signature> {
   insertMeasure = task(
     async (
       concept: MobilityMeasureConcept,
-      zonality:
-        | typeof ZONALITY_OPTIONS.ZONAL
-        | typeof ZONALITY_OPTIONS.NON_ZONAL,
+      zonality: ZonalOrNot,
       temporal: boolean,
     ) => {
       if (!this.decisionLocation) {
@@ -393,7 +392,6 @@ export default class RoadsignsModal extends Component<Signature> {
                 </AuLabel>
                 <PowerSelect
                   @renderInPlace={{true}}
-                  {{! @glint-expect-error some type issue of ember-power-select }}
                   @verticalPosition='below'
                   @options={{this.typeOptions}}
                   @searchEnabled={{true}}
@@ -412,7 +410,6 @@ export default class RoadsignsModal extends Component<Signature> {
                 </AuLabel>
                 <PowerSelect
                   @renderInPlace={{true}}
-                  {{! @glint-expect-error some type issue of ember-power-select }}
                   @verticalPosition='below'
                   @searchEnabled={{true}}
                   @search={{this.searchCodes.perform}}
@@ -442,9 +439,7 @@ export default class RoadsignsModal extends Component<Signature> {
                     consume the value in the template and force powerselect to rerender.
                     Other tricks such as #let bindings also do not work. }}
                 {{#if this.codeCombinationOptions.length}}
-                  {{! @glint-expect-error some type issue of ember-power-select }}
                   <PowerSelectMultiple
-                    {{! @glint-expect-error some type issue of ember-power-select }}
                     @renderInPlace={{true}}
                     @verticalPosition='below'
                     @searchEnabled={{true}}
@@ -459,9 +454,7 @@ export default class RoadsignsModal extends Component<Signature> {
                     {{option.label}}
                   </PowerSelectMultiple>
                 {{else}}
-                  {{! @glint-expect-error some type issue of ember-power-select }}
                   <PowerSelectMultiple
-                    {{! @glint-expect-error some type issue of ember-power-select }}
                     @renderInPlace={{true}}
                     @verticalPosition='below'
                     @searchEnabled={{false}}
@@ -483,7 +476,6 @@ export default class RoadsignsModal extends Component<Signature> {
                 </AuLabel>
                 <PowerSelect
                   @renderInPlace={{true}}
-                  {{! @glint-expect-error some type issue of ember-power-select }}
                   @verticalPosition='below'
                   @options={{this.zonalityOptions}}
                   @searchEnabled={{false}}

@@ -220,6 +220,7 @@ variable-plugin:
   insert-variable: Insert variable
   button: Insert
   enter-variable-value: Select value
+  unknown-codelist: Unable to find possible values for this codelist
   label: Label
   labelPlaceholder: Type something...
   number:

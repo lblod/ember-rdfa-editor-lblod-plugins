@@ -98,6 +98,7 @@ const parseDOMLegacy = [
           variable: variableUri,
           variableInstance: variableInstanceUri,
           label,
+          // Default to a blank string so the edit component uses the default
           source: sourceUri,
         });
       }
@@ -175,7 +176,9 @@ const emberNodeConfig: EmberNodeConfig = {
     label: {
       default: null,
     },
-    source: {},
+    source: {
+      default: '',
+    },
     datatype: {
       default: XSD('string').namedNode,
     },

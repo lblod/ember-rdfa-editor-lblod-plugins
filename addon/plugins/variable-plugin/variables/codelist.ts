@@ -104,6 +104,8 @@ const parseDOMLegacy = [
           variable: variableUri,
           variableInstance: variableInstanceUri,
           label,
+          // These attrs are required but it's possible for older documents to get into a broken
+          // state. We mark these as unknown so we can push the user to fix this as we can't do it.
           source: sourceUri,
           codelist: codelistUri,
           selectionStyle,
@@ -136,7 +138,6 @@ const parseDOMLegacy = [
         const sourceUri = getOutgoingTriple(attrs, DCT('source'))?.object.value;
         const selectionStyle = node.dataset.selectionStyle;
         const label = getOutgoingTriple(attrs, EXT('label'))?.object.value;
-
         return createCodelistVariableAttrs({
           variable: variableUri,
           variableInstance: variableInstanceUri,
@@ -235,8 +236,12 @@ const emberNodeConfig: EmberNodeConfig = {
     label: {
       default: null,
     },
-    codelist: {},
-    source: {},
+    codelist: {
+      default: 'UNKNOWN',
+    },
+    source: {
+      default: 'UNKNOWN',
+    },
     selectionStyle: {
       default: null,
     },
