@@ -12,6 +12,8 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/icons/external-link';
 import t from 'ember-intl/helpers/t';
 import { eq } from 'ember-truth-helpers';
+import ValidationReport from 'rdf-validate-shacl/src/validation-report';
+import { CircleInfoIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-info';
 
 interface Sig {
   Args: {
@@ -37,10 +39,28 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
   }
   get documentValidationErrors() {
     if (!this.validationState) return [];
-    const { propertiesWithErrors } = this.validationState;
+
+    const { propertiesWithErrors, actions } = this.validationState;
     if (!propertiesWithErrors) return undefined;
 
-    return propertiesWithErrors;
+    const documentValidationErrors = propertiesWithErrors.map((property) => {
+      const action = actions.find(
+        (action) => property?.shape === action.shaclRule,
+      );
+      if (action.violations) {
+        const actionPerConstraint = action.violations[property.constraint];
+        return {
+          ...property,
+          action: actionPerConstraint,
+        };
+      } else {
+        return {
+          ...property,
+          action,
+        };
+      }
+    });
+    return documentValidationErrors;
   }
   get propertiesWithoutErrors() {
     if (!this.validationState) return [];
@@ -64,6 +84,53 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
   get isSuccesslike() {
     return ['valid', 'no-matches'].includes(this.status);
   }
+
+  doActionAndTriggerValidation = async (
+    action: (controller: SayController, report: ValidationReport) => void,
+  ) => {
+    action(this.controller, this.validationState?.report as ValidationReport);
+    const pluginState = documentValidationPluginKey.getState(
+      this.controller.mainEditorView.state,
+    );
+    if (!pluginState) return;
+    const { validationCallback } = pluginState;
+    await validationCallback(
+      this.controller.mainEditorView,
+      this.controller.htmlContent,
+    );
+  };
+
+  oldVal: typeof this.documentValidationErrors;
+
+  dedupeDocumentValidationErrors = (
+    val: typeof this.documentValidationErrors,
+  ) => {
+    if (this.compareDocumentValidationErrors(val, this.oldVal)) {
+      return this.oldVal;
+    } else {
+      this.oldVal = val;
+      return val;
+    }
+  };
+
+  compareDocumentValidationErrors = (
+    val1: typeof this.documentValidationErrors,
+    val2: typeof this.documentValidationErrors,
+  ) => {
+    if (!val1?.length) return false;
+    if (val1.length !== val2?.length) return false;
+    for (let i = 0; i < val1.length; i++) {
+      if (
+        !val1 ||
+        !val2 ||
+        !val1[i] ||
+        !val2[i] ||
+        val1[i].shape !== val2[i].shape
+      )
+        return false;
+    }
+    return true;
+  };
 
   <template>
     <AuCard
@@ -94,42 +161,61 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
         </p>
       </c.header>
       <c.content>
-        <p class='au-u-medium au-u-para-small'>{{t
-            'document-validation-plugin.description'
-          }}</p>
-        {{#each this.documentValidationErrors as |error|}}
-          <div class='say-document-validation__error-container'>
-            <AuIcon
-              @icon={{CloseFilledIcon}}
-              @size='large'
-              @ariaHidden={{true}}
-              class='say-document-validation__icon-error au-u-margin-right-small'
-            />
-            <div>
-              {{error.message}}
-              <AuButton
-                class='au-u-padding-left-none au-u-padding-right-none'
-                @icon={{ExternalLinkIcon}}
-                @skin='link'
-                title={{error.subject}}
-                {{on 'click' (fn this.goToSubject error.subject)}}
-              >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
-            </div>
-          </div>
-        {{/each}}
-        {{#each this.propertiesWithoutErrors as |property|}}
-          <div class='say-document-validation__error-container'>
-            <div class='au-u-margin-right-small'>
+        <div>
+          {{#each
+            (this.dedupeDocumentValidationErrors this.documentValidationErrors)
+            as |error|
+          }}
+            <div class='say-document-validation__error-container'>
               <AuIcon
-                @icon={{CheckFilledIcon}}
+                @icon={{CloseFilledIcon}}
                 @size='large'
                 @ariaHidden={{true}}
-                class='say-document-validation__icon-success'
+                class='say-document-validation__icon-error au-u-margin-right-small'
               />
+              <div>
+                {{error.message}}
+                <AuButton
+                  class='au-u-padding-left-none au-u-padding-right-none'
+                  @icon={{ExternalLinkIcon}}
+                  @skin='link'
+                  title={{error.subject}}
+                  {{on 'click' (fn this.goToSubject error.subject)}}
+                >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
+                {{#if error.action.action}}
+                  <AuButton
+                    class='au-u-padding-left-none au-u-padding-right-none'
+                    @icon={{ExternalLinkIcon}}
+                    @skin='link'
+                    title={{error.subject}}
+                    {{on
+                      'click'
+                      (fn this.doActionAndTriggerValidation error.action.action)
+                    }}
+                  >{{error.action.buttonTitle}}</AuButton>
+                {{/if}}
+                {{#if error.action.helpText}}
+                  <span title={{error.action.helpText}}>
+                    <AuIcon @icon={{CircleInfoIcon}} />
+                  </span>
+                {{/if}}
+              </div>
             </div>
-            {{property.message}}
-          </div>
-        {{/each}}
+          {{/each}}
+          {{#each this.propertiesWithoutErrors as |property|}}
+            <div class='say-document-validation__error-container'>
+              <div class='au-u-margin-right-small'>
+                <AuIcon
+                  @icon={{CheckFilledIcon}}
+                  @size='large'
+                  @ariaHidden={{true}}
+                  class='say-document-validation__icon-success'
+                />
+              </div>
+              {{property.message}}
+            </div>
+          {{/each}}
+        </div>
       </c.content>
 
     </AuCard>
