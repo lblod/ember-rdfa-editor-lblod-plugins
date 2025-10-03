@@ -13,6 +13,7 @@ import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/ic
 import t from 'ember-intl/helpers/t';
 import { eq } from 'ember-truth-helpers';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
+import { CircleInfoIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-info';
 
 interface Sig {
   Args: {
@@ -46,10 +47,18 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       const action = actions.find(
         (action) => property?.shape === action.shaclRule,
       );
-      return {
-        ...property,
-        action,
-      };
+      if (action.violations) {
+        const actionPerConstraint = action.violations[property.constraint];
+        return {
+          ...property,
+          action: actionPerConstraint,
+        };
+      } else {
+        return {
+          ...property,
+          action,
+        };
+      }
     });
     return documentValidationErrors;
   }
@@ -173,7 +182,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                   title={{error.subject}}
                   {{on 'click' (fn this.goToSubject error.subject)}}
                 >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
-                {{#if error.action}}
+                {{#if error.action.action}}
                   <AuButton
                     class='au-u-padding-left-none au-u-padding-right-none'
                     @icon={{ExternalLinkIcon}}
@@ -184,6 +193,11 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                       (fn this.doActionAndTriggerValidation error.action.action)
                     }}
                   >{{error.action.buttonTitle}}</AuButton>
+                {{/if}}
+                {{#if error.action.helpText}}
+                  <span title={{error.action.helpText}}>
+                    <AuIcon @icon={{CircleInfoIcon}} />
+                  </span>
                 {{/if}}
               </div>
             </div>

@@ -127,18 +127,22 @@ async function validationCallback(view: EditorView, documentHtml: string) {
   const propertiesWithErrors: {
     sourceShape: BlankNode | NamedNode<string>;
     focusNode: BlankNode | NamedNode<string> | null;
+    constraint: NamedNode<string>;
   }[] = [];
   for (const r of report.results) {
     const sourceShape = r.sourceShape;
     if (sourceShape)
-      propertiesWithErrors.push({ sourceShape, focusNode: r.focusNode });
+      propertiesWithErrors.push({
+        sourceShape,
+        focusNode: r.focusNode,
+        constraint: r.sourceConstraintComponent,
+      });
   }
   const errorMessagePred = sayFactory.namedNode(
     'http://www.w3.org/ns/shacl#resultMessage',
   );
   const propertiesWithErrorsMessages = propertiesWithErrors
-    .map(({ sourceShape, focusNode }) => {
-      console.log(sourceShape);
+    .map(({ sourceShape, focusNode, constraint }) => {
       const match = shacl.match(sourceShape, errorMessagePred, undefined);
       const message = [...match][0]?.object.value;
       return message
@@ -146,6 +150,7 @@ async function validationCallback(view: EditorView, documentHtml: string) {
             message: removeQuotes(message),
             subject: focusNode?.value,
             shape: sourceShape.value,
+            constraint: constraint.value,
           }
         : undefined;
     })
