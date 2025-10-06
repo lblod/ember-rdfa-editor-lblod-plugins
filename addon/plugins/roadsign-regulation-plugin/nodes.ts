@@ -141,20 +141,12 @@ export const roadsign_regulation: NodeSpec = {
 };
 
 const replacements = [
-  [
-    MOBILITEIT('Verkeersbord-Verkeersteken'),
-    MOBILITEIT('VerkeersbordVerkeersteken').full,
-    // Switch to this once we've made the unhyphenated form the default (and similar for other entries
-    // TRAFFIC_SIGNAL_TYPES.ROAD_SIGN,
-  ],
+  [MOBILITEIT('Verkeersbord-Verkeersteken'), TRAFFIC_SIGNAL_TYPES.ROAD_SIGN],
   [
     MOBILITEIT('Verkeerslicht-Verkeersteken'),
-    MOBILITEIT('VerkeerslichtVerkeersteken').full,
+    TRAFFIC_SIGNAL_TYPES.TRAFFIC_LIGHT,
   ],
-  [
-    MOBILITEIT('Wegmarkering-Verkeersteken'),
-    MOBILITEIT('WegmarkeringVerkeersteken').full,
-  ],
+  [MOBILITEIT('Wegmarkering-Verkeersteken'), TRAFFIC_SIGNAL_TYPES.ROAD_MARKING],
 ] as const;
 /**
  * Migrates documents from a data model featuring multiple nested inline_rdfa nodes to one that uses
