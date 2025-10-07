@@ -3,10 +3,11 @@ import { ValuesOf } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 export const ZONALITY_OPTIONS = {
   POTENTIALLY_ZONAL:
-    'http://lblod.data.gift/concepts/8f9367b2-c717-4be7-8833-4c75bbb4ae1f',
-  ZONAL: 'http://lblod.data.gift/concepts/c81c6b96-736a-48cf-b003-6f5cc3dbc55d',
+    'http://register.mobiliteit.vlaanderen.be/concepts/8f9367b2-c717-4be7-8833-4c75bbb4ae1f',
+  ZONAL:
+    'http://register.mobiliteit.vlaanderen.be/concepts/c81c6b96-736a-48cf-b003-6f5cc3dbc55d',
   NON_ZONAL:
-    'http://lblod.data.gift/concepts/b651931b-923c-477c-8da9-fc7dd841fdcc',
+    'http://register.mobiliteit.vlaanderen.be/concepts/b651931b-923c-477c-8da9-fc7dd841fdcc',
 } as const;
 export type ZonalityOption = ValuesOf<typeof ZONALITY_OPTIONS>;
 export type ZonalOrNot = Exclude<
