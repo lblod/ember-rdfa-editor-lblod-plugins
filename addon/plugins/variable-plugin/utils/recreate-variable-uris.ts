@@ -45,11 +45,6 @@ export function recreateVariableUris(attrs: Attrs) {
     }
     return newBacklink;
   });
-  console.log({
-    ...attrs,
-    externalTriples: newTriples,
-    backlinks: newBacklinks,
-  });
   return {
     ...attrs,
     externalTriples: newTriples,
