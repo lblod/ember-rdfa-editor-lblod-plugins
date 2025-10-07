@@ -21,11 +21,15 @@ interface Sig {
   };
 }
 
-function hasProperty<O extends object = object>(
-  o: O,
-  key: PropertyKey,
-): key is keyof O {
-  return key in o;
+type ExtractWithKey<T, K extends PropertyKey> = T extends Record<K, unknown>
+  ? T
+  : never;
+
+function hasProperty<
+  O extends object = object,
+  K extends PropertyKey = PropertyKey,
+>(obj: O, key: K): obj is ExtractWithKey<O, K> {
+  return key in obj;
 }
 
 export default class DocumentValidationPluginCard extends Component<Sig> {
