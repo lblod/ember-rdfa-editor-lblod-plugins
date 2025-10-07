@@ -25,12 +25,12 @@ type Violation =
   | {
       action: (controller: SayController, report: ValidationReport) => void;
       buttonTitle: string;
-      helpText: void;
+      helpText?: never;
     }
   | {
       helpText: string;
-      action: void;
-      buttonTitle: void;
+      action?: never;
+      buttonTitle?: never;
     };
 type Rule =
   | {
@@ -38,23 +38,23 @@ type Rule =
       violations: {
         [key: string]: Violation;
       };
-      action: void;
-      buttonTitle: void;
-      helpText: void;
+      action?: never;
+      buttonTitle?: never;
+      helpText?: never;
     }
   | {
       shaclRule: string;
       action: (controller: SayController, report: ValidationReport) => void;
       buttonTitle: string;
-      violations: void;
-      helpText: void;
+      violations?: never;
+      helpText?: never;
     }
   | {
       shaclRule: string;
       helpText: string;
-      violations: void;
-      action: void;
-      buttonTitle: void;
+      violations?: never;
+      action?: never;
+      buttonTitle?: never;
     };
 
 interface DocumentValidationPluginArgs {
