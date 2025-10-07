@@ -50,5 +50,8 @@ export function recalculateNumbers(
       }
     },
   );
+  if (tr.docChanged) {
+    tr.setSelection(state.selection.getBookmark().resolve(tr.doc));
+  }
   return { transaction: tr, result: true, initialState: state };
 }
