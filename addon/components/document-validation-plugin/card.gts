@@ -21,6 +21,13 @@ interface Sig {
   };
 }
 
+function hasProperty<O extends object = object>(
+  o: O,
+  key: PropertyKey,
+): key is keyof O {
+  return key in o;
+}
+
 export default class DocumentValidationPluginCard extends Component<Sig> {
   get controller() {
     return this.args.controller;
@@ -45,7 +52,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
 
     const documentValidationErrors = propertiesWithErrors.map((property) => {
       const rule = rules.find((rule) => property?.shape === rule.shaclRule);
-      if (rule?.violations) {
+      if (rule && 'violations' in rule) {
         const rulePerConstraint = rule.violations[property?.constraint];
         return {
           ...property,
@@ -180,22 +187,24 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                   title={{error.subject}}
                   {{on 'click' (fn this.goToSubject error.subject)}}
                 >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
-                {{#if error.rule.action}}
-                  <AuButton
-                    class='au-u-padding-left-none au-u-padding-right-none'
-                    @icon={{ExternalLinkIcon}}
-                    @skin='link'
-                    title={{error.subject}}
-                    {{on
-                      'click'
-                      (fn this.doActionAndTriggerValidation error.rule.action)
-                    }}
-                  >{{error.rule.buttonTitle}}</AuButton>
-                {{/if}}
-                {{#if error.rule.helpText}}
-                  <span title={{error.rule.helpText}}>
-                    <AuIcon @icon={{CircleInfoIcon}} />
-                  </span>
+                {{#if error.rule}}
+                  {{#if (hasProperty error.rule 'action')}}
+                    <AuButton
+                      class='au-u-padding-left-none au-u-padding-right-none'
+                      @icon={{ExternalLinkIcon}}
+                      @skin='link'
+                      title={{error.subject}}
+                      {{on
+                        'click'
+                        (fn this.doActionAndTriggerValidation error.rule.action)
+                      }}
+                    >{{error.rule.buttonTitle}}</AuButton>
+                  {{/if}}
+                  {{#if (hasProperty error.rule 'helpText')}}
+                    <span title={{error.rule.helpText}}>
+                      <AuIcon @icon={{CircleInfoIcon}} />
+                    </span>
+                  {{/if}}
                 {{/if}}
               </div>
             </div>
