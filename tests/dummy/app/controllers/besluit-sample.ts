@@ -360,7 +360,7 @@ export default class BesluitSampleController extends Controller {
         onlyArticleSpecialName: true,
       },
       documentValidation: {
-        actions: [
+        rules: [
           {
             shaclRule:
               'https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-title-validation',

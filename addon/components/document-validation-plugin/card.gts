@@ -40,23 +40,21 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
   get documentValidationErrors() {
     if (!this.validationState) return [];
 
-    const { propertiesWithErrors, actions } = this.validationState;
+    const { propertiesWithErrors, rules } = this.validationState;
     if (!propertiesWithErrors) return undefined;
 
     const documentValidationErrors = propertiesWithErrors.map((property) => {
-      const action = actions.find(
-        (action) => property?.shape === action.shaclRule,
-      );
-      if (action.violations) {
-        const actionPerConstraint = action.violations[property.constraint];
+      const rule = rules.find((rule) => property?.shape === rule.shaclRule);
+      if (rule?.violations) {
+        const rulePerConstraint = rule.violations[property?.constraint];
         return {
           ...property,
-          action: actionPerConstraint,
+          rule: rulePerConstraint,
         };
       } else {
         return {
           ...property,
-          action,
+          rule: rule,
         };
       }
     });
@@ -182,7 +180,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                   title={{error.subject}}
                   {{on 'click' (fn this.goToSubject error.subject)}}
                 >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
-                {{#if error.action.action}}
+                {{#if error.rule.action}}
                   <AuButton
                     class='au-u-padding-left-none au-u-padding-right-none'
                     @icon={{ExternalLinkIcon}}
@@ -190,12 +188,12 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
                     title={{error.subject}}
                     {{on
                       'click'
-                      (fn this.doActionAndTriggerValidation error.action.action)
+                      (fn this.doActionAndTriggerValidation error.rule.action)
                     }}
-                  >{{error.action.buttonTitle}}</AuButton>
+                  >{{error.rule.buttonTitle}}</AuButton>
                 {{/if}}
-                {{#if error.action.helpText}}
-                  <span title={{error.action.helpText}}>
+                {{#if error.rule.helpText}}
+                  <span title={{error.rule.helpText}}>
                     <AuIcon @icon={{CircleInfoIcon}} />
                   </span>
                 {{/if}}
