@@ -8,14 +8,11 @@ import {
   findNodePosDown,
   findNodePosUp,
 } from '@lblod/ember-rdfa-editor/utils/position-utils';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { findAncestorOfType } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/find-ancestor';
 import {
   isNone,
   unwrap,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { recalculateNumbers } from '../monads/recalculate-structure-numbers';
-import { regenerateRdfaLinks } from '../monads/regenerate-rdfa-links';
 
 export function moveStructure(direction: 'up' | 'down'): Command {
   return (state, dispatch) => {
@@ -53,23 +50,18 @@ export function moveStructure(direction: 'up' | 'down'): Command {
           // previousStructurePos is the position right BEFORE the previous structure,
           // so inserting there is correct
           transaction.insert(previousStructurePos, node);
-          // after updating we have to recalculate the numbers
-          const { transaction: newTr } = transactionCombinator(
-            state,
-            transaction,
-          )([recalculateNumbers, regenerateRdfaLinks]);
 
           // previousStructurePos should now point to the position right before our moved structure
           // so we can simply add 1 to get the first position inside of it, and for the end
           // we add the nodesize and subtract one
-          newTr.setSelection(
+          transaction.setSelection(
             TextSelection.create(
-              newTr.doc,
+              transaction.doc,
               previousStructurePos + 1,
               previousStructurePos + node.nodeSize - 1,
             ),
           );
-          dispatch(newTr);
+          dispatch(transaction);
         }
         return true;
       }
@@ -107,21 +99,21 @@ export function moveStructure(direction: 'up' | 'down'): Command {
         );
         transaction.insert(insertPos, node);
 
-        const { transaction: newTr } = transactionCombinator(
-          state,
-          transaction,
-        )([recalculateNumbers, regenerateRdfaLinks]);
+        // const { transaction: newTr } = transactionCombinator(
+        //   state,
+        //   transaction,
+        // )([recalculateNumbers, regenerateRdfaLinks]);
 
         // since we've deleted something before the insert position, we have to map
         // the positions through the transaction to find the moved node's new position
-        newTr.setSelection(
+        transaction.setSelection(
           TextSelection.create(
-            newTr.doc,
+            transaction.doc,
             insertPos + 1,
             insertPos + node.nodeSize - 1,
           ),
         );
-        dispatch(newTr);
+        dispatch(transaction);
       }
 
       return true;
