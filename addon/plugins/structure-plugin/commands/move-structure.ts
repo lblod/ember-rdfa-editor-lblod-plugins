@@ -99,11 +99,6 @@ export function moveStructure(direction: 'up' | 'down'): Command {
         );
         transaction.insert(insertPos, node);
 
-        // const { transaction: newTr } = transactionCombinator(
-        //   state,
-        //   transaction,
-        // )([recalculateNumbers, regenerateRdfaLinks]);
-
         // since we've deleted something before the insert position, we have to map
         // the positions through the transaction to find the moved node's new position
         transaction.setSelection(
