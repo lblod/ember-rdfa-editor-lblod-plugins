@@ -46,7 +46,7 @@ type Rule =
       helpText: string;
     };
 
-interface DocumentValidationPluginArgs {
+export interface DocumentValidationPluginArgs {
   documentShape: string;
   rules: Rule[];
 }
@@ -56,7 +56,7 @@ export type ShaclValidationReport = ValidationReport.ValidationReport<
     DatasetCoreFactory<Quad, Quad, DatasetCore<Quad, Quad>>
 >;
 
-type propertyWithError = {
+type PropertyWithError = {
   message: string;
   subject: string | undefined;
   shape: string;
@@ -65,7 +65,7 @@ type propertyWithError = {
 interface DocumentValidationResult {
   report?: ValidationReport;
   propertiesWithoutErrors: { message: string }[];
-  propertiesWithErrors: propertyWithError[];
+  propertiesWithErrors: PropertyWithError[];
 }
 export interface DocumentValidationTransactionMeta
   extends DocumentValidationResult {
@@ -140,7 +140,7 @@ async function validationCallback(view: EditorView, documentHtml: string) {
   const errorMessagePred = sayFactory.namedNode(
     'http://www.w3.org/ns/shacl#resultMessage',
   );
-  const propertiesWithErrors: propertyWithError[] = [];
+  const propertiesWithErrors: PropertyWithError[] = [];
   for (const r of report.results) {
     const sourceShape = r.sourceShape;
     if (sourceShape) {

@@ -8,16 +8,19 @@ import { buildArticleStructure } from '../utils/build-article-structure';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { insertArticle } from '../actions/insert-article';
 import { recalculateNumbers } from '../../structure-plugin/monads/recalculate-structure-numbers';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
 
 interface InsertArticleContainerArgs {
   intl: IntlService;
   decisionUri: string;
   articleUriGenerator?: () => string;
+  decisionLocation: NodeWithPos;
 }
 
 export default function insertArticleContainer({
   decisionUri,
   articleUriGenerator,
+  decisionLocation,
 }: InsertArticleContainerArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { schema } = state;
@@ -33,9 +36,19 @@ export default function insertArticleContainer({
     const articleNode = buildArticleStructure(schema, articleUriGenerator);
 
     const factory = new SayDataFactory();
+    let replaceTr;
+    if (state.selection.$from.pos === decisionLocation.pos) {
+      replaceTr = state.tr.replaceRangeWith(
+        decisionLocation.pos + decisionLocation.node.nodeSize - 1,
+        decisionLocation.pos + decisionLocation.node.nodeSize - 1,
+        containerNode,
+      );
+    } else {
+      replaceTr = state.tr.replaceSelectionWith(containerNode);
+    }
     const { transaction: newTr, result } = transactionCombinator<boolean>(
       state,
-      state.tr.replaceSelectionWith(containerNode),
+      replaceTr,
     )([
       addPropertyToNode({
         resource: decisionUri,

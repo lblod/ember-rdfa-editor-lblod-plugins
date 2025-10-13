@@ -16,7 +16,7 @@ import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/c
 import { SayController } from '@lblod/ember-rdfa-editor';
 import fetchBesluitTypes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import {
   BesluitTypeInstance,
   checkBesluitTypeInstance,

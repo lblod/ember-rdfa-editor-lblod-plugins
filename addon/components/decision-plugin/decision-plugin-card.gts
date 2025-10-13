@@ -23,7 +23,7 @@ import { on } from '@ember/modifier';
 import { not } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 
 interface DecisionCardOptions {
   articleUriGenerator?: () => string;
@@ -151,6 +151,7 @@ export default class DecisionPluginCard extends Component<Sig> {
           intl: this.intl,
           decisionUri: this.decisionUri,
           articleUriGenerator: this.args.options?.articleUriGenerator,
+          decisionLocation: this.decisionNodeLocation,
         }),
         {
           view: this.controller.mainEditorView,

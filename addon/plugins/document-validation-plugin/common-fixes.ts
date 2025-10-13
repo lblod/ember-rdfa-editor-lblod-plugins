@@ -1,5 +1,5 @@
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { getCurrentBesluitRange } from '../besluit-topic-plugin/utils/helpers';
+import { getDecisionNodeLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import IntlService from 'ember-intl/services/intl';
 import {
   insertMotivation,
@@ -13,6 +13,7 @@ export function insertTitleAtCursor(
   intl: IntlService,
 ) {
   const decisionNodeLocation = getDecisionNodeLocation(controller);
+  console.log(decisionNodeLocation);
   if (!decisionNodeLocation) return;
   controller.doCommand(
     insertTitle({
@@ -74,19 +75,10 @@ export function insertArticleContainerAtCursor(
       intl: intl,
       decisionUri: decisionNodeLocation?.node.attrs.subject,
       articleUriGenerator: articleUriGenerator,
+      decisionLocation: decisionNodeLocation,
     }),
     {
       view: controller.mainEditorView,
     },
   );
-}
-
-function getDecisionNodeLocation(controller: SayController) {
-  const besluitRange = getCurrentBesluitRange(controller);
-  if (!besluitRange) return;
-  const decisionNodeLocation = {
-    pos: besluitRange.from,
-    node: besluitRange.node,
-  };
-  return decisionNodeLocation;
 }

@@ -5,7 +5,7 @@ import {
   Schema,
   Transaction,
 } from '@lblod/ember-rdfa-editor';
-import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import { MandateeTableConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin';
 import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';

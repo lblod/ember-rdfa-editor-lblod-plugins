@@ -15,7 +15,7 @@ import {
 import {
   getCurrentBesluitRange,
   getCurrentBesluitURI,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import {
   updateBesluitTopicResource,
   TOPIC_PREDICATE,
