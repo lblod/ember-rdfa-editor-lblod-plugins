@@ -246,7 +246,9 @@ function constructSignNode(
         },
       ],
     },
-    schema.text(`${prefix} ${signConcept.code}${zonalityText}`),
+    schema.text(
+      `${prefix} ${signConcept.regulatoryNotation || signConcept.code}${zonalityText}`,
+    ),
   );
   return node;
 }
