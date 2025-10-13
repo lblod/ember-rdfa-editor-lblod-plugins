@@ -24,9 +24,9 @@ export const TRAFFIC_SIGNAL_CONCEPT_TYPES = {
 
 export const TRAFFIC_SIGNAL_TYPES = {
   TRAFFIC_SIGNAL: MOBILITEIT('Verkeersteken').full,
-  ROAD_SIGN: MOBILITEIT('Verkeersbord').full,
-  TRAFFIC_LIGHT: MOBILITEIT('Verkeerslicht').full,
-  ROAD_MARKING: MOBILITEIT('Wegmarkering').full,
+  ROAD_SIGN: MOBILITEIT('VerkeersbordVerkeersteken').full,
+  TRAFFIC_LIGHT: MOBILITEIT('VerkeerslichtVerkeersteken').full,
+  ROAD_MARKING: MOBILITEIT('WegmarkeringVerkeersteken').full,
 } as const;
 
 export const TRAFFIC_SIGNAL_TYPE_MAPPING = {

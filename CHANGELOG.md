@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.7.0
+
+### Minor Changes
+
+- [#601](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/601) [`a221a64`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a221a64427c84b70e0058762367835274541656a) Thanks [@piemonkey](https://github.com/piemonkey)! - Add text to roadsigns indicating zonality to newly inserted zonal measures
+
 ## 32.6.2
 
 ### Patch Changes

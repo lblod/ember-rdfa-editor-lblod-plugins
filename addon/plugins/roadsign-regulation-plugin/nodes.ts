@@ -9,10 +9,25 @@ import {
   EXT,
   MOBILITEIT,
   PROV,
+  RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import {
+  getOutgoingTriple,
+  hasOutgoingNamedNodeTriple,
+  hasRDFaAttribute,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  SayDataFactory,
+  sayDataFactory,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  isResourceAttrs,
+  ModelMigration,
+  ModelMigrationGenerator,
+} from '@lblod/ember-rdfa-editor/core/rdfa-types';
+import { getRdfaContentElement } from '@lblod/ember-rdfa-editor/core/schema';
+import { TRAFFIC_SIGNAL_TYPES } from './constants';
 
 const CONTENT_SELECTOR = `div[property~='${
   DCT('description').full
@@ -123,4 +138,63 @@ export const roadsign_regulation: NodeSpec = {
       contentElement: CONTENT_SELECTOR,
     },
   ],
+};
+
+const replacements = [
+  [MOBILITEIT('Verkeersbord-Verkeersteken'), TRAFFIC_SIGNAL_TYPES.ROAD_SIGN],
+  [
+    MOBILITEIT('Verkeerslicht-Verkeersteken'),
+    TRAFFIC_SIGNAL_TYPES.TRAFFIC_LIGHT,
+  ],
+  [MOBILITEIT('Wegmarkering-Verkeersteken'), TRAFFIC_SIGNAL_TYPES.ROAD_MARKING],
+] as const;
+/**
+ * Migrates documents from a data model featuring multiple nested inline_rdfa nodes to one that uses
+ * namedNodes to encode everything in one inline_rdfa
+ **/
+export const trafficSignalMigration: ModelMigrationGenerator = (attrs) => {
+  const factory = new SayDataFactory();
+  for (const [source, replacement] of replacements) {
+    const conceptTriple = getOutgoingTriple(
+      attrs,
+      MOBILITEIT('heeftVerkeersbordconcept'),
+    );
+    if (
+      isResourceAttrs(attrs) &&
+      hasOutgoingNamedNodeTriple(attrs, RDF('type'), source) &&
+      conceptTriple
+    ) {
+      return {
+        getAttrs: () => {
+          const conceptProp = {
+            predicate: PROV('wasDerivedFrom').full,
+            object: factory.namedNode(conceptTriple.object.value),
+          };
+          return {
+            ...attrs,
+            properties: [
+              ...(conceptProp ? [conceptProp] : []),
+              {
+                predicate: RDF('type').full,
+                object: sayDataFactory.namedNode(
+                  TRAFFIC_SIGNAL_TYPES.TRAFFIC_SIGNAL,
+                ),
+              },
+              {
+                predicate: RDF('type').full,
+                object: sayDataFactory.namedNode(replacement),
+              },
+            ],
+          };
+        },
+        contentElement: (element) => {
+          const content = element.querySelector(
+            '[property="http://www.w3.org/2004/02/skos/core#prefLabel"]',
+          );
+          return getRdfaContentElement(content || element);
+        },
+      } satisfies ModelMigration;
+    }
+  }
+  return false;
 };
