@@ -241,12 +241,14 @@ function constructSignNode(
           ),
         },
         {
-          predicate: MOBILITEIT('heeftVerkeersbordconcept'),
+          predicate: PROV('wasDerivedFrom').full,
           object: sayDataFactory.namedNode(signConcept.uri),
         },
       ],
     },
-    schema.text(`${prefix} ${signConcept.code}${zonalityText}`),
+    schema.text(
+      `${prefix} ${signConcept.regulatoryNotation || signConcept.code}${zonalityText}`,
+    ),
   );
   return node;
 }

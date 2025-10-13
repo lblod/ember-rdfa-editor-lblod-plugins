@@ -60,7 +60,10 @@ import { lastKeyPressedPlugin } from '@lblod/ember-rdfa-editor/plugins/last-key-
 
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
-import { roadsign_regulation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
+import {
+  roadsign_regulation,
+  trafficSignalMigration,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
   citationPlugin,
   CitationPluginConfig,
@@ -225,7 +228,10 @@ export default class BesluitSampleController extends Controller {
         hard_break,
         block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
         invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
-        inline_rdfa: inlineRdfaWithConfig({ rdfaAware: true }),
+        inline_rdfa: inlineRdfaWithConfig({
+          rdfaAware: true,
+          modelMigrations: [trafficSignalMigration],
+        }),
         link: link(this.config.link),
         snippet_placeholder: snippetPlaceholder(this.config.snippet),
         snippet: snippet(this.config.snippet),
