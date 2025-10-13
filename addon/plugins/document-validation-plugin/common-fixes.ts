@@ -1,20 +1,26 @@
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { getDecisionNodeLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import IntlService from 'ember-intl/services/intl';
+import { notificationPluginKey } from '@lblod/ember-rdfa-editor/plugins/notification';
 import {
   insertMotivation,
   insertArticleContainer,
   insertDescription,
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
+import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
 
 export function insertTitleAtCursor(
   controller: SayController,
   intl: IntlService,
 ) {
   const decisionNodeLocation = getDecisionNodeLocation(controller);
-  console.log(decisionNodeLocation);
-  if (!decisionNodeLocation) return;
+  if (!decisionNodeLocation) {
+    return sendNotificationError(
+      controller,
+      intl.t('document-validation-plugin.decision-node-not-found'),
+    );
+  }
   controller.doCommand(
     insertTitle({
       placeholderText: intl.t('besluit-plugin.placeholder.decision-title'),
@@ -30,7 +36,12 @@ export function insertDescriptionAtCursor(
   intl: IntlService,
 ) {
   const decisionNodeLocation = getDecisionNodeLocation(controller);
-  if (!decisionNodeLocation) return;
+  if (!decisionNodeLocation) {
+    return sendNotificationError(
+      controller,
+      intl.t('document-validation-plugin.decision-node-not-found'),
+    );
+  }
   controller.doCommand(
     insertDescription({
       placeholderText: intl.t(
@@ -50,7 +61,12 @@ export function insertMotivationAtCursor(
   intl: IntlService,
 ) {
   const decisionNodeLocation = getDecisionNodeLocation(controller);
-  if (!decisionNodeLocation) return;
+  if (!decisionNodeLocation) {
+    return sendNotificationError(
+      controller,
+      intl.t('document-validation-plugin.decision-node-not-found'),
+    );
+  }
   controller.doCommand(
     insertMotivation({
       intl: intl,
@@ -69,7 +85,12 @@ export function insertArticleContainerAtCursor(
   articleUriGenerator?: () => string,
 ) {
   const decisionNodeLocation = getDecisionNodeLocation(controller);
-  if (!decisionNodeLocation) return;
+  if (!decisionNodeLocation) {
+    return sendNotificationError(
+      controller,
+      intl.t('document-validation-plugin.decision-node-not-found'),
+    );
+  }
   controller.doCommand(
     insertArticleContainer({
       intl: intl,
@@ -81,4 +102,21 @@ export function insertArticleContainerAtCursor(
       view: controller.mainEditorView,
     },
   );
+}
+
+function sendNotificationError(controller: SayController, text: string) {
+  // Show a notification via the notification plugin
+  const { notificationCallback } = notificationPluginKey.getState(
+    controller.mainEditorState,
+  ) as {
+    notificationCallback: (notification: Notification) => void;
+    intl: IntlService;
+  };
+  notificationCallback({
+    title: text,
+    options: {
+      type: 'error',
+      icon: CircleXIcon,
+    },
+  });
 }
