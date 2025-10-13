@@ -241,7 +241,7 @@ function constructSignNode(
           ),
         },
         {
-          predicate: MOBILITEIT('heeftVerkeersbordconcept'),
+          predicate: PROV('wasDerivedFrom').full,
           object: sayDataFactory.namedNode(signConcept.uri),
         },
       ],

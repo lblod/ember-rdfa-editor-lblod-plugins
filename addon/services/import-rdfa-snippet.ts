@@ -135,11 +135,7 @@ export default class ImportRdfaSnippet extends Service {
       .filter((triple) => triple.predicate === 'a')
       .map((triple) => triple.object)
       .filter((v, i, a) => a.indexOf(v) === i); //This filters only unique values
-    if (
-      types.includes(
-        'https://data.vlaanderen.be/ns/mobiliteit#Verkeersbord-Verkeersteken',
-      )
-    ) {
+    if (types.includes('Verkeersteken')) {
       return 'roadsign';
     } else {
       return 'generic';
