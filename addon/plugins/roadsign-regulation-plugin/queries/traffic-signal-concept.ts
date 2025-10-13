@@ -68,7 +68,7 @@ export async function queryTrafficSignalConcepts(
       }
 
       OPTIONAL {
-        ?uri ext:zonality ?zonality.
+        ?uri mobiliteit:zonaliteit ?zonality.
       }
 
       OPTIONAL  {

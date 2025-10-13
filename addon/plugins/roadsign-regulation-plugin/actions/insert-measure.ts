@@ -108,14 +108,19 @@ export default function insertMeasure({
             object: sayDataFactory.namedNode(measureConcept.uri),
           },
           {
-            //TODO: not sure about this predicate...
+            // TODO this should be replaced by MOBILITEIT('zone'), but we need to know what to
+            // actually link this to as we have no way to specify zones
             predicate: EXT('zonality').full,
             object: sayDataFactory.namedNode(zonality),
           },
           {
             predicate: DCT('description').full,
-            object: sayDataFactory.contentLiteral(),
+            object: sayDataFactory.contentLiteral('nl-BE'),
           },
+          // TODO there are some properties that are missing from the measure that we should define if we can:
+          // locn:address, mobiliteit:contactorganisatie, mobiliteit:doelgroep, adms:identifier,
+          // mobiliteit:periode, mobiliteit:plaatsbepaling, schema:eventSchedule, mobiliteit:type,
+          // mobiliteit:verwijstNaar, mobiliteit:heeftGevolg
         ],
       },
       [measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
@@ -244,6 +249,8 @@ function constructSignNode(
           predicate: PROV('wasDerivedFrom').full,
           object: sayDataFactory.namedNode(signConcept.uri),
         },
+        // TODO should include extra Verkeersteken properties? mobiliteit:heeftOnderbord,
+        // mobiliteit:isBeginZone, mobiliteit:isEindeZone?
       ],
     },
     schema.text(
