@@ -36,7 +36,6 @@ export async function queryTrafficSignalConcepts(
       ?type
       ?code
       ?regulatoryNotation
-      ?zonality
       ?image
       ?position
     WHERE {
@@ -65,10 +64,6 @@ export async function queryTrafficSignalConcepts(
       OPTIONAL {
         ?uri mobiliteit:grafischeWeergave/ext:hasFile/mu:uuid ?imageId.
         BIND(CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
-      }
-
-      OPTIONAL {
-        ?uri mobiliteit:zonaliteit ?zonality.
       }
 
       OPTIONAL  {
