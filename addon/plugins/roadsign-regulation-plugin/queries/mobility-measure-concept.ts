@@ -15,7 +15,7 @@ import { ZONALITY_OPTIONS } from '../constants';
 type QueryOptions<Count extends boolean = boolean> = {
   imageBaseUrl?: string;
   searchString?: string;
-  zonality?: string;
+  zonality?: (typeof ZONALITY_OPTIONS)[keyof typeof ZONALITY_OPTIONS];
   trafficSignalType?: string;
   codes?: string[];
   category?: string;
@@ -37,7 +37,11 @@ function _buildFilters(
   const filters = [];
   if (zonality) {
     filters.push(
-      `FILTER(?zonality IN (${sparqlEscapeUri(zonality)}, ${sparqlEscapeUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL)}))`,
+      `FILTER(?zonality IN (
+        ${sparqlEscapeUri(zonality)},
+        ${sparqlEscapeUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL)}
+        )
+      )`,
     );
   }
   if (trafficSignalType) {
