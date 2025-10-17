@@ -41,13 +41,10 @@ export const roadsign_regulation: NodeSpec = {
     resourceUri: {},
     measureUri: {},
     zonality: {},
-    temporal: {
-      default: false,
-    },
   },
   classNames: ['say-roadsign-regulation'],
   toDOM(node: PNode) {
-    const { resourceUri, measureUri, zonality, temporal } = node.attrs;
+    const { resourceUri, measureUri, zonality } = node.attrs;
     return [
       'div',
       {
@@ -68,18 +65,21 @@ export const roadsign_regulation: NodeSpec = {
         'span',
         {
           style: 'display:none;',
+          // TODO this should be replaced by MOBILITEIT('zone'), but we need to know what to
+          // actually link this to as we have no way to specify zones
           property: EXT('zonality'),
           resource: zonality as string,
         },
       ],
       [
-        'span',
+        'div',
         {
-          property: EXT('temporal'),
-          resource: (temporal as string) ?? false,
+          property: DCT('description'),
+          datatype: RDF('langString'),
+          lang: 'nl-BE',
         },
+        0,
       ],
-      ['div', { property: DCT('description') }, 0],
     ];
   },
   parseDOM: [
