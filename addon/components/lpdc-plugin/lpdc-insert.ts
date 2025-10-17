@@ -11,7 +11,7 @@ import {
   type LpdcPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lpdc-plugin';
 import { v4 as uuidv4 } from 'uuid';
-import { getCurrentBesluitURI } from '../../plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import { SRO } from '../../utils/constants';
 
 interface Args {

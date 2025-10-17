@@ -8,7 +8,7 @@ import {
   removePropertyFromNode,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import {
   extractBesluitTypeUris,
   isValidTypeChoice,

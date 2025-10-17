@@ -515,3 +515,4 @@ document-validation-plugin:
   no-matching-rules: There is nothing to validate in the document
   see-related-node: See related node
   description: Some parts are required to allow our system to parse this document.
+  decision-node-not-found: Please put the cursor inside a decision node

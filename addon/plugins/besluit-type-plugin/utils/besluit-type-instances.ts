@@ -1,6 +1,6 @@
 import { type EditorState } from '@lblod/ember-rdfa-editor';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { type BesluitType } from './fetchBesluitTypes';
 import { type NamedNodeTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';

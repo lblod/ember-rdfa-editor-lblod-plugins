@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import { PNode, SayController } from '@lblod/ember-rdfa-editor';
-import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin/utils/helpers';
+import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import { buildArticleStructure } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/utils/build-article-structure';
 import { not } from 'ember-truth-helpers';
 import { service } from '@ember/service';

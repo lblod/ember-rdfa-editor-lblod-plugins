@@ -31,7 +31,15 @@ export default function insertTitle({
     );
 
     const tr = state.tr;
-    tr.replaceSelectionWith(nodeToInsert);
+    if (state.selection.$from.pos === decisionLocation.pos) {
+      tr.replaceRangeWith(
+        decisionLocation.pos + decisionLocation.node.nodeSize - 1,
+        decisionLocation.pos + decisionLocation.node.nodeSize - 1,
+        nodeToInsert,
+      );
+    } else {
+      tr.replaceSelectionWith(nodeToInsert);
+    }
 
     const factory = new SayDataFactory();
     const { transaction: newTr, result } = transactionCombinator<boolean>(
