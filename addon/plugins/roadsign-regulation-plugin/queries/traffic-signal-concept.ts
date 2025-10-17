@@ -10,7 +10,12 @@ import {
   TrafficSignalConceptSchema,
 } from '../schemas/traffic-signal-concept';
 import queryRoadSignCategories from './road-sign-category';
-import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '../constants';
+import {
+  getNewZonalityUri,
+  LegacyZonalityUri,
+  TRAFFIC_SIGNAL_CONCEPT_TYPES,
+  ZonalityUri,
+} from '../constants';
 
 type QueryOptions = {
   imageBaseUrl?: string;
@@ -94,6 +99,9 @@ export async function queryTrafficSignalConcepts(
       return {
         ...objectified,
         image: objectified.image ?? '',
+        zonality: getNewZonalityUri(
+          objectified.zonality as ZonalityUri | LegacyZonalityUri,
+        ),
       };
     }),
   );

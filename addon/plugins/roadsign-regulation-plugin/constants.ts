@@ -1,13 +1,59 @@
 import { MOBILITEIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { ValueOf } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 import { ValuesOf } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 export const ZONALITY_OPTIONS = {
+  POTENTIALLY_ZONAL:
+    'http://register.mobiliteit.vlaanderen.be/concepts/8f9367b2-c717-4be7-8833-4c75bbb4ae1f',
+  ZONAL:
+    'http://register.mobiliteit.vlaanderen.be/concepts/c81c6b96-736a-48cf-b003-6f5cc3dbc55d',
+  NON_ZONAL:
+    'http://register.mobiliteit.vlaanderen.be/concepts/b651931b-923c-477c-8da9-fc7dd841fdcc',
+} as const;
+
+export const ZONALITY_OPTIONS_LEGACY = {
   POTENTIALLY_ZONAL:
     'http://lblod.data.gift/concepts/8f9367b2-c717-4be7-8833-4c75bbb4ae1f',
   ZONAL: 'http://lblod.data.gift/concepts/c81c6b96-736a-48cf-b003-6f5cc3dbc55d',
   NON_ZONAL:
     'http://lblod.data.gift/concepts/b651931b-923c-477c-8da9-fc7dd841fdcc',
 } as const;
+
+export type ZonalityUri = ValueOf<typeof ZONALITY_OPTIONS>;
+export type LegacyZonalityUri = ValueOf<typeof ZONALITY_OPTIONS_LEGACY>;
+
+export function getLegacyZonalityUri(uri: ZonalityUri | LegacyZonalityUri) {
+  if (isLegacyZonalityUri(uri)) {
+    return uri;
+  }
+  const key = (
+    Object.keys(ZONALITY_OPTIONS) as (keyof typeof ZONALITY_OPTIONS)[]
+  ).find((k) => ZONALITY_OPTIONS[k] === uri) as keyof typeof ZONALITY_OPTIONS;
+  return ZONALITY_OPTIONS_LEGACY[key];
+}
+
+export function getNewZonalityUri(uri: ZonalityUri | LegacyZonalityUri) {
+  if (isNewZonalityUri(uri)) {
+    return uri;
+  }
+  const key = (
+    Object.keys(ZONALITY_OPTIONS_LEGACY) as (keyof typeof ZONALITY_OPTIONS)[]
+  ).find(
+    (k) => ZONALITY_OPTIONS_LEGACY[k] === uri,
+  ) as keyof typeof ZONALITY_OPTIONS_LEGACY;
+  return ZONALITY_OPTIONS[key];
+}
+
+export function isNewZonalityUri(uri: string): uri is ZonalityUri {
+  // @ts-expect-error not sure how to handle this correctly
+  return Object.values(ZONALITY_OPTIONS).includes(uri);
+}
+
+export function isLegacyZonalityUri(uri: string): uri is LegacyZonalityUri {
+  // @ts-expect-error not sure how to handle this correctly
+  return Object.values(ZONALITY_OPTIONS_LEGACY).includes(uri);
+}
+
 export type ZonalityOption = ValuesOf<typeof ZONALITY_OPTIONS>;
 export type ZonalOrNot = Exclude<
   ZonalityOption,

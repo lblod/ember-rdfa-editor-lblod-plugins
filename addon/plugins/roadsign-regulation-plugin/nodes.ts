@@ -27,7 +27,11 @@ import {
   ModelMigrationGenerator,
 } from '@lblod/ember-rdfa-editor/core/rdfa-types';
 import { getRdfaContentElement } from '@lblod/ember-rdfa-editor/core/schema';
-import { TRAFFIC_SIGNAL_TYPES } from './constants';
+import {
+  getNewZonalityUri,
+  isLegacyZonalityUri,
+  TRAFFIC_SIGNAL_TYPES,
+} from './constants';
 
 const CONTENT_SELECTOR = `div[property~='${
   DCT('description').full
@@ -140,7 +144,7 @@ export const roadsign_regulation: NodeSpec = {
   ],
 };
 
-const replacements = [
+const trafficSignalRDFTypeReplacements = [
   [MOBILITEIT('Verkeersbord-Verkeersteken'), TRAFFIC_SIGNAL_TYPES.ROAD_SIGN],
   [
     MOBILITEIT('Verkeerslicht-Verkeersteken'),
@@ -154,7 +158,7 @@ const replacements = [
  **/
 export const trafficSignalMigration: ModelMigrationGenerator = (attrs) => {
   const factory = new SayDataFactory();
-  for (const [source, replacement] of replacements) {
+  for (const [source, replacement] of trafficSignalRDFTypeReplacements) {
     const conceptTriple = getOutgoingTriple(
       attrs,
       MOBILITEIT('heeftVerkeersbordconcept'),
@@ -197,4 +201,43 @@ export const trafficSignalMigration: ModelMigrationGenerator = (attrs) => {
     }
   }
   return false;
+};
+
+export const trafficMeasureZonalityMigration: ModelMigrationGenerator = (
+  attrs,
+) => {
+  const factory = new SayDataFactory();
+
+  if (
+    !isResourceAttrs(attrs) ||
+    !hasOutgoingNamedNodeTriple(
+      attrs,
+      RDF('type'),
+      MOBILITEIT('Mobiliteitsmaatregel'),
+    )
+  ) {
+    return false;
+  }
+  const zonalityTriple = getOutgoingTriple(attrs, EXT('zonality'));
+  if (!zonalityTriple) {
+    return false;
+  }
+  if (!isLegacyZonalityUri(zonalityTriple.object.value)) {
+    return false;
+  }
+  const newZonalityProp = {
+    predicate: EXT('zonality').full,
+    object: factory.namedNode(getNewZonalityUri(zonalityTriple.object.value)),
+  };
+  const newProps = attrs.properties
+    .filter((prop) => !EXT('zonality').matches(prop.predicate))
+    .concat([newZonalityProp]);
+  return {
+    getAttrs: () => {
+      return {
+        ...attrs,
+        properties: newProps,
+      };
+    },
+  } satisfies ModelMigration;
 };

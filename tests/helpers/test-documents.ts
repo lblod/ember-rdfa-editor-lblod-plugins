@@ -139,7 +139,7 @@ export const mobilityRegulationWithSignals = (
     ><span
       style="display: none"
       property="http://mu.semte.ch/vocabularies/ext/zonality"
-      resource="http://lblod.data.gift/concepts/b651931b-923c-477c-8da9-fc7dd841fdccZ"
+      resource="http://register.mobiliteit.vlaanderen.be/concepts/b651931b-923c-477c-8da9-fc7dd841fdccZ"
     ></span
     ><span
       property="http://mu.semte.ch/vocabularies/ext/temporal"

@@ -12,7 +12,10 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'reactiveweb/function';
 import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { tracked } from '@glimmer/tracking';
-import { ZONALITY_OPTIONS } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import {
+  ZONALITY_OPTIONS,
+  ZONALITY_OPTIONS_LEGACY,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import {
   getOutgoingTriple,
   hasOutgoingNamedNodeTriple,
@@ -109,7 +112,10 @@ export default class LocationEditComponent extends Component<Args> {
     if (!zonalityTriple) {
       return false;
     }
-    return zonalityTriple.object.value === ZONALITY_OPTIONS.ZONAL;
+    return (
+      zonalityTriple.object.value === ZONALITY_OPTIONS.ZONAL ||
+      zonalityTriple.object.value === ZONALITY_OPTIONS_LEGACY.ZONAL
+    );
   }
 
   locationOptions = trackedFunction(this, async () => {
