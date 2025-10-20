@@ -1,5 +1,22 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 32.8.0
+
+### Minor Changes
+
+- [#603](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/603) [`8f109f8`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8f109f8799741e529d627e4fdea03bb6cf47d181) Thanks [@lagartoverde](https://github.com/lagartoverde)! - IRGN: Use IRGN name when present for traffic signs
+
+- [#605](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/605) [`40b481c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/40b481cce0884e958174c10530cff019c4e53ddc) Thanks [@piemonkey](https://github.com/piemonkey)! - Update data model used for roadsigns to us correct classnames for different subclasses of traffic signal
+
+- [#597](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/597) [`b04e6d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b04e6d26c370dd3100fb674dc081eb1a53f445b8) Thanks [@piemonkey](https://github.com/piemonkey)! - Add model migration to update older roadsign regulation documents to the latest model
+
+### Patch Changes
+
+- [#606](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/606) [`b4e4d9a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b4e4d9a502fdb07974f13894d0168dc3548b7ed2) Thanks [@elpoelma](https://github.com/elpoelma)! - Resolve issue where selection was not correctly set when moving articles around
+  Note: this solution only works when having `@lblod/ember-rdfa-editor` 12.14.0 or later installed in your host-app.
+
+- [#597](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/597) [`533ccab`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/533ccab48508c9765e9dc7e176e63701fdb056d9) Thanks [@piemonkey](https://github.com/piemonkey)! - Update @lblod/ember-rdfa-editor to 12.13.0
+
 ## 32.7.0
 
 ### Minor Changes
