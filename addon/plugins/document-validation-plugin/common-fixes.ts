@@ -1,7 +1,10 @@
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { getDecisionNodeLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import IntlService from 'ember-intl/services/intl';
-import { notificationPluginKey } from '@lblod/ember-rdfa-editor/plugins/notification';
+import {
+  Notification,
+  notificationPluginKey,
+} from '@lblod/ember-rdfa-editor/plugins/notification';
 import {
   insertMotivation,
   insertArticleContainer,
@@ -9,6 +12,7 @@ import {
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
+import { NodeWithPos } from '@curvenote/prosemirror-utils';
 
 export function insertTitleAtCursor(
   controller: SayController,

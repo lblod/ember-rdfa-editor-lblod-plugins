@@ -145,7 +145,7 @@ export default class DecisionPluginCard extends Component<Sig> {
   }
   @action
   insertArticleBlock() {
-    if (this.decisionUri) {
+    if (this.decisionUri && this.decisionNodeLocation) {
       this.controller.doCommand(
         insertArticleContainer({
           intl: this.intl,
