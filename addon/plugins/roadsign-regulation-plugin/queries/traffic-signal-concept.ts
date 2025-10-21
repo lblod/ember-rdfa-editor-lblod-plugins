@@ -10,12 +10,7 @@ import {
   TrafficSignalConceptSchema,
 } from '../schemas/traffic-signal-concept';
 import queryRoadSignCategories from './road-sign-category';
-import {
-  getNewZonalityUri,
-  LegacyZonalityUri,
-  TRAFFIC_SIGNAL_CONCEPT_TYPES,
-  ZonalityUri,
-} from '../constants';
+import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '../constants';
 
 type QueryOptions = {
   imageBaseUrl?: string;
@@ -41,7 +36,6 @@ export async function queryTrafficSignalConcepts(
       ?type
       ?code
       ?regulatoryNotation
-      ?zonality
       ?image
       ?position
     WHERE {
@@ -72,10 +66,6 @@ export async function queryTrafficSignalConcepts(
         BIND(CONCAT(${sparqlEscapeString(imageBaseUrl ?? '')}, "/files/", ?imageId, "/download") AS ?image)
       }
 
-      OPTIONAL {
-        ?uri ext:zonality ?zonality.
-      }
-
       OPTIONAL  {
         ?uri ext:regulatoryNotation ?regulatoryNotation.
       }
@@ -99,9 +89,6 @@ export async function queryTrafficSignalConcepts(
       return {
         ...objectified,
         image: objectified.image ?? '',
-        zonality: getNewZonalityUri(
-          objectified.zonality as ZonalityUri | LegacyZonalityUri,
-        ),
       };
     }),
   );
