@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TRAFFIC_SIGNAL_CONCEPT_TYPES, ZONALITY_OPTIONS } from '../constants';
+import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '../constants';
 import { RoadSignCategorySchema } from './road-sign-category';
 
 export const TrafficSignalConceptSchema = z
@@ -8,7 +8,6 @@ export const TrafficSignalConceptSchema = z
     code: z.string(),
     regulatoryNotation: z.string().optional(),
     image: z.string(),
-    zonality: z.nativeEnum(ZONALITY_OPTIONS).optional(),
     position: z.coerce.number().default(-1),
   })
   .and(
