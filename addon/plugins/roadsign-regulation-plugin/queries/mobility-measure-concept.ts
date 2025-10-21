@@ -10,12 +10,18 @@ import {
 } from '../schemas/mobility-measure-concept';
 import { z } from 'zod';
 import { queryTrafficSignalConcepts } from './traffic-signal-concept';
-import { ZONALITY_OPTIONS } from '../constants';
+import {
+  getLegacyZonalityUri,
+  getNewZonalityUri,
+  LegacyZonalityUri,
+  ZONALITY_OPTIONS,
+  ZonalityUri,
+} from '../constants';
 
 type QueryOptions<Count extends boolean = boolean> = {
   imageBaseUrl?: string;
   searchString?: string;
-  zonality?: string;
+  zonality?: (typeof ZONALITY_OPTIONS)[keyof typeof ZONALITY_OPTIONS];
   trafficSignalType?: string;
   codes?: string[];
   category?: string;
@@ -37,7 +43,13 @@ function _buildFilters(
   const filters = [];
   if (zonality) {
     filters.push(
-      `FILTER(?zonality IN (${sparqlEscapeUri(zonality)}, ${sparqlEscapeUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL)}))`,
+      `FILTER(?zonality IN (
+        ${sparqlEscapeUri(zonality)},
+        ${sparqlEscapeUri(getLegacyZonalityUri(zonality))},
+        ${sparqlEscapeUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL)},
+        ${sparqlEscapeUri(getLegacyZonalityUri(ZONALITY_OPTIONS.POTENTIALLY_ZONAL))}
+        )
+      )`,
     );
   }
   if (trafficSignalType) {
@@ -137,6 +149,9 @@ async function _queryMobilityMeasures<Count extends boolean>(
           variableSignage:
             objectified.variableSignage === '1' ||
             objectified.variableSignage === 'true',
+          zonality: getNewZonalityUri(
+            objectified.zonality as ZonalityUri | LegacyZonalityUri,
+          ),
         };
       }),
     );

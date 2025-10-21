@@ -43,7 +43,10 @@ type Option = {
   label: string;
 };
 
-type Zonality = Option;
+type Zonality = {
+  uri: (typeof ZONALITY_OPTIONS)[keyof typeof ZONALITY_OPTIONS];
+  label: string;
+};
 type TypeOption = Option;
 type Code = Option;
 type Category = Option;
