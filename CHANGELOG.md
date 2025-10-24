@@ -1,5 +1,20 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 33.0.0
+
+### Major Changes
+
+- [#604](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/604) [`6299352`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/629935200df1c15d3094483465dcffc734daf55c) Thanks [@elpoelma](https://github.com/elpoelma)! - Increase `@lblod/ember-rdfa-editor` peerdep requirement to version [12.5.0](https://github.com/lblod/ember-rdfa-editor/releases/tag/%40lblod%2Fember-rdfa-editor%4012.15.0)
+  This versions contains `block_rdfa` support for model migrations.
+
+### Minor Changes
+
+- [#607](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/607) [`9032503`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/903250362f411c8c1f49912deb60f80f09c0ef89) Thanks [@piemonkey](https://github.com/piemonkey)! - Update RDFa output of roadsign-regulation-plugin to more closely match the data model
+
+### Patch Changes
+
+- [#604](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/604) [`cf02699`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/cf02699ef6e7811195546eaf9d4c98a873d08ab3) Thanks [@elpoelma](https://github.com/elpoelma)! - Update zonality concept URIs based on new URI bases
+
 ## 32.8.0
 
 ### Minor Changes

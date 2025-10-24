@@ -62,6 +62,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   roadsign_regulation,
+  trafficMeasureZonalityMigration,
   trafficSignalMigration,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
@@ -227,7 +228,10 @@ export default class BesluitSampleController extends Controller {
         image,
 
         hard_break,
-        block_rdfa: blockRdfaWithConfig({ rdfaAware: true }),
+        block_rdfa: blockRdfaWithConfig({
+          rdfaAware: true,
+          modelMigrations: [trafficMeasureZonalityMigration],
+        }),
         invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
         inline_rdfa: inlineRdfaWithConfig({
           rdfaAware: true,
@@ -300,8 +304,8 @@ export default class BesluitSampleController extends Controller {
         defaultDecisionsGovernmentName: 'Edegem',
       },
       roadsignRegulation: {
-        endpoint: 'https://roadsigns.lblod.info/sparql',
-        imageBaseUrl: 'https://roadsigns.lblod.info/',
+        endpoint: 'https://dev.roadsigns.lblod.info/sparql',
+        imageBaseUrl: 'https://dev.roadsigns.lblod.info/',
       },
       besluitType: {
         endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
