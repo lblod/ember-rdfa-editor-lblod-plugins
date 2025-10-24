@@ -12,7 +12,6 @@ import {
   insertTitle,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/decision-plugin/commands';
 import { CircleXIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-x';
-import { NodeWithPos } from '@curvenote/prosemirror-utils';
 
 export function insertTitleAtCursor(
   controller: SayController,
