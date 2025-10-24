@@ -144,9 +144,15 @@ import {
   documentValidationPlugin,
   documentValidationPluginKey,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin';
-import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  insertArticleContainerAtCursor,
+  insertDescriptionAtCursor,
+  insertMotivationAtCursor,
+  insertTitleAtCursor,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin/common-fixes';
+import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -365,6 +371,68 @@ export default class BesluitSampleController extends Controller {
         onlyArticleSpecialName: true,
       },
       documentValidation: {
+        rules: [
+          {
+            shaclRule:
+              'https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-title-validation',
+            violations: {
+              'http://www.w3.org/ns/shacl#MaxCountConstraintComponent': {
+                helpText:
+                  'You have to many titles please remove all except one',
+              },
+              'http://www.w3.org/ns/shacl#MinCountConstraintComponent': {
+                action: (controller: SayController) =>
+                  insertTitleAtCursor(controller, this.intl),
+                buttonTitle: 'Insert title',
+              },
+            },
+          },
+          {
+            shaclRule:
+              'https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-description-validation',
+            violations: {
+              'http://www.w3.org/ns/shacl#MaxCountConstraintComponent': {
+                helpText:
+                  'You have to many descriptions please remove all except one',
+              },
+              'http://www.w3.org/ns/shacl#MinCountConstraintComponent': {
+                action: (controller: SayController) =>
+                  insertDescriptionAtCursor(controller, this.intl),
+                buttonTitle: 'Insert description',
+              },
+            },
+          },
+          {
+            shaclRule:
+              'https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-motivering-validation',
+            violations: {
+              'http://www.w3.org/ns/shacl#MaxCountConstraintComponent': {
+                helpText:
+                  'You have to many motivations please remove all except one',
+              },
+              'http://www.w3.org/ns/shacl#MinCountConstraintComponent': {
+                action: (controller: SayController) =>
+                  insertMotivationAtCursor(controller, this.intl),
+                buttonTitle: 'Insert motivation',
+              },
+            },
+          },
+          {
+            shaclRule:
+              'https://data.vlaanderen.be/shacl/besluit-publicatie#besluit-article-container-validation',
+            violations: {
+              'http://www.w3.org/ns/shacl#MaxCountConstraintComponent': {
+                helpText:
+                  'You have to many article containers please remove all except one',
+              },
+              'http://www.w3.org/ns/shacl#MinCountConstraintComponent': {
+                action: (controller: SayController) =>
+                  insertArticleContainerAtCursor(controller, this.intl),
+                buttonTitle: 'Insert article container',
+              },
+            },
+          },
+        ],
         documentShape: getShapeOfDocumentType('decision'),
       },
     };

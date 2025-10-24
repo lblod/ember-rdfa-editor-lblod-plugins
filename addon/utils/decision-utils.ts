@@ -7,6 +7,16 @@ import { hasOutgoingNamedNodeTriple } from '@lblod/ember-rdfa-editor-lblod-plugi
 import { ElementPNode } from '@lblod/ember-rdfa-editor/plugins/datastore';
 import { findAncestors } from '@lblod/ember-rdfa-editor/utils/position-utils';
 
+export function getDecisionNodeLocation(controller: SayController) {
+  const besluitRange = getCurrentBesluitRange(controller);
+  if (!besluitRange) return;
+  const decisionNodeLocation = {
+    pos: besluitRange.from,
+    node: besluitRange.node,
+  };
+  return decisionNodeLocation;
+}
+
 export const getCurrentBesluitRange = (
   controllerOrState: SayController | EditorState,
 ): ElementPNode | undefined => {
@@ -15,15 +25,29 @@ export const getCurrentBesluitRange = (
       ? controllerOrState.mainEditorState
       : controllerOrState;
   const selection = state.selection;
-
-  const besluit =
-    findAncestors(selection.$from, (node: PNode) => {
-      return hasOutgoingNamedNodeTriple(
-        node.attrs,
-        RDF('type'),
-        BESLUIT('Besluit'),
-      );
-    })[0] ?? null;
+  let besluit;
+  if (
+    selection.$from.nodeAfter &&
+    hasOutgoingNamedNodeTriple(
+      selection.$from.nodeAfter.attrs,
+      RDF('type'),
+      BESLUIT('Besluit'),
+    )
+  ) {
+    besluit = {
+      node: selection.$from.nodeAfter,
+      pos: selection.$from.pos,
+    };
+  } else {
+    besluit =
+      findAncestors(selection.$from, (node: PNode) => {
+        return hasOutgoingNamedNodeTriple(
+          node.attrs,
+          RDF('type'),
+          BESLUIT('Besluit'),
+        );
+      })[0] ?? null;
+  }
   if (!besluit) {
     return undefined;
   }

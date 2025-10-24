@@ -2,14 +2,17 @@ import factory from '@rdfjs/dataset';
 import SHACLValidator from 'rdf-validate-shacl';
 import { Parser as ParserN3 } from 'n3';
 import { RdfaParser } from 'rdfa-streaming-parser';
-import { ProsePlugin, PluginKey, EditorView } from '@lblod/ember-rdfa-editor';
+import {
+  ProsePlugin,
+  PluginKey,
+  EditorView,
+  SayController,
+} from '@lblod/ember-rdfa-editor';
 import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
 import {
-  BlankNode,
   DataFactory,
   DatasetCore,
   DatasetCoreFactory,
-  NamedNode,
   Quad,
 } from '@rdfjs/types';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
@@ -18,8 +21,34 @@ import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 export const documentValidationPluginKey =
   new PluginKey<DocumentValidationPluginState>('DOCUMENT_VALIDATION');
 
-interface DocumentValidationPluginArgs {
+type Violation =
+  | {
+      action: (controller: SayController, report: ValidationReport) => void;
+      buttonTitle: string;
+    }
+  | {
+      helpText: string;
+    };
+type Rule =
+  | {
+      shaclRule: string;
+      violations: {
+        [key: string]: Violation;
+      };
+    }
+  | {
+      shaclRule: string;
+      action: (controller: SayController, report: ValidationReport) => void;
+      buttonTitle: string;
+    }
+  | {
+      shaclRule: string;
+      helpText: string;
+    };
+
+export interface DocumentValidationPluginArgs {
   documentShape: string;
+  rules: Rule[];
 }
 
 export type ShaclValidationReport = ValidationReport.ValidationReport<
@@ -27,17 +56,16 @@ export type ShaclValidationReport = ValidationReport.ValidationReport<
     DatasetCoreFactory<Quad, Quad, DatasetCore<Quad, Quad>>
 >;
 
+type PropertyWithError = {
+  message: string;
+  subject: string | undefined;
+  shape: string;
+  constraint: string;
+};
 interface DocumentValidationResult {
   report?: ValidationReport;
   propertiesWithoutErrors: { message: string }[];
-  propertiesWithErrors: (
-    | {
-        message: string;
-        subject: string | undefined;
-      }
-    // TODO get rid of this?
-    | undefined
-  )[];
+  propertiesWithErrors: PropertyWithError[];
 }
 export interface DocumentValidationTransactionMeta
   extends DocumentValidationResult {
@@ -47,6 +75,7 @@ export interface DocumentValidationPluginState
   extends DocumentValidationResult {
   documentShape: string;
   validationCallback: typeof validationCallback;
+  rules: Rule[];
 }
 
 export const documentValidationPlugin = (
@@ -61,6 +90,7 @@ export const documentValidationPlugin = (
           documentShape: options.documentShape,
           propertiesWithoutErrors: [],
           propertiesWithErrors: [],
+          rules: options.rules,
         };
       },
       apply(tr, state) {
@@ -107,31 +137,30 @@ async function validationCallback(view: EditorView, documentHtml: string) {
     ...shacl.match(undefined, propertyPred, undefined),
   ].map((quad: Quad) => quad.object);
 
-  const propertiesWithErrors: {
-    sourceShape: BlankNode | NamedNode<string>;
-    focusNode: BlankNode | NamedNode<string> | null;
-  }[] = [];
-  for (const r of report.results) {
-    const sourceShape = r.sourceShape;
-    if (sourceShape)
-      propertiesWithErrors.push({ sourceShape, focusNode: r.focusNode });
-  }
   const errorMessagePred = sayFactory.namedNode(
     'http://www.w3.org/ns/shacl#resultMessage',
   );
-  const propertiesWithErrorsMessages = propertiesWithErrors
-    .map(({ sourceShape, focusNode }) => {
+  const propertiesWithErrors: PropertyWithError[] = [];
+  for (const r of report.results) {
+    const sourceShape = r.sourceShape;
+    if (sourceShape) {
       const match = shacl.match(sourceShape, errorMessagePred, undefined);
       const message = [...match][0]?.object.value;
-      return message
-        ? { message: removeQuotes(message), subject: focusNode?.value }
-        : undefined;
-    })
-    .filter((message) => message);
+      if (message) {
+        propertiesWithErrors.push({
+          message: removeQuotes(message),
+          subject: r.focusNode?.value,
+          shape: sourceShape.value,
+          constraint: r.sourceConstraintComponent?.value as string,
+        });
+      }
+    }
+  }
+
   const propertiesWithoutErrorsArray = propertyNodes.filter((propertyNode) =>
-    propertiesWithErrors.some((propertyWithError) => {
-      return propertyWithError.sourceShape.value !== propertyNode.value;
-    }),
+    propertiesWithErrors.every(
+      (propertyWithError) => propertyWithError.shape !== propertyNode.value,
+    ),
   );
 
   const successMessagePred = sayFactory.namedNode(
@@ -149,7 +178,7 @@ async function validationCallback(view: EditorView, documentHtml: string) {
     type: 'setNewReport',
     report,
     propertiesWithoutErrors,
-    propertiesWithErrors: propertiesWithErrorsMessages,
+    propertiesWithErrors: propertiesWithErrors,
   });
   transaction.setMeta('addToHistory', false);
   view.dispatch(transaction);
