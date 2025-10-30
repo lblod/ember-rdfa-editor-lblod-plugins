@@ -92,8 +92,15 @@ async function _queryMobilityMeasures<Count extends boolean>(
     : /* sparql */ `SELECT DISTINCT ?uri ?label ?preview ?zonality ?variableSignage`;
 
   const filterStatement = _buildFilters(options).join('\n');
+  const orderBindings = !count
+    ? `
+      BIND(REPLACE(?label, "^(\\\\D+).*", "$1", "i") AS ?firstLetters)
+      BIND(xsd:decimal(REPLACE(?label, "^\\\\D+(\\\\d*\\\\.?\\\\d*).*", "$1", "i")) AS ?number)
+      BIND(REPLACE(?label, "^\\\\D+\\\\d*\\\\.?\\\\d*(.*)", "$1", "i") AS ?secondLetters)
+    `
+    : '';
   const orderByStatement = !count
-    ? /* sparql */ `ORDER BY ASC(strlen(str(?label))) ASC(?label)`
+    ? /* sparql */ `ORDER BY ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))`
     : '';
   const paginationStatement = !count
     ? /* sparql */ `LIMIT ${pageSize} OFFSET ${page * pageSize}`
@@ -126,6 +133,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
         ?signUri dct:type ?signClassification.
       }
       ${filterStatement}
+      ${orderBindings}
     }
     ${orderByStatement}
     ${paginationStatement}
