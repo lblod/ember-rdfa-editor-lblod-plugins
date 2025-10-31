@@ -39,17 +39,13 @@ import { createDateVariable } from '../../variable-plugin/actions/create-date-va
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
-import {
-  isMobilityMeasurePreview,
-  MobilityMeasurePreview,
-} from '../schemas/mobility-measure-preview';
+import { MobilityMeasurePreview } from '../schemas/mobility-measure-preview';
 import {
   isVariableInstance,
   VariableInstance,
 } from '../schemas/variable-instance';
 
-interface InsertMeasureArgs {
-  measureConceptOrPreview: MobilityMeasureConcept | MobilityMeasurePreview;
+type InsertMeasureArgs = {
   zonality: ZonalOrNot;
   temporal: boolean;
   variables: Record<
@@ -59,24 +55,30 @@ interface InsertMeasureArgs {
   templateString: string;
   decisionUri: string;
   articleUriGenerator?: () => string;
-}
+} & (
+  | {
+      measureConcept: MobilityMeasureConcept;
+    }
+  | {
+      measurePreview: MobilityMeasurePreview;
+    }
+);
 
 export default function insertMeasure({
-  measureConceptOrPreview,
   zonality,
   temporal,
   variables,
   templateString,
   articleUriGenerator,
   decisionUri,
+  ...args
 }: InsertMeasureArgs): TransactionMonad<boolean> {
   return function (state: EditorState) {
-    const measureConcept = isMobilityMeasurePreview(measureConceptOrPreview)
-      ? measureConceptOrPreview.measureConcept
-      : measureConceptOrPreview;
-    const measurePreview =
-      isMobilityMeasurePreview(measureConceptOrPreview) &&
-      measureConceptOrPreview;
+    const measureConcept =
+      'measureConcept' in args
+        ? args.measureConcept
+        : args.measurePreview.measureConcept;
+    const measurePreview = 'measurePreview' in args && args.measurePreview;
     const { schema } = state;
     const signNodes = measureConcept.trafficSignalConcepts.map((signConcept) =>
       constructSignalNode(signConcept, schema, zonality),

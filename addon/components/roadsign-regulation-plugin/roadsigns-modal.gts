@@ -338,7 +338,7 @@ export default class RoadsignsModal extends Component<Signature> {
         this.controller.withTransaction(
           () => {
             return insertMeasure({
-              measureConceptOrPreview: concept,
+              measureConcept: concept,
               variables: resolvedTemplate.variables,
               templateString: resolvedTemplate.templateString,
               articleUriGenerator: this.args.options.articleUriGenerator,
