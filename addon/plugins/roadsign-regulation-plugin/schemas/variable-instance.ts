@@ -37,7 +37,7 @@ const CodelistVariableInstanceSchema = BaseVariableInstanceSchema.extend({
   variable: CodelistVariableSchema,
 });
 
-const VariableInstanceSchema = z.union([
+export const VariableInstanceSchema = z.union([
   TextVariableInstanceSchema,
   NumberVariableInstanceSchema,
   DateVariableInstanceSchema,
