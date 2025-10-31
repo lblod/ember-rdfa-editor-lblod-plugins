@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 33.1.0
+
+### Minor Changes
+
+- [#589](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/589) [`380f999`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/380f9998e6c8f37f1c7be5bf2be528884f24a850) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add actions to document validation plugin
+
+### Patch Changes
+
+- [#608](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/608) [`7d01346`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7d01346456985efa3fc4438c828b4fbc31de297e) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix ordering of measures in IRGN plugin
+
 ## 33.0.0
 
 ### Major Changes
