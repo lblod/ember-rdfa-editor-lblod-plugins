@@ -39,7 +39,7 @@ import { createDateVariable } from '../../variable-plugin/actions/create-date-va
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
-import { MobilityMeasurePreview } from '../schemas/mobility-measure-preview';
+import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
 import {
   isVariableInstance,
   VariableInstance,
@@ -60,7 +60,7 @@ type InsertMeasureArgs = {
       measureConcept: MobilityMeasureConcept;
     }
   | {
-      measurePreview: MobilityMeasurePreview;
+      measureDesign: MobilityMeasureDesign;
     }
 );
 
@@ -77,8 +77,8 @@ export default function insertMeasure({
     const measureConcept =
       'measureConcept' in args
         ? args.measureConcept
-        : args.measurePreview.measureConcept;
-    const measurePreview = 'measurePreview' in args && args.measurePreview;
+        : args.measureDesign.measureConcept;
+    const measureDesign = 'measureDesign' in args && args.measureDesign;
     const { schema } = state;
     const signNodes = measureConcept.trafficSignalConcepts.map((signConcept) =>
       constructSignalNode(signConcept, schema, zonality),
@@ -137,11 +137,11 @@ export default function insertMeasure({
             predicate: DCT('description').full,
             object: sayDataFactory.contentLiteral('nl-BE'),
           },
-          ...(measurePreview
+          ...(measureDesign
             ? [
                 {
                   predicate: MOBILITEIT('isGebaseerdOpMaatregelOntwerp'),
-                  object: sayDataFactory.namedNode(measurePreview.uri),
+                  object: sayDataFactory.namedNode(measureDesign.uri),
                 },
               ]
             : []),
