@@ -38,30 +38,50 @@ import { createNumberVariable } from '../../variable-plugin/actions/create-numbe
 import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
+import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
+import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
+import {
+  isVariableInstance,
+  VariableInstance,
+} from '../schemas/variable-instance';
 
-interface InsertMeasureArgs {
-  measureConcept: MobilityMeasureConcept;
+type InsertMeasureArgs = {
   zonality: ZonalOrNot;
   temporal: boolean;
-  variables: Record<string, Exclude<Variable, { type: 'instruction' }>>;
+  variables: Record<
+    string,
+    Exclude<Variable, { type: 'instruction' }> | VariableInstance
+  >;
   templateString: string;
   decisionUri: string;
   articleUriGenerator?: () => string;
-}
+} & (
+  | {
+      measureConcept: MobilityMeasureConcept;
+    }
+  | {
+      measureDesign: MobilityMeasureDesign;
+    }
+);
 
 export default function insertMeasure({
-  measureConcept,
   zonality,
   temporal,
   variables,
   templateString,
   articleUriGenerator,
   decisionUri,
+  ...args
 }: InsertMeasureArgs): TransactionMonad<boolean> {
   return function (state: EditorState) {
+    const measureConcept =
+      'measureConcept' in args
+        ? args.measureConcept
+        : args.measureDesign.measureConcept;
+    const measureDesign = 'measureDesign' in args && args.measureDesign;
     const { schema } = state;
     const signNodes = measureConcept.trafficSignalConcepts.map((signConcept) =>
-      constructSignNode(signConcept, schema, zonality),
+      constructSignalNode(signConcept, schema, zonality),
     );
     let signSection: PNode[] = [];
     if (signNodes.length) {
@@ -117,6 +137,14 @@ export default function insertMeasure({
             predicate: DCT('description').full,
             object: sayDataFactory.contentLiteral('nl-BE'),
           },
+          ...(measureDesign
+            ? [
+                {
+                  predicate: MOBILITEIT('isGebaseerdOpMaatregelOntwerp'),
+                  object: sayDataFactory.namedNode(measureDesign.uri),
+                },
+              ]
+            : []),
           // TODO there are some properties that are missing from the measure that we should define if we can:
           // locn:address, mobiliteit:contactorganisatie, mobiliteit:doelgroep, adms:identifier,
           // mobiliteit:periode, mobiliteit:plaatsbepaling, schema:eventSchedule, mobiliteit:type,
@@ -172,7 +200,10 @@ export default function insertMeasure({
 
 function constructMeasureBody(
   templateString: string,
-  variables: Record<string, Exclude<Variable, { type: 'instruction' }>>,
+  variables: Record<
+    string,
+    Exclude<Variable, { type: 'instruction' }> | VariableInstance
+  >,
   schema: Schema,
 ) {
   const parts = templateString.split(/(\$\{[^{}$]+\})/);
@@ -216,13 +247,18 @@ function determineSignLabel(signConcept: TrafficSignalConcept) {
   }
 }
 
-function constructSignNode(
-  signConcept: TrafficSignalConcept,
+function constructSignalNode(
+  signalOrSignalConcept: TrafficSignal | TrafficSignalConcept,
   schema: Schema,
   zonality?: ZonalOrNot,
 ) {
-  const signUri = `http://data.lblod.info/verkeerstekens/${uuid()}`;
-  const prefix = determineSignLabel(signConcept);
+  const signalConcept = isTrafficSignal(signalOrSignalConcept)
+    ? signalOrSignalConcept.trafficSignalConcept
+    : signalOrSignalConcept;
+  const signalUri = isTrafficSignal(signalOrSignalConcept)
+    ? signalOrSignalConcept.uri
+    : `http://data.lblod.info/verkeerstekens/${uuid()}`;
+  const prefix = determineSignLabel(signalConcept);
   const zonalityText =
     !zonality || zonality !== ZONALITY_OPTIONS.ZONAL
       ? ''
@@ -232,7 +268,7 @@ function constructSignNode(
   const node = schema.nodes.inline_rdfa.create(
     {
       rdfaNodeType: 'resource',
-      subject: signUri,
+      subject: signalUri,
       __rdfaId: uuid(),
       properties: [
         {
@@ -242,33 +278,48 @@ function constructSignNode(
         {
           predicate: RDF('type').full,
           object: sayDataFactory.namedNode(
-            TRAFFIC_SIGNAL_TYPE_MAPPING[signConcept.type],
+            TRAFFIC_SIGNAL_TYPE_MAPPING[signalConcept.type],
           ),
         },
         {
           predicate: PROV('wasDerivedFrom').full,
-          object: sayDataFactory.namedNode(signConcept.uri),
+          object: sayDataFactory.namedNode(signalOrSignalConcept.uri),
         },
         // TODO should include extra Verkeersteken properties? mobiliteit:heeftOnderbord,
         // mobiliteit:isBeginZone, mobiliteit:isEindeZone?
       ],
     },
     schema.text(
-      `${prefix} ${signConcept.regulatoryNotation || signConcept.code}${zonalityText}`,
+      `${prefix} ${signalConcept.regulatoryNotation || signalConcept.code}${zonalityText}`,
     ),
   );
   return node;
 }
 
 function constructVariableNode(
-  variable: Exclude<Variable, { type: 'instruction' }>,
+  variableOrVariableInstance:
+    | Exclude<Variable, { type: 'instruction' }>
+    | VariableInstance,
   schema: Schema,
 ) {
-  const variableInstance = generateVariableInstanceUri();
+  const variable = isVariableInstance(variableOrVariableInstance)
+    ? variableOrVariableInstance.variable
+    : variableOrVariableInstance;
+  const variableInstance = isVariableInstance(variableOrVariableInstance)
+    ? variableOrVariableInstance
+    : {
+        uri: generateVariableInstanceUri(),
+        value: undefined,
+      };
+  const valueStr =
+    variableInstance.value instanceof Date
+      ? variableInstance.value.toISOString()
+      : variableInstance.value?.toString();
   const args = {
     schema,
     variable: variable.uri,
-    variableInstance,
+    variableInstance: variableInstance.uri,
+    value: valueStr,
     label: variable.label,
   };
   switch (variable.type) {
