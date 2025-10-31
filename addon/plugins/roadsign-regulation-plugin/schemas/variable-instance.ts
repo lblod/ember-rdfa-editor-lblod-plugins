@@ -10,7 +10,6 @@ import {
 
 const BaseVariableInstanceSchema = z.object({
   uri: z.string(),
-  id: z.string(),
 });
 
 const TextVariableInstanceSchema = BaseVariableInstanceSchema.extend({
