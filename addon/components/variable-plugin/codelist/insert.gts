@@ -11,6 +11,13 @@ import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'reactiveweb/function';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { createCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-codelist-variable';
+import PowerSelect from 'ember-power-select/components/power-select';
+import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import { on } from '@ember/modifier';
+import { not } from 'ember-truth-helpers';
+import t from 'ember-intl/helpers/t';
+import LabelInput from '../utils/label-input';
 
 export type CodelistInsertOptions = {
   publisher?: string;
@@ -31,7 +38,7 @@ interface SelectStyle {
 export default class CodelistInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked selectedCodelist?: CodeList;
-  @tracked label?: string;
+  @tracked label: string = '';
   @tracked selectedStyleValue = 'single';
 
   get controller() {
@@ -99,7 +106,7 @@ export default class CodelistInsertComponent extends Component<Args> {
       label,
     });
 
-    this.label = undefined;
+    this.label = '';
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,
     });
@@ -114,4 +121,39 @@ export default class CodelistInsertComponent extends Component<Args> {
   selectStyle(style: SelectStyle) {
     this.selectedStyleValue = style.value;
   }
+
+  <template>
+    {{#if this.codelistData.value}}
+      <PowerSelect
+        @allowClear={{false}}
+        @searchEnabled={{true}}
+        @searchField='label'
+        @options={{this.codelistData.value}}
+        @selected={{this.selectedCodelist}}
+        @onChange={{this.selectCodelist}}
+        as |codelist|
+      >
+        {{codelist.label}}
+      </PowerSelect>
+      <PowerSelect
+        @allowClear={{false}}
+        @searchEnabled={{false}}
+        @options={{this.selectionStyles}}
+        @selected={{this.selectedStyle}}
+        @onChange={{this.selectStyle}}
+        as |style|
+      >
+        {{style.label}}
+      </PowerSelect>
+      <AuFormRow>
+        <LabelInput @label={{this.label}} @updateLabel={{this.updateLabel}} />
+      </AuFormRow>
+      <AuButton
+        {{on 'click' this.insert}}
+        @disabled={{not this.selectedCodelist}}
+      >
+        {{t 'variable-plugin.button'}}
+      </AuButton>
+    {{/if}}
+  </template>
 }
