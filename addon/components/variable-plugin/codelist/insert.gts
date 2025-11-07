@@ -10,7 +10,6 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { trackedFunction } from 'reactiveweb/function';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
-import { createCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-codelist-variable';
 import PowerSelect from 'ember-power-select/components/power-select';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
@@ -18,6 +17,7 @@ import { on } from '@ember/modifier';
 import { not } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import LabelInput from '../utils/label-input';
+import { createCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-new-codelist-variable';
 
 export type CodelistInsertOptions = {
   publisher?: string;
@@ -32,14 +32,14 @@ type Args = {
 
 interface SelectStyle {
   label: string;
-  value: string;
+  value: 'single' | 'multi';
 }
 
 export default class CodelistInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
   @tracked selectedCodelist?: CodeList;
   @tracked label: string = '';
-  @tracked selectedStyleValue = 'single';
+  @tracked selectedStyleValue: 'single' | 'multi' = 'single';
 
   get controller() {
     return this.args.controller;
@@ -65,11 +65,11 @@ export default class CodelistInsertComponent extends Component<Args> {
     const singleSelect = {
       label: this.intl.t('variable.codelist.single-select'),
       value: 'single',
-    };
+    } as const;
     const multiSelect = {
       label: this.intl.t('variable.codelist.multi-select'),
       value: 'multi',
-    };
+    } as const;
     return [singleSelect, multiSelect];
   }
 
@@ -91,6 +91,9 @@ export default class CodelistInsertComponent extends Component<Args> {
   @action
   insert() {
     const codelistResource = this.selectedCodelist?.uri;
+    if (!codelistResource) {
+      return;
+    }
     const label =
       this.label ??
       this.selectedCodelist?.label ??
@@ -103,7 +106,7 @@ export default class CodelistInsertComponent extends Component<Args> {
       selectionStyle: this.selectedStyleValue,
       codelist: codelistResource,
       source,
-      label,
+      label: label ?? this.selectedCodelist?.label,
     });
 
     this.label = '';

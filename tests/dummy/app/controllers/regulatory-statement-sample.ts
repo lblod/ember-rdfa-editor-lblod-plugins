@@ -57,8 +57,6 @@ import {
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
-  codelist,
-  codelistView,
   location,
   locationView,
   number,
@@ -137,6 +135,15 @@ import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
 import { type StructurePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/structure-types';
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
+import {
+  codelist,
+  codelist_option,
+  codelistView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/codelist';
+import {
+  legacy_codelist,
+  legacyCodelistView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -199,7 +206,9 @@ export default class RegulatoryStatementSampleController extends Controller {
       number,
       location,
       oslo_location: osloLocation(this.config.location),
+      legacy_codelist,
       codelist,
+      codelist_option,
       heading: headingWithConfig({ rdfaAware: false }),
       blockquote,
 
@@ -373,6 +382,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       location: locationView(controller),
       oslo_location: osloLocationView(this.config.location)(controller),
       codelist: codelistView(controller),
+      legacy_codelist: legacyCodelistView(controller),
       templateComment: templateCommentView(controller),
       inline_rdfa: inlineRdfaWithConfigView({ rdfaAware: true })(controller),
       structure: structureViewWithConfig(this.config.structure)(controller),

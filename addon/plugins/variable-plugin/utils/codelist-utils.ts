@@ -1,8 +1,10 @@
 // This file contains helpers for both the codelist and location variable types
 
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { CodeListOption } from './fetch-data';
 import { PNode, ProseParser, SayController } from '@lblod/ember-rdfa-editor';
+import { generateVariableInstanceUri } from './variable-helpers';
+import { createCodelistOptionNode } from '../actions/create-new-codelist-variable';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 /**
  *
@@ -21,6 +23,48 @@ function wrapVariableInHighlight(text: string) {
 }
 
 export function updateCodelistVariable(
+  selectedCodelist: {
+    node: PNode;
+    pos: number;
+  },
+  selectedOption: CodeListOption | CodeListOption[],
+  controller: SayController,
+) {
+  const selectedOptions = Array.isArray(selectedOption)
+    ? selectedOption
+    : [selectedOption];
+  const variable = selectedCodelist.node.attrs['variable'] as
+    | string
+    | undefined;
+  const codelistOptionNodes = selectedOptions.map((option) =>
+    // @ts-expect-error fix types of variable and variableInstance
+    createCodelistOptionNode({
+      schema: controller.schema,
+      textContent: option.label,
+      subject: option.value,
+      ...(variable
+        ? {
+            variable,
+            variableInstance: generateVariableInstanceUri({
+              templateMode: false,
+            }),
+          }
+        : {}),
+    }),
+  );
+  const range = {
+    from: selectedCodelist.pos + 1,
+    to: selectedCodelist.pos + selectedCodelist.node.nodeSize - 1,
+  };
+  controller.withTransaction((tr) => {
+    return tr.replaceWith(range.from, range.to, codelistOptionNodes);
+  });
+}
+
+/**
+ * @deprecated use `updateCodelistVariable` instead
+ */
+export function updateCodelistVariableLegacy(
   selectedCodelist: {
     node: PNode;
     pos: number;

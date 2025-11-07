@@ -1,6 +1,7 @@
 import {
   executeQuery,
   QueryResult,
+  sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 
 export type CodeListOptions = {
@@ -9,8 +10,8 @@ export type CodeListOptions = {
 };
 
 export type CodeListOption = {
-  value?: string;
-  label?: string;
+  value: string;
+  label: string;
 };
 
 function generateCodeListOptionsQuery(codelistUri: string): string {
@@ -20,7 +21,7 @@ function generateCodeListOptionsQuery(codelistUri: string): string {
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX schema: <http://schema.org/>
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-    SELECT DISTINCT * WHERE { 
+    SELECT DISTINCT * WHERE {
       <${codelistUri}> a lblodMobiliteit:Codelist.
       ?codelistOptions skos:inScheme <${codelistUri}>.
       ?codelistOptions skos:prefLabel ?value.
@@ -57,6 +58,29 @@ export async function fetchCodeListOptions(
   };
 }
 
+export async function fetchCodelistOption(
+  endpoint: string,
+  codelistOptionUri: string,
+): Promise<Required<CodeListOption> | undefined> {
+  const response = await executeQuery({
+    endpoint,
+    query: /* sparql */ `
+      PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+      SELECT DISTINCT ?label WHERE {
+        ${sparqlEscapeUri(codelistOptionUri)} skos:prefLabel ?label.
+      }
+    `,
+  });
+  const bindings = response.results.bindings;
+  if (!bindings.length) {
+    return;
+  }
+  return {
+    value: codelistOptionUri,
+    label: bindings[0]['label'].value,
+  };
+}
+
 function parseCodelistOptions(queryResult: QueryResult): CodeListOption[] {
   const bindings = queryResult.results.bindings;
   return bindings.map((binding) => ({
@@ -76,7 +100,7 @@ function generateCodeListsByPublisherQuery(publisher?: string): string {
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
-    SELECT DISTINCT * WHERE { 
+    SELECT DISTINCT * WHERE {
       ?uri a lblodMobilitiet:Codelist;
         skos:prefLabel ?label.
       ${
