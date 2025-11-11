@@ -1,7 +1,10 @@
 import { type EditorState } from '@lblod/ember-rdfa-editor';
 import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
-import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { type BesluitType } from './fetchBesluitTypes';
 import { type NamedNodeTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
@@ -25,6 +28,20 @@ export function extractBesluitTypeUris(editorState: EditorState): string[] {
         ),
     )
     .map((type: NamedNodeTriple) => type?.object.value);
+}
+
+export function checkForDraftBesluitType(editorState: EditorState): boolean {
+  const besluitRange = getCurrentBesluitRange(editorState);
+  if (!besluitRange) {
+    return false;
+  }
+  return getOutgoingTripleList(
+    besluitRange.node.attrs,
+    EXT('isDraftDecisionType'),
+  ).some(
+    (draftTypeTriple: NamedNodeTriple) =>
+      draftTypeTriple?.object.value === 'true',
+  );
 }
 
 /**

@@ -20,6 +20,7 @@ import { getCurrentBesluitRange } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import {
   BesluitTypeInstance,
   checkBesluitTypeInstance,
+  checkForDraftBesluitType,
   mostSpecificBesluitType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/besluit-type-instances';
 import BesluitTypeForm from '@lblod/ember-rdfa-editor-lblod-plugins/components/besluit-type-plugin/besluit-type-form';
@@ -84,7 +85,10 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     );
     if (typeInstance) {
       this.selectedTypeInstance = typeInstance;
-      this.cardExpanded = false;
+      const isDraftType = checkForDraftBesluitType(
+        this.controller.mainEditorState,
+      );
+      this.cardExpanded = isDraftType;
     } else {
       this.cardExpanded = true;
     }
