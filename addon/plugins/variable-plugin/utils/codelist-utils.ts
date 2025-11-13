@@ -41,7 +41,7 @@ export function updateCodelistVariable(
     createCodelistOptionNode({
       schema: controller.schema,
       textContent: option.label,
-      subject: option.value,
+      subject: option.uri,
       ...(variable
         ? {
             variable,
@@ -74,9 +74,9 @@ export function updateCodelistVariableLegacy(
 ) {
   let htmlToInsert: string;
   if (Array.isArray(selectedOption)) {
-    htmlToInsert = selectedOption.map((option) => option.value).join(', ');
+    htmlToInsert = selectedOption.map((option) => option.label).join(', ');
   } else {
-    htmlToInsert = unwrap(selectedOption.value);
+    htmlToInsert = unwrap(selectedOption.label);
   }
   htmlToInsert = wrapVariableInHighlight(htmlToInsert);
   const domParser = new DOMParser();

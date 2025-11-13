@@ -118,7 +118,7 @@ export default class CodelistEditComponent extends Component<Sig> {
       codelistNode.children.length > 0
     ) {
       const options = codelistNode.children.map((child) => ({
-        value: child.attrs['subject'],
+        uri: child.attrs['subject'],
         label: child.textContent,
       }));
       this.selectedCodelistOption = this.multiSelect ? options : options[0];

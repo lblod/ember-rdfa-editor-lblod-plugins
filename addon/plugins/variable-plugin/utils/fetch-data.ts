@@ -10,29 +10,26 @@ export type CodeListOptions = {
 };
 
 export type CodeListOption = {
-  value: string;
+  uri: string;
   label: string;
 };
 
 function generateCodeListOptionsQuery(codelistUri: string): string {
-  const codeListOptionsQuery = `
+  const codeListOptionsQuery = /* sparql */ `
     PREFIX lblodMobiliteit: <http://data.lblod.info/vocabularies/mobiliteit/>
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX schema: <http://schema.org/>
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-    SELECT DISTINCT * WHERE {
+    SELECT DISTINCT ?codelistOption ?label ?type ?position WHERE {
       <${codelistUri}> a lblodMobiliteit:Codelist.
-      ?codelistOptions skos:inScheme <${codelistUri}>.
-      ?codelistOptions skos:prefLabel ?value.
+      ?codelistOption skos:inScheme <${codelistUri}>.
+      ?codelistOption skos:prefLabel ?label.
       OPTIONAL {
-        ?codelistOptions schema:position ?position .
+        ?codelistOption schema:position ?position .
       }
       OPTIONAL {
         <${codelistUri}> dct:type ?type.
-      }
-      OPTIONAL {
-        ?codelistOptions ext:summary ?label.
       }
     }
     ORDER BY (!BOUND(?position)) ASC(?position)
@@ -67,7 +64,8 @@ export async function fetchCodelistOption(
     query: /* sparql */ `
       PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
       SELECT DISTINCT ?label WHERE {
-        ${sparqlEscapeUri(codelistOptionUri)} skos:prefLabel ?label.
+        ${sparqlEscapeUri(codelistOptionUri)}
+          skos:prefLabel ?label.
       }
     `,
   });
@@ -76,7 +74,7 @@ export async function fetchCodelistOption(
     return;
   }
   return {
-    value: codelistOptionUri,
+    uri: codelistOptionUri,
     label: bindings[0]['label'].value,
   };
 }
@@ -84,8 +82,8 @@ export async function fetchCodelistOption(
 function parseCodelistOptions(queryResult: QueryResult): CodeListOption[] {
   const bindings = queryResult.results.bindings;
   return bindings.map((binding) => ({
-    value: binding['value']?.value,
-    label: binding['label'] ? binding['label'].value : binding['value']?.value,
+    uri: binding['codelistOption'].value,
+    label: binding['label'].value,
   }));
 }
 
@@ -125,7 +123,7 @@ export async function fetchCodeListsByPublisher(
   });
   const bindings = codelistsOptionsQueryResult.results.bindings;
   return bindings.map((binding) => ({
-    uri: binding['uri']?.value,
-    label: binding['label']?.value,
+    uri: binding['uri'].value,
+    label: binding['label'].value,
   }));
 }
