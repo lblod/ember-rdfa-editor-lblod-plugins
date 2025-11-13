@@ -70,6 +70,7 @@ export function setBesluitType(
     }),
   );
   if (isDraftDecisionType) {
+    console.log('inserting draft decision triple');
     monads.push(
       addPropertyToNode({
         resource,
