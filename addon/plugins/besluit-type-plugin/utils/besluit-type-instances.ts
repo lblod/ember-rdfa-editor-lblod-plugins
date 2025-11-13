@@ -35,7 +35,7 @@ export function checkForDraftBesluitType(editorState: EditorState): boolean {
   if (!besluitRange) {
     return false;
   }
-  console.log(
+  console.warn(
     getOutgoingTripleList(besluitRange.node.attrs, EXT('isDraftDecisionType')),
   );
   return getOutgoingTripleList(

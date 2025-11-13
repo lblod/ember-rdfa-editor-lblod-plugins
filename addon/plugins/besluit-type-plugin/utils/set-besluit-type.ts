@@ -69,8 +69,9 @@ export function setBesluitType(
       },
     }),
   );
+  console.warn(isDraftDecisionType);
   if (isDraftDecisionType) {
-    console.log('inserting draft decision triple');
+    console.warn('inserting draft decision triple');
     monads.push(
       addPropertyToNode({
         resource,
