@@ -13,9 +13,11 @@ import {
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
 import { trackedFunction } from 'reactiveweb/function';
-import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
+import {
+  updateCodelistVariable,
+  updateCodelistVariableLegacy,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { tracked } from '@glimmer/tracking';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
@@ -23,6 +25,7 @@ import PowerSelectMultiple from 'ember-power-select/components/power-select-mult
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
+import { tracked } from '@glimmer/tracking';
 
 export type CodelistEditOptions = {
   endpoint: string;
@@ -35,17 +38,26 @@ type Sig = {
 };
 
 export default class CodelistEditComponent extends Component<Sig> {
-  @tracked selectedCodelistOption?: CodeListOption | CodeListOption[];
+  @tracked
+  selectedCodelistOption?: CodeListOption | CodeListOption[];
 
   get controller() {
     return this.args.controller;
+  }
+
+  get isLegacyCodelist() {
+    return (
+      this.selectedCodelist?.node.type ===
+      this.controller.schema.nodes.legacy_codelist
+    );
   }
 
   get selectedCodelist() {
     const { selection } = this.controller.mainEditorState;
     if (
       selection instanceof NodeSelection &&
-      selection.node.type === this.controller.schema.nodes.codelist
+      (selection.node.type === this.controller.schema.nodes.codelist ||
+        selection.node.type === this.controller.schema.nodes.legacy_codelist)
     ) {
       const codelist = {
         node: selection.node,
@@ -86,6 +98,10 @@ export default class CodelistEditComponent extends Component<Sig> {
     return this.selectedCodelist?.node.attrs.label as string | undefined;
   }
 
+  get schema() {
+    return this.args.controller.schema;
+  }
+
   codelistOptions = trackedFunction(this, async () => {
     let result: CodeListOptions | undefined;
     if (this.source && this.codelistUri) {
@@ -95,6 +111,21 @@ export default class CodelistEditComponent extends Component<Sig> {
     // Normally we'd do this with a `trackedReset`, but this gave us `write-after-read` dev-errors at the time of writing this.
     // TODO: convert this back to a `trackedReset` (or an alternative) once possible.
     this.selectedCodelistOption = undefined;
+    const codelistNode = this.selectedCodelist?.node;
+    if (
+      !this.isLegacyCodelist &&
+      codelistNode &&
+      codelistNode.children.length > 0
+    ) {
+      const options = codelistNode.children.map((child) => ({
+        uri: child.attrs['subject'],
+        label: child.textContent,
+      }));
+      this.selectedCodelistOption = this.multiSelect ? options : options[0];
+    } else {
+      this.selectedCodelistOption = undefined;
+    }
+
     return result;
   });
 
@@ -112,11 +143,19 @@ export default class CodelistEditComponent extends Component<Sig> {
     if (!this.selectedCodelist || !this.selectedCodelistOption) {
       return;
     }
-    updateCodelistVariable(
-      this.selectedCodelist,
-      this.selectedCodelistOption,
-      this.controller,
-    );
+    if (this.isLegacyCodelist) {
+      updateCodelistVariableLegacy(
+        this.selectedCodelist,
+        this.selectedCodelistOption,
+        this.controller,
+      );
+    } else {
+      updateCodelistVariable(
+        this.selectedCodelist,
+        this.selectedCodelistOption,
+        this.controller,
+      );
+    }
   }
 
   @action

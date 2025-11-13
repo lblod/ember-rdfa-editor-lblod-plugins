@@ -70,13 +70,11 @@ import {
   CitationPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/citation-plugin';
 import {
-  codelist,
   number,
   text_variable,
   location,
   textVariableView,
   numberView,
-  codelistView,
   locationView,
   personVariableView,
   person_variable,
@@ -153,6 +151,15 @@ import {
   insertTitleAtCursor,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-validation-plugin/common-fixes';
 import { getShapeOfDocumentType } from '@lblod/lib-decision-shapes';
+import {
+  codelist,
+  codelist_option,
+  codelistView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/codelist';
+import {
+  legacy_codelist,
+  legacyCodelistView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -213,7 +220,9 @@ export default class BesluitSampleController extends Controller {
         autofilled_variable,
         number,
         location,
+        legacy_codelist,
         codelist,
+        codelist_option,
         oslo_location: osloLocation(this.config.location),
         roadsign_regulation,
         mandatee_table,
@@ -457,6 +466,7 @@ export default class BesluitSampleController extends Controller {
       person_variable: personVariableView(controller),
       number: numberView(controller),
       codelist: codelistView(controller),
+      legacy_codelist: legacyCodelistView(controller),
       location: locationView(controller),
       link: linkView(this.config.link)(controller),
       date: dateView(this.dateOptions)(controller),

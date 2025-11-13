@@ -13,15 +13,17 @@ import {
 } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
-type CreateCodelistVariableArgs = {
+type CreateLegacyCodelistVariableArgs = {
   schema: Schema;
   value?: string;
-} & CreateCodelistVariableAttrsArgs;
+} & CreateLegacyCodelistVariableAttrsArgs;
 
-export function createCodelistVariable(args: CreateCodelistVariableArgs) {
+export function createLegacyCodelistVariable(
+  args: CreateLegacyCodelistVariableArgs,
+) {
   const { schema, value, label } = args;
-  const attrs = createCodelistVariableAttrs(args);
-  return schema.nodes.codelist.create(
+  const attrs = createLegacyCodelistVariableAttrs(args);
+  return schema.nodes.legacy_codelist.create(
     attrs,
     value
       ? schema.text(value)
@@ -31,21 +33,21 @@ export function createCodelistVariable(args: CreateCodelistVariableArgs) {
   );
 }
 
-type CreateCodelistVariableAttrsArgs = {
+type CreateLegacyCodelistVariableAttrsArgs = {
   label?: string;
   source?: string;
   codelist?: string;
   selectionStyle?: string;
 } & AllOrNone<{ variable: string; variableInstance: string }>;
 
-export function createCodelistVariableAttrs({
+export function createLegacyCodelistVariableAttrs({
   variable,
   variableInstance,
   label,
   source,
   codelist,
   selectionStyle,
-}: CreateCodelistVariableAttrsArgs) {
+}: CreateLegacyCodelistVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
   const backlinks: IncomingTriple[] = [];
   if (variable) {

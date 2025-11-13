@@ -8,9 +8,8 @@ import {
 import { MULTI_SELECT_CODELIST_TYPE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/constants';
 import { findParentNode } from '@curvenote/prosemirror-utils';
 import { NodeSelection } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { trackedFunction } from 'reactiveweb/function';
-import { updateCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
+import { updateCodelistVariableLegacy } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
 import { tracked } from '@glimmer/tracking';
 import {
   ZONALITY_OPTIONS,
@@ -52,7 +51,7 @@ export default class LocationEditComponent extends Component<Args> {
     if (!this.selectedLocation || !this.selectedLocationOption) {
       return;
     }
-    updateCodelistVariable(
+    updateCodelistVariableLegacy(
       this.selectedLocation,
       this.selectedLocationOption,
       this.controller,
@@ -126,8 +125,8 @@ export default class LocationEditComponent extends Component<Args> {
         : this.options.nonZonalLocationCodelistUri,
     );
     result.options = result.options.map((option) => ({
+      uri: option.uri,
       label: option.label,
-      value: unwrap(option.value),
     }));
     // This a workaround/hack to be able to reset the `selected` option after the `locationOptions` change.
     // Normally we'd do this with a `trackedReset`, but this gave us `write-after-read` dev-errors at the time of writing this.
