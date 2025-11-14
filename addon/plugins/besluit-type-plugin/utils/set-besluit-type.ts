@@ -10,21 +10,25 @@ import {
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { getCurrentBesluitURI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/decision-utils';
 import {
+  checkForDraftBesluitType,
   extractBesluitTypeUris,
   isValidTypeChoice,
   mostSpecificBesluitType,
   type BesluitTypeInstance,
 } from './besluit-type-instances';
-import { RDF } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  EXT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export function setBesluitType(
   initialState: EditorState,
   typeInstance: BesluitTypeInstance,
+  isDraftDecisionType?: boolean,
 ): TransactionCombinatorResult<boolean> {
   const transaction = initialState.tr;
-
   const resource = getCurrentBesluitURI(initialState);
-  if (!resource || !isValidTypeChoice(typeInstance)) {
+  if (!resource || (!isValidTypeChoice(typeInstance) && !isDraftDecisionType)) {
     return {
       result: [false],
       initialState,
@@ -42,6 +46,17 @@ export function setBesluitType(
       },
     });
   });
+  if (checkForDraftBesluitType(initialState)) {
+    monads.push(
+      removePropertyFromNode({
+        resource,
+        property: {
+          predicate: EXT('isDraftDecisionType').full,
+          object: sayDataFactory.literal('true'),
+        },
+      }),
+    );
+  }
   monads.push(
     addPropertyToNode({
       resource,
@@ -53,5 +68,16 @@ export function setBesluitType(
       },
     }),
   );
+  if (isDraftDecisionType) {
+    monads.push(
+      addPropertyToNode({
+        resource,
+        property: {
+          predicate: EXT('isDraftDecisionType').full,
+          object: sayDataFactory.literal('true'),
+        },
+      }),
+    );
+  }
   return transactionCombinator<boolean>(initialState)(monads);
 }
