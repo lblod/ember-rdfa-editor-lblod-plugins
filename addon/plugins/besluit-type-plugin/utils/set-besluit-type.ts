@@ -27,9 +27,8 @@ export function setBesluitType(
   isDraftDecisionType?: boolean,
 ): TransactionCombinatorResult<boolean> {
   const transaction = initialState.tr;
-
   const resource = getCurrentBesluitURI(initialState);
-  if (!resource || !isValidTypeChoice(typeInstance)) {
+  if (!resource || (!isValidTypeChoice(typeInstance) && !isDraftDecisionType)) {
     return {
       result: [false],
       initialState,
@@ -53,7 +52,7 @@ export function setBesluitType(
         resource,
         property: {
           predicate: EXT('isDraftDecisionType').full,
-          object: sayDataFactory.literalNode('true'),
+          object: sayDataFactory.literal('true'),
         },
       }),
     );
@@ -69,15 +68,13 @@ export function setBesluitType(
       },
     }),
   );
-  console.warn(isDraftDecisionType);
   if (isDraftDecisionType) {
-    console.warn('inserting draft decision triple');
     monads.push(
       addPropertyToNode({
         resource,
         property: {
           predicate: EXT('isDraftDecisionType').full,
-          object: sayDataFactory.literalNode('true'),
+          object: sayDataFactory.literal('true'),
         },
       }),
     );
