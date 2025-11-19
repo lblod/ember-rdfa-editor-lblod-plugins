@@ -25,6 +25,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/besluit-type-instances';
 import BesluitTypeForm from '@lblod/ember-rdfa-editor-lblod-plugins/components/besluit-type-plugin/besluit-type-form';
 import { setBesluitType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/set-besluit-type';
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 
 type Args = {
   controller: SayController;
@@ -69,7 +70,9 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
 
   setType = (type: BesluitTypeInstance) => {
     this.selectedTypeInstance = type;
-    this.insertIfValid();
+    if (!this.args.allowForDraftTypes) {
+      this.insertIfValid();
+    }
   };
 
   updateBesluitTypes = () => {
@@ -95,7 +98,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
     }
   };
 
-  insertIfValid() {
+  insertIfValid = () => {
     this.controller.doCommand((state, dispatch) => {
       if (!this.selectedTypeInstance || !dispatch) {
         return false;
@@ -103,6 +106,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       const { result, transaction } = setBesluitType(
         state,
         this.selectedTypeInstance,
+        this.args.allowForDraftTypes,
       );
       if (result.every((ok) => ok)) {
         dispatch(transaction);
@@ -110,7 +114,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       }
       return false;
     });
-  }
+  };
 
   <template>
     <div
@@ -187,6 +191,11 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
                 @selectedType={{this.selectedTypeInstance}}
                 @setType={{this.setType}}
               />
+              {{#if @allowForDraftTypes}}
+                <AuButton {{on 'click' this.insertIfValid}}>
+                  {{t 'common.insert'}}
+                </AuButton>
+              {{/if}}
             {{/if}}
           </Modal.Body>
         </AuModal>

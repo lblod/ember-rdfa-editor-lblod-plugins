@@ -28,7 +28,8 @@ export function setBesluitType(
 ): TransactionCombinatorResult<boolean> {
   const transaction = initialState.tr;
   const resource = getCurrentBesluitURI(initialState);
-  if (!resource || (!isValidTypeChoice(typeInstance) && !isDraftDecisionType)) {
+  const isValidType = isValidTypeChoice(typeInstance);
+  if (!resource || (!isValidType && !isDraftDecisionType)) {
     return {
       result: [false],
       initialState,
@@ -68,7 +69,7 @@ export function setBesluitType(
       },
     }),
   );
-  if (isDraftDecisionType) {
+  if (!isValidType && isDraftDecisionType) {
     monads.push(
       addPropertyToNode({
         resource,
