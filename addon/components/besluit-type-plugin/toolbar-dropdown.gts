@@ -29,6 +29,7 @@ import { setBesluitType } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/b
 type Args = {
   controller: SayController;
   options: BesluitTypePluginOptions;
+  allowForDraftTypes?: boolean;
 };
 
 export default class EditorPluginsToolbarDropdownComponent extends Component<Args> {
@@ -88,7 +89,7 @@ export default class EditorPluginsToolbarDropdownComponent extends Component<Arg
       const isDraftType = checkForDraftBesluitType(
         this.controller.mainEditorState,
       );
-      this.cardExpanded = isDraftType;
+      this.cardExpanded = !this.args.allowForDraftTypes && isDraftType;
     } else {
       this.cardExpanded = true;
     }
