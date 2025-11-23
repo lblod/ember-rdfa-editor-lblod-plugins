@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 33.2.0
+
+### Minor Changes
+
+- [#609](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/609) [`600774b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/600774bf0e678850daa2ad1c848241403eb48b6f) Thanks [@elpoelma](https://github.com/elpoelma)! - roadsign-regulation-plugin: add support for inserting mobility-measures based on VKS measure-designs
+
+- [#612](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/612) [`7aa62a0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7aa62a00aa3706fcdd37944fad5613bd8a94bc57) Thanks [@piemonkey](https://github.com/piemonkey)! - Only display structure borders when within the editor
+
 ## 33.1.0
 
 ### Minor Changes
