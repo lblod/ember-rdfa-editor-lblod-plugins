@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 33.3.0
+
+### Minor Changes
+
+- [#611](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/611) [`ad9364d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ad9364d3d274d241228887356c057f7e2af84918) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Allow the use of draft besluit types
+
 ## 33.2.0
 
 ### Minor Changes
