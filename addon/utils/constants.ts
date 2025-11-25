@@ -67,3 +67,7 @@ export const BESTUURSPERIODES = {
 export type BestuursperiodeLabel = keyof typeof BESTUURSPERIODES;
 export type BestuursperiodeURI =
   (typeof BESTUURSPERIODES)[BestuursperiodeLabel];
+export const ONDERDEEL = namespace(
+  'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#',
+  'onderdeel',
+);
