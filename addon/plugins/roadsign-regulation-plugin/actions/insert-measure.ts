@@ -7,10 +7,12 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
+import { type FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   DCT,
   EXT,
   MOBILITEIT,
+  ONDERDEEL,
   PROV,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -46,6 +48,7 @@ import {
 } from '../schemas/variable-instance';
 
 type InsertMeasureArgs = {
+  arDesignUri?: string;
   zonality: ZonalOrNot;
   temporal: boolean;
   variables: Record<
@@ -65,6 +68,7 @@ type InsertMeasureArgs = {
 );
 
 export default function insertMeasure({
+  arDesignUri,
   zonality,
   temporal,
   variables,
@@ -79,6 +83,16 @@ export default function insertMeasure({
         ? args.measureConcept
         : args.measureDesign.measureConcept;
     const measureDesign = 'measureDesign' in args && args.measureDesign;
+    const externalTriples: FullTriple[] | undefined =
+      !arDesignUri || !measureDesign
+        ? undefined
+        : [
+            {
+              subject: sayDataFactory.namedNode(arDesignUri),
+              predicate: ONDERDEEL('BevatMaatregelOntwerp').full,
+              object: sayDataFactory.namedNode(measureDesign.uri),
+            },
+          ];
     const { schema } = state;
     const signNodes = measureConcept.trafficSignalConcepts
       .filter(
@@ -156,6 +170,7 @@ export default function insertMeasure({
           // mobiliteit:periode, mobiliteit:plaatsbepaling, schema:eventSchedule, mobiliteit:type,
           // mobiliteit:verwijstNaar, mobiliteit:heeftGevolg
         ],
+        externalTriples,
       },
       [measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
     );
