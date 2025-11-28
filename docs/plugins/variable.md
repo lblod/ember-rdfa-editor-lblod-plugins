@@ -23,6 +23,7 @@ import {
   autofilledVariableView,
   codelist,
   codelistView,
+  codelist_option,
   date,
   dateView,
   location,
