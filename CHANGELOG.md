@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 33.4.0
+
+### Minor Changes
+
+- [#614](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/614) [`a3d02d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a3d02d2d456f4c9925cbd609ed14cfcb0b800195) Thanks [@piemonkey](https://github.com/piemonkey)! - When inserting traffic measures, filter 'zonebord' signs from the list
+
+- [#613](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/613) [`770636c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/770636ca8ec292930c2ff01dfcb8b20c5737251d) Thanks [@piemonkey](https://github.com/piemonkey)! - When inserting an AR design, include the link to the design in the RDFa
+
 ## 33.3.0
 
 ### Minor Changes
