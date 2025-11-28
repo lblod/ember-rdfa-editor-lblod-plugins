@@ -94,9 +94,15 @@ export default function insertMeasure({
             },
           ];
     const { schema } = state;
-    const signNodes = measureConcept.trafficSignalConcepts.map((signConcept) =>
-      constructSignalNode(signConcept, schema, zonality),
-    );
+    const signNodes = measureConcept.trafficSignalConcepts
+      .filter(
+        (signConcept) =>
+          signConcept.type !== TRAFFIC_SIGNAL_CONCEPT_TYPES.ROAD_SIGN ||
+          !signConcept.categories.some(
+            (cat) => cat.uri === ROAD_SIGN_CATEGORIES.ZONEBORD,
+          ),
+      )
+      .map((signConcept) => constructSignalNode(signConcept, schema, zonality));
     let signSection: PNode[] = [];
     if (signNodes.length) {
       const signList = schema.nodes.bullet_list.create(
