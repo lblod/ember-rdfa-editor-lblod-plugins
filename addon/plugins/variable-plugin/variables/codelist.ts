@@ -148,7 +148,7 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
     selectionStyle: {
-      default: 'single',
+      default: null,
     },
     codelist: {},
     source: {},
