@@ -3,7 +3,7 @@
 import { CodeListOption } from './fetch-data';
 import { PNode, ProseParser, SayController } from '@lblod/ember-rdfa-editor';
 import { generateVariableInstanceUri } from './variable-helpers';
-import { createCodelistOptionNode } from '../actions/create-new-codelist-variable';
+import { createCodelistOptionNode } from '../actions/create-codelist-variable';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 /**

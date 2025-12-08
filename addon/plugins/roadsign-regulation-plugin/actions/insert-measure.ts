@@ -43,7 +43,7 @@ import {
   isVariableInstance,
   VariableInstance,
 } from '../schemas/variable-instance';
-import { createCodelistVariable } from '../../variable-plugin/actions/create-new-codelist-variable';
+import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 
 type InsertMeasureArgs = {
   zonality: ZonalOrNot;

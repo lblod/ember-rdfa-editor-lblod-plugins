@@ -17,7 +17,7 @@ import { on } from '@ember/modifier';
 import { not } from 'ember-truth-helpers';
 import t from 'ember-intl/helpers/t';
 import LabelInput from '../utils/label-input';
-import { createCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-new-codelist-variable';
+import { createCodelistVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-codelist-variable';
 
 export type CodelistInsertOptions = {
   publisher?: string;
