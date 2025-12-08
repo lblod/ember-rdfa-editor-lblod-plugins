@@ -40,7 +40,7 @@ export function updateCodelistVariable(
     // @ts-expect-error fix types of variable and variableInstance
     createCodelistOptionNode({
       schema: controller.schema,
-      textContent: option.label,
+      text: option.label,
       subject: option.uri,
       ...(variable
         ? {
