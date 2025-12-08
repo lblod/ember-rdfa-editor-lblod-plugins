@@ -28,8 +28,7 @@ type CreateCodelistVariableAttrsArgs = {
   label?: string;
   source: string;
   codelist: string;
-  variable?: string;
-};
+} & AllOrNone<{ variable: string; variableInstance: string }>;
 
 export function createCodelistVariableAttrs({
   selectionStyle,
@@ -37,40 +36,9 @@ export function createCodelistVariableAttrs({
   source,
   codelist,
   variable,
-}: CreateCodelistVariableAttrsArgs) {
-  return {
-    selectionStyle,
-    source,
-    codelist,
-    label,
-    variable,
-  };
-}
-
-type CreateCodelistOptionNodeArgs = {
-  schema: Schema;
-  text: string;
-} & CreateCodelistOptionNodeAttrsArgs;
-
-export function createCodelistOptionNode(args: CreateCodelistOptionNodeArgs) {
-  const { schema, text } = args;
-  const attrs = createCodelistOptionNodeAttrs(args);
-  return schema.nodes.codelist_option.create(attrs, schema.text(text));
-}
-
-type CreateCodelistOptionNodeAttrsArgs = {
-  subject: string;
-  text: string;
-} & AllOrNone<{ variable: string; variableInstance: string }>;
-
-function createCodelistOptionNodeAttrs({
-  subject,
-  text,
-  variable,
   variableInstance,
-}: CreateCodelistOptionNodeAttrsArgs) {
+}: CreateCodelistVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -89,6 +57,44 @@ function createCodelistOptionNodeAttrs({
         object: sayDataFactory.literal('codelist'),
       },
     );
+  }
+
+  return {
+    rdfaNodeType: 'literal',
+    externalTriples,
+    selectionStyle,
+    source,
+    codelist,
+    label,
+    variable,
+    variableInstance,
+  };
+}
+
+type CreateCodelistOptionNodeArgs = {
+  schema: Schema;
+  text: string;
+} & CreateCodelistOptionNodeAttrsArgs;
+
+export function createCodelistOptionNode(args: CreateCodelistOptionNodeArgs) {
+  const { schema, text } = args;
+  const attrs = createCodelistOptionNodeAttrs(args);
+  return schema.nodes.codelist_option.create(attrs, schema.text(text));
+}
+
+type CreateCodelistOptionNodeAttrsArgs = {
+  subject: string;
+  text: string;
+  variableInstance?: string;
+};
+
+function createCodelistOptionNodeAttrs({
+  subject,
+  text,
+  variableInstance,
+}: CreateCodelistOptionNodeAttrsArgs) {
+  const backlinks: IncomingTriple[] = [];
+  if (variableInstance) {
     backlinks.push({
       subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
@@ -104,7 +110,6 @@ function createCodelistOptionNodeAttrs({
   return {
     rdfaNodeType: 'resource',
     subject,
-    externalTriples,
     properties,
     backlinks,
   };

@@ -14,6 +14,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import type { ComponentLike } from '@glint/template';
 import {
+  getRdfaContentElement,
   RdfaAttrs,
   renderRdfaAware,
 } from '@lblod/ember-rdfa-editor/core/schema';
@@ -28,27 +29,41 @@ const parseDOM: TagParseRule[] = [
   {
     tag: 'span',
     getAttrs: (node: HTMLElement) => {
-      // The parent codelist variable is not an rdfa-aware node
-      if (node.dataset['rdfaNodeType']) {
+      const attrs = getRdfaAttrs(node, { rdfaAware }) as RdfaAttrs;
+      if (!attrs) {
         return false;
       }
       if (
         node.dataset.sayVariable &&
-        node.dataset.sayVariableType === 'codelist'
+        node.dataset.sayVariableType === 'codelist' &&
+        node.dataset.sayNodeVersion === '2'
       ) {
         const label = node.dataset.label;
         const source = node.dataset.source;
         const codelist = node.dataset.codelist;
         const variable = node.dataset.variable;
+        const variableInstance = node.dataset.variableInstance;
         const selectionStyle = node.dataset.selectionStyle;
-        return { label, source, codelist, selectionStyle, variable };
+        return {
+          ...attrs,
+          label,
+          source,
+          codelist,
+          selectionStyle,
+          variable,
+          variableInstance,
+        };
       }
       return false;
     },
     getContent: (node: HTMLElement, schema: Schema) => {
+      const contentContainer = getRdfaContentElement(node);
+      if (!contentContainer) {
+        return Fragment.fromArray([]);
+      }
       // We only retrieve the `children` here, as it skips the textnodes,
       // we only want the nodes corresponding to `codelist_option` nodes.
-      const children = [...node.children].filter(
+      const children = [...contentContainer.children].filter(
         (child: HTMLElement) => child.dataset.sayType === 'codelist_option',
       );
       if (!children.length) {
@@ -75,6 +90,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     humanReadableContent,
     selectionStyle,
     variable,
+    variableInstance,
   } = node.attrs;
   const className = humanReadableContent ? '' : ' say-variable';
   const codelist_option_nodes = node.content.content;
@@ -95,20 +111,23 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       contentArray.push(', ');
     }
   }
-  return [
-    'span',
-    {
+  return renderRdfaAware({
+    renderable: node,
+    tag: 'span',
+    attrs: {
       class: `${getClassnamesFromNode(node)}${className}`,
       'data-say-variable': 'true',
       'data-say-variable-type': 'codelist',
+      'data-say-node-version': '2',
       'data-label': label as string | null,
       'data-codelist': codelist as string,
       'data-source': source as string,
       'data-selection-style': selectionStyle as string,
       'data-variable': variable as string,
+      'data-variable-instance': variableInstance as string,
     },
-    ...(contentArray.length ? contentArray : [label]),
-  ];
+    contentArray: contentArray.length ? contentArray : [label],
+  });
 };
 
 const emberNodeConfig: EmberNodeConfig = {
@@ -124,6 +143,7 @@ const emberNodeConfig: EmberNodeConfig = {
   needsFFKludge: true,
   selectable: true,
   attrs: {
+    ...rdfaAttrSpec({ rdfaAware }),
     label: {
       default: null,
     },
@@ -133,6 +153,9 @@ const emberNodeConfig: EmberNodeConfig = {
     codelist: {},
     source: {},
     variable: {
+      default: null,
+    },
+    variableInstance: {
       default: null,
     },
   },

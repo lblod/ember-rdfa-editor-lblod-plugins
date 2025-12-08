@@ -2,7 +2,6 @@
 
 import { CodeListOption } from './fetch-data';
 import { PNode, ProseParser, SayController } from '@lblod/ember-rdfa-editor';
-import { generateVariableInstanceUri } from './variable-helpers';
 import { createCodelistOptionNode } from '../actions/create-codelist-variable';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
@@ -33,23 +32,15 @@ export function updateCodelistVariable(
   const selectedOptions = Array.isArray(selectedOption)
     ? selectedOption
     : [selectedOption];
-  const variable = selectedCodelist.node.attrs['variable'] as
+  const variableInstance = selectedCodelist.node.attrs['variableInstance'] as
     | string
     | undefined;
   const codelistOptionNodes = selectedOptions.map((option) =>
-    // @ts-expect-error fix types of variable and variableInstance
     createCodelistOptionNode({
       schema: controller.schema,
       text: option.label,
       subject: option.uri,
-      ...(variable
-        ? {
-            variable,
-            variableInstance: generateVariableInstanceUri({
-              templateMode: false,
-            }),
-          }
-        : {}),
+      variableInstance,
     }),
   );
   const range = {

@@ -56,6 +56,7 @@ const parseDOM = [
         node.dataset.sayVariable &&
         (node.dataset.sayVariableType === 'codelist' ||
           node.dataset.sayVariableType === 'legacy_codelist') &&
+        (!node.dataset.sayNodeVersion || node.dataset.sayNodeVersion === '1') &&
         node.querySelector(CONTENT_SELECTOR)
       ) {
         const label = node.dataset.label;
@@ -210,6 +211,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       class: `${getClassnamesFromNode(node)}${className}`,
       'data-say-variable': 'true',
       'data-say-variable-type': 'legacy_codelist',
+      'data-say-node-version': '1',
       'data-selection-style': selectionStyle as string,
       'data-label': label as string | null,
       'data-codelist': codelist as string,
