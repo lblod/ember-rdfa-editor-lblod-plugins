@@ -1,5 +1,27 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 33.4.0
+
+### Minor Changes
+
+- [#614](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/614) [`a3d02d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a3d02d2d456f4c9925cbd609ed14cfcb0b800195) Thanks [@piemonkey](https://github.com/piemonkey)! - When inserting traffic measures, filter 'zonebord' signs from the list
+
+- [#613](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/613) [`770636c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/770636ca8ec292930c2ff01dfcb8b20c5737251d) Thanks [@piemonkey](https://github.com/piemonkey)! - When inserting an AR design, include the link to the design in the RDFa
+
+## 33.3.0
+
+### Minor Changes
+
+- [#611](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/611) [`ad9364d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ad9364d3d274d241228887356c057f7e2af84918) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Allow the use of draft besluit types
+
+## 33.2.0
+
+### Minor Changes
+
+- [#609](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/609) [`600774b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/600774bf0e678850daa2ad1c848241403eb48b6f) Thanks [@elpoelma](https://github.com/elpoelma)! - roadsign-regulation-plugin: add support for inserting mobility-measures based on VKS measure-designs
+
+- [#612](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/612) [`7aa62a0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7aa62a00aa3706fcdd37944fad5613bd8a94bc57) Thanks [@piemonkey](https://github.com/piemonkey)! - Only display structure borders when within the editor
+
 ## 33.1.0
 
 ### Minor Changes
