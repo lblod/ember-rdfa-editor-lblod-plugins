@@ -61,6 +61,7 @@ import {
   number,
   text_variable,
   address,
+  codelist_option,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { templateComment } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
@@ -102,6 +103,7 @@ export const SAMPLE_SCHEMA = new Schema({
     number,
     location,
     codelist,
+    codelist_option,
     address,
     structure: structureWithConfig(),
     heading: headingWithConfig({ rdfaAware: false }),
