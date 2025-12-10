@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 34.0.0
+
+### Major Changes
+
+- [#610](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/610) [`2f70345`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2f7034552c477920d75ebf9dfff0f84bac7fba9a) Thanks [@elpoelma](https://github.com/elpoelma)! - Introduce new `codelist` variable which stores either a single or multiple `codelist_option` nodes.
+  Each `codelist_option` node is a resource node which represents a selected codelist-option, and a variable instance.
+  The `codelist` variable node itself is more of a container node and does not store any RDFa.
+  The old `codelist` variable node is renamed to `legacy_codelist`, and can still be used with the existing `codelist-edit` widget.
+  `legacy_codelist` nodes will not be automatically converted to new `codelist` nodes, as we lack the necessary information to do so (codelist-option URIs).
+
 ## 33.4.0
 
 ### Minor Changes
