@@ -1,8 +1,9 @@
 // This file contains helpers for both the codelist and location variable types
 
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { CodeListOption } from './fetch-data';
 import { PNode, ProseParser, SayController } from '@lblod/ember-rdfa-editor';
+import { createCodelistOptionNode } from '../actions/create-codelist-variable';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 /**
  *
@@ -28,11 +29,45 @@ export function updateCodelistVariable(
   selectedOption: CodeListOption | CodeListOption[],
   controller: SayController,
 ) {
+  const selectedOptions = Array.isArray(selectedOption)
+    ? selectedOption
+    : [selectedOption];
+  const variableInstance = selectedCodelist.node.attrs['variableInstance'] as
+    | string
+    | undefined;
+  const codelistOptionNodes = selectedOptions.map((option) =>
+    createCodelistOptionNode({
+      schema: controller.schema,
+      text: option.label,
+      subject: option.uri,
+      variableInstance,
+    }),
+  );
+  const range = {
+    from: selectedCodelist.pos + 1,
+    to: selectedCodelist.pos + selectedCodelist.node.nodeSize - 1,
+  };
+  controller.withTransaction((tr) => {
+    return tr.replaceWith(range.from, range.to, codelistOptionNodes);
+  });
+}
+
+/**
+ * @deprecated use `updateCodelistVariable` instead
+ */
+export function updateCodelistVariableLegacy(
+  selectedCodelist: {
+    node: PNode;
+    pos: number;
+  },
+  selectedOption: CodeListOption | CodeListOption[],
+  controller: SayController,
+) {
   let htmlToInsert: string;
   if (Array.isArray(selectedOption)) {
-    htmlToInsert = selectedOption.map((option) => option.value).join(', ');
+    htmlToInsert = selectedOption.map((option) => option.label).join(', ');
   } else {
-    htmlToInsert = unwrap(selectedOption.value);
+    htmlToInsert = unwrap(selectedOption.label);
   }
   htmlToInsert = wrapVariableInHighlight(htmlToInsert);
   const domParser = new DOMParser();

@@ -55,8 +55,6 @@ import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
 import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
 import {
-  codelist,
-  codelistView,
   date,
   dateView,
   number,
@@ -120,6 +118,15 @@ import { structureViewWithConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/
 import { RdfaVisualizerConfig } from '@lblod/ember-rdfa-editor/plugins/rdfa-info';
 import { firefoxCursorFix } from '@lblod/ember-rdfa-editor/plugins/firefox-cursor-fix';
 import { chromeHacksPlugin } from '@lblod/ember-rdfa-editor/plugins/chrome-hacks-plugin';
+import {
+  codelist,
+  codelist_option,
+  codelistView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/codelist';
+import {
+  legacy_codelist,
+  legacyCodelistView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
 
 export default class SnippetEditController extends Controller {
   queryParams = ['editableNodes'];
@@ -184,7 +191,9 @@ export default class SnippetEditController extends Controller {
       text_variable,
       person_variable,
       number,
+      legacy_codelist,
       codelist,
+      codelist_option,
       // TODO switch this for using structureWithConfig directly. This is left here for now to show
       // the 'backwards compatible' move away from the article-structure-plugin...
       ...STRUCTURE_NODES,
@@ -340,6 +349,7 @@ export default class SnippetEditController extends Controller {
       date: dateView(this.config.date)(controller),
       text_variable: textVariableView(controller),
       number: numberView(controller),
+      legacy_codelist: legacyCodelistView(controller),
       codelist: codelistView(controller),
       templateComment: templateCommentView(controller),
       person_variable: personVariableView(controller),

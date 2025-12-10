@@ -117,7 +117,10 @@ module('plugin | variable plugin', function () {
     controller.initialize(htmlContent);
     const { doc } = controller.mainEditorState;
 
-    const codelistNode: PNode | undefined = findNodesOfType(doc, 'codelist')[0];
+    const codelistNode: PNode | undefined = findNodesOfType(
+      doc,
+      'legacy_codelist',
+    )[0];
     assert.ok(codelistNode, 'should contain codelist node');
     assert.strictEqual(codelistNode?.attrs?.codelist, 'UNKNOWN');
   });
@@ -225,7 +228,10 @@ module('plugin | variable plugin', function () {
     );
     controller.initialize(htmlContent);
     const { doc } = controller.mainEditorState;
-    const codelistNode: PNode | undefined = findNodesOfType(doc, 'codelist')[0];
+    const codelistNode: PNode | undefined = findNodesOfType(
+      doc,
+      'legacy_codelist',
+    )[0];
     assert.ok(codelistNode, 'should contain codelist node');
     assert.strictEqual(codelistNode?.attrs?.codelist, CODELIST_URI);
   });
@@ -301,7 +307,7 @@ module('plugin | variable plugin', function () {
     controller.initialize(htmlContent);
     const codelistNode: PNode | undefined = findNodesOfType(
       controller.mainEditorState.doc,
-      'codelist',
+      'legacy_codelist',
     )[0];
     assert.strictEqual(codelistNode.attrs['source'], 'UNKNOWN');
     assert.strictEqual(codelistNode.attrs['codelist'], 'UNKNOWN');

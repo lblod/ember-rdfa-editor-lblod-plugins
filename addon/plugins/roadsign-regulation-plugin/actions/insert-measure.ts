@@ -38,7 +38,6 @@ import { createTextVariable } from '../../variable-plugin/actions/create-text-va
 import { generateVariableInstanceUri } from '../../variable-plugin/utils/variable-helpers';
 import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
 import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
-import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
 import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
@@ -46,6 +45,7 @@ import {
   isVariableInstance,
   VariableInstance,
 } from '../schemas/variable-instance';
+import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 
 type InsertMeasureArgs = {
   arDesignUri?: string;

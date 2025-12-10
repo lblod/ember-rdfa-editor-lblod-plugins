@@ -1,53 +1,44 @@
 import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   DCT,
-  MOBILITEIT,
   RDF,
+  SKOS,
   VARIABLES,
-  XSD,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { AllOrNone } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 import {
   FullTriple,
   IncomingTriple,
+  OutgoingTriple,
 } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type CreateCodelistVariableArgs = {
   schema: Schema;
-  value?: string;
 } & CreateCodelistVariableAttrsArgs;
 
 export function createCodelistVariable(args: CreateCodelistVariableArgs) {
-  const { schema, value, label } = args;
+  const { schema } = args;
   const attrs = createCodelistVariableAttrs(args);
-  return schema.nodes.codelist.create(
-    attrs,
-    value
-      ? schema.text(value)
-      : schema.node('placeholder', {
-          placeholderText: label,
-        }),
-  );
+  return schema.nodes.codelist.create(attrs);
 }
 
 type CreateCodelistVariableAttrsArgs = {
+  selectionStyle?: 'single' | 'multi';
   label?: string;
-  source?: string;
-  codelist?: string;
-  selectionStyle?: string;
+  source: string;
+  codelist: string;
 } & AllOrNone<{ variable: string; variableInstance: string }>;
 
 export function createCodelistVariableAttrs({
-  variable,
-  variableInstance,
+  selectionStyle,
   label,
   source,
   codelist,
-  selectionStyle,
+  variable,
+  variableInstance,
 }: CreateCodelistVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -66,34 +57,60 @@ export function createCodelistVariableAttrs({
         object: sayDataFactory.literal('codelist'),
       },
     );
-    if (codelist) {
-      externalTriples.push({
-        subject: sayDataFactory.namedNode(variableInstance),
-        predicate: MOBILITEIT('codelijst').full,
-        object: sayDataFactory.namedNode(codelist),
-      });
-    }
-    if (source) {
-      externalTriples.push({
-        subject: sayDataFactory.namedNode(variableInstance),
-        predicate: DCT('source').full,
-        object: sayDataFactory.namedNode(source),
-      });
-    }
+  }
+
+  return {
+    rdfaNodeType: 'literal',
+    externalTriples,
+    selectionStyle,
+    source,
+    codelist,
+    label,
+    variable,
+    variableInstance,
+  };
+}
+
+type CreateCodelistOptionNodeArgs = {
+  schema: Schema;
+  text: string;
+} & CreateCodelistOptionNodeAttrsArgs;
+
+export function createCodelistOptionNode(args: CreateCodelistOptionNodeArgs) {
+  const { schema, text } = args;
+  const attrs = createCodelistOptionNodeAttrs(args);
+  return schema.nodes.codelist_option.create(attrs, schema.text(text));
+}
+
+type CreateCodelistOptionNodeAttrsArgs = {
+  subject: string;
+  text: string;
+  variableInstance?: string;
+};
+
+function createCodelistOptionNodeAttrs({
+  subject,
+  text,
+  variableInstance,
+}: CreateCodelistOptionNodeAttrsArgs) {
+  const backlinks: IncomingTriple[] = [];
+  if (variableInstance) {
     backlinks.push({
       subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
     });
   }
+  const properties: OutgoingTriple[] = [
+    {
+      predicate: SKOS('prefLabel').full,
+      object: sayDataFactory.literal(text),
+    },
+  ];
 
   return {
-    rdfaNodeType: 'literal',
-    datatype: XSD('string').namedNode,
-    externalTriples,
+    rdfaNodeType: 'resource',
+    subject,
+    properties,
     backlinks,
-    source,
-    codelist,
-    label,
-    selectionStyle,
   };
 }

@@ -61,12 +61,14 @@ import {
   number,
   text_variable,
   address,
+  codelist_option,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { templateComment } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/template-comments-plugin';
 import { date } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/date';
 import { redacted } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/confidentiality-plugin/marks/redacted';
 import { inlineRdfaWithConfig } from '@lblod/ember-rdfa-editor/nodes/inline-rdfa';
 import { structureWithConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import { legacy_codelist } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
 
 export const SAMPLE_SCHEMA = new Schema({
   nodes: {
@@ -101,7 +103,9 @@ export const SAMPLE_SCHEMA = new Schema({
     text_variable,
     number,
     location,
+    legacy_codelist,
     codelist,
+    codelist_option,
     address,
     structure: structureWithConfig(),
     heading: headingWithConfig({ rdfaAware: false }),
