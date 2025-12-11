@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 34.0.1
+
+### Patch Changes
+
+- [#615](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/615) [`29ed983`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/29ed98336174e12667195f4b28cb9502b10cb479) Thanks [@elpoelma](https://github.com/elpoelma)! - Add missing `toDOM` method to `codelist_option` nodespec
+
 ## 34.0.0
 
 ### Major Changes
