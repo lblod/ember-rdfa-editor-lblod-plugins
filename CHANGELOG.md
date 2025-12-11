@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 34.0.2
+
+### Patch Changes
+
+- [`49c09bd`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/49c09bd0836b639afbfb8056807c3e8e765349f2) Thanks [@elpoelma](https://github.com/elpoelma)! - codelist: fix issue with `selectedCodelistOption` in case of multi-select codelist
+
 ## 34.0.1
 
 ### Patch Changes
