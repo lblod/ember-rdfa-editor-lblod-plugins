@@ -22,6 +22,7 @@ import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import SayNodeSpec from '@lblod/ember-rdfa-editor/core/say-node-spec';
 import CodelistNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/nodeview';
+import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const rdfaAware = true;
 
@@ -98,14 +99,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   for (let i = 0; i < codelist_option_nodes.length; i++) {
     const codelist_option_node = codelist_option_nodes[i];
     contentArray.push(
-      renderRdfaAware({
-        renderable: codelist_option_node,
-        attrs: {
-          'data-say-type': 'codelist_option',
-        },
-        tag: 'span',
-        content: codelist_option_node.textContent,
-      }),
+      unwrap(codelist_option_node.type.spec.toDOM)(codelist_option_node),
     );
     if (i !== codelist_option_nodes.length - 1) {
       contentArray.push(', ');
@@ -176,5 +170,15 @@ export const codelist_option: SayNodeSpec = {
   draggable: false,
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
+  },
+  toDOM: (node) => {
+    return renderRdfaAware({
+      renderable: node,
+      attrs: {
+        'data-say-type': 'codelist_option',
+      },
+      tag: 'span',
+      content: node.textContent,
+    });
   },
 };
