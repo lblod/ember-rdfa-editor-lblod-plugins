@@ -112,6 +112,14 @@ export default class CodelistEditComponent extends Component<Sig> {
     // TODO: convert this back to a `trackedReset` (or an alternative) once possible.
     this.selectedCodelistOption = undefined;
     const codelistNode = this.selectedCodelist?.node;
+    let multiSelect: boolean;
+    const localSelectionStyle = this.selectedCodelist?.node.attrs
+      .selectionStyle as string;
+    if (localSelectionStyle) {
+      multiSelect = localSelectionStyle === 'multi';
+    } else {
+      multiSelect = result?.type === MULTI_SELECT_CODELIST_TYPE;
+    }
     if (
       !this.isLegacyCodelist &&
       codelistNode &&
@@ -121,7 +129,7 @@ export default class CodelistEditComponent extends Component<Sig> {
         uri: child.attrs['subject'],
         label: child.textContent,
       }));
-      this.selectedCodelistOption = this.multiSelect ? options : options[0];
+      this.selectedCodelistOption = multiSelect ? options : options[0];
     } else {
       this.selectedCodelistOption = undefined;
     }
