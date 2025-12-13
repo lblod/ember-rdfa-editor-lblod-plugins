@@ -3,7 +3,6 @@ import { z } from 'zod';
 const BaseVariableSchema = z.object({
   uri: z.string(),
   label: z.string(),
-  source: z.string(),
 });
 export const TextVariableSchema = BaseVariableSchema.extend({
   type: z.literal('text'),
@@ -22,12 +21,14 @@ export const DateVariableSchema = BaseVariableSchema.extend({
 
 export const CodelistVariableSchema = BaseVariableSchema.extend({
   type: z.literal('codelist'),
+  source: z.string(),
   defaultValue: z.string().optional(),
   codelistUri: z.string(),
 });
 
 export const LocationVariableSchema = BaseVariableSchema.extend({
   type: z.literal('location'),
+  source: z.string(),
   defaultValue: z.string().optional(),
 });
 
