@@ -16,18 +16,18 @@ import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 type CreateCodelistVariableArgs = {
   schema: Schema;
   value?: string;
+  valueLabel?: string;
 } & CreateCodelistVariableAttrsArgs;
 
 export function createCodelistVariable(args: CreateCodelistVariableArgs) {
   const { schema } = args;
   const attrs = createCodelistVariableAttrs(args);
-  if (args.value) {
+  if (args.value && args.valueLabel) {
     const codelistOption = createCodelistOptionNode({
       schema,
       subject: args.value,
       variableInstance: args.variableInstance,
-      // TODO: this is wrong, we need the skos:prefLabel of the codelist-option uri
-      text: args.label || '',
+      text: args.valueLabel,
     });
     return schema.nodes.codelist.create(attrs, [codelistOption]);
   }

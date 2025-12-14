@@ -34,6 +34,7 @@ const LocationVariableInstanceSchema = BaseVariableInstanceSchema.extend({
 
 const CodelistVariableInstanceSchema = BaseVariableInstanceSchema.extend({
   value: z.string().optional(),
+  valueLabel: z.string().optional(),
   variable: CodelistVariableSchema,
 });
 
