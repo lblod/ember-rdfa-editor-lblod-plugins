@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 34.1.0
+
+### Minor Changes
+
+- [#617](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/617) [`b77f866`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b77f866cde0afa81671fcd8378d735eb747afa90) Thanks [@abeforgit](https://github.com/abeforgit)! - Automatically instantiate codelist options when possible
+
 ## 34.0.2
 
 ### Patch Changes
