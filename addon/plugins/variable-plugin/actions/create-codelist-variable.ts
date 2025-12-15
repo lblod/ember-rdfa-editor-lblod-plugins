@@ -15,11 +15,22 @@ import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 
 type CreateCodelistVariableArgs = {
   schema: Schema;
+  value?: string;
+  valueLabel?: string;
 } & CreateCodelistVariableAttrsArgs;
 
 export function createCodelistVariable(args: CreateCodelistVariableArgs) {
   const { schema } = args;
   const attrs = createCodelistVariableAttrs(args);
+  if (args.value && args.valueLabel) {
+    const codelistOption = createCodelistOptionNode({
+      schema,
+      subject: args.value,
+      variableInstance: args.variableInstance,
+      text: args.valueLabel,
+    });
+    return schema.nodes.codelist.create(attrs, [codelistOption]);
+  }
   return schema.nodes.codelist.create(attrs);
 }
 
@@ -85,6 +96,7 @@ export function createCodelistOptionNode(args: CreateCodelistOptionNodeArgs) {
 type CreateCodelistOptionNodeAttrsArgs = {
   subject: string;
   text: string;
+  value?: string;
   variableInstance?: string;
 };
 

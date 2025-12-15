@@ -341,6 +341,10 @@ function constructVariableNode(
     variable: variable.uri,
     variableInstance: variableInstance.uri,
     value: valueStr,
+    valueLabel:
+      'valueLabel' in variableInstance
+        ? variableInstance.valueLabel
+        : undefined,
     label: variable.label,
   };
   switch (variable.type) {
