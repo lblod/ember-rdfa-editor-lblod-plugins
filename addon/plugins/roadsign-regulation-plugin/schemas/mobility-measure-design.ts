@@ -4,10 +4,14 @@ import {
   type MobilityMeasureConcept,
   MobilityMeasureConceptSchema,
 } from './mobility-measure-concept';
+import { TrafficSignalConceptSchema } from './traffic-signal-concept';
 
 export const MobilityMeasureDesignSchema = z.object({
   uri: z.string(),
-  trafficSignals: z.array(TrafficSignalSchema),
+  trafficSignals: z.union([
+    z.array(TrafficSignalSchema),
+    z.array(TrafficSignalConceptSchema),
+  ]),
   measureConcept: MobilityMeasureConceptSchema,
 });
 
