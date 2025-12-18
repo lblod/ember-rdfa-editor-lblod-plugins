@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 34.1.1
+
+### Patch Changes
+
+- [`ea58ba1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ea58ba1cebf5d69c4f1d784c524a13c1dfe6034e) Thanks [@abeforgit](https://github.com/abeforgit)! - Allow insertMeasure to take in ar-designs with concepts instead of signs
+
 ## 34.1.0
 
 ### Minor Changes
