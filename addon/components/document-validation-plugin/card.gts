@@ -176,12 +176,14 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
             as |error|
           }}
             <div class='say-document-validation__error-container'>
-              <AuIcon
-                @icon={{CloseFilledIcon}}
-                @size='large'
-                @ariaHidden={{true}}
-                class='say-document-validation__icon-error au-u-margin-right-small'
-              />
+              <div class='au-u-margin-right-small'>
+                <AuIcon
+                  @icon={{CloseFilledIcon}}
+                  @size='large'
+                  @ariaHidden={{true}}
+                  class='say-document-validation__icon-error'
+                />
+              </div>
               <div>
                 {{error.message}}
                 <AuButton
