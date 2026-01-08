@@ -94,13 +94,14 @@ async function _queryMobilityMeasures<Count extends boolean>(
   const filterStatement = _buildFilters(options).join('\n');
   const orderBindings = !count
     ? `
+      BIND(strlen(str(?label)) AS ?labelLength)
       BIND(REPLACE(?label, "^(\\\\D+).*", "$1", "i") AS ?firstLetters)
       BIND(xsd:decimal(REPLACE(?label, "^\\\\D+(\\\\d*\\\\.?\\\\d*).*", "$1", "i")) AS ?number)
       BIND(REPLACE(?label, "^\\\\D+\\\\d*\\\\.?\\\\d*(.*)", "$1", "i") AS ?secondLetters)
     `
     : '';
   const orderByStatement = !count
-    ? /* sparql */ `ORDER BY ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))`
+    ? /* sparql */ `ORDER BY ASC(?labelLength) ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))`
     : '';
   const paginationStatement = !count
     ? /* sparql */ `LIMIT ${pageSize} OFFSET ${page * pageSize}`
