@@ -17,7 +17,6 @@ import {
   updateCodelistVariable,
   updateCodelistVariableLegacy,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/codelist-utils';
-import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
@@ -26,6 +25,7 @@ import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
 import { tracked } from '@glimmer/tracking';
+import { CodelistAttrs } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
 export type CodelistEditOptions = {
   endpoint: string;
@@ -68,10 +68,17 @@ export default class CodelistEditComponent extends Component<Sig> {
     return;
   }
 
-  get source() {
+  get codelistAttrs() {
     if (this.selectedCodelist) {
       const { node } = this.selectedCodelist;
-      const source = node.attrs['source'] as Option<string>;
+      return node.attrs as CodelistAttrs;
+    }
+    return;
+  }
+
+  get source() {
+    if (this.codelistAttrs) {
+      const source = this.codelistAttrs['source'];
       if (source && source !== 'UNKNOWN') {
         return source;
       }
@@ -80,9 +87,8 @@ export default class CodelistEditComponent extends Component<Sig> {
   }
 
   get codelistUri() {
-    if (this.selectedCodelist) {
-      const { node } = this.selectedCodelist;
-      const codelistUri = node.attrs['codelist'] as Option<string>;
+    if (this.codelistAttrs) {
+      const codelistUri = this.codelistAttrs['codelist'];
       if (codelistUri) {
         return codelistUri;
       }
@@ -95,7 +101,7 @@ export default class CodelistEditComponent extends Component<Sig> {
   }
 
   get label() {
-    return this.selectedCodelist?.node.attrs.label as string | undefined;
+    return this.codelistAttrs?.label;
   }
 
   get schema() {
@@ -104,6 +110,12 @@ export default class CodelistEditComponent extends Component<Sig> {
 
   codelistOptions = trackedFunction(this, async () => {
     let result: CodeListOptions | undefined;
+    if (this.codelistAttrs?.hardcodedOptionList) {
+      return {
+        type: '',
+        options: this.codelistAttrs.hardcodedOptionList,
+      } as CodeListOptions;
+    }
     if (this.source && this.codelistUri) {
       result = await fetchCodeListOptions(this.source, this.codelistUri);
     }
@@ -138,8 +150,7 @@ export default class CodelistEditComponent extends Component<Sig> {
   });
 
   get multiSelect() {
-    const localStyle = this.selectedCodelist?.node.attrs
-      .selectionStyle as string;
+    const localStyle = this.codelistAttrs?.selectionStyle;
     if (localStyle) {
       return localStyle === 'multi';
     } else

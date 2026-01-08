@@ -220,6 +220,9 @@ variable:
     label: persoon
   autofilled:
     label: automatisch ingevuld
+  marcode:
+    insert: Marcode invoegen
+    label: Marcode
 variable-plugin:
   insert-variable: Voeg variabele in
   button: Voeg in

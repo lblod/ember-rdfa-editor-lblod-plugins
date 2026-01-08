@@ -12,6 +12,8 @@ import {
   OutgoingTriple,
 } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import { CodelistAttrs } from '../variables';
+import { CodeListOption } from '../utils/fetch-data';
 
 type CreateCodelistVariableArgs = {
   schema: Schema;
@@ -39,6 +41,7 @@ type CreateCodelistVariableAttrsArgs = {
   label?: string;
   source: string;
   codelist: string;
+  hardcodedOptionList?: CodeListOption[];
 } & AllOrNone<{ variable: string; variableInstance: string }>;
 
 export function createCodelistVariableAttrs({
@@ -48,6 +51,7 @@ export function createCodelistVariableAttrs({
   codelist,
   variable,
   variableInstance,
+  hardcodedOptionList,
 }: CreateCodelistVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
   if (variable) {
@@ -79,7 +83,8 @@ export function createCodelistVariableAttrs({
     label,
     variable,
     variableInstance,
-  };
+    hardcodedOptionList,
+  } as CodelistAttrs;
 }
 
 type CreateCodelistOptionNodeArgs = {

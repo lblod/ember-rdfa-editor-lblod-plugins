@@ -22,7 +22,22 @@ import { recreateVariableUris } from '../utils/recreate-variable-uris';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import SayNodeSpec from '@lblod/ember-rdfa-editor/core/say-node-spec';
 import CodelistNodeviewComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/codelist/nodeview';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import {
+  Option,
+  unwrap,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { jsonParse } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import { CodeListOption } from '../utils/fetch-data';
+
+export type CodelistAttrs = {
+  label: Option<string>;
+  source: Option<string>;
+  codelist: Option<string>;
+  variable: Option<string>;
+  variableInstance: Option<string>;
+  selectionStyle: Option<string>;
+  hardcodedOptionList: Option<CodeListOption[]>;
+};
 
 const rdfaAware = true;
 
@@ -45,6 +60,9 @@ const parseDOM: TagParseRule[] = [
         const variable = node.dataset.variable;
         const variableInstance = node.dataset.variableInstance;
         const selectionStyle = node.dataset.selectionStyle;
+        const hardcodedOptionList = jsonParse(
+          node.dataset.optionList,
+        ) as Option<CodeListOption[]>;
         return {
           ...attrs,
           label,
@@ -53,7 +71,8 @@ const parseDOM: TagParseRule[] = [
           selectionStyle,
           variable,
           variableInstance,
-        };
+          hardcodedOptionList,
+        } satisfies CodelistAttrs;
       }
       return false;
     },
@@ -92,6 +111,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
     selectionStyle,
     variable,
     variableInstance,
+    hardcodedOptionList,
   } = node.attrs;
   const className = humanReadableContent ? '' : ' say-variable';
   const codelist_option_nodes = node.content.content;
@@ -119,6 +139,7 @@ const toDOM = (node: PNode): DOMOutputSpec => {
       'data-selection-style': selectionStyle as string,
       'data-variable': variable as string,
       'data-variable-instance': variableInstance as string,
+      'data-option-list': JSON.stringify(hardcodedOptionList),
     },
     contentArray: contentArray.length ? contentArray : [label],
   });
@@ -150,6 +171,9 @@ const emberNodeConfig: EmberNodeConfig = {
       default: null,
     },
     variableInstance: {
+      default: null,
+    },
+    hardcodedOptionList: {
       default: null,
     },
   },
