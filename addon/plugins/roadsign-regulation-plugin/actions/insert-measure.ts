@@ -46,6 +46,7 @@ import {
   VariableInstance,
 } from '../schemas/variable-instance';
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
+import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
 
 type InsertMeasureArgs = {
   arDesignUri?: string;
@@ -135,7 +136,7 @@ export default function insertMeasure({
         rdfaNodeType: 'resource',
         subject: measureUri,
         __rdfaId: uuid(),
-        label: `Mobiliteitsmaatregel ${measureConcept.label}`,
+        label: `Mobiliteitsmaatregel ${removeZFromLabel(measureConcept.label)}`,
         properties: [
           {
             predicate: RDF('type').full,

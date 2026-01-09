@@ -20,6 +20,7 @@ import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
 import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
+import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
 
 type Signature = {
   Args: {
@@ -90,7 +91,7 @@ export default class RoadSignsTable extends Component<Signature> {
                   {{on 'click' (fn this.selectRow measureConcept.uri)}}
                 >
                   <td>
-                    <p>{{measureConcept.label}}</p>
+                    <p>{{removeZFromLabel measureConcept.label}}</p>
                   </td>
                   <td>
                     <div class='au-o-grid au-o-grid--tiny'>
@@ -99,24 +100,26 @@ export default class RoadSignsTable extends Component<Signature> {
                         as |signalConcept|
                       }}
                         <div class='au-o-grid__item au-u-1-3'>
-                          {{#if signalConcept.image}}
-                            <img
-                              src={{signalConcept.image}}
-                              alt={{t
-                                'editor-plugins.roadsign-regulation.table.content.image.alt'
-                                code=signalConcept.code
-                              }}
-                              class='au-c-data-table__image'
-                            />
-                          {{else}}
-                            <AuPill
-                              @skin='border'
-                              @size='small'
-                              @draft={{true}}
-                            >
-                              {{signalConcept.code}}
-                            </AuPill>
-                          {{/if}}
+                          {{#unless (eq signalConcept.code 'Z')}}
+                            {{#if signalConcept.image}}
+                              <img
+                                src={{signalConcept.image}}
+                                alt={{t
+                                  'editor-plugins.roadsign-regulation.table.content.image.alt'
+                                  code=signalConcept.code
+                                }}
+                                class='au-c-data-table__image'
+                              />
+                            {{else}}
+                              <AuPill
+                                @skin='border'
+                                @size='small'
+                                @draft={{true}}
+                              >
+                                {{signalConcept.code}}
+                              </AuPill>
+                            {{/if}}
+                          {{/unless}}
                         </div>
                       {{/each}}
                     </div>
