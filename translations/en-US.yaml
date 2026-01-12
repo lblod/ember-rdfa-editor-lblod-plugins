@@ -216,6 +216,9 @@ variable:
     label: person
   autofilled:
     label: autofilled
+  marcode:
+    insert: Insert marcode
+    label: Marcode
 variable-plugin:
   insert-variable: Insert variable
   button: Insert
