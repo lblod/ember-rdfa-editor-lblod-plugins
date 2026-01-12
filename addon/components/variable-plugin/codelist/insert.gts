@@ -24,10 +24,13 @@ export type CodelistInsertOptions = {
   endpoint: string;
 };
 
-type Args = {
-  controller: SayController;
-  options: CodelistInsertOptions;
-  templateMode?: boolean;
+type Sig = {
+  Args: {
+    controller: SayController;
+    options: CodelistInsertOptions;
+    templateMode?: boolean;
+    fixedCodelist?: CodeList;
+  };
 };
 
 interface SelectStyle {
@@ -35,11 +38,15 @@ interface SelectStyle {
   value: 'single' | 'multi';
 }
 
-export default class CodelistInsertComponent extends Component<Args> {
+export default class CodelistInsertComponent extends Component<Sig> {
   @service declare intl: IntlService;
   @tracked selectedCodelist?: CodeList;
   @tracked label: string = '';
   @tracked selectedStyleValue: 'single' | 'multi' = 'single';
+
+  get codelistToInsert() {
+    return this.args.fixedCodelist ?? this.selectedCodelist;
+  }
 
   get controller() {
     return this.args.controller;
@@ -90,13 +97,13 @@ export default class CodelistInsertComponent extends Component<Args> {
 
   @action
   insert() {
-    const codelistResource = this.selectedCodelist?.uri;
+    const codelistResource = this.codelistToInsert?.uri;
     if (!codelistResource) {
       return;
     }
     const label =
       this.label ??
-      this.selectedCodelist?.label ??
+      this.codelistToInsert?.label ??
       this.intl.t('variable.codelist.label', {
         locale: this.documentLanguage,
       });
@@ -127,17 +134,19 @@ export default class CodelistInsertComponent extends Component<Args> {
 
   <template>
     {{#if this.codelistData.value}}
-      <PowerSelect
-        @allowClear={{false}}
-        @searchEnabled={{true}}
-        @searchField='label'
-        @options={{this.codelistData.value}}
-        @selected={{this.selectedCodelist}}
-        @onChange={{this.selectCodelist}}
-        as |codelist|
-      >
-        {{codelist.label}}
-      </PowerSelect>
+      {{#unless @fixedCodelist}}
+        <PowerSelect
+          @allowClear={{false}}
+          @searchEnabled={{true}}
+          @searchField='label'
+          @options={{this.codelistData.value}}
+          @selected={{this.selectedCodelist}}
+          @onChange={{this.selectCodelist}}
+          as |codelist|
+        >
+          {{codelist.label}}
+        </PowerSelect>
+      {{/unless}}
       <PowerSelect
         @allowClear={{false}}
         @searchEnabled={{false}}
@@ -153,7 +162,7 @@ export default class CodelistInsertComponent extends Component<Args> {
       </AuFormRow>
       <AuButton
         {{on 'click' this.insert}}
-        @disabled={{not this.selectedCodelist}}
+        @disabled={{not this.codelistToInsert}}
       >
         {{t 'variable-plugin.button'}}
       </AuButton>
