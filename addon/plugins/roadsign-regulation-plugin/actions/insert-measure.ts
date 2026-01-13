@@ -123,14 +123,19 @@ export default function insertMeasure({
         signList,
       ];
     }
-    const measureBody = constructMeasureBody(templateString, variables, schema);
+    const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
+    const measureBody = constructMeasureBody(
+      templateString,
+      variables,
+      schema,
+      measureUri,
+    );
     const temporalNode = temporal
       ? schema.nodes.paragraph.create(
           {},
           schema.text('Deze signalisatie is dynamisch.'),
         )
       : undefined;
-    const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
     const measureNode = schema.nodes.block_rdfa.create(
       {
         rdfaNodeType: 'resource',
@@ -227,6 +232,7 @@ function constructMeasureBody(
     Exclude<Variable, { type: 'instruction' }> | VariableInstance
   >,
   schema: Schema,
+  measureUri: string,
 ) {
   const parts = templateString.split(/(\$\{[^{}$]+\})/);
   const nodes = [];
@@ -239,7 +245,7 @@ function constructMeasureBody(
       const variableName = match[1];
       const matchedVariable = variables[variableName];
       if (matchedVariable) {
-        nodes.push(constructVariableNode(matchedVariable, schema));
+        nodes.push(constructVariableNode(matchedVariable, schema, measureUri));
       } else {
         nodes.push(schema.text(part));
       }
@@ -323,6 +329,7 @@ function constructVariableNode(
     | Exclude<Variable, { type: 'instruction' }>
     | VariableInstance,
   schema: Schema,
+  measureUri: string,
 ) {
   const variable = isVariableInstance(variableOrVariableInstance)
     ? variableOrVariableInstance.variable
@@ -339,6 +346,7 @@ function constructVariableNode(
       : variableInstance.value?.toString();
   const args = {
     schema,
+    measureUri,
     variable: variable.uri,
     variableInstance: variableInstance.uri,
     value: valueStr,
