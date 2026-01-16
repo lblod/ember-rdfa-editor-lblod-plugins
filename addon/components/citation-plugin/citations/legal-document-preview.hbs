@@ -9,6 +9,16 @@
   >
     {{if @fullSize (capitalize @legalDocument.fullTitle) @legalDocument.title}}
   </p>
+  {{#if (and @fullSize @legalDocument.documentDate)}}
+    <AuPill
+      class='au-u-margin-top-small au-u-margin-bottom-small'
+      @skin='border'
+      @icon={{this.DocumentIcon}}
+      @iconAlignment='left'
+    >
+      {{t 'citaten-plugin.pills.document-date'}} {{@legalDocument.documentDate}}
+    </AuPill>
+  {{/if}}
   {{#if (and @fullSize @legalDocument.publicationDate)}}
     <AuPill
       class='au-u-margin-top-small au-u-margin-bottom-small'
@@ -16,7 +26,7 @@
       @icon={{this.CalendarIcon}}
       @iconAlignment='left'
     >
-      {{@legalDocument.publicationDate}}
+      {{t 'citaten-plugin.pills.publication-date'}} {{@legalDocument.publicationDate}}
     </AuPill>
   {{/if}}
   {{#if @fullSize}}

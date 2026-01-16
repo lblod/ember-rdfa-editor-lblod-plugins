@@ -86,6 +86,9 @@ citaten-plugin:
     lookup-publicatie-short: Publicatie
     publicatie-non-available: Full content not public
     publicatie-non-available-short: Not public
+  pills:
+    document-date: 'Document date:'
+    publication-date: 'Publication date:'
 
 besluit-type-plugin:
   dt: 'Decision type'
