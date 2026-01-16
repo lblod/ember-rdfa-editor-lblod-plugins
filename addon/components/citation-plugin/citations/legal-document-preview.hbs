@@ -16,7 +16,8 @@
       @icon={{this.DocumentIcon}}
       @iconAlignment='left'
     >
-      {{t 'citaten-plugin.pills.document-date'}} {{@legalDocument.documentDate}}
+      {{t 'citaten-plugin.pills.document-date'}}
+      {{@legalDocument.documentDate}}
     </AuPill>
   {{/if}}
   {{#if (and @fullSize @legalDocument.publicationDate)}}
@@ -26,7 +27,8 @@
       @icon={{this.CalendarIcon}}
       @iconAlignment='left'
     >
-      {{t 'citaten-plugin.pills.publication-date'}} {{@legalDocument.publicationDate}}
+      {{t 'citaten-plugin.pills.publication-date'}}
+      {{@legalDocument.publicationDate}}
     </AuPill>
   {{/if}}
   {{#if @fullSize}}
