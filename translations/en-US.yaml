@@ -60,10 +60,10 @@ citaten-plugin:
     advanced: Advanced search
     type: Type of document
     placeholder: Type to search
-    date-document: Filter on date document
+    date-document: Document date
     date-document-from: 'Filter document on date from:'
     date-document-to: 'Filter document on date until:'
-    date-publication: Filter on date government gazette
+    date-publication: Publication government gazette
     date-publication-from: 'Filter publication on date from:'
     date-publication-to: 'Filter publication on date until:'
     from: from
@@ -88,7 +88,7 @@ citaten-plugin:
     publicatie-non-available-short: Not public
   pills:
     document-date: 'Document date:'
-    publication-date: 'Publication date:'
+    publication-date: 'Publication govt. gazette:'
 
 besluit-type-plugin:
   dt: 'Decision type'
