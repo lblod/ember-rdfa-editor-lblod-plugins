@@ -519,3 +519,5 @@ document-validation-plugin:
   see-related-node: See related node
   description: Some parts are required to allow our system to parse this document.
   decision-node-not-found: Please put the cursor inside a decision node
+  developer-modal-title: Developer info
+  developer-modal-button: Close

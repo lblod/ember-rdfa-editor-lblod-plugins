@@ -151,6 +151,7 @@
               <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
                 <DocumentValidationPlugin::Card
                   @controller={{this.controller}}
+                  @enableDeveloperInfo={{this.config.documentValidation.enableDeveloperInfo}}
                 />
                 <this.StructureControlCard @controller={{this.controller}} />
                 <DecisionPlugin::DecisionPluginCard
