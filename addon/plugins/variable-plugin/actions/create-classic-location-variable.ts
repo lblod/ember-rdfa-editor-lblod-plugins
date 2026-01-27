@@ -1,7 +1,6 @@
 import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   DCT,
-  MOBILITEIT,
   RDF,
   VARIABLES,
   XSD,
@@ -36,7 +35,7 @@ export function createClassicLocationVariable(
 type CreateClassicLocationVariableAttrsArgs = {
   label?: string;
   source?: string;
-  measureUri?: string;
+  backlinks?: IncomingTriple[];
 } & AllOrNone<{ variable: string; variableInstance: string }>;
 
 export function createClassicLocationVariableAttrs({
@@ -44,10 +43,10 @@ export function createClassicLocationVariableAttrs({
   variableInstance,
   label,
   source,
-  measureUri,
+  backlinks = [],
 }: CreateClassicLocationVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingTriple[] = [];
+  const addedBacklinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -73,13 +72,7 @@ export function createClassicLocationVariableAttrs({
         object: sayDataFactory.namedNode(source),
       });
     }
-    if (measureUri) {
-      backlinks.push({
-        subject: sayDataFactory.resourceNode(measureUri),
-        predicate: MOBILITEIT('plaatsbepaling').full,
-      });
-    }
-    backlinks.push({
+    addedBacklinks.push({
       subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
     });
@@ -88,7 +81,7 @@ export function createClassicLocationVariableAttrs({
     rdfaNodeType: 'literal',
     datatype: XSD('string').namedNode,
     externalTriples,
-    backlinks,
+    backlinks: [...backlinks, ...addedBacklinks],
     label,
     source,
   };

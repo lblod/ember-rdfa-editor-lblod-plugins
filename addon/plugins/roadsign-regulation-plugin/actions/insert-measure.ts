@@ -7,7 +7,10 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { type FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import {
+  type IncomingTriple,
+  type FullTriple,
+} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   DCT,
   EXT,
@@ -124,11 +127,33 @@ export default function insertMeasure({
       ];
     }
     const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
+    const variableInstances: Record<string, VariableInstance> =
+      Object.fromEntries(
+        Object.entries(variables).map(([key, variableOrVariableInstance]) => {
+          if (isVariableInstance(variableOrVariableInstance)) {
+            return [key, variableOrVariableInstance];
+          }
+
+          const variable = variableOrVariableInstance;
+          const variableInstance = {
+            uri: generateVariableInstanceUri(),
+            value: variable.defaultValue,
+            variable,
+          };
+
+          return [key, variableInstance];
+        }),
+      );
     const measureBody = constructMeasureBody(
       templateString,
-      variables,
+      variableInstances,
       schema,
-      measureUri,
+      [
+        {
+          subject: sayDataFactory.resourceNode(measureUri),
+          predicate: MOBILITEIT('plaatsbepaling').full,
+        },
+      ],
     );
     const temporalNode = temporal
       ? schema.nodes.paragraph.create(
@@ -175,6 +200,15 @@ export default function insertMeasure({
           // locn:address, mobiliteit:contactorganisatie, mobiliteit:doelgroep, adms:identifier,
           // mobiliteit:periode, mobiliteit:plaatsbepaling, schema:eventSchedule, mobiliteit:type,
           // mobiliteit:verwijstNaar, mobiliteit:heeftGevolg
+          ...Object.values(variableInstances)
+            .filter(
+              (variableInstance: VariableInstance) =>
+                variableInstance.variable.type === 'location',
+            )
+            .map((variableInstance: VariableInstance) => ({
+              predicate: MOBILITEIT('plaatsbepaling'),
+              object: sayDataFactory.namedNode(variableInstance.uri),
+            })),
         ],
         externalTriples,
       },
@@ -227,12 +261,9 @@ export default function insertMeasure({
 
 function constructMeasureBody(
   templateString: string,
-  variables: Record<
-    string,
-    Exclude<Variable, { type: 'instruction' }> | VariableInstance
-  >,
+  variables: Record<string, VariableInstance>,
   schema: Schema,
-  measureUri: string,
+  backlinks?: IncomingTriple[],
 ) {
   const parts = templateString.split(/(\$\{[^{}$]+\})/);
   const nodes = [];
@@ -245,7 +276,7 @@ function constructMeasureBody(
       const variableName = match[1];
       const matchedVariable = variables[variableName];
       if (matchedVariable) {
-        nodes.push(constructVariableNode(matchedVariable, schema, measureUri));
+        nodes.push(constructVariableNode(matchedVariable, schema, backlinks));
       } else {
         nodes.push(schema.text(part));
       }
@@ -325,28 +356,18 @@ function constructSignalNode(
 }
 
 function constructVariableNode(
-  variableOrVariableInstance:
-    | Exclude<Variable, { type: 'instruction' }>
-    | VariableInstance,
+  variableInstance: VariableInstance,
   schema: Schema,
-  measureUri: string,
+  backlinks?: IncomingTriple[],
 ) {
-  const variable = isVariableInstance(variableOrVariableInstance)
-    ? variableOrVariableInstance.variable
-    : variableOrVariableInstance;
-  const variableInstance = isVariableInstance(variableOrVariableInstance)
-    ? variableOrVariableInstance
-    : {
-        uri: generateVariableInstanceUri(),
-        value: undefined,
-      };
+  const variable = variableInstance.variable;
   const valueStr =
     variableInstance.value instanceof Date
       ? variableInstance.value.toISOString()
       : variableInstance.value?.toString();
   const args = {
     schema,
-    measureUri,
+    backlinks,
     variable: variable.uri,
     variableInstance: variableInstance.uri,
     value: valueStr,
