@@ -86,6 +86,9 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       view: this.controller.mainEditorView,
     });
     this.controller.focus();
+    if (this.developerModalOpen) {
+      this.developerModalOpen = false;
+    }
   };
   get status() {
     if (!this.validationState?.report) return 'not-run';
@@ -146,7 +149,6 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     return true;
   };
   openDeveloperModal = (event: Event) => {
-    console.log(this.validationState);
     this.developerModalOpen = true;
     event.stopPropagation();
   };
@@ -271,17 +273,28 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
         @title={{t 'document-validation-plugin.developer-modal-title'}}
         @closeModal={{this.closeDeveloperModal}}
         @modalOpen={{this.developerModalOpen}}
+        @size='large'
         as |Modal|
       >
         <Modal.Body>
           {{#each this.formattedValidationResult as |result|}}
-            <AuCard class='au-u-margin' as |c|>
+            <AuCard
+              class='au-u-margin say-document-validation__developer-card'
+              as |c|
+            >
               <c.content>
                 {{! template-lint-disable no-bare-strings }}
                 <span class='au-u-bold'>
                   FocusNode:
                 </span>
                 {{result.focusNode}}
+                <AuButton
+                  class='au-u-padding-left-none au-u-padding-right-none'
+                  @icon={{ExternalLinkIcon}}
+                  @skin='link'
+                  title={{result.focusNode}}
+                  {{on 'click' (fn this.goToSubject result.focusNode)}}
+                >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
                 <br />
                 <span class='au-u-bold'>
                   Path:
