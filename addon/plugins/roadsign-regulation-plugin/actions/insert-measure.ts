@@ -25,7 +25,6 @@ import {
   TransactionMonad,
 } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { MobilityMeasureConcept } from '../schemas/mobility-measure-concept';
-import { Variable } from '../schemas/variable';
 import { buildArticleStructure } from '../../decision-plugin/utils/build-article-structure';
 import { insertArticle } from '../../decision-plugin/actions/insert-article';
 import { TrafficSignalConcept } from '../schemas/traffic-signal-concept';
@@ -38,16 +37,12 @@ import {
   ZonalOrNot,
 } from '../constants';
 import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
-import { generateVariableInstanceUri } from '../../variable-plugin/utils/variable-helpers';
 import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
 import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
 import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
 import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
-import {
-  isVariableInstance,
-  VariableInstance,
-} from '../schemas/variable-instance';
+import { VariableInstance } from '../schemas/variable-instance';
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
 
@@ -55,10 +50,7 @@ type InsertMeasureArgs = {
   arDesignUri?: string;
   zonality: ZonalOrNot;
   temporal: boolean;
-  variables: Record<
-    string,
-    Exclude<Variable, { type: 'instruction' }> | VariableInstance
-  >;
+  variables: Record<string, VariableInstance>;
   templateString: string;
   decisionUri: string;
   articleUriGenerator?: () => string;
@@ -127,26 +119,9 @@ export default function insertMeasure({
       ];
     }
     const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
-    const variableInstances: Record<string, VariableInstance> =
-      Object.fromEntries(
-        Object.entries(variables).map(([key, variableOrVariableInstance]) => {
-          if (isVariableInstance(variableOrVariableInstance)) {
-            return [key, variableOrVariableInstance];
-          }
-
-          const variable = variableOrVariableInstance;
-          const variableInstance = {
-            uri: generateVariableInstanceUri(),
-            value: variable.defaultValue,
-            variable,
-          };
-
-          return [key, variableInstance];
-        }),
-      );
     const measureBody = constructMeasureBody(
       templateString,
-      variableInstances,
+      variables,
       schema,
       [
         {
@@ -200,7 +175,7 @@ export default function insertMeasure({
           // locn:address, mobiliteit:contactorganisatie, mobiliteit:doelgroep, adms:identifier,
           // mobiliteit:periode, mobiliteit:plaatsbepaling, schema:eventSchedule, mobiliteit:type,
           // mobiliteit:verwijstNaar, mobiliteit:heeftGevolg
-          ...Object.values(variableInstances)
+          ...Object.values(variables)
             .filter(
               (variableInstance: VariableInstance) =>
                 variableInstance.variable.type === 'location',

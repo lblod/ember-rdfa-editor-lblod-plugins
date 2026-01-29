@@ -37,6 +37,12 @@ import {
 import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
 import { queryMobilityTemplates } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-template';
 import insertMeasure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/insert-measure';
+import {
+  isVariableInstance,
+  VariableInstance,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/variable-instance';
+import { Variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/variable';
+import { generateVariableInstanceUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 
 type Option = {
   uri: string;
@@ -335,11 +341,24 @@ export default class RoadsignsModal extends Component<Signature> {
             abortSignal: abortController.signal,
           },
         );
+        // TODO use `mapObject` from utils/map-object.ts here
+        const variableInstances: Record<string, VariableInstance> =
+          Object.fromEntries(
+            Object.entries(resolvedTemplate.variables).map(
+              ([key, variableOrVariableInstance]) => {
+                if (isVariableInstance(variableOrVariableInstance)) {
+                  return [key, variableOrVariableInstance];
+                }
+
+                return [key, instantiateVariable(variableOrVariableInstance)];
+              },
+            ),
+          );
         this.controller.withTransaction(
           () => {
             return insertMeasure({
               measureConcept: concept,
-              variables: resolvedTemplate.variables,
+              variables: variableInstances,
               templateString: resolvedTemplate.templateString,
               articleUriGenerator: this.args.options.articleUriGenerator,
               decisionUri,
@@ -531,4 +550,27 @@ export default class RoadsignsModal extends Component<Signature> {
       </Modal.Body>
     </AuModal>
   </template>
+}
+
+function instantiateVariable(
+  variable: Exclude<Variable, { type: 'instruction' }>,
+) {
+  switch (variable.type) {
+    case 'text':
+    case 'number':
+    case 'date':
+    case 'location':
+      return {
+        uri: generateVariableInstanceUri(),
+        value: variable.defaultValue,
+        variable,
+      };
+    case 'codelist':
+      return {
+        uri: generateVariableInstanceUri(),
+        value: variable.defaultValue,
+        valueLabel: variable.defaultValueLabel,
+        variable,
+      };
+  }
 }
