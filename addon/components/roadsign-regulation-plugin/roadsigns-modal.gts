@@ -37,12 +37,9 @@ import {
 import { resolveTemplate } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/resolve-template';
 import { queryMobilityTemplates } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/queries/mobility-template';
 import insertMeasure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/actions/insert-measure';
-import {
-  isVariableInstance,
-  VariableInstance,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/variable-instance';
 import { Variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/variable';
 import { generateVariableInstanceUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
+import { mapObject } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/map-object';
 
 type Option = {
   uri: string;
@@ -341,19 +338,12 @@ export default class RoadsignsModal extends Component<Signature> {
             abortSignal: abortController.signal,
           },
         );
-        // TODO use `mapObject` from utils/map-object.ts here
-        const variableInstances: Record<string, VariableInstance> =
-          Object.fromEntries(
-            Object.entries(resolvedTemplate.variables).map(
-              ([key, variableOrVariableInstance]) => {
-                if (isVariableInstance(variableOrVariableInstance)) {
-                  return [key, variableOrVariableInstance];
-                }
-
-                return [key, instantiateVariable(variableOrVariableInstance)];
-              },
-            ),
-          );
+        const variableInstances = mapObject(
+          resolvedTemplate.variables,
+          ([key, variableOrVariableInstance]) => {
+            return [key, instantiateVariable(variableOrVariableInstance)];
+          },
+        );
         this.controller.withTransaction(
           () => {
             return insertMeasure({
@@ -557,8 +547,23 @@ function instantiateVariable(
 ) {
   switch (variable.type) {
     case 'text':
+      return {
+        uri: generateVariableInstanceUri(),
+        value: variable.defaultValue,
+        variable,
+      };
     case 'number':
+      return {
+        uri: generateVariableInstanceUri(),
+        value: variable.defaultValue,
+        variable,
+      };
     case 'date':
+      return {
+        uri: generateVariableInstanceUri(),
+        value: variable.defaultValue,
+        variable,
+      };
     case 'location':
       return {
         uri: generateVariableInstanceUri(),
