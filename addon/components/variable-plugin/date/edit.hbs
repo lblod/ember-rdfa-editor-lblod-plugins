@@ -1,7 +1,12 @@
 {{! @glint-nocheck: not typesafe yet }}
 <div>
   {{#if this.showCard}}
-    <this.AuCard @shadow={{true}} @size='flush' as |c|>
+    <this.AuCard
+      @shadow={{true}}
+      @size='flush'
+      @disableAuContent={{true}}
+      as |c|
+    >
       <c.header class='au-u-hidden-visually'>
         <AuHeading @level='3' @skin='6'>{{t
             'date-plugin.card.title'

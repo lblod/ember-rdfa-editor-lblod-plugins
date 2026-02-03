@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
+import AuContent from '@appuniversum/ember-appuniversum/components/au-content';
 import PowerSelect from 'ember-power-select/components/power-select';
 import { findParentNodeOfType } from '@curvenote/prosemirror-utils';
 import { on } from '@ember/modifier';
@@ -74,6 +75,7 @@ export default class ConfigureMandateeTableComponent extends Component<Sig> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
+        @disableAuContent={{true}}
         as |c|
       >
         <c.header>
@@ -82,39 +84,41 @@ export default class ConfigureMandateeTableComponent extends Component<Sig> {
           </AuHeading>
         </c.header>
         <c.content>
-          <AuFormRow>
-            <AuLabel for='mandatee-table-tag-select'>
-              {{t 'mandatee-table-plugin.configure.tag-input.label'}}
-            </AuLabel>
-            <PowerSelect
-              id='mandatee-table-tag-select'
-              @allowClear={{false}}
-              @searchEnabled={{false}}
-              @options={{@supportedTags}}
-              @selected={{this.currentTag}}
-              @onChange={{this.updateTag}}
-              @placeholder={{t
-                'mandatee-table-plugin.configure.tag-input.placeholder'
-              }}
-              as |tag|
-            >
-              {{tag}}
-            </PowerSelect>
-          </AuFormRow>
-          <AuFormRow>
-            <AuLabel for='mandatee-table-title-input'>
-              {{t 'mandatee-table-plugin.configure.title-input.label'}}
-            </AuLabel>
-            <AutoResizingTextArea
-              @width='block'
-              placeholder={{t
-                'mandatee-table-plugin.configure.title-input.placeholder'
-              }}
-              id='mandatee-table-title-input'
-              class='mandatee-table-title-input'
-              {{on 'input' this.updateNodeTitle}}
-            >{{this.nodeTitle}}</AutoResizingTextArea>
-          </AuFormRow>
+          <AuContent>
+            <AuFormRow>
+              <AuLabel for='mandatee-table-tag-select'>
+                {{t 'mandatee-table-plugin.configure.tag-input.label'}}
+              </AuLabel>
+              <PowerSelect
+                id='mandatee-table-tag-select'
+                @allowClear={{false}}
+                @searchEnabled={{false}}
+                @options={{@supportedTags}}
+                @selected={{this.currentTag}}
+                @onChange={{this.updateTag}}
+                @placeholder={{t
+                  'mandatee-table-plugin.configure.tag-input.placeholder'
+                }}
+                as |tag|
+              >
+                {{tag}}
+              </PowerSelect>
+            </AuFormRow>
+            <AuFormRow>
+              <AuLabel for='mandatee-table-title-input'>
+                {{t 'mandatee-table-plugin.configure.title-input.label'}}
+              </AuLabel>
+              <AutoResizingTextArea
+                @width='block'
+                placeholder={{t
+                  'mandatee-table-plugin.configure.title-input.placeholder'
+                }}
+                id='mandatee-table-title-input'
+                class='mandatee-table-title-input'
+                {{on 'input' this.updateNodeTitle}}
+              >{{this.nodeTitle}}</AutoResizingTextArea>
+            </AuFormRow>
+          </AuContent>
         </c.content>
       </AuCard>
     {{/if}}

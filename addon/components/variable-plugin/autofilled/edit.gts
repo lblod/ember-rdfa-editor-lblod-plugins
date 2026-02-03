@@ -10,10 +10,12 @@ import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox'
 import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-native-input';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
+import AuContent from '@appuniversum/ember-appuniversum/components/au-content';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { trackedReset } from 'tracked-toolbox';
 import LabelInput from '../utils/label-input';
+
 type Args = {
   controller: SayController;
 };
@@ -144,6 +146,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
+        @disableAuContent={{true}}
         as |c|
       >
         <c.header>
@@ -152,39 +155,41 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
           </AuHeading>
         </c.header>
         <c.content>
-          <AuFormRow>
-            <LabelInput
-              @label={{this.label}}
-              @updateLabel={{this.updateLabel}}
-            />
-          </AuFormRow>
-          <AuFormRow>
-            <AuLabel for='autofill_key'>
-              {{t 'variable-plugin.autofill.autofillKey'}}
-            </AuLabel>
-            <AuNativeInput
-              id='autofill_key'
-              placeholder={{t
-                'variable-plugin.autofill.autofillKeyPlaceholder'
-              }}
-              @type='text'
-              @width='block'
-              value={{this.autofillKey}}
-              {{on 'input' this.updateAutofillKey}}
-            />
-          </AuFormRow>
-          <AuFormRow>
-            <AuCheckbox
-              id='convert_to_string'
-              @checked={{this.convertToString}}
-              @onChange={{this.updateConvertToString}}
-            >
-              {{t 'variable-plugin.autofill.convertToString'}}
-            </AuCheckbox>
-          </AuFormRow>
-          <AuButton {{on 'click' this.edit}}>
-            {{t 'variable-plugin.button'}}
-          </AuButton>
+          <AuContent>
+            <AuFormRow>
+              <LabelInput
+                @label={{this.label}}
+                @updateLabel={{this.updateLabel}}
+              />
+            </AuFormRow>
+            <AuFormRow>
+              <AuLabel for='autofill_key'>
+                {{t 'variable-plugin.autofill.autofillKey'}}
+              </AuLabel>
+              <AuNativeInput
+                id='autofill_key'
+                placeholder={{t
+                  'variable-plugin.autofill.autofillKeyPlaceholder'
+                }}
+                @type='text'
+                @width='block'
+                value={{this.autofillKey}}
+                {{on 'input' this.updateAutofillKey}}
+              />
+            </AuFormRow>
+            <AuFormRow>
+              <AuCheckbox
+                id='convert_to_string'
+                @checked={{this.convertToString}}
+                @onChange={{this.updateConvertToString}}
+              >
+                {{t 'variable-plugin.autofill.convertToString'}}
+              </AuCheckbox>
+            </AuFormRow>
+            <AuButton {{on 'click' this.edit}}>
+              {{t 'variable-plugin.button'}}
+            </AuButton>
+          </AuContent>
         </c.content>
       </AuCard>
     {{/if}}

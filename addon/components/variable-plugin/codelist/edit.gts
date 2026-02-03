@@ -24,6 +24,7 @@ import PowerSelectMultiple from 'ember-power-select/components/power-select-mult
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
+import AuContent from '@appuniversum/ember-appuniversum/components/au-content';
 import { tracked } from '@glimmer/tracking';
 import { CodelistAttrs } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
@@ -191,6 +192,7 @@ export default class CodelistEditComponent extends Component<Sig> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
+        @disableAuContent={{true}}
         as |c|
       >
         <c.header>
@@ -199,48 +201,50 @@ export default class CodelistEditComponent extends Component<Sig> {
           </AuHeading>
         </c.header>
         <c.content>
-          {{#if (eq this.codelistUri 'UNKNOWN')}}
-            <AuAlert @icon={{AlertTriangleIcon}} @skin='warning'>
-              {{t 'variable-plugin.unknown-codelist'}}
-            </AuAlert>
-          {{else}}
-            <AuLabel for='codelist-select'>
-              {{this.label}}
-            </AuLabel>
-            {{#if this.multiSelect}}
-              <PowerSelectMultiple
-                id='codelist-select'
-                @allowClear={{false}}
-                @searchEnabled={{true}}
-                @searchField='label'
-                @options={{this.codelistOptions.value.options}}
-                @selected={{this.selectedCodelistOption}}
-                @onChange={{this.updateCodelistOption}}
-                as |option|
-              >
-                {{option.label}}
-              </PowerSelectMultiple>
+          <AuContent>
+            {{#if (eq this.codelistUri 'UNKNOWN')}}
+              <AuAlert @icon={{AlertTriangleIcon}} @skin='warning'>
+                {{t 'variable-plugin.unknown-codelist'}}
+              </AuAlert>
             {{else}}
-              <PowerSelect
-                id='codelist-select'
-                @allowClear={{false}}
-                @searchEnabled={{true}}
-                @searchField='label'
-                @options={{this.codelistOptions.value.options}}
-                @selected={{this.selectedCodelistOption}}
-                @onChange={{this.updateCodelistOption}}
-                as |option|
+              <AuLabel for='codelist-select'>
+                {{this.label}}
+              </AuLabel>
+              {{#if this.multiSelect}}
+                <PowerSelectMultiple
+                  id='codelist-select'
+                  @allowClear={{false}}
+                  @searchEnabled={{true}}
+                  @searchField='label'
+                  @options={{this.codelistOptions.value.options}}
+                  @selected={{this.selectedCodelistOption}}
+                  @onChange={{this.updateCodelistOption}}
+                  as |option|
+                >
+                  {{option.label}}
+                </PowerSelectMultiple>
+              {{else}}
+                <PowerSelect
+                  id='codelist-select'
+                  @allowClear={{false}}
+                  @searchEnabled={{true}}
+                  @searchField='label'
+                  @options={{this.codelistOptions.value.options}}
+                  @selected={{this.selectedCodelistOption}}
+                  @onChange={{this.updateCodelistOption}}
+                  as |option|
+                >
+                  {{option.label}}
+                </PowerSelect>
+              {{/if}}
+              <AuButton
+                {{on 'click' this.insert}}
+                @disabled={{not this.selectedCodelistOption}}
               >
-                {{option.label}}
-              </PowerSelect>
+                {{t 'editor-plugins.utils.insert'}}
+              </AuButton>
             {{/if}}
-            <AuButton
-              {{on 'click' this.insert}}
-              @disabled={{not this.selectedCodelistOption}}
-            >
-              {{t 'editor-plugins.utils.insert'}}
-            </AuButton>
-          {{/if}}
+          </AuContent>
         </c.content>
       </AuCard>
     {{/if}}
