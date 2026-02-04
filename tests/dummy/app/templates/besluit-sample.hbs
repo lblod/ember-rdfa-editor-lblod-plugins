@@ -8,6 +8,7 @@
     </:header>
     <:content>
       <EditorContainer
+        @controller={{this.controller}}
         @editorOptions={{hash
           showPaper=true
           showToolbarBottom=null
@@ -15,68 +16,66 @@
           showSidebarRight=true
         }}
       >
-        <:top>
-          {{#if this.controller}}
-            <ResponsiveToolbar>
-              <:main as |Tb|>
+        <:toolbar as |container|>
+          <ResponsiveToolbar>
+            <:main as |Tb|>
+              <Tb.Group>
+                <Toolbar::History @controller={{container.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <Toolbar::Styling @controller={{container.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <ConfidentialityPlugin::Toolbar
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Toolbar::List @controller={{container.controller}} />
+                <Plugins::Indentation::IndentationMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Link::LinkMenu @controller={{container.controller}} />
+              </Tb.Group>
+              {{#if this.supportsTables}}
                 <Tb.Group>
-                  <Toolbar::History @controller={{this.controller}} />
-                </Tb.Group>
-                <Tb.Group>
-                  <Toolbar::Styling @controller={{this.controller}} />
-                </Tb.Group>
-                <Tb.Group>
-                  <ConfidentialityPlugin::Toolbar
-                    @controller={{this.controller}}
+                  <Plugins::Table::TableMenu
+                    @controller={{container.controller}}
                   />
                 </Tb.Group>
-                <Tb.Group>
-                  <Toolbar::List @controller={{this.controller}} />
-                  <Plugins::Indentation::IndentationMenu
-                    @controller={{this.controller}}
-                  />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Link::LinkMenu @controller={{this.controller}} />
-                </Tb.Group>
-                {{#if this.supportsTables}}
-                  <Tb.Group>
-                    <Plugins::Table::TableMenu
-                      @controller={{this.controller}}
-                    />
-                  </Tb.Group>
-                {{/if}}
-                <Tb.Group>
-                  <Plugins::Heading::HeadingMenu
-                    @controller={{this.controller}}
-                  />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Formatting::FormattingToggle
-                    @controller={{this.controller}}
-                  />
-                  <BesluitTypePlugin::ToolbarDropdown
-                    @controller={{this.controller}}
-                    @options={{this.config.besluitType}}
-                  />
-                  <BesluitTopicPlugin::BesluitTopicToolbarDropdown
-                    @controller={{this.controller}}
-                    @options={{this.config.besluitTopic}}
-                  />
-                  <div class='say-rdfa-toggle'>
-                    <AuToggleSwitch
-                      @checked={{this.editableNodes}}
-                      @onChange={{this.toggleEditableNodes}}
-                    >
-                      Toggle editable nodes
-                    </AuToggleSwitch>
-                  </div>
-                </Tb.Group>
-                <Plugins::HtmlEditor::Menu @controller={{this.controller}} />
-              </:main>
-            </ResponsiveToolbar>
-          {{/if}}
-        </:top>
+              {{/if}}
+              <Tb.Group>
+                <Plugins::Heading::HeadingMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Formatting::FormattingToggle
+                  @controller={{container.controller}}
+                />
+                <BesluitTypePlugin::ToolbarDropdown
+                  @controller={{container.controller}}
+                  @options={{this.config.besluitType}}
+                />
+                <BesluitTopicPlugin::BesluitTopicToolbarDropdown
+                  @controller={{container.controller}}
+                  @options={{this.config.besluitTopic}}
+                />
+                <div class='say-rdfa-toggle'>
+                  <AuToggleSwitch
+                    @checked={{this.editableNodes}}
+                    @onChange={{this.toggleEditableNodes}}
+                  >
+                    Toggle editable nodes
+                  </AuToggleSwitch>
+                </div>
+              </Tb.Group>
+              <Plugins::HtmlEditor::Menu @controller={{container.controller}} />
+            </:main>
+          </ResponsiveToolbar>
+        </:toolbar>
         <:default>
           <Editor
             @plugins={{this.plugins}}
@@ -85,140 +84,140 @@
             @rdfaEditorInit={{this.rdfaEditorInit}}
           />
         </:default>
-        <:aside>
-          {{#if this.controller}}
-            <SynchronizeMandatees
-              @controller={{this.controller}}
-              @config={{this.config.mandateeTable.config}}
-            />
-            <AuButton {{on 'click' this.validateDocument}}>
-              Validate Document
-            </AuButton>
-            <Sidebar as |Sidebar|>
-              <Sidebar.Collapsible
-                @title='Structures'
-                @expandedInitially={{true}}
-              >
-                <this.InsertArticle @controller={{this.controller}} />
-                <this.InsertArticle
-                  @controller={{this.controller}}
-                  @label='Insert article freely'
-                  @options={{hash insertFreely=true}}
+        <:sidebarRight as |container|>
+          <SynchronizeMandatees
+            @controller={{container.controller}}
+            @config={{this.config.mandateeTable.config}}
+          />
+          <AuButton {{on 'click' this.validateDocument}}>
+            Validate Document
+          </AuButton>
+          <Sidebar as |Sidebar|>
+            <Sidebar.Collapsible
+              @title='Structures'
+              @expandedInitially={{true}}
+            >
+              <this.InsertArticle @controller={{container.controller}} />
+              <this.InsertArticle
+                @controller={{container.controller}}
+                @label='Insert article freely'
+                @options={{hash insertFreely=true}}
+              />
+            </Sidebar.Collapsible>
+            <Sidebar.Collapsible @title='Insert' @expandedInitially={{true}}>
+              <CitationPlugin::CitationInsert
+                @controller={{container.controller}}
+                @config={{this.config.citation}}
+              />
+              <RoadsignRegulationPlugin::RoadsignRegulationCard
+                @controller={{container.controller}}
+                @options={{this.config.roadsignRegulation}}
+              />
+              <StandardTemplatePlugin::Card
+                @controller={{container.controller}}
+                @templates={{this.standardTemplates}}
+              />
+              <LocationPlugin::Insert
+                @controller={{container.controller}}
+                @config={{this.config.location}}
+                @locationTypes={{array 'place' 'address' 'area'}}
+                @defaultMunicipality='Gent'
+              />
+              <LocationPlugin::InsertLocationPlaceholder
+                @controller={{container.controller}}
+                @templateMode={{true}}
+                @config={{this.config.location}}
+              />
+              <VariablePlugin::Date::Insert
+                @controller={{container.controller}}
+              />
+              <WorshipPlugin::Insert
+                @controller={{container.controller}}
+                @config={{this.config.worship}}
+              />
+              <LmbPlugin::Insert
+                @controller={{container.controller}}
+                @config={{this.config.lmb}}
+              />
+              <MandateeTablePlugin::Insert
+                @controller={{container.controller}}
+                @defaultTag={{this.config.mandateeTable.defaultTag}}
+              />
+              <LpdcPlugin::LpdcInsert
+                @controller={{container.controller}}
+                @config={{this.config.lpdc}}
+              />
+            </Sidebar.Collapsible>
+            <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
+              <DocumentValidationPlugin::Card
+                @controller={{container.controller}}
+              />
+              <this.StructureControlCard @controller={{container.controller}} />
+              <DecisionPlugin::DecisionPluginCard
+                @controller={{container.controller}}
+              />
+              <CitationPlugin::CitationCard
+                @controller={{container.controller}}
+                @config={{this.config.citation}}
+              />
+              <ImportSnippetPlugin::Card @controller={{container.controller}} />
+              <MandateeTablePlugin::Configure
+                @controller={{container.controller}}
+                @supportedTags={{this.config.mandateeTable.tags}}
+              />
+              <VariablePlugin::Codelist::Edit
+                @controller={{container.controller}}
+                @options={{this.codelistOptions}}
+              />
+              <VariablePlugin::Date::Edit
+                @controller={{container.controller}}
+                @options={{this.dateOptions}}
+              />
+              <VariablePlugin::Location::Edit
+                @controller={{container.controller}}
+                @options={{this.locationOptions}}
+              />
+              <VariablePlugin::Person::Edit
+                @controller={{container.controller}}
+                @config={{this.config.lmb}}
+              />
+              {{#if this.editableNodes}}
+                <this.VisualiserCard
+                  @config={{this.visualizerConfig}}
+                  @controller={{container.controller}}
                 />
-              </Sidebar.Collapsible>
-              <Sidebar.Collapsible @title='Insert' @expandedInitially={{true}}>
-                <CitationPlugin::CitationInsert
-                  @controller={{this.controller}}
-                  @config={{this.config.citation}}
+                <this.NodeControlsCard
+                  @node={{this.activeNode}}
+                  @controller={{container.controller}}
                 />
-                <RoadsignRegulationPlugin::RoadsignRegulationCard
-                  @controller={{this.controller}}
-                  @options={{this.config.roadsignRegulation}}
-                />
-                <StandardTemplatePlugin::Card
-                  @controller={{this.controller}}
-                  @templates={{this.standardTemplates}}
-                />
-                <LocationPlugin::Insert
-                  @controller={{this.controller}}
-                  @config={{this.config.location}}
-                  @locationTypes={{array 'place' 'address' 'area'}}
-                  @defaultMunicipality='Gent'
-                />
-                <LocationPlugin::InsertLocationPlaceholder
-                  @controller={{this.controller}}
-                  @templateMode={{true}}
-                  @config={{this.config.location}}
-                />
-                <VariablePlugin::Date::Insert @controller={{this.controller}} />
-                <WorshipPlugin::Insert
-                  @controller={{this.controller}}
-                  @config={{this.config.worship}}
-                />
-                <LmbPlugin::Insert
-                  @controller={{this.controller}}
-                  @config={{this.config.lmb}}
-                />
-                <MandateeTablePlugin::Insert
-                  @controller={{this.controller}}
-                  @defaultTag={{this.config.mandateeTable.defaultTag}}
-                />
-                <LpdcPlugin::LpdcInsert
-                  @controller={{this.controller}}
-                  @config={{this.config.lpdc}}
-                />
-              </Sidebar.Collapsible>
-              <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
-                <DocumentValidationPlugin::Card
-                  @controller={{this.controller}}
-                />
-                <this.StructureControlCard @controller={{this.controller}} />
-                <DecisionPlugin::DecisionPluginCard
-                  @controller={{this.controller}}
-                />
-                <CitationPlugin::CitationCard
-                  @controller={{this.controller}}
-                  @config={{this.config.citation}}
-                />
-                <ImportSnippetPlugin::Card @controller={{this.controller}} />
-                <MandateeTablePlugin::Configure
-                  @controller={{this.controller}}
-                  @supportedTags={{this.config.mandateeTable.tags}}
-                />
-                <VariablePlugin::Codelist::Edit
-                  @controller={{this.controller}}
-                  @options={{this.codelistOptions}}
-                />
-                <VariablePlugin::Date::Edit
-                  @controller={{this.controller}}
-                  @options={{this.dateOptions}}
-                />
-                <VariablePlugin::Location::Edit
-                  @controller={{this.controller}}
-                  @options={{this.locationOptions}}
-                />
-                <VariablePlugin::Person::Edit
-                  @controller={{this.controller}}
-                  @config={{this.config.lmb}}
-                />
-                {{#if this.editableNodes}}
-                  <this.VisualiserCard
-                    @config={{this.visualizerConfig}}
-                    @controller={{this.controller}}
-                  />
-                  <this.NodeControlsCard
+                {{#if this.activeNode}}
+                  <this.RelationshipEditorCard
                     @node={{this.activeNode}}
-                    @controller={{this.controller}}
+                    @controller={{container.controller}}
+                    @optionGeneratorConfig={{this.optionGeneratorConfig}}
                   />
-                  {{#if this.activeNode}}
-                    <this.RelationshipEditorCard
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
-                    />
-                    <this.DocImportedResourceEditorCard
-                      @controller={{this.controller}}
-                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
-                    />
-                    <this.ImportedResourceLinkerCard
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                    />
-                    <this.ExternalTripleEditorCard
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                    />
-                    <this.DebugInfo @node={{this.activeNode}} />
-                    <this.AttributeEditor
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                    />
-                  {{/if}}
+                  <this.DocImportedResourceEditorCard
+                    @controller={{container.controller}}
+                    @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                  />
+                  <this.ImportedResourceLinkerCard
+                    @node={{this.activeNode}}
+                    @controller={{container.controller}}
+                  />
+                  <this.ExternalTripleEditorCard
+                    @node={{this.activeNode}}
+                    @controller={{container.controller}}
+                  />
+                  <this.DebugInfo @node={{this.activeNode}} />
+                  <this.AttributeEditor
+                    @node={{this.activeNode}}
+                    @controller={{container.controller}}
+                  />
                 {{/if}}
-              </div>
-            </Sidebar>
-          {{/if}}
-        </:aside>
+              {{/if}}
+            </div>
+          </Sidebar>
+        </:sidebarRight>
       </EditorContainer>
     </:content>
   </DummyContainer>

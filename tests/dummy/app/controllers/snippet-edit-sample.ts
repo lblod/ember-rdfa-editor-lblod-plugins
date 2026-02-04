@@ -44,7 +44,6 @@ import IntlService from 'ember-intl/services/intl';
 import {
   bulletListWithConfig,
   listItemWithConfig,
-  listTrackingPlugin,
   orderedListWithConfig,
 } from '@lblod/ember-rdfa-editor/plugins/list';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
@@ -373,7 +372,6 @@ export default class SnippetEditController extends Controller {
     tableKeymap,
     this.citationPlugin,
     linkPasteHandler(this.schema.nodes.link),
-    listTrackingPlugin(),
     editableNodePlugin(),
   ];
 
