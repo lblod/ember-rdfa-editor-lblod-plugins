@@ -284,43 +284,51 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
             >
               <c.content>
                 {{! template-lint-disable no-bare-strings }}
-                <span class='au-u-bold'>
-                  FocusNode:
-                </span>
-                {{result.focusNode}}
-                <AuButton
-                  class='au-u-padding-left-none au-u-padding-right-none'
-                  @icon={{ExternalLinkIcon}}
-                  @skin='link'
-                  title={{result.focusNode}}
-                  {{on 'click' (fn this.goToSubject result.focusNode)}}
-                >{{t 'document-validation-plugin.see-related-node'}}</AuButton>
-                <br />
-                <span class='au-u-bold'>
-                  Path:
-                </span>
-                {{result.path}}
-                <br />
-                <span class='au-u-bold'>
-                  Severity:
-                </span>
-                {{result.severity}}
-                <br />
-                <span class='au-u-bold'>
-                  SourceConstraintComponent:
-                </span>
-                {{result.sourceConstraintComponent}}
-                <br />
-                <span class='au-u-bold'>
-                  SourceShape:
-                </span>
-                {{result.sourceShape}}
-                <br />
-                <span class='au-u-bold'>
-                  Value:
-                </span>
-                {{result.value}}
-                <br />
+                <p>
+                  <span class='au-u-bold'>
+                    FocusNode:
+                  </span>
+                  {{result.focusNode}}
+                  <AuButton
+                    class='au-u-padding-left-none au-u-padding-right-none'
+                    @icon={{ExternalLinkIcon}}
+                    @skin='link'
+                    title={{result.focusNode}}
+                    {{on 'click' (fn this.goToSubject result.focusNode)}}
+                  >{{t
+                      'document-validation-plugin.see-related-node'
+                    }}</AuButton>
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    Path:
+                  </span>
+                  {{result.path}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    Severity:
+                  </span>
+                  {{result.severity}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    SourceConstraintComponent:
+                  </span>
+                  {{result.sourceConstraintComponent}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    SourceShape:
+                  </span>
+                  {{result.sourceShape}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    Value:
+                  </span>
+                  {{result.value}}
+                </p>
               </c.content>
             </AuCard>
           {{/each}}
