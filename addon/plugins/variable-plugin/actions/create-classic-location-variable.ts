@@ -36,11 +36,16 @@ type CreateClassicLocationVariableAttrsArgs = {
   label?: string;
   source?: string;
   backlinks?: IncomingTriple[];
-} & AllOrNone<{ variable: string; variableInstance: string }>;
+} & AllOrNone<{
+  variable: string;
+  variableInstance: string;
+  __rdfaId?: string;
+}>;
 
 export function createClassicLocationVariableAttrs({
   variable,
   variableInstance,
+  __rdfaId,
   label,
   source,
   backlinks = [],
@@ -80,6 +85,7 @@ export function createClassicLocationVariableAttrs({
   return {
     rdfaNodeType: 'literal',
     datatype: XSD('string').namedNode,
+    __rdfaId,
     externalTriples,
     backlinks: [...backlinks, ...addedBacklinks],
     label,

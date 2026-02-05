@@ -31,11 +31,13 @@ type CreateNumberVariableAttrsArgs = {
 } & AllOrNone<{
   variable: string;
   variableInstance: string;
+  __rdfaId?: string;
 }>;
 
 export function createNumberVariableAttrs({
   variable,
   variableInstance,
+  __rdfaId,
   label,
   value,
   minimumValue,
@@ -72,6 +74,7 @@ export function createNumberVariableAttrs({
     datatype: XSD('number').namedNode,
     label,
     externalTriples,
+    __rdfaId,
     backlinks,
     content: value,
     minimumValue,

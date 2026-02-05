@@ -10,6 +10,7 @@ import {
 
 const BaseVariableInstanceSchema = z.object({
   uri: z.string(),
+  __rdfaId: z.string().optional(),
 });
 
 const TextVariableInstanceSchema = BaseVariableInstanceSchema.extend({

@@ -40,6 +40,7 @@ import insertMeasure from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsi
 import { Variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/variable';
 import { generateVariableInstanceUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 import { mapObject } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/map-object';
+import { v4 as uuid } from 'uuid';
 
 type Option = {
   uri: string;
@@ -545,30 +546,35 @@ export default class RoadsignsModal extends Component<Signature> {
 function instantiateVariable(
   variable: Exclude<Variable, { type: 'instruction' }>,
 ) {
+  const __rdfaId = uuid();
   switch (variable.type) {
     case 'text':
       return {
         uri: generateVariableInstanceUri(),
         value: variable.defaultValue,
         variable,
+        __rdfaId,
       };
     case 'number':
       return {
         uri: generateVariableInstanceUri(),
         value: variable.defaultValue,
         variable,
+        __rdfaId,
       };
     case 'date':
       return {
         uri: generateVariableInstanceUri(),
         value: variable.defaultValue,
         variable,
+        __rdfaId,
       };
     case 'location':
       return {
         uri: generateVariableInstanceUri(),
         value: variable.defaultValue,
         variable,
+        __rdfaId,
       };
     case 'codelist':
       return {
@@ -576,6 +582,7 @@ function instantiateVariable(
         value: variable.defaultValue,
         valueLabel: variable.defaultValueLabel,
         variable,
+        __rdfaId,
       };
   }
 }

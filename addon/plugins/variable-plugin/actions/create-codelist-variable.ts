@@ -42,13 +42,18 @@ type CreateCodelistVariableAttrsArgs = {
   source: string;
   codelist: string;
   hardcodedOptionList?: CodeListOption[];
-} & AllOrNone<{ variable: string; variableInstance: string }>;
+} & AllOrNone<{
+  variable: string;
+  variableInstance: string;
+  __rdfaId?: string;
+}>;
 
 export function createCodelistVariableAttrs({
   selectionStyle,
   label,
   source,
   codelist,
+  __rdfaId,
   variable,
   variableInstance,
   hardcodedOptionList,
@@ -79,6 +84,7 @@ export function createCodelistVariableAttrs({
     externalTriples,
     selectionStyle,
     source,
+    __rdfaId,
     codelist,
     label,
     variable,

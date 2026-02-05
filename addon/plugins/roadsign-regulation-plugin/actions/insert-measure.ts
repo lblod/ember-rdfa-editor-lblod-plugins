@@ -50,7 +50,7 @@ type InsertMeasureArgs = {
   arDesignUri?: string;
   zonality: ZonalOrNot;
   temporal: boolean;
-  variables: Record<string, VariableInstance>;
+  variables: Record<string, VariableInstance & { __rdfaId: string }>;
   templateString: string;
   decisionUri: string;
   articleUriGenerator?: () => string;
@@ -177,12 +177,12 @@ export default function insertMeasure({
           // mobiliteit:verwijstNaar, mobiliteit:heeftGevolg
           ...Object.values(variables)
             .filter(
-              (variableInstance: VariableInstance) =>
+              (variableInstance) =>
                 variableInstance.variable.type === 'location',
             )
-            .map((variableInstance: VariableInstance) => ({
+            .map((variableInstance) => ({
               predicate: MOBILITEIT('plaatsbepaling').full,
-              object: sayDataFactory.literalNode(variableInstance.uri),
+              object: sayDataFactory.literalNode(variableInstance.__rdfaId),
             })),
         ],
         externalTriples,
@@ -345,6 +345,7 @@ function constructVariableNode(
     backlinks,
     variable: variable.uri,
     variableInstance: variableInstance.uri,
+    __rdfaId: variableInstance.__rdfaId,
     value: valueStr,
     valueLabel:
       'valueLabel' in variableInstance
