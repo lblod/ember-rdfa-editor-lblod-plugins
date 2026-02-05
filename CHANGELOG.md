@@ -1,5 +1,35 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.0.0
+
+### Major Changes
+
+- [#622](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/622) [`f11000d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f11000d89ff4c93a40f87be958b90e7cc52cf2c0) Thanks [@kobemertens](https://github.com/kobemertens)! - `insertMeasure` expects `VariableInstance`s with a non-optional `__rdfaId`
+
+### Minor Changes
+
+- [#624](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/624) [`564c223`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/564c223c12bd2e4712796ae8c9fc4593db539dfa) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add developer modal info to document validation modal
+
+- [#619](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/619) [`01a6c0d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/01a6c0d308305ede93eb8a22a276d5a7f036b1db) Thanks [@piemonkey](https://github.com/piemonkey)! - Add marcode variable with separate insert button, using hard-coded URIs and labels
+
+- [#625](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/625) [`298e176`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/298e176f5b06345c1130358d788d096d1e47f0f2) Thanks [@piemonkey](https://github.com/piemonkey)! - Update and improve RDFa annotations of inserted AR designs to more closely follow the data model
+
+### Patch Changes
+
+- [#621](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/621) [`d24e857`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d24e857e13dd9f6edd23c924ff4f14871724ebf6) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Don't show Z sign in GN
+
+- [#626](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/626) [`e06f00a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e06f00a6f03fc9a57dac6a5db4e9fe80b392044d) Thanks [@piemonkey](https://github.com/piemonkey)! - Update usage of AuCard and AuAccordion to avoid deprecated behaviour
+
+- [#618](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/618) [`29920bc`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/29920bcd6d316470556433a018a2c90739cfecff) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Styling fixes on document validation plugin
+
+- [#623](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/623) [`a0e9139`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/a0e9139a0c5d2dfdde787a0cb94f52c59661987b) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Improve visual representation of dates in citatie plugin
+
+- [#622](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/622) [`3f36533`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3f365333c21531feb20132202d5ff855c72a5149) Thanks [@kobemertens](https://github.com/kobemertens)! - add mobility measure plaatsbepaling predicate
+
+- [#626](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/626) [`4a53f7e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4a53f7e19020ea54996eec0a29c7f575991343a7) Thanks [@piemonkey](https://github.com/piemonkey)! - Add @lblod/ember-rdfa-editor v13 to peer-deps as it was already supported
+
+- [#620](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/620) [`2bb2d86`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2bb2d8667fd883733b2c3224a79adf632ba324cb) Thanks [@kobemertens](https://github.com/kobemertens)! - Change traffic measure sorting to take sign count into account
+
 ## 34.1.1
 
 ### Patch Changes
