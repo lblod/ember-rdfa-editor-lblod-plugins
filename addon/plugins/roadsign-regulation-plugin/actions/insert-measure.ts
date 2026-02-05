@@ -182,7 +182,7 @@ export default function insertMeasure({
             )
             .map((variableInstance: VariableInstance) => ({
               predicate: MOBILITEIT('plaatsbepaling'),
-              object: sayDataFactory.namedNode(variableInstance.uri),
+              object: sayDataFactory.literalNode(variableInstance.uri),
             })),
         ],
         externalTriples,
