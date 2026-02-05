@@ -11,13 +11,17 @@ import { fn } from '@ember/helper';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { ExternalLinkIcon } from '@appuniversum/ember-appuniversum/components/icons/external-link';
 import t from 'ember-intl/helpers/t';
-import { eq } from 'ember-truth-helpers';
+import { and, eq } from 'ember-truth-helpers';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { CircleInfoIcon } from '@appuniversum/ember-appuniversum/components/icons/circle-info';
+import { SettingsIcon } from '@appuniversum/ember-appuniversum/components/icons/settings';
+import { tracked } from '@glimmer/tracking';
+import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
 
 interface Sig {
   Args: {
     controller: SayController;
+    enableDeveloperInfo?: boolean;
   };
 }
 
@@ -33,6 +37,7 @@ function hasProperty<
 }
 
 export default class DocumentValidationPluginCard extends Component<Sig> {
+  @tracked developerModalOpen = false;
   get controller() {
     return this.args.controller;
   }
@@ -81,6 +86,9 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       view: this.controller.mainEditorView,
     });
     this.controller.focus();
+    if (this.developerModalOpen) {
+      this.developerModalOpen = false;
+    }
   };
   get status() {
     if (!this.validationState?.report) return 'not-run';
@@ -140,6 +148,24 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
     }
     return true;
   };
+  openDeveloperModal = (event: Event) => {
+    this.developerModalOpen = true;
+    event.stopPropagation();
+  };
+  closeDeveloperModal = () => {
+    this.developerModalOpen = false;
+  };
+
+  get formattedValidationResult() {
+    return this.validationState?.report?.results.map((result) => ({
+      focusNode: result.focusNode?.value,
+      path: result.path?.value,
+      severity: result.severity?.value,
+      sourceConstraintComponent: result.sourceConstraintComponent?.value,
+      sourceShape: result.sourceShape?.value,
+      value: result.value?.value,
+    }));
+  }
 
   <template>
     <AuCard
@@ -158,17 +184,27 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       as |c|
     >
       <c.header>
-        <p class='au-u-medium au-u-h6'>
-          {{#if (eq this.status 'valid')}}
-            {{t 'document-validation-plugin.valid-document-title'}}
-          {{else if (eq this.status 'invalid')}}
-            {{t 'document-validation-plugin.invalid-document-title'}}
-          {{else if (eq this.status 'not-run')}}
-            {{t 'document-validation-plugin.document-not-validated-title'}}
-          {{else if (eq this.status 'no-matches')}}
-            {{t 'document-validation-plugin.no-matching-rules'}}
+        <div class='au-u-flex au-u-flex--between au-u-1-1'>
+          <p class='au-u-medium au-u-h6'>
+            {{#if (eq this.status 'valid')}}
+              {{t 'document-validation-plugin.valid-document-title'}}
+            {{else if (eq this.status 'invalid')}}
+              {{t 'document-validation-plugin.invalid-document-title'}}
+            {{else if (eq this.status 'not-run')}}
+              {{t 'document-validation-plugin.document-not-validated-title'}}
+            {{else if (eq this.status 'no-matches')}}
+              {{t 'document-validation-plugin.no-matching-rules'}}
+            {{/if}}
+          </p>
+          {{#if (and @enableDeveloperInfo this.documentValidationErrors)}}
+            <AuButton
+              @icon={{SettingsIcon}}
+              @iconAlignment='left'
+              @skin='link'
+              {{on 'click' this.openDeveloperModal}}
+            />
           {{/if}}
-        </p>
+        </div>
       </c.header>
       <c.content>
         <div>
@@ -233,5 +269,78 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       </c.content>
 
     </AuCard>
+    {{#if @enableDeveloperInfo}}
+      <AuModal
+        @title={{t 'document-validation-plugin.developer-modal-title'}}
+        @closeModal={{this.closeDeveloperModal}}
+        @modalOpen={{this.developerModalOpen}}
+        @size='large'
+        as |Modal|
+      >
+        <Modal.Body>
+          {{#each this.formattedValidationResult as |result|}}
+            <AuCard
+              class='au-u-margin say-document-validation__developer-card'
+              @disableAuContent={{true}}
+              as |c|
+            >
+              <c.content>
+                {{! template-lint-disable no-bare-strings }}
+                <p>
+                  <span class='au-u-bold'>
+                    FocusNode:
+                  </span>
+                  {{result.focusNode}}
+                  <AuButton
+                    class='au-u-padding-left-none au-u-padding-right-none'
+                    @icon={{ExternalLinkIcon}}
+                    @skin='link'
+                    title={{result.focusNode}}
+                    {{on 'click' (fn this.goToSubject result.focusNode)}}
+                  >{{t
+                      'document-validation-plugin.see-related-node'
+                    }}</AuButton>
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    Path:
+                  </span>
+                  {{result.path}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    Severity:
+                  </span>
+                  {{result.severity}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    SourceConstraintComponent:
+                  </span>
+                  {{result.sourceConstraintComponent}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    SourceShape:
+                  </span>
+                  {{result.sourceShape}}
+                </p>
+                <p>
+                  <span class='au-u-bold'>
+                    Value:
+                  </span>
+                  {{result.value}}
+                </p>
+              </c.content>
+            </AuCard>
+          {{/each}}
+        </Modal.Body>
+        <Modal.Footer>
+          <AuButton {{on 'click' this.closeDeveloperModal}}>{{t
+              'document-validation-plugin.developer-modal-button'
+            }}</AuButton>
+        </Modal.Footer>
+      </AuModal>
+    {{/if}}
   </template>
 }
