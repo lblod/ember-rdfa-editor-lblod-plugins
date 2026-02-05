@@ -90,6 +90,9 @@ async function _queryMobilityMeasures<Count extends boolean>(
   const selectStatement = count
     ? /* sparql */ `SELECT (COUNT(DISTINCT(?uri)) AS ?count)`
     : /* sparql */ `SELECT DISTINCT ?uri ?label ?preview ?zonality ?variableSignage`;
+  const groupByStatement = !count
+    ? /* sparql */ `GROUP BY ?uri ?label ?firstLetters ?number ?secondLetters ?preview ?zonality ?variableSignage`
+    : '';
 
   const filterStatement = _buildFilters(options).join('\n');
   const orderBindings = !count
@@ -100,7 +103,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
     `
     : '';
   const orderByStatement = !count
-    ? /* sparql */ `ORDER BY ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))`
+    ? /* sparql */ `ORDER BY ASC(COUNT(DISTINCT ?signConceptItem)) ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))`
     : '';
   const paginationStatement = !count
     ? /* sparql */ `LIMIT ${pageSize} OFFSET ${page * pageSize}`
@@ -117,6 +120,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
         a mobiliteit:Mobiliteitmaatregelconcept;
         skos:prefLabel ?label;
         ext:zonality ?zonality;
+        mobiliteit:heeftVerkeerstekenLijstItem ?signConceptItem ;
         mobiliteit:Mobiliteitsmaatregelconcept.template ?templateUri.
 
       ?templateUri ext:preview ?preview.
@@ -135,6 +139,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
       ${filterStatement}
       ${orderBindings}
     }
+    ${groupByStatement}
     ${orderByStatement}
     ${paginationStatement}
   `;
