@@ -380,6 +380,7 @@ export default class BesluitSampleController extends Controller {
         onlyArticleSpecialName: true,
       },
       documentValidation: {
+        enableDeveloperInfo: true,
         rules: [
           {
             shaclRule:

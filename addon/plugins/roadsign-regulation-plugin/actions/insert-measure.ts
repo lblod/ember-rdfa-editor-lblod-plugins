@@ -45,6 +45,13 @@ import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
 import { VariableInstance } from '../schemas/variable-instance';
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
+import { namespace } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+
+// This is defined locally as it's an implementation quirk that we don't want to use generally
+const RELATIE_OBJECT = namespace(
+  'https://wegenenverkeer.data.vlaanderen.be/ns/implementatieelement#RelatieObject.',
+  'relatieobject',
+);
 
 type InsertMeasureArgs = {
   arDesignUri?: string;
@@ -79,16 +86,43 @@ export default function insertMeasure({
         ? args.measureConcept
         : args.measureDesign.measureConcept;
     const measureDesign = 'measureDesign' in args && args.measureDesign;
-    const externalTriples: FullTriple[] | undefined =
-      !arDesignUri || !measureDesign
-        ? undefined
-        : [
-            {
-              subject: sayDataFactory.namedNode(arDesignUri),
-              predicate: ONDERDEEL('BevatMaatregelOntwerp').full,
-              object: sayDataFactory.namedNode(measureDesign.uri),
-            },
-          ];
+    let externalTriples: FullTriple[] | undefined;
+    if (arDesignUri && measureDesign) {
+      // We don't get this URI from VKS as we're generally not interested in the internal
+      // implementation details of their system. Since this association class made it's way into the
+      // model, we now need it. Their URIs are of the form https://does.not.resolve/BevatMaatregelOntwerp/<UID>
+      // which implies that they do not intend them to be outward facing. We therefore create our
+      // own URI here for internal use, and to avoid needing blank nodes, which can cause issues
+      // with some tooling.
+      const associationClassUri = `https://does.not.resolve/lblod/BevatMaatregelOntwerp/${uuid()}`;
+      externalTriples = [
+        {
+          subject: sayDataFactory.namedNode(associationClassUri),
+          predicate: RELATIE_OBJECT('bron').full,
+          object: sayDataFactory.namedNode(arDesignUri),
+        },
+        {
+          subject: sayDataFactory.namedNode(associationClassUri),
+          predicate: RDF('type').full,
+          object: ONDERDEEL('BevatMaatregelOntwerp').namedNode,
+        },
+        {
+          subject: sayDataFactory.namedNode(associationClassUri),
+          predicate: RELATIE_OBJECT('doel').full,
+          object: sayDataFactory.namedNode(measureDesign.uri),
+        },
+        {
+          subject: sayDataFactory.namedNode(measureDesign.uri),
+          predicate: RDF('type').full,
+          object: MOBILITEIT('MobiliteitsmaatregelOntwerp').namedNode,
+        },
+        {
+          subject: sayDataFactory.namedNode(arDesignUri),
+          predicate: RDF('type').full,
+          object: MOBILITEIT('AanvullendReglementOntwerp').namedNode,
+        },
+      ];
+    }
     const { schema } = state;
     const signNodes = measureConcept.trafficSignalConcepts
       .filter(
@@ -205,7 +239,7 @@ export default function insertMeasure({
       addPropertyToNode({
         resource: articleNode.attrs.subject as string,
         property: {
-          predicate: MOBILITEIT('heeftVerkeersmaatregel').full,
+          predicate: MOBILITEIT('heeftMobiliteitsmaatregel').full,
           object: sayDataFactory.resourceNode(
             measureNode.attrs.subject as string,
           ),
