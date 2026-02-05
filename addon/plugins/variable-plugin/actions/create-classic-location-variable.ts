@@ -35,16 +35,23 @@ export function createClassicLocationVariable(
 type CreateClassicLocationVariableAttrsArgs = {
   label?: string;
   source?: string;
-} & AllOrNone<{ variable: string; variableInstance: string }>;
+  backlinks?: IncomingTriple[];
+} & AllOrNone<{
+  variable: string;
+  variableInstance: string;
+  __rdfaId?: string;
+}>;
 
 export function createClassicLocationVariableAttrs({
   variable,
   variableInstance,
+  __rdfaId,
   label,
   source,
+  backlinks = [],
 }: CreateClassicLocationVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
-  const backlinks: IncomingTriple[] = [];
+  const addedBacklinks: IncomingTriple[] = [];
   if (variable) {
     externalTriples.push(
       {
@@ -70,7 +77,7 @@ export function createClassicLocationVariableAttrs({
         object: sayDataFactory.namedNode(source),
       });
     }
-    backlinks.push({
+    addedBacklinks.push({
       subject: sayDataFactory.resourceNode(variableInstance),
       predicate: RDF('value').full,
     });
@@ -78,8 +85,9 @@ export function createClassicLocationVariableAttrs({
   return {
     rdfaNodeType: 'literal',
     datatype: XSD('string').namedNode,
+    __rdfaId,
     externalTriples,
-    backlinks,
+    backlinks: [...backlinks, ...addedBacklinks],
     label,
     source,
   };

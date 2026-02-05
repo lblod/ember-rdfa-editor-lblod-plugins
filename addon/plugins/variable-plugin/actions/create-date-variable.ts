@@ -34,11 +34,16 @@ type CreateDateVariableAttrsArgs = {
   format?: string;
   custom?: boolean;
   customAllowed?: boolean;
-} & AllOrNone<{ variable: string; variableInstance: string }>;
+} & AllOrNone<{
+  variable: string;
+  variableInstance: string;
+  __rdfaId?: string;
+}>;
 
 export function createDateVariableAttrs({
   variable,
   variableInstance,
+  __rdfaId,
   label,
   value,
   format,
@@ -82,6 +87,7 @@ export function createDateVariableAttrs({
     externalTriples,
     backlinks,
     label,
+    __rdfaId,
     content: value,
     format,
     customAllowed,

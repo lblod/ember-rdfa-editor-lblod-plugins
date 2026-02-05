@@ -32,12 +32,14 @@ export function createTextVariable(args: CreateTextVariableArgs) {
 type CreateTextVariableAttrsArgs = { label?: string } & AllOrNone<{
   variable: string;
   variableInstance: string;
+  __rdfaId?: string;
 }>;
 
 export function createTextVariableAttrs({
   label,
   variable,
   variableInstance,
+  __rdfaId,
 }: CreateTextVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
   const backlinks: IncomingTriple[] = [];
@@ -67,6 +69,7 @@ export function createTextVariableAttrs({
   return {
     rdfaNodeType: 'literal',
     datatype: XSD('string').namedNode,
+    __rdfaId,
     label,
     backlinks,
     externalTriples,

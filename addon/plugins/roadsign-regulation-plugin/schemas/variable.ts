@@ -23,6 +23,7 @@ export const DateVariableSchema = BaseVariableSchema.extend({
 export const CodelistVariableSchema = BaseVariableSchema.extend({
   type: z.literal('codelist'),
   defaultValue: z.string().optional(),
+  defaultValueLabel: z.string().optional(),
   codelistUri: z.string(),
 });
 

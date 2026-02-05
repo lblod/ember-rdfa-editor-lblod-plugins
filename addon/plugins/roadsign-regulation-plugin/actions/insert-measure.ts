@@ -7,7 +7,10 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { type FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import {
+  type IncomingTriple,
+  type FullTriple,
+} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   DCT,
   EXT,
@@ -22,7 +25,6 @@ import {
   TransactionMonad,
 } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { MobilityMeasureConcept } from '../schemas/mobility-measure-concept';
-import { Variable } from '../schemas/variable';
 import { buildArticleStructure } from '../../decision-plugin/utils/build-article-structure';
 import { insertArticle } from '../../decision-plugin/actions/insert-article';
 import { TrafficSignalConcept } from '../schemas/traffic-signal-concept';
@@ -35,16 +37,12 @@ import {
   ZonalOrNot,
 } from '../constants';
 import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
-import { generateVariableInstanceUri } from '../../variable-plugin/utils/variable-helpers';
 import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
 import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
 import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
 import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
-import {
-  isVariableInstance,
-  VariableInstance,
-} from '../schemas/variable-instance';
+import { VariableInstance } from '../schemas/variable-instance';
 import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
 import { namespace } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -59,10 +57,7 @@ type InsertMeasureArgs = {
   arDesignUri?: string;
   zonality: ZonalOrNot;
   temporal: boolean;
-  variables: Record<
-    string,
-    Exclude<Variable, { type: 'instruction' }> | VariableInstance
-  >;
+  variables: Record<string, VariableInstance & { __rdfaId: string }>;
   templateString: string;
   decisionUri: string;
   articleUriGenerator?: () => string;
@@ -157,14 +152,24 @@ export default function insertMeasure({
         signList,
       ];
     }
-    const measureBody = constructMeasureBody(templateString, variables, schema);
+    const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
+    const measureBody = constructMeasureBody(
+      templateString,
+      variables,
+      schema,
+      [
+        {
+          subject: sayDataFactory.resourceNode(measureUri),
+          predicate: MOBILITEIT('plaatsbepaling').full,
+        },
+      ],
+    );
     const temporalNode = temporal
       ? schema.nodes.paragraph.create(
           {},
           schema.text('Deze signalisatie is dynamisch.'),
         )
       : undefined;
-    const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
     const measureNode = schema.nodes.block_rdfa.create(
       {
         rdfaNodeType: 'resource',
@@ -204,6 +209,15 @@ export default function insertMeasure({
           // locn:address, mobiliteit:contactorganisatie, mobiliteit:doelgroep, adms:identifier,
           // mobiliteit:periode, mobiliteit:plaatsbepaling, schema:eventSchedule, mobiliteit:type,
           // mobiliteit:verwijstNaar, mobiliteit:heeftGevolg
+          ...Object.values(variables)
+            .filter(
+              (variableInstance) =>
+                variableInstance.variable.type === 'location',
+            )
+            .map((variableInstance) => ({
+              predicate: MOBILITEIT('plaatsbepaling').full,
+              object: sayDataFactory.literalNode(variableInstance.__rdfaId),
+            })),
         ],
         externalTriples,
       },
@@ -256,11 +270,9 @@ export default function insertMeasure({
 
 function constructMeasureBody(
   templateString: string,
-  variables: Record<
-    string,
-    Exclude<Variable, { type: 'instruction' }> | VariableInstance
-  >,
+  variables: Record<string, VariableInstance>,
   schema: Schema,
+  backlinks?: IncomingTriple[],
 ) {
   const parts = templateString.split(/(\$\{[^{}$]+\})/);
   const nodes = [];
@@ -273,7 +285,7 @@ function constructMeasureBody(
       const variableName = match[1];
       const matchedVariable = variables[variableName];
       if (matchedVariable) {
-        nodes.push(constructVariableNode(matchedVariable, schema));
+        nodes.push(constructVariableNode(matchedVariable, schema, backlinks));
       } else {
         nodes.push(schema.text(part));
       }
@@ -353,28 +365,21 @@ function constructSignalNode(
 }
 
 function constructVariableNode(
-  variableOrVariableInstance:
-    | Exclude<Variable, { type: 'instruction' }>
-    | VariableInstance,
+  variableInstance: VariableInstance,
   schema: Schema,
+  backlinks?: IncomingTriple[],
 ) {
-  const variable = isVariableInstance(variableOrVariableInstance)
-    ? variableOrVariableInstance.variable
-    : variableOrVariableInstance;
-  const variableInstance = isVariableInstance(variableOrVariableInstance)
-    ? variableOrVariableInstance
-    : {
-        uri: generateVariableInstanceUri(),
-        value: undefined,
-      };
+  const variable = variableInstance.variable;
   const valueStr =
     variableInstance.value instanceof Date
       ? variableInstance.value.toISOString()
       : variableInstance.value?.toString();
   const args = {
     schema,
+    backlinks,
     variable: variable.uri,
     variableInstance: variableInstance.uri,
+    __rdfaId: variableInstance.__rdfaId,
     value: valueStr,
     valueLabel:
       'valueLabel' in variableInstance
