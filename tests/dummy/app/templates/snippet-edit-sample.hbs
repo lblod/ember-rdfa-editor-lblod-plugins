@@ -8,6 +8,7 @@
     </:header>
     <:content>
       <EditorContainer
+        @controller={{this.controller}}
         @editorOptions={{hash
           showPaper=true
           showToolbarBottom=null
@@ -15,83 +16,91 @@
           showSidebarRight=true
         }}
       >
-        <:top>
-          {{#if this.controller}}
-            <ResponsiveToolbar>
-              <:main as |Tb|>
-                <Tb.Group>
-                  <Toolbar::History @controller={{this.controller}} />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::TextStyle::Bold @controller={{this.controller}} />
-                  <Plugins::TextStyle::Italic @controller={{this.controller}} />
-                  <Plugins::TextStyle::Strikethrough
-                    @controller={{this.controller}}
-                  />
-                  <Plugins::TextStyle::Underline
-                    @controller={{this.controller}}
-                  />
-                  <Plugins::TextStyle::Subscript
-                    @controller={{this.controller}}
-                  />
-                  <Plugins::TextStyle::Superscript
-                    @controller={{this.controller}}
-                  />
-                  <Plugins::TextStyle::Highlight
-                    @controller={{this.controller}}
-                    @defaultColor='#FFEA00'
-                  />
-                  <Plugins::TextStyle::Color
-                    @controller={{this.controller}}
-                    @defaultColor='#000000'
-                  />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::List::Unordered @controller={{this.controller}} />
-                  <Plugins::List::Ordered @controller={{this.controller}} />
-                  <Plugins::Indentation::IndentationMenu
-                    @controller={{this.controller}}
-                  />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Link::LinkMenu @controller={{this.controller}} />
-                  <Plugins::Image::InsertMenu @controller={{this.controller}} />
-                  <GenericRdfaVariable::InsertMenu
-                    @controller={{this.controller}}
-                  />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Table::TableMenu @controller={{this.controller}} />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Heading::HeadingMenu
-                    @controller={{this.controller}}
-                  />
-                </Tb.Group>
-                <Tb.Group>
-                  <Plugins::Alignment::AlignmentMenu
-                    @controller={{this.controller}}
-                  />
-                </Tb.Group>
-                <Tb.Spacer />
-                <Tb.Group>
-                  <TableOfContentsPlugin::ToolbarButton
-                    @controller={{this.controller}}
-                  />
-                  <div class='say-rdfa-toggle'>
-                    <AuToggleSwitch
-                      @checked={{this.editableNodes}}
-                      @onChange={{this.toggleEditableNodes}}
-                    >
-                      Toggle editable nodes
-                    </AuToggleSwitch>
-                  </div>
-                </Tb.Group>
-                <Plugins::HtmlEditor::Menu @controller={{this.controller}} />
-              </:main>
-            </ResponsiveToolbar>
-          {{/if}}
-        </:top>
+        <:toolbar as |container|>
+          <ResponsiveToolbar>
+            <:main as |Tb|>
+              <Tb.Group>
+                <Toolbar::History @controller={{container.controller}} />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::TextStyle::Bold
+                  @controller={{container.controller}}
+                />
+                <Plugins::TextStyle::Italic
+                  @controller={{container.controller}}
+                />
+                <Plugins::TextStyle::Strikethrough
+                  @controller={{container.controller}}
+                />
+                <Plugins::TextStyle::Underline
+                  @controller={{container.controller}}
+                />
+                <Plugins::TextStyle::Subscript
+                  @controller={{container.controller}}
+                />
+                <Plugins::TextStyle::Superscript
+                  @controller={{container.controller}}
+                />
+                <Plugins::TextStyle::Highlight
+                  @controller={{container.controller}}
+                  @defaultColor='#FFEA00'
+                />
+                <Plugins::TextStyle::Color
+                  @controller={{container.controller}}
+                  @defaultColor='#000000'
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::List::Unordered
+                  @controller={{container.controller}}
+                />
+                <Plugins::List::Ordered @controller={{container.controller}} />
+                <Plugins::Indentation::IndentationMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Link::LinkMenu @controller={{container.controller}} />
+                <Plugins::Image::InsertMenu
+                  @controller={{container.controller}}
+                />
+                <GenericRdfaVariable::InsertMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Table::TableMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Heading::HeadingMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Group>
+                <Plugins::Alignment::AlignmentMenu
+                  @controller={{container.controller}}
+                />
+              </Tb.Group>
+              <Tb.Spacer />
+              <Tb.Group>
+                <TableOfContentsPlugin::ToolbarButton
+                  @controller={{container.controller}}
+                />
+                <div class='say-rdfa-toggle'>
+                  <AuToggleSwitch
+                    @checked={{this.editableNodes}}
+                    @onChange={{this.toggleEditableNodes}}
+                  >
+                    Toggle editable nodes
+                  </AuToggleSwitch>
+                </div>
+              </Tb.Group>
+              <Plugins::HtmlEditor::Menu @controller={{container.controller}} />
+            </:main>
+          </ResponsiveToolbar>
+        </:toolbar>
         <:default>
           <Editor
             @plugins={{this.plugins}}
@@ -100,116 +109,114 @@
             @rdfaEditorInit={{this.rdfaEditorInit}}
           />
         </:default>
-        <:aside>
-          {{#if this.controller}}
-            <Sidebar as |Sidebar|>
-              <Sidebar.Collapsible @title='Insert'>
-                <DocumentTitlePlugin::InsertTitleCard
-                  @controller={{this.controller}}
-                />
-                <ArticleStructurePlugin::ArticleStructureCard
-                  @controller={{this.controller}}
-                  @options={{this.config.structures}}
-                />
-                <VariablePlugin::Date::Insert
-                  @controller={{this.controller}}
-                  @options={{this.config.date}}
-                />
-                <CitationPlugin::CitationInsert
-                  @controller={{this.controller}}
-                  @plugin={{this.citationPlugin}}
-                  @config={{this.config.citation}}
-                />
-                <LocationPlugin::Insert
-                  @controller={{this.controller}}
-                  @config={{this.config.location}}
-                />
-                <TemplateCommentsPlugin::Insert
-                  @controller={{this.controller}}
-                />
-                <VariablePlugin::Address::Insert
-                  @controller={{this.controller}}
-                />
-                <SnippetPlugin::SnippetInsertPlaceholder
-                  @controller={{this.controller}}
+        <:sidebarRight as |container|>
+          <Sidebar as |Sidebar|>
+            <Sidebar.Collapsible @title='Insert'>
+              <DocumentTitlePlugin::InsertTitleCard
+                @controller={{container.controller}}
+              />
+              <ArticleStructurePlugin::ArticleStructureCard
+                @controller={{container.controller}}
+                @options={{this.config.structures}}
+              />
+              <VariablePlugin::Date::Insert
+                @controller={{container.controller}}
+                @options={{this.config.date}}
+              />
+              <CitationPlugin::CitationInsert
+                @controller={{container.controller}}
+                @plugin={{this.citationPlugin}}
+                @config={{this.config.citation}}
+              />
+              <LocationPlugin::Insert
+                @controller={{container.controller}}
+                @config={{this.config.location}}
+              />
+              <TemplateCommentsPlugin::Insert
+                @controller={{container.controller}}
+              />
+              <VariablePlugin::Address::Insert
+                @controller={{container.controller}}
+              />
+              <SnippetPlugin::SnippetInsertPlaceholder
+                @controller={{container.controller}}
+                @config={{this.config.snippet}}
+              />
+            </Sidebar.Collapsible>
+            <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
+              <VariablePlugin::InsertVariableCard
+                @controller={{container.controller}}
+                @variableTypes={{this.variableTypes}}
+              />
+              <VariablePlugin::Address::Edit
+                @controller={{container.controller}}
+                @defaultMunicipality='Gent'
+              />
+              <ArticleStructurePlugin::StructureCard
+                @controller={{container.controller}}
+                @options={{this.config.structures}}
+              />
+              <CitationPlugin::CitationCard
+                @controller={{container.controller}}
+                @plugin={{this.citationPlugin}}
+                @config={{this.config.citation}}
+              />
+              <VariablePlugin::Date::Edit
+                @controller={{container.controller}}
+                @options={{this.dateOptions}}
+              />
+              <VariablePlugin::Person::Edit
+                @controller={{container.controller}}
+                @config={{this.config.lmb}}
+              />
+              <TemplateCommentsPlugin::EditCard
+                @controller={{container.controller}}
+              />
+              <AuHr />
+              {{#if this.activeNode}}
+                <this.SnippetListSelect
+                  @node={{this.activeNode}}
+                  @controller={{container.controller}}
                   @config={{this.config.snippet}}
                 />
-              </Sidebar.Collapsible>
-              <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
-                <VariablePlugin::InsertVariableCard
-                  @controller={{this.controller}}
-                  @variableTypes={{this.variableTypes}}
+              {{/if}}
+              {{#if this.editableNodes}}
+                <this.VisualiserCard
+                  @controller={{container.controller}}
+                  @config={{this.visualizerConfig}}
                 />
-                <VariablePlugin::Address::Edit
-                  @controller={{this.controller}}
-                  @defaultMunicipality='Gent'
+                <this.NodeControlsCard
+                  @node={{this.activeNode}}
+                  @controller={{container.controller}}
                 />
-                <ArticleStructurePlugin::StructureCard
-                  @controller={{this.controller}}
-                  @options={{this.config.structures}}
-                />
-                <CitationPlugin::CitationCard
-                  @controller={{this.controller}}
-                  @plugin={{this.citationPlugin}}
-                  @config={{this.config.citation}}
-                />
-                <VariablePlugin::Date::Edit
-                  @controller={{this.controller}}
-                  @options={{this.dateOptions}}
-                />
-                <VariablePlugin::Person::Edit
-                  @controller={{this.controller}}
-                  @config={{this.config.lmb}}
-                />
-                <TemplateCommentsPlugin::EditCard
-                  @controller={{this.controller}}
-                />
-                <AuHr />
                 {{#if this.activeNode}}
-                  <this.SnippetListSelect
+                  <this.RelationshipEditorCard
                     @node={{this.activeNode}}
-                    @controller={{this.controller}}
-                    @config={{this.config.snippet}}
+                    @controller={{container.controller}}
+                    @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                  />
+                  <this.DocImportedResourceEditorCard
+                    @controller={{container.controller}}
+                    @optionGeneratorConfig={{this.optionGeneratorConfig}}
+                  />
+                  <this.ImportedResourceLinkerCard
+                    @node={{this.activeNode}}
+                    @controller={{container.controller}}
+                  />
+                  <this.ExternalTripleEditorCard
+                    @node={{this.activeNode}}
+                    @controller={{container.controller}}
+                  />
+                  <this.DebugInfo @node={{this.activeNode}} />
+                  <this.AttributeEditor
+                    @node={{this.activeNode}}
+                    @controller={{container.controller}}
                   />
                 {{/if}}
-                {{#if this.editableNodes}}
-                  <this.VisualiserCard
-                    @controller={{this.controller}}
-                    @config={{this.visualizerConfig}}
-                  />
-                  <this.NodeControlsCard
-                    @node={{this.activeNode}}
-                    @controller={{this.controller}}
-                  />
-                  {{#if this.activeNode}}
-                    <this.RelationshipEditorCard
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
-                    />
-                    <this.DocImportedResourceEditorCard
-                      @controller={{this.controller}}
-                      @optionGeneratorConfig={{this.optionGeneratorConfig}}
-                    />
-                    <this.ImportedResourceLinkerCard
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                    />
-                    <this.ExternalTripleEditorCard
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                    />
-                    <this.DebugInfo @node={{this.activeNode}} />
-                    <this.AttributeEditor
-                      @node={{this.activeNode}}
-                      @controller={{this.controller}}
-                    />
-                  {{/if}}
-                {{/if}}
-              </div>
-            </Sidebar>
-          {{/if}}
-        </:aside>
+              {{/if}}
+            </div>
+          </Sidebar>
+        </:sidebarRight>
       </EditorContainer>
     </:content>
   </DummyContainer>

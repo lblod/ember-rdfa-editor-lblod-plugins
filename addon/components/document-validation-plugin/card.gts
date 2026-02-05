@@ -175,6 +175,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       @expandable={{true}}
       @shadow={{true}}
       @size='small'
+      @disableAuContent={{true}}
       class={{if
         this.isSuccesslike
         'say-document-validation__card-valid'

@@ -156,6 +156,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
         @shadow={{true}}
         @isOpenInitially={{true}}
         @size='small'
+        @disableAuContent={{true}}
         as |Card|
       >
         <Card.header>

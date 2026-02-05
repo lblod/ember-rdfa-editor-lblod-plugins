@@ -7,6 +7,7 @@
     @expandable={{true}}
     @shadow={{true}}
     @size='small'
+    @disableAuContent={{true}}
     as |c|
   >
     <c.header>
@@ -15,23 +16,25 @@
       </AuHeading>
     </c.header>
     <c.content>
-      <PowerSelect
-        @allowClear={{false}}
-        @searchEnabled={{false}}
-        @options={{@variableTypes}}
-        @selected={{this.selectedVariable}}
-        @onChange={{this.updateSelectedVariable}}
-        as |variable|
-      >
-        {{variable.label}}
-      </PowerSelect>
-      {{#if this.selectedVariable}}
-        <this.selectedVariable.component
-          @controller={{this.controller}}
-          @options={{this.selectedVariable.options}}
-          @templateMode={{@templateMode}}
-        />
-      {{/if}}
+      <AuContent>
+        <PowerSelect
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @options={{@variableTypes}}
+          @selected={{this.selectedVariable}}
+          @onChange={{this.updateSelectedVariable}}
+          as |variable|
+        >
+          {{variable.label}}
+        </PowerSelect>
+        {{#if this.selectedVariable}}
+          <this.selectedVariable.component
+            @controller={{this.controller}}
+            @options={{this.selectedVariable.options}}
+            @templateMode={{@templateMode}}
+          />
+        {{/if}}
+      </AuContent>
     </c.content>
   </AuCard>
 {{/if}}
