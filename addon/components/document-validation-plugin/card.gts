@@ -280,6 +280,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
           {{#each this.formattedValidationResult as |result|}}
             <AuCard
               class='au-u-margin say-document-validation__developer-card'
+              @disableAuContent={{true}}
               as |c|
             >
               <c.content>
