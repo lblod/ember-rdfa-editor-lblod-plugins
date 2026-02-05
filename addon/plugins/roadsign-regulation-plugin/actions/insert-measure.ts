@@ -181,7 +181,7 @@ export default function insertMeasure({
                 variableInstance.variable.type === 'location',
             )
             .map((variableInstance: VariableInstance) => ({
-              predicate: MOBILITEIT('plaatsbepaling'),
+              predicate: MOBILITEIT('plaatsbepaling').full,
               object: sayDataFactory.literalNode(variableInstance.uri),
             })),
         ],
