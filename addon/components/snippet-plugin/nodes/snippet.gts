@@ -209,6 +209,7 @@ export default class SnippetNode extends Component<Signature> {
         range: { start, end },
         allowMultipleSnippets: this.allowMultipleSnippets,
       }),
+      { view: this.args.controller.mainEditorView },
     );
   }
   get class() {
