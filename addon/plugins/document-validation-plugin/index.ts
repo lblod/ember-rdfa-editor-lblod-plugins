@@ -17,6 +17,10 @@ import {
 } from '@rdfjs/types';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  BESLUIT,
+  RDF,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export const documentValidationPluginKey =
   new PluginKey<DocumentValidationPluginState>('DOCUMENT_VALIDATION');
@@ -122,6 +126,10 @@ async function validationCallback(view: EditorView, documentHtml: string) {
   const { documentShape } = documentValidationState;
   const rdf = await htmlToRdf(documentHtml);
 
+  const documentHasDecision =
+    rdf.match(null, RDF('type').namedNode, BESLUIT('Besluit').namedNode).size >
+    0;
+
   const shacl = await parse(documentShape);
 
   const validator = new SHACLValidator(shacl, {
@@ -157,11 +165,13 @@ async function validationCallback(view: EditorView, documentHtml: string) {
     }
   }
 
-  const propertiesWithoutErrorsArray = propertyNodes.filter((propertyNode) =>
-    propertiesWithErrors.every(
-      (propertyWithError) => propertyWithError.shape !== propertyNode.value,
-    ),
-  );
+  const propertiesWithoutErrorsArray = documentHasDecision
+    ? propertyNodes.filter((propertyNode) =>
+        propertiesWithErrors.every(
+          (propertyWithError) => propertyWithError.shape !== propertyNode.value,
+        ),
+      )
+    : [];
 
   const successMessagePred = sayFactory.namedNode(
     'http://mu.semte.ch/vocabularies/ext/successMessage',
