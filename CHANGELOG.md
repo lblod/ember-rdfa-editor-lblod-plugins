@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.0.1
+
+### Patch Changes
+
+- [#628](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/628) [`ef95ac6`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/ef95ac6afb3fcb00ab62c346376dbf5a88380bc2) Thanks [@kobemertens](https://github.com/kobemertens)! - Fix bug where snippet was not inserted if cursor was placed in link
+
+- [#629](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/629) [`bbbbaa1`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/bbbbaa1109bc60cde8affcd8d54dff97b59dfd9b) Thanks [@piemonkey](https://github.com/piemonkey)! - Update tracked-built-ins dependency
+
 ## 35.0.0
 
 ### Major Changes
