@@ -108,7 +108,11 @@ import DocImportedResourceEditorCard from '@lblod/ember-rdfa-editor/components/_
 import ImportedResourceLinkerCard from '@lblod/ember-rdfa-editor/components/_private/imported-resource-linker/card';
 import ExternalTripleEditorCard from '@lblod/ember-rdfa-editor/components/_private/external-triple-editor/card';
 import RelationshipEditorCard from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/card';
-import { documentConfig } from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/configs';
+import {
+  combineConfigs,
+  documentConfig,
+  lovConfig,
+} from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/configs';
 import {
   structureWithConfig,
   structureViewWithConfig,
@@ -160,6 +164,18 @@ import {
   legacy_codelist,
   legacyCodelistView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
+
+import {
+  bullet_list_input_rule,
+  ordered_list_input_rule,
+} from '@lblod/ember-rdfa-editor/plugins/list/input_rules';
+import { inputRules } from '@lblod/ember-rdfa-editor';
+
+import type {
+  PredicateOptionGeneratorArgs,
+  TargetOptionGeneratorArgs,
+} from '@lblod/ember-rdfa-editor/components/_private/relationship-editor/types';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -490,6 +506,13 @@ export default class BesluitSampleController extends Controller {
     lastKeyPressedPlugin,
     tablePlugin,
     tableKeymap,
+
+    inputRules({
+      rules: [
+        bullet_list_input_rule(this.schema.nodes.bullet_list),
+        ordered_list_input_rule(this.schema.nodes.ordered_list),
+      ],
+    }),
     linkPasteHandler(this.schema.nodes.link),
     this.citationPlugin,
     createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
@@ -548,7 +571,15 @@ export default class BesluitSampleController extends Controller {
   }
 
   get optionGeneratorConfig() {
-    return this.controller && documentConfig(this.controller);
+    if (this.controller) {
+      const config = combineConfigs(
+        documentConfig(this.controller),
+        lovConfig(),
+      );
+      console.log(config);
+      return config;
+    }
+    return null;
   }
 
   get visualizerConfig(): RdfaVisualizerConfig {
@@ -556,6 +587,36 @@ export default class BesluitSampleController extends Controller {
       displayConfig: {},
     };
   }
+
+  subjectOptionGeneratorTask = restartableTask(
+    async (args?: TargetOptionGeneratorArgs) => {
+      await timeout(200);
+      const result = (await this.optionGeneratorConfig?.subjects?.(args)) ?? [];
+      return result;
+    },
+  );
+  predicateOptionGeneratorTask = restartableTask(
+    async (args?: PredicateOptionGeneratorArgs) => {
+      await timeout(200);
+      const result =
+        (await this.optionGeneratorConfig?.predicates?.(args)) ?? [];
+      return result;
+    },
+  );
+
+  objectOptionGeneratorTask = restartableTask(
+    async (args?: TargetOptionGeneratorArgs) => {
+      await timeout(200);
+      const result = (await this.optionGeneratorConfig?.objects?.(args)) ?? [];
+      return result;
+    },
+  );
+
+  optionGeneratorConfigTaskified = {
+    subjects: this.subjectOptionGeneratorTask.perform.bind(this),
+    predicates: this.predicateOptionGeneratorTask.perform.bind(this),
+    objects: this.objectOptionGeneratorTask.perform.bind(this),
+  };
 
   get standardTemplates() {
     return [

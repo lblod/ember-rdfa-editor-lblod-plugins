@@ -9,6 +9,14 @@ module.exports = function (defaults) {
     sassOptions: {
       sourceMapEmbed: true,
     },
+    babel: {
+      plugins: [
+        // ... any other plugins
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+
+        // NOTE: put any code coverage plugins last, after the transform.
+      ],
+    },
     '@appuniversum/ember-appuniversum': {
       disableWormholeElement: true,
     },
