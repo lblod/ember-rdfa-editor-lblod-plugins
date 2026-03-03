@@ -10,6 +10,7 @@ import AuInput from '@appuniversum/ember-appuniversum/components/au-input';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import { modifier } from 'ember-modifier';
 
 type VariableComponentArgs = {
   Args: {
@@ -65,6 +66,12 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       );
     });
   };
+  determinePlaceholderLabel = modifier(() => {
+    this.labelPlaceholder = this.selectedPlaceholderNode?.attrs.placeholderText;
+    return () => {
+      this.labelPlaceholder = '';
+    };
+  });
   <template>
     {{#if this.showCard}}
       <AuCard
@@ -74,6 +81,7 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
         @shadow={{true}}
         @size='flush'
         as |c|
+        {{this.determinePlaceholderLabel}}
       >
         <c.header>
           Edit Placeholder
