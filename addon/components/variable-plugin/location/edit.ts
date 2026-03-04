@@ -24,7 +24,7 @@ import {
   MOBILITEIT,
   RDF,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { Option } from '@lblod/ember-rdfa-editor/utils/_private/option';
+import { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export type LocationEditOptions = {
   endpoint: string;
