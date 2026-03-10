@@ -59,11 +59,11 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
   get placeholderLabel() {
     return (
       this.editedPlaceholderLabel ||
-      this.selectedPlaceholderNode.attrs.placeholderText
+      this.selectedPlaceholderNode?.attrs.placeholderText
     );
   }
   updateLabelPlaceholder = (event: InputEvent) => {
-    this.editedLabelPlaceholder = (event.target as HTMLInputElement).value;
+    this.editedPlaceholderLabel = (event.target as HTMLInputElement).value;
   };
   updatePlaceholder = () => {
     const { selection } = this.controller.activeEditorState;
@@ -71,7 +71,7 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
       return tr.setNodeAttribute(
         selection.$from.pos,
         'placeholderText',
-        this.editedLabelPlaceholder,
+        this.editedPlaceholderLabel,
       );
     });
   };
