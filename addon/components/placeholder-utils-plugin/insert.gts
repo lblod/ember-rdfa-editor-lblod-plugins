@@ -65,7 +65,7 @@ export default class PlaceholderUtilsPluginInsertComponent extends Component<Sig
         {{on 'click' this.insertPlaceholder}}
         @disabled={{not this.canInsert}}
       >
-        {{t 'location-plugin.insert-placeholder'}}
+        {{t 'placeholder-utils-plugin.button-title'}}
       </AuButton>
     </li>
   </template>

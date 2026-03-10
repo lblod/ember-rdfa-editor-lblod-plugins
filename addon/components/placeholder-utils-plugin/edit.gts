@@ -6,11 +6,14 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
-import AuInput from '@appuniversum/ember-appuniversum/components/au-input';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
-import { modifier } from 'ember-modifier';
+import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
+import AuNativeInput from '../au-native-input';
+import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
+import checkEnterAndSubmit from '@lblod/ember-rdfa-editor-lblod-plugins/utils/check-enter-and-submit';
+import { fn } from '@ember/helper';
 
 type VariableComponentArgs = {
   Args: {
@@ -31,7 +34,7 @@ type Args = {
 };
 
 export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {
-  @tracked labelPlaceholder?: string;
+  @tracked editedPlaceholderLabel?: string;
 
   @service declare intl: IntlService;
 
@@ -53,8 +56,14 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
   get showCard() {
     return !!this.selectedPlaceholderNode;
   }
+  get placeholderLabel() {
+    return (
+      this.editedPlaceholderLabel ||
+      this.selectedPlaceholderNode.attrs.placeholderText
+    );
+  }
   updateLabelPlaceholder = (event: InputEvent) => {
-    this.labelPlaceholder = (event.target as HTMLInputElement).value;
+    this.editedLabelPlaceholder = (event.target as HTMLInputElement).value;
   };
   updatePlaceholder = () => {
     const { selection } = this.controller.activeEditorState;
@@ -62,44 +71,48 @@ export default class EditorPluginsInsertCodelistCardComponent extends Component<
       return tr.setNodeAttribute(
         selection.$from.pos,
         'placeholderText',
-        this.labelPlaceholder,
+        this.editedLabelPlaceholder,
       );
     });
   };
-  determinePlaceholderLabel = modifier(() => {
-    this.labelPlaceholder = this.selectedPlaceholderNode?.attrs.placeholderText;
-    return () => {
-      this.labelPlaceholder = '';
-    };
-  });
+
   <template>
     {{#if this.showCard}}
       <AuCard
         @flex={{true}}
         @divided={{true}}
-        @expandable={{false}}
+        @isOpenInitially={{true}}
+        @expandable={{true}}
         @shadow={{true}}
-        @size='flush'
+        @size='small'
+        @disableAuContent={{true}}
         as |c|
-        {{this.determinePlaceholderLabel}}
       >
         <c.header>
-          Edit Placeholder
+          <AuHeading @level='3' @skin='6'>
+            {{t 'placeholder-utils-plugin.card-title'}}
+          </AuHeading>
         </c.header>
         <c.content>
-          <form class='au-c-form'>
-            <AuLabel>
-              {{t 'editor-plugins.roadsign-regulation.modal.filter.text'}}
+          <AuFormRow>
+            <AuLabel for='label'>
+              {{t 'placeholder-utils-plugin.placeholder-text'}}
             </AuLabel>
-            <AuInput
-              value={{this.labelPlaceholder}}
+            <AuNativeInput
+              id='label'
+              @type='text'
+              @width='block'
+              value={{this.placeholderLabel}}
               {{on 'input' this.updateLabelPlaceholder}}
+              {{on 'keypress' (fn checkEnterAndSubmit this.updatePlaceholder)}}
             />
-            <AuButton {{on 'click' this.updatePlaceholder}}>
-              {{t 'editor-plugins.utils.insert'}}
-            </AuButton>
-
-          </form>
+          </AuFormRow>
+          <AuButton
+            {{on 'click' this.updatePlaceholder}}
+            class='au-u-margin-top'
+          >
+            {{t 'editor-plugins.utils.insert'}}
+          </AuButton>
         </c.content>
       </AuCard>
     {{/if}}

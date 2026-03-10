@@ -524,3 +524,8 @@ document-validation-plugin:
   decision-node-not-found: Please put the cursor inside a decision node
   developer-modal-title: Developer info
   developer-modal-button: Close
+
+placeholder-utils-plugin:
+  card-title: Edit placeholder
+  button-title: Insert placeholder
+  placeholder-text: Placeholder Text
