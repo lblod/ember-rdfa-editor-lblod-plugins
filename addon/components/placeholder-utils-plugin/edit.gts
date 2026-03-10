@@ -33,7 +33,7 @@ type Args = {
   variableTypes: VariableConfig[];
 };
 
-export default class EditorPluginsInsertCodelistCardComponent extends Component<Args> {
+export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
   @tracked editedPlaceholderLabel?: string;
 
   @service declare intl: IntlService;
