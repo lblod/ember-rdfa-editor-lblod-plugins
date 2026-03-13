@@ -20,7 +20,7 @@ export type InsertArticleOptions = StructurePluginOptions & {
 interface Sig {
   Args: {
     controller: SayController;
-    label: string;
+    label?: string;
     options?: InsertArticleOptions;
   };
 }

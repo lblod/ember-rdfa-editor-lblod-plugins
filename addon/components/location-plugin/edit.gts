@@ -37,6 +37,7 @@ import { type Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/locat
 import { type NodeContentsUtils } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/node-contents';
 import { SUPPORTED_LOCATION_TYPES, type LocationType } from './map';
 import { type SafeString } from '@ember/template';
+import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 interface Message {
   skin: AuAlertSignature['Args']['skin'];
@@ -50,7 +51,7 @@ type Signature = {
     locationTypes?: readonly LocationType[];
     locationType: LocationType;
     setLocationType: (type: LocationType) => void;
-    defaultMunicipality?: string;
+    defaultMunicipality: Option<string>;
     currentAddress?: Address;
     selectedLocationNode: ResolvedPNode | null;
     setAddressToInsert: (address: Address | undefined) => void;

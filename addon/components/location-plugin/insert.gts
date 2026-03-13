@@ -34,6 +34,7 @@ import LocationMap, {
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { updateSubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info/utils';
 import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/node-utils';
+import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
@@ -58,7 +59,7 @@ interface Signature {
   Args: {
     controller: SayController;
     config: LocationPluginConfig;
-    defaultMunicipality?: string;
+    defaultMunicipality?: Option<string>;
     templateMode?: boolean;
     locationTypes?: LocationType[];
   };
