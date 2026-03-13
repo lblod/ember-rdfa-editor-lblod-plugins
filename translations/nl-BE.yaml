@@ -227,7 +227,7 @@ variable:
     insert: Marcode invoegen
     label: Marcode
 variable-plugin:
-  insert-variable: Voeg variabele in
+  insert-variable: Voeg invulveld in
   button: Voeg in
   enter-variable-value: Selecteer waarde
   unknown-codelist: Er werden geen mogelijke waarden voor deze codelijst gevonden
@@ -432,7 +432,7 @@ lmb-plugin:
 location-plugin:
   insert-placeholder: Voeg locatie-placeholder in
   modal:
-    insert: locatie invoegen
+    insert: Locatie invoegen
     edit: Bewerk locatie
     confirm: Locatie instellen
     checkbox-message: Verkort adres tonen?
