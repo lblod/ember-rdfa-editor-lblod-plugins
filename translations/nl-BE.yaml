@@ -521,3 +521,8 @@ document-validation-plugin:
   decision-node-not-found: Plaats de cursor in een besluit
   developer-modal-title: Ontwikkelaarsinformatie
   developer-modal-button: Sluiten
+
+placeholder-utils-plugin:
+  card-title: Plaatshouder bewerken
+  button-title: Plaatshouder invoegen
+  placeholder-text: Plaatshoudertekst
