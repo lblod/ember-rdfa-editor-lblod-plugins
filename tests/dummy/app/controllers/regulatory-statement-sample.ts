@@ -57,6 +57,8 @@ import {
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
+  address,
+  addressView,
   location,
   locationView,
   number,
@@ -226,6 +228,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       link: link(this.config.link),
       snippet_placeholder: snippetPlaceholder(this.config.snippet),
       snippet: snippet(this.config.snippet),
+      address,
     },
     marks: {
       em,
@@ -393,6 +396,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       autofilled_variable: autofilledVariableView(controller),
       block_rdfa: (...args: Parameters<NodeViewConstructor>) =>
         new BlockRDFaView(args, controller),
+      address: addressView(controller),
     };
   };
   @tracked plugins: Plugin[] = [
