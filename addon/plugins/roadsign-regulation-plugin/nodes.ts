@@ -121,13 +121,28 @@ export const roadsign_regulation: NodeSpec = {
           }
           const { rdfaNodeType, properties, backlinks, __rdfaId } = attrs;
           // We need to ensure that a content-literal for the description is added
-          const propertiesFiltered = properties.filter(
+          let propertiesFiltered = properties.filter(
             (prop) => !DCT('description').matches(prop.predicate),
           );
           propertiesFiltered.push({
             predicate: DCT('description').full,
             object: sayDataFactory.contentLiteral(),
           });
+
+          // Previously having no 'temporal' value could lead to a relationship being added, but
+          // to `resource="false". Strip this.
+          const temporal = node
+            .querySelector(
+              `span[property~='${EXT('temporal').prefixed}'],
+           span[property~='${EXT('temporal').full}']`,
+            )
+            ?.getAttribute('resource');
+          if (temporal === 'false') {
+            propertiesFiltered = propertiesFiltered.filter(
+              (prop) => !EXT('temporal').matches(prop.predicate),
+            );
+          }
+
           return {
             rdfaNodeType,
             __rdfaId,
