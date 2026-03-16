@@ -83,7 +83,7 @@
         </:default>
         <:sidebarRight as |container|>
           <Sidebar as |Sidebar|>
-            <Sidebar.Collapsible @title='Insert'>
+            <Sidebar.Collapsible @title='Insert' @expandedInitially={{true}}>
               <DocumentTitlePlugin::InsertTitleCard
                 @controller={{container.controller}}
               />

@@ -223,7 +223,7 @@ variable:
     insert: Insert marcode
     label: Marcode
 variable-plugin:
-  insert-variable: Insert variable
+  insert-variable: Insert input field
   button: Insert
   enter-variable-value: Select value
   unknown-codelist: Unable to find possible values for this codelist
