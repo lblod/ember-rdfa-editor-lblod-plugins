@@ -1,5 +1,17 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.1.0
+
+### Minor Changes
+
+- [#631](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/631) [`784b5c7`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/784b5c72babe3b47e2830dc91103f5b493e82a56) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add plugin to add and edit placeholders
+
+### Patch Changes
+
+- [#630](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/630) [`1688755`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/168875521b1a0bc0927323a9eb64073efb66b1f1) Thanks [@kobemertens](https://github.com/kobemertens)! - For the document-validator-plugin: check if document has decision, hide correct property messages if true
+
+- [`3e72235`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3e72235c9b7822030b17e2533ed9d98e17df5735) Thanks [@kobemertens](https://github.com/kobemertens)! - change "variable" to "input field" in the UI
+
 ## 35.0.1
 
 ### Patch Changes
