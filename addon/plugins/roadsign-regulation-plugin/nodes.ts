@@ -27,6 +27,7 @@ import {
   ModelMigrationGenerator,
 } from '@lblod/ember-rdfa-editor/core/rdfa-types';
 import { getRdfaContentElement } from '@lblod/ember-rdfa-editor/core/schema';
+import type { OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   getNewZonalityUri,
   isLegacyZonalityUri,
@@ -121,13 +122,28 @@ export const roadsign_regulation: NodeSpec = {
           }
           const { rdfaNodeType, properties, backlinks, __rdfaId } = attrs;
           // We need to ensure that a content-literal for the description is added
-          const propertiesFiltered = properties.filter(
+          let propertiesFiltered = properties.filter(
             (prop) => !DCT('description').matches(prop.predicate),
           );
           propertiesFiltered.push({
             predicate: DCT('description').full,
             object: sayDataFactory.contentLiteral(),
           });
+
+          // Previously having no 'temporal' value could lead to a relationship being added, but
+          // to `resource="false". Strip this.
+          const temporal = node
+            .querySelector(
+              `span[property~='${EXT('temporal').prefixed}'],
+           span[property~='${EXT('temporal').full}']`,
+            )
+            ?.getAttribute('resource');
+          if (temporal === 'false') {
+            propertiesFiltered = propertiesFiltered.filter(
+              (prop) => !EXT('temporal').matches(prop.predicate),
+            );
+          }
+
           return {
             rdfaNodeType,
             __rdfaId,
@@ -203,7 +219,7 @@ export const trafficSignalMigration: ModelMigrationGenerator = (attrs) => {
   return false;
 };
 
-export const trafficMeasureZonalityMigration: ModelMigrationGenerator = (
+export const trafficMeasureModelMigration: ModelMigrationGenerator = (
   attrs,
 ) => {
   const factory = new SayDataFactory();
@@ -218,20 +234,34 @@ export const trafficMeasureZonalityMigration: ModelMigrationGenerator = (
   ) {
     return false;
   }
+
+  // Migrate zonality to new model
+  let newProps: OutgoingTriple[] | undefined;
   const zonalityTriple = getOutgoingTriple(attrs, EXT('zonality'));
-  if (!zonalityTriple) {
+  if (zonalityTriple && isLegacyZonalityUri(zonalityTriple.object.value)) {
+    const newZonalityProp = {
+      predicate: EXT('zonality').full,
+      object: factory.namedNode(getNewZonalityUri(zonalityTriple.object.value)),
+    };
+    newProps = attrs.properties
+      .filter((prop) => !EXT('zonality').matches(prop.predicate))
+      .concat([newZonalityProp]);
+  }
+
+  // Remove invalid temporal values
+  const temporalTriple = getOutgoingTriple(attrs, EXT('temporal'));
+  if (
+    temporalTriple &&
+    temporalTriple.object.value === 'http://example.org/false'
+  ) {
+    newProps = (newProps ?? attrs.properties).filter(
+      (prop) => !EXT('temporal').matches(prop.predicate),
+    );
+  }
+
+  if (!newProps) {
     return false;
   }
-  if (!isLegacyZonalityUri(zonalityTriple.object.value)) {
-    return false;
-  }
-  const newZonalityProp = {
-    predicate: EXT('zonality').full,
-    object: factory.namedNode(getNewZonalityUri(zonalityTriple.object.value)),
-  };
-  const newProps = attrs.properties
-    .filter((prop) => !EXT('zonality').matches(prop.predicate))
-    .concat([newZonalityProp]);
   return {
     getAttrs: () => {
       return {
@@ -241,3 +271,7 @@ export const trafficMeasureZonalityMigration: ModelMigrationGenerator = (
     },
   } satisfies ModelMigration;
 };
+/**
+ * @deprecated moved to trafficMeasureModelMigration
+ */
+export const trafficMeasureZonalityMigration = trafficMeasureModelMigration;

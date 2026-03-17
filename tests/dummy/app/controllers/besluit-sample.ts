@@ -62,7 +62,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import importRdfaSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/services/import-rdfa-snippet';
 import {
   roadsign_regulation,
-  trafficMeasureZonalityMigration,
+  trafficMeasureModelMigration,
   trafficSignalMigration,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/nodes';
 import {
@@ -239,7 +239,7 @@ export default class BesluitSampleController extends Controller {
         hard_break,
         block_rdfa: blockRdfaWithConfig({
           rdfaAware: true,
-          modelMigrations: [trafficMeasureZonalityMigration],
+          modelMigrations: [trafficMeasureModelMigration],
         }),
         invisible_rdfa: invisibleRdfaWithConfig({ rdfaAware: true }),
         inline_rdfa: inlineRdfaWithConfig({
