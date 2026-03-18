@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.1.1
+
+### Patch Changes
+
+- [#633](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/633) [`2bdb16b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2bdb16b0811350bfd01c8a76b316cc0bc9173af9) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix parsing of (deprecated) roadsign_regulation nodes to ignore incorrect `resource="false"` values
+
+- [#632](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/632) [`1b9933c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1b9933ca93badb06e3c7cc42797f2cc98bf732e3) Thanks [@piemonkey](https://github.com/piemonkey)! - Update location-plugin types to accept null as well as undefined
+
 ## 35.1.0
 
 ### Minor Changes
