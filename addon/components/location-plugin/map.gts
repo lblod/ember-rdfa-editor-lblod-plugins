@@ -320,6 +320,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
         as |layers|
       >
         <div
+          {{! template-lint-disable no-invalid-interactive }}
           {{on 'click' this.stopEventPropagation}}
           class='tile-provider-selector'
         >
