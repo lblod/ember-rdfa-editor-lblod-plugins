@@ -19,6 +19,7 @@
 
   .map-wrapper {
     height: 100%;
+    position: relative;
   }
 
   // Override the 'grab' cursor to 'pointer' so we can accurately pick points
@@ -28,5 +29,13 @@
 
   .leaflet-container {
     height: 100%;
+    font-family: var(--au-font);
+  }
+
+  .leaflet-container .tile-provider-selector {
+    position: absolute;
+    bottom: 0.6em;
+    left: 0.6em;
+    z-index: 1000;
   }
 }
