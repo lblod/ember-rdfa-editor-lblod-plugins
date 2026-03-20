@@ -20,6 +20,10 @@ import {
   GeoPos,
   type GlobalCoordinates,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/geo-helpers';
+import AuToggleSwitch from '@appuniversum/ember-appuniversum/components/au-toggle-switch';
+import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
+import { on } from '@ember/modifier';
+import set from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/set';
 
 // Taken from Leaflet's default icon, with the viewbox tweaked (from 0 0 500 820), so that the icon
 // is a whole number of pixels in size, to make positioning the point easy.
@@ -56,16 +60,26 @@ const MARKER_ICON = Leaflet.divIcon({
 export const SUPPORTED_LOCATION_TYPES = ['address', 'place', 'area'] as const;
 export type LocationType = (typeof SUPPORTED_LOCATION_TYPES)[number];
 
-const MAP_TILE_ATTRIBUTION =
-  '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-const MAP_TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_PROVIDER_CONSTANTS = {
+  OPEN_STREET_MAP: {
+    ATTRIBUTION:
+      '&copy; <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    URL: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  },
+  GRB: {
+    ATTRIBUTION:
+      'Bron: Grootschalig Referentie Bestand Vlaanderen, Digitaal Vlaanderen',
+    URL: 'https://geo.api.vlaanderen.be/GRB/wmts?layer=grb_bsk&style=GRB-Basiskaart&tilematrixset=GoogleMapsVL&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}',
+  },
+};
+
 const COORD_SYSTEM_CENTER: GlobalCoordinates = {
   lng: 4.450822554431,
   lat: 50.50526730529,
 };
 const COORD_SYSTEM_START = {
   center: COORD_SYSTEM_CENTER,
-  zoom: 7,
+  zoom: 8,
 };
 
 function isLast(array: unknown[], index: number) {
@@ -216,6 +230,7 @@ class MapWrapper extends Component<MapWrapperSig> {
 
 export default class LocationPluginMapComponent extends Component<Signature> {
   @tracked vertices: GlobalCoordinates[] = [];
+  @tracked useOpenStreetMaps = false;
 
   // Use untracked properties as otherwise the map jumps to any area or location we pick
   existingAreaBounds = generateBoundsFromShape(this.args.existingArea);
@@ -259,6 +274,14 @@ export default class LocationPluginMapComponent extends Component<Signature> {
     return 'center' in this.mapLocation ? this.mapLocation.center : false;
   }
 
+  get tileProvider() {
+    if (this.useOpenStreetMaps) {
+      return TILE_PROVIDER_CONSTANTS.OPEN_STREET_MAP;
+    } else {
+      return TILE_PROVIDER_CONSTANTS.GRB;
+    }
+  }
+
   @action
   onMapClick(event: LeafletMouseEvent) {
     if (this.args.locationType === 'place') {
@@ -280,6 +303,11 @@ export default class LocationPluginMapComponent extends Component<Signature> {
     }
   }
 
+  @action
+  stopEventPropagation(event: MouseEvent) {
+    event.stopPropagation();
+  }
+
   <template>
     <div
       class='map-wrapper
@@ -291,10 +319,46 @@ export default class LocationPluginMapComponent extends Component<Signature> {
         @onClick={{this.onMapClick}}
         as |layers|
       >
-        <layers.tile
-          @url={{MAP_TILE_URL}}
-          @attribution={{MAP_TILE_ATTRIBUTION}}
-        />
+        <div
+          {{! template-lint-disable no-invalid-interactive }}
+          {{on 'click' this.stopEventPropagation}}
+          class='tile-provider-selector'
+        >
+          <AuCard
+            class='au-u-padding-tiny'
+            @size='flush'
+            @textCenter={{true}}
+            as |c|
+          >
+            <c.content>
+              <AuToggleSwitch @onChange={{set this 'useOpenStreetMaps'}}>
+                <p class='au-u-para-tiny'>{{t
+                    'location-plugin.use-open-street-map'
+                  }}</p>
+              </AuToggleSwitch>
+            </c.content>
+          </AuCard>
+        </div>
+        {{! Don't change: I know the last component from each leg can be lifted out of the condition but cycling the OSM button does not work anymore then}}
+        {{#if (eq this.tileProvider.URL TILE_PROVIDER_CONSTANTS.GRB.URL)}}
+          <layers.tile
+            @url={{TILE_PROVIDER_CONSTANTS.OPEN_STREET_MAP.URL}}
+            @minZoom={{8}}
+            @maxNativeZoom={{12}}
+          />
+          <layers.tile
+            @url={{this.tileProvider.URL}}
+            @attribution={{this.tileProvider.ATTRIBUTION}}
+            @minZoom={{8}}
+          />
+        {{else}}
+          <layers.tile
+            @url={{this.tileProvider.URL}}
+            @attribution={{this.tileProvider.ATTRIBUTION}}
+            @minZoom={{8}}
+          />
+        {{/if}}
+
         {{#if (and @address (eq @locationType 'address') this.foundAddress)}}
           <layers.marker
             @location={{this.foundAddress}}
