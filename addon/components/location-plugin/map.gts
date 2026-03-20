@@ -344,7 +344,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
           <layers.tile
             @url={{TILE_PROVIDER_CONSTANTS.OPEN_STREET_MAP.URL}}
             @minZoom={{8}}
-            @maxZoom={{12}}
+            @maxNativeZoom={{12}}
           />
           <layers.tile
             @url={{this.tileProvider.URL}}
