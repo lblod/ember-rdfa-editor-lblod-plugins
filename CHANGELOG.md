@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.1.2
+
+### Patch Changes
+
+- [#634](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/634) [`7f89a0f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/7f89a0f010d4f843407390621cdab4f0966deb02) Thanks [@kobemertens](https://github.com/kobemertens)! - Change the default tile server of location plugin to GBR and add OSM as an option
+
 ## 35.1.1
 
 ### Patch Changes
