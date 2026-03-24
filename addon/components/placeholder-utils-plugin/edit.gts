@@ -1,11 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { type ComponentLike } from '@glint/template';
-import {
-  NodeSelection,
-  NodeType,
-  SayController,
-} from '@lblod/ember-rdfa-editor';
+import { NodeSelection, Node, SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import AuCard from '@appuniversum/ember-appuniversum/components/au-card';
@@ -41,7 +37,7 @@ type Args = {
 
 export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
   @tracked editedPlaceholderLabel?: string;
-  lastSelectedPlaceholder?: NodeType;
+  lastSelectedPlaceholder?: Node;
 
   @service declare intl: IntlService;
 
