@@ -30,6 +30,7 @@ export function createCodelistVariable(args: CreateCodelistVariableArgs) {
       subject: args.value,
       variableInstance: args.variableInstance,
       text: args.valueLabel,
+      pointed: args.__rdfaId,
     });
     return schema.nodes.codelist.create(attrs, [codelistOption]);
   }
@@ -109,12 +110,14 @@ type CreateCodelistOptionNodeAttrsArgs = {
   text: string;
   value?: string;
   variableInstance?: string;
+  pointed?: string;
 };
 
 function createCodelistOptionNodeAttrs({
   subject,
   text,
   variableInstance,
+  pointed,
 }: CreateCodelistOptionNodeAttrsArgs) {
   const backlinks: IncomingTriple[] = [];
   if (variableInstance) {
@@ -135,5 +138,6 @@ function createCodelistOptionNodeAttrs({
     subject,
     properties,
     backlinks,
+    pointed,
   };
 }
