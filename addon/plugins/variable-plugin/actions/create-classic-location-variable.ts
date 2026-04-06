@@ -26,6 +26,7 @@ export function createClassicLocationVariable(
 }
 
 type CreateClassicLocationVariableAttrsArgs = {
+  label?: string;
   source?: string;
   backlinks?: IncomingTriple[];
 } & AllOrNone<{
@@ -38,6 +39,7 @@ export function createClassicLocationVariableAttrs({
   variable,
   variableInstance,
   __rdfaId,
+  label,
   source,
   backlinks = [],
 }: CreateClassicLocationVariableAttrsArgs) {
@@ -79,7 +81,7 @@ export function createClassicLocationVariableAttrs({
     __rdfaId,
     externalTriples,
     backlinks: [...backlinks, ...addedBacklinks],
-    label: 'Plaatsbeschrijving',
+    label: label ?? 'Plaatsbeschrijving',
     source,
   };
 }
