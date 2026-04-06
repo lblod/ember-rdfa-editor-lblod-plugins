@@ -232,7 +232,7 @@ variable-plugin:
   enter-variable-value: Selecteer waarde
   unknown-codelist: Er werden geen mogelijke waarden voor deze codelijst gevonden
   label: Label
-  labelPlaceholder: Type iets...
+  labelPlaceholder: Typ iets…
   number:
     minimum: Minimum
     minimum-placeholder: minimumwaarde
@@ -445,7 +445,7 @@ location-plugin:
     place: Plaats
     area: Gebied
   label: Label
-  labelPlaceholder: Type iets...
+  labelPlaceholder: Typ iets…
   default-label: locatie
   map:
     hint:
