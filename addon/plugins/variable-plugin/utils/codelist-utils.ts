@@ -14,7 +14,7 @@ import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
  * E.g. `This is a variable with ${placeholder}` gets converted to:
  * `This is a variable with <span class="mark-highlight-manual">${placeholder}</span>`
  */
-function wrapVariableInHighlight(text: string) {
+export function wrapVariableInHighlight(text: string) {
   return text.replace(
     /\$\{(.+?)\}/g,
     '<span class="mark-highlight-manual">${$1}</span>',

@@ -160,6 +160,11 @@ import {
   legacy_codelist,
   legacyCodelistView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
+import ContextualActionsContainer from '@lblod/ember-rdfa-editor/components/plugins/contextual-actions/container';
+import {
+  getContextualActionGroups,
+  getContextualActions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -175,6 +180,7 @@ export default class BesluitSampleController extends Controller {
 
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
+  ContextualActionsContainer = ContextualActionsContainer;
 
   @tracked editableNodes = false;
 
@@ -196,6 +202,9 @@ export default class BesluitSampleController extends Controller {
     dct: 'http://purl.org/dc/terms/',
     say: 'https://say.data.gift/ns/',
   };
+
+  contextualActionGetters = [getContextualActions(this.locationOptions)];
+  contextualGroupGetters = [getContextualActionGroups()];
 
   get schema() {
     return new Schema({

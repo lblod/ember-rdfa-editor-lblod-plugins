@@ -153,7 +153,7 @@ export default function insertMeasure({
       ];
     }
     const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
-    const measureBody = constructMeasureBody(
+    const measureBody = constructMeasureFragment(
       templateString,
       variables,
       schema,
@@ -221,7 +221,7 @@ export default function insertMeasure({
         ],
         externalTriples,
       },
-      [measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
+      [...measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
     );
     const articleNode = buildArticleStructure(
       state.schema,
@@ -268,14 +268,16 @@ export default function insertMeasure({
   };
 }
 
-function constructMeasureBody(
+function constructMeasureFragment(
   templateString: string,
   variables: Record<string, VariableInstance>,
   schema: Schema,
   backlinks?: IncomingTriple[],
 ) {
+  // TODO: extract this functionality of parsing a text with "variable" placeholders into a fragment to a more general place
   const parts = templateString.split(/(\$\{[^{}$]+\})/);
-  const nodes = [];
+  const fragment = [];
+  let currentParagraphContent = [];
   for (const part of parts) {
     if (!part) {
       continue;
@@ -285,15 +287,29 @@ function constructMeasureBody(
       const variableName = match[1];
       const matchedVariable = variables[variableName];
       if (matchedVariable) {
-        nodes.push(constructVariableNode(matchedVariable, schema, backlinks));
+        const node = constructVariableNode(matchedVariable, schema, backlinks);
+        if (node.type.isBlock) {
+          if (currentParagraphContent.length > 0) {
+            fragment.push(
+              schema.nodes.paragraph.create({}, currentParagraphContent),
+            );
+            currentParagraphContent = [];
+          }
+          fragment.push(node);
+        }
       } else {
-        nodes.push(schema.text(part));
+        currentParagraphContent.push(schema.text(part));
       }
     } else {
-      nodes.push(schema.text(part));
+      currentParagraphContent.push(schema.text(part));
     }
   }
-  return schema.nodes.paragraph.create({}, nodes);
+
+  if (currentParagraphContent.length > 0) {
+    fragment.push(schema.nodes.paragraph.create({}, currentParagraphContent));
+  }
+
+  return fragment;
 }
 
 function determineSignLabel(signConcept: TrafficSignalConcept) {

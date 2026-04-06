@@ -212,7 +212,7 @@ variable:
     multi-select: Meervoudige selectie
     label: codelijst
   location:
-    label: locatie
+    label: plaatsbeschrijving
   text:
     label: tekst
   date:
