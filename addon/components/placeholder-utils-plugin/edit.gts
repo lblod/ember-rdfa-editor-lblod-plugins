@@ -37,7 +37,7 @@ type Args = {
 
 export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
   @tracked editedPlaceholderLabel?: string;
-  lastSelectedPlaceholder?: Node;
+  lastSelectedPlaceholder: Node | null = null;
 
   @service declare intl: IntlService;
 
@@ -53,7 +53,7 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
     ) {
       return selection.node;
     } else {
-      return;
+      return null;
     }
   }
   get showCard() {
