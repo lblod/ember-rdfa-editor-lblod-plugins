@@ -56,6 +56,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       controller: this.controller,
       subject: uri,
       subjectTypes: this.args.config.subjectTypesToLinkTo,
+      explicitSubjectToLinkTo: this.args.config.explicitSubjectToLinkTo,
     });
   }
 

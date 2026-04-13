@@ -28,6 +28,10 @@ interface ReplaceSelectionWithLocationArgs {
    * If found, the location will be linked to that resource using prov:atLocation
    */
   subjectTypes?: Resource[];
+  /**
+   * If present, the location will be linked to this uri using prov:atLocation using external triples.
+   */
+  explicitSubjectToLinkTo?: string;
 }
 
 /**
@@ -42,7 +46,11 @@ export function replaceSelectionWithLocation({
   subject,
   toInsert,
   subjectTypes,
+  explicitSubjectToLinkTo,
 }: ReplaceSelectionWithLocationArgs) {
+  if (explicitSubjectToLinkTo) {
+    console.log('EXPLICIT SUBJECT RECIEVED', explicitSubjectToLinkTo);
+  }
   let resourceToLink: { pos: number; node: PNode } | undefined;
   subjectTypes?.forEach((subjectType) => {
     if (!resourceToLink) {
