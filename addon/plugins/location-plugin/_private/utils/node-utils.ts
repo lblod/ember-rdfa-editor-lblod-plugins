@@ -1,5 +1,13 @@
-import { SayController, NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  SayController,
+  NodeSelection,
+  PNode,
+  RdfaAttrs,
+} from '@lblod/ember-rdfa-editor';
+import {
+  SayDataFactory,
+  sayDataFactory,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   PROV,
   RDF,
@@ -12,7 +20,9 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { Area, Place } from './geo-helpers';
 import { Address } from './address-helpers';
+import { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 
+const df = new SayDataFactory();
 interface ReplaceSelectionWithLocationArgs {
   /** SayController */
   controller: SayController;
@@ -48,9 +58,6 @@ export function replaceSelectionWithLocation({
   subjectTypes,
   explicitSubjectToLinkTo,
 }: ReplaceSelectionWithLocationArgs) {
-  if (explicitSubjectToLinkTo) {
-    console.log('EXPLICIT SUBJECT RECIEVED', explicitSubjectToLinkTo);
-  }
   let resourceToLink: { pos: number; node: PNode } | undefined;
   subjectTypes?.forEach((subjectType) => {
     if (!resourceToLink) {
@@ -79,7 +86,16 @@ export function replaceSelectionWithLocation({
           ),
         },
       ];
-
+  let externalTriples: FullTriple[];
+  if (explicitSubjectToLinkTo) {
+    externalTriples = [
+      {
+        subject: df.namedNode(explicitSubjectToLinkTo),
+        predicate: PROV('atLocation').full,
+        object: df.namedNode(subject),
+      },
+    ];
+  }
   controller.withTransaction((tr) => {
     tr.replaceSelectionWith(
       controller.schema.node('oslo_location', {
@@ -89,7 +105,8 @@ export function replaceSelectionWithLocation({
         value: toInsert,
         properties: [],
         backlinks,
-      }),
+        externalTriples,
+      } satisfies RdfaAttrs & { value: Place | Address | Area | undefined }),
     );
     if (tr.selection.$anchor.nodeBefore) {
       const resolvedPos = tr.doc.resolve(
