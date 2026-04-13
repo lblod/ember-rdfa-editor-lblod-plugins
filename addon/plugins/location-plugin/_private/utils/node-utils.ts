@@ -13,24 +13,36 @@ import {
 import { Area, Place } from './geo-helpers';
 import { Address } from './address-helpers';
 
+interface ReplaceSelectionWithLocationArgs {
+  /** SayController */
+  controller: SayController;
+  /** The uri of the Location resource */
+  subject: string;
+  /** The object representing the location to insert */
+  toInsert?: Place | Address | Area;
+  /**
+   * A list of Resources, each will be looked at in turn to compare the
+   * `rdf:type` of the resource, if no parent is found matching the first, then the second will be
+   * used, etc.
+   *
+   * If found, the location will be linked to that resource using prov:atLocation
+   */
+  subjectTypes?: Resource[];
+}
+
 /**
  * Creates an 'OSLO location' node in place of the selection, along with the RDFa to create a triple
  * with the nearest parent of one of the passed types as the subject and the predicate
  * prov:atLocation. This doesn't work well with the RDFa tools, but since refactoring is required to
  * clean up the RDFa structure inherited from variables and to make it work well with 'undo', this
  * work was put off until then.
- * @param controller - SayController
- * @param toInsert - The object representing the location to insert
- * @param subjectTypes - A list of Resources, each will be looked at in turn to compare the
- * `rdf:type` of the resource, if no parent is found matching the first, then the second will be
- * used, etc.
  */
-export function replaceSelectionWithLocation(
-  controller: SayController,
-  subject: string,
-  toInsert?: Place | Address | Area,
-  subjectTypes?: Resource[],
-) {
+export function replaceSelectionWithLocation({
+  controller,
+  subject,
+  toInsert,
+  subjectTypes,
+}: ReplaceSelectionWithLocationArgs) {
   let resourceToLink: { pos: number; node: PNode } | undefined;
   subjectTypes?.forEach((subjectType) => {
     if (!resourceToLink) {

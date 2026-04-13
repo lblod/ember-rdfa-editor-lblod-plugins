@@ -292,12 +292,12 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         });
       } else {
         // Insert
-        replaceSelectionWithLocation(
-          this.controller,
-          toInsert.uri,
+        replaceSelectionWithLocation({
+          controller: this.controller,
+          subject: toInsert.uri,
           toInsert,
-          this.args.config.subjectTypesToLinkTo,
-        );
+          subjectTypes: this.args.config.subjectTypesToLinkTo,
+        });
       }
     }
   }
