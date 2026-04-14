@@ -95,7 +95,7 @@ function humanReadableLabel(label: string) {
 function createInsertPlaceDescriptionCommand(label: string) {
   return (state: EditorState, dispatch: (tr: Transaction) => void) => {
     if (dispatch) {
-      let htmlToInsert = unwrap(label);
+      let htmlToInsert = label;
       htmlToInsert = wrapVariableInHighlight(htmlToInsert);
       const domParser = new DOMParser();
       const htmlNode = domParser.parseFromString(htmlToInsert, 'text/html');
