@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { type ComponentLike } from '@glint/template';
 import { NodeSelection, Node, SayController } from '@lblod/ember-rdfa-editor';
 import { service } from '@ember/service';
@@ -14,8 +13,8 @@ import AuNativeInput from '../au-native-input';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import checkEnterAndSubmit from '@lblod/ember-rdfa-editor-lblod-plugins/utils/check-enter-and-submit';
 import { fn } from '@ember/helper';
-import { modifier } from 'ember-modifier';
 import { not } from 'ember-truth-helpers';
+import { trackedReset } from 'tracked-toolbox';
 
 type VariableComponentArgs = {
   Args: {
@@ -36,7 +35,13 @@ type Args = {
 };
 
 export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
-  @tracked editedPlaceholderLabel?: string;
+  @trackedReset({
+    memo: 'selectedPlaceholderNode',
+    update(component: PlaceholderUtilsEditCardComponent) {
+      return component.selectedPlaceholderNode?.attrs.placeholderText;
+    },
+  })
+  placeholderLabel: string | null = null;
   lastSelectedPlaceholder: Node | null = null;
 
   @service declare intl: IntlService;
@@ -59,14 +64,8 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
   get showCard() {
     return !!this.selectedPlaceholderNode;
   }
-  get placeholderLabel() {
-    if (this.editedPlaceholderLabel !== undefined) {
-      return this.editedPlaceholderLabel;
-    }
-    return this.selectedPlaceholderNode?.attrs.placeholderText;
-  }
   updateLabelPlaceholder = (event: InputEvent) => {
-    this.editedPlaceholderLabel = (event.target as HTMLInputElement).value;
+    this.placeholderLabel = (event.target as HTMLInputElement).value;
   };
   updatePlaceholder = () => {
     const { selection } = this.controller.activeEditorState;
@@ -74,19 +73,10 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
       return tr.setNodeAttribute(
         selection.$from.pos,
         'placeholderText',
-        this.editedPlaceholderLabel,
+        this.placeholderLabel,
       );
     });
-    this.editedPlaceholderLabel = undefined;
   };
-
-  trackNode = modifier(() => {
-    const selectedPlaceholderNode = this.selectedPlaceholderNode;
-    if (this.lastSelectedPlaceholder !== selectedPlaceholderNode) {
-      this.editedPlaceholderLabel = undefined;
-      this.lastSelectedPlaceholder = selectedPlaceholderNode;
-    }
-  });
 
   <template>
     {{#if this.showCard}}
@@ -98,7 +88,6 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
         @shadow={{true}}
         @size='small'
         @disableAuContent={{true}}
-        {{this.trackNode}}
         as |c|
       >
         <c.header>
@@ -123,7 +112,7 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
           <AuButton
             {{on 'click' this.updatePlaceholder}}
             class='au-u-margin-top'
-            @disabled={{not this.editedPlaceholderLabel}}
+            @disabled={{not this.placeholderLabel}}
           >
             {{t 'editor-plugins.utils.insert'}}
           </AuButton>
