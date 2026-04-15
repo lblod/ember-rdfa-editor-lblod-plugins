@@ -283,13 +283,13 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         // if they exist
         const newExternalTriples: FullTriple[] = (
           locNode.attrs.externalTriples as FullTriple[]
-        ).slice();
-        for (const tr of newExternalTriples) {
+        ).map((tr) => {
           if (PROV('atLocation').matches(tr.predicate)) {
-            tr.object = df.namedNode(toInsert.uri);
+            return { ...tr, object: df.namedNode(toInsert.uri) };
+          } else {
+            return tr;
           }
-        }
-        // update the location value and the external triples
+        }); // update the location value and the external triples
         this.controller.withTransaction((tr) => {
           return transactionCombinator(
             this.controller.activeEditorState,
