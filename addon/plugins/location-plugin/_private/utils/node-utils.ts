@@ -1,5 +1,13 @@
-import { SayController, NodeSelection, PNode } from '@lblod/ember-rdfa-editor';
-import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  SayController,
+  NodeSelection,
+  PNode,
+  RdfaAttrs,
+} from '@lblod/ember-rdfa-editor';
+import {
+  SayDataFactory,
+  sayDataFactory,
+} from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   PROV,
   RDF,
@@ -12,6 +20,29 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { Area, Place } from './geo-helpers';
 import { Address } from './address-helpers';
+import { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+
+const df = new SayDataFactory();
+interface ReplaceSelectionWithLocationArgs {
+  /** SayController */
+  controller: SayController;
+  /** The uri of the Location resource */
+  subject: string;
+  /** The object representing the location to insert */
+  toInsert?: Place | Address | Area;
+  /**
+   * A list of Resources, each will be looked at in turn to compare the
+   * `rdf:type` of the resource, if no parent is found matching the first, then the second will be
+   * used, etc.
+   *
+   * If found, the location will be linked to that resource using prov:atLocation
+   */
+  subjectTypes?: Resource[];
+  /**
+   * If present, the location will be linked to this uri using prov:atLocation using external triples.
+   */
+  explicitSubjectToLinkTo?: string;
+}
 
 /**
  * Creates an 'OSLO location' node in place of the selection, along with the RDFa to create a triple
@@ -19,18 +50,14 @@ import { Address } from './address-helpers';
  * prov:atLocation. This doesn't work well with the RDFa tools, but since refactoring is required to
  * clean up the RDFa structure inherited from variables and to make it work well with 'undo', this
  * work was put off until then.
- * @param controller - SayController
- * @param toInsert - The object representing the location to insert
- * @param subjectTypes - A list of Resources, each will be looked at in turn to compare the
- * `rdf:type` of the resource, if no parent is found matching the first, then the second will be
- * used, etc.
  */
-export function replaceSelectionWithLocation(
-  controller: SayController,
-  subject: string,
-  toInsert?: Place | Address | Area,
-  subjectTypes?: Resource[],
-) {
+export function replaceSelectionWithLocation({
+  controller,
+  subject,
+  toInsert,
+  subjectTypes,
+  explicitSubjectToLinkTo,
+}: ReplaceSelectionWithLocationArgs) {
   let resourceToLink: { pos: number; node: PNode } | undefined;
   subjectTypes?.forEach((subjectType) => {
     if (!resourceToLink) {
@@ -59,7 +86,16 @@ export function replaceSelectionWithLocation(
           ),
         },
       ];
-
+  let externalTriples: FullTriple[];
+  if (explicitSubjectToLinkTo) {
+    externalTriples = [
+      {
+        subject: df.namedNode(explicitSubjectToLinkTo),
+        predicate: PROV('atLocation').full,
+        object: df.namedNode(subject),
+      },
+    ];
+  }
   controller.withTransaction((tr) => {
     tr.replaceSelectionWith(
       controller.schema.node('oslo_location', {
@@ -69,7 +105,8 @@ export function replaceSelectionWithLocation(
         value: toInsert,
         properties: [],
         backlinks,
-      }),
+        externalTriples,
+      } satisfies RdfaAttrs & { value: Place | Address | Area | undefined }),
     );
     if (tr.selection.$anchor.nodeBefore) {
       const resolvedPos = tr.doc.resolve(
