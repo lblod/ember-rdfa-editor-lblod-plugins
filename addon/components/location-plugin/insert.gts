@@ -281,6 +281,8 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         const { pos, value: locNode } = this.selectedLocationNode;
         // The location's subject has likely changed, so we should update the external links too
         // if they exist
+        // NOTE: It's VERY important that this is done without mutating the triple objects
+        // otherwise the attributes will not update as expected when undo-ing
         const newExternalTriples: FullTriple[] = (
           locNode.attrs.externalTriples as FullTriple[]
         ).map((tr) => {
