@@ -30,7 +30,7 @@ export function createCodelistVariable(args: CreateCodelistVariableArgs) {
       subject: args.value,
       variableInstance: args.variableInstance,
       text: args.valueLabel,
-      pointed: args.__rdfaId,
+      pointsToNode: args.__rdfaId,
     });
     return schema.nodes.codelist.create(attrs, [codelistOption]);
   }
@@ -43,6 +43,7 @@ type CreateCodelistVariableAttrsArgs = {
   source: string;
   codelist: string;
   hardcodedOptionList?: CodeListOption[];
+  hasNonLiteralContents?: boolean;
 } & AllOrNone<{
   variable: string;
   variableInstance: string;
@@ -58,6 +59,7 @@ export function createCodelistVariableAttrs({
   variable,
   variableInstance,
   hardcodedOptionList,
+  hasNonLiteralContents,
 }: CreateCodelistVariableAttrsArgs) {
   const externalTriples: FullTriple[] = [];
   if (variable) {
@@ -91,6 +93,7 @@ export function createCodelistVariableAttrs({
     variable,
     variableInstance,
     hardcodedOptionList,
+    hasNonLiteralContents: !!hasNonLiteralContents,
   } as CodelistAttrs;
 }
 
@@ -110,14 +113,14 @@ type CreateCodelistOptionNodeAttrsArgs = {
   text: string;
   value?: string;
   variableInstance?: string;
-  pointed?: string;
+  pointsToNode?: string;
 };
 
 function createCodelistOptionNodeAttrs({
   subject,
   text,
   variableInstance,
-  pointed,
+  pointsToNode,
 }: CreateCodelistOptionNodeAttrsArgs) {
   const backlinks: IncomingTriple[] = [];
   if (variableInstance) {
@@ -138,6 +141,6 @@ function createCodelistOptionNodeAttrs({
     subject,
     properties,
     backlinks,
-    pointed,
+    pointsToNode,
   };
 }

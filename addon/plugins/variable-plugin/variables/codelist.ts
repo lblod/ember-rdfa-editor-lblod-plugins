@@ -129,24 +129,27 @@ const toDOM = (node: PNode, state?: EditorState): DOMOutputSpec => {
       contentArray.push(', ');
     }
   }
-  return renderRdfaAware({
-    renderable: node,
-    tag: 'span',
-    attrs: {
-      class: `${getClassnamesFromNode(node)}${className}`,
-      'data-say-variable': 'true',
-      'data-say-variable-type': 'codelist',
-      'data-say-node-version': '2',
-      'data-label': label as string | null,
-      'data-codelist': codelist as string,
-      'data-source': source as string,
-      'data-selection-style': selectionStyle as string,
-      'data-variable': variable as string,
-      'data-variable-instance': variableInstance as string,
-      'data-option-list': JSON.stringify(hardcodedOptionList),
+  return renderRdfaAware(
+    {
+      renderable: node,
+      tag: 'span',
+      attrs: {
+        class: `${getClassnamesFromNode(node)}${className}`,
+        'data-say-variable': 'true',
+        'data-say-variable-type': 'codelist',
+        'data-say-node-version': '2',
+        'data-label': label as string | null,
+        'data-codelist': codelist as string,
+        'data-source': source as string,
+        'data-selection-style': selectionStyle as string,
+        'data-variable': variable as string,
+        'data-variable-instance': variableInstance as string,
+        'data-option-list': JSON.stringify(hardcodedOptionList),
+      },
+      contentArray: contentArray.length ? contentArray : [label],
     },
-    contentArray: contentArray.length ? contentArray : [label],
-  });
+    state,
+  );
 };
 
 const emberNodeConfig: EmberNodeConfig = {

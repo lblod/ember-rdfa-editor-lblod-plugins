@@ -185,15 +185,12 @@ importers:
       '@glint/template':
         specifier: ^1.5.0
         version: 1.5.1
-      '@graphy/content.ttl.write':
-        specifier: ^4.3.7
-        version: 4.3.7
-      '@graphy/memory.dataset.fast':
-        specifier: 4.3.3
-        version: 4.3.3
       '@lblod/ember-rdfa-editor':
-        specifier: 13.5.0-dev.8fc7ebdf8e9b66b64e30cbd26161bb5d10c07f80
-        version: 13.5.0-dev.8fc7ebdf8e9b66b64e30cbd26161bb5d10c07f80(6e7de4d60badd9ea1c3a78b32e1d3e2c)
+        specifier: 13.5.0-dev.a6492f963d68ec437e460b64569e45c4203cdc4b
+        version: 13.5.0-dev.a6492f963d68ec437e460b64569e45c4203cdc4b(6e7de4d60badd9ea1c3a78b32e1d3e2c)
+      '@rdfjs/to-ntriples':
+        specifier: ^3.0.1
+        version: 3.0.1
       '@rdfjs/types':
         specifier: ^1.1.0
         version: 1.1.2
@@ -1765,30 +1762,6 @@ packages:
   '@glint/tsserver-plugin@2.1.0':
     resolution: {integrity: sha512-paMTIS/GOt/AVktX91Mp2yd6CdfY4Z/X24oAF4NP2DWKgLYhj+ukJedMuQhpGFwdtQIFfUyUDS8aZS9kyIOYoQ==}
 
-  '@graphy/content.ttl.write@4.3.7':
-    resolution: {integrity: sha512-QpSa3lMmU+DA8udvikrPDji+XvUf5wfU4ShhqXU9mQEdccDTNw/eOOlhtLITAC3Q0dsobAdb71fXtj7zqtDwQA==}
-    engines: {node: '>=8.4.0'}
-
-  '@graphy/core.class.scribable@4.3.7':
-    resolution: {integrity: sha512-XOR4hQOKiy34/q8svdcOzgcao27tClebSzpNaOfvdxSOC/E7plOhaLfVtWxPjfIbMJs7OtVihlyXEtD22Xnm1w==}
-    engines: {node: '>=8.4.0'}
-
-  '@graphy/core.class.writable@4.3.7':
-    resolution: {integrity: sha512-vUvYP9Sine5j9epaOlmkZ0Mll2Vlh/N3zc7weRlSnxNm2HhT/LhzF8PSCZyPg17rwpTabrjKW/Rj0xwQUqeEGQ==}
-    engines: {node: '>=8.4.0'}
-
-  '@graphy/core.data.factory@4.3.7':
-    resolution: {integrity: sha512-6uiNrClDnlfN52B8f0ZBjnyETXiCyYOyIUET2aGFTG+TXZTsiO1WcinsIo36YPt29i+boCDf0ldYDKhPKAibdw==}
-    engines: {node: '>=8.4.0'}
-
-  '@graphy/core.iso.stream@4.3.7':
-    resolution: {integrity: sha512-Rr7C+pPYmFVUGqP8OnYPh7D6VnwucT4LUQBDvlni4OSB9Px0QEenlUBTyqcfIByDTcDNb8fFek9qyjjrO6zlNQ==}
-    engines: {node: '>=8.4.0'}
-
-  '@graphy/memory.dataset.fast@4.3.3':
-    resolution: {integrity: sha512-7ooKeO/+tttXfNiO1mhtodHxiiXtKOOZXWNp1/WW1GgmnLVMsgFvcI1NaND4+wwFHWY/FCQBkCSxb7ADVbF0AQ==}
-    engines: {node: '>=8.4.0'}
-
   '@handlebars/parser@2.0.0':
     resolution: {integrity: sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==}
 
@@ -1923,8 +1896,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lblod/ember-rdfa-editor@13.5.0-dev.8fc7ebdf8e9b66b64e30cbd26161bb5d10c07f80':
-    resolution: {integrity: sha512-BPLxo3AJ6hkl8Ox/L1b2YIRQUJzTQbuLsv6oVV6X5k/NF9euYAWY/NV6cP7K0joM9UNg/MQwJer0MS4KGDWlMA==}
+  '@lblod/ember-rdfa-editor@13.5.0-dev.a6492f963d68ec437e460b64569e45c4203cdc4b':
+    resolution: {integrity: sha512-Bm/gg2/1blI5iXWqmjzZgbZYyrkLTLKQsgB8aJ/3m1aT8SqJnFoNJDzuNwejnIzo1hZrT3LOooT6z/pJP/5pmw==}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.11.0
       '@ember/test-helpers': ^2.9.4 || ^3.2.1 || ^4.0.2 || ^5.0.0
@@ -12767,35 +12740,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@graphy/content.ttl.write@4.3.7':
-    dependencies:
-      '@graphy/core.class.writable': 4.3.7
-      '@graphy/core.data.factory': 4.3.7
-      big-integer: 1.6.52
-
-  '@graphy/core.class.scribable@4.3.7':
-    dependencies:
-      '@graphy/core.data.factory': 4.3.7
-      '@graphy/core.iso.stream': 4.3.7
-
-  '@graphy/core.class.writable@4.3.7':
-    dependencies:
-      '@graphy/core.class.scribable': 4.3.7
-      '@graphy/core.data.factory': 4.3.7
-
-  '@graphy/core.data.factory@4.3.7':
-    dependencies:
-      uri-js: 4.4.1
-
-  '@graphy/core.iso.stream@4.3.7':
-    dependencies:
-      readable-stream: 3.6.2
-
-  '@graphy/memory.dataset.fast@4.3.3':
-    dependencies:
-      '@graphy/core.data.factory': 4.3.7
-      '@graphy/core.iso.stream': 4.3.7
-
   '@handlebars/parser@2.0.0': {}
 
   '@handlebars/parser@2.2.2': {}
@@ -13038,7 +12982,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lblod/ember-rdfa-editor@13.5.0-dev.8fc7ebdf8e9b66b64e30cbd26161bb5d10c07f80(6e7de4d60badd9ea1c3a78b32e1d3e2c)':
+  '@lblod/ember-rdfa-editor@13.5.0-dev.a6492f963d68ec437e460b64569e45c4203cdc4b(6e7de4d60badd9ea1c3a78b32e1d3e2c)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.17.0(@ember/test-helpers@3.3.1(@babel/core@7.26.0)(@glint/template@1.5.1)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))(webpack@5.97.1))(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glimmer/tracking@1.1.2)(@glint/environment-ember-loose@1.5.1(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(@types/ember__array@4.0.10(@babel/core@7.26.0))(@types/ember__component@4.0.22(@babel/core@7.26.0))(@types/ember__controller@4.0.12(@babel/core@7.26.0))(@types/ember__object@4.0.12(@babel/core@7.26.0))(@types/ember__routing@4.0.22(@babel/core@7.26.0))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))))(@glint/template@1.5.1)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.5.1)(rsvp@4.8.5)(webpack@5.97.1))(tracked-built-ins@4.1.0(@babel/core@7.26.0))(webpack@5.97.1)
       '@codemirror/commands': 6.10.1
@@ -13671,27 +13615,6 @@ snapshots:
     dependencies:
       '@types/ms': 0.7.34
 
-  '@types/ember@4.0.11':
-    dependencies:
-      '@types/ember__application': 4.0.11(@babel/core@7.26.0)
-      '@types/ember__array': 4.0.10(@babel/core@7.26.0)
-      '@types/ember__component': 4.0.22(@babel/core@7.26.0)
-      '@types/ember__controller': 4.0.12(@babel/core@7.26.0)
-      '@types/ember__debug': 4.0.8(@babel/core@7.26.0)
-      '@types/ember__engine': 4.0.11(@babel/core@7.26.0)
-      '@types/ember__error': 4.0.6
-      '@types/ember__object': 4.0.12(@babel/core@7.26.0)
-      '@types/ember__polyfills': 4.0.6
-      '@types/ember__routing': 4.0.22(@babel/core@7.26.0)
-      '@types/ember__runloop': 4.0.10
-      '@types/ember__service': 4.0.9(@babel/core@7.26.0)
-      '@types/ember__string': 3.0.15
-      '@types/ember__template': 4.0.7
-      '@types/ember__test': 4.0.6(@babel/core@7.26.0)
-      '@types/ember__utils': 4.0.7(@babel/core@7.26.0)
-      '@types/rsvp': 4.0.9
-    optional: true
-
   '@types/ember@4.0.11(@babel/core@7.26.0)':
     dependencies:
       '@types/ember__application': 4.0.11(@babel/core@7.26.0)
@@ -13719,7 +13642,7 @@ snapshots:
   '@types/ember__application@4.0.11(@babel/core@7.26.0)':
     dependencies:
       '@glimmer/component': 1.1.2(@babel/core@7.26.0)
-      '@types/ember': 4.0.11
+      '@types/ember': 4.0.11(@babel/core@7.26.0)
       '@types/ember__engine': 4.0.11(@babel/core@7.26.0)
       '@types/ember__object': 4.0.12(@babel/core@7.26.0)
       '@types/ember__owner': 4.0.9
@@ -13819,11 +13742,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
-
-  '@types/ember__runloop@4.0.10':
-    dependencies:
-      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__runloop@4.0.10(@babel/core@7.26.0)':

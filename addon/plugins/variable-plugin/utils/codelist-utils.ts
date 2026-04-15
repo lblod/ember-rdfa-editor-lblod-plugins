@@ -35,14 +35,16 @@ export function updateCodelistVariable(
   const variableInstance = selectedCodelist.node.attrs['variableInstance'] as
     | string
     | undefined;
-  const pointer = selectedCodelist.node.attrs['__rdfaId'] as string | undefined;
+  const pointerTarget = selectedCodelist.node.attrs['__rdfaId'] as
+    | string
+    | undefined;
   const codelistOptionNodes = selectedOptions.map((option) =>
     createCodelistOptionNode({
       schema: controller.schema,
       text: option.label,
       subject: option.uri,
       variableInstance,
-      pointed: pointer,
+      pointsToNode: pointerTarget,
     }),
   );
   const range = {
