@@ -52,12 +52,12 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     const uri = `http://data.lblod.info/variables/${
       this.args.templateMode ? '--ref-uuid4-' : ''
     }${uuidv4()}`;
-    replaceSelectionWithLocation(
-      this.controller,
-      uri,
-      undefined,
-      this.args.config.subjectTypesToLinkTo,
-    );
+    replaceSelectionWithLocation({
+      controller: this.controller,
+      subject: uri,
+      subjectTypes: this.args.config.subjectTypesToLinkTo,
+      explicitSubjectToLinkTo: this.args.config.explicitSubjectToLinkTo,
+    });
   }
 
   <template>

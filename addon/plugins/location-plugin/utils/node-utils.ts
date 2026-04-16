@@ -21,10 +21,10 @@ export function replaceSelectionWithLocation(
   toInsert: Place | Address | Area,
   subjectTypes?: Resource[],
 ) {
-  return replaceSelectionWithLocationInternal(
+  return replaceSelectionWithLocationInternal({
     controller,
-    toInsert.uri,
+    subject: toInsert.uri,
     toInsert,
     subjectTypes,
-  );
+  });
 }

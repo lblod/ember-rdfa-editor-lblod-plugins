@@ -355,6 +355,7 @@ export default class BesluitSampleController extends Controller {
         defaultAddressUriRoot:
           'https://publicatie.gelinkt-notuleren.vlaanderen.be/id/adres/',
         subjectTypesToLinkTo: [BESLUIT('Artikel'), BESLUIT('Besluit')],
+        explicitSubjectToLinkTo: 'http://example.org/foo-decision',
         additionalRDFTypes: [
           sayDataFactory.namedNode(
             'https://data.vlaanderen.be/ns/mobiliteit#Zone',

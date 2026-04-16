@@ -49,6 +49,7 @@ export interface LocationPluginConfig {
   defaultPlaceUriRoot: string;
   defaultPointUriRoot: string;
   subjectTypesToLinkTo?: Resource[];
+  explicitSubjectToLinkTo?: string;
   additionalRDFTypes?: NamedNode[];
 }
 
