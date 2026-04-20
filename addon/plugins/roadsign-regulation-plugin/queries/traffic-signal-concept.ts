@@ -81,6 +81,7 @@ export async function queryTrafficSignalConcepts(
     query,
     endpoint,
     abortSignal,
+    useGet: true,
   });
   const bindings = queryResult.results.bindings;
   const concepts = TrafficSignalConceptSchema.array().parse(

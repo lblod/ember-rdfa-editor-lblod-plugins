@@ -49,6 +49,7 @@ export async function queryMobilityTemplates(
     query,
     endpoint,
     abortSignal,
+    useGet: true,
   });
 
   const bindings = queryResult.results.bindings;

@@ -38,6 +38,7 @@ export default async function queryRoadSignCategories(
     endpoint,
     query,
     abortSignal,
+    useGet: true,
   });
   const bindings = queryResult.results.bindings;
   return RoadSignCategorySchema.array().parse(bindings.map(objectify));

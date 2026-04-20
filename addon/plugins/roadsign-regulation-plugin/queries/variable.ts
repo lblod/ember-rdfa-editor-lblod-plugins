@@ -49,6 +49,7 @@ export async function queryVariables(
     endpoint,
     query,
     abortSignal,
+    useGet: true,
   });
   const bindings = queryResult.results.bindings;
   return VariableSchema.array().parse(

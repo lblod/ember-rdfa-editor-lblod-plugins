@@ -101,7 +101,12 @@ export default async function queryTrafficSignalCodes(
     }
     ORDER BY ASC(UCASE(?firstLetters)) ASC(?number) ASC(LCASE(?secondLetters))
   `;
-  const queryResult = await executeQuery({ endpoint, query, abortSignal });
+  const queryResult = await executeQuery({
+    endpoint,
+    query,
+    abortSignal,
+    useGet: true,
+  });
   const bindings = queryResult.results.bindings;
   return TrafficSignalCodeSchema.array().parse(bindings.map(objectify));
 }
