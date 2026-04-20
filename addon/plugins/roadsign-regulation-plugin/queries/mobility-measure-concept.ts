@@ -148,6 +148,7 @@ async function _queryMobilityMeasures<Count extends boolean>(
     query,
     endpoint,
     abortSignal,
+    useGet: true,
   });
   const bindings = queryResult.results.bindings;
   if (count) {
