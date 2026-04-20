@@ -46,7 +46,7 @@ export async function executeQuery<Binding = Record<string, RDF.Term>>({
   const params = new URLSearchParams();
   params.append('query', query);
 
-  const fetchOptions = {
+  const fetchOptions: RequestInit = {
     mode: 'cors',
     headers: {
       Accept: 'application/sparql-results+json',
@@ -60,7 +60,7 @@ export async function executeQuery<Binding = Record<string, RDF.Term>>({
     finalUrl = `${endpoint}?${params.toString()}`;
   } else {
     fetchOptions.method = 'POST';
-    fetchOptions.headers['Content-Type'] =
+    (fetchOptions.headers as { [key: string]: string })['Content-Type'] =
       'application/x-www-form-urlencoded; charset=UTF-8';
     fetchOptions.body = `query=${encodedQuery}`;
   }
