@@ -180,6 +180,7 @@ export const fetchSnippets = async ({
     endpoint,
     query: buildSnippetCountQuery(filter),
     abortSignal,
+    useGet: true,
   });
 
   if (totalCount === 0) {

@@ -120,6 +120,7 @@ export async function fetchLegalDocuments({
         endpoint: shouldQueryPublicDecisions
           ? (config.decisionsEndpoint as string)
           : config.endpoint,
+        useGet: shouldQueryPublicDecisions,
         abortSignal: config.abortSignal,
       },
     };
