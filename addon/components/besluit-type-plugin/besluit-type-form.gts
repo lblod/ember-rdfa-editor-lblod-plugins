@@ -8,6 +8,7 @@ interface Sig {
     types: BesluitType[];
     selectedType?: BesluitTypeInstance;
     setType: (selected: BesluitTypeInstance) => void;
+    required?: boolean;
   };
   Element: HTMLDivElement;
 }
@@ -44,6 +45,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
         @onchange={{this.updateParentType}}
         @selected={{@selectedType.parent}}
         @showWarningWhenEmpty={{false}}
+        @required={{@required}}
       />
       {{#if @selectedType.parent.subTypes.length}}
         <BesluitTypeSelect
@@ -52,6 +54,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
           @onchange={{this.updateSubType}}
           @selected={{@selectedType.subType}}
           @showWarningWhenEmpty={{true}}
+          @required={{@required}}
         />
       {{/if}}
       {{#if @selectedType.subType.subTypes.length}}
@@ -61,6 +64,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
           @onchange={{this.updateSubSubType}}
           @selected={{@selectedType.subSubType}}
           @showWarningWhenEmpty={{true}}
+          @required={{@required}}
         />
       {{/if}}
     </div>
