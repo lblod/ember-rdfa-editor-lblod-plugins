@@ -194,6 +194,7 @@ export const fetchSnippets = async ({
     endpoint,
     query: buildSnippetFetchQuery({ filter, pagination }),
     abortSignal,
+    useGet: true,
   });
 
   const results = queryResult.results.bindings.map(
@@ -235,6 +236,7 @@ export const fetchSnippetLists = async ({
     endpoint,
     query: buildSnippetListFetchQuery({ filter, orderBy }),
     abortSignal,
+    useGet: true,
   });
 
   const results = [

@@ -44,6 +44,7 @@ export async function fetchCodeListOptions(
   const codelistsOptionsQueryResult = await executeQuery({
     endpoint,
     query: generateCodeListOptionsQuery(codelistUri),
+    useGet: true,
   });
   const options = parseCodelistOptions(codelistsOptionsQueryResult);
   return {
@@ -68,6 +69,7 @@ export async function fetchCodelistOption(
           skos:prefLabel ?label.
       }
     `,
+    useGet: true,
   });
   const bindings = response.results.bindings;
   if (!bindings.length) {
@@ -120,6 +122,7 @@ export async function fetchCodeListsByPublisher(
   const codelistsOptionsQueryResult = await executeQuery({
     endpoint,
     query: generateCodeListsByPublisherQuery(publisher),
+    useGet: true,
   });
   const bindings = codelistsOptionsQueryResult.results.bindings;
   return bindings.map((binding) => ({
