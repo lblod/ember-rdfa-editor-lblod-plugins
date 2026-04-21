@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.3.0
+
+### Minor Changes
+
+- [#641](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/641) [`062b89a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/062b89ad35edff9cb0963a17e606497697e7614a) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add a way to set the required attribute of the label of the besluit type select
+
+### Patch Changes
+
+- [#635](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/635) [`d2ac617`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d2ac61769c71978bc9bc5e3ff10385057ae807bb) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix resetting the placeholder edit card
+
 ## 35.2.0
 
 ### Minor Changes
