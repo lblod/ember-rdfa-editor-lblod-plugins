@@ -16,6 +16,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { Task } from 'ember-concurrency';
 import { isSome } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import ButtonWithDropdownOptions from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/button-with-dropdown-options';
 
 export type InsertMobilityMeasureTask = Task<
   void,
@@ -136,17 +137,24 @@ export default class ExpandedMeasure extends Component<Signature> {
           </div>
         {{/if}}
         <AuButtonGroup>
-          <AuButton
+          <AuButton @skin='secondary' {{on 'click' this.unselectRow}}>
+            {{t 'editor-plugins.utils.cancel'}}
+          </AuButton>
+          <ButtonWithDropdownOptions
             {{on 'click' this.insert}}
+            @skin='primary'
             @loading={{@insert.isRunning}}
             @loadingMessage={{t 'common.loading'}}
             @disabled={{this.insertButtonDisabled}}
           >
-            {{t 'editor-plugins.utils.insert'}}
-          </AuButton>
-          <AuButton @skin='secondary' {{on 'click' this.unselectRow}}>
-            {{t 'editor-plugins.utils.cancel'}}
-          </AuButton>
+            <:primaryButton>
+              {{t 'editor-plugins.utils.insert'}}
+            </:primaryButton>
+            <:dropdown>
+              <AuButton @skin="link" role="menuitem">Voeg vooraan in</AuButton>
+              <AuButton @skin="link" role="menuitem">Voeg in na specifiek artikel</AuButton>
+            </:dropdown>
+          </ButtonWithDropdownOptions>
         </AuButtonGroup>
       </td>
     </tr>
