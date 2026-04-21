@@ -4,8 +4,5 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "glint": {
-    "environment": ["ember-loose", "ember-template-imports"],
-    "checkStandaloneTemplates": false
-  }
+  "declaration": false
 }
