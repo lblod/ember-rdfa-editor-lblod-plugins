@@ -19,7 +19,6 @@ import {
   ZONALITY_OPTIONS_LEGACY,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { ProseParser } from '@lblod/ember-rdfa-editor';
-import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { wrapVariableInHighlight } from '../utils/codelist-utils';
 import { getActiveEditableNode } from '@lblod/ember-rdfa-editor/plugins/editable-node';
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/rdfa-types';
@@ -164,7 +163,12 @@ function contextualGroupIsVisible(state: EditorState) {
     activeNode.value.attrs.backlinks.some((value) =>
       MOBILITEIT('plaatsbepaling').matches(value.predicate),
     );
-  return activeNode?.value.type.name === 'location' || isPlaatsbepaling;
+
+  const isEmptySelection = state.selection.empty;
+  return (
+    (activeNode?.value.type.name === 'location' || isPlaatsbepaling) &&
+    isEmptySelection
+  );
 }
 
 export function getContextualActionGroups() {
