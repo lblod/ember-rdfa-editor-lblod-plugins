@@ -20,7 +20,7 @@ import ButtonWithDropdownOptions from '@lblod/ember-rdfa-editor-lblod-plugins/co
 
 export type InsertMobilityMeasureTask = Task<
   void,
-  [MobilityMeasureConcept, ZonalOrNot, boolean]
+  [MobilityMeasureConcept, ZonalOrNot, boolean, number?]
 >;
 type Signature = {
   Args: {
@@ -63,6 +63,17 @@ export default class ExpandedMeasure extends Component<Signature> {
       // POTENTIALLY_ZONAL option is filtered out by requiring a zonalityValue to submit
       (this.zonalityValue ?? this.args.concept.zonality) as ZonalOrNot,
       this.temporalValue ?? false,
+    );
+  }
+
+  @action
+  insertAtStart() {
+    this.args.insert.perform(
+      this.args.concept,
+      // POTENTIALLY_ZONAL option is filtered out by requiring a zonalityValue to submit
+      (this.zonalityValue ?? this.args.concept.zonality) as ZonalOrNot,
+      this.temporalValue ?? false,
+      0,
     );
   }
 
@@ -140,19 +151,36 @@ export default class ExpandedMeasure extends Component<Signature> {
           <AuButton @skin='secondary' {{on 'click' this.unselectRow}}>
             {{t 'editor-plugins.utils.cancel'}}
           </AuButton>
-          <ButtonWithDropdownOptions
-            {{on 'click' this.insert}}
-            @skin='primary'
-            @loading={{@insert.isRunning}}
-            @loadingMessage={{t 'common.loading'}}
-            @disabled={{this.insertButtonDisabled}}
-          >
+          <ButtonWithDropdownOptions>
             <:primaryButton>
-              {{t 'editor-plugins.utils.insert'}}
+              <AuButton
+                {{on 'click' this.insert}}
+                @skin='primary'
+                @loading={{@insert.isRunning}}
+                @loadingMessage={{t 'common.loading'}}
+                @disabled={{this.insertButtonDisabled}}
+              >
+                {{t 'editor-plugins.utils.insert'}}
+              </AuButton>
             </:primaryButton>
             <:dropdown>
-              <AuButton @skin="link" role="menuitem">Voeg vooraan in</AuButton>
-              <AuButton @skin="link" role="menuitem">Voeg in na specifiek artikel</AuButton>
+              {{! template-lint-disable require-context-role }}
+              <AuButton
+                {{on 'click' this.insertAtStart}}
+                @disabled={{@insert.isRunning}}
+                @skin='link'
+                role='menuitem'
+              >{{t
+                  'editor-plugins.roadsign-regulation.expanded-measure.insert-measure-in-front'
+                }}</AuButton>
+              {{! template-lint-disable require-context-role }}
+              <AuButton
+                @disabled={{@insert.isRunning}}
+                @skin='link'
+                role='menuitem'
+              >{{t
+                  'editor-plugins.roadsign-regulation.expanded-measure.insert-measure-after-specific-article'
+                }}</AuButton>
             </:dropdown>
           </ButtonWithDropdownOptions>
         </AuButtonGroup>

@@ -315,6 +315,8 @@ editor-plugins:
   roadsign-regulation:
     expanded-measure:
       insert-measure: 'Voeg maatregel in:'
+      insert-measure-in-front: 'Voeg vooraan in'
+      insert-measure-after-specific-article: 'Voeg in na specifiek artikel'
       select-zonality:
         label: 'Selecteer zonale geldigheid:'
         zonal: Zonaal

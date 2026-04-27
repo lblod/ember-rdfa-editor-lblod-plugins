@@ -1,15 +1,31 @@
-import AuButtonGroup from '@appuniversum/ember-appuniversum/components/au-button-group';
-import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuDropdown from '@appuniversum/ember-appuniversum/components/au-dropdown';
-import Component from '@glimmer/component';
+import { TOC } from '@ember/component/template-only';
 
-export default class ButtonWithDropdownOptions extends Component {
-  <template>
-    <AuButtonGroup>
-      <AuButton ...attributes>{{yield to='primaryButton'}}</AuButton>
-      <AuDropdown @alignment='left' @skin='primary' @icon='chevron-down'>
-        {{yield to='dropdown'}}
-      </AuDropdown>
-    </AuButtonGroup>
-  </template>
-}
+type Signature = {
+  Blocks: {
+    primaryButton: [];
+    dropdown: [];
+  };
+};
+
+const ButtonWithDropdownOptions: TOC<Signature> = <template>
+  <div class='button-with-dropdown'>
+    <div id='button-with-dropdown--primary'>
+      {{yield to='primaryButton'}}
+    </div>
+    <div id='button-with-dropdown--divider' />
+    <AuDropdown
+      id='button-with-dropdown--dropdown'
+      @title=''
+      @hideText={{true}}
+      @alignment='left'
+      role='menu'
+      @skin='primary'
+      @icon='chevron-down'
+    >
+      {{yield to='dropdown'}}
+    </AuDropdown>
+  </div>
+</template>;
+
+export default ButtonWithDropdownOptions;

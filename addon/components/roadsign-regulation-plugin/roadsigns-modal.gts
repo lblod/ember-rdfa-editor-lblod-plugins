@@ -319,6 +319,7 @@ export default class RoadsignsModal extends Component<Signature> {
       concept: MobilityMeasureConcept,
       zonality: ZonalOrNot,
       temporal: boolean,
+      position?: number,
     ) => {
       if (!this.decisionLocation) {
         return;
@@ -355,6 +356,7 @@ export default class RoadsignsModal extends Component<Signature> {
               decisionUri,
               zonality,
               temporal,
+              position,
             })(this.controller.mainEditorState).transaction;
           },
           { view: this.controller.mainEditorView },
