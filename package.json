@@ -111,7 +111,7 @@
     "@glint/environment-ember-loose": "^1.5.0",
     "@glint/environment-ember-template-imports": "^1.5.0",
     "@glint/template": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "13.5.0-dev.d24cba9af91e1b0b4392e1ce86e8c23002c24c08",
+    "@lblod/ember-rdfa-editor": "13.6.0",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^1.1.0",
     "@release-it/keep-a-changelog": "^4.0.0",
