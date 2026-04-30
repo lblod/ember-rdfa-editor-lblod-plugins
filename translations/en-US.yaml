@@ -434,7 +434,7 @@ lmb-plugin:
 
 location-plugin:
   insert-placeholder: Insert location placeholder
-  use-open-street-map: OpenStreetMap
+  use-grb: GRB
   modal:
     insert: Insert location
     edit: Edit location

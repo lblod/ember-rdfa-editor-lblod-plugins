@@ -1,5 +1,27 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.3.0
+
+### Minor Changes
+
+- [#641](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/641) [`062b89a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/062b89ad35edff9cb0963a17e606497697e7614a) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add a way to set the required attribute of the label of the besluit type select
+
+### Patch Changes
+
+- [#635](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/635) [`d2ac617`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d2ac61769c71978bc9bc5e3ff10385057ae807bb) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix resetting the placeholder edit card
+
+## 35.2.0
+
+### Minor Changes
+
+- [#640](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/640) [`3180369`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/31803691c6e577dfed2d6e0f91962a5180906101) Thanks [@abeforgit](https://github.com/abeforgit)! - Add option to explicitly configure subject to link locations to
+
+### Patch Changes
+
+- [#639](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/639) [`0946fdb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0946fdb3561050ed2b4f197305b0556007fe32d3) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix typing in besluit topic select
+
+- [#638](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/638) [`32f2217`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/32f22174393411561665f3266db62eb463bfc4ea) Thanks [@piemonkey](https://github.com/piemonkey)! - Invert oslo-location toggle to be 'GRB' in place of 'Open Streetmap'
+
 ## 35.1.2
 
 ### Patch Changes

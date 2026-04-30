@@ -230,7 +230,7 @@ class MapWrapper extends Component<MapWrapperSig> {
 
 export default class LocationPluginMapComponent extends Component<Signature> {
   @tracked vertices: GlobalCoordinates[] = [];
-  @tracked useOpenStreetMaps = false;
+  @tracked useGRB = true;
 
   // Use untracked properties as otherwise the map jumps to any area or location we pick
   existingAreaBounds = generateBoundsFromShape(this.args.existingArea);
@@ -275,7 +275,7 @@ export default class LocationPluginMapComponent extends Component<Signature> {
   }
 
   get tileProvider() {
-    if (this.useOpenStreetMaps) {
+    if (!this.useGRB) {
       return TILE_PROVIDER_CONSTANTS.OPEN_STREET_MAP;
     } else {
       return TILE_PROVIDER_CONSTANTS.GRB;
@@ -331,10 +331,11 @@ export default class LocationPluginMapComponent extends Component<Signature> {
             as |c|
           >
             <c.content>
-              <AuToggleSwitch @onChange={{set this 'useOpenStreetMaps'}}>
-                <p class='au-u-para-tiny'>{{t
-                    'location-plugin.use-open-street-map'
-                  }}</p>
+              <AuToggleSwitch
+                @checked={{this.useGRB}}
+                @onChange={{set this 'useGRB'}}
+              >
+                <p class='au-u-para-tiny'>{{t 'location-plugin.use-grb'}}</p>
               </AuToggleSwitch>
             </c.content>
           </AuCard>

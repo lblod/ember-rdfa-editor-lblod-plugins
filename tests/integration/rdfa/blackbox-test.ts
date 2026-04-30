@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-
 import { module, test } from 'qunit';
 import TEST_CASES from './test-cases';
 import { EditorStore } from '@lblod/ember-rdfa-editor/utils/_private/datastore/datastore';
@@ -15,10 +12,8 @@ import {
   SAMPLE_SCHEMA,
   testEditor,
 } from 'dummy/tests/utils/editor';
-//@ts-expect-error graphy has no typescript definitions
-import ttl_write from '@graphy/content.ttl.write';
-import { Dataset } from '@rdfjs/types';
-import { FastDataset } from '@graphy/memory.dataset.fast';
+//@ts-expect-error No types for some reason
+import toNT from '@rdfjs/to-ntriples';
 
 function calculateDataset(html: string) {
   const domParser = new DOMParser();
@@ -47,25 +42,7 @@ function calculateDataset(html: string) {
       return node.textContent || '';
     },
   });
-  return datastore.dataset as unknown as FastDataset;
-}
-
-async function toTurtle(dataset: Dataset) {
-  return new Promise<string>((resolve, reject) => {
-    let result = '';
-    const ttl_writer = ttl_write();
-    ttl_writer.on('data', (chunk) => {
-      result += chunk;
-    });
-    ttl_writer.on('end', () => {
-      resolve(result);
-    });
-    ttl_writer.on('error', () => {
-      reject();
-    });
-    dataset.forEach((quad) => ttl_writer.write(quad));
-    ttl_writer.end();
-  });
+  return datastore.dataset;
 }
 
 module('Integration | RDFa blackbox test ', function () {
@@ -77,23 +54,23 @@ module('Integration | RDFa blackbox test ', function () {
       controller.initialize(html);
       const outputHTML = controller.htmlContent;
       // run through the editor twice to test for stability
-      // controller.initialize(outputHTML);
+      controller.initialize(outputHTML);
 
       const finalHTML = controller.htmlContent;
       assert.strictEqual(outputHTML, finalHTML);
       const resultingDataset = calculateDataset(finalHTML);
       const isEqual = initialDataset.equals(resultingDataset);
-      const initialTurtle = (await toTurtle(initialDataset)).trim();
-      const resultingTurtle = (await toTurtle(resultingDataset)).trim();
+      const initialTurtle = (await toNT(initialDataset)).trim();
+      const resultingTurtle = (await toNT(resultingDataset)).trim();
       const message = `
         Before:
         ${initialTurtle || '<empty>'}
         After:
         ${resultingTurtle || '<empty>'}
         In 'before' but not in 'after':
-        ${await toTurtle(initialDataset.minus(resultingDataset))}
+        ${await toNT(initialDataset.difference(resultingDataset))}
         In 'after' but not in 'before':
-        ${await toTurtle(resultingDataset.minus(initialDataset))}
+        ${await toNT(resultingDataset.difference(initialDataset))}
       `;
       assert.true(isEqual, message);
     });

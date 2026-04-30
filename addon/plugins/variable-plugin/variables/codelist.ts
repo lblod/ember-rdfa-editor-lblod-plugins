@@ -5,6 +5,7 @@ import {
 } from '@lblod/ember-rdfa-editor/utils/ember-node';
 import {
   DOMOutputSpec,
+  EditorState,
   Fragment,
   PNode,
   Schema,
@@ -102,7 +103,7 @@ const parseDOM: TagParseRule[] = [
   },
 ];
 
-const toDOM = (node: PNode): DOMOutputSpec => {
+const toDOM = (node: PNode, state?: EditorState): DOMOutputSpec => {
   const {
     label = 'codelist',
     codelist,
@@ -119,30 +120,36 @@ const toDOM = (node: PNode): DOMOutputSpec => {
   for (let i = 0; i < codelist_option_nodes.length; i++) {
     const codelist_option_node = codelist_option_nodes[i];
     contentArray.push(
-      unwrap(codelist_option_node.type.spec.toDOM)(codelist_option_node),
+      unwrap((codelist_option_node.type.spec as SayNodeSpec).toDOM)(
+        codelist_option_node,
+        state,
+      ),
     );
     if (i !== codelist_option_nodes.length - 1) {
       contentArray.push(', ');
     }
   }
-  return renderRdfaAware({
-    renderable: node,
-    tag: 'span',
-    attrs: {
-      class: `${getClassnamesFromNode(node)}${className}`,
-      'data-say-variable': 'true',
-      'data-say-variable-type': 'codelist',
-      'data-say-node-version': '2',
-      'data-label': label as string | null,
-      'data-codelist': codelist as string,
-      'data-source': source as string,
-      'data-selection-style': selectionStyle as string,
-      'data-variable': variable as string,
-      'data-variable-instance': variableInstance as string,
-      'data-option-list': JSON.stringify(hardcodedOptionList),
+  return renderRdfaAware(
+    {
+      renderable: node,
+      tag: 'span',
+      attrs: {
+        class: `${getClassnamesFromNode(node)}${className}`,
+        'data-say-variable': 'true',
+        'data-say-variable-type': 'codelist',
+        'data-say-node-version': '2',
+        'data-label': label as string | null,
+        'data-codelist': codelist as string,
+        'data-source': source as string,
+        'data-selection-style': selectionStyle as string,
+        'data-variable': variable as string,
+        'data-variable-instance': variableInstance as string,
+        'data-option-list': JSON.stringify(hardcodedOptionList),
+      },
+      contentArray: contentArray.length ? contentArray : [label],
     },
-    contentArray: contentArray.length ? contentArray : [label],
-  });
+    state,
+  );
 };
 
 const emberNodeConfig: EmberNodeConfig = {
@@ -195,14 +202,17 @@ export const codelist_option: SayNodeSpec = {
   attrs: {
     ...rdfaAttrSpec({ rdfaAware }),
   },
-  toDOM: (node) => {
-    return renderRdfaAware({
-      renderable: node,
-      attrs: {
-        'data-say-type': 'codelist_option',
+  toDOM: (node, state) => {
+    return renderRdfaAware(
+      {
+        renderable: node,
+        attrs: {
+          'data-say-type': 'codelist_option',
+        },
+        tag: 'span',
+        content: node.textContent,
       },
-      tag: 'span',
-      content: node.textContent,
-    });
+      state,
+    );
   },
 };
