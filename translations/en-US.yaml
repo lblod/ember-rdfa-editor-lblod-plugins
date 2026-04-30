@@ -316,8 +316,10 @@ editor-plugins:
   roadsign-regulation:
     expanded-measure:
       insert-measure: 'Insert measure:'
-      insert-measure-in-front: 'Insert at the beginning'
-      insert-measure-after-specific-article: 'Insert after a specific article'
+      as-last-article: As first article
+      as-first-article: As last article
+      after-article-x: After article {articleNumber}
+      insert-position: Invoerpositie
       select-zonality:
         label: 'Select zonal validity:'
         zonal: Zonal

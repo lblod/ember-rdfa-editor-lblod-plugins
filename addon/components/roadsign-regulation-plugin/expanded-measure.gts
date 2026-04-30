@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
 import MeasurePreview from './measure-preview';
 import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
-import AuButtonGroup from '@appuniversum/ember-appuniversum/components/au-button-group';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import { MobilityMeasureConcept } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/schemas/mobility-measure-concept';
 import { action } from '@ember/object';
@@ -16,7 +15,11 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import { Task } from 'ember-concurrency';
 import { isSome } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import ButtonWithDropdownOptions from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/button-with-dropdown-options';
+import set from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/set';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
+import { PNode } from '@lblod/ember-rdfa-editor';
+import PowerSelect from 'ember-power-select/components/power-select';
 
 export type InsertMobilityMeasureTask = Task<
   void,
@@ -28,12 +31,43 @@ type Signature = {
     selectRow: (uri: string) => void;
     insert: InsertMobilityMeasureTask;
     endpoint: string;
+    articleNodes: PNode[];
   };
 };
 
+type InsertPositionOption = {
+  label: string;
+  position: 'first' | 'last' | 'custom';
+  insertIndex?: number;
+};
+
 export default class ExpandedMeasure extends Component<Signature> {
+  @service declare intl: IntlService;
+
   @tracked zonalityValue?: ZonalOrNot;
   @tracked temporalValue?: boolean;
+  @tracked selectedInsertPosition: InsertPositionOption;
+
+  insertPositionOptionFirst: InsertPositionOption;
+  insertPositionOptionLast: InsertPositionOption;
+
+  constructor(owner: unknown, args: Signature['Args']) {
+    super(owner, args);
+    this.insertPositionOptionFirst = {
+      label: this.intl.t(
+        'editor-plugins.roadsign-regulation.expanded-measure.as-first-article',
+      ),
+      position: 'first',
+      insertIndex: 0,
+    };
+    this.insertPositionOptionLast = {
+      label: this.intl.t(
+        'editor-plugins.roadsign-regulation.expanded-measure.as-last-article',
+      ),
+      position: 'last',
+    };
+    this.selectedInsertPosition = this.insertPositionOptionLast;
+  }
 
   get isPotentiallyZonal() {
     return this.args.concept.zonality === ZONALITY_OPTIONS.POTENTIALLY_ZONAL;
@@ -42,6 +76,7 @@ export default class ExpandedMeasure extends Component<Signature> {
   get insertButtonDisabled() {
     return (
       (this.isPotentiallyZonal && !this.zonalityValue) ||
+      this.args.insert.isRunning ||
       (this.args.concept.variableSignage && !isSome(this.temporalValue))
     );
   }
@@ -58,28 +93,42 @@ export default class ExpandedMeasure extends Component<Signature> {
 
   @action
   insert() {
+    const { insertIndex } = this.selectedInsertPosition;
     this.args.insert.perform(
       this.args.concept,
       // POTENTIALLY_ZONAL option is filtered out by requiring a zonalityValue to submit
       (this.zonalityValue ?? this.args.concept.zonality) as ZonalOrNot,
       this.temporalValue ?? false,
-    );
-  }
-
-  @action
-  insertAtStart() {
-    this.args.insert.perform(
-      this.args.concept,
-      // POTENTIALLY_ZONAL option is filtered out by requiring a zonalityValue to submit
-      (this.zonalityValue ?? this.args.concept.zonality) as ZonalOrNot,
-      this.temporalValue ?? false,
-      0,
+      insertIndex,
     );
   }
 
   @action
   unselectRow() {
     this.args.selectRow(this.args.concept.uri);
+  }
+
+  get articlesInDocument() {
+    return this.args.articleNodes;
+  }
+
+  get insertPositionOptions() {
+    return [
+      this.insertPositionOptionLast,
+      this.insertPositionOptionFirst,
+      ...this.articlesInDocument.slice(1).map((_, index) => ({
+        label: this.intl.t(
+          'editor-plugins.roadsign-regulation.expanded-measure.after-article-x',
+          { articleNumber: index + 1 },
+        ),
+        position: 'custom',
+        insertIndex: index + 1,
+      })),
+    ];
+  }
+
+  get insertPositionDropdownTitle() {
+    return this.selectedInsertPosition?.label.toLowerCase();
   }
 
   <template>
@@ -147,43 +196,28 @@ export default class ExpandedMeasure extends Component<Signature> {
             </AuRadioGroup>
           </div>
         {{/if}}
-        <AuButtonGroup>
-          <AuButton @skin='secondary' {{on 'click' this.unselectRow}}>
-            {{t 'editor-plugins.utils.cancel'}}
-          </AuButton>
-          <ButtonWithDropdownOptions>
-            <:primaryButton>
-              <AuButton
-                {{on 'click' this.insert}}
-                @skin='primary'
-                @loading={{@insert.isRunning}}
-                @loadingMessage={{t 'common.loading'}}
-                @disabled={{this.insertButtonDisabled}}
-              >
-                {{t 'editor-plugins.utils.insert'}}
-              </AuButton>
-            </:primaryButton>
-            <:dropdown>
-              {{! template-lint-disable require-context-role }}
-              <AuButton
-                {{on 'click' this.insertAtStart}}
-                @disabled={{@insert.isRunning}}
-                @skin='link'
-                role='menuitem'
-              >{{t
-                  'editor-plugins.roadsign-regulation.expanded-measure.insert-measure-in-front'
-                }}</AuButton>
-              {{! template-lint-disable require-context-role }}
-              <AuButton
-                @disabled={{@insert.isRunning}}
-                @skin='link'
-                role='menuitem'
-              >{{t
-                  'editor-plugins.roadsign-regulation.expanded-measure.insert-measure-after-specific-article'
-                }}</AuButton>
-            </:dropdown>
-          </ButtonWithDropdownOptions>
-        </AuButtonGroup>
+        <AuHeading @level='6' @skin='6'>
+          {{t
+            'editor-plugins.roadsign-regulation.expanded-measure.insert-position'
+          }}
+        </AuHeading>
+        <PowerSelect
+          class='au-u-1-5'
+          @allowClear={{false}}
+          @onChange={{set this 'selectedInsertPosition'}}
+          @selected={{this.selectedInsertPosition}}
+          @options={{this.insertPositionOptions}}
+          as |option|
+        >{{option.label}}</PowerSelect>
+        <AuButton
+          {{on 'click' this.insert}}
+          @skin='primary'
+          @loading={{@insert.isRunning}}
+          @loadingMessage={{t 'common.loading'}}
+          @disabled={{this.insertButtonDisabled}}
+        >
+          {{t 'common.insert'}}
+        </AuButton>
       </td>
     </tr>
   </template>

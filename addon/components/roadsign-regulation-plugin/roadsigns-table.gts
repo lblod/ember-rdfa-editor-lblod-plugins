@@ -21,6 +21,7 @@ import { on } from '@ember/modifier';
 import { fn } from '@ember/helper';
 import { TRAFFIC_SIGNAL_CONCEPT_TYPES } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/constants';
 import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
+import { PNode } from '@lblod/ember-rdfa-editor';
 
 type Signature = {
   Args: {
@@ -28,6 +29,7 @@ type Signature = {
     content?: MobilityMeasureConcept[];
     isLoading?: boolean;
     insert: InsertMobilityMeasureTask;
+    articleNodes: PNode[];
   };
 };
 
@@ -163,6 +165,7 @@ export default class RoadSignsTable extends Component<Signature> {
                     @insert={{@insert}}
                     @selectRow={{this.selectRow}}
                     @endpoint={{@options.endpoint}}
+                    @articleNodes={{@articleNodes}}
                   />
                 {{/if}}
               {{else}}
