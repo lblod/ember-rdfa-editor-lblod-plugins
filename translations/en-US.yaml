@@ -319,7 +319,7 @@ editor-plugins:
       as-last-article: As first article
       as-first-article: As last article
       after-article-x: After article {articleNumber}
-      insert-position: Invoerpositie
+      insert-position: 'Insertion position:'
       select-zonality:
         label: 'Select zonal validity:'
         zonal: Zonal
