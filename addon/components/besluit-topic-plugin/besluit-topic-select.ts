@@ -6,6 +6,8 @@ import { BesluitTopic } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/bes
 
 type Args = {
   besluitTopics: BesluitTopic[];
+  selected?: BesluitTopic[];
+  onchange: (topic: BesluitTopic[]) => void;
 };
 
 export default class BesluitTopicSelectComponent extends Component<Args> {

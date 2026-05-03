@@ -15,6 +15,7 @@ interface Sig {
     selected?: BesluitType;
     showWarningWhenEmpty: boolean;
     onchange: (selected: BesluitType) => void;
+    required?: boolean;
   };
   Element: HTMLDivElement;
 }
@@ -43,7 +44,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
   <template>
     <div ...attributes>
       {{#let (uuidv4) as |id|}}
-        <AuLabel for={{id}}>
+        <AuLabel for={{id}} @required={{@required}}>
           {{t @fieldNameTranslation}}
         </AuLabel>
         <PowerSelect
