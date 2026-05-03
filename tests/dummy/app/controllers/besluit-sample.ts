@@ -165,6 +165,7 @@ import {
   getContextualActionGroups,
   getContextualActions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
+import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -510,6 +511,10 @@ export default class BesluitSampleController extends Controller {
     recreateUuidsOnPaste,
     variableAutofillerPlugin(this.config.autofilledVariable),
     documentValidationPlugin(this.config.documentValidation),
+    slashCommandsPlugin({
+      intl: this.intl,
+      getGroups: this.contextualGroupGetters,
+    }),
   ];
 
   @action
