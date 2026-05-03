@@ -88,7 +88,7 @@
     "stream-browserify": "^3.0.0",
     "tracked-built-ins": "^4.1.0",
     "tracked-toolbox": "^2.0.0",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
