@@ -106,6 +106,7 @@
     "@gavant/glint-template-types": "^0.4.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@glint/core": "^1.5.2",
     "@glint/ember-tsc": "^1.1.1",
     "@glint/template": "^1.7.4",
     "@graphy/content.ttl.write": "^4.3.7",
