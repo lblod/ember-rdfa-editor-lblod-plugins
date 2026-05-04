@@ -50,6 +50,7 @@ export default class MarcodeInsertComponent extends Component<Sig> {
       // list in code instead of in the doc?
       hardcodedOptionList: hardcodedMarcodeList,
       label,
+      hasNonLiteralContents: true,
     });
     this.controller.doCommand(replaceSelectionWithAndSelectNode(node), {
       view: this.controller.mainEditorView,
