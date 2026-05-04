@@ -7,7 +7,7 @@ import { emberApplicationPluginKey } from '@lblod/ember-rdfa-editor/plugins/embe
 export const getTranslationFunction = (state?: EditorState) => {
   const intl = state && getIntlService(state);
 
-  const locale = state?.doc.attrs.lang as string;
+  const locale = state?.doc.attrs.lang;
 
   return (
     key: string,
@@ -28,7 +28,7 @@ export const getTranslationFunction = (state?: EditorState) => {
 export const getIntlService = (state: EditorState) => {
   const intl = emberApplicationPluginKey
     .getState(state)
-    ?.application.lookup('service:intl') as IntlService | undefined;
+    ?.application.lookup('service:intl');
   return intl;
 };
 /**
