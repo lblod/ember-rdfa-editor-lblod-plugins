@@ -71,12 +71,10 @@ interface DocumentValidationResult {
   propertiesWithoutErrors: { message: string }[];
   propertiesWithErrors: PropertyWithError[];
 }
-export interface DocumentValidationTransactionMeta
-  extends DocumentValidationResult {
+export interface DocumentValidationTransactionMeta extends DocumentValidationResult {
   type: string;
 }
-export interface DocumentValidationPluginState
-  extends DocumentValidationResult {
+export interface DocumentValidationPluginState extends DocumentValidationResult {
   documentShape: string;
   validationCallback: typeof validationCallback;
   rules: Rule[];
