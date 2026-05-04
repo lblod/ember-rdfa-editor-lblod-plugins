@@ -138,11 +138,15 @@ function resolveInsertLocation(
   }
 
   let offset = location.pos + 1; // +1 to step inside the container node
-  for (let i = 0; i < childCount; i++) {
-    if (i === position) {
+  let articleIndex = 0;
+  for (const child of containerNode.children) {
+    if (articleIndex === position) {
       return offset;
     }
-    offset += containerNode.child(i).nodeSize;
+    offset += child.nodeSize;
+    if (child.attrs.structureType === 'article') {
+      articleIndex += 1;
+    }
   }
 
   return location.pos + containerNode.nodeSize - 1;
