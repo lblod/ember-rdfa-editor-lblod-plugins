@@ -161,9 +161,10 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
 import ContextualActionsContainer from '@lblod/ember-rdfa-editor/components/plugins/contextual-actions/container';
 import {
-  getContextualActionGroups,
-  getContextualActions,
+  getContextualActionGroups as placeDescriptionActionGroups,
+  getContextualActions as placeDescriptionActions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
+import { getContextualActionGroups as locationActionsGroups, getContextualActions as locationActions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/contextual-actions';
 import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
 import Owner from '@ember/owner';
 
@@ -234,8 +235,8 @@ export default class BesluitSampleController extends Controller {
     say: 'https://say.data.gift/ns/',
   };
 
-  contextualActionGetters = [getContextualActions(this.locationOptions)];
-  contextualGroupGetters = [getContextualActionGroups()];
+  contextualActionGetters = [placeDescriptionActions(this.locationOptions), locationActions()];
+  contextualGroupGetters = [placeDescriptionActionGroups(), locationActionsGroups()];
 
   get schema() {
     return new Schema({
