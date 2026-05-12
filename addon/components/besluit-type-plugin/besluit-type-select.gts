@@ -16,6 +16,7 @@ interface Sig {
     showWarningWhenEmpty: boolean;
     onchange: (selected: BesluitType) => void;
     required?: boolean;
+    renderInPlace?: boolean;
   };
   Element: HTMLDivElement;
 }
@@ -49,7 +50,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
         </AuLabel>
         <PowerSelect
           id={{id}}
-          @renderInPlace={{true}}
+          @renderInPlace={{@renderInPlace}}
           @searchEnabled={{true}}
           @searchMessage={{t 'besluit-type-plugin.search-message'}}
           @noMatchesMessage={{t 'besluit-type-plugin.no-matches-message'}}
