@@ -26,8 +26,7 @@ import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/u
 import IntlService from 'ember-intl/services/intl';
 import { select } from '@ember/test-helpers';
 
-const locationActionsGroupId =
-  'locatie-fde16805-5b4d-4595-9742-e434d477ee1d';
+const locationActionsGroupId = 'locatie-fde16805-5b4d-4595-9742-e434d477ee1d';
 
 function createInsertPlaceDescriptionCommand(label: string) {
   return (state: EditorState, dispatch: (tr: Transaction) => void) => {
@@ -73,20 +72,21 @@ function createInsertPlaceDescriptionCommand(label: string) {
 export function getContextualActions() {
   return async function (state: EditorState) {
     const t = getTranslationFunction(state);
+
     // TODO: translate!
     const options = [
-      {label: 'Adres invoegen'},
-      {label: 'Punt op de kaart invoegen'},
-      {label: 'Gebied invoegen'},
-      {label: 'Perceel invoegen'}
-    ]
+      { label: 'Adres invoegen', icon: 'location' },
+      { label: 'Punt op de kaart invoegen', icon: 'location-gps' },
+      { label: 'Gebied invoegen', icon: 'area' },
+      { label: 'Perceel invoegen', icon: 'focus' },
+    ];
 
-    return options.map(({label}) => {
+    return options.map((option) => {
       return {
+        ...option,
         id: uuidv4(),
-        label,
         group: locationActionsGroupId,
-        command: createInsertPlaceDescriptionCommand(label),
+        command: createInsertPlaceDescriptionCommand(option.label),
       };
     });
   };
@@ -94,7 +94,10 @@ export function getContextualActions() {
 
 function contextualGroupIsVisible(state: EditorState) {
   const { selection } = state;
-  return (selection instanceof NodeSelection && selection.node.type === selection.node.type.schema.nodes['oslo_location']);
+  return (
+    selection instanceof NodeSelection &&
+    selection.node.type === selection.node.type.schema.nodes['oslo_location']
+  );
 }
 
 export function getContextualActionGroups() {
