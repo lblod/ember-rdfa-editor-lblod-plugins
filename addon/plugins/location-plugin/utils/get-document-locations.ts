@@ -28,7 +28,7 @@ export default function getDocumentLocations(controller: SayController) {
     return true;
   });
   const locationMetadata: locationMetadataType = {};
-  const locationsDedup: locationsWithDistanceType[] = [];
+  const locationsDedup: (Place | Address | Area)[] = [];
   for (const locationWithDistance of locationsWithDistance) {
     const uri =
       (locationWithDistance.location as Address).belgianAddressUri ||
@@ -38,7 +38,7 @@ export default function getDocumentLocations(controller: SayController) {
         ocurrences: 1,
         distance: locationWithDistance.distance,
       };
-      locationsDedup.push(locationWithDistance);
+      locationsDedup.push(locationWithDistance.location);
     } else {
       locationMetadata[uri].ocurrences++;
       if (locationWithDistance.distance < locationMetadata[uri].distance) {
@@ -47,22 +47,18 @@ export default function getDocumentLocations(controller: SayController) {
     }
   }
 
-  const locations = locationsDedup
-    .sort((a, b) => {
-      const uriA = (a.location as Address).belgianAddressUri || a.location.uri;
-      const uriB = (b.location as Address).belgianAddressUri || b.location.uri;
-      if (
-        locationMetadata[uriA].ocurrences === locationMetadata[uriB].ocurrences
-      ) {
-        return (
-          locationMetadata[uriA].distance - locationMetadata[uriB].distance
-        );
-      } else {
-        return (
-          locationMetadata[uriB].ocurrences - locationMetadata[uriA].ocurrences
-        );
-      }
-    })
-    .map((locationWithPos) => locationWithPos.location);
+  const locations = locationsDedup.sort((a, b) => {
+    const uriA = (a as Address).belgianAddressUri || a.uri;
+    const uriB = (b as Address).belgianAddressUri || b.uri;
+    if (
+      locationMetadata[uriA].ocurrences === locationMetadata[uriB].ocurrences
+    ) {
+      return locationMetadata[uriA].distance - locationMetadata[uriB].distance;
+    } else {
+      return (
+        locationMetadata[uriB].ocurrences - locationMetadata[uriA].ocurrences
+      );
+    }
+  });
   return locations;
 }
