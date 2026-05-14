@@ -9,6 +9,7 @@ interface Sig {
     selectedType?: BesluitTypeInstance;
     setType: (selected: BesluitTypeInstance) => void;
     required?: boolean;
+    renderInPlace?: boolean;
   };
   Element: HTMLDivElement;
 }
@@ -36,6 +37,10 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
       });
     }
   };
+  get renderInPlace() {
+    if (this.args.renderInPlace === false) return false;
+    return true;
+  }
 
   <template>
     <div ...attributes>
@@ -46,6 +51,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
         @selected={{@selectedType.parent}}
         @showWarningWhenEmpty={{false}}
         @required={{@required}}
+        @renderInPlace={{this.renderInPlace}}
       />
       {{#if @selectedType.parent.subTypes.length}}
         <BesluitTypeSelect
@@ -55,6 +61,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
           @selected={{@selectedType.subType}}
           @showWarningWhenEmpty={{true}}
           @required={{@required}}
+          @renderInPlace={{this.renderInPlace}}
         />
       {{/if}}
       {{#if @selectedType.subType.subTypes.length}}
@@ -65,6 +72,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
           @selected={{@selectedType.subSubType}}
           @showWarningWhenEmpty={{true}}
           @required={{@required}}
+          @renderInPlace={{this.renderInPlace}}
         />
       {{/if}}
     </div>
