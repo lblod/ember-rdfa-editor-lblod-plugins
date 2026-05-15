@@ -192,7 +192,6 @@ export default class CodelistEditComponent extends Component<Sig> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
-        @disableAuContent={{true}}
         as |c|
       >
         <c.header>

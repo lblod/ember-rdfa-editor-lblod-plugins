@@ -75,7 +75,6 @@ export default class ConfigureMandateeTableComponent extends Component<Sig> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
-        @disableAuContent={{true}}
         as |c|
       >
         <c.header>

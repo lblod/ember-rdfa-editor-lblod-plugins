@@ -146,7 +146,6 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
-        @disableAuContent={{true}}
         as |c|
       >
         <c.header>
