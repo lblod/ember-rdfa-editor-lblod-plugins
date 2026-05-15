@@ -60,6 +60,7 @@ type InsertMeasureArgs = {
   variables: Record<string, VariableInstance & { __rdfaId: string }>;
   templateString: string;
   decisionUri: string;
+  position?: number;
   articleUriGenerator?: () => string;
 } & (
   | {
@@ -78,6 +79,7 @@ export default function insertMeasure({
   templateString,
   articleUriGenerator,
   decisionUri,
+  position,
   ...args
 }: InsertMeasureArgs): TransactionMonad<boolean> {
   return function (state: EditorState) {
@@ -230,6 +232,7 @@ export default function insertMeasure({
     const initialTransaction = insertArticle({
       node: articleNode,
       decisionUri,
+      position,
     })(state).transaction;
     const resultingSelection = initialTransaction.selection;
     const { transaction, result } = transactionCombinator(

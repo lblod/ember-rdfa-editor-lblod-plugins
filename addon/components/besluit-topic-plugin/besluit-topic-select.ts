@@ -8,6 +8,7 @@ type Args = {
   besluitTopics: BesluitTopic[];
   selected?: BesluitTopic[];
   onchange: (topic: BesluitTopic[]) => void;
+  renderInPlace?: boolean;
 };
 
 export default class BesluitTopicSelectComponent extends Component<Args> {
@@ -30,5 +31,9 @@ export default class BesluitTopicSelectComponent extends Component<Args> {
     return this.args.besluitTopics.filter((besluitTopic) =>
       besluitTopic.label.toLowerCase().includes(lowerTerm),
     );
+  }
+  get renderInPlace() {
+    if (this.args.renderInPlace === false) return false;
+    return true;
   }
 }
