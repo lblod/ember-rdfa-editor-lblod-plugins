@@ -1,21 +1,20 @@
-import { SayController } from '@lblod/ember-rdfa-editor';
+import { EditorState } from '@lblod/ember-rdfa-editor';
 import { Area, Place } from './geo-helpers';
 import { Address } from './address-helpers';
 
-type locationsWithDistanceType = {
+type LocationsWithDistanceType = {
   location: Place | Address | Area;
   distance: number;
 };
 
-type locationMetadataType = {
+type LocationMetadataType = {
   [locationUri: string]: { ocurrences: number; distance: number };
 };
 
-export default function getDocumentLocations(controller: SayController) {
-  const state = controller.mainEditorState;
+export default function getDocumentLocations(state: EditorState) {
   const doc = state.doc;
-  const locationsWithDistance: locationsWithDistanceType[] = [];
-  const { selection } = controller.mainEditorState;
+  const locationsWithDistance: LocationsWithDistanceType[] = [];
+  const selection = state.selection;
   doc.descendants((node, pos) => {
     if (node.type.name === 'oslo_location') {
       const distance = Math.abs(pos - selection.from);
@@ -27,7 +26,7 @@ export default function getDocumentLocations(controller: SayController) {
     }
     return true;
   });
-  const locationMetadata: locationMetadataType = {};
+  const locationMetadata: LocationMetadataType = {};
   const locationsDedup: (Place | Address | Area)[] = [];
   for (const locationWithDistance of locationsWithDistance) {
     const uri =
