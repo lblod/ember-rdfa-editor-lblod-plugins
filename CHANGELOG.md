@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.6.0
+
+### Minor Changes
+
+- [#652](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/652) [`6a75255`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6a752557f1e36010629ba8d2f366739a42e063ed) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Allow to modify render in place for besluit topic select
+
 ## 35.5.0
 
 ### Minor Changes
