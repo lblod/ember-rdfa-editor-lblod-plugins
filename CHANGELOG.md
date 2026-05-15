@@ -1,5 +1,33 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 35.6.0
+
+### Minor Changes
+
+- [#652](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/652) [`6a75255`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6a752557f1e36010629ba8d2f366739a42e063ed) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Allow to modify render in place for besluit topic select
+
+## 35.5.0
+
+### Minor Changes
+
+- [#649](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/649) [`d317e0f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d317e0f900739d19318c2ef9a9386b26a746efcc) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Allow modify renderInPlace for besluit type form component
+
+### Patch Changes
+
+- [#647](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/647) [`2663d32`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/2663d32eef43f8a781ad3f4bd6e3b05e1d1c4f0b) Thanks [@kobemertens](https://github.com/kobemertens)! - Glint V2 hybrid setup
+
+- [#650](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/650) [`6973282`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/6973282740db8016c28959d0f83bb9cd96e9f10c) Thanks [@kobemertens](https://github.com/kobemertens)! - fix structure move on select by using outline instead of changing the border size
+
+## 35.4.0
+
+### Minor Changes
+
+- [#636](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/636) [`867383d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/867383d8ee85dcf30ad7338cd80dc2c0802326c7) Thanks [@piemonkey](https://github.com/piemonkey)! - Use pointer functionality to link to make linking to codelist URIs possible
+
+### Patch Changes
+
+- [#636](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/636) [`aeb74b2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/aeb74b22f159f0297749e430093d90a54f5f34f6) Thanks [@piemonkey](https://github.com/piemonkey)! - Update to [v13.6.0](https://github.com/lblod/ember-rdfa-editor/releases/tag/%40lblod%2Fember-rdfa-editor%4013.6.0) of the editor
+
 ## 35.3.0
 
 ### Minor Changes

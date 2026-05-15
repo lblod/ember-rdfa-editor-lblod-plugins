@@ -133,7 +133,6 @@ export default class AuCard extends Component<AuCardSignature> {
               @skin='link'
               class='au-c-card__toggle'
               aria-hidden='true'
-              focusable='false'
               aria-expanded={{if this.sectionOpen 'true' 'false'}}
             >
               {{#if this.sectionOpen}}
@@ -169,7 +168,6 @@ export default class AuCard extends Component<AuCardSignature> {
               @skin='link'
               class='au-c-card__toggle'
               aria-hidden='true'
-              focusable='false'
               aria-expanded={{if this.sectionOpen 'true' 'false'}}
             >
               {{#if this.sectionOpen}}
