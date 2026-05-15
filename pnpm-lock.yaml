@@ -189,8 +189,8 @@ importers:
         specifier: ^1.7.7
         version: 1.7.7
       '@lblod/ember-rdfa-editor':
-        specifier: 13.7.0
-        version: 13.7.0(0a1d660f56f52556014e8c7c9cef96eb)
+        specifier: 13.7.1
+        version: 13.7.1(0a1d660f56f52556014e8c7c9cef96eb)
       '@rdfjs/to-ntriples':
         specifier: ^3.0.1
         version: 3.0.1
@@ -1916,8 +1916,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lblod/ember-rdfa-editor@13.7.0':
-    resolution: {integrity: sha512-uI6NCowtBhkK7FpwBI5go+UEyVE+6IcjpWVCw9q8LFVNK65P1Mfrv7qReEcGhXmMFoI5XAKvcl0B+1RCkOPsLA==}
+  '@lblod/ember-rdfa-editor@13.7.1':
+    resolution: {integrity: sha512-busSsEJ2NjSAzropp9gwkAvh/ufocIHDZDmjbWj5M5KScrxqPMttFbvgArqXcb6Ff5kXFs9Yi4pHHf1whHtuFw==}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.11.0
       '@ember/test-helpers': ^2.9.4 || ^3.2.1 || ^4.0.2 || ^5.0.0
@@ -13048,7 +13048,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lblod/ember-rdfa-editor@13.7.0(0a1d660f56f52556014e8c7c9cef96eb)':
+  '@lblod/ember-rdfa-editor@13.7.1(0a1d660f56f52556014e8c7c9cef96eb)':
     dependencies:
       '@appuniversum/ember-appuniversum': 3.17.0(@ember/test-helpers@3.3.1(@babel/core@7.26.0)(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(webpack@5.97.1))(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glimmer/tracking@1.1.2)(@glint/environment-ember-loose@1.5.1(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(@types/ember__array@4.0.10(@babel/core@7.26.0))(@types/ember__component@4.0.22(@babel/core@7.26.0))(@types/ember__controller@4.0.12(@babel/core@7.26.0))(@types/ember__object@4.0.12(@babel/core@7.26.0))(@types/ember__routing@4.0.22(@babel/core@7.26.0))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))))(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(tracked-built-ins@4.1.0(@babel/core@7.26.0))(webpack@5.97.1)
       '@codemirror/commands': 6.10.3
@@ -13692,12 +13692,12 @@ snapshots:
       '@types/ember__object': 4.0.12(@babel/core@7.26.0)
       '@types/ember__polyfills': 4.0.6
       '@types/ember__routing': 4.0.22(@babel/core@7.26.0)
-      '@types/ember__runloop': 4.0.10(@babel/core@7.26.0)
+      '@types/ember__runloop': 4.0.10
       '@types/ember__service': 4.0.9(@babel/core@7.26.0)
       '@types/ember__string': 3.0.15
       '@types/ember__template': 4.0.7
       '@types/ember__test': 4.0.6(@babel/core@7.26.0)
-      '@types/ember__utils': 4.0.7
+      '@types/ember__utils': 4.0.7(@babel/core@7.26.0)
       '@types/rsvp': 4.0.9
     optional: true
 
@@ -13830,6 +13830,11 @@ snapshots:
       - supports-color
     optional: true
 
+  '@types/ember__runloop@4.0.10':
+    dependencies:
+      '@types/ember': 4.0.11
+    optional: true
+
   '@types/ember__runloop@4.0.10(@babel/core@7.26.0)':
     dependencies:
       '@types/ember': 4.0.11(@babel/core@7.26.0)
@@ -13858,11 +13863,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
-
-  '@types/ember__utils@4.0.7':
-    dependencies:
-      '@types/ember': 4.0.11
     optional: true
 
   '@types/ember__utils@4.0.7(@babel/core@7.26.0)':
