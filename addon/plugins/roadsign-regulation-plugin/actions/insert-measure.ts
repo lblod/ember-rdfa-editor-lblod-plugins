@@ -36,16 +36,12 @@ import {
   ZONALITY_OPTIONS,
   ZonalOrNot,
 } from '../constants';
-import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
-import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
-import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
-import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
 import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
 import { VariableInstance } from '../schemas/variable-instance';
-import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
 import { namespace } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { constructMeasureFragment } from '../helpers/construct-measure-fragment';
 
 // This is defined locally as it's an implementation quirk that we don't want to use generally
 const RELATIE_OBJECT = namespace(
@@ -268,50 +264,6 @@ export default function insertMeasure({
   };
 }
 
-function constructMeasureFragment(
-  templateString: string,
-  variables: Record<string, VariableInstance>,
-  schema: Schema,
-  backlinks?: IncomingTriple[],
-) {
-  // TODO: extract this functionality of parsing a text with "variable" placeholders into a fragment to a more general place
-  const parts = templateString.split(/(\$\{[^{}$]+\})/);
-  const fragment = [];
-  let currentParagraphContent = [];
-  for (const part of parts) {
-    if (!part) {
-      continue;
-    }
-    const match = /^\$\{([^{}$]+)\}$/.exec(part);
-    if (match) {
-      const variableName = match[1];
-      const matchedVariable = variables[variableName];
-      if (matchedVariable) {
-        const node = constructVariableNode(matchedVariable, schema, backlinks);
-        if (node.type.isBlock) {
-          if (currentParagraphContent.length > 0) {
-            fragment.push(
-              schema.nodes.paragraph.create({}, currentParagraphContent),
-            );
-            currentParagraphContent = [];
-          }
-          fragment.push(node);
-        }
-      } else {
-        currentParagraphContent.push(schema.text(part));
-      }
-    } else {
-      currentParagraphContent.push(schema.text(part));
-    }
-  }
-
-  if (currentParagraphContent.length > 0) {
-    fragment.push(schema.nodes.paragraph.create({}, currentParagraphContent));
-  }
-
-  return fragment;
-}
-
 function determineSignLabel(signConcept: TrafficSignalConcept) {
   switch (signConcept.type) {
     case TRAFFIC_SIGNAL_CONCEPT_TYPES.TRAFFIC_LIGHT:
@@ -378,48 +330,4 @@ function constructSignalNode(
     ),
   );
   return node;
-}
-
-function constructVariableNode(
-  variableInstance: VariableInstance,
-  schema: Schema,
-  backlinks?: IncomingTriple[],
-) {
-  const variable = variableInstance.variable;
-  const valueStr =
-    variableInstance.value instanceof Date
-      ? variableInstance.value.toISOString()
-      : variableInstance.value?.toString();
-  const args = {
-    schema,
-    backlinks,
-    variable: variable.uri,
-    variableInstance: variableInstance.uri,
-    __rdfaId: variableInstance.__rdfaId,
-    value: valueStr,
-    valueLabel:
-      'valueLabel' in variableInstance
-        ? variableInstance.valueLabel
-        : undefined,
-    label: variable.label,
-  };
-  switch (variable.type) {
-    case 'text':
-      return createTextVariable(args);
-    case 'number':
-      return createNumberVariable(args);
-    case 'date':
-      return createDateVariable(args);
-    case 'codelist':
-      return createCodelistVariable({
-        ...args,
-        source: variable.source,
-        codelist: variable.codelistUri,
-      });
-    case 'location':
-      return createClassicLocationVariable({
-        ...args,
-        source: variable.source,
-      });
-  }
 }
