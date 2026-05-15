@@ -41,6 +41,7 @@ import { Variable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsig
 import { generateVariableInstanceUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/utils/variable-helpers';
 import { mapObject } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/map-object';
 import { v4 as uuid } from 'uuid';
+import { getArticleNodes } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/document-structure-utils';
 
 type Option = {
   uri: string;
@@ -319,6 +320,7 @@ export default class RoadsignsModal extends Component<Signature> {
       concept: MobilityMeasureConcept,
       zonality: ZonalOrNot,
       temporal: boolean,
+      position?: number,
     ) => {
       if (!this.decisionLocation) {
         return;
@@ -355,6 +357,7 @@ export default class RoadsignsModal extends Component<Signature> {
               decisionUri,
               zonality,
               temporal,
+              position,
             })(this.controller.mainEditorState).transaction;
           },
           { view: this.controller.mainEditorView },
@@ -384,6 +387,12 @@ export default class RoadsignsModal extends Component<Signature> {
   @action
   goToPage(pageNumber: number) {
     this.pageNumber = pageNumber;
+  }
+
+  get articleNodes() {
+    return getArticleNodes(this.controller.mainEditorState).map(
+      (node) => node.node,
+    );
   }
 
   <template>
@@ -516,6 +525,7 @@ export default class RoadsignsModal extends Component<Signature> {
             @isLoading={{this.measureConceptsQuery.isRunning}}
             @insert={{this.insertMeasure}}
             @options={{@options}}
+            @articleNodes={{this.articleNodes}}
           />
           {{#if this.measureConceptCount}}
             {{#let

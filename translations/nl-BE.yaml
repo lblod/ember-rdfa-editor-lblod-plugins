@@ -315,6 +315,10 @@ editor-plugins:
   roadsign-regulation:
     expanded-measure:
       insert-measure: 'Voeg maatregel in:'
+      as-last-article: Als laatste artikel
+      as-first-article: Als eerste artikel
+      after-article-x: Na artikel {articleNumber}
+      insert-position: 'Invoegpositie:'
       select-zonality:
         label: 'Selecteer zonale geldigheid:'
         zonal: Zonaal
