@@ -212,7 +212,7 @@ variable:
     multi-select: Meervoudige selectie
     label: codelijst
   location:
-    label: locatie
+    label: plaatsbeschrijving
   text:
     label: tekst
   date:
@@ -232,7 +232,7 @@ variable-plugin:
   enter-variable-value: Selecteer waarde
   unknown-codelist: Er werden geen mogelijke waarden voor deze codelijst gevonden
   label: Label
-  labelPlaceholder: Type iets...
+  labelPlaceholder: Label invullen…
   number:
     minimum: Minimum
     minimum-placeholder: minimumwaarde
@@ -272,7 +272,7 @@ snippet-plugin:
     search:
       title: Filter op
       label: Fragmentnaam
-      placeholder: Typ iets...
+      placeholder: Vul in…
   snippet-list:
     open-modal: Fragmentlijsten beheren
     modal:
@@ -281,7 +281,7 @@ snippet-plugin:
       search:
         title: Filter op
         label: Naam lijst
-        placeholder: Typ iets..
+        placeholder: Vul in…
       button:
         cancel: Annuleer
         update: Fragmentlijsten opslaan
@@ -449,7 +449,7 @@ location-plugin:
     place: Plaats
     area: Gebied
   label: Label
-  labelPlaceholder: Type iets...
+  labelPlaceholder: Vul in…
   default-label: locatie
   map:
     hint:

@@ -208,7 +208,7 @@ variable:
     multi-select: Multiple selection
     label: codelist
   location:
-    label: location
+    label: place description
   text:
     label: text
   date:

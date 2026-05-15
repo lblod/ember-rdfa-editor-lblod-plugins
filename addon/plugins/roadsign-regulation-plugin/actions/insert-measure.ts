@@ -7,10 +7,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import {
-  type IncomingTriple,
-  type FullTriple,
-} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { type FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   DCT,
   EXT,
@@ -36,16 +33,12 @@ import {
   ZONALITY_OPTIONS,
   ZonalOrNot,
 } from '../constants';
-import { createTextVariable } from '../../variable-plugin/actions/create-text-variable';
-import { createNumberVariable } from '../../variable-plugin/actions/create-number-variable';
-import { createDateVariable } from '../../variable-plugin/actions/create-date-variable';
-import { createClassicLocationVariable } from '../../variable-plugin/actions/create-classic-location-variable';
 import { isTrafficSignal, TrafficSignal } from '../schemas/traffic-signal';
 import { MobilityMeasureDesign } from '../schemas/mobility-measure-design';
 import { VariableInstance } from '../schemas/variable-instance';
-import { createCodelistVariable } from '../../variable-plugin/actions/create-codelist-variable';
 import removeZFromLabel from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/roadsign-regulation-plugin/helpers/removeZFromLabel';
 import { namespace } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { constructMeasureFragment } from '../helpers/construct-measure-fragment';
 
 // This is defined locally as it's an implementation quirk that we don't want to use generally
 const RELATIE_OBJECT = namespace(
@@ -155,7 +148,7 @@ export default function insertMeasure({
       ];
     }
     const measureUri = `http://data.lblod.info/mobiliteitsmaatregels/${uuid()}`;
-    const measureBody = constructMeasureBody(
+    const measureBody = constructMeasureFragment(
       templateString,
       variables,
       schema,
@@ -223,7 +216,7 @@ export default function insertMeasure({
         ],
         externalTriples,
       },
-      [measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
+      [...measureBody, ...signSection, ...(temporalNode ? [temporalNode] : [])],
     );
     const articleNode = buildArticleStructure(
       state.schema,
@@ -269,34 +262,6 @@ export default function insertMeasure({
       result: result.every(Boolean),
     };
   };
-}
-
-function constructMeasureBody(
-  templateString: string,
-  variables: Record<string, VariableInstance>,
-  schema: Schema,
-  backlinks?: IncomingTriple[],
-) {
-  const parts = templateString.split(/(\$\{[^{}$]+\})/);
-  const nodes = [];
-  for (const part of parts) {
-    if (!part) {
-      continue;
-    }
-    const match = /^\$\{([^{}$]+)\}$/.exec(part);
-    if (match) {
-      const variableName = match[1];
-      const matchedVariable = variables[variableName];
-      if (matchedVariable) {
-        nodes.push(constructVariableNode(matchedVariable, schema, backlinks));
-      } else {
-        nodes.push(schema.text(part));
-      }
-    } else {
-      nodes.push(schema.text(part));
-    }
-  }
-  return schema.nodes.paragraph.create({}, nodes);
 }
 
 function determineSignLabel(signConcept: TrafficSignalConcept) {
@@ -365,48 +330,4 @@ function constructSignalNode(
     ),
   );
   return node;
-}
-
-function constructVariableNode(
-  variableInstance: VariableInstance,
-  schema: Schema,
-  backlinks?: IncomingTriple[],
-) {
-  const variable = variableInstance.variable;
-  const valueStr =
-    variableInstance.value instanceof Date
-      ? variableInstance.value.toISOString()
-      : variableInstance.value?.toString();
-  const args = {
-    schema,
-    backlinks,
-    variable: variable.uri,
-    variableInstance: variableInstance.uri,
-    __rdfaId: variableInstance.__rdfaId,
-    value: valueStr,
-    valueLabel:
-      'valueLabel' in variableInstance
-        ? variableInstance.valueLabel
-        : undefined,
-    label: variable.label,
-  };
-  switch (variable.type) {
-    case 'text':
-      return createTextVariable(args);
-    case 'number':
-      return createNumberVariable(args);
-    case 'date':
-      return createDateVariable(args);
-    case 'codelist':
-      return createCodelistVariable({
-        ...args,
-        source: variable.source,
-        codelist: variable.codelistUri,
-      });
-    case 'location':
-      return createClassicLocationVariable({
-        ...args,
-        source: variable.source,
-      });
-  }
 }
