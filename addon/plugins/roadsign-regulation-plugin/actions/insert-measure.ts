@@ -7,10 +7,7 @@ import {
 } from '@lblod/ember-rdfa-editor';
 import { v4 as uuid } from 'uuid';
 import { addPropertyToNode } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import {
-  type IncomingTriple,
-  type FullTriple,
-} from '@lblod/ember-rdfa-editor/core/rdfa-processor';
+import { type FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import {
   DCT,
   EXT,

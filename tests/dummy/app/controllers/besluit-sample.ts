@@ -9,7 +9,6 @@ import IntlService from 'ember-intl/services/intl';
 
 import {
   NodeViewConstructor,
-  Plugin,
   PNode,
   SayController,
   Schema,
@@ -166,6 +165,7 @@ import {
   getContextualActions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
 import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
+import Owner from '@ember/owner';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -196,6 +196,36 @@ export default class BesluitSampleController extends Controller {
   @tracked citationPlugin = citationPlugin(
     this.config.citation as CitationPluginConfig,
   );
+
+  @tracked plugins;
+
+  constructor(owner: Owner) {
+    super(owner);
+    this.plugins = [
+      firefoxCursorFix(),
+      chromeHacksPlugin(),
+      lastKeyPressedPlugin,
+      tablePlugin,
+      tableKeymap,
+      linkPasteHandler(this.schema.nodes.link),
+      this.citationPlugin,
+      createInvisiblesPlugin(
+        [hardBreak, paragraphInvisible, headingInvisible],
+        {
+          shouldShowInvisibles: false,
+        },
+      ),
+      editableNodePlugin(),
+      emberApplication({ application: unwrap(getOwner(this)) }),
+      recreateUuidsOnPaste,
+      variableAutofillerPlugin(this.config.autofilledVariable),
+      documentValidationPlugin(this.config.documentValidation),
+      slashCommandsPlugin({
+        intl: this.intl,
+        getGroups: this.contextualGroupGetters,
+      }),
+    ];
+  }
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -495,27 +525,6 @@ export default class BesluitSampleController extends Controller {
         new BlockRDFaView(args, controller),
     } satisfies Record<string, NodeViewConstructor>;
   };
-  @tracked plugins: Plugin[] = [
-    firefoxCursorFix(),
-    chromeHacksPlugin(),
-    lastKeyPressedPlugin,
-    tablePlugin,
-    tableKeymap,
-    linkPasteHandler(this.schema.nodes.link),
-    this.citationPlugin,
-    createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
-      shouldShowInvisibles: false,
-    }),
-    editableNodePlugin(),
-    emberApplication({ application: unwrap(getOwner(this)) }),
-    recreateUuidsOnPaste,
-    variableAutofillerPlugin(this.config.autofilledVariable),
-    documentValidationPlugin(this.config.documentValidation),
-    slashCommandsPlugin({
-      intl: this.intl,
-      getGroups: this.contextualGroupGetters,
-    }),
-  ];
 
   @action
   setPrefixes(element: HTMLElement) {
