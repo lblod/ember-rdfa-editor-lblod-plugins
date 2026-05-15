@@ -129,7 +129,7 @@ export default class RoadSignsTable extends Component<Signature> {
                   <td>
                     <AuHelpText
                       @size='large'
-                      skin='secondary'
+                      @skin='secondary'
                       class='au-u-margin-none'
                     >
                       <MeasurePreview

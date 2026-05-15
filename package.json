@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "35.4.0",
+  "version": "35.6.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -108,9 +108,10 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@glint/core": "^1.5.0",
+    "@glint/ember-tsc": "^1.5.0",
     "@glint/environment-ember-loose": "^1.5.0",
     "@glint/environment-ember-template-imports": "^1.5.0",
-    "@glint/template": "^1.5.0",
+    "@glint/template": "^1.7.7",
     "@lblod/ember-rdfa-editor": "13.6.0",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^1.1.0",
