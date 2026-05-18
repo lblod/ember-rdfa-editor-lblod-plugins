@@ -316,8 +316,8 @@ editor-plugins:
   roadsign-regulation:
     expanded-measure:
       insert-measure: 'Insert measure:'
-      as-last-article: As first article
-      as-first-article: As last article
+      as-last-article: As last article
+      as-first-article: As first article
       after-article-x: After article {articleNumber}
       insert-position: 'Insertion position:'
       select-zonality:
