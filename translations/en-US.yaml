@@ -139,6 +139,11 @@ besluit-plugin:
     authority: Authority
     legal-context: Legal context
     factual-context: Factual context and reasoning
+  labels:
+    description: Description
+    article-block: Articles
+    motivation: Motivation
+    title: Title
 
 date-plugin:
   help:

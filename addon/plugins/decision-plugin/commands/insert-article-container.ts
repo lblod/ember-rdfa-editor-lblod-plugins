@@ -15,12 +15,14 @@ interface InsertArticleContainerArgs {
   decisionUri: string;
   articleUriGenerator?: () => string;
   decisionLocation: NodeWithPos;
+  label?: string;
 }
 
 export default function insertArticleContainer({
   decisionUri,
   articleUriGenerator,
   decisionLocation,
+  label,
 }: InsertArticleContainerArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { schema } = state;
@@ -29,6 +31,7 @@ export default function insertArticleContainer({
       {
         rdfaNodeType: 'literal',
         __rdfaId: articleContainerId,
+        label,
       },
       schema.nodes.paragraph.create(),
     );

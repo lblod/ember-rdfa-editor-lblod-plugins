@@ -9,18 +9,20 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 interface InsertDescriptionArgs {
   placeholderText: string;
   decisionLocation: NodeWithPos;
+  label?: string;
 }
 
 export default function insertDescription({
   placeholderText,
   decisionLocation,
+  label,
 }: InsertDescriptionArgs) {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { schema } = state;
     const descriptionId = uuid();
     const nodeToInsert = schema.node(
       'block_rdfa',
-      { rdfaNodeType: 'literal', __rdfaId: descriptionId },
+      { rdfaNodeType: 'literal', __rdfaId: descriptionId, label },
       schema.node(
         'paragraph',
         null,
@@ -30,6 +32,7 @@ export default function insertDescription({
       ),
     );
     const tr = state.tr;
+    console.log(nodeToInsert);
 
     if (state.selection.$from.pos === decisionLocation.pos) {
       tr.replaceRangeWith(
