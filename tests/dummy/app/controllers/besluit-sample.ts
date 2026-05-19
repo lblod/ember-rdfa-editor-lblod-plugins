@@ -164,9 +164,13 @@ import {
   getContextualActionGroups as placeDescriptionActionGroups,
   getContextualActions as placeDescriptionActions,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
-import { getContextualActionGroups as locationActionsGroups, getContextualActions as locationActions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/contextual-actions';
+import {
+  getContextualActionGroups as locationActionsGroups,
+  getContextualActions as locationActions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/contextual-actions';
 import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
 import Owner from '@ember/owner';
+import { locationModalsPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -225,6 +229,7 @@ export default class BesluitSampleController extends Controller {
         intl: this.intl,
         getGroups: this.contextualGroupGetters,
       }),
+      locationModalsPlugin(),
     ];
   }
 
@@ -235,8 +240,14 @@ export default class BesluitSampleController extends Controller {
     say: 'https://say.data.gift/ns/',
   };
 
-  contextualActionGetters = [placeDescriptionActions(this.locationOptions), locationActions()];
-  contextualGroupGetters = [placeDescriptionActionGroups(), locationActionsGroups()];
+  contextualActionGetters = [
+    placeDescriptionActions(this.locationOptions),
+    locationActions(),
+  ];
+  contextualGroupGetters = [
+    placeDescriptionActionGroups(),
+    locationActionsGroups(),
+  ];
 
   get schema() {
     return new Schema({
