@@ -1,5 +1,25 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 36.0.0
+
+### Major Changes
+
+- [#637](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/637) [`d2d939b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d2d939bd5fe39e51146ad1df777aa48d6f54236b) Thanks [@kobemertens](https://github.com/kobemertens)! - Bump editor
+
+- [#637](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/637) [`23a40c0`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/23a40c0389687eb34933fd2e740789ac29450e1e) Thanks [@kobemertens](https://github.com/kobemertens)! - Add contextual actions for inserting place descriptions
+
+### Minor Changes
+
+- [#651](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/651) [`c03484c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c03484cd40fca81c9cdeafa3f0d5f2dcbb6b340f) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add function to search the document for oslo locations
+
+### Patch Changes
+
+- [#643](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/643) [`42cd09c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/42cd09c7b199b7c4f487d90b1823f272fe5ff0ab) Thanks [@kobemertens](https://github.com/kobemertens)! - Add slash commands plugin
+
+- [#648](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/648) [`329813f`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/329813f43ee6cdbc25a8c0acb18ba2188f753d1b) Thanks [@kobemertens](https://github.com/kobemertens)! - Adds ability to choose insert position for a mobility measure article
+
+- [`8ac430e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8ac430e1b89167275c7cceeb50e331bfe271e46a) Thanks [@kobemertens](https://github.com/kobemertens)! - fix translation mobility measure insert position
+
 ## 35.6.0
 
 ### Minor Changes
