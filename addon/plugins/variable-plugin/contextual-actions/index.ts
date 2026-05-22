@@ -92,7 +92,7 @@ function humanReadableLabel(label: string) {
 }
 
 function createInsertPlaceDescriptionCommand(label: string) {
-  return (state: EditorState, dispatch: (tr: Transaction) => void) => {
+  return (state: EditorState, dispatch?: (tr: Transaction) => void) => {
     if (dispatch) {
       let htmlToInsert = label;
       htmlToInsert = wrapVariableInHighlight(htmlToInsert);
