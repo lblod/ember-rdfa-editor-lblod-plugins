@@ -1,20 +1,20 @@
 import { Attrs, type PNode } from '@lblod/ember-rdfa-editor';
-import {
-  composeMonads,
-  type TransactionMonad,
-} from '@lblod/ember-rdfa-editor/utils/transaction-utils';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
+import { isSome } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { difference } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/set-utils';
+import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   addPropertyToNode,
   getProperties,
   getSubject,
   removePropertyFromNode,
 } from '@lblod/ember-rdfa-editor/utils/rdfa-utils';
-import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
+import {
+  composeMonads,
+  type TransactionMonad,
+} from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { isHierarchyNode } from '../structure-types';
-import { getOutgoingTripleList } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { difference } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/set-utils';
-import { isSome } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
 const factory = new SayDataFactory();
 
