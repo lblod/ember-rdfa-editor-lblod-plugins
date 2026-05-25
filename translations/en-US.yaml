@@ -534,3 +534,12 @@ placeholder-utils-plugin:
   card-title: Edit placeholder
   button-title: Insert placeholder
   placeholder-text: Placeholder Text
+
+locked-placeholder-plugin:
+  insert-title: Insert locked placeholder
+  key: Key
+  keyPlaceholder: Key
+  type: Type
+  inline: Inline
+  block: Block
+  button: Insert

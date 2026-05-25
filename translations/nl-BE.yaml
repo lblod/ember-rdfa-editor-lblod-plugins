@@ -531,3 +531,12 @@ placeholder-utils-plugin:
   card-title: Plaatshouder bewerken
   button-title: Plaatshouder invoegen
   placeholder-text: Plaatshoudertekst
+
+locked-placeholder-plugin:
+  insert-title: Samenvoegveld invoegen
+  key: Key
+  keyPlaceholder: Key
+  type: Type
+  inline: Inline
+  block: Blok
+  button: Invoegen
