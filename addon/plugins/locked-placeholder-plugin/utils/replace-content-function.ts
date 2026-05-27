@@ -16,7 +16,7 @@ type ReplacementValues = {
 
 export default function replaceLockedPlaceholderContent(
   initialState: EditorState,
-  values: ReplacementValues,
+  values: ReplacementValues | ((state: EditorState) => ReplacementValues),
 ): TransactionCombinatorResult<boolean> {
   const doc = initialState.doc;
   const placeholdersWithPos: PlaceholderWithPos[] = [];
@@ -35,9 +35,10 @@ export default function replaceLockedPlaceholderContent(
   });
   placeholdersWithPos.reverse();
   const monads = [];
+  const valuesResolved = typeof values === 'function' ? values(state) : values;
   for (const { placeholder, pos } of placeholdersWithPos) {
     const key = placeholder.attrs.key as string;
-    const valueToReplace = values[key];
+    const valueToReplace = valuesResolved[key];
     if (!valueToReplace) continue;
     if (typeof valueToReplace === 'string') {
       const monad = replacePlaceholderWithHtml(

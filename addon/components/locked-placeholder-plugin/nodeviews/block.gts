@@ -12,7 +12,7 @@ export default class BlockLockedPlaceholder extends Component<Sig> {
     return this.args.node.attrs.label;
   }
   <template>
-    <AuAlert>
+    <AuAlert class='say-block-locked-placeholder'>
       {{this.label}}
     </AuAlert>
   </template>
