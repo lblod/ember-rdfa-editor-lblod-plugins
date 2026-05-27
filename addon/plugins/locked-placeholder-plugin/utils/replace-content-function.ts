@@ -53,7 +53,6 @@ function replacePlaceholderWithHtml(
   pos: number,
   value: string,
 ) {
-  console.log(placeholder);
   const domParser = new DOMParser();
   const contentFragment = ProseParser.fromSchema(controller.schema).parse(
     domParser.parseFromString(value, 'text/html'),

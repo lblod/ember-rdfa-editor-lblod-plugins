@@ -24,7 +24,8 @@ interface Signature {
 }
 
 export default class LockedPlaceholderPluginInsert extends Component<Signature> {
-  @tracked key;
+  @tracked key: string | null = null;
+  @tracked label: string | null = null;
   @tracked type = 'inline';
   get selectedPlaceholderNode() {
     const { selection, schema } = this.controller.activeEditorState;
@@ -56,6 +57,7 @@ export default class LockedPlaceholderPluginInsert extends Component<Signature> 
       tr.replaceSelectionWith(
         this.controller.schema.node(node, {
           key: this.key,
+          label: this.label,
         }),
       );
       if (tr.selection.$anchor.nodeBefore) {
@@ -68,11 +70,17 @@ export default class LockedPlaceholderPluginInsert extends Component<Signature> 
     });
     this.type = 'inline';
     this.key = null;
+    this.label = null;
   }
 
   @action
   updateKey(event: InputEvent) {
     this.key = (event.target as HTMLInputElement).value;
+  }
+
+  @action
+  updateLabel(event: InputEvent) {
+    this.label = (event.target as HTMLInputElement).value;
   }
 
   @action
@@ -104,12 +112,25 @@ export default class LockedPlaceholderPluginInsert extends Component<Signature> 
               {{t 'locked-placeholder-plugin.key'}}
             </AuLabel>
             <AuNativeInput
-              id='label'
+              id='key'
               placeholder={{t 'locked-placeholder-plugin.keyPlaceholder'}}
               @type='text'
               @width='block'
               value={{this.key}}
               {{on 'input' this.updateKey}}
+            />
+          </AuFormRow>
+          <AuFormRow>
+            <AuLabel for='label'>
+              {{t 'locked-placeholder-plugin.label'}}
+            </AuLabel>
+            <AuNativeInput
+              id='label'
+              placeholder={{t 'locked-placeholder-plugin.labelPlaceholder'}}
+              @type='text'
+              @width='block'
+              value={{this.label}}
+              {{on 'input' this.updateLabel}}
             />
           </AuFormRow>
           <AuFormRow>

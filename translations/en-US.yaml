@@ -539,6 +539,8 @@ locked-placeholder-plugin:
   insert-title: Insert locked placeholder
   key: Key
   keyPlaceholder: Key
+  label: Label
+  labelPlaceholder: Label
   type: Type
   inline: Inline
   block: Block

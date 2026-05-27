@@ -536,6 +536,8 @@ locked-placeholder-plugin:
   insert-title: Samenvoegveld invoegen
   key: Key
   keyPlaceholder: Key
+  label: Label
+  labelPlaceholder: Label
   type: Type
   inline: Inline
   block: Blok

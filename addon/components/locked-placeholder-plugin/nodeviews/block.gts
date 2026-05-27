@@ -8,9 +8,12 @@ interface Sig {
 }
 
 export default class BlockLockedPlaceholder extends Component<Sig> {
+  get label() {
+    return this.args.node.attrs.label;
+  }
   <template>
     <AuAlert>
-      Locked placeholder
+      {{this.label}}
     </AuAlert>
   </template>
 }
