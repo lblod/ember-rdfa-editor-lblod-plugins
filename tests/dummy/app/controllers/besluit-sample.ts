@@ -175,7 +175,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
 import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
 import Owner from '@ember/owner';
-import replaceLockedPlaceholderContent from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/locked-placeholder-plugin/utils/replace-content-function';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
