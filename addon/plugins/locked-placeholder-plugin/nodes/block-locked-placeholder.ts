@@ -9,7 +9,7 @@ import type { ComponentLike } from '@glint/template';
 
 const parseDOM = [
   {
-    tag: 'span',
+    tag: 'div',
     getAttrs: (node: HTMLElement) => {
       if (
         node.dataset.lockedPlaceholder &&
@@ -29,7 +29,7 @@ const parseDOM = [
 
 const toDOM = (node: PNode): DOMOutputSpec => {
   return [
-    'span',
+    'div',
     {
       'data-locked-placeholder': 'true',
       'data-locked-placeholder-type': 'block',

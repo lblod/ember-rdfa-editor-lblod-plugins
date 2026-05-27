@@ -1,5 +1,9 @@
-import { Node, SayController } from '@lblod/ember-rdfa-editor';
+import { Node, EditorState } from '@lblod/ember-rdfa-editor';
 import { DOMParser as ProseParser } from '@lblod/ember-rdfa-editor';
+import {
+  transactionCombinator,
+  type TransactionCombinatorResult,
+} from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 
 type PlaceholderWithPos = {
   placeholder: Node;
@@ -11,10 +15,10 @@ type ReplacementValues = {
 };
 
 export default function replaceLockedPlaceholderContent(
-  controller: SayController,
+  initialState: EditorState,
   values: ReplacementValues,
-) {
-  const doc = controller.mainEditorState.doc;
+): TransactionCombinatorResult<boolean> {
+  const doc = initialState.doc;
   const placeholdersWithPos: PlaceholderWithPos[] = [];
   doc.descendants((node, pos) => {
     if (
@@ -30,55 +34,53 @@ export default function replaceLockedPlaceholderContent(
     return true;
   });
   placeholdersWithPos.reverse();
+  const monads = [];
   for (const { placeholder, pos } of placeholdersWithPos) {
     const key = placeholder.attrs.key as string;
     const valueToReplace = values[key];
     if (!valueToReplace) continue;
     if (typeof valueToReplace === 'string') {
-      replacePlaceholderWithHtml(controller, placeholder, pos, valueToReplace);
-    } else {
-      replacePlaceholderWithProsemirrorNode(
-        controller,
+      const monad = replacePlaceholderWithHtml(
         placeholder,
         pos,
         valueToReplace,
       );
+      monads.push(monad);
+    } else {
+      const monad = replacePlaceholderWithProsemirrorNode(
+        placeholder,
+        pos,
+        valueToReplace,
+      );
+      monads.push(monad);
     }
   }
+  return transactionCombinator<boolean>(initialState)(monads);
 }
 
 function replacePlaceholderWithHtml(
-  controller: SayController,
   placeholder: Node,
   pos: number,
   value: string,
 ) {
-  const domParser = new DOMParser();
-  const contentFragment = ProseParser.fromSchema(controller.schema).parse(
-    domParser.parseFromString(value, 'text/html'),
-  ).content;
-  controller.withTransaction(
-    (transaction) => {
-      return transaction.replaceWith(
-        pos,
-        pos + placeholder.nodeSize,
-        contentFragment,
-      );
-    },
-    { view: controller.mainEditorView },
-  );
+  return (state: EditorState) => {
+    const domParser = new DOMParser();
+    const contentFragment = ProseParser.fromSchema(state.schema).parse(
+      domParser.parseFromString(value, 'text/html'),
+    ).content;
+    const tr = state.tr;
+    tr.replaceWith(pos, pos + placeholder.nodeSize, contentFragment);
+    return { initialState: state, transaction: tr, result: true };
+  };
 }
 
 function replacePlaceholderWithProsemirrorNode(
-  controller: SayController,
   placeholder: Node,
   pos: number,
   value: Node,
 ) {
-  controller.withTransaction(
-    (transaction) => {
-      return transaction.replaceWith(pos, pos + placeholder.nodeSize, value);
-    },
-    { view: controller.mainEditorView },
-  );
+  return (state: EditorState) => {
+    const tr = state.tr;
+    tr.replaceWith(pos, pos + placeholder.nodeSize, value);
+  };
 }
