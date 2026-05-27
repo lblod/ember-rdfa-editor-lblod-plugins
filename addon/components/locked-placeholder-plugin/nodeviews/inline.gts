@@ -1,7 +1,11 @@
 import Component from '@glimmer/component';
 import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
+import { PNode } from '@lblod/ember-rdfa-editor';
 
 interface Sig {
+  Args: {
+    node: PNode;
+  };
   Blocks: {
     default: [];
   };

@@ -35,7 +35,8 @@ export default function replaceLockedPlaceholderContent(
   });
   placeholdersWithPos.reverse();
   const monads = [];
-  const valuesResolved = typeof values === 'function' ? values(state) : values;
+  const valuesResolved =
+    typeof values === 'function' ? values(initialState) : values;
   for (const { placeholder, pos } of placeholdersWithPos) {
     const key = placeholder.attrs.key as string;
     const valueToReplace = valuesResolved[key];
@@ -83,5 +84,6 @@ function replacePlaceholderWithProsemirrorNode(
   return (state: EditorState) => {
     const tr = state.tr;
     tr.replaceWith(pos, pos + placeholder.nodeSize, value);
+    return { initialState: state, transaction: tr, result: true };
   };
 }
