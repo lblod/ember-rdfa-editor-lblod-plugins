@@ -139,11 +139,6 @@ besluit-plugin:
     authority: Bevoegdheid
     legal-context: Juridische context
     factual-context: Feitelijke context en argumentatie
-  labels:
-    description: Beschrijving
-    article-block: Artikels
-    motivation: Motivering
-    title: Titel
 
 date-plugin:
   help:

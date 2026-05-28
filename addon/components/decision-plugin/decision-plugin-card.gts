@@ -78,7 +78,7 @@ export default class DecisionPluginCard extends Component<Sig> {
             'besluit-plugin.placeholder.decision-title',
           ),
           decisionLocation: this.decisionNodeLocation,
-          label: this.intl.t('besluit-plugin.labels.title'),
+          label: 'Titel',
         }),
         { view: this.controller.mainEditorView },
       );
@@ -103,7 +103,7 @@ export default class DecisionPluginCard extends Component<Sig> {
             'besluit-plugin.placeholder.decision-description',
           ),
           decisionLocation: this.decisionNodeLocation,
-          label: this.intl.t('besluit-plugin.labels.description'),
+          label: 'Beschrijving',
         }),
         {
           view: this.controller.mainEditorView,
@@ -130,7 +130,7 @@ export default class DecisionPluginCard extends Component<Sig> {
         insertMotivation({
           intl: this.intl,
           decisionLocation: this.decisionNodeLocation,
-          label: this.intl.t('besluit-plugin.labels.motivation'),
+          label: 'Motivering',
         }),
         {
           view: this.controller.mainEditorView,
@@ -155,7 +155,7 @@ export default class DecisionPluginCard extends Component<Sig> {
           decisionUri: this.decisionUri,
           articleUriGenerator: this.args.options?.articleUriGenerator,
           decisionLocation: this.decisionNodeLocation,
-          label: this.intl.t('besluit-plugin.labels.article-block'),
+          label: 'Artikels',
         }),
         {
           view: this.controller.mainEditorView,
