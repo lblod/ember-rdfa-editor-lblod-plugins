@@ -1,7 +1,6 @@
 import { EditorState, NodeSelection } from '@lblod/ember-rdfa-editor';
 import { v4 as uuidv4 } from 'uuid';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
-import IntlService from 'ember-intl/services/intl';
 import { openLocationModalCommand } from '..';
 import { LocationType } from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/map';
 
@@ -9,7 +8,7 @@ const otherElementsGroupId =
   'other-elements-e01f46a0-b323-4add-8035-d81dc2e8578d';
 
 export function getContextualActions() {
-  return async function (state: EditorState) {
+  return function (state: EditorState, searchQuery?: string) {
     const t = getTranslationFunction(state);
 
     const options: {
@@ -43,14 +42,20 @@ export function getContextualActions() {
       },
     ];
 
-    return options.map((option) => {
-      return {
-        ...option,
-        id: uuidv4(),
-        group: otherElementsGroupId,
-        command: openLocationModalCommand(option.locationType),
-      };
-    });
+    return options
+      .filter(
+        (option) =>
+          !searchQuery ||
+          option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase()),
+      )
+      .map((option) => {
+        return {
+          ...option,
+          id: uuidv4(),
+          group: otherElementsGroupId,
+          command: openLocationModalCommand(option.locationType),
+        };
+      });
   };
 }
 
