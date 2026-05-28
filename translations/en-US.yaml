@@ -208,7 +208,7 @@ variable:
     multi-select: Multiple selection
     label: codelist
   location:
-    label: location
+    label: place description
   text:
     label: text
   date:
@@ -316,6 +316,10 @@ editor-plugins:
   roadsign-regulation:
     expanded-measure:
       insert-measure: 'Insert measure:'
+      as-last-article: As last article
+      as-first-article: As first article
+      after-article-x: After article {articleNumber}
+      insert-position: 'Insertion position:'
       select-zonality:
         label: 'Select zonal validity:'
         zonal: Zonal

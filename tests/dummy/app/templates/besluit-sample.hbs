@@ -83,6 +83,13 @@
             @nodeViews={{this.nodeViews}}
             @rdfaEditorInit={{this.rdfaEditorInit}}
           />
+          {{#if this.controller}}
+            <this.ContextualActionsContainer
+              @controller={{this.controller}}
+              @getActions={{this.contextualActionGetters}}
+              @getGroups={{this.contextualGroupGetters}}
+            />
+          {{/if}}
         </:default>
         <:sidebarRight as |container|>
           <SynchronizeMandatees

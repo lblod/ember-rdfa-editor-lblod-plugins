@@ -20,16 +20,9 @@ type CreateClassicLocationVariableArgs = {
 export function createClassicLocationVariable(
   args: CreateClassicLocationVariableArgs,
 ) {
-  const { schema, value, label } = args;
+  const { schema } = args;
   const attrs = createClassicLocationVariableAttrs(args);
-  return schema.nodes.location.create(
-    attrs,
-    value
-      ? schema.text(value)
-      : schema.node('placeholder', {
-          placeholderText: label,
-        }),
-  );
+  return schema.nodes.block_rdfa.create(attrs, schema.nodes.paragraph.create());
 }
 
 type CreateClassicLocationVariableAttrsArgs = {
@@ -88,7 +81,7 @@ export function createClassicLocationVariableAttrs({
     __rdfaId,
     externalTriples,
     backlinks: [...backlinks, ...addedBacklinks],
-    label,
+    label: label ?? 'Plaatsbeschrijving',
     source,
   };
 }

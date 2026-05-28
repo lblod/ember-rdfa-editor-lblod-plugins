@@ -94,11 +94,15 @@
 
 .ember-node.say-active > .say-structure {
   border-color: var(--au-blue-700);
-  border-width: 0.2rem;
+  outline-color: var(--au-blue-700);
+  outline-width: 0.18rem;
+  outline-style: solid;
 
   > .say-structure__header {
     border-bottom-color: var(--au-blue-700);
-    border-bottom-width: 0.2rem;
+    outline-color: var(--au-blue-700);
+    outline-width: 0.18rem;
+    outline-style: solid;
   }
 }
 

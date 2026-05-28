@@ -9,7 +9,6 @@ import IntlService from 'ember-intl/services/intl';
 
 import {
   NodeViewConstructor,
-  Plugin,
   PNode,
   SayController,
   Schema,
@@ -160,6 +159,13 @@ import {
   legacy_codelist,
   legacyCodelistView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
+import ContextualActionsContainer from '@lblod/ember-rdfa-editor/components/plugins/contextual-actions/container';
+import {
+  getContextualActionGroups,
+  getContextualActions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
+import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
+import Owner from '@ember/owner';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -175,6 +181,7 @@ export default class BesluitSampleController extends Controller {
 
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
+  ContextualActionsContainer = ContextualActionsContainer;
 
   @tracked editableNodes = false;
 
@@ -190,12 +197,45 @@ export default class BesluitSampleController extends Controller {
     this.config.citation as CitationPluginConfig,
   );
 
+  @tracked plugins;
+
+  constructor(owner: Owner) {
+    super(owner);
+    this.plugins = [
+      firefoxCursorFix(),
+      chromeHacksPlugin(),
+      lastKeyPressedPlugin,
+      tablePlugin,
+      tableKeymap,
+      linkPasteHandler(this.schema.nodes.link),
+      this.citationPlugin,
+      createInvisiblesPlugin(
+        [hardBreak, paragraphInvisible, headingInvisible],
+        {
+          shouldShowInvisibles: false,
+        },
+      ),
+      editableNodePlugin(),
+      emberApplication({ application: unwrap(getOwner(this)) }),
+      recreateUuidsOnPaste,
+      variableAutofillerPlugin(this.config.autofilledVariable),
+      documentValidationPlugin(this.config.documentValidation),
+      slashCommandsPlugin({
+        intl: this.intl,
+        getGroups: this.contextualGroupGetters,
+      }),
+    ];
+  }
+
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
     mobiliteit: 'https://data.vlaanderen.be/ns/mobiliteit#',
     dct: 'http://purl.org/dc/terms/',
     say: 'https://say.data.gift/ns/',
   };
+
+  contextualActionGetters = [getContextualActions(this.locationOptions)];
+  contextualGroupGetters = [getContextualActionGroups()];
 
   get schema() {
     return new Schema({
@@ -485,23 +525,6 @@ export default class BesluitSampleController extends Controller {
         new BlockRDFaView(args, controller),
     } satisfies Record<string, NodeViewConstructor>;
   };
-  @tracked plugins: Plugin[] = [
-    firefoxCursorFix(),
-    chromeHacksPlugin(),
-    lastKeyPressedPlugin,
-    tablePlugin,
-    tableKeymap,
-    linkPasteHandler(this.schema.nodes.link),
-    this.citationPlugin,
-    createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
-      shouldShowInvisibles: false,
-    }),
-    editableNodePlugin(),
-    emberApplication({ application: unwrap(getOwner(this)) }),
-    recreateUuidsOnPaste,
-    variableAutofillerPlugin(this.config.autofilledVariable),
-    documentValidationPlugin(this.config.documentValidation),
-  ];
 
   @action
   setPrefixes(element: HTMLElement) {
