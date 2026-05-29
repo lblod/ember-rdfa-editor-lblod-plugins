@@ -89,7 +89,6 @@ export default class LockedPlaceholderPluginInsert extends Component<Signature> 
   }
 
   <template>
-    {{! @glint-nocheck: not typesafe yet }}
     <AuCard
       @flex={{true}}
       @divided={{true}}
