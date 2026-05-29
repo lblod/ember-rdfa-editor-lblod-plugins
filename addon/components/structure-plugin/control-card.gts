@@ -156,6 +156,8 @@ export default class StructureControlCardComponent extends Component<Sig> {
         @shadow={{true}}
         @isOpenInitially={{true}}
         @size='small'
+        {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
+        @disableAuContent={{true}}
         as |Card|
       >
         <Card.header>
