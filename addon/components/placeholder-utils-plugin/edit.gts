@@ -87,6 +87,7 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
         @expandable={{true}}
         @shadow={{true}}
         @size='small'
+        {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
         @disableAuContent={{true}}
         as |c|
       >

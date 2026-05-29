@@ -96,6 +96,7 @@ export default class LockedPlaceholderPluginInsert extends Component<Signature> 
       @expandable={{true}}
       @shadow={{true}}
       @size='small'
+      {{! @glint-ignore: backwards compat for au v3}}
       @disableAuContent={{true}}
       as |c|
     >

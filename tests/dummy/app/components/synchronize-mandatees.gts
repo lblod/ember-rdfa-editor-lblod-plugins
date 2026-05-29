@@ -9,6 +9,7 @@ import {
   syncDocument,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/mandatee-table-plugin';
 import { SynchronizeIcon } from '@appuniversum/ember-appuniversum/components/icons/synchronize';
+import t from 'ember-intl/helpers/t';
 
 interface Sig<R> {
   Args: { controller: SayController; config: MandateeTableConfig<R> };
@@ -33,6 +34,7 @@ export default class SychronizeMandateesComponent<R> extends Component<Sig<R>> {
       @icon={{SynchronizeIcon}}
       @iconAlignment='left'
       @loading={{this.synchronize.isRunning}}
+      @loadingMessage={{t 'common.search.loading'}}
     >
       {{! template-lint-disable no-bare-strings  }}
       Synchronise mandatees

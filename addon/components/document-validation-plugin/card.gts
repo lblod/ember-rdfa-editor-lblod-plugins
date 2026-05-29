@@ -175,6 +175,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
       @expandable={{true}}
       @shadow={{true}}
       @size='small'
+      {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
       @disableAuContent={{true}}
       class={{if
         this.isSuccesslike
@@ -281,6 +282,7 @@ export default class DocumentValidationPluginCard extends Component<Sig> {
           {{#each this.formattedValidationResult as |result|}}
             <AuCard
               class='au-u-margin say-document-validation__developer-card'
+              {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
               @disableAuContent={{true}}
               as |c|
             >
