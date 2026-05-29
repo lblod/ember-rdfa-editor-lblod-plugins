@@ -47,7 +47,7 @@ import {
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
 function updateFromNode<T extends Address | Place | Area, R>(
-  Class: new (...args: unknown[]) => T,
+  Class: new (...args: never[]) => T,
   extractFunc: (current: T) => R,
   defaultValue?: R,
 ) {
@@ -192,14 +192,14 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     openLocationModal(this.controller.activeEditorView, type);
   }
 
-  get locationType() {
+  get locationType(): LocationType {
     return (
       // If the modal was not opened trough the context actions, this will be null
       getLocationModalsPluginState(this.controller.activeEditorState)
         ?.locationType ??
-      updateFromNode(Place, () => 'place')(this) ??
-      updateFromNode(Area, () => 'area')(this) ??
-      updateFromNode(Address, () => 'address')(this) ??
+      updateFromNode<Place, 'place'>(Place, () => 'place')(this) ??
+      updateFromNode<Area, 'area'>(Area, () => 'area')(this) ??
+      updateFromNode<Address, 'address'>(Address, () => 'address')(this) ??
       this.locationTypes[0]
     );
   }
