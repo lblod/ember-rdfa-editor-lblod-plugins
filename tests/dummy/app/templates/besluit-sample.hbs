@@ -157,6 +157,7 @@
               <PlaceholderUtilsPlugin::Insert
                 @controller={{container.controller}}
               />
+
             </Sidebar.Collapsible>
             <div class='au-u-flex au-u-flex--column au-u-flex--spaced-tiny'>
               <DocumentValidationPlugin::Card
@@ -193,6 +194,9 @@
                 @config={{this.config.lmb}}
               />
               <PlaceholderUtilsPlugin::Edit
+                @controller={{container.controller}}
+              />
+              <LockedPlaceholderPlugin::Insert
                 @controller={{container.controller}}
               />
               {{#if this.editableNodes}}

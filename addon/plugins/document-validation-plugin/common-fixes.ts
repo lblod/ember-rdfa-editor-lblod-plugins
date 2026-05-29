@@ -28,6 +28,7 @@ export function insertTitleAtCursor(
     insertTitle({
       placeholderText: intl.t('besluit-plugin.placeholder.decision-title'),
       decisionLocation: decisionNodeLocation,
+      label: 'Titel',
     }),
     { view: controller.mainEditorView },
   );
@@ -51,6 +52,7 @@ export function insertDescriptionAtCursor(
         'besluit-plugin.placeholder.decision-description',
       ),
       decisionLocation: decisionNodeLocation,
+      label: 'Beschrijving',
     }),
     {
       view: controller.mainEditorView,
@@ -74,6 +76,7 @@ export function insertMotivationAtCursor(
     insertMotivation({
       intl: intl,
       decisionLocation: decisionNodeLocation,
+      label: 'Motivering',
     }),
     {
       view: controller.mainEditorView,
@@ -100,6 +103,7 @@ export function insertArticleContainerAtCursor(
       decisionUri: decisionNodeLocation?.node.attrs.subject,
       articleUriGenerator: articleUriGenerator,
       decisionLocation: decisionNodeLocation,
+      label: 'Artikels',
     }),
     {
       view: controller.mainEditorView,

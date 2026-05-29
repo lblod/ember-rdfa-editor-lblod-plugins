@@ -9,18 +9,20 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 interface InsertTitleArgs {
   placeholderText: string;
   decisionLocation: NodeWithPos;
+  label?: string;
 }
 
 export default function insertTitle({
   placeholderText,
   decisionLocation,
+  label,
 }: InsertTitleArgs) {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const { schema } = state;
     const titleId = uuid();
     const nodeToInsert = schema.node(
       'block_rdfa',
-      { rdfaNodeType: 'literal', __rdfaId: titleId },
+      { rdfaNodeType: 'literal', __rdfaId: titleId, label },
       schema.node(
         'paragraph',
         null,

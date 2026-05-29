@@ -112,6 +112,15 @@ import {
   structureWithConfig,
   structureViewWithConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/structure-plugin/node';
+import {
+  inlineLockedPlaceholder,
+  inlineLockedPlaceholderView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/locked-placeholder-plugin/nodes/inline-locked-placeholder';
+
+import {
+  blockLockedPlaceholder,
+  blockLockedPlaceholderView,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/locked-placeholder-plugin/nodes/block-locked-placeholder';
 
 import InsertArticleComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/decision-plugin/insert-article';
 import StructureControlCardComponent from '@lblod/ember-rdfa-editor-lblod-plugins/components/structure-plugin/control-card';
@@ -301,6 +310,8 @@ export default class BesluitSampleController extends Controller {
         link: link(this.config.link),
         snippet_placeholder: snippetPlaceholder(this.config.snippet),
         snippet: snippet(this.config.snippet),
+        inline_locked_placeholder: inlineLockedPlaceholder,
+        block_locked_placeholder: blockLockedPlaceholder,
       },
       marks: {
         em,
@@ -535,6 +546,8 @@ export default class BesluitSampleController extends Controller {
       snippet: snippetView(this.config.snippet)(controller),
       block_rdfa: (...args: Parameters<NodeViewConstructor>) =>
         new BlockRDFaView(args, controller),
+      inline_locked_placeholder: inlineLockedPlaceholderView(controller),
+      block_locked_placeholder: blockLockedPlaceholderView(controller),
     } satisfies Record<string, NodeViewConstructor>;
   };
 
