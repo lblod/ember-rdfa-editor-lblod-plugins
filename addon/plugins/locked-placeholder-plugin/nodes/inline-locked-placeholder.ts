@@ -44,7 +44,7 @@ const emberNodeConfig: EmberNodeConfig = {
   name: 'inline-locked-placeholder',
   component: InlineLockedPlaceholderNodeView as unknown as ComponentLike,
   inline: true,
-  group: 'inline variable',
+  group: 'inline',
   content: 'inline*',
   atom: true,
   draggable: false,
