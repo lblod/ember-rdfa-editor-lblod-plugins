@@ -11,11 +11,13 @@ import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transactio
 interface InsertMotivationArgs {
   intl: IntlService;
   decisionLocation: NodeWithPos;
+  label?: string;
 }
 
 export default function insertMotivation({
   intl,
   decisionLocation,
+  label,
 }: InsertMotivationArgs): Command {
   return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const translationWithDocLang = getTranslationFunction(state);
@@ -24,7 +26,7 @@ export default function insertMotivation({
     const motivationId = uuid();
     const nodeToInsert = schema.node(
       'block_rdfa',
-      { rdfaNodeType: 'literal', __rdfaId: motivationId },
+      { rdfaNodeType: 'literal', __rdfaId: motivationId, label },
       [
         schema.node(
           'paragraph',
