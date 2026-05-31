@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.0.1
+
+### Patch Changes
+
+- [`d088a86`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d088a868fdacb5d6b5f7c6d16eb0a2e9a5abdf24) Thanks [@abeforgit](https://github.com/abeforgit)! - correctly type command signature of location actions
+
 ## 37.0.0
 
 ### Major Changes
