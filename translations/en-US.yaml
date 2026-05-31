@@ -447,6 +447,11 @@ location-plugin:
     checkbox-helptext: Checking this will remove the zipcode and municipality from the address.
   nodeview:
     placeholder: Insert location
+  context-actions:
+    insert-address: Insert Address
+    insert-point-on-map: Insert a point on the map
+    insert-area: Insert area
+    other-elements: Other elements
   types:
     address: Address
     place: Place

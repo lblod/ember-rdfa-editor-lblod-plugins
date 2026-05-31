@@ -38,11 +38,16 @@ import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option
 import type { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
+import {
+  closeLocationModal,
+  getLocationModalsPluginState,
+  openLocationModal,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin';
 
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
 function updateFromNode<T extends Address | Place | Area, R>(
-  Class: new (...args: unknown[]) => T,
+  Class: new (...args: never[]) => T,
   extractFunc: (current: T) => R,
   defaultValue?: R,
 ) {
@@ -71,7 +76,6 @@ interface Signature {
 
 export default class LocationPluginInsertComponent extends Component<Signature> {
   @service declare intl: IntlService;
-  @tracked modalOpen = false;
   @tracked chosenPoint: GeoPos | undefined;
   @tracked isLoading = false;
 
@@ -121,19 +125,6 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     update: updateFromNode(Area, (area) => area.shape.locations),
   })
   savedArea: GeoPos[] | undefined;
-
-  @trackedReset({
-    memo: 'modalOpen',
-    update(component: LocationPluginInsertComponent) {
-      return (
-        updateFromNode(Place, () => 'place')(component) ??
-        updateFromNode(Area, () => 'area')(component) ??
-        updateFromNode(Address, () => 'address')(component) ??
-        component.locationTypes[0]
-      );
-    },
-  })
-  declare locationType: LocationType;
 
   @trackedReset({
     memo: 'controller.activeEditorState',
@@ -191,9 +182,26 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     }
   }
 
+  get modalOpen() {
+    return getLocationModalsPluginState(this.controller.activeEditorState)
+      ?.modalOpen;
+  }
+
   @action
   setLocationType(type: LocationType) {
-    this.locationType = type;
+    openLocationModal(this.controller.activeEditorView, type);
+  }
+
+  get locationType(): LocationType {
+    return (
+      // If the modal was not opened trough the context actions, this will be null
+      getLocationModalsPluginState(this.controller.activeEditorState)
+        ?.locationType ??
+      updateFromNode<Place, 'place'>(Place, () => 'place')(this) ??
+      updateFromNode<Area, 'area'>(Area, () => 'area')(this) ??
+      updateFromNode<Address, 'address'>(Address, () => 'address')(this) ??
+      this.locationTypes[0]
+    );
   }
 
   @action
@@ -212,12 +220,12 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
   @action
   closeModal() {
     this.chosenPoint = undefined;
-    this.modalOpen = false;
+    closeLocationModal(this.controller.activeEditorView);
   }
 
   @action
   insertOrEditAddress() {
-    this.modalOpen = true;
+    openLocationModal(this.controller.activeEditorView, 'address');
   }
 
   @action
@@ -275,7 +283,7 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
       });
     }
     if (toInsert) {
-      this.modalOpen = false;
+      closeLocationModal(this.controller.activeEditorView);
       if (this.selectedLocationNode) {
         const df = new SayDataFactory();
         const { pos, value: locNode } = this.selectedLocationNode;

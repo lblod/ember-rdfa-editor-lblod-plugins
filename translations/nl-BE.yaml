@@ -444,6 +444,11 @@ location-plugin:
     checkbox-helptext: Aanvinken verwijdert de postcode en gemeente van het adres.
   nodeview:
     placeholder: Voeg locatie in
+  context-actions:
+    insert-address: Adres invoegen
+    insert-point-on-map: Punt op de kaart invoegen
+    insert-area: Gebied invoegen
+    other-elements: Andere elementen
   types:
     address: Adres
     place: Plaats
