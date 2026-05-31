@@ -1,5 +1,5 @@
 ---
-'@lblod/ember-rdfa-editor-lblod-plugins': minor
+'@lblod/ember-rdfa-editor-lblod-plugins': major
 ---
 
 Update appuniversum to v4
