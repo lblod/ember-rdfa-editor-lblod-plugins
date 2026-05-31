@@ -45,15 +45,20 @@ export function openLocationModal(
 }
 
 export function openLocationModalCommand(locationType: LocationType) {
-  return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
-    if (dispatch) {
-      const tr = state.tr;
-      tr.setMeta(locationModalsPluginKey, {
-        action: 'open_location_modal',
-        locationType,
-      });
-      dispatch(tr);
+  return function (
+    state: EditorState,
+    dispatch?: (tr: Transaction) => boolean,
+  ) {
+    if (!dispatch) {
+      return false;
     }
+    const tr = state.tr;
+    tr.setMeta(locationModalsPluginKey, {
+      action: 'open_location_modal',
+      locationType,
+    });
+    dispatch(tr);
+    return true;
   };
 }
 
