@@ -4,6 +4,7 @@ import {
   EditorState,
   EditorView,
   Transaction,
+  Command,
 } from '@lblod/ember-rdfa-editor';
 import { LocationType } from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/map';
 
@@ -44,11 +45,8 @@ export function openLocationModal(
   view.dispatch(tr);
 }
 
-export function openLocationModalCommand(locationType: LocationType) {
-  return function (
-    state: EditorState,
-    dispatch?: (tr: Transaction) => boolean,
-  ) {
+export function openLocationModalCommand(locationType: LocationType): Command {
+  return function (state, dispatch) {
     if (!dispatch) {
       return false;
     }
