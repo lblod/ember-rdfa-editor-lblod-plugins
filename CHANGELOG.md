@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.0.2
+
+### Patch Changes
+
+- [`22a4866`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/22a486642e8c7d7ee6d42370e59da200e4339121) Thanks [@abeforgit](https://github.com/abeforgit)! - correct return type for location context commands
+
 ## 37.0.1
 
 ### Patch Changes
