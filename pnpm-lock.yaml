@@ -189,8 +189,8 @@ importers:
         specifier: ^1.7.7
         version: 1.7.7
       '@lblod/ember-rdfa-editor':
-        specifier: 13.7.1-dev.50bc2ce9865c356ab514c4a03011a2876c21a821
-        version: 13.7.1-dev.50bc2ce9865c356ab514c4a03011a2876c21a821(eaaf812331dec1c55ca86d1378863615)
+        specifier: 13.8.0
+        version: 13.8.0(eaaf812331dec1c55ca86d1378863615)
       '@rdfjs/to-ntriples':
         specifier: ^3.0.1
         version: 3.0.1
@@ -1928,8 +1928,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lblod/ember-rdfa-editor@13.7.1-dev.50bc2ce9865c356ab514c4a03011a2876c21a821':
-    resolution: {integrity: sha512-u/DQIDd1Rah+LK2Kyw4bIcGPMbRiEbqMNwNmhv7gWWMskjWHJ15wzpCYkflxFXywd/vFpXfJ1EYs7Tyzrwwzvg==}
+  '@lblod/ember-rdfa-editor@13.8.0':
+    resolution: {integrity: sha512-32EDfk8Jnf8U2CgNgIuKqModx7bLtdwF+XF8wydG1yQr3cx6uIIds2XLwH5u+BGDxWeYkcZcSW5fMVD+mJouHw==}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.11.0 || ^4.2.1
       '@ember/test-helpers': ^2.9.4 || ^3.2.1 || ^4.0.2 || ^5.0.0
@@ -13121,7 +13121,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lblod/ember-rdfa-editor@13.7.1-dev.50bc2ce9865c356ab514c4a03011a2876c21a821(eaaf812331dec1c55ca86d1378863615)':
+  '@lblod/ember-rdfa-editor@13.8.0(eaaf812331dec1c55ca86d1378863615)':
     dependencies:
       '@appuniversum/ember-appuniversum': 4.2.2(@babel/core@7.26.0)(@ember/test-helpers@3.3.1(@babel/core@7.26.0)(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(webpack@5.97.1))(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(tracked-built-ins@4.1.0(@babel/core@7.26.0))
       '@codemirror/commands': 6.10.3
