@@ -1,5 +1,27 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.0.0
+
+### Major Changes
+
+- [#657](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/657) [`3280b11`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3280b118f0f69210fcbb67e3a71c85a0abf6b10c) Thanks [@kobemertens](https://github.com/kobemertens)! - Update appuniversum to v4
+
+### Minor Changes
+
+- [#656](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/656) [`0335b04`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0335b04e6ee22c0c18791e8f82b026c4fd7a0522) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add locked placeholders feature
+
+- [#654](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/654) [`07e9655`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/07e9655428d07c099ef5ae3117482715a719e5d1) Thanks [@kobemertens](https://github.com/kobemertens)! - Add "Insert address", "Insert point on the map" and "Insert area" contextual actions for the location nodes
+
+- [#654](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/654) [`d2301c5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/d2301c55e8e15a5dfdb83dbe88062eb83ebf7e90) Thanks [@kobemertens](https://github.com/kobemertens)! - Add context actions for location nodes: Insert address, insert place on map, insert area
+
+### Patch Changes
+
+- [`02609da`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/02609da40961713aa695fe14dec3fdd7dc469fa5) Thanks [@kobemertens](https://github.com/kobemertens)! - fix function signature for place description context actions
+
+- [#655](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/655) [`615a7ff`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/615a7fff08bd9647619bf97b766f343f22fbb7a1) Thanks [@abeforgit](https://github.com/abeforgit)! - Improve performance of automatic structure-linking
+
+- [#653](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/653) [`1c1ae88`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1c1ae88b82537c3a769497f70dba869299566e65) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Translate functions that insert besluit blocks
+
 ## 36.0.0
 
 ### Major Changes
