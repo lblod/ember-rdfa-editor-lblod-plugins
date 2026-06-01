@@ -29,26 +29,28 @@ export default function getDocumentLocations(state: EditorState) {
   const locationMetadata: LocationMetadataType = {};
   const locationsDedup: (Place | Address | Area)[] = [];
   for (const locationWithDistance of locationsWithDistance) {
-    const uri =
-      (locationWithDistance.location as Address).belgianAddressUri ||
-      locationWithDistance.location.uri;
+    const { location, distance } = locationWithDistance;
+    if (!location) {
+      continue;
+    }
+    const uri = (location as Address).belgianAddressUri ?? location.uri;
     if (!locationMetadata[uri]) {
       locationMetadata[uri] = {
         ocurrences: 1,
-        distance: locationWithDistance.distance,
+        distance,
       };
-      locationsDedup.push(locationWithDistance.location);
+      locationsDedup.push(location);
     } else {
       locationMetadata[uri].ocurrences++;
-      if (locationWithDistance.distance < locationMetadata[uri].distance) {
-        locationMetadata[uri].distance = locationWithDistance.distance;
+      if (distance < locationMetadata[uri].distance) {
+        locationMetadata[uri].distance = distance;
       }
     }
   }
 
   const locations = locationsDedup.sort((a, b) => {
-    const uriA = (a as Address).belgianAddressUri || a.uri;
-    const uriB = (b as Address).belgianAddressUri || b.uri;
+    const uriA = (a as Address).belgianAddressUri ?? a.uri;
+    const uriB = (b as Address).belgianAddressUri ?? b.uri;
     if (
       locationMetadata[uriA].ocurrences === locationMetadata[uriB].ocurrences
     ) {

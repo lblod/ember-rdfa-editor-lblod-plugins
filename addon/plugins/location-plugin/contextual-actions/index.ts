@@ -3,25 +3,41 @@ import { v4 as uuidv4 } from 'uuid';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { openLocationModalCommand } from '..';
 import { LocationType } from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/map';
+import getDocumentLocations from '../utils/get-document-locations';
+import { replaceLocationCommand } from '../utils/replace-location';
 
 const otherElementsGroupId =
   'other-elements-e01f46a0-b323-4add-8035-d81dc2e8578d';
+const recentLocationsGroupId =
+  'other-elements-de3e5a9a-40de-4fb5-832e-c22199ec584f';
 
 export function getContextualActions() {
   return function (state: EditorState, searchQuery?: string) {
     const t = getTranslationFunction(state);
+    const { selection } = state;
+    if (!(selection instanceof NodeSelection)) return [];
 
-    const options: {
-      label: string;
-      locationType: LocationType;
-      icon: string;
-    }[] = [
+    const locationSuggestionOptions = getDocumentLocations(state).map(
+      (location) => ({
+        label: location.formatted,
+        id: uuidv4(),
+        group: recentLocationsGroupId,
+        command: replaceLocationCommand(
+          { value: selection.node, pos: selection.from },
+          location,
+        ),
+      }),
+    );
+
+    console.log(getDocumentLocations(state));
+
+    const otherElementsOptions = [
       {
         label: t(
           'location-plugin.context-actions.insert-address',
           'Adres invoegen',
         ),
-        locationType: 'address',
+        locationType: 'address' as LocationType,
         icon: 'location',
       },
       {
@@ -29,7 +45,7 @@ export function getContextualActions() {
           'location-plugin.context-actions.insert-point-on-map',
           'Punt op de kaart invoegen',
         ),
-        locationType: 'place',
+        locationType: 'place' as LocationType,
         icon: 'location-gps',
       },
       {
@@ -37,25 +53,25 @@ export function getContextualActions() {
           'location-plugin.context-actions.insert-area',
           'Gebied invoegen',
         ),
-        locationType: 'area',
+        locationType: 'area' as LocationType,
         icon: 'area',
       },
-    ];
+    ].map((option) => {
+      return {
+        ...option,
+        id: uuidv4(),
+        group: otherElementsGroupId,
+        command: openLocationModalCommand(option.locationType),
+      };
+    });
 
-    return options
+    return locationSuggestionOptions
+      .concat(otherElementsOptions)
       .filter(
         (option) =>
           !searchQuery ||
           option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase()),
-      )
-      .map((option) => {
-        return {
-          ...option,
-          id: uuidv4(),
-          group: otherElementsGroupId,
-          command: openLocationModalCommand(option.locationType),
-        };
-      });
+      );
   };
 }
 
@@ -69,16 +85,22 @@ function contextualGroupIsVisible(state: EditorState) {
 
 export function getContextualActionGroups() {
   return function (state: EditorState) {
-    return contextualGroupIsVisible(state)
-      ? [
-          {
-            id: otherElementsGroupId,
-            label: getTranslationFunction(state)(
-              'location-plugin.context-actions.other-elements',
-              'Andere elementen',
-            ),
-          },
-        ]
-      : [];
+    if (!contextualGroupIsVisible(state)) return [];
+    return [
+      {
+        id: recentLocationsGroupId,
+        label: getTranslationFunction(state)(
+          'location-plugin.context-actions.location-suggestions',
+          'Locatiesuggesties',
+        ),
+      },
+      {
+        id: otherElementsGroupId,
+        label: getTranslationFunction(state)(
+          'location-plugin.context-actions.other-elements',
+          'Andere elementen',
+        ),
+      },
+    ];
   };
 }

@@ -449,6 +449,7 @@ location-plugin:
     insert-point-on-map: Punt op de kaart invoegen
     insert-area: Gebied invoegen
     other-elements: Andere elementen
+    location-suggestions: Locatiesuggesties
   types:
     address: Adres
     place: Plaats
