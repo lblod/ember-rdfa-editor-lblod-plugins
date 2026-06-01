@@ -23,10 +23,14 @@ export function getContextualActions() {
     const selectedNode = selection.node;
     if (selectedNode.type.name !== 'oslo_location') return [];
 
-    const selectedLocation = selectedNode.attrs.value as Address | Place | Area;
+    const selectedLocation = selectedNode.attrs.value as
+      | Address
+      | Place
+      | Area
+      | undefined;
 
     const locationSuggestionOptions = getDocumentLocations(state)
-      .filter((location) => selectedLocation.uri !== location.uri)
+      .filter((location) => selectedLocation?.uri !== location.uri)
       .map((location) => ({
         label: location.formatted,
         id: uuidv4(),
