@@ -13,6 +13,8 @@ const otherElementsGroupId =
 const recentLocationsGroupId =
   'other-elements-de3e5a9a-40de-4fb5-832e-c22199ec584f';
 
+const SUGGESTION_AMOUNT = 15;
+
 export function getContextualActions() {
   return function (state: EditorState, searchQuery?: string) {
     const t = getTranslationFunction(state);
@@ -33,7 +35,8 @@ export function getContextualActions() {
           { value: selection.node, pos: selection.from },
           location,
         ),
-      }));
+      }))
+      .slice(0, SUGGESTION_AMOUNT);
 
     const otherElementsOptions = [
       {
