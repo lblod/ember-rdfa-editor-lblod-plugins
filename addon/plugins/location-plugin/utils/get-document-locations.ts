@@ -33,7 +33,7 @@ export default function getDocumentLocations(state: EditorState) {
     if (!location) {
       continue;
     }
-    const uri = (location as Address).belgianAddressUri ?? location.uri;
+    const { uri } = location;
     if (!locationMetadata[uri]) {
       locationMetadata[uri] = {
         ocurrences: 1,
@@ -48,9 +48,7 @@ export default function getDocumentLocations(state: EditorState) {
     }
   }
 
-  const locations = locationsDedup.sort((a, b) => {
-    const uriA = (a as Address).belgianAddressUri ?? a.uri;
-    const uriB = (b as Address).belgianAddressUri ?? b.uri;
+  locationsDedup.sort(({ uri: uriA }, { uri: uriB }) => {
     if (
       locationMetadata[uriA].ocurrences === locationMetadata[uriB].ocurrences
     ) {
@@ -61,5 +59,6 @@ export default function getDocumentLocations(state: EditorState) {
       );
     }
   });
-  return locations;
+
+  return locationsDedup;
 }

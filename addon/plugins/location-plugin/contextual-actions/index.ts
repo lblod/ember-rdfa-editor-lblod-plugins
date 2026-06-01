@@ -5,6 +5,8 @@ import { openLocationModalCommand } from '..';
 import { LocationType } from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/map';
 import getDocumentLocations from '../utils/get-document-locations';
 import { replaceLocationCommand } from '../utils/replace-location';
+import { Area, Place } from '../utils/geo-helpers';
+import { Address } from '../utils/address-helpers';
 
 const otherElementsGroupId =
   'other-elements-e01f46a0-b323-4add-8035-d81dc2e8578d';
@@ -16,9 +18,14 @@ export function getContextualActions() {
     const t = getTranslationFunction(state);
     const { selection } = state;
     if (!(selection instanceof NodeSelection)) return [];
+    const selectedNode = selection.node;
+    if (selectedNode.type.name !== 'oslo_location') return [];
 
-    const locationSuggestionOptions = getDocumentLocations(state).map(
-      (location) => ({
+    const selectedLocation = selectedNode.attrs.value as Address | Place | Area;
+
+    const locationSuggestionOptions = getDocumentLocations(state)
+      .filter((location) => selectedLocation.uri !== location.uri)
+      .map((location) => ({
         label: location.formatted,
         id: uuidv4(),
         group: recentLocationsGroupId,
@@ -26,10 +33,7 @@ export function getContextualActions() {
           { value: selection.node, pos: selection.from },
           location,
         ),
-      }),
-    );
-
-    console.log(getDocumentLocations(state));
+      }));
 
     const otherElementsOptions = [
       {
