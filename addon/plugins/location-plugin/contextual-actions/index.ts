@@ -116,6 +116,7 @@ export function getContextualActionGroups() {
           'location-plugin.context-actions.other-elements',
           'Andere elementen',
         ),
+        sticky: 'bottom',
       },
     ];
   };
