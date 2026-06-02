@@ -33,7 +33,7 @@ export function getContextualActions() {
     const locationSuggestionOptions = getDocumentLocations(state)
       .filter(
         (location) =>
-          selectedLocation &&
+          !selectedLocation ||
           getLocationUri(selectedLocation) !== getLocationUri(location),
       )
       .slice(0, SUGGESTION_AMOUNT)
