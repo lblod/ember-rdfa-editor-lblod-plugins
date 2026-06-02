@@ -7,6 +7,7 @@ import getDocumentLocations from '../utils/get-document-locations';
 import { replaceLocationCommand } from '../utils/replace-location';
 import { Area, Place } from '../utils/geo-helpers';
 import { Address } from '../utils/address-helpers';
+import { getLocationUri } from '../_private/utils/location-helpers';
 
 const otherElementsGroupId =
   'other-elements-e01f46a0-b323-4add-8035-d81dc2e8578d';
@@ -30,7 +31,11 @@ export function getContextualActions() {
       | undefined;
 
     const locationSuggestionOptions = getDocumentLocations(state)
-      .filter((location) => selectedLocation?.uri !== location.uri)
+      .filter(
+        (location) =>
+          selectedLocation &&
+          getLocationUri(selectedLocation) !== getLocationUri(location),
+      )
       .slice(0, SUGGESTION_AMOUNT)
       .map((location) => ({
         label: location.formatted,

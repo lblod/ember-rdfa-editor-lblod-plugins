@@ -1,6 +1,7 @@
 import { EditorState } from '@lblod/ember-rdfa-editor';
 import { Area, Place } from './geo-helpers';
 import { Address } from './address-helpers';
+import { getLocationUri } from '../_private/utils/location-helpers';
 
 type LocationsWithDistanceType = {
   location: Place | Address | Area;
@@ -70,7 +71,7 @@ export default function getDocumentLocations(state: EditorState) {
     if (!location) {
       continue;
     }
-    const { uri } = location;
+    const uri = getLocationUri(location);
     if (!locationMetadata[uri]) {
       locationMetadata[uri] = {
         location,
