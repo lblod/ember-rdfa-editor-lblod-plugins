@@ -31,6 +31,7 @@ export function getContextualActions() {
 
     const locationSuggestionOptions = getDocumentLocations(state)
       .filter((location) => selectedLocation?.uri !== location.uri)
+      .slice(0, SUGGESTION_AMOUNT)
       .map((location) => ({
         label: location.formatted,
         id: uuidv4(),
@@ -39,8 +40,7 @@ export function getContextualActions() {
           { value: selection.node, pos: selection.from },
           location,
         ),
-      }))
-      .slice(0, SUGGESTION_AMOUNT);
+      }));
 
     const otherElementsOptions = [
       {

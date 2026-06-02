@@ -282,10 +282,9 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
 
     closeLocationModal(this.controller.activeEditorView);
     if (this.selectedLocationNode) {
-      const dispatch = this.controller.activeEditorView.dispatch;
       replaceLocationCommand(this.selectedLocationNode, toInsert)(
         this.controller.activeEditorState,
-        dispatch,
+        this.controller.activeEditorView.dispatch,
       );
     } else {
       // Insert
