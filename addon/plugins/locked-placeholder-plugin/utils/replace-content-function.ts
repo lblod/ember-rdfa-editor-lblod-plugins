@@ -34,7 +34,6 @@ export default function replaceLockedPlaceholderContent(
     return true;
   });
   placeholdersWithPos.reverse();
-  console.log(placeholdersWithPos);
   const monads = [];
   const valuesResolved =
     typeof values === 'function' ? values(initialState) : values;
