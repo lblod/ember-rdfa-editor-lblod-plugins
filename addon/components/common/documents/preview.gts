@@ -14,6 +14,7 @@ import t from 'ember-intl/helpers/t';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import { PreviewableDocument } from './types';
 import { VoteStarUnfilledIcon } from '../vote-star-unfilled-icon';
+import perform from 'ember-concurrency/helpers/perform';
 
 interface Signature<Doc extends PreviewableDocument> {
   Args: {
@@ -31,10 +32,10 @@ export default class DocumentPreview<
   @tracked controller?: SayController;
   @tracked isExpanded = false;
 
-  @action
-  onInsert() {
+  onInsert = task(async () => {
+    await this.contentTask.perform();
     this.args.onInsert(this.args.doc);
-  }
+  });
 
   @action
   togglePreview() {
@@ -101,7 +102,7 @@ export default class DocumentPreview<
         <div
           role='button'
           title={{t 'common.preview-list.select-button.title'}}
-          {{on 'click' this.onInsert}}
+          {{on 'click' (perform this.onInsert)}}
           {{! template-lint-disable require-presentational-children}}
         >
           <AuButton class='snippet-preview__insert-button' @skin='naked'>
