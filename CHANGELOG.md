@@ -1,5 +1,15 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.1.0
+
+### Minor Changes
+
+- [#658](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/658) [`e45764c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e45764c5f10e590963307a00b93501ec99b5b8ac) Thanks [@kobemertens](https://github.com/kobemertens)! - Integrate location suggestions in context menu
+
+### Patch Changes
+
+- [#660](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/660) [`062a3f9`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/062a3f92528e0db450aaa51853197759650d85ed) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fetch document content before passing it up on the document template component in order to solve race condition on GN
+
 ## 37.0.3
 
 ### Patch Changes
