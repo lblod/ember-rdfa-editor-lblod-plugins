@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.2.0
+
+### Minor Changes
+
+- [#661](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/661) [`dee0a62`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/dee0a622158a925cd3adb718fa4ee82a8a29b394) Thanks [@abeforgit](https://github.com/abeforgit)! - Add option to make location-insert insert a placeholder instead
+
 ## 37.1.0
 
 ### Minor Changes
