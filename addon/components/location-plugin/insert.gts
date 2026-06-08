@@ -31,18 +31,14 @@ import LocationMap, {
   SUPPORTED_LOCATION_TYPES,
   type LocationType,
 } from './map';
-import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
-import { updateSubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info/utils';
 import { replaceSelectionWithLocation } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/_private/utils/node-utils';
 import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import type { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
-import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
-import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
   closeLocationModal,
   getLocationModalsPluginState,
   openLocationModal,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin';
+import { replaceLocationCommand } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/utils/replace-location';
 
 export type CurrentLocation = Address | GlobalCoordinates | undefined;
 
@@ -282,51 +278,23 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
         }),
       });
     }
-    if (toInsert) {
-      closeLocationModal(this.controller.activeEditorView);
-      if (this.selectedLocationNode) {
-        const df = new SayDataFactory();
-        const { pos, value: locNode } = this.selectedLocationNode;
-        // The location's subject has likely changed, so we should update the external links too
-        // if they exist
-        // NOTE: It's VERY important that this is done without mutating the triple objects
-        // otherwise the attributes will not update as expected when undo-ing
-        const newExternalTriples: FullTriple[] = (
-          locNode.attrs.externalTriples as FullTriple[]
-        ).map((tr) => {
-          if (PROV('atLocation').matches(tr.predicate)) {
-            return { ...tr, object: df.namedNode(toInsert.uri) };
-          } else {
-            return tr;
-          }
-        }); // update the location value and the external triples
-        this.controller.withTransaction((tr) => {
-          return transactionCombinator(
-            this.controller.activeEditorState,
-            tr
-              .setNodeAttribute(pos, 'value', toInsert)
-              .setNodeAttribute(pos, 'externalTriples', newExternalTriples),
-          )([
-            // Update the subject uri, while keeping backlinks intact
-            updateSubject({
-              pos,
-              targetSubject: toInsert.uri,
-              keepBacklinks: true,
-              keepProperties: false,
-              keepExternalTriples: true,
-            }),
-          ]).transaction;
-        });
-      } else {
-        // Insert
-        replaceSelectionWithLocation({
-          controller: this.controller,
-          subject: toInsert.uri,
-          toInsert,
-          subjectTypes: this.args.config.subjectTypesToLinkTo,
-          explicitSubjectToLinkTo: this.args.config.explicitSubjectToLinkTo,
-        });
-      }
+    if (!toInsert) return;
+
+    closeLocationModal(this.controller.activeEditorView);
+    if (this.selectedLocationNode) {
+      replaceLocationCommand(this.selectedLocationNode, toInsert)(
+        this.controller.activeEditorState,
+        this.controller.activeEditorView.dispatch,
+      );
+    } else {
+      // Insert
+      replaceSelectionWithLocation({
+        controller: this.controller,
+        subject: toInsert.uri,
+        toInsert,
+        subjectTypes: this.args.config.subjectTypesToLinkTo,
+        explicitSubjectToLinkTo: this.args.config.explicitSubjectToLinkTo,
+      });
     }
   }
 

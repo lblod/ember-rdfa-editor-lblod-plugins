@@ -452,6 +452,7 @@ location-plugin:
     insert-point-on-map: Insert a point on the map
     insert-area: Insert area
     other-elements: Other elements
+    location-suggestions: Location suggestions
   types:
     address: Address
     place: Place
