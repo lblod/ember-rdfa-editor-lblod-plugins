@@ -7,6 +7,7 @@ import not from 'ember-truth-helpers/helpers/not';
 import IntlService from 'ember-intl/services/intl';
 import t from 'ember-intl/helpers/t';
 import { trackedReset } from 'tracked-toolbox';
+import { v4 as uuidv4 } from 'uuid';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
 import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
@@ -66,6 +67,11 @@ interface Signature {
     defaultMunicipality?: Option<string>;
     templateMode?: boolean;
     locationTypes?: LocationType[];
+    /**
+     * TODO: remove this option once the modal has been reworked and the UX of the button
+     * has settled
+     */
+    insertPlaceholder?: boolean;
   };
   Element: HTMLLIElement;
 }
@@ -219,9 +225,26 @@ export default class LocationPluginInsertComponent extends Component<Signature> 
     closeLocationModal(this.controller.activeEditorView);
   }
 
+  get insertPlaceholder() {
+    return this.args.insertPlaceholder ?? false;
+  }
   @action
   insertOrEditAddress() {
-    openLocationModal(this.controller.activeEditorView, 'address');
+    // TODO: remove this logic once the whole modal redesign is through and we settled on
+    // the UX of this button
+    if (this.selectedLocationNode ?? !this.insertPlaceholder) {
+      openLocationModal(this.controller.activeEditorView, 'address');
+    } else {
+      const uri = `http://data.lblod.info/variables/${
+        this.args.templateMode ? '--ref-uuid4-' : ''
+      }${uuidv4()}`;
+      replaceSelectionWithLocation({
+        controller: this.controller,
+        subject: uri,
+        subjectTypes: this.args.config.subjectTypesToLinkTo,
+        explicitSubjectToLinkTo: this.args.config.explicitSubjectToLinkTo,
+      });
+    }
   }
 
   @action
