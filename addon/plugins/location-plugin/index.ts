@@ -3,7 +3,6 @@ import {
   PluginKey,
   EditorState,
   EditorView,
-  Transaction,
   Command,
 } from '@lblod/ember-rdfa-editor';
 import { LocationType } from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/map';
