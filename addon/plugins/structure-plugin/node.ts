@@ -211,7 +211,7 @@ export const emberNodeConfig: (
       const hasTitle = node.attrs.hasTitle as boolean;
       const titleHTML = hasTitle
         ? parser.parseFromString(node.attrs.title, 'text/html').body
-            .firstElementChild
+            .firstElementChild?.textContent
         : null;
       const headerFormat = node.attrs.headerFormat as string;
       const romanizeNumber = node.attrs.romanize as boolean;
