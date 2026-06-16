@@ -67,7 +67,7 @@ function replacePlaceholderWithHtml(
 ) {
   return (state: EditorState) => {
     const domParser = new DOMParser();
-    const contentFragment = ProseParser.fromSchema(state.schema).parse(
+    const contentFragment = ProseParser.fromSchema(state.schema).parseSlice(
       domParser.parseFromString(value, 'text/html'),
     ).content;
     const tr = state.tr;
