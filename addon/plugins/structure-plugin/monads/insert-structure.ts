@@ -83,7 +83,10 @@ export function findHowToInsertStructure(
 
     const closestAncestorRank = parentStructures[0]?.rank;
     // ### Either there is no parent structure or the nearest parent is higher in the hierarchy
-    if (parentStructures.length === 0 || closestAncestorRank < hierarchyRank) {
+    if (
+      parentStructures.length === 0 ||
+      (closestAncestorRank && closestAncestorRank < hierarchyRank)
+    ) {
       if (
         selection instanceof NodeSelection &&
         isHierarchyNode(selection.node)
@@ -112,7 +115,7 @@ export function findHowToInsertStructure(
       // ### We have parent structures that are lower in the hierarchy, so find one where we can insert
       for (let i = 0; i < parentStructures.length; i++) {
         const parentStructure = parentStructures[i];
-        const parentRank = parentStructure.rank;
+        const parentRank = parentStructure.rank ?? -1;
         if (hierarchyRank === parentRank) {
           // ### If parent we are looking at is same structure type, put an empty structure after that one
           const insertLocation =
