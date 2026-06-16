@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.2.1
+
+### Patch Changes
+
+- [#663](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/663) [`4938095`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/49380955ce5c33beac6013cea02a684558aa0701) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Use parse slice to not include unneeded paragraphs on the inline locked placeholders parse
+
 ## 37.2.0
 
 ### Minor Changes
