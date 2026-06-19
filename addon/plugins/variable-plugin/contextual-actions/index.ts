@@ -171,7 +171,7 @@ function contextualGroupIsVisible(state: EditorState) {
   );
 }
 
-export function getContextualActionGroups() {
+export function getContextualActionGroups(attrs: GetContextualActionsAttrs) {
   return function (state: EditorState) {
     return contextualGroupIsVisible(state)
       ? [
@@ -181,6 +181,7 @@ export function getContextualActionGroups() {
               'variable.location.label',
               'Plaatsbeschrijving',
             ),
+            getActions: getContextualActions(attrs),
           },
         ]
       : [];
