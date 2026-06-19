@@ -8,6 +8,7 @@ import { replaceLocationCommand } from '../utils/replace-location';
 import { Area, Place } from '../utils/geo-helpers';
 import { Address } from '../utils/address-helpers';
 import { getLocationUri } from '../_private/utils/location-helpers';
+import { ContextualActionGroup } from '@lblod/ember-rdfa-editor/plugins/contextual-actions';
 
 const otherElementsGroupId =
   'other-elements-e01f46a0-b323-4add-8035-d81dc2e8578d';
@@ -107,7 +108,7 @@ function contextualGroupIsVisible(state: EditorState) {
 }
 
 export function getContextualActionGroups() {
-  return function (state: EditorState) {
+  return function (state: EditorState): ContextualActionGroup[] {
     if (!contextualGroupIsVisible(state)) return [];
     return [
       {

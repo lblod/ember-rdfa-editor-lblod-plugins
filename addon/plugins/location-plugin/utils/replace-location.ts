@@ -8,6 +8,7 @@ import {
   TextSelection,
   PNode,
   Selection,
+  Command,
 } from '@lblod/ember-rdfa-editor';
 import type { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
@@ -39,8 +40,10 @@ function moveNodeSelectionForward(selection: Selection, doc: PNode) {
 export function replaceLocationCommand(
   node: ResolvedPNode,
   location: Address | Place | Area,
-) {
-  return function (state: EditorState, dispatch: (tr: Transaction) => void) {
+): Command {
+  return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
+    if (!dispatch) return false;
+
     const df = new SayDataFactory();
     const { pos, value: locNode } = node;
     // The location's subject has likely changed, so we should update the external links too
@@ -79,5 +82,6 @@ export function replaceLocationCommand(
     );
     setLocationTr.setSelection(newSelection);
     dispatch(setLocationTr);
+    return true;
   };
 }
