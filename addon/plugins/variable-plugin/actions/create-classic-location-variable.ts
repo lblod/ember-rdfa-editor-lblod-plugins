@@ -83,5 +83,6 @@ export function createClassicLocationVariableAttrs({
     backlinks: [...backlinks, ...addedBacklinks],
     label: label ?? 'Plaatsbeschrijving',
     source,
+    placeholder: 'Plaatsbeschrijving toevoegen',
   };
 }
