@@ -180,6 +180,7 @@ import {
 import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
 import Owner from '@ember/owner';
 import { locationModalsPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin';
+import { emptyBlockPlaceholder } from '@lblod/ember-rdfa-editor/plugins/empty-block-placeholder';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -239,6 +240,7 @@ export default class BesluitSampleController extends Controller {
         getGroups: this.contextualGroupGetters,
       }),
       locationModalsPlugin(),
+      emptyBlockPlaceholder(),
     ];
   }
 
