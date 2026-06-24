@@ -40,7 +40,7 @@ export function replaceLocationCommand(
   node: ResolvedPNode,
   location: Address | Place | Area,
 ) {
-  return function (state: EditorState, dispatch: (tr: Transaction) => void) {
+  return function (state: EditorState, dispatch?: (tr: Transaction) => void) {
     const df = new SayDataFactory();
     const { pos, value: locNode } = node;
     // The location's subject has likely changed, so we should update the external links too
@@ -57,7 +57,7 @@ export function replaceLocationCommand(
       }
     }); // update the location value and the external triples
     const tr = state.tr;
-    const setLocationTr = transactionCombinator(
+    const { transaction: setLocationTr, result } = transactionCombinator(
       state,
       tr
         .setNodeAttribute(pos, 'value', location)
@@ -71,13 +71,16 @@ export function replaceLocationCommand(
         keepProperties: false,
         keepExternalTriples: true,
       }),
-    ]).transaction;
+    ]);
 
-    const newSelection = moveNodeSelectionForward(
-      state.selection.map(setLocationTr.doc, setLocationTr.mapping),
-      setLocationTr.doc,
-    );
-    setLocationTr.setSelection(newSelection);
-    dispatch(setLocationTr);
+    if (dispatch) {
+      const newSelection = moveNodeSelectionForward(
+        state.selection.map(setLocationTr.doc, setLocationTr.mapping),
+        setLocationTr.doc,
+      );
+      setLocationTr.setSelection(newSelection);
+      dispatch(setLocationTr);
+    }
+    return result.every((res) => res);
   };
 }

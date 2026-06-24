@@ -9,12 +9,7 @@ import {
   SayController,
 } from '@lblod/ember-rdfa-editor';
 import removeQuotes from '@lblod/ember-rdfa-editor-lblod-plugins/utils/remove-quotes';
-import {
-  DataFactory,
-  DatasetCore,
-  DatasetCoreFactory,
-  Quad,
-} from '@rdfjs/types';
+import { DatasetCore, Quad } from '@rdfjs/types';
 import ValidationReport from 'rdf-validate-shacl/src/validation-report';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import {
@@ -54,11 +49,6 @@ export interface DocumentValidationPluginArgs {
   documentShape: string;
   rules: Rule[];
 }
-
-export type ShaclValidationReport = ValidationReport.ValidationReport<
-  DataFactory<Quad, Quad> &
-    DatasetCoreFactory<Quad, Quad, DatasetCore<Quad, Quad>>
->;
 
 type PropertyWithError = {
   message: string;
@@ -133,10 +123,9 @@ async function validationCallback(view: EditorView, documentHtml: string) {
   const shacl = await parse(documentShape);
 
   const validator = new SHACLValidator(shacl, {
-    // @ts-expect-error ts doesn't recognize the configuration parameter not sure why
     allowNamedNodeInList: true,
   });
-  const report = validator.validate(rdf);
+  const report = await validator.validate(rdf);
   const sayFactory = new SayDataFactory();
   const propertyPred = sayFactory.namedNode(
     'http://www.w3.org/ns/shacl#property',
@@ -159,7 +148,7 @@ async function validationCallback(view: EditorView, documentHtml: string) {
           message: removeQuotes(message),
           subject: r.focusNode?.value,
           shape: sourceShape.value,
-          constraint: r.sourceConstraintComponent?.value as string,
+          constraint: r.sourceConstraintComponent?.value,
         });
       }
     }
