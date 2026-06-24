@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 37.3.0
+
+### Minor Changes
+
+- [#664](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/664) [`5762f00`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/5762f007f928081a911ae9c50fb5a7b94bf3fec1) Thanks [@piemonkey](https://github.com/piemonkey)! - Update @rdfjs/types to v2
+
 ## 37.2.1
 
 ### Patch Changes
