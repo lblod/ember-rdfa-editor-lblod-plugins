@@ -110,7 +110,7 @@
     "@glint/ember-tsc": "^1.5.0",
     "@glint/environment-ember-loose": "^1.5.0",
     "@glint/environment-ember-template-imports": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "13.10.0",
+    "@lblod/ember-rdfa-editor": "13.10.2-dev.e26309571bb5b422640bb0281f659239799f642c",
     "@glint/template": "^1.7.7",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^2.0.1",
@@ -215,7 +215,7 @@
     "node": ">= 18"
   },
   "volta": {
-    "node": "20.11.0"
+    "node": "22.22.0"
   },
   "ember": {
     "edition": "octane"
