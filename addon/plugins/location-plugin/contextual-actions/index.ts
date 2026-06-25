@@ -17,78 +17,85 @@ const recentLocationsGroupId =
 
 const SUGGESTION_AMOUNT = 15;
 
-export function getContextualActions() {
+function getLocationSuggestionOptions(state: EditorState) {
+  const { selection } = state;
+  if (!(selection instanceof NodeSelection)) return [];
+  const selectedNode = selection.node;
+  if (selectedNode.type.name !== 'oslo_location') return [];
+
+  const selectedLocation = selectedNode.attrs.value as
+    | Address
+    | Place
+    | Area
+    | undefined;
+
+  return getDocumentLocations(state)
+    .filter(
+      (location) =>
+        !selectedLocation ||
+        getLocationUri(selectedLocation) !== getLocationUri(location),
+    )
+    .slice(0, SUGGESTION_AMOUNT)
+    .map((location) => ({
+      label: location.formatted,
+      id: uuidv4(),
+      group: recentLocationsGroupId,
+      command: replaceLocationCommand(
+        { value: selection.node, pos: selection.from },
+        location,
+      ),
+    }));
+}
+
+function getOtherElementsOptions(state: EditorState) {
+  const t = getTranslationFunction(state);
+
+  return [
+    {
+      label: t(
+        'location-plugin.context-actions.insert-address',
+        'Adres invoegen',
+      ),
+      locationType: 'address' as LocationType,
+      icon: 'location',
+    },
+    {
+      label: t(
+        'location-plugin.context-actions.insert-point-on-map',
+        'Punt op de kaart invoegen',
+      ),
+      locationType: 'place' as LocationType,
+      icon: 'location-gps',
+    },
+    {
+      label: t(
+        'location-plugin.context-actions.insert-area',
+        'Gebied invoegen',
+      ),
+      locationType: 'area' as LocationType,
+      icon: 'area',
+    },
+  ].map((option) => {
+    return {
+      ...option,
+      id: uuidv4(),
+      group: otherElementsGroupId,
+      command: openLocationModalCommand(option.locationType),
+    };
+  });
+}
+
+export function getContextualActions(type: 'suggestions' | 'other_elements') {
   return function (state: EditorState, searchQuery?: string) {
-    const t = getTranslationFunction(state);
-    const { selection } = state;
-    if (!(selection instanceof NodeSelection)) return [];
-    const selectedNode = selection.node;
-    if (selectedNode.type.name !== 'oslo_location') return [];
-
-    const selectedLocation = selectedNode.attrs.value as
-      | Address
-      | Place
-      | Area
-      | undefined;
-
-    const locationSuggestionOptions = getDocumentLocations(state)
-      .filter(
-        (location) =>
-          !selectedLocation ||
-          getLocationUri(selectedLocation) !== getLocationUri(location),
-      )
-      .slice(0, SUGGESTION_AMOUNT)
-      .map((location) => ({
-        label: location.formatted,
-        id: uuidv4(),
-        group: recentLocationsGroupId,
-        command: replaceLocationCommand(
-          { value: selection.node, pos: selection.from },
-          location,
-        ),
-      }));
-
-    const otherElementsOptions = [
-      {
-        label: t(
-          'location-plugin.context-actions.insert-address',
-          'Adres invoegen',
-        ),
-        locationType: 'address' as LocationType,
-        icon: 'location',
-      },
-      {
-        label: t(
-          'location-plugin.context-actions.insert-point-on-map',
-          'Punt op de kaart invoegen',
-        ),
-        locationType: 'place' as LocationType,
-        icon: 'location-gps',
-      },
-      {
-        label: t(
-          'location-plugin.context-actions.insert-area',
-          'Gebied invoegen',
-        ),
-        locationType: 'area' as LocationType,
-        icon: 'area',
-      },
-    ].map((option) => {
-      return {
-        ...option,
-        id: uuidv4(),
-        group: otherElementsGroupId,
-        command: openLocationModalCommand(option.locationType),
-      };
-    });
-
-    return locationSuggestionOptions
-      .concat(otherElementsOptions)
-      .filter(
-        (option) =>
-          !searchQuery ||
-          option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase()),
-      );
+    const options =
+      type === 'suggestions'
+        ? getLocationSuggestionOptions(state)
+        : getOtherElementsOptions(state);
+    return options.filter(
+      (option) =>
+        !searchQuery ||
+        option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase()),
+    );
   };
 }
 
@@ -101,7 +108,7 @@ function contextualGroupIsVisible(state: EditorState) {
 }
 
 export function getContextualActionGroups() {
-  return function (state: EditorState) {
+  return function (state: EditorState): ContextualActionGroup[] {
     if (!contextualGroupIsVisible(state)) return [];
     return [
       {
@@ -110,14 +117,12 @@ export function getContextualActionGroups() {
           'location-plugin.context-actions.location-suggestions',
           'Locatiesuggesties',
         ),
+        getActions: getContextualActions('suggestions'),
       },
       {
         id: otherElementsGroupId,
-        label: getTranslationFunction(state)(
-          'location-plugin.context-actions.other-elements',
-          'Andere elementen',
-        ),
         sticky: 'bottom',
+        getActions: getContextualActions('other_elements'),
       },
     ] satisfies ContextualActionGroup[];
   };

@@ -24,9 +24,17 @@ import { getActiveEditableNode } from '@lblod/ember-rdfa-editor/plugins/editable
 import { isRdfaAttrs } from '@lblod/ember-rdfa-editor/core/rdfa-types';
 import { v4 as uuidv4 } from 'uuid';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
+import { type CodeListOptions } from '../utils/fetch-data';
+import { ContextualActionGroup } from '@lblod/ember-rdfa-editor/plugins/contextual-actions';
 
 const plaatsbepalingGroupId =
   'plaatsbepaling-1d8563d6-bfd8-487f-a2a0-6d7a6ab01cb5';
+
+const placeDescriptionCodelistCache: {
+  placeDescriptions: CodeListOptions | null;
+} = {
+  placeDescriptions: null,
+};
 
 function getSelectedLocation(state: EditorState) {
   const { selection } = state;
@@ -131,27 +139,47 @@ function createInsertPlaceDescriptionCommand(label: string) {
   };
 }
 
-export function getContextualActions({
-  zonalLocationCodelistUri,
-  nonZonalLocationCodelistUri,
-  endpoint,
-}: GetContextualActionsAttrs) {
-  return async function (state: EditorState) {
-    const source = getSource(state, endpoint);
-    const isZonal = getIsZonal(state);
-    const result = await fetchCodeListOptions(
+async function getPlaceDescriptionsCached(
+  state: EditorState,
+  {
+    zonalLocationCodelistUri,
+    nonZonalLocationCodelistUri,
+    endpoint,
+  }: GetContextualActionsAttrs,
+) {
+  const source = getSource(state, endpoint);
+  const isZonal = getIsZonal(state);
+  let options;
+  if (!placeDescriptionCodelistCache.placeDescriptions) {
+    options = await fetchCodeListOptions(
       source,
       isZonal ? zonalLocationCodelistUri : nonZonalLocationCodelistUri,
     );
+    placeDescriptionCodelistCache.placeDescriptions = options;
+  } else {
+    options = placeDescriptionCodelistCache.placeDescriptions;
+  }
 
-    return result.options.map((option) => {
-      return {
-        id: uuidv4(),
-        label: humanReadableLabel(option.label),
-        group: plaatsbepalingGroupId,
-        command: createInsertPlaceDescriptionCommand(option.label),
-      };
-    });
+  return options;
+}
+
+export function getContextualActions(attrs: GetContextualActionsAttrs) {
+  return async function (state: EditorState, searchQuery?: string) {
+    const result = await getPlaceDescriptionsCached(state, attrs);
+    return result.options
+      .filter(
+        (option) =>
+          !searchQuery ||
+          option.label.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+      .map((option) => {
+        return {
+          id: uuidv4(),
+          label: humanReadableLabel(option.label),
+          group: plaatsbepalingGroupId,
+          command: createInsertPlaceDescriptionCommand(option.label),
+        };
+      });
   };
 }
 
@@ -171,8 +199,8 @@ function contextualGroupIsVisible(state: EditorState) {
   );
 }
 
-export function getContextualActionGroups() {
-  return function (state: EditorState) {
+export function getContextualActionGroups(attrs: GetContextualActionsAttrs) {
+  return function (state: EditorState): ContextualActionGroup[] {
     return contextualGroupIsVisible(state)
       ? [
           {
@@ -181,6 +209,7 @@ export function getContextualActionGroups() {
               'variable.location.label',
               'Plaatsbeschrijving',
             ),
+            getActions: getContextualActions(attrs),
           },
         ]
       : [];
