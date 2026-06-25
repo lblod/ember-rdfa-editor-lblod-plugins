@@ -124,6 +124,6 @@ export function getContextualActionGroups() {
         sticky: 'bottom',
         getActions: getContextualActions('other_elements'),
       },
-    ];
+    ] satisfies ContextualActionGroup[];
   };
 }
