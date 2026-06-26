@@ -204,13 +204,6 @@
     }
   },
   "overrides": {},
-  "pnpm": {
-    "overrides": {
-      "babel-plugin-ember-template-compilation": "^2.2.5",
-      "@codemirror/state": "6.5.2",
-      "prosemirror-view": "^1.41.5"
-    }
-  },
   "engines": {
     "node": ">= 18"
   },
