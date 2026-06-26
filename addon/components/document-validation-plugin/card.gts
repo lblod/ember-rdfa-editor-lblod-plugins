@@ -25,9 +25,8 @@ interface Sig {
   };
 }
 
-type ExtractWithKey<T, K extends PropertyKey> = T extends Record<K, unknown>
-  ? T
-  : never;
+type ExtractWithKey<T, K extends PropertyKey> =
+  T extends Record<K, unknown> ? T : never;
 
 function hasProperty<
   O extends object = object,

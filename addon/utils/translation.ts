@@ -28,7 +28,7 @@ export const getTranslationFunction = (state?: EditorState) => {
 export const getIntlService = (state: EditorState) => {
   const intl = emberApplicationPluginKey
     .getState(state)
-    ?.application.lookup('service:intl') as IntlService | undefined;
+    ?.application.lookup('service:intl');
   return intl;
 };
 /**
