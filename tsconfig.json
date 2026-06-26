@@ -2,7 +2,8 @@
 {
   "extends": "./tsconfig.main.json",
   "compilerOptions": {
-    "rootDir": "."
+    "rootDir": ".",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
   "glint": {
     "environment": ["ember-loose", "ember-template-imports"],
