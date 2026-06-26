@@ -269,7 +269,7 @@ const serialize = (node: PNode, state: EditorState) => {
     renderable: node,
     tag: 'span',
     attrs: dateAttrs,
-    content: [humanReadableDate],
+    content: humanReadableDate,
   });
 };
 

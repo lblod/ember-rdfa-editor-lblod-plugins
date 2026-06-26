@@ -233,7 +233,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
       'data-maximum-value': (maximumValue as string) ?? null,
       'data-label': node.attrs['label'],
     },
-    content: [humanReadableContent.toString()],
+    content: humanReadableContent.toString(),
   });
 };
 

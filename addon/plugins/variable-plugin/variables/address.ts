@@ -73,28 +73,28 @@ const constructLocationNode = (location: Lambert72Coordinates) => {
 };
 
 const constructAddressNode = (address: Address) => {
-  const housenumberNode: DOMOutputSpec | null = address.housenumber
+  const housenumberNode = address.housenumber
     ? [
         ' ',
         span(
           {
             property: ADRES('Adresvoorstelling.huisnummer').full,
           },
-          [address.housenumber],
+          address.housenumber,
         ),
       ]
-    : null;
-  const busnumberNode: DOMOutputSpec | null = address.busnumber
+    : [];
+  const busnumberNode = address.busnumber
     ? [
         ' bus ',
         span(
           {
             property: ADRES('Adresvoorstelling.busnummer').full,
           },
-          [address.busnumber],
+          address.busnumber,
         ),
       ]
-    : null;
+    : [];
   const idNode = address.id
     ? [
         span({
@@ -113,25 +113,25 @@ const constructAddressNode = (address: Address) => {
         {
           property: LOCN('thoroughfare').full,
         },
-        [address.street],
+        address.street,
       ),
-      ...(housenumberNode ? [housenumberNode] : []),
-      ...(busnumberNode ? [busnumberNode] : []),
+      ...housenumberNode,
+      ...busnumberNode,
     ),
-    [', '],
+    ', ',
     span(
       {
         property: LOCN('postcode').full,
       },
-      [address.zipcode],
+      address.zipcode,
     ),
-    [' '],
+    ' ',
     span(
       {
         property: ADRES('gemeentenaam').full,
         language: 'nl',
       },
-      [address.municipality],
+      address.municipality,
     ),
     ...idNode,
     constructLocationNode(address.location),
@@ -373,7 +373,7 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
       'editor-plugins.address.nodeview.placeholder',
       'Voeg adres in',
     );
-    contentNode = contentSpan({}, [placeholder]);
+    contentNode = contentSpan({}, placeholder);
   }
   return renderRdfaAware({
     renderable: node,
