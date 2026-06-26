@@ -1,2 +1,2 @@
 overrides:
-  "prosemirror-model": "^1.25.9"
+  'prosemirror-model': '^1.25.9'
