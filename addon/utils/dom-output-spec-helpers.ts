@@ -3,7 +3,7 @@ import { EXT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export const span = (
   attributes: Attrs = {},
-  ...children: (DOMOutputSpec | 0)[]
+  ...children: (DOMOutputSpec | string | 0)[]
 ): DOMOutputSpec => {
   return ['span', attributes, ...children];
 };
@@ -13,7 +13,7 @@ export const span = (
  */
 export const contentSpan = (
   attributes: Attrs,
-  ...children: (DOMOutputSpec | 0)[]
+  ...children: (DOMOutputSpec | string | 0)[]
 ) => {
   return span(
     {

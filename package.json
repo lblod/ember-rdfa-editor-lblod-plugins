@@ -110,7 +110,7 @@
     "@glint/ember-tsc": "^1.5.0",
     "@glint/environment-ember-loose": "^1.5.0",
     "@glint/environment-ember-template-imports": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "13.11.1-dev.1d04be8fff80b0623caa35067ea137d44af4e99b",
+    "@lblod/ember-rdfa-editor": "13.11.1-dev.f4be2322eeb2ce1956563d4ce9622f97f5b70fa5",
     "@glint/template": "^1.7.7",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^2.0.1",
@@ -204,13 +204,6 @@
     }
   },
   "overrides": {},
-  "pnpm": {
-    "overrides": {
-      "babel-plugin-ember-template-compilation": "^2.2.5",
-      "@codemirror/state": "6.5.2",
-      "prosemirror-view": "^1.41.5"
-    }
-  },
   "engines": {
     "node": ">= 18"
   },
