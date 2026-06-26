@@ -12,6 +12,7 @@ import { Point } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-p
 import { constructGeometrySpec } from './point';
 import { type NodeContentsUtils } from './';
 import { NamedNode } from '@rdfjs/types';
+import { type DOMOutputSpec } from '@lblod/ember-rdfa-editor';
 
 type ConstructAddressSpecOptions = {
   additionalRDFTypes?: NamedNode[];
@@ -24,20 +25,18 @@ export const constructAddressSpec = (
     {
       property: LOCN('thoroughfare').full,
     },
-    address.street,
+    [address.street],
   );
   const housenumberNode =
     address.housenumber &&
-    span(
-      { property: ADRES('Adresvoorstelling.huisnummer').full },
+    span({ property: ADRES('Adresvoorstelling.huisnummer').full }, [
       address.housenumber,
-    );
+    ]);
   const busnumberNode =
     address.busnumber &&
-    span(
-      { property: ADRES('Adresvoorstelling.busnummer').full },
+    span({ property: ADRES('Adresvoorstelling.busnummer').full }, [
       address.busnumber,
-    );
+    ]);
   const zipcodeNode = address.truncated
     ? span({
         property: LOCN('postcode').full,
@@ -47,7 +46,7 @@ export const constructAddressSpec = (
         {
           property: LOCN('postcode').full,
         },
-        address.zipcode,
+        [address.zipcode],
       );
   const municipalityNode = address.truncated
     ? span({
@@ -60,7 +59,7 @@ export const constructAddressSpec = (
           property: ADRES('gemeentenaam').full,
           language: 'nl',
         },
-        address.municipality,
+        [address.municipality],
       );
   const belgianUriNode =
     address.belgianAddressUri &&
@@ -82,11 +81,11 @@ export const constructAddressSpec = (
       ].join(' '),
     },
     streetNode,
-    ...(housenumberNode ? [' ', housenumberNode] : []),
-    ...(busnumberNode ? [' bus ', busnumberNode] : []),
-    address.truncated ? '' : ', ',
+    ...(housenumberNode ? [[' '] as DOMOutputSpec, housenumberNode] : []),
+    ...(busnumberNode ? [[' bus '] as DOMOutputSpec, busnumberNode] : []),
+    address.truncated ? [''] : [', '],
     zipcodeNode,
-    address.truncated ? '' : ' ',
+    address.truncated ? [''] : [' '],
     municipalityNode,
     ...(belgianUriNode ? [belgianUriNode] : []),
     truncatedNode,

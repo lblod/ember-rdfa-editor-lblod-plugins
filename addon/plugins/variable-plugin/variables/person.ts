@@ -147,12 +147,14 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
       'data-say-variable-type': 'person',
       'data-label': node.attrs['label'],
     },
-    content: subject
-      ? [firstName, lastName].filter(Boolean).join(' ')
-      : t(
-          'variable-plugin.person.nodeview-placeholder',
-          TRANSLATION_FALLBACKS.nodeview_placeholder,
-        ),
+    content: [
+      subject
+        ? [firstName, lastName].filter(Boolean).join(' ')
+        : t(
+            'variable-plugin.person.nodeview-placeholder',
+            TRANSLATION_FALLBACKS.nodeview_placeholder,
+          ),
+    ],
   });
 };
 

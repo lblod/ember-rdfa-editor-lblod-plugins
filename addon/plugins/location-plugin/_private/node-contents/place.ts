@@ -32,7 +32,7 @@ export const constructPlaceSpec = (
       {
         property: RDFS('label').full,
       },
-      place.name,
+      [place.name],
     ),
     constructGeometrySpec(place.location, LOCN('geometry')),
   );

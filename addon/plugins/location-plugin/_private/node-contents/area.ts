@@ -32,7 +32,7 @@ export const constructAreaSpec = (
       {
         property: RDFS('label').full,
       },
-      area.name,
+      [area.name],
     ),
     constructGeometrySpec(area.shape, LOCN('geometry')),
   );

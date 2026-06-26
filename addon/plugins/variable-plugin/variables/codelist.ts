@@ -210,7 +210,7 @@ export const codelist_option: SayNodeSpec = {
           'data-say-type': 'codelist_option',
         },
         tag: 'span',
-        content: node.textContent,
+        content: [node.textContent],
       },
       state,
     );

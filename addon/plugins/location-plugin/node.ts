@@ -243,7 +243,7 @@ const serialize =
         'location-plugin.nodeview.placeholder',
         'Voeg locatie in',
       );
-      contentNode = contentSpan({}, placeholder);
+      contentNode = contentSpan({}, [placeholder]);
     }
     const locationAttrs = {
       class: `${getClassnamesFromNode(node)}${value ? '' : ' say-variable'}`,
