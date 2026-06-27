@@ -110,7 +110,7 @@
     "@glint/ember-tsc": "^1.5.0",
     "@glint/environment-ember-loose": "^1.5.0",
     "@glint/environment-ember-template-imports": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "13.10.2-dev.e26309571bb5b422640bb0281f659239799f642c",
+    "@lblod/ember-rdfa-editor": "13.12.0",
     "@glint/template": "^1.7.7",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^2.0.1",
@@ -183,7 +183,7 @@
     "@appuniversum/ember-appuniversum": "^3.12.0",
     "@ember/string": "3.x",
     "@glint/template": "^1.4.0",
-    "@lblod/ember-rdfa-editor": "^13.10.0",
+    "@lblod/ember-rdfa-editor": "^13.12.0",
     "ember-concurrency": "^4.0.2",
     "ember-element-helper": "^0.8.6",
     "ember-intl": "^7.0.0",
@@ -204,13 +204,6 @@
     }
   },
   "overrides": {},
-  "pnpm": {
-    "overrides": {
-      "babel-plugin-ember-template-compilation": "^2.2.5",
-      "@codemirror/state": "6.5.2",
-      "prosemirror-view": "^1.41.5"
-    }
-  },
   "engines": {
     "node": ">= 18"
   },

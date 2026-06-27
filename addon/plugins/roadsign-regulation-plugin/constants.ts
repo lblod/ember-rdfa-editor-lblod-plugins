@@ -1,6 +1,5 @@
 import { MOBILITEIT } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { ValueOf } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
-import { ValuesOf } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 export const ZONALITY_OPTIONS = {
   POTENTIALLY_ZONAL:
@@ -54,7 +53,7 @@ export function isLegacyZonalityUri(uri: string): uri is LegacyZonalityUri {
   return Object.values(ZONALITY_OPTIONS_LEGACY).includes(uri);
 }
 
-export type ZonalityOption = ValuesOf<typeof ZONALITY_OPTIONS>;
+export type ZonalityOption = ValueOf<typeof ZONALITY_OPTIONS>;
 export type ZonalOrNot = Exclude<
   ZonalityOption,
   typeof ZONALITY_OPTIONS.POTENTIALLY_ZONAL
