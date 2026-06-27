@@ -1,11 +1,10 @@
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
 
 LABEL maintainer="info@redpencil.io"
 
 RUN corepack enable
-RUN corepack prepare pnpm@9.4 --activate
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm i --frozen-lockfile
 COPY . .
 RUN pnpm build
