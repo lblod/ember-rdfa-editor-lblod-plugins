@@ -1,5 +1,21 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.0.0
+
+### Major Changes
+
+- [#668](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/668) [`b16702c`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b16702c91011512897145fb4ff9875d138497a92) Thanks [@kobemertens](https://github.com/kobemertens)! - Bump editor peerdep to 13.12.0
+
+### Minor Changes
+
+- [#665](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/665) [`819a3d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/819a3d2193d8b51fe262bcc4ed3cf052acb2ec9f) Thanks [@kobemertens](https://github.com/kobemertens)! - Adds caching, sticky groups, and offline search for the existing context actions
+
+- [#666](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/666) [`06da07b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/06da07bd0a260a424caa82fca8cba4c855e785cb) Thanks [@kobemertens](https://github.com/kobemertens)! - Add placeholder for empty place description
+
+### Patch Changes
+
+- [#668](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/668) [`31809a2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/31809a2d82778280569fb515b0fb0f356fa44f34) Thanks [@kobemertens](https://github.com/kobemertens)! - Update prosemirror-model to 1.25.9
+
 ## 37.3.0
 
 ### Minor Changes
