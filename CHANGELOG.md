@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.0.1
+
+### Patch Changes
+
+- [#669](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/669) [`79ffc3a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/79ffc3afb4895d6bfd7f6c67ffb259936c0b6c44) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix non block variables were not being added to the measure
+
+- [`b9357c3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b9357c31cc7a92a4a855f372a0910e86348d85c4) Thanks [@abeforgit](https://github.com/abeforgit)! - Fix docker build
+
 ## 38.0.0
 
 ### Major Changes
