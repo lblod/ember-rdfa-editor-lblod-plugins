@@ -51,11 +51,11 @@ function getSelectedLocation(state: EditorState) {
   }
 }
 
-function getSource(state: EditorState, fallback?: string) {
+function getSource(state: EditorState, fallback: string) {
   const selectedLocation = getSelectedLocation(state);
   if (selectedLocation) {
     const { node } = selectedLocation;
-    const source = node.attrs.source;
+    const source = node.attrs.source as string | undefined;
     if (source) {
       return source;
     }
@@ -92,7 +92,7 @@ function getIsZonal(state: EditorState) {
 type GetContextualActionsAttrs = {
   zonalLocationCodelistUri: string;
   nonZonalLocationCodelistUri: string;
-  endpoint?: string;
+  endpoint: string;
 };
 
 function humanReadableLabel(label: string) {
