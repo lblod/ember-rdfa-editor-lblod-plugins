@@ -2,3 +2,4 @@ allowBuilds:
   core-js: true
 overrides:
   'prosemirror-model': '^1.25.9'
+  browserslist: '^4.28.8'
