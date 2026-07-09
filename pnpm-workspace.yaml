@@ -1,2 +1,4 @@
+allowBuilds:
+  core-js: true
 overrides:
   'prosemirror-model': '^1.25.9'

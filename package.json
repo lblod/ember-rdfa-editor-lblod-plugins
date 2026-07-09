@@ -216,5 +216,5 @@
   "ember-addon": {
     "configPath": "tests/dummy/config"
   },
-  "packageManager": "pnpm@10.28.2"
+  "packageManager": "pnpm@11.10.0"
 }
