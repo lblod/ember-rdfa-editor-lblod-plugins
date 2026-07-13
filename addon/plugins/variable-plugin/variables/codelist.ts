@@ -159,7 +159,7 @@ const emberNodeConfig: EmberNodeConfig = {
   group: 'inline variable',
   content: 'codelist_option*',
   atom: true,
-  editable: false,
+  editable: true,
   recreateUriFunction: recreateVariableUris,
   draggable: false,
   needsFFKludge: true,
