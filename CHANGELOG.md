@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.0.2
+
+### Patch Changes
+
+- [#672](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/672) [`0c2621a`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0c2621a6afe5e60faafdab4a14553712cad29ca0) Thanks [@kobemertens](https://github.com/kobemertens)! - make codelist editable for it to show up in the editable nodes node inspector
+
 ## 38.0.1
 
 ### Patch Changes
