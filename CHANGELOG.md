@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.0.3
+
+### Patch Changes
+
+- [`448e7e3`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/448e7e324996d4422d2ba236bd3fba8970a8bb5d) Thanks [@abeforgit](https://github.com/abeforgit)! - Republish 38.0.2
+
 ## 38.0.2
 
 ### Patch Changes
