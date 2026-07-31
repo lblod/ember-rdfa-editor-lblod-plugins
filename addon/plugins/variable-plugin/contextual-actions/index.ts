@@ -31,9 +31,11 @@ const plaatsbepalingGroupId =
   'plaatsbepaling-1d8563d6-bfd8-487f-a2a0-6d7a6ab01cb5';
 
 const placeDescriptionCodelistCache: {
-  placeDescriptions: CodeListOptions | null;
+  zonal: CodeListOptions | null;
+  nonZonal: CodeListOptions | null;
 } = {
-  placeDescriptions: null,
+  zonal: null,
+  nonZonal: null,
 };
 
 function getSelectedLocation(state: EditorState) {
@@ -149,15 +151,16 @@ async function getPlaceDescriptionsCached(
 ) {
   const source = getSource(state, endpoint);
   const isZonal = getIsZonal(state);
+  const zonality = isZonal ? 'zonal' : 'nonZonal';
   let options;
-  if (!placeDescriptionCodelistCache.placeDescriptions) {
+  if (!placeDescriptionCodelistCache[zonality]) {
     options = await fetchCodeListOptions(
       source,
       isZonal ? zonalLocationCodelistUri : nonZonalLocationCodelistUri,
     );
-    placeDescriptionCodelistCache.placeDescriptions = options;
+    placeDescriptionCodelistCache[zonality] = options;
   } else {
-    options = placeDescriptionCodelistCache.placeDescriptions;
+    options = placeDescriptionCodelistCache[zonality];
   }
 
   return options;
