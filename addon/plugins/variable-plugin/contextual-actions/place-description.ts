@@ -202,7 +202,9 @@ function contextualGroupIsVisible(state: EditorState) {
   );
 }
 
-export function getContextualActionGroups(attrs: GetContextualActionsAttrs) {
+export function getPlaceDescriptionActionGroups(
+  attrs: GetContextualActionsAttrs,
+) {
   return function (state: EditorState): ContextualActionGroup[] {
     return contextualGroupIsVisible(state)
       ? [

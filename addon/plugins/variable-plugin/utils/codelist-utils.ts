@@ -1,7 +1,14 @@
 // This file contains helpers for both the codelist and location variable types
 
+import {
+  EditorState,
+  PNode,
+  ProseParser,
+  SayController,
+  Transaction,
+} from '@lblod/ember-rdfa-editor';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import { CodeListOption } from './fetch-data';
-import { PNode, ProseParser, SayController } from '@lblod/ember-rdfa-editor';
 import { createCodelistOptionNode } from '../actions/create-codelist-variable';
 import { unwrap } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 
@@ -21,6 +28,40 @@ export function wrapVariableInHighlight(text: string) {
   );
 }
 
+export function updateCodelistVariableCommand(
+  selectedCodelist: ResolvedPNode,
+  selectedOption: CodeListOption | CodeListOption[],
+) {
+  return (state: EditorState, dispatch?: (tr: Transaction) => void) => {
+    const selectedOptions = Array.isArray(selectedOption)
+      ? selectedOption
+      : [selectedOption];
+    const variableInstance = selectedCodelist.value.attrs[
+      'variableInstance'
+    ] as string | undefined;
+    const pointerTarget = selectedCodelist.value.attrs['__rdfaId'] as
+      | string
+      | undefined;
+    const codelistOptionNodes = selectedOptions.map((option) =>
+      createCodelistOptionNode({
+        schema: state.schema,
+        text: option.label,
+        subject: option.uri,
+        variableInstance,
+        pointsToNode: pointerTarget,
+      }),
+    );
+    const range = {
+      from: selectedCodelist.pos + 1,
+      to: selectedCodelist.pos + selectedCodelist.value.nodeSize - 1,
+    };
+    if (dispatch) {
+      dispatch(state.tr.replaceWith(range.from, range.to, codelistOptionNodes));
+    }
+    return true;
+  };
+}
+
 export function updateCodelistVariable(
   selectedCodelist: {
     node: PNode;
@@ -29,31 +70,11 @@ export function updateCodelistVariable(
   selectedOption: CodeListOption | CodeListOption[],
   controller: SayController,
 ) {
-  const selectedOptions = Array.isArray(selectedOption)
-    ? selectedOption
-    : [selectedOption];
-  const variableInstance = selectedCodelist.node.attrs['variableInstance'] as
-    | string
-    | undefined;
-  const pointerTarget = selectedCodelist.node.attrs['__rdfaId'] as
-    | string
-    | undefined;
-  const codelistOptionNodes = selectedOptions.map((option) =>
-    createCodelistOptionNode({
-      schema: controller.schema,
-      text: option.label,
-      subject: option.uri,
-      variableInstance,
-      pointsToNode: pointerTarget,
-    }),
+  const command = updateCodelistVariableCommand(
+    { value: selectedCodelist.node, pos: selectedCodelist.pos },
+    selectedOption,
   );
-  const range = {
-    from: selectedCodelist.pos + 1,
-    to: selectedCodelist.pos + selectedCodelist.node.nodeSize - 1,
-  };
-  controller.withTransaction((tr) => {
-    return tr.replaceWith(range.from, range.to, codelistOptionNodes);
-  });
+  controller.doCommand(command, { view: controller.mainEditorView });
 }
 
 /**

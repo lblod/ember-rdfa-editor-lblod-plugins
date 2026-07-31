@@ -169,7 +169,7 @@ import {
   legacyCodelistView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
 import ContextualActionsContainer from '@lblod/ember-rdfa-editor/components/plugins/contextual-actions/container';
-import { getContextualActionGroups as placeDescriptionActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions';
+import { getPlaceDescriptionActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/place-description';
 import { getContextualActionGroups as locationActionsGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/contextual-actions';
 import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
 import Owner from '@ember/owner';
@@ -246,7 +246,7 @@ export default class BesluitSampleController extends Controller {
   };
 
   contextualGroupGetters = [
-    placeDescriptionActionGroups(this.locationOptions),
+    getPlaceDescriptionActionGroups(this.locationOptions),
     locationActionsGroups(),
   ];
 
