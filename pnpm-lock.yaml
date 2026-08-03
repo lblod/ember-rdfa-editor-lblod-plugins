@@ -185,8 +185,8 @@ importers:
         specifier: ^1.7.7
         version: 1.7.7
       '@lblod/ember-rdfa-editor':
-        specifier: 13.12.0
-        version: 13.12.0(eaaf812331dec1c55ca86d1378863615)
+        specifier: 13.15.1-dev.c5cefcf9a50117c08ff14a54a8b585d176b0654c
+        version: 13.15.1-dev.c5cefcf9a50117c08ff14a54a8b585d176b0654c(eaaf812331dec1c55ca86d1378863615)
       '@rdfjs/to-ntriples':
         specifier: ^3.0.1
         version: 3.0.1
@@ -1924,8 +1924,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lblod/ember-rdfa-editor@13.12.0':
-    resolution: {integrity: sha512-lqv46ZibcdV2OVw4fSDIWxtx9qJdxPESdUjvt8FK8oq0dIA597UNCWwkwN0GcuRoBviADjdftJNPoV6h/2jaFQ==}
+  '@lblod/ember-rdfa-editor@13.15.1-dev.c5cefcf9a50117c08ff14a54a8b585d176b0654c':
+    resolution: {integrity: sha512-uVeueCuJsSWTQxBz2jA62cl75iOZbEjg+lIwLSWEhGgO1rmc+vrwlRZpVfSbQovrFH09LD81Tb50NxE2t+jgWQ==}
     peerDependencies:
       '@appuniversum/ember-appuniversum': ^3.11.0 || ^4.2.1
       '@ember/test-helpers': ^2.9.4 || ^3.2.1 || ^4.0.2 || ^5.0.0
@@ -4679,12 +4679,6 @@ packages:
       miragejs:
         optional: true
 
-  ember-focus-trap@1.1.1:
-    resolution: {integrity: sha512-5tOWu6eV1UoNZE+P9Gl9lJXNrENZVCoOXi52ePb7JOrOZ3ckOk1OkPsFwR4Jym9VJ7vZ6S3Z3D8BrkFa2aCpYw==}
-    engines: {node: 12.* || >= 14}
-    peerDependencies:
-      ember-source: '>= 4.0.0'
-
   ember-focus-trap@2.0.0:
     resolution: {integrity: sha512-zGPvt934h08gxdemIZz29XRn4cdwn51UxlodKtDkiahGrEpiSQ6qH8nvXGwDhQvZsf8zGumnXqcmDYYA5oFomQ==}
     engines: {node: '>= 22.*', pnpm: '>= 10'}
@@ -5434,9 +5428,6 @@ packages:
 
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
-
-  focus-trap@6.9.4:
-    resolution: {integrity: sha512-v2NTsZe2FF59Y+sDykKY+XjqZ0cPfhq/hikWVL88BqLivnNiEffAsac6rP6H45ff9wG9LL5ToiDqrLEP9GX9mw==}
 
   focus-trap@8.2.1:
     resolution: {integrity: sha512-6CxwrrFRquH7pDXb1mWxudkU9LSfYBMRZutpgddb2o6iwCk7cIRrBhyY3c8SGKcmIKdeMTrGSNg4Bedh2RSF/w==}
@@ -8988,9 +8979,6 @@ packages:
   synckit@0.9.2:
     resolution: {integrity: sha512-vrozgXDQwYO72vHjUb/HnFbQx1exDjoKzqx23aXEg2a9VIg2TSFZ8FmeZpTjUCFMYw7mpX4BE2SFu8wI7asYsw==}
     engines: {node: ^14.18.0 || >=16.0.0}
-
-  tabbable@5.3.3:
-    resolution: {integrity: sha512-QD9qKY3StfbZqWOPLp0++pOrAVb/HbUi5xCc8cUo4XjP19808oaMiDzn0leBY5mCespIBM0CIZePzZjgzR83kA==}
 
   tabbable@6.4.0:
     resolution: {integrity: sha512-05PUHKSNE8ou2dwIxTngl4EzcnsCDZGJ/iCLtDflR/SHB/ny14rXc+qU5P4mG9JkusiV7EivzY9Mhm55AzAvCg==}
@@ -13120,7 +13108,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lblod/ember-rdfa-editor@13.12.0(eaaf812331dec1c55ca86d1378863615)':
+  '@lblod/ember-rdfa-editor@13.15.1-dev.c5cefcf9a50117c08ff14a54a8b585d176b0654c(eaaf812331dec1c55ca86d1378863615)':
     dependencies:
       '@appuniversum/ember-appuniversum': 4.2.2(@babel/core@7.26.0)(@ember/test-helpers@3.3.1(@babel/core@7.26.0)(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(webpack@5.97.1))(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(tracked-built-ins@4.1.0(@babel/core@7.26.0))
       '@codemirror/commands': 6.10.3
@@ -13151,7 +13139,7 @@ snapshots:
       ember-cli-babel: 8.3.1(@babel/core@7.26.0)
       ember-cli-htmlbars: 6.3.0
       ember-concurrency: 4.0.3(@babel/core@7.26.0)(@glimmer/tracking@1.1.2)(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))
-      ember-focus-trap: 1.1.1(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))
+      ember-focus-trap: 2.0.0(@babel/core@7.26.0)
       ember-headless-form: 1.1.1(@babel/core@7.26.0)(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glimmer/tracking@1.1.2)(@glint/environment-ember-loose@1.5.1(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(@types/ember__array@4.0.10(@babel/core@7.26.0))(@types/ember__component@4.0.22(@babel/core@7.26.0))(@types/ember__controller@4.0.12(@babel/core@7.26.0))(@types/ember__object@4.0.12(@babel/core@7.26.0))(@types/ember__routing@4.0.22(@babel/core@7.26.0))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))))(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(eslint@8.57.1)
       ember-headless-form-yup: 1.0.0(ember-headless-form@1.1.1(@babel/core@7.26.0)(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glimmer/tracking@1.1.2)(@glint/environment-ember-loose@1.5.1(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(@types/ember__array@4.0.10(@babel/core@7.26.0))(@types/ember__component@4.0.22(@babel/core@7.26.0))(@types/ember__controller@4.0.12(@babel/core@7.26.0))(@types/ember__object@4.0.12(@babel/core@7.26.0))(@types/ember__routing@4.0.22(@babel/core@7.26.0))(ember-cli-htmlbars@6.3.0)(ember-modifier@4.1.0(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))))(@glint/template@1.7.7)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(eslint@8.57.1))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1))(yup@1.7.1)
       ember-intl: 7.0.3(@glint/template@1.7.7)(typescript@5.7.3)(webpack@5.97.1)
@@ -17271,14 +17259,6 @@ snapshots:
       - '@glint/template'
       - supports-color
 
-  ember-focus-trap@1.1.1(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1)):
-    dependencies:
-      '@embroider/addon-shim': 1.10.2
-      ember-source: 5.12.0(@glimmer/component@1.1.2(@babel/core@7.26.0))(@glint/template@1.7.7)(rsvp@4.8.5)(webpack@5.97.1)
-      focus-trap: 6.9.4
-    transitivePeerDependencies:
-      - supports-color
-
   ember-focus-trap@2.0.0(@babel/core@7.26.0):
     dependencies:
       '@embroider/addon-shim': 1.10.2
@@ -18553,10 +18533,6 @@ snapshots:
       rimraf: 3.0.2
 
   flatted@3.3.1: {}
-
-  focus-trap@6.9.4:
-    dependencies:
-      tabbable: 5.3.3
 
   focus-trap@8.2.1:
     dependencies:
@@ -22745,8 +22721,6 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.1.1
       tslib: 2.6.3
-
-  tabbable@5.3.3: {}
 
   tabbable@6.4.0: {}
 

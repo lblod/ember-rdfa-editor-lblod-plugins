@@ -9,6 +9,7 @@ import { updateCodelistVariableCommand } from '../utils/codelist-utils';
 import {
   type CodeListOptions,
   fetchCodeListOptions,
+  CodeListOption,
 } from '../utils/fetch-data';
 import { CodelistAttrs } from '../variables';
 
@@ -67,6 +68,15 @@ export function getContextualActions(attrs: GetContextualActionsAttrs) {
     const activeNode = getActiveEditableNode(state);
     if (!activeNode) return [];
     const result = await getCodelistOptionsCached(activeNode, attrs);
+    const isMultiSelect = activeNode.value.attrs['selectionStyle'] === 'multi';
+    const selectedOptions: CodeListOption[] = [];
+    activeNode.value.content.forEach((contentNode) => {
+      selectedOptions.push({
+        uri: contentNode.attrs.subject,
+        label: contentNode.textContent,
+      });
+    });
+
     return result.options
       .filter(
         (option) =>
@@ -74,11 +84,20 @@ export function getContextualActions(attrs: GetContextualActionsAttrs) {
           option.label.toLowerCase().includes(searchQuery.toLowerCase()),
       )
       .map((option) => {
+        const selected = selectedOptions.some(
+          (selOption) => selOption.uri === option.uri,
+        );
+        const newOptions = selected
+          ? selectedOptions.filter((selOption) => selOption.uri !== option.uri)
+          : isMultiSelect
+            ? [...selectedOptions, option]
+            : option;
         return {
           id: uuidv4(),
           label: humanReadableLabel(option.label),
           group: codelistGroupId,
-          command: updateCodelistVariableCommand(activeNode, option),
+          command: updateCodelistVariableCommand(activeNode, newOptions),
+          selected,
         };
       });
   };
@@ -104,6 +123,7 @@ export function getCodelistActionGroups(attrs: GetContextualActionsAttrs) {
               'variable.codelist.label',
               'Codelijst',
             ),
+            keepOpen: true,
             getActions: getContextualActions(attrs),
           },
         ]

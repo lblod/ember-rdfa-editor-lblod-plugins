@@ -110,7 +110,7 @@
     "@glint/ember-tsc": "^1.5.0",
     "@glint/environment-ember-loose": "^1.5.0",
     "@glint/environment-ember-template-imports": "^1.5.0",
-    "@lblod/ember-rdfa-editor": "13.12.0",
+    "@lblod/ember-rdfa-editor": "13.15.1-dev.c5cefcf9a50117c08ff14a54a8b585d176b0654c",
     "@glint/template": "^1.7.7",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^2.0.1",
