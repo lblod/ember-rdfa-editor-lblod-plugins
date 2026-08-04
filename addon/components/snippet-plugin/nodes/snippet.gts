@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
 import t from 'ember-intl/helpers/t';
+import { trackedFunction } from 'reactiveweb/function';
 import AuIcon, {
   type AuIconSignature,
 } from '@appuniversum/ember-appuniversum/components/au-icon';
@@ -33,8 +34,12 @@ import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins
 import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
 import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
 import { getSnippetListUrisFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
-import { Snippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  Snippet,
+  SnippetPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
+import { fetchSnippets } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
 
 interface ButtonSig {
   Args: {
@@ -87,6 +92,12 @@ export default class SnippetNode extends Component<Signature> {
   get allowMultipleSnippets() {
     return this.node.attrs.allowMultipleSnippets as boolean;
   }
+  get snippetListUris() {
+    return getSnippetListUrisFromNode(this.node);
+  }
+  get config(): SnippetPluginConfig {
+    return this.node.attrs.config;
+  }
 
   @action
   closeModal() {
@@ -131,8 +142,8 @@ export default class SnippetNode extends Component<Signature> {
         const node = createSnippetPlaceholder({
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
-            listUris: getSnippetListUrisFromNode(this.node),
-            names: this.node.attrs.snippetListNames,
+            listUris: this.snippetListUris,
+            names: this.snippetListNames,
             importedResources: this.node.attrs.importedResources,
           },
           schema: this.schema,
@@ -202,8 +213,8 @@ export default class SnippetNode extends Component<Signature> {
         title: snippet.title ?? '',
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
-          listUris: getSnippetListUrisFromNode(this.node),
-          names: this.node.attrs.snippetListNames,
+          listUris: this.snippetListUris,
+          names: this.snippetListNames,
           importedResources: this.node.attrs.importedResources,
         },
         range: { start, end },
@@ -216,12 +227,39 @@ export default class SnippetNode extends Component<Signature> {
     return getClassnamesFromNode(this.args.node);
   }
 
+  loadedListNames = trackedFunction(this, async () => {
+    const abortController = new AbortController();
+    const listNames = new Set<string>();
+    let pageNumber = 0;
+    let pages = 1;
+    // TODO snippet fetching could be moved to a service and cached to avoid multiple queries
+    while (listNames.size < this.snippetListUris.length && pageNumber < pages) {
+      const queryResult = await fetchSnippets({
+        endpoint: this.config.endpoint,
+        abortSignal: abortController.signal,
+        filter: {
+          snippetListUris: this.snippetListUris,
+        },
+        pagination: { pageNumber, pageSize: 20 },
+      });
+      pages = Math.ceil(queryResult.totalCount / 20);
+      pageNumber++;
+      queryResult.listNames.forEach((name) => listNames.add(name));
+    }
+
+    return [...listNames];
+  });
+  get snippetListNames() {
+    return this.loadedListNames.value ?? [];
+  }
+
   <template>
     {{#if this.isPlaceholder}}
       <SnippetPlaceholder
         @node={{@node}}
         @selectNode={{@selectNode}}
         @insertSnippet={{this.editFragment}}
+        @snippetListNames={{this.snippetListNames}}
       />
     {{else}}
       <div class='{{this.class}} say-snippet-card'>
@@ -268,10 +306,10 @@ export default class SnippetNode extends Component<Signature> {
     <SearchModal
       @open={{this.showModal}}
       @closeModal={{this.closeModal}}
-      @config={{this.node.attrs.config}}
+      @config={{this.config}}
       @onInsert={{this.onInsert}}
-      @snippetListUris={{getSnippetListUrisFromNode this.node}}
-      @snippetListNames={{this.node.attrs.snippetListNames}}
+      @snippetListUris={{this.snippetListUris}}
+      @snippetListNames={{this.snippetListNames}}
     />
   </template>
 }

@@ -1,7 +1,10 @@
 import { Command } from '@lblod/ember-rdfa-editor';
 import { addProperty, removeProperty } from '@lblod/ember-rdfa-editor/commands';
 import { sayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
-import { SNIPPET_LIST_RDFA_PREDICATE } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
+import {
+  SNIPPET_LIST_RDFA_PREDICATE,
+  tripleForSnippetListUri,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
 import { type OutgoingTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { type ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import {
@@ -47,10 +50,7 @@ export const updateSnippetPlaceholder = ({
 
         addProperty({
           resource,
-          property: {
-            predicate: SNIPPET_LIST_RDFA_PREDICATE.prefixed,
-            object: sayDataFactory.namedNode(list.uri),
-          },
+          property: tripleForSnippetListUri(list.uri),
           transaction,
         })(newState, (newTransaction) => {
           transaction = newTransaction;

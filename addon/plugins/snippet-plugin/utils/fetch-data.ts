@@ -85,7 +85,7 @@ const buildSnippetFetchQuery = ({
       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
       PREFIX say: <https://say.data.gift/ns/>
 
-      SELECT DISTINCT ?title ?content ?createdOn
+      SELECT DISTINCT ?title ?content ?createdOn ?snippetListName
       WHERE {
           ?snippet a say:Snippet;
                    pav:hasCurrentVersion ?snippetVersion;
@@ -94,7 +94,8 @@ const buildSnippetFetchQuery = ({
           OPTIONAL {
             ?snippet schema:position ?position.
           }
-          ?snippetList pav:createdOn ?snippetListCreatedOn.
+          ?snippetList pav:createdOn ?snippetListCreatedOn;
+                       skos:prefLabel ?snippetListName.
           ?snippetVersion dct:title ?title ;
                           ext:editorDocumentContent ?content.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
@@ -172,8 +173,9 @@ export const fetchSnippets = async ({
   filter: Filter;
   pagination: Pagination;
 }) => {
+  const listNames = new Set<string>();
   if (!filter.snippetListUris?.length) {
-    return { totalCount: 0, results: [] };
+    return { totalCount: 0, results: [], listNames };
   }
 
   const totalCount = await executeCountQuery({
@@ -183,29 +185,30 @@ export const fetchSnippets = async ({
   });
 
   if (totalCount === 0) {
-    return { totalCount, results: [] };
+    return { totalCount, results: [], listNames };
   }
 
   const queryResult = await executeQuery<{
     title: { value: string };
     createdOn: { value: string };
     content: { value: string };
+    snippetListName: { value: string };
   }>({
     endpoint,
     query: buildSnippetFetchQuery({ filter, pagination }),
     abortSignal,
   });
 
-  const results = queryResult.results.bindings.map(
-    (binding) =>
-      new Snippet({
-        title: binding.title?.value,
-        createdOn: binding.createdOn?.value,
-        content: binding.content?.value,
-      }),
-  );
+  const results = queryResult.results.bindings.map((binding) => {
+    listNames.add(binding.snippetListName.value);
+    return new Snippet({
+      title: binding.title?.value,
+      createdOn: binding.createdOn?.value,
+      content: binding.content?.value,
+    });
+  });
 
-  return { totalCount, results };
+  return { totalCount, results, listNames };
 };
 
 export const fetchSnippetLists = async ({

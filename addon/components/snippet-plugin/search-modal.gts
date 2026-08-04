@@ -24,11 +24,12 @@ import {
 import PreviewList from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/documents/preview-list';
 import AlertNoItems from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-no-items';
 import PaginationView from '@lblod/ember-rdfa-editor-lblod-plugins/components/pagination/pagination-view';
+import { Option } from '@lblod/ember-rdfa-editor/utils/option';
 
 interface Args {
   config: SnippetPluginConfig;
-  snippetListUris: string[] | undefined;
-  snippetListNames: string[] | undefined;
+  snippetListUris: Option<string[]>;
+  snippetListNames: Option<string[]>;
   closeModal: () => void;
   open: boolean;
   onInsert: (snippet: Snippet) => void;
