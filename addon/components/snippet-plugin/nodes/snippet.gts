@@ -4,6 +4,7 @@ import SearchModal from '../search-modal';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
+import { service } from '@ember/service';
 import t from 'ember-intl/helpers/t';
 import { trackedFunction } from 'reactiveweb/function';
 import AuIcon, {
@@ -39,7 +40,7 @@ import {
   SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
-import { fetchSnippetListNames } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
+import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
 
 interface ButtonSig {
   Args: {
@@ -69,8 +70,11 @@ interface Signature {
 }
 
 export default class SnippetNode extends Component<Signature> {
+  @service declare snippetFetchService: SnippetFetchService;
+
   @tracked showModal: boolean = false;
   @tracked mode: string = '';
+
   get controller() {
     return this.args.controller;
   }
@@ -228,15 +232,10 @@ export default class SnippetNode extends Component<Signature> {
   }
 
   loadedListNames = trackedFunction(this, async () => {
-    const abortController = new AbortController();
-    // TODO snippet fetching could be moved to a service and cached to avoid multiple queries
-    const listNames = await fetchSnippetListNames({
-      endpoint: this.config.endpoint,
-      abortSignal: abortController.signal,
-      snippetListUris: this.snippetListUris,
-    });
-
-    return listNames;
+    return this.snippetFetchService.getListNames(
+      this.config,
+      this.snippetListUris,
+    );
   });
   get snippetListNames() {
     return this.loadedListNames.value ?? [];

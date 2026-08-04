@@ -166,7 +166,7 @@ const buildSnippetListNameFetchQuery = (snippetListUris: string[]) => {
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX say: <https://say.data.gift/ns/>
 
-        SELECT DISTINCT ?snippetListName WHERE {
+        SELECT DISTINCT ?snippetList ?snippetListName WHERE {
           ?snippetList a say:SnippetList;
             skos:prefLabel ?snippetListName.
           FILTER (?snippetList IN (${snippetListUris
@@ -288,14 +288,17 @@ export const fetchSnippetListNames = async ({
   snippetListUris: string[];
 }) => {
   const queryResult = await executeQuery<
-    BindingObject<{ snippetListName: string }>
+    BindingObject<{ snippetList: string; snippetListName: string }>
   >({
     endpoint,
     query: buildSnippetListNameFetchQuery(snippetListUris),
     abortSignal,
   });
 
-  return queryResult.results.bindings.map(
-    (binding) => binding.snippetListName.value,
+  return new Map(
+    queryResult.results.bindings.map((binding) => [
+      binding.snippetList.value,
+      binding.snippetListName.value,
+    ]),
   );
 };
