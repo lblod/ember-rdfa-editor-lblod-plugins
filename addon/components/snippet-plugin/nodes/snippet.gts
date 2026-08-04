@@ -39,7 +39,7 @@ import {
   SnippetPluginConfig,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
-import { fetchSnippets } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
+import { fetchSnippetListNames } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
 
 interface ButtonSig {
   Args: {
@@ -229,25 +229,14 @@ export default class SnippetNode extends Component<Signature> {
 
   loadedListNames = trackedFunction(this, async () => {
     const abortController = new AbortController();
-    const listNames = new Set<string>();
-    let pageNumber = 0;
-    let pages = 1;
     // TODO snippet fetching could be moved to a service and cached to avoid multiple queries
-    while (listNames.size < this.snippetListUris.length && pageNumber < pages) {
-      const queryResult = await fetchSnippets({
-        endpoint: this.config.endpoint,
-        abortSignal: abortController.signal,
-        filter: {
-          snippetListUris: this.snippetListUris,
-        },
-        pagination: { pageNumber, pageSize: 20 },
-      });
-      pages = Math.ceil(queryResult.totalCount / 20);
-      pageNumber++;
-      queryResult.listNames.forEach((name) => listNames.add(name));
-    }
+    const listNames = await fetchSnippetListNames({
+      endpoint: this.config.endpoint,
+      abortSignal: abortController.signal,
+      snippetListUris: this.snippetListUris,
+    });
 
-    return [...listNames];
+    return listNames;
   });
   get snippetListNames() {
     return this.loadedListNames.value ?? [];

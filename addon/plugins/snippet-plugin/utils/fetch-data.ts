@@ -85,7 +85,7 @@ const buildSnippetFetchQuery = ({
       PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
       PREFIX say: <https://say.data.gift/ns/>
 
-      SELECT DISTINCT ?title ?content ?createdOn ?snippetListName
+      SELECT DISTINCT ?title ?content ?createdOn
       WHERE {
           ?snippet a say:Snippet;
                    pav:hasCurrentVersion ?snippetVersion;
@@ -94,8 +94,7 @@ const buildSnippetFetchQuery = ({
           OPTIONAL {
             ?snippet schema:position ?position.
           }
-          ?snippetList pav:createdOn ?snippetListCreatedOn;
-                       skos:prefLabel ?snippetListName.
+          ?snippetList pav:createdOn ?snippetListCreatedOn.
           ?snippetVersion dct:title ?title ;
                           ext:editorDocumentContent ?content.
           OPTIONAL { ?snippetVersion schema:validThrough ?validThrough. }
@@ -162,6 +161,21 @@ const buildSnippetListFetchQuery = ({
         `;
 };
 
+const buildSnippetListNameFetchQuery = (snippetListUris: string[]) => {
+  return /* sparql */ `
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+        PREFIX say: <https://say.data.gift/ns/>
+
+        SELECT DISTINCT ?snippetListName WHERE {
+          ?snippetList a say:SnippetList;
+            skos:prefLabel ?snippetListName.
+          FILTER (?snippetList IN (${snippetListUris
+            .map(sparqlEscapeUri)
+            .join(', ')}))
+        }
+        `;
+};
+
 export const fetchSnippets = async ({
   endpoint,
   abortSignal,
@@ -173,9 +187,8 @@ export const fetchSnippets = async ({
   filter: Filter;
   pagination: Pagination;
 }) => {
-  const listNames = new Set<string>();
   if (!filter.snippetListUris?.length) {
-    return { totalCount: 0, results: [], listNames };
+    return { totalCount: 0, results: [] };
   }
 
   const totalCount = await executeCountQuery({
@@ -185,14 +198,13 @@ export const fetchSnippets = async ({
   });
 
   if (totalCount === 0) {
-    return { totalCount, results: [], listNames };
+    return { totalCount, results: [] };
   }
 
   const queryResult = await executeQuery<{
     title: { value: string };
     createdOn: { value: string };
     content: { value: string };
-    snippetListName: { value: string };
   }>({
     endpoint,
     query: buildSnippetFetchQuery({ filter, pagination }),
@@ -200,7 +212,6 @@ export const fetchSnippets = async ({
   });
 
   const results = queryResult.results.bindings.map((binding) => {
-    listNames.add(binding.snippetListName.value);
     return new Snippet({
       title: binding.title?.value,
       createdOn: binding.createdOn?.value,
@@ -208,7 +219,7 @@ export const fetchSnippets = async ({
     });
   });
 
-  return { totalCount, results, listNames };
+  return { totalCount, results };
 };
 
 export const fetchSnippetLists = async ({
@@ -265,4 +276,26 @@ export const fetchSnippetLists = async ({
   ].map((slArgs) => new SnippetList(slArgs));
 
   return { results };
+};
+
+export const fetchSnippetListNames = async ({
+  endpoint,
+  abortSignal,
+  snippetListUris,
+}: {
+  endpoint: string;
+  abortSignal: AbortSignal;
+  snippetListUris: string[];
+}) => {
+  const queryResult = await executeQuery<
+    BindingObject<{ snippetListName: string }>
+  >({
+    endpoint,
+    query: buildSnippetListNameFetchQuery(snippetListUris),
+    abortSignal,
+  });
+
+  return queryResult.results.bindings.map(
+    (binding) => binding.snippetListName.value,
+  );
 };
