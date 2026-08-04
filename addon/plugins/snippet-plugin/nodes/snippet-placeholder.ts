@@ -81,7 +81,6 @@ export function createSnippetPlaceholder({
   return schema.nodes.snippet_placeholder.create({
     rdfaNodeType: 'resource',
     placeholderId: listProps.placeholderId,
-    snippetListNames: listProps.names,
     subject: mappingResource,
     properties: [
       {
@@ -106,7 +105,6 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
     ...rdfaAttrSpec({ rdfaAware: true }),
     typeof: { default: EXT('SnippetPlaceholder') },
     placeholderId: { default: '' },
-    snippetListNames: { default: [] },
     importedResources: { default: {} },
     allowMultipleSnippets: { default: false },
     config: {
@@ -117,13 +115,11 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
   classNames: ['say-snippet'],
   serialize(node, editorState) {
     const t = getTranslationFunction(editorState);
-    const listNames = node.attrs.snippetListNames as string[];
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
       attrs: {
         class: `${getClassnamesFromNode(node)} say-snippet-placeholder`,
-        'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
       },
@@ -149,20 +145,12 @@ const emberNodeConfig = (config: SnippetPluginConfig): EmberNodeConfig => ({
             EXT('SnippetPlaceholder'),
           )
         ) {
-          let snippetListNames = jsonParse(
-            node.getAttribute('data-list-names'),
-          );
-          if (!snippetListNames) {
-            // We might have an older version which is comma separated
-            snippetListNames = node.getAttribute('data-list-names')?.split(',');
-          }
           return {
             ...rdfaAttrs,
             // Generate a placeholderId any time we deserialise, this way we don't need to handle
             // generating new ids whenever we re-use parts of a document (e.g. copy-paste or
             // placeholders inside snippets)
             placeholderId: uuidv4(),
-            snippetListNames,
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),
