@@ -1,5 +1,32 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.1.0
+
+### Minor Changes
+
+- [#674](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/674) [`9ded434`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9ded4345c52e1bc6f22bb3fbae8dfd96c5d6e6be) Thanks [@piemonkey](https://github.com/piemonkey)! - Cache snippets for insertion when not doing a text search
+
+- [#674](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/674) [`13576c5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/13576c5bd749b40bdc33d26c0b31c3a0a11b96b9) Thanks [@piemonkey](https://github.com/piemonkey)! - Query for snippet list names instead of storing names when inserting
+
+- [#674](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/674) [`b107980`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/b10798018e487503613fa3ba4473c91cde20dbef) Thanks [@piemonkey](https://github.com/piemonkey)! - No longer store snippet list names on snippet nodes. Passing this when creating snippets or placeholders is now deprecated.
+
+- [#670](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/670) [`530dafc`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/530dafcf0723bf7f06715633563ae73d19ec9f68) Thanks [@piemonkey](https://github.com/piemonkey)! - Make endpoint arg for location variable config required in the typescript type, which matches the documentation, and the reality of handling locations without a source attribute
+
+- [#674](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/674) [`f5e1c0d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/f5e1c0dd13b2d3af6ca2f47ad8789247c2e94af4) Thanks [@piemonkey](https://github.com/piemonkey)! - Cache snippet list names to avoid excess queries
+
+- [#673](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/673) [`8913ca5`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8913ca57dfa9e3ccfabdea405dc7cd38acfb1459) Thanks [@piemonkey](https://github.com/piemonkey)! - Add contextual actions for filling in codelist values. This introduces new contextual actions for
+  the variable-plugin, so the import for place description actions has moved to
+  `@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/place-description`.
+  The old import location remains for backwards compatibility.
+
+### Patch Changes
+
+- [#673](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/673) [`e2b9436`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e2b943657850d63673457233a7aa34676fe42ad3) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix bug in location description context actions where one cache was used for both zonal and non-zonal options
+
+- [#673](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/673) [`8a844bd`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/8a844bd88a2bc1786034136bb02c3d7891ef57ac) Thanks [@piemonkey](https://github.com/piemonkey)! - Keep context menu open after selecting codelist options
+
+- [#673](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/673) [`593e95e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/593e95e4ae870719bc48cb14d3759d7f0f10041e) Thanks [@piemonkey](https://github.com/piemonkey)! - bump editor to [@lblod](https://github.com/lblod/ember-rdfa-editor/releases/tag/@lblod/ember-rdfa-editor@13.16.0)
+
 ## 38.0.3
 
 ### Patch Changes
