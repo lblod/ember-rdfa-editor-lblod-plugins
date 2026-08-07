@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from 'tracked-built-ins';
 import { getOwner } from '@ember/owner';
 import { service } from '@ember/service';
+import Owner from '@ember/owner';
 import IntlService from 'ember-intl/services/intl';
 import { ComponentLike } from '@glint/template';
 import { EditorState, PNode, SayController } from '@lblod/ember-rdfa-editor';
@@ -55,6 +56,8 @@ import {
   paragraph as paragraphInvisible,
 } from '@lblod/ember-rdfa-editor/plugins/invisibles';
 import { emberApplication } from '@lblod/ember-rdfa-editor/plugins/ember-application';
+import { slashCommandsPlugin } from '@lblod/ember-rdfa-editor/plugins/slash-commands/index';
+import ContextualActionsContainer from '@lblod/ember-rdfa-editor/components/plugins/contextual-actions/container';
 import { document_title } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/document-title-plugin/nodes';
 import {
   address,
@@ -146,6 +149,9 @@ import {
   legacy_codelist,
   legacyCodelistView,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables/legacy-codelist';
+import { getPlaceDescriptionActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/place-description';
+import { getCodelistActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/codelist';
+import { getContextualActionGroups as locationActionsGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin/contextual-actions';
 
 export default class RegulatoryStatementSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -158,10 +164,11 @@ export default class RegulatoryStatementSampleController extends Controller {
   ImportedResourceLinkerCard = ImportedResourceLinkerCard;
   ExternalTripleEditorCard = ExternalTripleEditorCard;
   RelationshipEditorCard = RelationshipEditorCard;
-
   SnippetInsert = SnippetInsertRdfaComponent;
   SnippetListSelect = SnippetListSelect;
   StructureControlCard = StructureControlCardComponent;
+  ContextualActionsContainer = ContextualActionsContainer;
+
   @tracked editableNodes = false;
 
   @action
@@ -173,6 +180,33 @@ export default class RegulatoryStatementSampleController extends Controller {
   @service declare intl: IntlService;
   @tracked controller?: SayController;
   @tracked citationPlugin = citationPlugin(this.config.citation);
+  @tracked plugins: Plugin[];
+
+  constructor(owner: Owner) {
+    super(owner);
+    this.plugins = [
+      firefoxCursorFix(),
+      chromeHacksPlugin(),
+      lastKeyPressedPlugin,
+      tablePlugin,
+      tableKeymap,
+      linkPasteHandler(this.schema.nodes.link),
+      createInvisiblesPlugin(
+        [hardBreak, paragraphInvisible, headingInvisible],
+        {
+          shouldShowInvisibles: false,
+        },
+      ),
+      emberApplication({ application: unwrap(getOwner(this)) }),
+      editableNodePlugin(),
+      recreateUuidsOnPaste,
+      variableAutofillerPlugin(this.config.autofilledVariable),
+      slashCommandsPlugin({
+        intl: this.intl,
+        getGroups: this.contextualGroupGetters,
+      }),
+    ];
+  }
 
   prefixes = {
     ext: 'http://mu.semte.ch/vocabularies/ext/',
@@ -180,6 +214,12 @@ export default class RegulatoryStatementSampleController extends Controller {
     dct: 'http://purl.org/dc/terms/',
     say: 'https://say.data.gift/ns/',
   };
+
+  contextualGroupGetters = [
+    getPlaceDescriptionActionGroups(this.locationOptions),
+    locationActionsGroups(),
+    getCodelistActionGroups(this.codelistOptions),
+  ];
 
   schema = new Schema({
     nodes: {
@@ -399,21 +439,6 @@ export default class RegulatoryStatementSampleController extends Controller {
       address: addressView(controller),
     };
   };
-  @tracked plugins: Plugin[] = [
-    firefoxCursorFix(),
-    chromeHacksPlugin(),
-    lastKeyPressedPlugin,
-    tablePlugin,
-    tableKeymap,
-    linkPasteHandler(this.schema.nodes.link),
-    createInvisiblesPlugin([hardBreak, paragraphInvisible, headingInvisible], {
-      shouldShowInvisibles: false,
-    }),
-    emberApplication({ application: unwrap(getOwner(this)) }),
-    editableNodePlugin(),
-    recreateUuidsOnPaste,
-    variableAutofillerPlugin(this.config.autofilledVariable),
-  ];
 
   @action
   setPrefixes(element: HTMLElement) {
