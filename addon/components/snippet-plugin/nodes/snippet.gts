@@ -4,7 +4,9 @@ import SearchModal from '../search-modal';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { TemplateOnlyComponent } from '@ember/component/template-only';
+import { service } from '@ember/service';
 import t from 'ember-intl/helpers/t';
+import { trackedFunction } from 'reactiveweb/function';
 import AuIcon, {
   type AuIconSignature,
 } from '@appuniversum/ember-appuniversum/components/au-icon';
@@ -33,8 +35,12 @@ import { createSnippetPlaceholder } from '@lblod/ember-rdfa-editor-lblod-plugins
 import { hasDecendant } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/has-descendant';
 import SnippetPlaceholder from '@lblod/ember-rdfa-editor-lblod-plugins/components/snippet-plugin/nodes/placeholder';
 import { getSnippetListUrisFromNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/rdfa-predicate';
-import { Snippet } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
+import {
+  Snippet,
+  SnippetPluginConfig,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
+import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
 
 interface ButtonSig {
   Args: {
@@ -64,8 +70,11 @@ interface Signature {
 }
 
 export default class SnippetNode extends Component<Signature> {
+  @service declare snippetFetchService: SnippetFetchService;
+
   @tracked showModal: boolean = false;
   @tracked mode: string = '';
+
   get controller() {
     return this.args.controller;
   }
@@ -86,6 +95,12 @@ export default class SnippetNode extends Component<Signature> {
   }
   get allowMultipleSnippets() {
     return this.node.attrs.allowMultipleSnippets as boolean;
+  }
+  get snippetListUris() {
+    return getSnippetListUrisFromNode(this.node);
+  }
+  get config(): SnippetPluginConfig {
+    return this.node.attrs.config;
   }
 
   @action
@@ -131,8 +146,8 @@ export default class SnippetNode extends Component<Signature> {
         const node = createSnippetPlaceholder({
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
-            listUris: getSnippetListUrisFromNode(this.node),
-            names: this.node.attrs.snippetListNames,
+            listUris: this.snippetListUris,
+            names: this.snippetListNames,
             importedResources: this.node.attrs.importedResources,
           },
           schema: this.schema,
@@ -202,8 +217,8 @@ export default class SnippetNode extends Component<Signature> {
         title: snippet.title ?? '',
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
-          listUris: getSnippetListUrisFromNode(this.node),
-          names: this.node.attrs.snippetListNames,
+          listUris: this.snippetListUris,
+          names: this.snippetListNames,
           importedResources: this.node.attrs.importedResources,
         },
         range: { start, end },
@@ -216,12 +231,23 @@ export default class SnippetNode extends Component<Signature> {
     return getClassnamesFromNode(this.args.node);
   }
 
+  loadedListNames = trackedFunction(this, async () => {
+    return this.snippetFetchService.getListNames(
+      this.config,
+      this.snippetListUris,
+    );
+  });
+  get snippetListNames() {
+    return this.loadedListNames.value ?? [];
+  }
+
   <template>
     {{#if this.isPlaceholder}}
       <SnippetPlaceholder
         @node={{@node}}
         @selectNode={{@selectNode}}
         @insertSnippet={{this.editFragment}}
+        @snippetListNames={{this.snippetListNames}}
       />
     {{else}}
       <div class='{{this.class}} say-snippet-card'>
@@ -268,10 +294,10 @@ export default class SnippetNode extends Component<Signature> {
     <SearchModal
       @open={{this.showModal}}
       @closeModal={{this.closeModal}}
-      @config={{this.node.attrs.config}}
+      @config={{this.config}}
       @onInsert={{this.onInsert}}
-      @snippetListUris={{getSnippetListUrisFromNode this.node}}
-      @snippetListNames={{this.node.attrs.snippetListNames}}
+      @snippetListUris={{this.snippetListUris}}
+      @snippetListNames={{this.snippetListNames}}
     />
   </template>
 }

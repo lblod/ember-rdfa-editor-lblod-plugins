@@ -7,7 +7,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
 import { Snippet, SnippetList, SnippetListArgs } from '../index';
 
-type Filter = { name?: string; snippetListUris?: string[] };
+export type SnippetFilter = { name?: string; snippetListUris?: string[] };
 export type OrderBy =
   | 'label'
   | 'created-on'
@@ -15,9 +15,9 @@ export type OrderBy =
   | '-created-on'
   | ''
   | null;
-type Pagination = { pageNumber: number; pageSize: number };
+export type Pagination = { pageNumber: number; pageSize: number };
 
-const buildSnippetCountQuery = ({ name, snippetListUris }: Filter) => {
+const buildSnippetCountQuery = ({ name, snippetListUris }: SnippetFilter) => {
   return /* sparql */ `
       PREFIX schema: <http://schema.org/>
       PREFIX dct: <http://purl.org/dc/terms/>
@@ -52,7 +52,7 @@ const buildSnippetCountQuery = ({ name, snippetListUris }: Filter) => {
       `;
 };
 
-// const buildSnippetListCountQuery = ({ name }: Filter) => {
+// const buildSnippetListCountQuery = ({ name }: SnippetFilter) => {
 //   return `
 //       PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 //       SELECT (COUNT(?snippetLists) AS ?count)
@@ -72,7 +72,7 @@ const buildSnippetFetchQuery = ({
   filter: { name, snippetListUris },
   pagination: { pageSize, pageNumber },
 }: {
-  filter: Filter;
+  filter: SnippetFilter;
   pagination: Pagination;
 }) => {
   return /* sparql */ `
@@ -138,7 +138,7 @@ const buildSnippetListFetchQuery = ({
   filter: { name },
   orderBy,
 }: {
-  filter: Filter;
+  filter: SnippetFilter;
   orderBy: OrderBy;
 }) => {
   return /* sparql */ `
@@ -161,6 +161,21 @@ const buildSnippetListFetchQuery = ({
         `;
 };
 
+const buildSnippetListNameFetchQuery = (snippetListUris: string[]) => {
+  return /* sparql */ `
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+        PREFIX say: <https://say.data.gift/ns/>
+
+        SELECT DISTINCT ?snippetList ?snippetListName WHERE {
+          ?snippetList a say:SnippetList;
+            skos:prefLabel ?snippetListName.
+          FILTER (?snippetList IN (${snippetListUris
+            .map(sparqlEscapeUri)
+            .join(', ')}))
+        }
+        `;
+};
+
 export const fetchSnippets = async ({
   endpoint,
   abortSignal,
@@ -169,7 +184,7 @@ export const fetchSnippets = async ({
 }: {
   endpoint: string;
   abortSignal: AbortSignal;
-  filter: Filter;
+  filter: SnippetFilter;
   pagination: Pagination;
 }) => {
   if (!filter.snippetListUris?.length) {
@@ -196,14 +211,13 @@ export const fetchSnippets = async ({
     abortSignal,
   });
 
-  const results = queryResult.results.bindings.map(
-    (binding) =>
-      new Snippet({
-        title: binding.title?.value,
-        createdOn: binding.createdOn?.value,
-        content: binding.content?.value,
-      }),
-  );
+  const results = queryResult.results.bindings.map((binding) => {
+    return new Snippet({
+      title: binding.title?.value,
+      createdOn: binding.createdOn?.value,
+      content: binding.content?.value,
+    });
+  });
 
   return { totalCount, results };
 };
@@ -216,7 +230,7 @@ export const fetchSnippetLists = async ({
 }: {
   endpoint: string;
   abortSignal: AbortSignal;
-  filter: Filter;
+  filter: SnippetFilter;
   orderBy: OrderBy;
 }) => {
   // We don't currently use this count, so skip the query, but we'll need it if we make pagination
@@ -262,4 +276,29 @@ export const fetchSnippetLists = async ({
   ].map((slArgs) => new SnippetList(slArgs));
 
   return { results };
+};
+
+export const fetchSnippetListNames = async ({
+  endpoint,
+  abortSignal,
+  snippetListUris,
+}: {
+  endpoint: string;
+  abortSignal: AbortSignal;
+  snippetListUris: string[];
+}) => {
+  const queryResult = await executeQuery<
+    BindingObject<{ snippetList: string; snippetListName: string }>
+  >({
+    endpoint,
+    query: buildSnippetListNameFetchQuery(snippetListUris),
+    abortSignal,
+  });
+
+  return new Map(
+    queryResult.results.bindings.map((binding) => [
+      binding.snippetList.value,
+      binding.snippetListName.value,
+    ]),
+  );
 };
