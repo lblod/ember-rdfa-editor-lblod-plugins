@@ -1,15 +1,7 @@
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import { Address } from './address-helpers';
 import { Area, Place } from './geo-helpers';
-import {
-  EditorState,
-  Transaction,
-  NodeSelection,
-  TextSelection,
-  PNode,
-  Selection,
-  Command,
-} from '@lblod/ember-rdfa-editor';
+import { EditorState, Transaction, Command } from '@lblod/ember-rdfa-editor';
 import type { FullTriple } from '@lblod/ember-rdfa-editor/core/rdfa-processor';
 import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';

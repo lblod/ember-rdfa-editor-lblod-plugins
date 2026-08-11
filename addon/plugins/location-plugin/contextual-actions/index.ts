@@ -8,7 +8,10 @@ import { replaceLocationCommand } from '../utils/replace-location';
 import { Area, Place } from '../utils/geo-helpers';
 import { Address } from '../utils/address-helpers';
 import { getLocationUri } from '../_private/utils/location-helpers';
-import { ContextualActionGroup } from '@lblod/ember-rdfa-editor/plugins/contextual-actions';
+import {
+  ContextualAction,
+  ContextualActionGroup,
+} from '@lblod/ember-rdfa-editor/plugins/contextual-actions';
 
 const otherElementsGroupId =
   'other-elements-e01f46a0-b323-4add-8035-d81dc2e8578d';
@@ -39,7 +42,7 @@ function getLocationSuggestionOptions(state: EditorState) {
         getLocationUri(selectedLocation) !== getLocationUri(location),
     )
     .slice(0, SUGGESTION_AMOUNT)
-    .map((location) => ({
+    .map((location: Address | Area | Place) => ({
       label: location.formatted,
       id: uuidv4(),
       group: recentLocationsGroupId,
@@ -90,7 +93,7 @@ function getOtherElementsOptions(state: EditorState) {
 
 export function getContextualActions(type: 'suggestions' | 'other_elements') {
   return function (state: EditorState, searchQuery?: string) {
-    const options =
+    const options: ContextualAction[] =
       type === 'suggestions'
         ? getLocationSuggestionOptions(state)
         : getOtherElementsOptions(state);

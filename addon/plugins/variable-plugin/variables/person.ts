@@ -24,7 +24,10 @@ import {
   getOutgoingTriple,
   hasOutgoingNamedNodeTriple,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
-import { renderRdfaAware } from '@lblod/ember-rdfa-editor/core/schema';
+import {
+  isRdfaAttrs,
+  renderRdfaAware,
+} from '@lblod/ember-rdfa-editor/core/schema';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { createPersonVariableAttrs } from '../actions/create-person-variable';
 
@@ -156,21 +159,28 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   });
 };
 
-export function getPersonFromPNode(node: PNode): Person & { fullName: string } {
-  if (node.type !== node.type.schema.nodes['person_variable']) return null;
+export function getPersonFromPNode(
+  node: PNode,
+): (Person & { fullName: string }) | null {
+  if (
+    node.type !== node.type.schema.nodes['person_variable'] ||
+    !isRdfaAttrs(node.attrs) ||
+    node.attrs.rdfaNodeType !== 'resource'
+  )
+    return null;
 
   const { subject, properties } = node.attrs;
   const firstName = properties.find(
     (property) => property.predicate === FOAF('givenName').full,
-  ).object.value;
+  )?.object.value;
   const lastName = properties.find(
     (property) => property.predicate === FOAF('familyName').full,
-  ).object.value;
-  const fullName = firstName ? `${firstName} ${lastName}` : lastName;
+  )?.object.value;
+  const fullName = firstName || lastName ? [firstName, lastName].join(' ') : '';
   return {
     uri: subject,
-    firstName,
-    lastName,
+    firstName: firstName ?? '',
+    lastName: lastName ?? '',
     fullName,
   };
 }

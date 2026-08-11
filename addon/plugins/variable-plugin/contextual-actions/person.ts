@@ -21,21 +21,22 @@ export function getContextualActions(state: EditorState, searchQuery?: string) {
       (node) => selectedNode.value.attrs.subject !== node.value.attrs.subject,
     )
     .slice(0, SUGGESTION_AMOUNT)
-    .map((node) => {
+    .flatMap((node) => {
       const person = getPersonFromPNode(node.value);
-      if (!person) return;
-      return {
-        label: person.fullName,
-        id: uuidv4(),
-        group: PERSON_SUGGESTIONS_GROUP_ID,
-        command: replacePersonCommand(selectedNode, person),
-      };
+      if (!person) return [];
+      return [
+        {
+          label: person.fullName,
+          id: uuidv4(),
+          group: PERSON_SUGGESTIONS_GROUP_ID,
+          command: replacePersonCommand(selectedNode, person),
+        },
+      ];
     })
     .filter(
       (option) =>
-        option !== undefined &&
-        (!searchQuery ||
-          option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase())),
+        !searchQuery ||
+        option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase()),
     );
 }
 
