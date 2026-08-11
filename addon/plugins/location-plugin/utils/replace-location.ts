@@ -15,27 +15,7 @@ import { PROV } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { SayDataFactory } from '@lblod/ember-rdfa-editor/core/say-data-factory';
 import { transactionCombinator } from '@lblod/ember-rdfa-editor/utils/transaction-utils';
 import { updateSubject } from '@lblod/ember-rdfa-editor/plugins/rdfa-info/utils';
-
-function moveNodeSelectionForward(selection: Selection, doc: PNode) {
-  if (!(selection instanceof NodeSelection)) {
-    return selection;
-  }
-
-  const $from = selection.$from;
-
-  const index = $from.index();
-  const parent = $from.parent;
-
-  if (index + 1 < parent.childCount) {
-    const nextPos = selection.from + selection.node.nodeSize;
-
-    return NodeSelection.create(doc, nextPos);
-  } else {
-    const posAfter = selection.to;
-
-    return TextSelection.create(doc, posAfter);
-  }
-}
+import { moveNodeSelectionForward } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/move-node-selection-forward';
 
 export function replaceLocationCommand(
   node: ResolvedPNode,
