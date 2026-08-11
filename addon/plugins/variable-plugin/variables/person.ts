@@ -156,6 +156,25 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   });
 };
 
+export function getPersonFromPNode(node: PNode): Person & { fullName: string } {
+  if (node.type !== node.type.schema.nodes['person_variable']) return null;
+
+  const { subject, properties } = node.attrs;
+  const firstName = properties.find(
+    (property) => property.predicate === FOAF('givenName').full,
+  ).object.value;
+  const lastName = properties.find(
+    (property) => property.predicate === FOAF('familyName').full,
+  ).object.value;
+  const fullName = firstName ? `${firstName} ${lastName}` : lastName;
+  return {
+    uri: subject,
+    firstName,
+    lastName,
+    fullName,
+  };
+}
+
 const emberNodeConfig: EmberNodeConfig = {
   name: 'person-variable',
   component: PersonNodeViewComponent as unknown as ComponentLike,
