@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getTranslationFunction } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/translation';
 import { openLocationModalCommand } from '..';
 import { LocationType } from '@lblod/ember-rdfa-editor-lblod-plugins/components/location-plugin/map';
-import getDocumentLocations from '../utils/get-document-locations';
+import { getRankedPNodes } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/get-ranked-pnodes';
 import { replaceLocationCommand } from '../utils/replace-location';
 import { Area, Place } from '../utils/geo-helpers';
 import { Address } from '../utils/address-helpers';
@@ -29,7 +29,10 @@ function getLocationSuggestionOptions(state: EditorState) {
     | Area
     | undefined;
 
-  return getDocumentLocations(state)
+  return getRankedPNodes(state, 'oslo_location', (node) =>
+    getLocationUri(node.attrs.value),
+  )
+    .map((rankedNode) => rankedNode.node.attrs.value)
     .filter(
       (location) =>
         !selectedLocation ||
