@@ -4,7 +4,7 @@ import { ELI } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 import { hasRDFaAttribute } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 
-const rdfaAware = true;
+const rdfaAware = false;
 export const document_title: NodeSpec = {
   content: 'paragraph{1}',
   inline: false,
