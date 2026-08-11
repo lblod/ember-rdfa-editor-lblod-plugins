@@ -26,11 +26,12 @@ import PreviewList from '@lblod/ember-rdfa-editor-lblod-plugins/components/commo
 import AlertNoItems from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-no-items';
 import PaginationView from '@lblod/ember-rdfa-editor-lblod-plugins/components/pagination/pagination-view';
 import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
+import { AsyncResult } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/async-result';
 
 interface Args {
   config: SnippetPluginConfig;
   snippetListUris: Option<string[]>;
-  snippetListNames: Option<string[]>;
+  snippetListNames: AsyncResult<string[]>;
   closeModal: () => void;
   open: boolean;
   onInsert: (snippet: Snippet) => void;
@@ -59,7 +60,9 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   }
 
   get snippetListNames() {
-    return this.args.snippetListNames?.map((name) => `"${name}"`).join(', ');
+    return this.args.snippetListNames.value
+      ?.map((name) => `"${name}"`)
+      .join(', ');
   }
 
   @action

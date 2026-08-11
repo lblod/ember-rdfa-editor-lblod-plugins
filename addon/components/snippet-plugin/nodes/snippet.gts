@@ -41,6 +41,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
+import { asyncResultFromState } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/async-result';
 
 interface ButtonSig {
   Args: {
@@ -147,7 +148,6 @@ export default class SnippetNode extends Component<Signature> {
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
             listUris: this.snippetListUris,
-            names: this.snippetListNames,
             importedResources: this.node.attrs.importedResources,
           },
           schema: this.schema,
@@ -218,7 +218,6 @@ export default class SnippetNode extends Component<Signature> {
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
           listUris: this.snippetListUris,
-          names: this.snippetListNames,
           importedResources: this.node.attrs.importedResources,
         },
         range: { start, end },
@@ -231,15 +230,12 @@ export default class SnippetNode extends Component<Signature> {
     return getClassnamesFromNode(this.args.node);
   }
 
-  loadedListNames = trackedFunction(this, async () => {
+  snippetListNames = trackedFunction(this, async () => {
     return this.snippetFetchService.getListNames(
       this.config,
       this.snippetListUris,
     );
   });
-  get snippetListNames() {
-    return this.loadedListNames.value ?? [];
-  }
 
   <template>
     {{#if this.isPlaceholder}}
@@ -247,7 +243,7 @@ export default class SnippetNode extends Component<Signature> {
         @node={{@node}}
         @selectNode={{@selectNode}}
         @insertSnippet={{this.editFragment}}
-        @snippetListNames={{this.snippetListNames}}
+        @snippetListNames={{asyncResultFromState this.snippetListNames}}
       />
     {{else}}
       <div class='{{this.class}} say-snippet-card'>
@@ -297,7 +293,7 @@ export default class SnippetNode extends Component<Signature> {
       @config={{this.config}}
       @onInsert={{this.onInsert}}
       @snippetListUris={{this.snippetListUris}}
-      @snippetListNames={{this.snippetListNames}}
+      @snippetListNames={{asyncResultFromState this.snippetListNames}}
     />
   </template>
 }
