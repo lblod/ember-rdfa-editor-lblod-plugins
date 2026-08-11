@@ -32,7 +32,7 @@ function getLocationSuggestionOptions(state: EditorState) {
   return getRankedPNodes(state, 'oslo_location', (node) =>
     getLocationUri(node.attrs.value),
   )
-    .map((rankedNode) => rankedNode.node.attrs.value)
+    .map((rankedNode) => rankedNode.node.value.attrs.value)
     .filter(
       (location) =>
         !selectedLocation ||
