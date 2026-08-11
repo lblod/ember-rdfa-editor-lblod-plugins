@@ -1,8 +1,9 @@
 import { EditorState, type PNode } from '@lblod/ember-rdfa-editor';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
 type NodeMetadataType = {
   [uri: string]: {
-    node: PNode;
+    node: ResolvedPNode;
     occurrences: number;
     distance: number;
   };
@@ -47,17 +48,17 @@ export function getRankedPNodes(
   nodeType: string,
   getUri: (node: PNode) => string,
 ): {
-  node: PNode;
+  node: ResolvedPNode;
   score: number;
 }[] {
   const doc = state.doc;
-  const nodesWithDistance: { node: PNode; distance: number }[] = [];
+  const nodesWithDistance: { node: ResolvedPNode; distance: number }[] = [];
   const selection = state.selection;
   doc.descendants((node, pos) => {
     if (node.type.name === nodeType) {
       const distance = Math.abs(pos - selection.from);
       nodesWithDistance.push({
-        node,
+        node: { value: node, pos },
         distance: distance,
       });
       return false;
@@ -67,7 +68,7 @@ export function getRankedPNodes(
   const nodeMetadata: NodeMetadataType = {};
   for (const nodeWithDistance of nodesWithDistance) {
     const { node, distance } = nodeWithDistance;
-    const uri = getUri(node);
+    const uri = getUri(node.value);
     if (!uri) {
       continue;
     }
