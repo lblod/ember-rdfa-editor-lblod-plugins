@@ -176,6 +176,7 @@ import Owner from '@ember/owner';
 import { locationModalsPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin';
 import { emptyBlockPlaceholder } from '@lblod/ember-rdfa-editor/plugins/empty-block-placeholder';
 import { getCodelistActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/codelist';
+import { getPersonActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/person';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -250,6 +251,7 @@ export default class BesluitSampleController extends Controller {
     getPlaceDescriptionActionGroups(this.locationOptions),
     locationActionsGroups(),
     getCodelistActionGroups(this.codelistOptions),
+    getPersonActionGroups(),
   ];
 
   get schema() {
