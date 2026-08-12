@@ -3,6 +3,7 @@ import { service } from '@ember/service';
 import { on } from '@ember/modifier';
 import IntlService from 'ember-intl/services/intl';
 import t from 'ember-intl/helpers/t';
+import { State } from 'reactiveweb/get-promise-state';
 import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
@@ -10,12 +11,11 @@ import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import { type SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
-import { AsyncResult } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/async-result';
 
 interface Signature {
   Args: Pick<EmberNodeArgs, 'node' | 'selectNode'> & {
     insertSnippet: () => void;
-    snippetListNames: AsyncResult<string[]>;
+    snippetListNames: State<string[]>;
   };
 }
 
@@ -29,12 +29,12 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
     return this.node.attrs.config;
   }
   get isSingleList() {
-    return this.args.snippetListNames.value?.length === 1;
+    return this.args.snippetListNames.resolved?.length === 1;
   }
   get alertTitle() {
     if (this.isSingleList) {
       return this.intl.t('snippet-plugin.placeholder.title-single', {
-        listName: this.args.snippetListNames.value?.[0],
+        listName: this.args.snippetListNames.resolved?.[0],
       });
     } else {
       return this.intl.t('snippet-plugin.placeholder.title-multiple');
@@ -55,7 +55,7 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
         <AuIcon @icon={{PlusTextIcon}} />
       </div>
       <div class='say-snippet-placeholder__content'>
-        {{#if @snippetListNames.isRunning}}
+        {{#if @snippetListNames.isLoading}}
           <AuLoader @hideMessage={{true}}>
             {{t 'common.search.loading'}}
           </AuLoader>
@@ -63,7 +63,7 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
           <p class='say-snippet-placeholder__title'>{{this.alertTitle}}</p>
           {{#unless this.isSingleList}}
             <ul class='say-snippet-placeholder__list'>
-              {{#each @snippetListNames.value as |listName|}}
+              {{#each @snippetListNames.resolved as |listName|}}
                 <li>{{listName}}</li>
               {{/each}}
             </ul>

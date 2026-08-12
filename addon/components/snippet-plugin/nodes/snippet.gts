@@ -7,6 +7,7 @@ import { TemplateOnlyComponent } from '@ember/component/template-only';
 import { service } from '@ember/service';
 import t from 'ember-intl/helpers/t';
 import { trackedFunction } from 'reactiveweb/function';
+import { getPromiseState } from 'reactiveweb/get-promise-state';
 import AuIcon, {
   type AuIconSignature,
 } from '@appuniversum/ember-appuniversum/components/au-icon';
@@ -41,7 +42,6 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
 import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
-import { asyncResultFromState } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/async-result';
 
 interface ButtonSig {
   Args: {
@@ -243,7 +243,7 @@ export default class SnippetNode extends Component<Signature> {
         @node={{@node}}
         @selectNode={{@selectNode}}
         @insertSnippet={{this.editFragment}}
-        @snippetListNames={{asyncResultFromState this.snippetListNames}}
+        @snippetListNames={{getPromiseState this.snippetListNames.promise}}
       />
     {{else}}
       <div class='{{this.class}} say-snippet-card'>
@@ -293,7 +293,7 @@ export default class SnippetNode extends Component<Signature> {
       @config={{this.config}}
       @onInsert={{this.onInsert}}
       @snippetListUris={{this.snippetListUris}}
-      @snippetListNames={{asyncResultFromState this.snippetListNames}}
+      @snippetListNames={{getPromiseState this.snippetListNames.promise}}
     />
   </template>
 }

@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'reactiveweb/ember-concurrency';
+import { getPromiseState, State } from 'reactiveweb/get-promise-state';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
 import t from 'ember-intl/helpers/t';
@@ -26,12 +27,11 @@ import PreviewList from '@lblod/ember-rdfa-editor-lblod-plugins/components/commo
 import AlertNoItems from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-no-items';
 import PaginationView from '@lblod/ember-rdfa-editor-lblod-plugins/components/pagination/pagination-view';
 import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
-import { AsyncResult } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/async-result';
 
 interface Args {
   config: SnippetPluginConfig;
   snippetListUris: Option<string[]>;
-  snippetListNames: AsyncResult<string[]>;
+  snippetListNames: State<string[]>;
   closeModal: () => void;
   open: boolean;
   onInsert: (snippet: Snippet) => void;
@@ -60,7 +60,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   }
 
   get snippetListNames() {
-    return this.args.snippetListNames.value
+    return this.args.snippetListNames.resolved
       ?.map((name) => `"${name}"`)
       .join(', ');
   }
@@ -119,6 +119,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
     this.pageSize,
     this.args.snippetListUris,
   ]);
+  snippets = getPromiseState(async () => this.snippetsResource);
 
   @action
   previousPage() {
@@ -178,17 +179,17 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
           </mc.sidebar>
           <mc.content @scroll={{true}}>
             <div class='au-u-padding-top snippet-modal--list-container'>
-              {{#if this.snippetsResource.isRunning}}
+              {{#if this.snippets.isLoading}}
                 <div class='au-u-margin'>
                   <Loading />
                 </div>
               {{else}}
-                {{#if this.error}}
-                  <AlertLoadError @error={{this.error}} />
+                {{#if this.snippets.error}}
+                  <AlertLoadError @error={{this.snippets.error}} />
                 {{else}}
-                  {{#if this.snippetsResource.value.length}}
+                  {{#if this.snippets.resolved.length}}
                     <PreviewList
-                      @docs={{this.snippetsResource.value}}
+                      @docs={{this.snippets.resolved}}
                       @onInsert={{@onInsert}}
                     />
                   {{else}}
@@ -197,7 +198,7 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
                 {{/if}}
               {{/if}}
             </div>
-            {{#if this.snippetsResource.value.length}}
+            {{#if this.snippets.resolved.length}}
               {{#let
                 (pagination
                   page=this.pageNumber

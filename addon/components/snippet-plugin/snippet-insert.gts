@@ -3,6 +3,7 @@ import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
+import { getPromiseState } from 'reactiveweb/get-promise-state';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import {
@@ -92,7 +93,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @config={{@config}}
       @onInsert={{this.onInsert}}
       @snippetListUris={{@listProperties.listUris}}
-      @snippetListNames={{@listProperties.names}}
+      @snippetListNames={{getPromiseState @listProperties.names}}
     />
   </template>
 }
