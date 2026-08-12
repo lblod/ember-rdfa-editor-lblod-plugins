@@ -111,6 +111,9 @@ export default class SnippetNode extends Component<Signature> {
   openModal() {
     this.controller.focus();
     this.showModal = true;
+    if (this.snippetListNames.error) {
+      this.snippetListNames.retry();
+    }
   }
 
   @action

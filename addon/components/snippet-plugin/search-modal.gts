@@ -4,9 +4,10 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'reactiveweb/ember-concurrency';
-import { getPromiseState, State } from 'reactiveweb/get-promise-state';
+import { State } from 'reactiveweb/get-promise-state';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
+import IntlService from 'ember-intl/services/intl';
 import t from 'ember-intl/helpers/t';
 import { not } from 'ember-truth-helpers';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
@@ -39,17 +40,10 @@ interface Args {
 
 export default class SnippetPluginSearchModalComponent extends Component<Args> {
   @service declare snippetFetchService: SnippetFetchService;
+  @service declare intl: IntlService;
 
   // Filtering
   @tracked inputSearchText: string | null = null;
-
-  // Display
-  @tracked error: unknown;
-
-  // Pagination
-  @tracked pageNumber = 0;
-  @tracked pageSize = 20;
-  @tracked totalCount = 0;
 
   get config() {
     return this.args.config;
@@ -59,10 +53,17 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
     return this.inputSearchText;
   }
 
-  get snippetListNames() {
-    return this.args.snippetListNames.resolved
-      ?.map((name) => `"${name}"`)
-      .join(', ');
+  get modalTitle() {
+    const listNames = this.args.snippetListNames;
+    return listNames.isLoading
+      ? this.intl.t('common.search.loading')
+      : listNames.error
+        ? this.intl.t('snippet-plugin.snippet-list.name-error')
+        : this.intl.t('snippet-plugin.modal.title', {
+            snippetListNames: listNames.resolved
+              ?.map((name) => `"${name}"`)
+              .join(', '),
+          });
   }
 
   @action
@@ -75,71 +76,12 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
     this.inputSearchText = event.target.value;
   }
 
-  @action
-  async closeModal() {
-    await this.snippetsResource.cancel();
-    this.args.closeModal();
-  }
-
-  snippetsSearch = restartableTask(async () => {
-    if (this.searchText) {
-      await timeout(500);
-    }
-
-    const abortController = new AbortController();
-
-    try {
-      const queryResult = await this.snippetFetchService.getSnippets({
-        endpoint: this.args.config.endpoint,
-        abortSignal: abortController.signal,
-        filter: {
-          name: this.inputSearchText ?? undefined,
-          snippetListUris: this.args.snippetListUris ?? undefined,
-        },
-        pagination: {
-          pageNumber: this.pageNumber,
-          pageSize: this.pageSize,
-        },
-      });
-
-      this.totalCount = queryResult.totalCount;
-
-      return queryResult.results;
-    } catch (error) {
-      this.error = error;
-      return [];
-    } finally {
-      abortController.abort();
-    }
-  });
-
-  snippetsResource = trackedTask<Snippet[]>(this, this.snippetsSearch, () => [
-    this.inputSearchText,
-    this.pageNumber,
-    this.pageSize,
-    this.args.snippetListUris,
-  ]);
-  snippets = getPromiseState(async () => this.snippetsResource);
-
-  @action
-  previousPage() {
-    --this.pageNumber;
-  }
-
-  @action
-  nextPage() {
-    ++this.pageNumber;
-  }
-
   <template>
     <AuModal
       class='snippet-modal'
       @modalOpen={{@open}}
-      @closeModal={{this.closeModal}}
-      @title={{t
-        'snippet-plugin.modal.title'
-        snippetListNames=this.snippetListNames
-      }}
+      @closeModal={{@closeModal}}
+      @title={{this.modalTitle}}
       @size='large'
       @padding='none'
       as |modal|
@@ -178,49 +120,121 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
             </div>
           </mc.sidebar>
           <mc.content @scroll={{true}}>
-            <div class='au-u-padding-top snippet-modal--list-container'>
-              {{#if this.snippets.isLoading}}
-                <div class='au-u-margin'>
-                  <Loading />
-                </div>
-              {{else}}
-                {{#if this.snippets.error}}
-                  <AlertLoadError @error={{this.snippets.error}} />
-                {{else}}
-                  {{#if this.snippets.resolved.length}}
-                    <PreviewList
-                      @docs={{this.snippets.resolved}}
-                      @onInsert={{@onInsert}}
-                    />
-                  {{else}}
-                    <AlertNoItems />
-                  {{/if}}
-                {{/if}}
-              {{/if}}
-            </div>
-            {{#if this.snippets.resolved.length}}
-              {{#let
-                (pagination
-                  page=this.pageNumber
-                  pageSize=this.pageSize
-                  count=this.totalCount
-                )
-                as |pg|
-              }}
-                <PaginationView
-                  @totalCount={{pg.count}}
-                  @rangeStart={{pg.pageStart}}
-                  @rangeEnd={{pg.pageEnd}}
-                  @onNextPage={{this.nextPage}}
-                  @onPreviousPage={{this.previousPage}}
-                  @isFirstPage={{not pg.hasPreviousPage}}
-                  @isLastPage={{not pg.hasNextPage}}
-                />
-              {{/let}}
-            {{/if}}
+            <Inner
+              @snippetListUris={{@snippetListUris}}
+              @searchText={{this.inputSearchText}}
+              @onInsert={{@onInsert}}
+              @config={{@config}}
+            />
           </mc.content>
         </AuMainContainer>
       </modal.Body>
     </AuModal>
+  </template>
+}
+
+type InnerSig = {
+  Args: {
+    snippetListUris: Option<string[]>;
+    searchText: string | null;
+    onInsert: (snippet: Snippet) => void;
+    config: SnippetPluginConfig;
+  };
+};
+
+// Split out inner component to allow for easy re-trying of fetch errors
+class Inner extends Component<InnerSig> {
+  @service declare snippetFetchService: SnippetFetchService;
+
+  // Pagination
+  @tracked pageNumber = 0;
+  @tracked pageSize = 20;
+  @tracked totalCount = 0;
+
+  snippetsSearch = restartableTask(async () => {
+    if (this.args.searchText) {
+      await timeout(500);
+    }
+
+    const abortController = new AbortController();
+
+    try {
+      const queryResult = await this.snippetFetchService.getSnippets({
+        endpoint: this.args.config.endpoint,
+        abortSignal: abortController.signal,
+        filter: {
+          name: this.args.searchText ?? undefined,
+          snippetListUris: this.args.snippetListUris ?? undefined,
+        },
+        pagination: {
+          pageNumber: this.pageNumber,
+          pageSize: this.pageSize,
+        },
+      });
+
+      this.totalCount = queryResult.totalCount;
+
+      return queryResult.results;
+    } finally {
+      abortController.abort();
+    }
+  });
+
+  snippetsResource = trackedTask<Snippet[]>(this, this.snippetsSearch, () => [
+    this.args.searchText,
+    this.pageNumber,
+    this.pageSize,
+    this.args.snippetListUris,
+  ]);
+
+  @action
+  previousPage() {
+    --this.pageNumber;
+  }
+
+  @action
+  nextPage() {
+    ++this.pageNumber;
+  }
+
+  <template>
+    <div class='au-u-padding-top snippet-modal--list-container'>
+      {{#if this.snippetsResource.isRunning}}
+        <div class='au-u-margin'>
+          <Loading />
+        </div>
+      {{else}}
+        {{#if this.snippetsResource.error}}
+          <AlertLoadError @error={{this.snippetsResource.error}} />
+        {{else}}
+          {{#if this.snippetsResource.value.length}}
+            <PreviewList
+              @docs={{this.snippetsResource.value}}
+              @onInsert={{@onInsert}}
+            />
+          {{else}}
+            <AlertNoItems />
+          {{/if}}
+        {{/if}}
+      {{/if}}
+    </div>
+    {{#if this.snippetsResource.value.length}}
+      {{#let
+        (pagination
+          page=this.pageNumber pageSize=this.pageSize count=this.totalCount
+        )
+        as |pg|
+      }}
+        <PaginationView
+          @totalCount={{pg.count}}
+          @rangeStart={{pg.pageStart}}
+          @rangeEnd={{pg.pageEnd}}
+          @onNextPage={{this.nextPage}}
+          @onPreviousPage={{this.previousPage}}
+          @isFirstPage={{not pg.hasPreviousPage}}
+          @isLastPage={{not pg.hasNextPage}}
+        />
+      {{/let}}
+    {{/if}}
   </template>
 }

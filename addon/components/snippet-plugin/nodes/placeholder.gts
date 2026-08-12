@@ -60,14 +60,21 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
             {{t 'common.search.loading'}}
           </AuLoader>
         {{else}}
-          <p class='say-snippet-placeholder__title'>{{this.alertTitle}}</p>
-          {{#unless this.isSingleList}}
-            <ul class='say-snippet-placeholder__list'>
-              {{#each @snippetListNames.resolved as |listName|}}
-                <li>{{listName}}</li>
-              {{/each}}
-            </ul>
-          {{/unless}}
+          {{#if @snippetListNames.error}}
+            <p class='say-snippet-placeholder__title'>{{t
+                'snippet-plugin.snippet-list.name-error-message'
+                message=@snippetListNames.error.reason
+              }}</p>
+          {{else}}
+            <p class='say-snippet-placeholder__title'>{{this.alertTitle}}</p>
+            {{#unless this.isSingleList}}
+              <ul class='say-snippet-placeholder__list'>
+                {{#each @snippetListNames.resolved as |listName|}}
+                  <li>{{listName}}</li>
+                {{/each}}
+              </ul>
+            {{/unless}}
+          {{/if}}
           {{#unless this.config.hidePlaceholderInsertButton}}
             <AuButton
               @skin='link'

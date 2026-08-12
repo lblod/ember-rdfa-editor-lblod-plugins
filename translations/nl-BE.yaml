@@ -274,6 +274,8 @@ snippet-plugin:
       label: Fragmentnaam
       placeholder: Vul in…
   snippet-list:
+    name-error: Probleem bij het laden van de namen van de snippetlijsten
+    name-error-message: "Probleem bij het laden van de namen van de snippetlijsten: {message}"
     open-modal: Fragmentlijsten beheren
     modal:
       title: Selecteer beschikbare fragmentlijsten voor deze sjabloon
