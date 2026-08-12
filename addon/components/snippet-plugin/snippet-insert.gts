@@ -1,8 +1,10 @@
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
+import { trackedFunction } from 'reactiveweb/function';
 import { getPromiseState } from 'reactiveweb/get-promise-state';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
@@ -17,6 +19,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { type SnippetListProperties } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import insertSnippet from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/commands/insert-snippet';
+import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
 import SearchModal from './search-modal';
 
 interface Sig {
@@ -29,6 +32,8 @@ interface Sig {
 }
 
 export default class SnippetInsertComponent extends Component<Sig> {
+  @service declare snippetFetchService: SnippetFetchService;
+
   @tracked showModal = false;
 
   get controller() {
@@ -74,6 +79,16 @@ export default class SnippetInsertComponent extends Component<Sig> {
     }
   }
 
+  snippetListNames = trackedFunction(this, async () => {
+    return (
+      this.args.listProperties &&
+      this.snippetFetchService.getListNames(
+        this.args.config,
+        this.args.listProperties.listUris,
+      )
+    );
+  });
+
   <template>
     <li class='au-c-list__item'>
       <AuButton
@@ -93,7 +108,7 @@ export default class SnippetInsertComponent extends Component<Sig> {
       @config={{@config}}
       @onInsert={{this.onInsert}}
       @snippetListUris={{@listProperties.listUris}}
-      @snippetListNames={{getPromiseState @listProperties.names}}
+      @snippetListNames={{getPromiseState this.snippetListNames.promise}}
     />
   </template>
 }

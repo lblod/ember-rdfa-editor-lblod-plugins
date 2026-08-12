@@ -276,7 +276,7 @@ snippet-plugin:
       placeholder: Type something...
   snippet-list:
     name-error: Error loading snippet list names
-    name-error-message: "Error loading snippet list names: {message}"
+    name-error-message: 'Error loading snippet list names: {message}'
     open-modal: Manage snippet lists
     modal:
       title: Select available snippet lists for this template
