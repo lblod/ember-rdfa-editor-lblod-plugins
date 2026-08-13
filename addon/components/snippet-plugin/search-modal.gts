@@ -1,7 +1,7 @@
-import pagination from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/pagination';
 import Component from '@glimmer/component';
 import { assert } from '@ember/debug';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { task as trackedTask } from 'reactiveweb/ember-concurrency';
 import { tracked } from '@glimmer/tracking';
@@ -13,10 +13,11 @@ import AuMainContainer from '@appuniversum/ember-appuniversum/components/au-main
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 
+import { Option } from '@lblod/ember-rdfa-editor/utils/option';
+import pagination from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/pagination';
 import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-native-input';
 import Loading from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/loading';
 import AlertLoadError from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-load-error';
-import { fetchSnippets } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
 import {
   Snippet,
   SnippetPluginConfig,
@@ -24,17 +25,20 @@ import {
 import PreviewList from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/documents/preview-list';
 import AlertNoItems from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-no-items';
 import PaginationView from '@lblod/ember-rdfa-editor-lblod-plugins/components/pagination/pagination-view';
+import SnippetFetchService from '@lblod/ember-rdfa-editor-lblod-plugins/services/snippet-fetch-service';
 
 interface Args {
   config: SnippetPluginConfig;
-  snippetListUris: string[] | undefined;
-  snippetListNames: string[] | undefined;
+  snippetListUris: Option<string[]>;
+  snippetListNames: Option<string[]>;
   closeModal: () => void;
   open: boolean;
   onInsert: (snippet: Snippet) => void;
 }
 
 export default class SnippetPluginSearchModalComponent extends Component<Args> {
+  @service declare snippetFetchService: SnippetFetchService;
+
   // Filtering
   @tracked inputSearchText: string | null = null;
 
@@ -75,12 +79,14 @@ export default class SnippetPluginSearchModalComponent extends Component<Args> {
   }
 
   snippetsSearch = restartableTask(async () => {
-    await timeout(500);
+    if (this.searchText) {
+      await timeout(500);
+    }
 
     const abortController = new AbortController();
 
     try {
-      const queryResult = await fetchSnippets({
+      const queryResult = await this.snippetFetchService.getSnippets({
         endpoint: this.args.config.endpoint,
         abortSignal: abortController.signal,
         filter: {

@@ -28,7 +28,6 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
       return {
         listUris,
         placeholderId: activeNode.attrs.placeholderId,
-        names: activeNode.attrs.snippetListNames,
         importedResources: activeNode.attrs.importedResources,
       };
     }
@@ -50,7 +49,6 @@ export default class SnippetInsertRdfaComponent extends Component<Sig> {
         return {
           listUris,
           placeholderId: parentNode.node.attrs.placeholderId,
-          names: parentNode.node.attrs.snippetListNames,
           importedResources: parentNode.node.attrs.importedResources,
         };
       }

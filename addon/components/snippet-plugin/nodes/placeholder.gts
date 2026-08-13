@@ -13,6 +13,7 @@ import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames
 interface Signature {
   Args: Pick<EmberNodeArgs, 'node' | 'selectNode'> & {
     insertSnippet: () => void;
+    snippetListNames: string[];
   };
 }
 
@@ -22,19 +23,16 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
   get node() {
     return this.args.node;
   }
-  get listNames() {
-    return this.args.node.attrs.snippetListNames;
-  }
   get config(): SnippetPluginConfig {
     return this.node.attrs.config;
   }
   get isSingleList() {
-    return this.listNames.length === 1;
+    return this.args.snippetListNames.length === 1;
   }
   get alertTitle() {
     if (this.isSingleList) {
       return this.intl.t('snippet-plugin.placeholder.title-single', {
-        listName: this.listNames[0],
+        listName: this.args.snippetListNames[0],
       });
     } else {
       return this.intl.t('snippet-plugin.placeholder.title-multiple');
@@ -58,7 +56,7 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
         <p class='say-snippet-placeholder__title'>{{this.alertTitle}}</p>
         {{#unless this.isSingleList}}
           <ul class='say-snippet-placeholder__list'>
-            {{#each this.listNames as |listName|}}
+            {{#each @snippetListNames as |listName|}}
               <li>{{listName}}</li>
             {{/each}}
           </ul>

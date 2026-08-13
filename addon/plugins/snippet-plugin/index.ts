@@ -33,7 +33,8 @@ export type ImportedResourceMap = Record<string, Option<string>>;
 export type SnippetListProperties = {
   placeholderId: string;
   listUris: string[];
-  names: string[];
+  /** @deprecated Passing snippet list names is no longer necessary */
+  names?: string[];
   importedResources: ImportedResourceMap;
 };
 

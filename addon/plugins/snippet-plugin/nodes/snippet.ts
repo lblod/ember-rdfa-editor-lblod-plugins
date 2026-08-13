@@ -84,12 +84,7 @@ export function createSnippet({
   content,
   title,
   allowMultipleSnippets,
-  listProperties: {
-    listUris,
-    names: snippetListNames,
-    importedResources,
-    placeholderId,
-  },
+  listProperties: { listUris, importedResources, placeholderId },
 }: CreateSnippetArgs): [PNode, Map<string, OutgoingTriple[]>] {
   // Replace instances of linked to uris with the resources that exist in the outer document.
   let replacedContent = content;
@@ -116,7 +111,6 @@ export function createSnippet({
     {
       placeholderId,
       properties,
-      snippetListNames,
       title,
       subject: `http://data.lblod.info/snippets/${uuidv4()}`,
       importedResources,
@@ -169,7 +163,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
     },
     rdfaNodeType: { default: 'resource' },
     placeholderId: { default: '' },
-    snippetListNames: { default: [] },
     importedResources: { default: {} },
     title: { default: '' },
     config: { default: options },
@@ -180,13 +173,11 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
   content: options.allowedContent || DEFAULT_CONTENT_STRING,
   classNames: ['say-snippet'],
   serialize(node) {
-    const listNames = node.attrs.snippetListNames as string[];
     return renderRdfaAware({
       renderable: node,
       tag: 'div',
       attrs: {
         'data-snippet-placeholder-id': node.attrs.placeholderId,
-        'data-list-names': listNames && JSON.stringify(listNames),
         'data-imported-resources': JSON.stringify(node.attrs.importedResources),
         'data-snippet-title': node.attrs.title,
         'data-allow-multiple-snippets': node.attrs.allowMultipleSnippets,
@@ -225,7 +216,6 @@ const emberNodeConfig = (options: SnippetPluginConfig): EmberNodeConfig => ({
             ...rdfaAttrs,
             properties,
             placeholderId,
-            snippetListNames: jsonParse(node.getAttribute('data-list-names')),
             importedResources: jsonParse(
               node.getAttribute('data-imported-resources'),
             ),
