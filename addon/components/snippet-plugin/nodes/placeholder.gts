@@ -75,16 +75,17 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
               </ul>
             {{/unless}}
           {{/if}}
-          {{#unless this.config.hidePlaceholderInsertButton}}
-            <AuButton
-              @skin='link'
-              class='say-snippet-placeholder__button'
-              {{on 'click' @insertSnippet}}
-            >
-              {{t 'snippet-plugin.placeholder.button'}}
-            </AuButton>
-          {{/unless}}
         {{/if}}
+        {{#unless this.config.hidePlaceholderInsertButton}}
+          <AuButton
+            @skin='link'
+            class='say-snippet-placeholder__button'
+            @disabled={{@snippetListNames.isLoading}}
+            {{on 'click' @insertSnippet}}
+          >
+            {{t 'snippet-plugin.placeholder.button'}}
+          </AuButton>
+        {{/unless}}
       </div>
     </div>
   </template>
