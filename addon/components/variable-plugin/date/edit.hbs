@@ -62,7 +62,7 @@
             </AuFormRow>
           </VariablePlugin::Date::DateTimePicker>
           <AuRadioGroup
-            @name='dateFormat'
+            @name={{(this.uuidv4)}}
             @selected={{this.dateFormatType}}
             @onChange={{this.setDateFormatFromKey}}
             as |Group|

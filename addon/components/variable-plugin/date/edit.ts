@@ -32,6 +32,7 @@ import { InfoCircleIcon } from '@appuniversum/ember-appuniversum/components/icon
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import AuCard from '../../_private/appuniversum-overrides/au-card';
+import { v4 as uuidv4 } from 'uuid';
 
 type Args = {
   controller: SayController;
@@ -43,6 +44,8 @@ export default class DateEditComponent extends Component<Args> {
   InfoCircleIcon = InfoCircleIcon;
   Velcro = Velcro;
   AuCard = AuCard;
+
+  uuidv4 = uuidv4;
 
   @service
   declare intl: IntlService;
