@@ -176,6 +176,7 @@ import Owner from '@ember/owner';
 import { locationModalsPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/location-plugin';
 import { emptyBlockPlaceholder } from '@lblod/ember-rdfa-editor/plugins/empty-block-placeholder';
 import { getCodelistActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/codelist';
+import FloatingDateContainer from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/floating-date-container';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -192,6 +193,7 @@ export default class BesluitSampleController extends Controller {
   InsertArticle = InsertArticleComponent;
   StructureControlCard = StructureControlCardComponent;
   ContextualActionsContainer = ContextualActionsContainer;
+  FloatingDateContainer = FloatingDateContainer;
 
   @tracked editableNodes = false;
 
