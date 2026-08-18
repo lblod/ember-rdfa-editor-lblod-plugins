@@ -58,7 +58,6 @@ export function replacePersonCommand(
       transaction.setSelection(newSelection);
       dispatch(transaction);
     }
-    console.log(result);
 
     return result.every((res) => res);
   };
