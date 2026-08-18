@@ -177,6 +177,7 @@ import { locationModalsPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plu
 import { emptyBlockPlaceholder } from '@lblod/ember-rdfa-editor/plugins/empty-block-placeholder';
 import { getCodelistActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/codelist';
 import { getPersonActionGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/contextual-actions/person';
+import { lmbModalsPlugin } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 
 export default class BesluitSampleController extends Controller {
   queryParams = ['editableNodes'];
@@ -237,6 +238,7 @@ export default class BesluitSampleController extends Controller {
       }),
       locationModalsPlugin(),
       emptyBlockPlaceholder(),
+      lmbModalsPlugin(),
     ];
   }
 

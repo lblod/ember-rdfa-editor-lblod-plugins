@@ -239,6 +239,9 @@ variable-plugin:
     card-title: Insert person
     nodeview-placeholder: Person
     suggestions: Suggestions
+    other-elements: Other elements
+    insert-mandatee: Insert mandatee
+    insert-electee: Insert electee
   autofill:
     autofillKey: Autofill Key
     convertToString: Replace variable node with plain text on text insertion

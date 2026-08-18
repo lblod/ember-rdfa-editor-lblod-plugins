@@ -1,10 +1,14 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { AddIcon } from '@appuniversum/ember-appuniversum/components/icons/add';
 
 import { SayController } from '@lblod/ember-rdfa-editor';
-import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
+import {
+  closeLmbModal,
+  getLmbModalsPluginState,
+  LmbPluginConfig,
+  openLmbModal,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin';
 import Electee from '@lblod/ember-rdfa-editor-lblod-plugins/models/electee';
 import { replaceSelectionWithAndSelectNode } from '@lblod/ember-rdfa-editor-lblod-plugins/commands';
 import { service } from '@ember/service';
@@ -22,7 +26,9 @@ export default class LmbPluginInsertComponent extends Component<Args> {
   @service declare intl: IntlService;
   AddIcon = AddIcon;
 
-  @tracked showModal = false;
+  get showModal() {
+    return getLmbModalsPluginState(this.controller.mainEditorState)?.modalOpen;
+  }
 
   get controller() {
     return this.args.controller;
@@ -31,12 +37,12 @@ export default class LmbPluginInsertComponent extends Component<Args> {
   @action
   openModal() {
     this.controller.focus();
-    this.showModal = true;
+    openLmbModal(this.controller.mainEditorView);
   }
 
   @action
   closeModal() {
-    this.showModal = false;
+    closeLmbModal(this.controller.mainEditorView);
   }
 
   @action

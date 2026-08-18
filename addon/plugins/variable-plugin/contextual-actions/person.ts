@@ -6,13 +6,42 @@ import { getPersonFromPNode } from '@lblod/ember-rdfa-editor-lblod-plugins/plugi
 import { v4 as uuidv4 } from 'uuid';
 import { replacePersonCommand } from '../utils/replace-person';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
+import { type ContextualAction } from '@lblod/ember-rdfa-editor/plugins/contextual-actions/index';
+import { openLmbModalCommand } from '../../lmb-plugin';
 
 const PERSON_SUGGESTIONS_GROUP_ID =
   'person-suggestions-9cc92bb6-de78-41cf-824c-ed391b206764';
 
+const OTHER_ELEMENTS_GROUP_ID =
+  'person-other-elements-5c66b28f-22ff-4f0a-bd24-4f90cdc5a64a';
+
 const SUGGESTION_AMOUNT = 15;
 
-export function getContextualActions(state: EditorState, searchQuery?: string) {
+function getOtherElementsActions(state: EditorState) {
+  const translate = getTranslationFunction(state);
+  return [
+    {
+      label: translate(
+        'variable-plugin.person.insert-electee',
+        'Verkozene invoegen',
+      ),
+      id: uuidv4(),
+      group: OTHER_ELEMENTS_GROUP_ID,
+      command: openLmbModalCommand(),
+    },
+    // {
+    //   label: translate(
+    //     'variable-plugin.person.insert-mandatee',
+    //     'Mandataris invoegen',
+    //   ),
+    //   id: uuidv4(),
+    //   group: OTHER_ELEMENTS_GROUP_ID,
+    //   command: null,
+    // },
+  ];
+}
+
+function getSuggestionsActions(state: EditorState) {
   const selectedNode = getSelectedPersonNode(state);
   if (!selectedNode) return [];
   return getRankedPNodes(state, 'person_variable', (node) => node.attrs.subject)
@@ -32,12 +61,19 @@ export function getContextualActions(state: EditorState, searchQuery?: string) {
           command: replacePersonCommand(selectedNode, person),
         },
       ];
-    })
-    .filter(
+    });
+}
+
+function makeSearchable(
+  actionGetter: (state: EditorState) => ContextualAction[],
+) {
+  return function (state: EditorState, searchQuery?: string) {
+    return actionGetter(state).filter(
       (option) =>
         !searchQuery ||
         option.label.toLocaleLowerCase().includes(searchQuery.toLowerCase()),
     );
+  };
 }
 
 function getSelectedPersonNode(state: EditorState): ResolvedPNode | null {
@@ -57,7 +93,12 @@ export function getPersonActionGroups() {
       {
         id: PERSON_SUGGESTIONS_GROUP_ID,
         label: t('variable-plugin.person.suggestions', 'Suggesties'),
-        getActions: getContextualActions,
+        getActions: makeSearchable(getSuggestionsActions),
+      },
+      {
+        id: OTHER_ELEMENTS_GROUP_ID,
+        getActions: makeSearchable(getOtherElementsActions),
+        sticky: 'bottom',
       },
     ];
   };
