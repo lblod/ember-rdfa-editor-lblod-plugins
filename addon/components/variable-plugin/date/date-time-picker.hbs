@@ -1,10 +1,10 @@
 {{! @glint-nocheck: not typesafe yet }}
 <AuFormRow>
-  <AuDatePicker
+  <DatePicker
     @onChange={{this.onChangeDate}}
     @value={{this.date}}
     @label={{t 'date-plugin.card.label'}}
-    @localization={{this.datePickerLocalization}}
+    class='au-u-1-1'
   />
 </AuFormRow>
 {{yield}}

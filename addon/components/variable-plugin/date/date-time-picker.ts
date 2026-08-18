@@ -25,23 +25,6 @@ export default class DateTimePickerComponent extends Component<Args> {
     return this.date?.getSeconds();
   }
 
-  get datePickerLocalization() {
-    return {
-      buttonLabel: this.intl.t('au-date-picker.button-label'),
-      selectedDateMessage: this.intl.t('au-date-picker.selected-date-message'),
-      prevMonthLabel: this.intl.t('au-date-picker.prev-month-label'),
-      nextMonthLabel: this.intl.t('au-date-picker.next-month-label'),
-      monthSelectLabel: this.intl.t('au-date-picker.month-select-label'),
-      yearSelectLabel: this.intl.t('au-date-picker.year-select-label'),
-      closeLabel: this.intl.t('au-date-picker.close-label'),
-      calendarHeading: this.intl.t('au-date-picker.calendar-heading'),
-      dayNames: getLocalizedDays(this.intl),
-      monthNames: getLocalizedMonths(this.intl),
-      monthNamesShort: getLocalizedMonths(this.intl, 'short'),
-      placeholder: this.intl.t('au-date-picker.placeholder'),
-    };
-  }
-
   @action
   onChangeDate(_isoDate: unknown, date: Date) {
     const wasDateInputCleared = !date;
@@ -69,27 +52,4 @@ export default class DateTimePickerComponent extends Component<Args> {
     this.date.setSeconds(timeObject.seconds);
     this.args.onChange(this.date);
   }
-}
-
-function getLocalizedMonths(
-  intl: Intl,
-  monthFormat: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' = 'long',
-) {
-  const someYear = 2021;
-  return [...Array(12).keys()].map((monthIndex) => {
-    const date = new Date(someYear, monthIndex);
-    return intl.formatDate(date, { month: monthFormat });
-  });
-}
-
-function getLocalizedDays(
-  intl: Intl,
-  weekdayFormat: 'long' | 'short' | 'narrow' = 'long',
-) {
-  const someSunday = new Date('2021-01-03');
-  return [...Array(7).keys()].map((index) => {
-    const weekday = new Date(someSunday.getTime());
-    weekday.setDate(someSunday.getDate() + index);
-    return intl.formatDate(weekday, { weekday: weekdayFormat });
-  });
 }
