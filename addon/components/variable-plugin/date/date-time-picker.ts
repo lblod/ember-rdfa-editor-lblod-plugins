@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { localCopy } from 'tracked-toolbox';
 import Intl from 'ember-intl/services/intl';
+import DatePicker from '@lblod/ember-rdfa-editor/components/date-picker';
 
 type Args = {
   value?: Date;
@@ -12,6 +13,8 @@ type Args = {
 export default class DateTimePickerComponent extends Component<Args> {
   @service declare intl: Intl;
   @localCopy('args.value') declare date?: Date;
+
+  DatePicker = DatePicker;
 
   get hours() {
     return this.date?.getHours();
