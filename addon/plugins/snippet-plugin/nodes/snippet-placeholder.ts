@@ -64,7 +64,6 @@ export function createSnippetPlaceholder({
     listProps = {
       // This is a completely new placeholder, so new id
       placeholderId: uuidv4(),
-      names: args.lists.map((list) => list.label),
       importedResources: importedResourcesFromSnippetLists(args.lists),
     };
     additionalProperties = args.lists.map((list) =>
