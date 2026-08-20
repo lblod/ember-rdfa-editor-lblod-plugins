@@ -9,7 +9,7 @@ related to the LBLOD Project.
   4.12 is no longer tested and not officially supported, but should still work for now.
 
 - Embroider or ember-auto-import v2
-- Node 18 or above (20+ recommended)
+- Node 18 or above (22+ recommended)
 
 ## Installation
 
