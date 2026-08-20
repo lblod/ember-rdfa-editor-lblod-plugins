@@ -7,6 +7,20 @@ import AuLinkExternal from '@appuniversum/ember-appuniversum/components/au-link-
 import { AlertTriangleIcon } from '@appuniversum/ember-appuniversum/components/icons/alert-triangle';
 import { MailIcon } from '@appuniversum/ember-appuniversum/components/icons/mail';
 
+function errorMessage(err: unknown): string {
+  if (!err) return 'Error';
+  if (typeof err !== 'object') return JSON.stringify(err);
+  return (
+    ('message' in err && (err?.message as string)) ||
+    // getPromiseState includes the original error, so try to use that to avoid their generic error
+    ('original' in err && (err?.original as Error | undefined)?.message) ||
+    // getPromiseState 'Error's use 'reason' in place of 'message' for some reason
+    ('reason' in err && (err?.reason as string)) ||
+    err?.toString?.() ||
+    'Error'
+  );
+}
+
 interface Sig {
   Args: {
     error: unknown;
@@ -26,8 +40,7 @@ const AlertLoadError: TemplateOnlyComponent<Sig> = <template>
     ...attributes
   >
     <p>{{t 'common.search.error-intro'}}</p>
-    {{! @glint-expect-error: This seems to work... I guess Error has a toString that is called? }}
-    <code class='au-u-error error-code'>{{@error}}</code>
+    <code class='au-u-error error-code'>{{errorMessage @error}}</code>
     <p>
       {{t 'common.search.error-outro'}}
       <AuLinkExternal

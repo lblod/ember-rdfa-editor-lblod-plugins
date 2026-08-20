@@ -1,15 +1,12 @@
 import { NodeWithPos } from '@curvenote/prosemirror-utils';
 import { LegacyTableOfContentsConfig, TableOfContentsConfig } from '..';
 import { DOMOutputSpec, PNode, EditorState } from '@lblod/ember-rdfa-editor';
+import { Mutable } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/types';
 
 export type OutlineEntry = {
   content: string;
   pos: number;
   children?: OutlineEntry[];
-};
-
-type Mutable<T> = {
-  -readonly [P in keyof T]: T[P];
 };
 
 export function createTableOfContents(entries: OutlineEntry[]) {

@@ -3,9 +3,11 @@ import { service } from '@ember/service';
 import { on } from '@ember/modifier';
 import IntlService from 'ember-intl/services/intl';
 import t from 'ember-intl/helpers/t';
+import { State } from 'reactiveweb/get-promise-state';
 import { PlusTextIcon } from '@appuniversum/ember-appuniversum/components/icons/plus-text';
 import AuIcon from '@appuniversum/ember-appuniversum/components/au-icon';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
 import { type EmberNodeArgs } from '@lblod/ember-rdfa-editor/utils/_private/ember-node';
 import { type SnippetPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames-from-node';
@@ -13,7 +15,7 @@ import getClassnamesFromNode from '@lblod/ember-rdfa-editor/utils/get-classnames
 interface Signature {
   Args: Pick<EmberNodeArgs, 'node' | 'selectNode'> & {
     insertSnippet: () => void;
-    snippetListNames: string[];
+    snippetListNames: State<string[]>;
   };
 }
 
@@ -27,12 +29,12 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
     return this.node.attrs.config;
   }
   get isSingleList() {
-    return this.args.snippetListNames.length === 1;
+    return this.args.snippetListNames.resolved?.length === 1;
   }
   get alertTitle() {
     if (this.isSingleList) {
       return this.intl.t('snippet-plugin.placeholder.title-single', {
-        listName: this.args.snippetListNames[0],
+        listName: this.args.snippetListNames.resolved?.[0],
       });
     } else {
       return this.intl.t('snippet-plugin.placeholder.title-multiple');
@@ -53,18 +55,32 @@ export default class SnippetPluginPlaceholder extends Component<Signature> {
         <AuIcon @icon={{PlusTextIcon}} />
       </div>
       <div class='say-snippet-placeholder__content'>
-        <p class='say-snippet-placeholder__title'>{{this.alertTitle}}</p>
-        {{#unless this.isSingleList}}
-          <ul class='say-snippet-placeholder__list'>
-            {{#each @snippetListNames as |listName|}}
-              <li>{{listName}}</li>
-            {{/each}}
-          </ul>
-        {{/unless}}
+        {{#if @snippetListNames.isLoading}}
+          <AuLoader @hideMessage={{true}}>
+            {{t 'common.search.loading'}}
+          </AuLoader>
+        {{else}}
+          {{#if @snippetListNames.error}}
+            <p class='say-snippet-placeholder__title'>{{t
+                'snippet-plugin.snippet-list.name-error-message'
+                message=@snippetListNames.error.reason
+              }}</p>
+          {{else}}
+            <p class='say-snippet-placeholder__title'>{{this.alertTitle}}</p>
+            {{#unless this.isSingleList}}
+              <ul class='say-snippet-placeholder__list'>
+                {{#each @snippetListNames.resolved as |listName|}}
+                  <li>{{listName}}</li>
+                {{/each}}
+              </ul>
+            {{/unless}}
+          {{/if}}
+        {{/if}}
         {{#unless this.config.hidePlaceholderInsertButton}}
           <AuButton
             @skin='link'
             class='say-snippet-placeholder__button'
+            @disabled={{@snippetListNames.isLoading}}
             {{on 'click' @insertSnippet}}
           >
             {{t 'snippet-plugin.placeholder.button'}}
