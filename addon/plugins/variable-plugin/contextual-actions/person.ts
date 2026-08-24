@@ -67,7 +67,6 @@ function getAsyncSearchActionsGetter(args: LmbPluginConfig) {
     state: EditorState,
     searchQuery?: string,
   ) {
-    console.log(`looking for: ${searchQuery}`);
     const selectedNode = getSelectedPersonNode(state);
     if (!searchQuery || !selectedNode) return [];
 
