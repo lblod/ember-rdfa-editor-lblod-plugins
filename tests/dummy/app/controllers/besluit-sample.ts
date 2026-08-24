@@ -253,7 +253,7 @@ export default class BesluitSampleController extends Controller {
     getPlaceDescriptionActionGroups(this.locationOptions),
     locationActionsGroups(),
     getCodelistActionGroups(this.codelistOptions),
-    getPersonActionGroups(),
+    getPersonActionGroups(this.config.lmb),
   ];
 
   get schema() {

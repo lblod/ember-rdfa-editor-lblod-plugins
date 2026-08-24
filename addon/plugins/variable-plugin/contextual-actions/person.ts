@@ -7,7 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { replacePersonCommand } from '../utils/replace-person';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 import { type ContextualAction } from '@lblod/ember-rdfa-editor/plugins/contextual-actions/index';
-import { openLmbModalCommand } from '../../lmb-plugin';
+import { LmbPluginConfig, openLmbModalCommand } from '../../lmb-plugin';
+import { fetchElectees } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchElectees';
+import { BESTUURSPERIODES } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 const PERSON_SUGGESTIONS_GROUP_ID =
   'person-suggestions-9cc92bb6-de78-41cf-824c-ed391b206764';
@@ -15,29 +17,25 @@ const PERSON_SUGGESTIONS_GROUP_ID =
 const OTHER_ELEMENTS_GROUP_ID =
   'person-other-elements-5c66b28f-22ff-4f0a-bd24-4f90cdc5a64a';
 
+const ASYNC_SEARCH_GROUP_ID =
+  'person-async-search-5545e1fa-aa23-4a77-8c5d-b97481d58fc4';
+
 const SUGGESTION_AMOUNT = 15;
+const SEARCH_PAGE_SIZE = 20;
 
 function getOtherElementsActions(state: EditorState) {
   const translate = getTranslationFunction(state);
   return [
     {
       label: translate(
-        'variable-plugin.person.insert-electee',
-        'Verkozene invoegen',
+        'variable-plugin.person.advanced-search',
+        'Geavanceerd zoeken',
       ),
       id: uuidv4(),
       group: OTHER_ELEMENTS_GROUP_ID,
       command: openLmbModalCommand(),
+      icon: 'search',
     },
-    // {
-    //   label: translate(
-    //     'variable-plugin.person.insert-mandatee',
-    //     'Mandataris invoegen',
-    //   ),
-    //   id: uuidv4(),
-    //   group: OTHER_ELEMENTS_GROUP_ID,
-    //   command: null,
-    // },
   ];
 }
 
@@ -64,6 +62,34 @@ function getSuggestionsActions(state: EditorState) {
     });
 }
 
+function getAsyncSearchActionsGetter(args: LmbPluginConfig) {
+  return async function getAsyncSearchActions(
+    state: EditorState,
+    searchQuery?: string,
+  ) {
+    console.log(`looking for: ${searchQuery}`);
+    const selectedNode = getSelectedPersonNode(state);
+    if (!searchQuery || !selectedNode) return [];
+
+    const persons = await fetchElectees({
+      endpoint: args.endpoint,
+      page: 0,
+      pageSize: SEARCH_PAGE_SIZE,
+      searchString: searchQuery,
+      adminUnitSearch: args.defaultAdminUnit ?? '',
+      sort: false,
+      period:
+        args.defaultPeriod ?? Object.values(BESTUURSPERIODES).at(-1) ?? '',
+    });
+    return persons.electees.map((person) => ({
+      label: person.fullName,
+      id: uuidv4(),
+      group: ASYNC_SEARCH_GROUP_ID,
+      command: replacePersonCommand(selectedNode, person),
+    }));
+  };
+}
+
 function makeSearchable(
   actionGetter: (state: EditorState) => ContextualAction[],
 ) {
@@ -84,7 +110,7 @@ function getSelectedPersonNode(state: EditorState): ResolvedPNode | null {
     : null;
 }
 
-export function getPersonActionGroups() {
+export function getPersonActionGroups(args: LmbPluginConfig) {
   return function (state: EditorState): ContextualActionGroup[] {
     const selectedNode = getSelectedPersonNode(state);
     if (!selectedNode) return [];
@@ -99,6 +125,16 @@ export function getPersonActionGroups() {
         id: OTHER_ELEMENTS_GROUP_ID,
         getActions: makeSearchable(getOtherElementsActions),
         sticky: 'bottom',
+      },
+      {
+        id: ASYNC_SEARCH_GROUP_ID,
+        priority: 10,
+        getActions: getAsyncSearchActionsGetter(args),
+        searchDebounceMs: 300,
+        loadingMessage: t(
+          'variable-plugin.person.searching',
+          'Aan het zoeken…',
+        ),
       },
     ];
   };

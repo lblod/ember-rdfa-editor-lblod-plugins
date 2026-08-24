@@ -244,8 +244,8 @@ variable-plugin:
     nodeview-placeholder: Persoon
     suggestions: Suggesties
     other-elements: Andere elementen
-    insert-mandatee: Mandataris invoegen
-    insert-electee: Verkozene invoegen
+    advanced-search: Geavanceerd zoeken…
+    searching: Aan het zoeken…
   autofill:
     autofillKey: Sleutelwaarde
     convertToString: Vervang variabele door platte tekst bij invoegen
