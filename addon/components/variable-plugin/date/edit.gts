@@ -49,7 +49,7 @@ import { hash } from '@ember/helper';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { eq, not } from 'ember-truth-helpers';
-import VariablePluginDateDateTimePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/date-time-picker.gts';
+import VariablePluginDateDateTimePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/date-time-picker';
 
 type Args = {
   controller: SayController;
