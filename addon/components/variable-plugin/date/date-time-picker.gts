@@ -58,17 +58,15 @@ export default class DateTimePickerComponent extends Component<Sig> {
   @action
   onChangeDate(_isoDate: unknown | null, date: Date | null) {
     if (!date) return;
-    const wasDateInputCleared = !date;
-    if (!wasDateInputCleared) {
-      if (!this.date) {
-        this.date = new Date();
-        this.date.setHours(0, 0, 0, 0);
-      }
-      this.date.setFullYear(date.getFullYear());
-      this.date.setMonth(date.getMonth());
-      this.date.setDate(date.getDate());
-      this.args.onChange(this.date);
+
+    if (!this.date) {
+      this.date = new Date();
+      this.date.setHours(0, 0, 0, 0);
     }
+    this.date.setFullYear(date.getFullYear());
+    this.date.setMonth(date.getMonth());
+    this.date.setDate(date.getDate());
+    this.args.onChange(this.date);
   }
 
   @action
@@ -83,6 +81,7 @@ export default class DateTimePickerComponent extends Component<Sig> {
     this.date.setSeconds(timeObject.seconds);
     this.args.onChange(this.date);
   }
+
   <template>
     <AuFormRow>
       <AuDatePicker
