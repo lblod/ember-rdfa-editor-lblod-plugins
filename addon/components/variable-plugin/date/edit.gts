@@ -42,6 +42,7 @@ import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
 import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-native-input';
+import TimePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/time-picker';
 
 import VariablePluginDateHelpModal from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/help-modal';
 import { hash } from '@ember/helper';
@@ -49,7 +50,7 @@ import { hash } from '@ember/helper';
 import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { eq, not } from 'ember-truth-helpers';
-import VariablePluginDateDateTimePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/date-time-picker';
+import DatePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/date-picker';
 
 type Args = {
   controller: SayController;
@@ -208,7 +209,19 @@ export default class DateEditComponent extends Component<Args> {
   }
 
   get pickerDate(): Option<Date> {
-    return this.documentDate;
+    return this.documentDate ?? null;
+  }
+
+  get pickerHours() {
+    return this.pickerDate?.getHours();
+  }
+
+  get pickerMinutes() {
+    return this.pickerDate?.getMinutes();
+  }
+
+  get pickerSeconds() {
+    return this.pickerDate?.getSeconds();
   }
 
   @action
@@ -306,68 +319,78 @@ export default class DateEditComponent extends Component<Args> {
   }
 
   <template>
-    <div>
-      {{#if this.showCard}}
-        <AuCard
-          @shadow={{true}}
-          @size='flush'
-          {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
-          @disableAuContent={{true}}
-          as |c|
-        >
-          <c.header class='au-u-hidden-visually'>
-            <AuHeading @level='3' @skin='6'>{{t
-                'date-plugin.card.title'
-              }}</AuHeading>
-          </c.header>
-          <c.content class='au-o-box au-o-box--small'>
-            <div class='au-o-flow au-o-flow--small'>
-              <VariablePluginDateDateTimePicker
-                @onChange={{this.changeDate}}
+    {{#if this.showCard}}
+      <AuCard
+        @shadow={{true}}
+        @size='flush'
+        {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
+        @disableAuContent={{true}}
+        as |c|
+      >
+        <c.header class='au-u-hidden-visually'>
+          <AuHeading @level='3' @skin='6'>{{t
+              'date-plugin.card.title'
+            }}</AuHeading>
+        </c.header>
+        <c.content class='au-o-box au-o-box--small'>
+          <div class='au-o-flow au-o-flow--small au-u-flex au-u-flex--column'>
+            <AuFormRow>
+              <DatePicker
                 @value={{this.pickerDate}}
-                @onlyDate={{this.onlyDate}}
-                @showSeconds={{this.showSeconds}}
-              >
-
-                <AuFormRow @alignment='inline'>
-                  <AuCheckbox
-                    @name='include-time'
-                    @disabled={{eq this.dateFormatType 'custom'}}
-                    @checked={{not this.onlyDate}}
-                    @onChange={{this.changeIncludeTime}}
+                @onChange={{this.changeDate}}
+              />
+            </AuFormRow>
+            <div
+              class='au-o-flow au-o-flow--small au-u-flex-shrink'
+              id='say-date-edit-scrollable-part'
+            >
+              <AuFormRow @alignment='inline'>
+                <AuCheckbox
+                  @name='include-time'
+                  @disabled={{eq this.dateFormatType 'custom'}}
+                  @checked={{not this.onlyDate}}
+                  @onChange={{this.changeIncludeTime}}
+                >
+                  {{t 'date-plugin.card.include-time'}}
+                </AuCheckbox>
+                {{#if this.isCustom}}
+                  <Velcro
+                    @placement='top'
+                    @strategy='absolute'
+                    @offsetOptions={{hash mainAxis=10}}
+                    as |velcro|
                   >
-                    {{t 'date-plugin.card.include-time'}}
-                  </AuCheckbox>
-                  {{#if this.isCustom}}
-                    <Velcro
-                      @placement='top'
-                      @strategy='absolute'
-                      @offsetOptions={{hash mainAxis=10}}
-                      as |velcro|
-                    >
-                      <AuBadge
-                        @size='small'
-                        @icon={{InfoCircleIcon}}
-                        aria-describedby='date-plugin-time-info-tooltip'
-                        {{velcro.hook}}
-                        {{on 'mouseenter' this.showTooltip}}
-                        {{on 'mouseleave' this.hideTooltip}}
-                        {{on 'focus' this.showTooltip}}
-                        {{on 'blur' this.hideTooltip}}
-                      />
-                      {{#if this.tooltipOpen}}
-                        <AuPill
-                          id='date-plugin-time-info-tooltip'
-                          role='tooltip'
-                          {{velcro.loop}}
-                        >
-                          {{t 'date-plugin.card.info-custom-time'}}
-                        </AuPill>
-                      {{/if}}
-                    </Velcro>
-                  {{/if}}
+                    <AuBadge
+                      @size='small'
+                      @icon={{InfoCircleIcon}}
+                      aria-describedby='date-plugin-time-info-tooltip'
+                      {{velcro.hook}}
+                      {{on 'mouseenter' this.showTooltip}}
+                      {{on 'mouseleave' this.hideTooltip}}
+                      {{on 'focus' this.showTooltip}}
+                      {{on 'blur' this.hideTooltip}}
+                    />
+                    {{#if this.tooltipOpen}}
+                      <AuPill
+                        id='date-plugin-time-info-tooltip'
+                        role='tooltip'
+                        {{velcro.loop}}
+                      >
+                        {{t 'date-plugin.card.info-custom-time'}}
+                      </AuPill>
+                    {{/if}}
+                  </Velcro>
+                {{/if}}
+              </AuFormRow>
+              {{#unless this.onlyDate}}
+                <AuFormRow>
+                  <TimePicker
+                    @value={{this.pickerDate}}
+                    @onChange={{this.changeDate}}
+                    @showSeconds={{this.showSeconds}}
+                  />
                 </AuFormRow>
-              </VariablePluginDateDateTimePicker>
+              {{/unless}}
               <AuRadioGroup
                 @name={{(uuidv4)}}
                 @selected={{this.dateFormatType}}
@@ -412,10 +435,10 @@ export default class DateEditComponent extends Component<Args> {
                 {{/if}}
               {{/if}}
             </div>
-          </c.content>
-        </AuCard>
-      {{/if}}
-    </div>
+          </div>
+        </c.content>
+      </AuCard>
+    {{/if}}
     <VariablePluginDateHelpModal
       @modalOpen={{this.helpModalOpen}}
       @closeModal={{this.toggleHelpModal}}
