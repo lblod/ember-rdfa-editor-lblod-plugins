@@ -393,8 +393,10 @@ export default class DateEditComponent extends Component<Args> {
                 <AuFormRow @alignment='post'>
                   <AuButton
                     @skin='secondary'
-                    @icon={{InfoCircleIcon}}
+                    @icon='info-circle'
+                    @hideText={{true}}
                     {{on 'click' this.toggleHelpModal}}
+                    id='say-date-edit-info-modal-button'
                   />
                   <AuNativeInput
                     @error={{this.hasCustomDateFormatError}}
