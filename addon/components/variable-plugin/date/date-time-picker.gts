@@ -52,6 +52,7 @@ export default class DateTimePickerComponent extends Component<Sig> {
       monthNames: getLocalizedMonths(this.intl),
       monthNamesShort: getLocalizedMonths(this.intl, 'short'),
       placeholder: this.intl.t('au-date-picker.placeholder'),
+      locale: this.intl.primaryLocale ?? 'nl-BE',
     };
   }
 
@@ -111,6 +112,21 @@ export default class DateTimePickerComponent extends Component<Sig> {
   </template>
 }
 
+type MonthNames = [
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+];
+type DayNames = [string, string, string, string, string, string, string];
 function getLocalizedMonths(
   intl: Intl,
   monthFormat: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' = 'long',
@@ -119,17 +135,17 @@ function getLocalizedMonths(
   return [...Array(12).keys()].map((monthIndex) => {
     const date = new Date(someYear, monthIndex);
     return intl.formatDate(date, { month: monthFormat });
-  });
+  }) as MonthNames;
 }
 
 function getLocalizedDays(
   intl: Intl,
   weekdayFormat: 'long' | 'short' | 'narrow' = 'long',
-) {
+): DayNames {
   const someSunday = new Date('2021-01-03');
   return [...Array(7).keys()].map((index) => {
     const weekday = new Date(someSunday.getTime());
     weekday.setDate(someSunday.getDate() + index);
     return intl.formatDate(weekday, { weekday: weekdayFormat });
-  });
+  }) as DayNames;
 }
