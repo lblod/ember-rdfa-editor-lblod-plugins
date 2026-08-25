@@ -429,7 +429,9 @@ lmb-plugin:
       placeholder: bv. Gent, Aalst...
     fields:
       name: Naam
+      status: Status
       kandidatenlijst: Kandidatenlijst
+      role: Rol
       period: Bestuursperiode
       adminUnit: Bestuurseenheid
 
