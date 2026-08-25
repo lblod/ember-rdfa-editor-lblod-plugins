@@ -9,7 +9,7 @@ import t from 'ember-intl/helpers/t';
 
 type Sig = {
   Args: {
-    value?: Date;
+    value?: Date | null;
     onChange: (date: Date) => void;
   };
 };
