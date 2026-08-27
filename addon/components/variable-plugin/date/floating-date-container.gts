@@ -45,6 +45,7 @@ export default class FloatingDateContainer extends Component<Signature> {
       <FloatingWindow
         @forSelection={{this.forSelection}}
         @controller={{@controller}}
+        class='au-u-flex'
       >
         <EditDate @controller={{@controller}} @options={{@options}} />
       </FloatingWindow>

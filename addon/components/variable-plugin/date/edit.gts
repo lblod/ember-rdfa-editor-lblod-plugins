@@ -320,124 +320,113 @@ export default class DateEditComponent extends Component<Args> {
 
   <template>
     {{#if this.showCard}}
-      <AuCard
-        @shadow={{true}}
-        @size='flush'
-        {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
-        @disableAuContent={{true}}
-        as |c|
+      <div
+        class='au-u-flex au-u-flex--column au-u-flex au-u-background-gray-100'
       >
-        <c.header class='au-u-hidden-visually'>
-          <AuHeading @level='3' @skin='6'>{{t
-              'date-plugin.card.title'
-            }}</AuHeading>
-        </c.header>
-        <c.content class='au-o-box au-o-box--small'>
-          <div class='au-o-flow au-o-flow--small au-u-flex au-u-flex--column'>
+        <AuFormRow
+          class='au-u-padding-top-small au-u-padding-left-small au-u-padding-right-small au-u-padding-bottom-tiny'
+        >
+          <DatePicker
+            @value={{this.pickerDate}}
+            @onChange={{this.changeDate}}
+          />
+        </AuFormRow>
+        <div
+          class='au-o-flow au-o-flow--small au-u-flex-shrink au-u-padding-top-tiny au-u-padding-left-small au-u-padding-right-small au-u-padding-bottom-small'
+          id='say-date-edit-scrollable-part'
+        >
+          <AuFormRow @alignment='inline'>
+            <AuCheckbox
+              @name='include-time'
+              @disabled={{eq this.dateFormatType 'custom'}}
+              @checked={{not this.onlyDate}}
+              @onChange={{this.changeIncludeTime}}
+            >
+              {{t 'date-plugin.card.include-time'}}
+            </AuCheckbox>
+            {{#if this.isCustom}}
+              <Velcro
+                @placement='top'
+                @strategy='absolute'
+                @offsetOptions={{hash mainAxis=10}}
+                as |velcro|
+              >
+                <AuBadge
+                  @size='small'
+                  @icon={{InfoCircleIcon}}
+                  aria-describedby='date-plugin-time-info-tooltip'
+                  {{velcro.hook}}
+                  {{on 'mouseenter' this.showTooltip}}
+                  {{on 'mouseleave' this.hideTooltip}}
+                  {{on 'focus' this.showTooltip}}
+                  {{on 'blur' this.hideTooltip}}
+                />
+                {{#if this.tooltipOpen}}
+                  <AuPill
+                    id='date-plugin-time-info-tooltip'
+                    role='tooltip'
+                    {{velcro.loop}}
+                  >
+                    {{t 'date-plugin.card.info-custom-time'}}
+                  </AuPill>
+                {{/if}}
+              </Velcro>
+            {{/if}}
+          </AuFormRow>
+          {{#unless this.onlyDate}}
             <AuFormRow>
-              <DatePicker
+              <TimePicker
                 @value={{this.pickerDate}}
                 @onChange={{this.changeDate}}
+                @showSeconds={{this.showSeconds}}
               />
             </AuFormRow>
-            <div
-              class='au-o-flow au-o-flow--small au-u-flex-shrink'
-              id='say-date-edit-scrollable-part'
-            >
-              <AuFormRow @alignment='inline'>
-                <AuCheckbox
-                  @name='include-time'
-                  @disabled={{eq this.dateFormatType 'custom'}}
-                  @checked={{not this.onlyDate}}
-                  @onChange={{this.changeIncludeTime}}
-                >
-                  {{t 'date-plugin.card.include-time'}}
-                </AuCheckbox>
-                {{#if this.isCustom}}
-                  <Velcro
-                    @placement='top'
-                    @strategy='absolute'
-                    @offsetOptions={{hash mainAxis=10}}
-                    as |velcro|
-                  >
-                    <AuBadge
-                      @size='small'
-                      @icon={{InfoCircleIcon}}
-                      aria-describedby='date-plugin-time-info-tooltip'
-                      {{velcro.hook}}
-                      {{on 'mouseenter' this.showTooltip}}
-                      {{on 'mouseleave' this.hideTooltip}}
-                      {{on 'focus' this.showTooltip}}
-                      {{on 'blur' this.hideTooltip}}
-                    />
-                    {{#if this.tooltipOpen}}
-                      <AuPill
-                        id='date-plugin-time-info-tooltip'
-                        role='tooltip'
-                        {{velcro.loop}}
-                      >
-                        {{t 'date-plugin.card.info-custom-time'}}
-                      </AuPill>
-                    {{/if}}
-                  </Velcro>
-                {{/if}}
-              </AuFormRow>
-              {{#unless this.onlyDate}}
-                <AuFormRow>
-                  <TimePicker
-                    @value={{this.pickerDate}}
-                    @onChange={{this.changeDate}}
-                    @showSeconds={{this.showSeconds}}
-                  />
-                </AuFormRow>
-              {{/unless}}
-              <AuRadioGroup
-                @name={{(uuidv4)}}
-                @selected={{this.dateFormatType}}
-                @onChange={{this.setDateFormatFromKey}}
-                as |Group|
-              >
-                {{#each this.formats as |format|}}
-                  <Group.Radio @value={{format.key}}>
-                    {{if
-                      format.label
-                      format.label
-                      (if this.onlyDate format.dateFormat format.dateTimeFormat)
-                    }}
-                  </Group.Radio>
-                {{/each}}
-                {{#if this.isCustomAllowed}}
-                  <Group.Radio @value='custom'>
-                    {{t 'date-plugin.card.custom-date'}}
-                  </Group.Radio>
-                {{/if}}
-              </AuRadioGroup>
-              {{#if (eq this.dateFormatType 'custom')}}
-                <AuFormRow @alignment='post'>
-                  <AuButton
-                    @skin='secondary'
-                    @icon='info-circle'
-                    @hideText={{true}}
-                    {{on 'click' this.toggleHelpModal}}
-                    id='say-date-edit-info-modal-button'
-                  />
-                  <AuNativeInput
-                    @error={{this.hasCustomDateFormatError}}
-                    value={{this.documentDateFormat}}
-                    {{on 'input' this.setCustomDateFormat}}
-                  />
-                </AuFormRow>
-                {{#if this.humanError}}
-                  <AuPill
-                    @skin='error'
-                    @icon={{CrossIcon}}
-                  >{{this.humanError}}</AuPill>
-                {{/if}}
-              {{/if}}
-            </div>
-          </div>
-        </c.content>
-      </AuCard>
+          {{/unless}}
+          <AuRadioGroup
+            @name={{(uuidv4)}}
+            @selected={{this.dateFormatType}}
+            @onChange={{this.setDateFormatFromKey}}
+            as |Group|
+          >
+            {{#each this.formats as |format|}}
+              <Group.Radio @value={{format.key}}>
+                {{if
+                  format.label
+                  format.label
+                  (if this.onlyDate format.dateFormat format.dateTimeFormat)
+                }}
+              </Group.Radio>
+            {{/each}}
+            {{#if this.isCustomAllowed}}
+              <Group.Radio @value='custom'>
+                {{t 'date-plugin.card.custom-date'}}
+              </Group.Radio>
+            {{/if}}
+          </AuRadioGroup>
+          {{#if (eq this.dateFormatType 'custom')}}
+            <AuFormRow @alignment='post'>
+              <AuButton
+                @skin='secondary'
+                @icon='info-circle'
+                @hideText={{true}}
+                {{on 'click' this.toggleHelpModal}}
+                id='say-date-edit-info-modal-button'
+              />
+              <AuNativeInput
+                @error={{this.hasCustomDateFormatError}}
+                value={{this.documentDateFormat}}
+                {{on 'input' this.setCustomDateFormat}}
+              />
+            </AuFormRow>
+            {{#if this.humanError}}
+              <AuPill
+                @skin='error'
+                @icon={{CrossIcon}}
+              >{{this.humanError}}</AuPill>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
     {{/if}}
     <VariablePluginDateHelpModal
       @modalOpen={{this.helpModalOpen}}
