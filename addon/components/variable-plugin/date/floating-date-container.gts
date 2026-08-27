@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import FloatingWindow from '@lblod/ember-rdfa-editor/components/popover';
 import { NodeSelection, SayController } from '@lblod/ember-rdfa-editor';
-import EditDate from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/edit';
+import { DateEditComponent } from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/edit';
 import { DateOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 
 type Signature = {
@@ -47,7 +47,7 @@ export default class FloatingDateContainer extends Component<Signature> {
         @controller={{@controller}}
         class='au-u-flex'
       >
-        <EditDate @controller={{@controller}} @options={{@options}} />
+        <DateEditComponent @controller={{@controller}} @options={{@options}} />
       </FloatingWindow>
     {{/if}}
   </template>

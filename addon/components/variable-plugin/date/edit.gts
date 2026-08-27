@@ -51,13 +51,18 @@ import t from 'ember-intl/helpers/t';
 import { on } from '@ember/modifier';
 import { eq, not } from 'ember-truth-helpers';
 import DatePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/date-picker';
+import { TOC } from '@ember/component/template-only';
 
-type Args = {
-  controller: SayController;
-  options: DateOptions;
+type Sig = {
+  Args: {
+    controller: SayController;
+    options: DateOptions;
+  };
+  Element: HTMLDivElement;
 };
+
 const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
-export default class DateEditComponent extends Component<Args> {
+export class DateEditComponent extends Component<Sig> {
   @service
   declare intl: IntlService;
 
@@ -320,9 +325,7 @@ export default class DateEditComponent extends Component<Args> {
 
   <template>
     {{#if this.showCard}}
-      <div
-        class='au-u-flex au-u-flex--column au-u-flex au-u-background-gray-100'
-      >
+      <div class='au-u-flex au-u-flex--column au-u-flex' ...attributes>
         <AuFormRow
           class='au-u-padding-top-small au-u-padding-left-small au-u-padding-right-small au-u-padding-bottom-tiny'
         >
@@ -434,3 +437,19 @@ export default class DateEditComponent extends Component<Args> {
     />
   </template>
 }
+
+const DateEditCardComponent: TOC<Sig> = <template>
+  <AuCard
+    @shadow={{true}}
+    @size='flush'
+    {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
+    @disableAuContent={{true}}
+    as |c|
+  >
+    <c.content>
+      <DateEditComponent @controller={{@controller}} @options={{@options}} />
+    </c.content>
+  </AuCard>
+</template>;
+
+export default DateEditCardComponent;
