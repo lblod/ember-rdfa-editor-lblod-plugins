@@ -170,11 +170,11 @@ export function getPersonFromPNode(
     return null;
 
   const { subject, properties } = node.attrs;
-  const firstName = properties.find(
-    (property) => property.predicate === FOAF('givenName').full,
+  const firstName = properties.find((property) =>
+    FOAF('givenName').matches(property.predicate),
   )?.object.value;
-  const lastName = properties.find(
-    (property) => property.predicate === FOAF('familyName').full,
+  const lastName = properties.find((property) =>
+    FOAF('familyName').matches(property.predicate),
   )?.object.value;
   const fullName = firstName || lastName ? [firstName, lastName].join(' ') : '';
   return {
