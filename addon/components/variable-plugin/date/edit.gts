@@ -34,7 +34,6 @@ import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import AuCard from '../../_private/appuniversum-overrides/au-card';
 import { v4 as uuidv4 } from 'uuid';
 
-import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox';
 import AuBadge from '@appuniversum/ember-appuniversum/components/au-badge';
