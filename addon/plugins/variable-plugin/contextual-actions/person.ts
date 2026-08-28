@@ -122,7 +122,7 @@ export function getPersonActionGroups(args: LmbPluginConfig) {
       },
       {
         id: OTHER_ELEMENTS_GROUP_ID,
-        getActions: makeSearchable(getOtherElementsActions),
+        getActions: getOtherElementsActions,
         sticky: 'bottom',
       },
       {
