@@ -7,6 +7,7 @@ import { TemplateOnlyComponent } from '@ember/component/template-only';
 import { service } from '@ember/service';
 import t from 'ember-intl/helpers/t';
 import { trackedFunction } from 'reactiveweb/function';
+import { getPromiseState } from 'reactiveweb/get-promise-state';
 import AuIcon, {
   type AuIconSignature,
 } from '@appuniversum/ember-appuniversum/components/au-icon';
@@ -110,6 +111,9 @@ export default class SnippetNode extends Component<Signature> {
   openModal() {
     this.controller.focus();
     this.showModal = true;
+    if (this.snippetListNames.error) {
+      this.snippetListNames.retry();
+    }
   }
 
   @action
@@ -147,7 +151,6 @@ export default class SnippetNode extends Component<Signature> {
           listProperties: {
             placeholderId: this.node.attrs.placeholderId,
             listUris: this.snippetListUris,
-            names: this.snippetListNames,
             importedResources: this.node.attrs.importedResources,
           },
           schema: this.schema,
@@ -218,7 +221,6 @@ export default class SnippetNode extends Component<Signature> {
         listProperties: {
           placeholderId: this.node.attrs.placeholderId,
           listUris: this.snippetListUris,
-          names: this.snippetListNames,
           importedResources: this.node.attrs.importedResources,
         },
         range: { start, end },
@@ -231,15 +233,12 @@ export default class SnippetNode extends Component<Signature> {
     return getClassnamesFromNode(this.args.node);
   }
 
-  loadedListNames = trackedFunction(this, async () => {
+  snippetListNames = trackedFunction(this, async () => {
     return this.snippetFetchService.getListNames(
       this.config,
       this.snippetListUris,
     );
   });
-  get snippetListNames() {
-    return this.loadedListNames.value ?? [];
-  }
 
   <template>
     {{#if this.isPlaceholder}}
@@ -247,7 +246,7 @@ export default class SnippetNode extends Component<Signature> {
         @node={{@node}}
         @selectNode={{@selectNode}}
         @insertSnippet={{this.editFragment}}
-        @snippetListNames={{this.snippetListNames}}
+        @snippetListNames={{getPromiseState this.snippetListNames.promise}}
       />
     {{else}}
       <div class='{{this.class}} say-snippet-card'>
@@ -297,7 +296,7 @@ export default class SnippetNode extends Component<Signature> {
       @config={{this.config}}
       @onInsert={{this.onInsert}}
       @snippetListUris={{this.snippetListUris}}
-      @snippetListNames={{this.snippetListNames}}
+      @snippetListNames={{getPromiseState this.snippetListNames.promise}}
     />
   </template>
 }

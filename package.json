@@ -1,6 +1,6 @@
 {
   "name": "@lblod/ember-rdfa-editor-lblod-plugins",
-  "version": "38.1.0",
+  "version": "38.2.0",
   "description": "Ember addon providing lblod specific plugins for the ember-rdfa-editor",
   "keywords": [
     "ember-addon",
@@ -216,5 +216,5 @@
   "ember-addon": {
     "configPath": "tests/dummy/config"
   },
-  "packageManager": "pnpm@10.28.2"
+  "packageManager": "pnpm@11.10.0"
 }

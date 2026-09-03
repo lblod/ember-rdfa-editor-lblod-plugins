@@ -1,5 +1,19 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.2.0
+
+### Minor Changes
+
+- [#677](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/677) [`024bc21`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/024bc215bbe2eec144c6742a932680581799bb2a) Thanks [@piemonkey](https://github.com/piemonkey)! - Add loading feedback and error messages for snippet name loading
+
+### Patch Changes
+
+- [#675](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/675) [`e05f335`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e05f3357b9e61f80a94c78cef18d3bd5030c07bc) Thanks [@piemonkey](https://github.com/piemonkey)! - Expand peer-dep versions of ember-concurrency and ember-appuniversum based on versions already used in template-builder app
+
+- [#675](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/675) [`4a9e617`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/4a9e617f2335f3f83016147ce8bff0a82ef62fe4) Thanks [@piemonkey](https://github.com/piemonkey)! - Fix bug with document title which caused crashes with some usage
+
+- [#671](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/671) [`770fa4e`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/770fa4e08e1b6cc41b4b4a0bc954005fe513dde7) Thanks [@piemonkey](https://github.com/piemonkey)! - Use node v22 for build process and pnpm v11.10
+
 ## 38.1.0
 
 ### Minor Changes
