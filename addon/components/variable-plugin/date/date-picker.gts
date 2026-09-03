@@ -4,26 +4,19 @@ import { service } from '@ember/service';
 import { localCopy } from 'tracked-toolbox';
 import Intl from 'ember-intl/services/intl';
 
-type Args = {
-  value?: Date;
-  onChange: (date: Date) => void;
+import AuDatePicker from '@appuniversum/ember-appuniversum/components/au-date-picker';
+import t from 'ember-intl/helpers/t';
+
+type Sig = {
+  Args: {
+    value?: Date | null;
+    onChange: (date: Date) => void;
+  };
 };
 
-export default class DateTimePickerComponent extends Component<Args> {
+export default class DatePickerComponent extends Component<Sig> {
   @service declare intl: Intl;
   @localCopy('args.value') declare date?: Date;
-
-  get hours() {
-    return this.date?.getHours();
-  }
-
-  get minutes() {
-    return this.date?.getMinutes();
-  }
-
-  get seconds() {
-    return this.date?.getSeconds();
-  }
 
   get datePickerLocalization() {
     return {
@@ -39,38 +32,49 @@ export default class DateTimePickerComponent extends Component<Args> {
       monthNames: getLocalizedMonths(this.intl),
       monthNamesShort: getLocalizedMonths(this.intl, 'short'),
       placeholder: this.intl.t('au-date-picker.placeholder'),
+      locale: this.intl.primaryLocale ?? 'nl-BE',
     };
   }
 
   @action
-  onChangeDate(_isoDate: unknown, date: Date) {
-    const wasDateInputCleared = !date;
-    if (!wasDateInputCleared) {
-      if (!this.date) {
-        this.date = new Date();
-        this.date.setHours(0, 0, 0, 0);
-      }
-      this.date.setFullYear(date.getFullYear());
-      this.date.setMonth(date.getMonth());
-      this.date.setDate(date.getDate());
-      this.args.onChange(this.date);
-    }
-  }
+  onChangeDate(_isoDate: unknown | null, date: Date | null) {
+    if (!date) return;
 
-  @action
-  onChangeTime(timeObject: {
-    hours: number;
-    minutes: number;
-    seconds: number;
-  }) {
-    if (!this.date) this.date = new Date();
-    this.date.setHours(timeObject.hours);
-    this.date.setMinutes(timeObject.minutes);
-    this.date.setSeconds(timeObject.seconds);
+    if (!this.date) {
+      this.date = new Date();
+      this.date.setHours(0, 0, 0, 0);
+    }
+    this.date.setFullYear(date.getFullYear());
+    this.date.setMonth(date.getMonth());
+    this.date.setDate(date.getDate());
     this.args.onChange(this.date);
   }
+
+  <template>
+    <AuDatePicker
+      @onChange={{this.onChangeDate}}
+      @value={{this.date}}
+      @label={{t 'date-plugin.card.label'}}
+      @localization={{this.datePickerLocalization}}
+    />
+  </template>
 }
 
+type MonthNames = [
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+];
+type DayNames = [string, string, string, string, string, string, string];
 function getLocalizedMonths(
   intl: Intl,
   monthFormat: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' = 'long',
@@ -79,17 +83,17 @@ function getLocalizedMonths(
   return [...Array(12).keys()].map((monthIndex) => {
     const date = new Date(someYear, monthIndex);
     return intl.formatDate(date, { month: monthFormat });
-  });
+  }) as MonthNames;
 }
 
 function getLocalizedDays(
   intl: Intl,
   weekdayFormat: 'long' | 'short' | 'narrow' = 'long',
-) {
+): DayNames {
   const someSunday = new Date('2021-01-03');
   return [...Array(7).keys()].map((index) => {
     const weekday = new Date(someSunday.getTime());
     weekday.setDate(someSunday.getDate() + index);
     return intl.formatDate(weekday, { weekday: weekdayFormat });
-  });
+  }) as DayNames;
 }

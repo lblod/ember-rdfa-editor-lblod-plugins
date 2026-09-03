@@ -89,6 +89,10 @@
               @getActions={{this.contextualActionGetters}}
               @getGroups={{this.contextualGroupGetters}}
             />
+            <this.FloatingDateContainer
+              @controller={{this.controller}}
+              @options={{this.dateOptions}}
+            />
           {{/if}}
         </:default>
         <:sidebarRight as |container|>

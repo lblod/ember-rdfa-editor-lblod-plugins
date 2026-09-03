@@ -32,18 +32,36 @@ import { InfoCircleIcon } from '@appuniversum/ember-appuniversum/components/icon
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 import { XSD } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import AuCard from '../../_private/appuniversum-overrides/au-card';
+import { v4 as uuidv4 } from 'uuid';
 
-type Args = {
-  controller: SayController;
-  options: DateOptions;
+import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
+import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox';
+import AuBadge from '@appuniversum/ember-appuniversum/components/au-badge';
+import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
+import AuRadioGroup from '@appuniversum/ember-appuniversum/components/au-radio-group';
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import AuNativeInput from '@lblod/ember-rdfa-editor-lblod-plugins/components/au-native-input';
+import TimePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/time-picker';
+
+import VariablePluginDateHelpModal from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/help-modal';
+import { hash } from '@ember/helper';
+
+import t from 'ember-intl/helpers/t';
+import { on } from '@ember/modifier';
+import { eq, not } from 'ember-truth-helpers';
+import DatePicker from '@lblod/ember-rdfa-editor-lblod-plugins/components/variable-plugin/date/date-picker';
+import { TOC } from '@ember/component/template-only';
+
+type Sig = {
+  Args: {
+    controller: SayController;
+    options: DateOptions;
+  };
+  Element: HTMLDivElement;
 };
-const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
-export default class DateEditComponent extends Component<Args> {
-  CrossIcon = CrossIcon;
-  InfoCircleIcon = InfoCircleIcon;
-  Velcro = Velcro;
-  AuCard = AuCard;
 
+const SECONDS_REGEX = new RegExp('[sStT]|p{2,}');
+export class DateEditComponent extends Component<Sig> {
   @service
   declare intl: IntlService;
 
@@ -166,6 +184,10 @@ export default class DateEditComponent extends Component<Args> {
     }
   }
 
+  get hasCustomDateFormatError(): boolean {
+    return !!this.customDateFormatError;
+  }
+
   get humanError(): string | null {
     if (this.customDateFormatError) {
       const { error, payload } = this.customDateFormatError;
@@ -191,7 +213,19 @@ export default class DateEditComponent extends Component<Args> {
   }
 
   get pickerDate(): Option<Date> {
-    return this.documentDate;
+    return this.documentDate ?? null;
+  }
+
+  get pickerHours() {
+    return this.pickerDate?.getHours();
+  }
+
+  get pickerMinutes() {
+    return this.pickerDate?.getMinutes();
+  }
+
+  get pickerSeconds() {
+    return this.pickerDate?.getSeconds();
   }
 
   @action
@@ -245,7 +279,8 @@ export default class DateEditComponent extends Component<Args> {
   }
 
   @action
-  setDateFormatFromKey(formatKey: string) {
+  setDateFormatFromKey(formatKey?: string) {
+    if (!formatKey) return;
     const pos = this.documentDatePos;
     if (isNone(pos)) {
       return;
@@ -286,4 +321,134 @@ export default class DateEditComponent extends Component<Args> {
   toggleHelpModal() {
     this.helpModalOpen = !this.helpModalOpen;
   }
+
+  <template>
+    {{#if this.showCard}}
+      <div class='au-u-flex au-u-flex--column au-u-flex' ...attributes>
+        <AuFormRow
+          class='au-u-padding-top-small au-u-padding-left-small au-u-padding-right-small au-u-padding-bottom-tiny'
+        >
+          <DatePicker
+            @value={{this.pickerDate}}
+            @onChange={{this.changeDate}}
+          />
+        </AuFormRow>
+        <div
+          class='au-o-flow au-o-flow--small au-u-flex-shrink au-u-padding-top-tiny au-u-padding-left-small au-u-padding-right-small au-u-padding-bottom-small'
+          id='say-date-edit-scrollable-part'
+        >
+          <AuFormRow @alignment='inline'>
+            <AuCheckbox
+              @name='include-time'
+              @disabled={{eq this.dateFormatType 'custom'}}
+              @checked={{not this.onlyDate}}
+              @onChange={{this.changeIncludeTime}}
+            >
+              {{t 'date-plugin.card.include-time'}}
+            </AuCheckbox>
+            {{#if this.isCustom}}
+              <Velcro
+                @placement='top'
+                @strategy='absolute'
+                @offsetOptions={{hash mainAxis=10}}
+                as |velcro|
+              >
+                <AuBadge
+                  @size='small'
+                  @icon={{InfoCircleIcon}}
+                  aria-describedby='date-plugin-time-info-tooltip'
+                  {{velcro.hook}}
+                  {{on 'mouseenter' this.showTooltip}}
+                  {{on 'mouseleave' this.hideTooltip}}
+                  {{on 'focus' this.showTooltip}}
+                  {{on 'blur' this.hideTooltip}}
+                />
+                {{#if this.tooltipOpen}}
+                  <AuPill
+                    id='date-plugin-time-info-tooltip'
+                    role='tooltip'
+                    {{velcro.loop}}
+                  >
+                    {{t 'date-plugin.card.info-custom-time'}}
+                  </AuPill>
+                {{/if}}
+              </Velcro>
+            {{/if}}
+          </AuFormRow>
+          {{#unless this.onlyDate}}
+            <AuFormRow>
+              <TimePicker
+                @value={{this.pickerDate}}
+                @onChange={{this.changeDate}}
+                @showSeconds={{this.showSeconds}}
+              />
+            </AuFormRow>
+          {{/unless}}
+          <AuRadioGroup
+            @name={{(uuidv4)}}
+            @selected={{this.dateFormatType}}
+            @onChange={{this.setDateFormatFromKey}}
+            as |Group|
+          >
+            {{#each this.formats as |format|}}
+              <Group.Radio @value={{format.key}}>
+                {{if
+                  format.label
+                  format.label
+                  (if this.onlyDate format.dateFormat format.dateTimeFormat)
+                }}
+              </Group.Radio>
+            {{/each}}
+            {{#if this.isCustomAllowed}}
+              <Group.Radio @value='custom'>
+                {{t 'date-plugin.card.custom-date'}}
+              </Group.Radio>
+            {{/if}}
+          </AuRadioGroup>
+          {{#if (eq this.dateFormatType 'custom')}}
+            <AuFormRow @alignment='post'>
+              <AuButton
+                @skin='secondary'
+                @icon='info-circle'
+                @hideText={{true}}
+                {{on 'click' this.toggleHelpModal}}
+                id='say-date-edit-info-modal-button'
+              />
+              <AuNativeInput
+                @error={{this.hasCustomDateFormatError}}
+                value={{this.documentDateFormat}}
+                {{on 'input' this.setCustomDateFormat}}
+              />
+            </AuFormRow>
+            {{#if this.humanError}}
+              <AuPill
+                @skin='error'
+                @icon={{CrossIcon}}
+              >{{this.humanError}}</AuPill>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+    <VariablePluginDateHelpModal
+      @modalOpen={{this.helpModalOpen}}
+      @closeModal={{this.toggleHelpModal}}
+    />
+  </template>
 }
+
+const DateEditCardComponent: TOC<Sig> = <template>
+  <AuCard
+    @shadow={{true}}
+    @size='flush'
+    {{! @glint-ignore: backwards compat with AU v3, remove if not supported anymore}}
+    @disableAuContent={{true}}
+    as |c|
+  >
+    <c.content>
+      <DateEditComponent @controller={{@controller}} @options={{@options}} />
+    </c.content>
+  </AuCard>
+</template>;
+
+export default DateEditCardComponent;
