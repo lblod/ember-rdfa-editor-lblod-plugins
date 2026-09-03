@@ -1,7 +1,9 @@
 steps:
   install:
-    image: node:20-slim
+    image: node:22-slim
     commands:
+      - npm config set ignore-scripts true
+      - npm i -g corepack@0.35
       - corepack enable
       - pnpm i --frozen-lockfile
   release:

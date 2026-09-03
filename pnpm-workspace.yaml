@@ -1,3 +1,6 @@
+allowBuilds:
+  core-js: true
 overrides:
   'prosemirror-model': '^1.25.9'
   '@codemirror/state': '^6.7.0'
+  browserslist: '^4.28.8'
