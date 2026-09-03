@@ -238,6 +238,10 @@ variable-plugin:
   person:
     card-title: Insert person
     nodeview-placeholder: Person
+    suggestions: Suggestions
+    other-elements: Other elements
+    advanced-search: Advanced search…
+    searching: Searching…
   autofill:
     autofillKey: Autofill Key
     convertToString: Replace variable node with plain text on text insertion

@@ -1,18 +1,11 @@
-import { EditorState } from '@lblod/ember-rdfa-editor';
-import { Area, Place } from './geo-helpers';
-import { Address } from './address-helpers';
-import { getLocationUri } from '../_private/utils/location-helpers';
+import { EditorState, type PNode } from '@lblod/ember-rdfa-editor';
+import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
 
-type LocationsWithDistanceType = {
-  location: Place | Address | Area;
-  distance: number;
-};
-
-type LocationMetadataType = {
-  [locationUri: string]: {
+type NodeMetadataType = {
+  [uri: string]: {
+    node: ResolvedPNode;
     occurrences: number;
     distance: number;
-    location: Address | Place | Area;
   };
 };
 
@@ -50,60 +43,67 @@ function getSuggestionScore(
   return score;
 }
 
-export default function getDocumentLocations(state: EditorState) {
+export function getRankedPNodes(
+  state: EditorState,
+  nodeType: string,
+  getUri: (node: PNode) => string,
+): {
+  node: ResolvedPNode;
+  score: number;
+}[] {
   const doc = state.doc;
-  const locationsWithDistance: LocationsWithDistanceType[] = [];
+  const nodesWithDistance: { node: ResolvedPNode; distance: number }[] = [];
   const selection = state.selection;
   doc.descendants((node, pos) => {
-    if (node.type.name === 'oslo_location') {
+    if (node.type.name === nodeType) {
       const distance = Math.abs(pos - selection.from);
-      locationsWithDistance.push({
-        location: node.attrs.value,
+      nodesWithDistance.push({
+        node: { value: node, pos },
         distance: distance,
       });
       return false;
     }
     return true;
   });
-  const locationMetadata: LocationMetadataType = {};
-  for (const locationWithDistance of locationsWithDistance) {
-    const { location, distance } = locationWithDistance;
-    if (!location) {
+  const nodeMetadata: NodeMetadataType = {};
+  for (const nodeWithDistance of nodesWithDistance) {
+    const { node, distance } = nodeWithDistance;
+    const uri = getUri(node.value);
+    if (!uri) {
       continue;
     }
-    const uri = getLocationUri(location);
-    if (!locationMetadata[uri]) {
-      locationMetadata[uri] = {
-        location,
+    if (!nodeMetadata[uri]) {
+      nodeMetadata[uri] = {
+        node,
         occurrences: 1,
         distance,
       };
     } else {
-      locationMetadata[uri].occurrences++;
-      if (distance < locationMetadata[uri].distance) {
-        locationMetadata[uri].distance = distance;
+      nodeMetadata[uri].occurrences++;
+      if (distance < nodeMetadata[uri].distance) {
+        nodeMetadata[uri].distance = distance;
       }
     }
   }
 
-  const maxOccurence = Object.values(locationMetadata).reduce(
+  const maxOccurence = Object.values(nodeMetadata).reduce(
     (acc, { occurrences: ocurrences }) =>
       acc >= ocurrences ? acc : ocurrences,
     1,
   );
 
-  const scoredLocations = Object.values(locationMetadata).map(
-    ({ location, occurrences, distance }) => ({
-      location,
+  const scoredNodes = Object.values(nodeMetadata).map(
+    ({ node, occurrences, distance }) => ({
+      node,
       score: getSuggestionScore(occurrences, maxOccurence, distance),
       occurrences,
       distance,
     }),
   );
 
-  scoredLocations.sort(({ score: scoreA }, { score: scoreB }) => {
+  scoredNodes.sort(({ score: scoreA }, { score: scoreB }) => {
     return scoreB - scoreA;
   });
 
-  return scoredLocations.map(({ location }) => location);
+  return scoredNodes;
 }

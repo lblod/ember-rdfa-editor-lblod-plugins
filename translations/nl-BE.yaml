@@ -242,6 +242,10 @@ variable-plugin:
   person:
     card-title: Persoon invoegen
     nodeview-placeholder: Persoon
+    suggestions: Suggesties
+    other-elements: Andere elementen
+    advanced-search: Geavanceerd zoeken…
+    searching: Aan het zoeken…
   autofill:
     autofillKey: Sleutelwaarde
     convertToString: Vervang variabele door platte tekst bij invoegen
