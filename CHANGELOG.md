@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 38.3.0
+
+### Minor Changes
+
+- [#676](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/676) [`c7c44ec`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/c7c44ec8b883dbcc3330f33c0638d764684eb1e9) Thanks [@kobemertens](https://github.com/kobemertens)! - Add document-local suggestions for person variables
+
+- [#678](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/678) [`294b023`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/294b023cdd48d946d8c2b49ec2c5ae947d97f64a) Thanks [@kobemertens](https://github.com/kobemertens)! - Add floating edit window for date variable nodes
+
 ## 38.2.0
 
 ### Minor Changes
