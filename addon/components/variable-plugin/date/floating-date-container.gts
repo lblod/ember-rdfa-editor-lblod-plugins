@@ -36,7 +36,7 @@ export default class FloatingDateContainer extends Component<Signature> {
 
     return NodeSelection.create(
       this.editorState.doc,
-      this.selectedDateNode.pos - 1,
+      this.selectedDateNode.pos,
     );
   }
 
