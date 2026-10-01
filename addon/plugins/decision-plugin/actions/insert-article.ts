@@ -1,4 +1,9 @@
-import { EditorState, PNode, TextSelection } from '@lblod/ember-rdfa-editor';
+import {
+  EditorState,
+  NodeSelection,
+  PNode,
+  TextSelection,
+} from '@lblod/ember-rdfa-editor';
 import {
   ELI,
   PROV,
@@ -31,6 +36,7 @@ export function insertArticle(
   args: InsertArticleToDecisionArgs | InsertArticleFreelyArgs,
 ): TransactionMonad<boolean> {
   return function (state: EditorState) {
+    console.log('running');
     const { node } = args;
     if ('insertFreely' in args) {
       const tr = state.tr;
@@ -99,8 +105,8 @@ export function insertArticle(
     transaction.setSelection(
       TextSelection.create(
         transaction.doc,
-        insertLocation + 1,
-        insertLocation + node.nodeSize - 1,
+        insertLocation + 2,
+        insertLocation + 3,
       ),
     );
 
