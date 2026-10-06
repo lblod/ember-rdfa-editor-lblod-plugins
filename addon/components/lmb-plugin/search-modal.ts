@@ -9,6 +9,7 @@ import { LmbPluginConfig } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/
 import Electee from '@lblod/ember-rdfa-editor-lblod-plugins/models/electee';
 import {
   FetchMandateesArgs,
+  fetchAdministrativeUnits,
   fetchElectees,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/lmb-plugin/utils/fetchElectees';
 import {
@@ -17,6 +18,8 @@ import {
   BestuursperiodeURI,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { isSome } from '@lblod/ember-rdfa-editor/utils/_private/option';
+import type { AdministrativeUnit } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/worship-plugin';
+import { localCopy } from 'tracked-toolbox';
 export type SearchSort = [keyof Electee, 'ASC' | 'DESC'] | false;
 
 interface Args {
@@ -45,7 +48,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   @tracked selectedAdminPeriod: AdminPeriodOption;
   adminPeriods: AdminPeriodOption[];
   // Admin units
-  @tracked adminUnitSearch: string;
+  @localCopy('args.config.defaultAdminUnit')
+  selectedAdministrativeUnit?: AdministrativeUnit;
   // tracks whether the user has just typed a character
   // doesn't need to be reactive
   typing = false;
@@ -63,7 +67,6 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
           isSome(args.config.defaultPeriod) &&
           entry.label === args.config.defaultPeriod,
       ) ?? this.adminPeriods[this.adminPeriods.length - 1];
-    this.adminUnitSearch = args.config.defaultAdminUnit ?? '';
   }
 
   get config() {
@@ -71,15 +74,6 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
   }
   selectAdminPeriod = (value: AdminPeriodOption) => {
     this.selectedAdminPeriod = value;
-    this.pageNumber = 0;
-  };
-  setAdminUnitSearch = (event: InputEvent) => {
-    this.typing = true;
-    assert(
-      'setAdminUnitSearch must be bound to an input element',
-      event.target instanceof HTMLInputElement,
-    );
-    this.adminUnitSearch = event.target.value;
     this.pageNumber = 0;
   };
 
@@ -102,7 +96,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       pageSize,
       sort,
       period,
-      adminUnitSearch,
+      administrativeUnit,
     }: FetchMandateesArgs) => {
       // debounce, but only when the input fields are being used
       if (this.typing) {
@@ -125,7 +119,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
           pageSize,
           sort,
           period,
-          adminUnitSearch,
+          administrativeUnit,
         });
         const { count, electees } = result;
 
@@ -153,9 +147,35 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       pageSize: this.pageSize,
       open: this.args.open,
       period: this.selectedAdminPeriod.uri,
-      adminUnitSearch: this.adminUnitSearch,
+      administrativeUnit: this.selectedAdministrativeUnit,
     } satisfies Partial<FetchMandateesArgs> & { open: boolean },
   ]);
+
+  searchAdministrativeUnits = restartableTask(async (search: string) => {
+    await timeout(200);
+    try {
+      const units = await fetchAdministrativeUnits({
+        endpoint: this.config.endpoint,
+        searchString: search,
+        lmbPeriod: this.selectedAdminPeriod.uri,
+      });
+
+      return units;
+    } catch (err) {
+      // ember-power-select doesn't seem to have a way to display errors.
+      console.error(
+        'Error occured when searching for administrative units',
+        err,
+      );
+      // We just re-throw to keep TS happy, ember-concurrency just swallows it.
+      throw err;
+    }
+  });
+
+  selectAdministrativeUnit = (administrativeUnit: AdministrativeUnit) => {
+    this.selectedAdministrativeUnit = administrativeUnit;
+    this.pageNumber = 0;
+  };
 
   @action
   setSort(sort: SearchSort) {

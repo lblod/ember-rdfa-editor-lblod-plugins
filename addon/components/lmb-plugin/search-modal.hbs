@@ -48,14 +48,19 @@
             <AuLabel class='au-margin-bottom-small' for='searchAdminUnit'>
               {{t 'lmb-plugin.modal.fields.adminUnit'}}
             </AuLabel>
-            <AuNativeInput
-              @type='text'
-              @width='block'
-              id='searchAdminUnit'
-              value={{this.adminUnitSearch}}
-              placeholder={{t 'lmb-plugin.modal.adminUnitSearch.placeholder'}}
-              {{on 'input' this.setAdminUnitSearch}}
-            />
+            <PowerSelect
+              @allowClear={{true}}
+              @searchEnabled={{true}}
+              @search={{perform this.searchAdministrativeUnits}}
+              @selected={{this.selectedAdministrativeUnit}}
+              @onChange={{this.selectAdministrativeUnit}}
+              @loadingMessage={{t 'common.search.loading'}}
+              @placeholder={{t 'lmb-plugin.modal.adminUnitSearch.placeholder'}}
+              @searchPlaceholder={{t 'common.search.type-to-search'}}
+              as |unit|
+            >
+              {{unit.label}}
+            </PowerSelect>
 
           </div>
         </div>
