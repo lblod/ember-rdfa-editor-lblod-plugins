@@ -86,8 +86,6 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     this.args.closeModal();
   }
 
-  // TODO Either make this a trackedFunction or do filtering on the query and correctly pass an
-  // AbortController
   search = restartableTask(
     async ({
       endpoint,
@@ -111,6 +109,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
         };
       }
 
+      const abortController = new AbortController();
+
       try {
         const result = await fetchElectees({
           endpoint,
@@ -120,6 +120,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
           sort,
           period,
           administrativeUnit,
+          abortSignal: abortController.signal,
         });
         const { count, electees } = result;
 
@@ -130,6 +131,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       } catch (err) {
         console.error('Got an error fetching electees', err);
         this.error = err;
+      } finally {
+        abortController.abort();
       }
       return {
         results: [],
@@ -153,11 +156,14 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
 
   searchAdministrativeUnits = restartableTask(async (search: string) => {
     await timeout(200);
+
+    const abortController = new AbortController();
     try {
       const units = await fetchAdministrativeUnits({
         endpoint: this.config.endpoint,
         searchString: search,
         lmbPeriod: this.selectedAdminPeriod.uri,
+        abortSignal: abortController.signal,
       });
 
       return units;
@@ -169,6 +175,8 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
       );
       // We just re-throw to keep TS happy, ember-concurrency just swallows it.
       throw err;
+    } finally {
+      abortController.abort();
     }
   });
 

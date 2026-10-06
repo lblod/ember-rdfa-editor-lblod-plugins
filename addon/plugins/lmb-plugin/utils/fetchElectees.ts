@@ -16,6 +16,7 @@ export type FetchMandateesArgs = {
   pageSize: number;
   sort: SearchSort;
   period: (typeof BESTUURSPERIODES)[keyof typeof BESTUURSPERIODES];
+  abortSignal?: AbortSignal;
 };
 
 export async function countElectees({
@@ -23,9 +24,10 @@ export async function countElectees({
   searchString,
   administrativeUnit,
   period,
+  abortSignal,
 }: Pick<
   FetchMandateesArgs,
-  'searchString' | 'endpoint' | 'period' | 'administrativeUnit'
+  'searchString' | 'endpoint' | 'period' | 'administrativeUnit' | 'abortSignal'
 >) {
   const query = /* sparql */ `
       PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
@@ -79,6 +81,7 @@ export async function countElectees({
   const response = await executeQuery({
     query,
     endpoint,
+    abortSignal,
   });
   return Number(response.results.bindings[0].count.value);
 }
@@ -91,6 +94,7 @@ export async function fetchElectees({
   administrativeUnit,
   sort,
   period,
+  abortSignal,
 }: FetchMandateesArgs) {
   const count = await countElectees({
     endpoint,
@@ -180,6 +184,7 @@ export async function fetchElectees({
   const response = await executeQuery({
     query,
     endpoint,
+    abortSignal,
   });
   const electees = response.results.bindings.map(Electee.fromBinding);
   return { electees, count };
@@ -191,6 +196,7 @@ type FetchAdministrativeUnitsArgs = {
   lmbPeriod?: (typeof BESTUURSPERIODES)[keyof typeof BESTUURSPERIODES];
   classificationCodes?: string[];
   limit?: number;
+  abortSignal?: AbortSignal;
 };
 
 /**
@@ -203,6 +209,7 @@ export async function fetchAdministrativeUnits({
   lmbPeriod,
   classificationCodes,
   limit,
+  abortSignal,
 }: FetchAdministrativeUnitsArgs) {
   const query = /* sparql */ `
   PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
@@ -244,6 +251,7 @@ export async function fetchAdministrativeUnits({
   const response = await executeQuery({
     query,
     endpoint,
+    abortSignal,
   });
   const administrativeUnits = response.results.bindings.map<AdministrativeUnit>(
     (binding) => ({
