@@ -170,7 +170,7 @@ export default class LmbPluginSearchModalComponent extends Component<Args> {
     } catch (err) {
       // ember-power-select doesn't seem to have a way to display errors.
       console.error(
-        'Error occured when searching for administrative units',
+        'Error occurred when searching for administrative units',
         err,
       );
       // We just re-throw to keep TS happy, ember-concurrency just swallows it.

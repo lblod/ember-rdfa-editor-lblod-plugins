@@ -40,7 +40,10 @@ export async function countElectees({
       PREFIX org: <http://www.w3.org/ns/org#>
 
       SELECT (COUNT(DISTINCT ?person) as ?count) WHERE {
-        ?person a person:Person.
+        ?person 
+          a person:Person;
+          foaf:familyName ?lastName;
+          persoon:gebruikteVoornaam ?firstName.
 
         ?bestuursorgaanIT lmb:heeftBestuursperiode ${sparqlEscapeUri(period)}.
         ${
@@ -52,6 +55,7 @@ export async function countElectees({
         {
           ?verkiezing mandaat:steltSamen ?bestuursorgaanIT.
           ?kandidatenlijst mandaat:behoortTot ?verkiezing.
+          ?kandidatenlijst skos:prefLabel ?kandidatenlijstLabel.
 
           ?verkiezingsresultaat mandaat:isResultaatVoor ?kandidatenlijst.
           ?verkiezingsresultaat mandaat:isResultaatVan ?person.
@@ -62,15 +66,22 @@ export async function countElectees({
                     org:holds ?mandaat;
                     mandaat:isBestuurlijkeAliasVan ?person.
           ?bestuursorgaanIT org:hasPost ?mandaat.
+
+          FILTER NOT EXISTS {
+            ?_bestuursorgaanIT lmb:heeftBestuursperiode <${period}>.
+            ?verkiezing mandaat:steltSamen ?_bestuursorgaanIT.
+            ?kandidatenlijst mandaat:behoortTot ?verkiezing.
+            ?kandidatenlijst skos:prefLabel ?kandidatenlijstLabel.
+
+            ?verkiezingsresultaat mandaat:isResultaatVoor ?kandidatenlijst.
+            ?verkiezingsresultaat mandaat:isResultaatVan ?person.
+          }
         }
         
         
         ${
           searchString.length
             ? `
-            ?person 
-              foaf:familyName ?lastName;
-              persoon:gebruikteVoornaam ?firstName.
             BIND(CONCAT(?firstName, " ", ?lastName) AS ?name)
             FILTER(contains(lcase(?name), lcase(${sparqlEscapeString(searchString)}) )).`
             : ''
@@ -101,6 +112,7 @@ export async function fetchElectees({
     searchString,
     period,
     administrativeUnit,
+    abortSignal,
   });
   let sortString = '?lastName ?firstName';
   if (sort) {
