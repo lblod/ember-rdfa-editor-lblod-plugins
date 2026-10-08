@@ -39,12 +39,12 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   }
 
   @action
-  updateLabel(event: InputEvent) {
+  updateLabel(event: Event) {
     this.label = (event.target as HTMLInputElement).value;
   }
 
   @action
-  updateAutofillKey(event: InputEvent) {
+  updateAutofillKey(event: Event) {
     this.autofillKey = (event.target as HTMLInputElement).value;
   }
 

@@ -211,7 +211,7 @@ export default class SearchModal extends Component<Signature> {
     this.sort = sort;
   }
   @action
-  setInputSearchText(event: InputEvent) {
+  setInputSearchText(event: Event) {
     assert(
       'inputSearchText must be bound to an input element',
       event.target instanceof HTMLInputElement,

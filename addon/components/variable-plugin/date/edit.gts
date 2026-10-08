@@ -301,7 +301,7 @@ export class DateEditComponent extends Component<Sig> {
   }
 
   @action
-  setCustomDateFormat(event: InputEvent) {
+  setCustomDateFormat(event: Event) {
     const format = (event.target as HTMLInputElement).value;
 
     const pos = this.documentDatePos;

@@ -152,7 +152,7 @@ export default class RoadsignsModal extends Component<Signature> {
   }
 
   @action
-  handleSearch(event: InputEvent) {
+  handleSearch(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value;
     this.resetPagination();
   }
