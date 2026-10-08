@@ -75,7 +75,7 @@ function getAsyncSearchActionsGetter(args: LmbPluginConfig) {
       page: 0,
       pageSize: SEARCH_PAGE_SIZE,
       searchString: searchQuery,
-      adminUnitSearch: args.defaultAdminUnit ?? '',
+      administrativeUnit: args.defaultAdminUnit,
       sort: false,
       period:
         args.defaultPeriod ?? Object.values(BESTUURSPERIODES).at(-1) ?? '',
