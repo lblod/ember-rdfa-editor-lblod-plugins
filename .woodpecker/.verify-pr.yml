@@ -8,6 +8,7 @@ steps:
   check-dev-packages:
     image: node:22-slim
     commands:
+      - corepack enable
       - apt-get update
       - apt-get install -y --no-install-recommends jq
       - "pnpm list --json | jq -e '[ .. | .version? ] | map(select(. != null)) | map(test(\"dev\")) | any | not'"
