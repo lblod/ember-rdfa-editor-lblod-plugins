@@ -2,4 +2,4 @@
 '@lblod/ember-rdfa-editor-lblod-plugins': patch
 ---
 
-Fix floating window position on date variable
+Fix variable serialization to include label
