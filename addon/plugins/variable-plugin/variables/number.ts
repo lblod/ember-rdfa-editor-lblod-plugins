@@ -218,7 +218,9 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
       humanReadableContent = content as string;
     }
   } else {
-    humanReadableContent = t('variable.number.placeholder', 'Voeg getal in');
+    humanReadableContent =
+      (node.attrs['label'] as string) ||
+      t('variable.number.placeholder', 'Voeg getal in');
   }
 
   return renderRdfaAware({

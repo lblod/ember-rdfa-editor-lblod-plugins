@@ -30,6 +30,7 @@ import {
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/variable-attribute-parsers';
 import {
   findChildWithRdfaAttribute,
+  getOutgoingTriple,
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
@@ -369,10 +370,10 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
   if (value) {
     contentNode = constructAddressNode(value);
   } else {
-    const placeholder = t(
-      'editor-plugins.address.nodeview.placeholder',
-      'Voeg adres in',
-    );
+    const label = getOutgoingTriple(node.attrs, EXT('label'))?.object.value;
+    const placeholder =
+      label ||
+      t('editor-plugins.address.nodeview.placeholder', 'Voeg adres in');
     contentNode = contentSpan({}, placeholder);
   }
   return renderRdfaAware({
