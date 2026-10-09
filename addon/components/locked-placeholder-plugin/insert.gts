@@ -74,12 +74,12 @@ export default class LockedPlaceholderPluginInsert extends Component<Signature> 
   }
 
   @action
-  updateKey(event: InputEvent) {
+  updateKey(event: Event) {
     this.key = (event.target as HTMLInputElement).value;
   }
 
   @action
-  updateLabel(event: InputEvent) {
+  updateLabel(event: Event) {
     this.label = (event.target as HTMLInputElement).value;
   }
 

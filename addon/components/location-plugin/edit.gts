@@ -340,18 +340,18 @@ export default class LocationPluginEditComponent extends Component<Signature> {
   }
 
   @action
-  updateHousenumber(event: InputEvent) {
+  updateHousenumber(event: Event) {
     this.newHousenumber = (event.target as HTMLInputElement).value;
     this.newBusnumber = '';
   }
 
   @action
-  updateBusnumber(event: InputEvent) {
+  updateBusnumber(event: Event) {
     this.newBusnumber = (event.target as HTMLInputElement).value;
   }
 
   @action
-  updatePlaceName(event: InputEvent) {
+  updatePlaceName(event: Event) {
     this.args.setPlaceName((event.target as HTMLInputElement).value);
   }
 
@@ -434,7 +434,7 @@ export default class LocationPluginEditComponent extends Component<Signature> {
           @allowClear={{true}}
           @renderInPlace={{true}}
           @searchEnabled={{true}}
-          @search={{perform this.searchMunicipality}}
+          @search={{this.searchMunicipality.perform}}
           @selected={{this.newMunicipality}}
           @onChange={{this.selectMunicipality}}
           as |municipality|

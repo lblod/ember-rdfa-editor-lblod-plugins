@@ -62,7 +62,7 @@ export default class ConfigureMandateeTableComponent extends Component<Sig> {
   }
 
   @action
-  updateNodeTitle(event: InputEvent) {
+  updateNodeTitle(event: Event) {
     this.updateAttribute('title', (event.target as HTMLInputElement).value);
   }
 

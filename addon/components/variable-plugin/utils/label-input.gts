@@ -7,7 +7,7 @@ import { TemplateOnlyComponent } from '@ember/component/template-only';
 interface Sig {
   Args: {
     label: string;
-    updateLabel: (event: InputEvent) => void;
+    updateLabel: (event: Event) => void;
   };
 }
 

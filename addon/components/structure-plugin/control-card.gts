@@ -114,7 +114,7 @@ export default class StructureControlCardComponent extends Component<Sig> {
     },
   })
   startNumber: number | null = null;
-  onStartNumberChange = (event: InputEvent) => {
+  onStartNumberChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
     this.startNumber = parseInt(target.value);
   };
