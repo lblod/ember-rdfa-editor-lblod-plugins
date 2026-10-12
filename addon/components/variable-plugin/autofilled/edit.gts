@@ -102,7 +102,7 @@ export default class AutoFilledVariableInsertComponent extends Component<Args> {
   }
 
   @action
-  updateAutofillKey(event: InputEvent) {
+  updateAutofillKey(event: Event) {
     this.autofillKey = (event.target as HTMLInputElement).value;
   }
 

@@ -64,7 +64,7 @@ export default class PlaceholderUtilsEditCardComponent extends Component<Args> {
   get showCard() {
     return !!this.selectedPlaceholderNode;
   }
-  updateLabelPlaceholder = (event: InputEvent) => {
+  updateLabelPlaceholder = (event: Event) => {
     this.placeholderLabel = (event.target as HTMLInputElement).value;
   };
   updatePlaceholder = () => {
