@@ -36,7 +36,6 @@ export function insertArticle(
   args: InsertArticleToDecisionArgs | InsertArticleFreelyArgs,
 ): TransactionMonad<boolean> {
   return function (state: EditorState) {
-    console.log('running');
     const { node } = args;
     if ('insertFreely' in args) {
       const tr = state.tr;
