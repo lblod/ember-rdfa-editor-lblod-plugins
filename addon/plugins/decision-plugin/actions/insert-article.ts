@@ -99,8 +99,8 @@ export function insertArticle(
     transaction.setSelection(
       TextSelection.create(
         transaction.doc,
-        insertLocation + 1,
-        insertLocation + node.nodeSize - 1,
+        insertLocation + 2,
+        insertLocation + 3,
       ),
     );
 
