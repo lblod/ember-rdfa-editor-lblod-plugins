@@ -108,7 +108,7 @@
     "@glimmer/tracking": "^1.1.2",
     "@glint/ember-tsc": "^1.11.6",
     "@glint/template": "^1.9.0",
-    "@lblod/ember-rdfa-editor": "13.16.0-dev.7794d286b071182b48aea581cb16221fca22c8d1",
+    "@lblod/ember-rdfa-editor": "13.20.0",
     "@rdfjs/to-ntriples": "^3.0.1",
     "@rdfjs/types": "^2.0.1",
     "@release-it/keep-a-changelog": "^4.0.0",
