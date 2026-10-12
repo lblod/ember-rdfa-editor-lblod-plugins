@@ -7,6 +7,7 @@ common:
     error-title: Probleem bij het laden
     error-intro: 'Er is een fout opgetreden tijdens het laden van de resultaten:'
     error-outro: Moest dit probleem aanhouden, neem contact op met
+    type-to-search: Typ om te zoeken
   sort:
     sort: Sorteren
     asc: Oplopend sorteren

@@ -8,11 +8,12 @@ import {
   EditorView,
   Command,
 } from '@lblod/ember-rdfa-editor';
+import type { AdministrativeUnit } from '../worship-plugin';
 
 export type LmbPluginConfig = {
   endpoint: string;
   defaultPeriod?: BestuursperiodeLabel;
-  defaultAdminUnit?: string;
+  defaultAdminUnit?: AdministrativeUnit;
 };
 
 export function createPersonNode(controller: SayController, person: Person) {

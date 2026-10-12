@@ -252,9 +252,16 @@ const serialize = (node: PNode, state: EditorState) => {
       );
     }
   } else {
-    humanReadableDate = !formatContainsTime(format)
-      ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
-      : t('date-plugin.insert.datetime', TRANSLATION_FALLBACKS.insertDateTime);
+    if (node.attrs['label']) {
+      humanReadableDate = node.attrs['label'] as string;
+    } else {
+      humanReadableDate = !formatContainsTime(format)
+        ? t('date-plugin.insert.date', TRANSLATION_FALLBACKS.insertDate)
+        : t(
+            'date-plugin.insert.datetime',
+            TRANSLATION_FALLBACKS.insertDateTime,
+          );
+    }
   }
   const dateAttrs = {
     class: `${getClassnamesFromNode(node)}${content ? '' : ' say-variable'}`,

@@ -15,6 +15,10 @@ import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { Person } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/variables';
 import { createPersonVariable } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/variable-plugin/actions/create-person-variable';
+import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
+import SearchModal from './search-modal';
+import { on } from '@ember/modifier';
+import t from 'ember-intl/helpers/t';
 
 interface Args {
   controller: SayController;
@@ -27,7 +31,10 @@ export default class LmbPluginInsertComponent extends Component<Args> {
   AddIcon = AddIcon;
 
   get showModal() {
-    return getLmbModalsPluginState(this.controller.mainEditorState)?.modalOpen;
+    return (
+      getLmbModalsPluginState(this.controller.mainEditorState)?.modalOpen ??
+      false
+    );
   }
 
   get controller() {
@@ -66,4 +73,24 @@ export default class LmbPluginInsertComponent extends Component<Args> {
       view: this.controller.mainEditorView,
     });
   }
+
+  <template>
+    <li class='au-c-list__item'>
+      <AuButton
+        @icon={{this.AddIcon}}
+        @iconAlignment='left'
+        @skin='link'
+        {{on 'click' this.openModal}}
+      >
+        {{t 'lmb-plugin.insert.title'}}
+      </AuButton>
+    </li>
+
+    <SearchModal
+      @open={{this.showModal}}
+      @closeModal={{this.closeModal}}
+      @config={{@config}}
+      @onInsert={{this.onInsert}}
+    />
+  </template>
 }

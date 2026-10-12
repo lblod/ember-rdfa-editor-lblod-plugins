@@ -3,9 +3,15 @@ steps:
     image: node:22-slim
     commands:
       - npm config set ignore-scripts true
-      - npm i -g corepack@0.35
       - corepack enable
       - pnpm i --frozen-lockfile
+  check-dev-packages:
+    image: node:22-slim
+    commands:
+      - corepack enable
+      - apt-get update
+      - apt-get install -y --no-install-recommends jq
+      - "pnpm list --json | jq -e '[ .. | .version? ] | map(select(. != null)) | map(test(\"dev\")) | any | not'"
   lint-js:
     image: node:22-slim
     group: lint

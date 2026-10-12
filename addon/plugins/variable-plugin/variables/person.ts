@@ -152,7 +152,8 @@ const serialize = (node: PNode, state: EditorState): DOMOutputSpec => {
     },
     content: subject
       ? [firstName, lastName].filter(Boolean).join(' ')
-      : t(
+      : node.attrs['label'] ||
+        t(
           'variable-plugin.person.nodeview-placeholder',
           TRANSLATION_FALLBACKS.nodeview_placeholder,
         ),

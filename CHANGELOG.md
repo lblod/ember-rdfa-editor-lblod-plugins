@@ -1,5 +1,41 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 39.1.0
+
+### Minor Changes
+
+- [#683](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/683) [`69858cb`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/69858cb1b537e7e7ed43adcd78bc858b21a5bab3) Thanks [@elpoelma](https://github.com/elpoelma)! - Move to glint v2
+
+### Patch Changes
+
+- [#679](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/679) [`e08902b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e08902b088d4e649abe0f4396341e581d8949fa2) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix variable serialization to include label
+
+- [#684](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/684) [`9781fc2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/9781fc21da2f4a1a1aece249ee207b0d0e8cc350) Thanks [@abeforgit](https://github.com/abeforgit)! - add ci check for dev-packages
+
+## 39.0.0
+
+### Major Changes
+
+- [#682](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/682) [`370378d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/370378d9718bf1d757e5026134eecce579280503) Thanks [@elpoelma](https://github.com/elpoelma)! - LMB-plugin: breaking change to the `LMBPluginConfig` interface:
+  the `defaultAdminUnit` now expects an object of the shape
+
+  ```ts
+  {
+    uri: string;
+    label: string;
+  }
+  ```
+
+  The administrative unit input field of the `lmb-plugin` `SearchModal` component is now implement through a dynamic `PowerSelect` component rather than a free-text input field.
+
+### Minor Changes
+
+- [#682](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/682) [`370378d`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/370378d9718bf1d757e5026134eecce579280503) Thanks [@elpoelma](https://github.com/elpoelma)! - LMB-plugin: improve SPARQL query performance
+
+### Patch Changes
+
+- [#679](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/679) [`e08902b`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e08902b088d4e649abe0f4396341e581d8949fa2) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Fix floating window position on date variable
+
 ## 38.3.0
 
 ### Minor Changes

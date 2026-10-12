@@ -28,6 +28,7 @@ import {
 import {
   hasOutgoingNamedNodeTriple,
   hasRDFaAttribute,
+  getOutgoingTriple,
   Resource,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/namespace';
 import { contentSpan } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/dom-output-spec-helpers';
@@ -239,10 +240,9 @@ const serialize =
       }
     }
     if (!contentNode) {
-      const placeholder = t(
-        'location-plugin.nodeview.placeholder',
-        'Voeg locatie in',
-      );
+      const label = getOutgoingTriple(node.attrs, EXT('label'))?.object.value;
+      const placeholder =
+        label || t('location-plugin.nodeview.placeholder', 'Voeg locatie in');
       contentNode = contentSpan({}, placeholder);
     }
     const locationAttrs = {
