@@ -146,11 +146,11 @@ const buildSnippetListFetchQuery = ({
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX say: <https://say.data.gift/ns/>
 
-        SELECT (?snippetLists as ?uri) ?label ?createdOn ?importedResources WHERE {
-          ?snippetLists a say:SnippetList;
+        SELECT ?uri ?label ?createdOn ?importedResource WHERE {
+          ?uri a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
-          OPTIONAL { ?snippetLists say:snippetImportedResource ?importedResources . }
+          OPTIONAL { ?uri say:snippetImportedResource ?importedResource . }
           ${
             name
               ? `FILTER (CONTAINS(LCASE(?label), ${sparqlEscapeString(name.toLowerCase())}))`
@@ -245,7 +245,7 @@ export const fetchSnippetLists = async ({
   //   return { totalCount, results: [] };
   // }
 
-  const queryResult = await executeQuery<BindingObject<SnippetListArgs>>({
+  const queryResult = await executeQuery({
     endpoint,
     query: buildSnippetListFetchQuery({ filter, orderBy }),
     abortSignal,
@@ -257,20 +257,20 @@ export const fetchSnippetLists = async ({
         uri: binding.uri?.value,
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
-        importedResources: binding.importedResources?.value,
+        importedResource: binding.importedResource?.value,
       }))
-      .reduce((mappedResults, bindings) => {
-        const existing = mappedResults.get(bindings.uri) ?? {
-          ...bindings,
+      .reduce((mappedResults, binding) => {
+        const existing = mappedResults.get(binding.uri) ?? {
+          ...binding,
           importedResources: [],
         };
-        if (bindings.importedResources) {
+        if (binding.importedResource) {
           existing.importedResources = [
             ...existing.importedResources,
-            bindings.importedResources,
+            binding.importedResource,
           ];
         }
-        return mappedResults.set(bindings.uri, existing);
+        return mappedResults.set(binding.uri, existing);
       }, new Map<string, SnippetListArgs>())
       .values(),
   ].map((slArgs) => new SnippetList(slArgs));
