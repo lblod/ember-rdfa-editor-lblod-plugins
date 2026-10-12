@@ -1,9 +1,4 @@
-import {
-  EditorState,
-  NodeSelection,
-  PNode,
-  TextSelection,
-} from '@lblod/ember-rdfa-editor';
+import { EditorState, PNode, TextSelection } from '@lblod/ember-rdfa-editor';
 import {
   ELI,
   PROV,
@@ -36,7 +31,6 @@ export function insertArticle(
   args: InsertArticleToDecisionArgs | InsertArticleFreelyArgs,
 ): TransactionMonad<boolean> {
   return function (state: EditorState) {
-    console.log('running');
     const { node } = args;
     if ('insertFreely' in args) {
       const tr = state.tr;
