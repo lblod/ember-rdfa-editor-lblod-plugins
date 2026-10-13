@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 39.1.1
+
+### Patch Changes
+
+- [#685](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/685) [`898d635`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/898d6357fe879e3ddd1df27655af07c7feea60df) Thanks [@elpoelma](https://github.com/elpoelma)! - classic `address` plugin: fix typo in `generiek` namespace
+
+- [#680](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/680) [`e91e1bd`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e91e1bd37cf6119b1dd403abeb61d0ff3ca275ad) Thanks [@lagartoverde](https://github.com/lagartoverde)! - `insert-article` command: fix article node selection to avoid prosemirror selection warning
+
 ## 39.1.0
 
 ### Minor Changes
