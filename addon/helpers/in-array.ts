@@ -1,13 +1,7 @@
-import { helper } from '@ember/component/helper';
-
-type PositionalParams = [array: unknown[], needle: unknown];
-
-export function inArray([theArray, needle]: PositionalParams) {
-  if (!Array.isArray(theArray)) {
+export default function inArray(arr: unknown[], needle: unknown) {
+  if (!Array.isArray(arr)) {
     return false;
   }
 
-  return theArray.includes(needle);
+  return arr.includes(needle);
 }
-
-export default helper<PositionalParams>(inArray);
