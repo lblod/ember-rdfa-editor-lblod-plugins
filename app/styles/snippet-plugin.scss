@@ -75,7 +75,48 @@
   }
 }
 
-.say-snippet-lists-table {
+.say-snippet-list-overview {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.say-snippet-list-overview__sidebar {
+  flex-basis: 30rem;
+  padding: $au-unit;
+  height: 100%;
+  min-width: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  background-color: var(--au-gray-100);
+}
+
+.say-snippet-list-overview__form {
+  display: flex;
+  flex-direction: column;
+  margin-top: $au-unit;
+  gap: $au-unit;
+}
+
+.say-snippet-list-overview__tag-selector {
+  width: 100%;
+}
+
+.say-snippet-list-overview__reset-filters-button {
+  align-self: flex-end;
+  padding: 0;
+}
+
+.say-snippet-list-overview__content {
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.say-snippet-list-overview__table {
+  flex-grow: 1;
+  min-height: 0;
   .au-c-table-wrapper {
     margin-top: 20px;
     margin-right: 100px;
