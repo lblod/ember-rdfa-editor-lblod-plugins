@@ -8,13 +8,13 @@ import { tracked } from '@glimmer/tracking';
 import {
   fetchSnippetLists,
   OrderBy,
-  UsedByTagResourceType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
 
 import {
   SnippetPluginConfig,
   SnippetList,
   Tag,
+  TaggableResourceType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { localCopy, trackedReset } from 'tracked-toolbox';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
@@ -36,7 +36,7 @@ import { uniqueId } from '@ember/helper';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
 
-const TAG_USED_BY_RESOURCE_TYPES: UsedByTagResourceType[] = [
+const TAGGABLE_RESOURCE_TYPES: TaggableResourceType[] = [
   SAY('SnippetList').full,
 ];
 interface Signature {
@@ -204,7 +204,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
                     @endpoint={{this.config.endpoint}}
                     @onChange={{this.setSelectedTags}}
                     @selectedTags={{this.selectedTags}}
-                    @usedByResourceTypes={{TAG_USED_BY_RESOURCE_TYPES}}
+                    @taggableTypes={{TAGGABLE_RESOURCE_TYPES}}
                   />
                 {{/let}}
               </AuFormRow>

@@ -5,9 +5,14 @@ import {
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { Snippet, SnippetList, SnippetListArgs, type Tag } from '../index';
+import {
+  Snippet,
+  SnippetList,
+  SnippetListArgs,
+  type Tag,
+  type TaggableResourceType,
+} from '../index';
 import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
 export type SnippetFilter = {
   name?: string;
@@ -335,14 +340,11 @@ export const fetchSnippetListNames = async ({
   );
 };
 
-const SNIPPET_LIST_TYPE = SAY('SnippetList').full;
-export type UsedByTagResourceType = typeof SNIPPET_LIST_TYPE;
-
 type TagFilter = {
   searchTerm?: Option<string>;
-  usedByResourceTypes?: UsedByTagResourceType[];
+  taggableTypes?: TaggableResourceType[];
 };
-const buildTagsQuery = ({ searchTerm, usedByResourceTypes }: TagFilter) => {
+const buildTagsQuery = ({ searchTerm, taggableTypes }: TagFilter) => {
   return /* sparql */ `
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX say: <https://say.data.gift/ns/>
@@ -353,12 +355,12 @@ const buildTagsQuery = ({ searchTerm, usedByResourceTypes }: TagFilter) => {
       ?uri a gn:Tag;
         skos:prefLabel ?label.
       ${
-        usedByResourceTypes && usedByResourceTypes.length
+        taggableTypes && taggableTypes.length
           ? `
           FILTER EXISTS {
             ?usedBy a ?usedByType.
             VALUES ?usedByType {
-              ${usedByResourceTypes.map((t) => sparqlEscapeUri(t)).join('\n')}
+              ${taggableTypes.map((t) => sparqlEscapeUri(t)).join('\n')}
             }
             ?usedBy ext:hasTag ?uri.
           }
