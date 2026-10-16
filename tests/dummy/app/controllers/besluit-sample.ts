@@ -441,7 +441,7 @@ export default class BesluitSampleController extends Controller {
         },
       },
       snippet: {
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+        endpoint: 'http://rb.localhost/raw-sparql',
       },
       structure: {
         fullLengthArticles: false,
