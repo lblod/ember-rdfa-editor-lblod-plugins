@@ -20,7 +20,7 @@ import { localCopy, trackedReset } from 'tracked-toolbox';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
 import t from 'ember-intl/helpers/t';
 import AuMainContainer from '@appuniversum/ember-appuniversum/components/au-main-container';
-import AlertLoadError from '../../common/search/alert-load-error';
+import AlertLoadError from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/search/alert-load-error';
 import SnippetListView from './snippet-list-view';
 import AuToolbar from '@appuniversum/ember-appuniversum/components/au-toolbar';
 import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox';
