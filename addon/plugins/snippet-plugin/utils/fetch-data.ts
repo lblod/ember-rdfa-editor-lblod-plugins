@@ -5,9 +5,14 @@ import {
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import { Snippet, SnippetList, SnippetListArgs } from '../index';
+import { Snippet, SnippetList, SnippetListArgs, type Tag } from '../index';
+import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 
-export type SnippetFilter = { name?: string; snippetListUris?: string[] };
+export type SnippetFilter = {
+  name?: string;
+  snippetListUris?: string[];
+};
 export type OrderBy =
   | 'label'
   | 'created-on'
@@ -134,23 +139,43 @@ const buildOrderByString = (orderBy: OrderBy) => {
   }
 };
 
+type SnippetListFilter = {
+  name?: string;
+  tags?: Tag[];
+};
+
 const buildSnippetListFetchQuery = ({
-  filter: { name },
+  filter: { name, tags },
   orderBy,
 }: {
-  filter: SnippetFilter;
+  filter: SnippetListFilter;
   orderBy: OrderBy;
 }) => {
   return /* sparql */ `
         PREFIX pav: <http://purl.org/pav/>
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         PREFIX say: <https://say.data.gift/ns/>
+        PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-        SELECT ?uri ?label ?createdOn ?importedResource WHERE {
+        SELECT DISTINCT ?uri ?label ?createdOn ?importedResource ?tagUri ?tagLabel WHERE {
           ?uri a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
           OPTIONAL { ?uri say:snippetImportedResource ?importedResource . }
+          OPTIONAL {
+            ?uri ext:hasTag ?tagUri .
+            ?tagUri skos:prefLabel ?tagLabel .
+          }
+          ${
+            tags && tags.length
+              ? `
+            FILTER EXISTS {
+              ?uri ext:hasTag ?_tagUri .
+              VALUES ?_tagUri { ${tags.map((tag) => sparqlEscapeUri(tag.uri)).join('\n')} }
+            }
+            `
+              : ''
+          }
           ${
             name
               ? `FILTER (CONTAINS(LCASE(?label), ${sparqlEscapeString(name.toLowerCase())}))`
@@ -230,7 +255,7 @@ export const fetchSnippetLists = async ({
 }: {
   endpoint: string;
   abortSignal: AbortSignal;
-  filter: SnippetFilter;
+  filter: SnippetListFilter;
   orderBy: OrderBy;
 }) => {
   // We don't currently use this count, so skip the query, but we'll need it if we make pagination
@@ -244,7 +269,6 @@ export const fetchSnippetLists = async ({
   // if (totalCount === 0) {
   //   return { totalCount, results: [] };
   // }
-
   const queryResult = await executeQuery({
     endpoint,
     query: buildSnippetListFetchQuery({ filter, orderBy }),
@@ -258,11 +282,14 @@ export const fetchSnippetLists = async ({
         label: binding.label?.value,
         createdOn: binding.createdOn?.value,
         importedResource: binding.importedResource?.value,
+        tagUri: binding.tagUri?.value,
+        tagLabel: binding.tagLabel?.value,
       }))
       .reduce((mappedResults, binding) => {
         const existing = mappedResults.get(binding.uri) ?? {
           ...binding,
           importedResources: [],
+          tags: [],
         };
         if (binding.importedResource) {
           existing.importedResources = [
@@ -270,11 +297,16 @@ export const fetchSnippetLists = async ({
             binding.importedResource,
           ];
         }
+        if (binding.tagUri) {
+          existing.tags = [
+            ...existing.tags,
+            { uri: binding.tagUri, label: binding.tagLabel },
+          ].sort((tagA, tagB) => tagA.label.localeCompare(tagB.label));
+        }
         return mappedResults.set(binding.uri, existing);
       }, new Map<string, SnippetListArgs>())
       .values(),
   ].map((slArgs) => new SnippetList(slArgs));
-
   return { results };
 };
 
@@ -301,4 +333,63 @@ export const fetchSnippetListNames = async ({
       binding.snippetListName.value,
     ]),
   );
+};
+
+const SNIPPET_LIST_TYPE = SAY('SnippetList').full;
+export type UsedByTagResourceType = typeof SNIPPET_LIST_TYPE;
+
+type TagFilter = {
+  searchTerm?: Option<string>;
+  usedByResourceTypes?: UsedByTagResourceType[];
+};
+const buildTagsQuery = ({ searchTerm, usedByResourceTypes }: TagFilter) => {
+  return /* sparql */ `
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX say: <https://say.data.gift/ns/>
+    PREFIX gn: <http://data.lblod.info/vocabularies/gelinktnotuleren/>
+    PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+
+    SELECT DISTINCT ?uri ?label WHERE {
+      ?uri a gn:Tag;
+        skos:prefLabel ?label.
+      ${
+        usedByResourceTypes && usedByResourceTypes.length
+          ? `
+          FILTER EXISTS {
+            ?usedBy a ?usedByType.
+            VALUES ?usedByType {
+              ${usedByResourceTypes.map((t) => sparqlEscapeUri(t)).join('\n')}
+            }
+            ?usedBy ext:hasTag ?uri.
+          }
+        `
+          : ''
+      } 
+      ${searchTerm ? `FILTER(CONTAINS(?label, ${sparqlEscapeString(searchTerm)}))` : ''}
+    }
+    ORDER BY ?label
+    `;
+};
+
+export const fetchTags = async ({
+  endpoint,
+  abortSignal,
+  filter,
+}: {
+  endpoint: string;
+  abortSignal?: AbortSignal;
+  filter: TagFilter;
+}): Promise<Tag[]> => {
+  const queryResult = await executeQuery<
+    BindingObject<{ uri: string; label: string }>
+  >({
+    endpoint,
+    query: buildTagsQuery(filter),
+    abortSignal,
+  });
+
+  return queryResult.results.bindings.map((binding) => ({
+    uri: binding.uri.value,
+    label: binding.label.value,
+  }));
 };
