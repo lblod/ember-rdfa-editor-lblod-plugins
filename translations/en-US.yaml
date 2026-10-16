@@ -286,10 +286,15 @@ snippet-plugin:
     modal:
       title: Select available snippet lists for this template
       subtitle: Select available snippets lists for this template
-      search:
-        title: Filter on
-        label: Snippet list name
-        placeholder: Type something...
+      filter:
+        title: Filters
+        name-filter:
+          label: List name
+          placeholder: Type to search
+        tag-filter:
+          label: Tags
+          placeholder: Select tags
+        reset: Reset filters
       button:
         cancel: Cancel
         update: Save snippet lists
@@ -298,6 +303,7 @@ snippet-plugin:
         list: List
         created: Created
         imported-resources: Imported Resources
+        tags: Tags
       multi-snippet-toggle: Allow multi-snippet selection
   snippet-node:
     change-fragment: Change Fragment

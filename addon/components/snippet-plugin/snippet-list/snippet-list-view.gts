@@ -3,13 +3,12 @@ import { action } from '@ember/object';
 import { SnippetList } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import AuDataTable from '@appuniversum/ember-appuniversum/components/au-data-table';
 import AuDataTableThSortable from '@appuniversum/ember-appuniversum/components/au-data-table/th-sortable';
-import AuDataTableTextSearch from '@appuniversum/ember-appuniversum/components/au-data-table/text-search';
-import AuToolbar from '@appuniversum/ember-appuniversum/components/au-toolbar';
 import AuCheckbox from '@appuniversum/ember-appuniversum/components/au-checkbox';
 import { fn } from '@ember/helper';
 import t from 'ember-intl/helpers/t';
 import inArray from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/in-array';
 import { OrderBy } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
+import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
 
 interface Signature {
   Args: {
@@ -68,76 +67,63 @@ export default class SnippetListView extends Component<Signature> {
   }
 
   <template>
-    <div class='say-snippet-lists-table'>
-      {{#let
-        (t 'snippet-plugin.snippet-list.modal.table.list')
-        (t 'snippet-plugin.snippet-list.modal.table.created')
-        (t 'snippet-plugin.snippet-list.modal.table.select')
-        (t 'snippet-plugin.snippet-list.modal.subtitle')
-        (t 'snippet-plugin.snippet-list.modal.search.label')
-        (t 'snippet-plugin.snippet-list.modal.table.imported-resources')
-        as |list created select subtitle search imported|
-      }}
-        {{! @glint-expect-error au-data-table does not have type annotations yet }}
-        <AuDataTable
-          @content={{this.snippetLists}}
-          @isLoading={{@isLoading}}
-          @noDataMessage={{t 'common.search.no-results'}}
-          @sort={{@sort}}
-          @onClickRow={{this.onClickRow}}
-          as |t|
-        >
-          <t.menu as |menu|>
-            <menu.general>
-              <AuToolbar class='au-o-box' as |Group|>
-                <Group />
-                <Group class='au-c-toolbar__group--center'>
-                  {{! @glint-expect-error au-data-table does not have type annotations yet }}
-                  <AuDataTableTextSearch
-                    @wait={{500}}
-                    @filter={{@listNameFilter}}
-                    @placeholder={{search}}
-                  />
-                </Group>
-              </AuToolbar>
-            </menu.general>
-          </t.menu>
-          <t.content as |c|>
-            <c.header>
-              <th class='snippet-list-table-select-column'>{{select}}</th>
-              {{! @glint-expect-error au-data-table does not have type annotations yet }}
-              <AuDataTableThSortable
-                @field='label'
-                @label={{list}}
-                @currentSorting={{@sort}}
-                @class='data-table__header-title'
+    {{#let
+      (t 'snippet-plugin.snippet-list.modal.table.list')
+      (t 'snippet-plugin.snippet-list.modal.table.created')
+      (t 'snippet-plugin.snippet-list.modal.table.select')
+      (t 'snippet-plugin.snippet-list.modal.table.imported-resources')
+      (t 'snippet-plugin.snippet-list.modal.table.tags')
+      as |list created select imported tags|
+    }}
+      {{! @glint-expect-error au-data-table does not have type annotations yet }}
+      <AuDataTable
+        @content={{this.snippetLists}}
+        @isLoading={{@isLoading}}
+        @noDataMessage={{t 'common.search.no-results'}}
+        @sort={{@sort}}
+        @onClickRow={{this.onClickRow}}
+        @hidePagination={{true}}
+        as |t|
+      >
+        <t.content as |c|>
+          <c.header>
+            <th class='snippet-list-table-select-column'>{{select}}</th>
+            {{! @glint-expect-error au-data-table does not have type annotations yet }}
+            <AuDataTableThSortable
+              @field='label'
+              @label={{list}}
+              @currentSorting={{@sort}}
+              @class='data-table__header-title'
+            />
+            <th>{{imported}}</th>
+            <th>{{tags}}</th>
+            {{! @glint-expect-error au-data-table does not have type annotations yet }}
+            <AuDataTableThSortable
+              @field='createdOn'
+              @label={{created}}
+              @currentSorting={{@sort}}
+              @class='data-table__header-title snippet-list-table-created-column'
+            />
+          </c.header>
+          <c.body as |row|>
+            <td class='snippet-list-table-select-column'>
+              <AuCheckbox
+                id={{row.label}}
+                @onChange={{fn this.onChange row.uri}}
+                @checked={{inArray @snippetListUris row.uri}}
               />
-              <th>{{imported}}</th>
-              {{! @glint-expect-error au-data-table does not have type annotations yet }}
-              <AuDataTableThSortable
-                @field='createdOn'
-                @label={{created}}
-                @currentSorting={{@sort}}
-                @class='data-table__header-title snippet-list-table-created-column'
-              />
-            </c.header>
-            <c.body as |row|>
-              <td class='snippet-list-table-select-column'>
-                <AuCheckbox
-                  id={{row.label}}
-                  @onChange={{fn this.onChange row.uri}}
-                  @checked={{inArray @snippetListUris row.uri}}
-                />
-              </td>
-              <td>{{row.label}}</td>
-              <td>{{row.importedResources}}</td>
-              <td
-                class='snippet-list-table-created-column'
-              >{{row.createdOn}}</td>
-            </c.body>
-          </t.content>
-        </AuDataTable>
-      {{/let}}
-    </div>
+            </td>
+            <td>{{row.label}}</td>
+            <td>{{row.importedResources}}</td>
+            <td>
+              {{#each row.tags as |tag|}}
+                <AuPill>{{tag.label}}</AuPill>
+              {{/each}}
+            </td>
+            <td class='snippet-list-table-created-column'>{{row.createdOn}}</td>
+          </c.body>
+        </t.content>
+      </AuDataTable>
+    {{/let}}
   </template>
 }

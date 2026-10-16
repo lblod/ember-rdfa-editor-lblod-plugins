@@ -43,6 +43,7 @@ export type SnippetListArgs = {
   label: string;
   createdOn: string;
   importedResources: string[];
+  tags: Tag[];
 };
 
 export class SnippetList {
@@ -50,11 +51,24 @@ export class SnippetList {
   label: string;
   createdOn: string | null;
   importedResources: string[];
+  tags: Tag[];
 
-  constructor({ uri, label, createdOn, importedResources }: SnippetListArgs) {
+  constructor({
+    uri,
+    label,
+    createdOn,
+    importedResources,
+    tags,
+  }: SnippetListArgs) {
     this.uri = uri;
     this.label = label;
     this.createdOn = dateValue(createdOn);
     this.importedResources = importedResources;
+    this.tags = tags;
   }
 }
+
+export type Tag = {
+  uri: string;
+  label: string;
+};
