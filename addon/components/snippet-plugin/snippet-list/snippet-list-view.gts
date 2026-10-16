@@ -9,6 +9,7 @@ import t from 'ember-intl/helpers/t';
 import inArray from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/in-array';
 import { OrderBy } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
 import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
+import { uniqueId } from '@ember/helper';
 
 interface Signature {
   Args: {
@@ -108,7 +109,7 @@ export default class SnippetListView extends Component<Signature> {
           <c.body as |row|>
             <td class='snippet-list-table-select-column'>
               <AuCheckbox
-                id={{row.label}}
+                id={{(uniqueId)}}
                 @onChange={{fn this.onChange row.uri}}
                 @checked={{inArray @snippetListUris row.uri}}
               />
