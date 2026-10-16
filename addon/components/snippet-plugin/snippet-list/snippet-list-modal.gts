@@ -196,7 +196,7 @@ export default class SnippetListModalComponent extends Component<Signature> {
                     @error={{false}}
                     @warning={{false}}
                   >{{t
-                      'snippet-plugin.snippet-list.modal.filter.tag-filter.placeholder'
+                      'snippet-plugin.snippet-list.modal.filter.tag-filter.label'
                     }}</AuLabel>
                   <TagSelector
                     id={{id}}
