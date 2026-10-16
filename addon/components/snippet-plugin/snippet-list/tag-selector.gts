@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { trackedFunction } from 'reactiveweb/function';
 import { service } from '@ember/service';
 import PowerSelectMultiple from 'ember-power-select/components/power-select-multiple';
-import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 import { Tag } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import {
@@ -24,8 +23,6 @@ type Signature = {
 export default class TagSelector extends Component<Signature> {
   @service declare intl: IntlService;
 
-  @tracked searchTerm: string | null = null;
-
   tags = trackedFunction<Promise<Tag[]>>(this, async () => {
     return fetchTags({
       endpoint: this.args.endpoint,
@@ -36,14 +33,9 @@ export default class TagSelector extends Component<Signature> {
   });
 
   changeSelection = (selectedTags: Tag[]) => {
-    this.searchTerm = null;
     this.args.onChange?.(
       selectedTags.sort((tagA, tagB) => tagA.label.localeCompare(tagB.label)),
     );
-  };
-
-  setSearchTerm = (term: string) => {
-    this.searchTerm = term;
   };
 
   <template>
@@ -54,7 +46,6 @@ export default class TagSelector extends Component<Signature> {
         @searchEnabled={{true}}
         @selected={{@selectedTags}}
         @searchField='label'
-        @onInput={{this.setSearchTerm}}
         @placeholder={{t
           'snippet-plugin.snippet-list.modal.filter.tag-filter.placeholder'
         }}
