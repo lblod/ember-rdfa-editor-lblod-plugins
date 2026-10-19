@@ -1,7 +1,7 @@
 import { PreviewableDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/documents/types';
-import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { type Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import type { Tag } from '../common/tags/types';
 
 export const DEFAULT_CONTENT_STRING = 'block+';
 
@@ -68,10 +68,3 @@ export class SnippetList {
     this.tags = tags;
   }
 }
-
-export type Tag = {
-  uri: string;
-  label: string;
-};
-const SNIPPET_LIST_TYPE = SAY('SnippetList').full;
-export type TaggableResourceType = typeof SNIPPET_LIST_TYPE;

@@ -8,8 +8,8 @@ import { fn } from '@ember/helper';
 import t from 'ember-intl/helpers/t';
 import inArray from '@lblod/ember-rdfa-editor-lblod-plugins/helpers/in-array';
 import { OrderBy } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin/utils/fetch-data';
-import AuPill from '@appuniversum/ember-appuniversum/components/au-pill';
 import { uniqueId } from '@ember/helper';
+import CollapsibleTagList from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/tags/collapsible-tag-list';
 
 interface Signature {
   Args: {
@@ -117,9 +117,9 @@ export default class SnippetListView extends Component<Signature> {
             <td>{{row.label}}</td>
             <td>{{row.importedResources}}</td>
             <td>
-              {{#each row.tags as |tag|}}
-                <AuPill>{{tag.label}}</AuPill>
-              {{/each}}
+              {{#if row.tags.length}}
+                <CollapsibleTagList @tags={{row.tags}} />
+              {{/if}}
             </td>
             <td class='snippet-list-table-created-column'>{{row.createdOn}}</td>
           </c.body>

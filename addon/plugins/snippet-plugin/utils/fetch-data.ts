@@ -5,14 +5,8 @@ import {
   sparqlEscapeString,
   sparqlEscapeUri,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/sparql-helpers';
-import {
-  Snippet,
-  SnippetList,
-  SnippetListArgs,
-  type Tag,
-  type TaggableResourceType,
-} from '../index';
-import type { Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
+import { Snippet, SnippetList, SnippetListArgs } from '../index';
+import type { TagWithUri } from '../../common/tags/types';
 
 export type SnippetFilter = {
   name?: string;
@@ -146,7 +140,7 @@ const buildOrderByString = (orderBy: OrderBy) => {
 
 type SnippetListFilter = {
   name?: string;
-  tags?: Tag[];
+  tags?: TagWithUri[];
 };
 
 const buildSnippetListFetchQuery = ({
@@ -162,14 +156,14 @@ const buildSnippetListFetchQuery = ({
         PREFIX say: <https://say.data.gift/ns/>
         PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-        SELECT DISTINCT ?uri ?label ?createdOn ?importedResource ?tagUri ?tagLabel WHERE {
+        SELECT DISTINCT ?uri ?label ?createdOn ?importedResource ?tagUri ?tagValue WHERE {
           ?uri a say:SnippetList;
             skos:prefLabel ?label;
             pav:createdOn ?createdOn.
           OPTIONAL { ?uri say:snippetImportedResource ?importedResource . }
           OPTIONAL {
             ?uri ext:hasTag ?tagUri .
-            ?tagUri skos:prefLabel ?tagLabel .
+            ?tagUri skos:prefLabel ?tagValue .
           }
           ${
             tags && tags.length
@@ -288,7 +282,7 @@ export const fetchSnippetLists = async ({
         createdOn: binding.createdOn?.value,
         importedResource: binding.importedResource?.value,
         tagUri: binding.tagUri?.value,
-        tagLabel: binding.tagLabel?.value,
+        tagValue: binding.tagValue?.value,
       }))
       .reduce((mappedResults, binding) => {
         const existing = mappedResults.get(binding.uri) ?? {
@@ -305,8 +299,8 @@ export const fetchSnippetLists = async ({
         if (binding.tagUri) {
           existing.tags = [
             ...existing.tags,
-            { uri: binding.tagUri, label: binding.tagLabel },
-          ].sort((tagA, tagB) => tagA.label.localeCompare(tagB.label));
+            { uri: binding.tagUri, value: binding.tagValue },
+          ].sort((tagA, tagB) => tagA.value.localeCompare(tagB.value));
         }
         return mappedResults.set(binding.uri, existing);
       }, new Map<string, SnippetListArgs>())
@@ -338,60 +332,4 @@ export const fetchSnippetListNames = async ({
       binding.snippetListName.value,
     ]),
   );
-};
-
-type TagFilter = {
-  searchTerm?: Option<string>;
-  taggableTypes?: TaggableResourceType[];
-};
-const buildTagsQuery = ({ searchTerm, taggableTypes }: TagFilter) => {
-  return /* sparql */ `
-    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-    PREFIX say: <https://say.data.gift/ns/>
-    PREFIX gn: <http://data.lblod.info/vocabularies/gelinktnotuleren/>
-    PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-
-    SELECT DISTINCT ?uri ?label WHERE {
-      ?uri a gn:Tag;
-        skos:prefLabel ?label.
-      ${
-        taggableTypes && taggableTypes.length
-          ? `
-          FILTER EXISTS {
-            ?usedBy a ?usedByType.
-            VALUES ?usedByType {
-              ${taggableTypes.map((t) => sparqlEscapeUri(t)).join('\n')}
-            }
-            ?usedBy ext:hasTag ?uri.
-          }
-        `
-          : ''
-      } 
-      ${searchTerm ? `FILTER(CONTAINS(?label, ${sparqlEscapeString(searchTerm)}))` : ''}
-    }
-    ORDER BY ?label
-    `;
-};
-
-export const fetchTags = async ({
-  endpoint,
-  abortSignal,
-  filter,
-}: {
-  endpoint: string;
-  abortSignal?: AbortSignal;
-  filter: TagFilter;
-}): Promise<Tag[]> => {
-  const queryResult = await executeQuery<
-    BindingObject<{ uri: string; label: string }>
-  >({
-    endpoint,
-    query: buildTagsQuery(filter),
-    abortSignal,
-  });
-
-  return queryResult.results.bindings.map((binding) => ({
-    uri: binding.uri.value,
-    label: binding.label.value,
-  }));
 };

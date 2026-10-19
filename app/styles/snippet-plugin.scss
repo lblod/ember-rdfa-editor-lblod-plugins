@@ -78,6 +78,7 @@
 .say-snippet-list-overview {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   height: 100%;
 }
 

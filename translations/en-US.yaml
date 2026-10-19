@@ -20,6 +20,13 @@ common:
       label: Select
       title: Insert
     no-content: Does not contain any content
+  tags:
+    collapsible-tag-list:
+      show-less: Show less
+    tag-selector:
+      placeholder: Select tags
+      create-new-tag: 'Create new tag {tagName}'
+      no-results-message: No results found
 
 structure-plugin:
   move-up: 'Move {structureName} up'
@@ -293,7 +300,6 @@ snippet-plugin:
           placeholder: Type to search
         tag-filter:
           label: Tags
-          placeholder: Select tags
         reset: Reset filters
       button:
         cancel: Cancel

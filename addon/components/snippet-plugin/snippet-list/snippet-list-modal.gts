@@ -13,8 +13,6 @@ import {
 import {
   SnippetPluginConfig,
   SnippetList,
-  Tag,
-  TaggableResourceType,
 } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/snippet-plugin';
 import { localCopy, trackedReset } from 'tracked-toolbox';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
@@ -30,15 +28,14 @@ import { on } from '@ember/modifier';
 import AuHeading from '@appuniversum/ember-appuniversum/components/au-heading';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 import AuNativeInput from '../../au-native-input';
-import TagSelector from './tag-selector';
 import { SAY } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/constants';
 import { uniqueId } from '@ember/helper';
 import AuFormRow from '@appuniversum/ember-appuniversum/components/au-form-row';
 import { CrossIcon } from '@appuniversum/ember-appuniversum/components/icons/cross';
-
-const TAGGABLE_RESOURCE_TYPES: TaggableResourceType[] = [
-  SAY('SnippetList').full,
-];
+import { TagWithUri } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/common/tags/types';
+import TagSelector from '../../common/tags/tag-selector';
+import { trackedFunction } from 'reactiveweb/function';
+import { fetchTags } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/common/tags/queries';
 interface Signature {
   Args: {
     config: SnippetPluginConfig;
@@ -56,7 +53,7 @@ interface Signature {
 export default class SnippetListModalComponent extends Component<Signature> {
   // Filtering
   @tracked nameFilterText: string | null = null;
-  @tracked selectedTags: Tag[] = [];
+  @tracked selectedTags: TagWithUri[] = [];
 
   // Sorting
   @tracked sort: OrderBy = null;
@@ -78,8 +75,10 @@ export default class SnippetListModalComponent extends Component<Signature> {
     this.nameFilterText = (event.target as HTMLInputElement).value;
   };
 
-  setSelectedTags = (tags: Tag[]) => {
-    this.selectedTags = tags;
+  setSelectedTags = (tags: TagWithUri[]) => {
+    this.selectedTags = tags
+      .slice()
+      .sort((tagA, tagB) => tagA.value.localeCompare(tagB.value));
   };
 
   resetFilters = () => {
@@ -142,6 +141,15 @@ export default class SnippetListModalComponent extends Component<Signature> {
     () => [this.nameFilterText, this.selectedTags, this.sort],
   );
 
+  tags = trackedFunction(this, async () => {
+    return fetchTags({
+      endpoint: this.args.config.endpoint,
+      filter: {
+        taggableTypes: [SAY('SnippetList').full],
+      },
+    });
+  });
+
   @action
   onChange(snippetListUris: string[]) {
     this.snippetListUris = snippetListUris;
@@ -187,27 +195,28 @@ export default class SnippetListModalComponent extends Component<Signature> {
                   />
                 {{/let}}
               </AuFormRow>
-              <AuFormRow>
-                {{#let (uniqueId) as |id|}}
-                  <AuLabel
-                    for={{id}}
-                    @inline={{false}}
-                    @required={{false}}
-                    @error={{false}}
-                    @warning={{false}}
-                  >{{t
-                      'snippet-plugin.snippet-list.modal.filter.tag-filter.label'
-                    }}</AuLabel>
-                  <TagSelector
-                    id={{id}}
-                    class='say-snippet-list-overview__tag-selector'
-                    @endpoint={{this.config.endpoint}}
-                    @onChange={{this.setSelectedTags}}
-                    @selectedTags={{this.selectedTags}}
-                    @taggableTypes={{TAGGABLE_RESOURCE_TYPES}}
-                  />
-                {{/let}}
-              </AuFormRow>
+              {{#if this.tags.value}}
+                <AuFormRow>
+                  {{#let (uniqueId) as |id|}}
+                    <AuLabel
+                      for={{id}}
+                      @inline={{false}}
+                      @required={{false}}
+                      @error={{false}}
+                      @warning={{false}}
+                    >{{t
+                        'snippet-plugin.snippet-list.modal.filter.tag-filter.label'
+                      }}</AuLabel>
+                    <TagSelector
+                      id={{id}}
+                      class='say-snippet-list-overview__tag-selector'
+                      @tags={{this.tags.value}}
+                      @onChange={{this.setSelectedTags}}
+                      @selectedTags={{this.selectedTags}}
+                    />
+                  {{/let}}
+                </AuFormRow>
+              {{/if}}
               <AuButton
                 class='say-snippet-list-overview__reset-filters-button'
                 @skin='naked'
