@@ -25,7 +25,7 @@ common:
       show-less: Toon minder
     tag-selector:
       placeholder: Selecteer tags
-      create-new-tag: 'Maak nieuwe tag {tagName} aan'
+      create-new-tag: Maak nieuwe tag "{tagName}" aan
       no-results-message: Geen resultaten gevonden
 
 structure-plugin:

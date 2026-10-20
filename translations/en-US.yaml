@@ -25,7 +25,7 @@ common:
       show-less: Show less
     tag-selector:
       placeholder: Select tags
-      create-new-tag: 'Create new tag {tagName}'
+      create-new-tag: Create new tag "{tagName}"
       no-results-message: No results found
 
 structure-plugin:
