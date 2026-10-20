@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 39.1.2
+
+### Patch Changes
+
+- [#687](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/687) [`e843838`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/e843838e191b369d8f6d0e5815456a30d530ac07) Thanks [@abeforgit](https://github.com/abeforgit)! - Fix location suggestions when a location placeholder is present in the doc
+
 ## 39.1.1
 
 ### Patch Changes
