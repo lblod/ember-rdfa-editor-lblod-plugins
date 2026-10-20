@@ -1,5 +1,8 @@
-import { EditorState, type PNode } from '@lblod/ember-rdfa-editor';
+import { Attrs, EditorState, type PNode } from '@lblod/ember-rdfa-editor';
 import { ResolvedPNode } from '@lblod/ember-rdfa-editor/utils/_private/types';
+import { Address } from '../plugins/location-plugin/_private/utils/address-helpers';
+import { Area, Place } from '../plugins/location-plugin/utils/geo-helpers';
+import { getLocationUri } from '../plugins/location-plugin/_private/utils/location-helpers';
 
 type NodeMetadataType = {
   [uri: string]: {
@@ -42,25 +45,41 @@ function getSuggestionScore(
 
   return score;
 }
+type NodeWithLocAttrs = PNode & {
+  attrs: Attrs & { value: Address | Place | Area };
+};
+type ResolvedLocAttrsNode = ResolvedPNode & { value: NodeWithLocAttrs };
+function isNodeWithLocAttrs(node: PNode): node is NodeWithLocAttrs {
+  const value = node.attrs.value;
+  if (value) {
+    if (getLocationUri(value)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export function getRankedPNodes(
   state: EditorState,
   nodeType: string,
-  getUri: (node: PNode) => string,
+  getUri: (node: NodeWithLocAttrs) => string,
 ): {
   node: ResolvedPNode;
   score: number;
 }[] {
   const doc = state.doc;
-  const nodesWithDistance: { node: ResolvedPNode; distance: number }[] = [];
+  const nodesWithDistance: { node: ResolvedLocAttrsNode; distance: number }[] =
+    [];
   const selection = state.selection;
   doc.descendants((node, pos) => {
     if (node.type.name === nodeType) {
       const distance = Math.abs(pos - selection.from);
-      nodesWithDistance.push({
-        node: { value: node, pos },
-        distance: distance,
-      });
+      if (isNodeWithLocAttrs(node)) {
+        nodesWithDistance.push({
+          node: { value: node, pos },
+          distance: distance,
+        });
+      }
       return false;
     }
     return true;
