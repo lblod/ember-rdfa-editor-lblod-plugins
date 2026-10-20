@@ -23,7 +23,7 @@ type Signature<T extends Tag> = {
   );
   Element: HTMLElement;
 };
-type NewTag = {
+export type NewTag = {
   value: string;
   // this works better than a boolean "isNew" for runtime type-checking
   optionType: 'new';
