@@ -90,6 +90,7 @@
   flex-grow: 0;
   flex-shrink: 0;
   background-color: var(--au-gray-100);
+  border-right: 1px solid $au-sidebar-border;
 }
 
 .say-snippet-list-overview__form {
