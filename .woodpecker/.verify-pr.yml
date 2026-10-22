@@ -3,11 +3,14 @@ steps:
     image: node:24-slim
     commands:
       - npm config set ignore-scripts true
+      - npm i -g corepack@0.36
       - corepack enable
       - pnpm i --frozen-lockfile
   check-dev-packages:
     image: node:24-slim
     commands:
+      - npm config set ignore-scripts true
+      - npm i -g corepack@0.36
       - corepack enable
       - apt-get update
       - apt-get install -y --no-install-recommends jq
@@ -16,30 +19,38 @@ steps:
     image: node:24-slim
     group: lint
     commands:
+      - npm config set ignore-scripts true
+      - npm i -g corepack@0.36
       - corepack enable
       - pnpm lint:js
   lint-hbs:
     image: node:24-slim
     group: lint
     commands:
+      - npm config set ignore-scripts true
+      - npm i -g corepack@0.36
       - corepack enable
       - pnpm lint:hbs
   lint-prettier:
     image: node:24-slim
     group: lint
     commands:
+      - npm config set ignore-scripts true
+      - npm i -g corepack@0.36
       - corepack enable
       - pnpm lint:prettier
   test:
     image:  node:24-slim
     commands:
       - npm config set ignore-scripts true
-      - npm i -g corepack@0.35
+      - npm i -g corepack@0.36
       - corepack enable
       - pnpm test:ember
   precompile:
     image: node:24-slim
     commands:
+      - npm config set ignore-scripts true
+      - npm i -g corepack@0.36
       - corepack enable
       - pnpm prepack
 when:
