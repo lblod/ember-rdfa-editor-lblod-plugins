@@ -96,15 +96,16 @@ export default class SnippetListSelect extends Component<Signature> {
       >
         {{t 'snippet-plugin.snippet-list.open-modal'}}
       </AuButton>
-
-      <SnippetListModal
-        @config={{@config}}
-        @snippetListUris={{this.snippetListUris}}
-        @onSaveSnippetLists={{this.onSaveSnippetLists}}
-        @allowMultipleSnippets={{this.allowMultipleSnippets}}
-        @open={{this.showModal}}
-        @closeModal={{this.closeModal}}
-      />
+      {{#if this.showModal}}
+        <SnippetListModal
+          @config={{@config}}
+          @snippetListUris={{this.snippetListUris}}
+          @onSaveSnippetLists={{this.onSaveSnippetLists}}
+          @allowMultipleSnippets={{this.allowMultipleSnippets}}
+          @open={{true}}
+          @closeModal={{this.closeModal}}
+        />
+      {{/if}}
     {{/if}}
   </template>
 }

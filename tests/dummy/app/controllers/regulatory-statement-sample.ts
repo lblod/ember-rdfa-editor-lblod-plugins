@@ -363,7 +363,7 @@ export default class RegulatoryStatementSampleController extends Controller {
       },
       snippet: {
         allowedContent: 'document_title? block+',
-        endpoint: 'https://dev.reglementairebijlagen.lblod.info/sparql',
+        endpoint: 'http://rb.localhost/raw-sparql',
         hidePlaceholderInsertButton: true,
       },
       worship: {

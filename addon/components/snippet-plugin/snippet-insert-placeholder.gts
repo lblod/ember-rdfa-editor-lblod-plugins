@@ -70,13 +70,15 @@ export default class SnippetPluginSnippetInsertPlaceholder extends Component<Sig
         {{t 'snippet-plugin.insert.placeholder'}}
       </AuButton>
     </li>
-    <SnippetListModal
-      @config={{@config}}
-      @snippetListUris={{empty}}
-      @allowMultipleSnippets={{false}}
-      @onSaveSnippetLists={{this.insertPlaceholder}}
-      @open={{this.isModalOpen}}
-      @closeModal={{this.closeModal}}
-    />
+    {{#if this.isModalOpen}}
+      <SnippetListModal
+        @config={{@config}}
+        @snippetListUris={{empty}}
+        @allowMultipleSnippets={{false}}
+        @onSaveSnippetLists={{this.insertPlaceholder}}
+        @open={{true}}
+        @closeModal={{this.closeModal}}
+      />
+    {{/if}}
   </template>
 }
