@@ -1,0 +1,61 @@
+.say-tag-selector .ember-power-select-multiple-option {
+  max-width: 95%;
+}
+
+.say-tag-selector__item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.say-tag-selector
+  .ember-power-select-multiple-option
+  .ember-power-select-multiple-remove-btn {
+  flex-shrink: 0;
+}
+
+.say-collapsible-tag-list {
+  position: relative;
+  width: 100%;
+}
+
+.say-collapsible-tag-list__measure {
+  position: absolute;
+  // To ensure we don't cause any vertical scroll
+  overflow: hidden;
+
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
+  height: 0;
+}
+
+.say-collapsible-tag-list__visible {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  gap: 6px;
+}
+
+.say-collapsible-tag-list--expanded .say-collapsible-tag-list__visible {
+  flex-wrap: wrap;
+}
+
+.say-collapsible-tag-list__pill {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.say-collapsible-tag-list__more {
+  cursor: pointer;
+}
+
+.say-collapsible-tag-list__less {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}

@@ -1,6 +1,7 @@
 import { PreviewableDocument } from '@lblod/ember-rdfa-editor-lblod-plugins/components/common/documents/types';
 import { type Option } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/option';
 import { dateValue } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/strings';
+import type { Tag } from '../common/tags/types';
 
 export const DEFAULT_CONTENT_STRING = 'block+';
 
@@ -43,6 +44,7 @@ export type SnippetListArgs = {
   label: string;
   createdOn: string;
   importedResources: string[];
+  tags: Tag[];
 };
 
 export class SnippetList {
@@ -50,11 +52,19 @@ export class SnippetList {
   label: string;
   createdOn: string | null;
   importedResources: string[];
+  tags: Tag[];
 
-  constructor({ uri, label, createdOn, importedResources }: SnippetListArgs) {
+  constructor({
+    uri,
+    label,
+    createdOn,
+    importedResources,
+    tags,
+  }: SnippetListArgs) {
     this.uri = uri;
     this.label = label;
     this.createdOn = dateValue(createdOn);
     this.importedResources = importedResources;
+    this.tags = tags;
   }
 }

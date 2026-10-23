@@ -20,6 +20,13 @@ common:
       label: Selecteer
       title: Invoegen
     no-content: Bevat geen inhoud
+  tags:
+    collapsible-tag-list:
+      show-less: Toon minder
+    tag-selector:
+      placeholder: Selecteer tags
+      create-new-tag: Maak nieuwe tag "{tagName}" aan
+      no-results-message: Geen resultaten gevonden
 
 structure-plugin:
   move-up: '{structureName} naar boven verplaatsen'
@@ -285,10 +292,14 @@ snippet-plugin:
     modal:
       title: Selecteer beschikbare fragmentlijsten voor deze sjabloon
       subtitle: Selecteer beschikbare fragmentlijsten voor deze sjabloon
-      search:
-        title: Filter op
-        label: Naam lijst
-        placeholder: Vul in…
+      filter:
+        title: Filters
+        name-filter:
+          label: Naam lijst
+          placeholder: Typ om te zoeken
+        tag-filter:
+          label: Tags
+        reset: Reset filters
       button:
         cancel: Annuleer
         update: Fragmentlijsten opslaan
@@ -297,6 +308,7 @@ snippet-plugin:
         list: Lijst
         created: Aangemaakt op
         imported-resources: Ingevoerde Middelen
+        tags: Tags
       multi-snippet-toggle: Meerkeuze-fragmentselectie
   snippet-node:
     change-fragment: Fragment vervangen
