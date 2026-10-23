@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 39.2.0
+
+### Minor Changes
+
+- [#686](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/686) [`25cb100`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/25cb10062fc4dc92e211bd4921171c73222152ee) Thanks [@elpoelma](https://github.com/elpoelma)! - snippet-list plugin: introduce tag filtering
+
+- [#686](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/686) [`25cb100`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/25cb10062fc4dc92e211bd4921171c73222152ee) Thanks [@elpoelma](https://github.com/elpoelma)! - snippet-list plugin: move filtering options to separate sidebar
+
 ## 39.1.2
 
 ### Patch Changes
