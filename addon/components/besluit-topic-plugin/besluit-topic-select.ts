@@ -9,6 +9,7 @@ type Args = {
   selected?: BesluitTopic[];
   onchange: (topic: BesluitTopic[]) => void;
   renderInPlace?: boolean;
+  disabled?: boolean;
 };
 
 export default class BesluitTopicSelectComponent extends Component<Args> {
@@ -32,6 +33,7 @@ export default class BesluitTopicSelectComponent extends Component<Args> {
       besluitTopic.label.toLowerCase().includes(lowerTerm),
     );
   }
+
   get renderInPlace() {
     if (this.args.renderInPlace === false) return false;
     return true;
