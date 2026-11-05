@@ -5,6 +5,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import DocumentInformationModal from '@lblod/ember-rdfa-editor-lblod-plugins/components/document-information-plugin/document-information-modal';
+import { BesluitTargetGroupPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/types';
 import { BesluitTopicPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 
@@ -13,6 +14,7 @@ interface Signature {
     controller: SayController;
     besluitTopicOptions: BesluitTopicPluginOptions;
     besluitTypeOptions: BesluitTypePluginOptions;
+    besluitTargetGroupOptions: BesluitTargetGroupPluginOptions;
   };
 }
 export default class extends Component<Signature> {
@@ -39,6 +41,7 @@ export default class extends Component<Signature> {
         @controller={{@controller}}
         @besluitTopicOptions={{@besluitTopicOptions}}
         @besluitTypeOptions={{@besluitTypeOptions}}
+        @besluitTargetGroupOptions={{@besluitTargetGroupOptions}}
         @requireBesluitType={{true}}
         @onSave={{this.closeModal}}
         @onCancel={{this.closeModal}}
@@ -46,6 +49,7 @@ export default class extends Component<Signature> {
       >
         <DIM.BesluitType />
         <DIM.BesluitTopic />
+        <DIM.BesluitTargetGroup />
       </DocumentInformationModal>
     {{/if}}
   </template>

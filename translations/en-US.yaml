@@ -124,6 +124,11 @@ besluit-topic-plugin:
   error-rest-body: '. For more specific details about this problem, inspect the browser console.'
   close-modal: OK
 
+besluit-target-group-plugin:
+  label: Target group
+  error-title: 'Error'
+  error-short: 'Error fetching decision target groups'
+
 document-information-plugin:
   modal-title: 'Edit document information'
   save: 'Save'

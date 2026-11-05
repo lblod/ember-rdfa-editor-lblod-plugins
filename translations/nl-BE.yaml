@@ -124,6 +124,11 @@ besluit-topic-plugin:
   error-rest-body: '. Voor meer specifieke details, controleer de console in de browser.'
   close-modal: OK
 
+besluit-target-group-plugin:
+  label: Doelgroep
+  error-title: 'Error'
+  error-short: 'Fout bij ophalen doelgroepen'
+
 document-information-plugin:
   modal-title: 'Documentinformatie bewerken'
   save: 'Opslaan'

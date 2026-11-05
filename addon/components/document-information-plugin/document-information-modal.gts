@@ -32,12 +32,21 @@ import BesluitTypeField from './_private/besluit-type-field';
 import BesluitTopicField from './_private/besluit-topic-field';
 import { WithBoundArgs } from '@glint/template';
 import { not } from 'ember-truth-helpers';
+import {
+  BesluitTargetGroup,
+  BesluitTargetGroupPluginOptions,
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/types';
+import { fetchBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/queries';
+import BesluitTargetGroupField from './_private/besluit-target-group-field';
+import { extractBesluitTargetGroupUris } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/extract-besluit-target-group-uris';
+import { setBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/set-besluit-target-groups';
 
 interface Sig {
   Args: {
     controller: SayController;
     besluitTypeOptions?: BesluitTypePluginOptions;
     besluitTopicOptions?: BesluitTopicPluginOptions;
+    besluitTargetGroupOptions?: BesluitTargetGroupPluginOptions;
     onSave?: () => void | Promise<void>;
     onCancel?: () => void;
     saveDisabled?: boolean;
@@ -65,6 +74,15 @@ interface Sig {
           | 'renderInPlace'
           | 'disabled'
         >;
+        BesluitTargetGroup: WithBoundArgs<
+          typeof BesluitTargetGroupField,
+          | 'targetGroups'
+          | 'selected'
+          | 'onChange'
+          | 'isError'
+          | 'renderInPlace'
+          | 'disabled'
+        >;
       },
     ];
   };
@@ -73,6 +91,7 @@ interface Sig {
 export default class DocumentInformationModal extends Component<Sig> {
   @tracked stagedTypeInstance?: BesluitTypeInstance;
   @tracked stagedTopics?: BesluitTopic[];
+  @tracked stagedTargetGroups?: BesluitTargetGroup[];
 
   get controller() {
     return this.args.controller;
@@ -88,6 +107,10 @@ export default class DocumentInformationModal extends Component<Sig> {
 
   get fetchedTopics() {
     return this.topics.value ?? undefined;
+  }
+
+  get fetchedTargetGroups() {
+    return this.targetGroups.value ?? undefined;
   }
 
   get besluitTypeInstance(): BesluitTypeInstance | undefined {
@@ -124,6 +147,23 @@ export default class DocumentInformationModal extends Component<Sig> {
 
   get hasStagedTopics() {
     return this.stagedTopics !== undefined;
+  }
+
+  get besluitTargetGroups(): BesluitTargetGroup[] | undefined {
+    const targetGroups = this.fetchedTargetGroups;
+    const uris = extractBesluitTargetGroupUris(this.controller);
+    if (!targetGroups || !uris.length) {
+      return;
+    }
+    return targetGroups.filter((topic) => uris.includes(topic.uri));
+  }
+
+  get selectedTargetGroups(): BesluitTargetGroup[] | undefined {
+    return this.stagedTargetGroups ?? this.besluitTargetGroups;
+  }
+
+  get hasStagedTargetGroups() {
+    return this.stagedTargetGroups !== undefined;
   }
 
   // default is true
@@ -171,12 +211,28 @@ export default class DocumentInformationModal extends Component<Sig> {
     return result.topics;
   });
 
+  targetGroups = trackedFunction(this, async () => {
+    if (!this.args.besluitTargetGroupOptions) {
+      throw new Error(
+        '`@besluitTargetGroupOptions` argument of `DocumentInformationModal` component is not configured',
+      );
+    }
+    const result = await fetchBesluitTargetGroups({
+      config: this.args.besluitTargetGroupOptions,
+    });
+    return result;
+  });
+
   setType = (type: BesluitTypeInstance) => {
     this.stagedTypeInstance = type;
   };
 
   setBesluitTopics = (selected: BesluitTopic[]) => {
     this.stagedTopics = selected;
+  };
+
+  setTargetGroups = (selected: BesluitTargetGroup[]) => {
+    this.stagedTargetGroups = selected;
   };
 
   updateDocumentBesluitType() {
@@ -212,6 +268,23 @@ export default class DocumentInformationModal extends Component<Sig> {
     }
   }
 
+  updateDocumentTargetGroups() {
+    this.controller.doCommand((state, dispatch) => {
+      if (!this.selectedTargetGroups || !dispatch) {
+        return false;
+      }
+      const { result, transaction } = setBesluitTargetGroups(
+        state,
+        this.selectedTargetGroups,
+      );
+      if (result.every((ok) => ok)) {
+        dispatch(transaction);
+        return true;
+      }
+      return false;
+    });
+  }
+
   saveChanges = task(async () => {
     if (this.hasStagedType) {
       this.updateDocumentBesluitType();
@@ -220,6 +293,10 @@ export default class DocumentInformationModal extends Component<Sig> {
     if (this.hasStagedTopics) {
       this.updateDocumentTopic();
       this.stagedTopics = undefined;
+    }
+    if (this.hasStagedTargetGroups) {
+      this.updateDocumentTargetGroups();
+      this.stagedTargetGroups = undefined;
     }
     await this.args.onSave?.();
   });
@@ -256,6 +333,15 @@ export default class DocumentInformationModal extends Component<Sig> {
               selected=this.selectedTopics
               onChange=this.setBesluitTopics
               isError=this.topics.isError
+              renderInPlace=false
+              disabled=(not this.hasBesluit)
+            )
+            BesluitTargetGroup=(component
+              BesluitTargetGroupField
+              targetGroups=this.fetchedTargetGroups
+              selected=this.selectedTargetGroups
+              onChange=this.setTargetGroups
+              isError=this.targetGroups.isError
               renderInPlace=false
               disabled=(not this.hasBesluit)
             )
