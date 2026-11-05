@@ -84,6 +84,9 @@ interface Sig {
           | 'renderInPlace'
           | 'disabled'
         >;
+        selectedTypeInstance: BesluitTypeInstance | undefined;
+        selectedTopics: BesluitTopic[] | undefined;
+        selectedTargetGroups: BesluitTargetGroup[] | undefined;
       },
     ];
   };
@@ -342,6 +345,9 @@ export default class DocumentInformationModal extends Component<Sig> {
               renderInPlace=false
               disabled=(not this.hasBesluit)
             )
+            selectedTypeInstance=this.selectedTypeInstance
+            selectedTopics=this.selectedTopics
+            selectedTargetGroups=this.selectedTargetGroups
           )
         }}
       </Modal.Body>
