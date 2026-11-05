@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import { cached, tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
 import { hash } from '@ember/helper';
 import { task } from 'ember-concurrency';
@@ -8,7 +8,6 @@ import t from 'ember-intl/helpers/t';
 import AuButton from '@appuniversum/ember-appuniversum/components/au-button';
 import AuModal from '@appuniversum/ember-appuniversum/components/au-modal';
 import type { SayController } from '@lblod/ember-rdfa-editor';
-import { trackedFunction } from 'reactiveweb/function';
 import type { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 import type { BesluitTopicPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin';
 import fetchBesluitTypes from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin/utils/fetchBesluitTypes';
@@ -40,6 +39,8 @@ import { fetchBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins
 import BesluitTargetGroupField from './_private/besluit-target-group-field';
 import { extractBesluitTargetGroupUris } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/extract-besluit-target-group-uris';
 import { setBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/set-besluit-target-groups';
+import { getPromiseState } from 'reactiveweb/get-promise-state';
+import { toBool } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/boolean';
 
 interface Sig {
   Args: {
@@ -101,20 +102,13 @@ export default class DocumentInformationModal extends Component<Sig> {
     return !!getCurrentBesluitRange(this.controller);
   }
 
-  get fetchedTypes() {
-    return this.types.value ?? undefined;
-  }
-
-  get fetchedTopics() {
-    return this.topics.value ?? undefined;
-  }
-
-  get fetchedTargetGroups() {
-    return this.targetGroups.value ?? undefined;
+  // default is true
+  get requireBesluitType() {
+    return this.args.requireBesluitType !== false && this.hasBesluit;
   }
 
   get besluitTypeInstance(): BesluitTypeInstance | undefined {
-    const types = this.fetchedTypes;
+    const types = this.types.resolved;
     if (!types) {
       return;
     }
@@ -133,7 +127,7 @@ export default class DocumentInformationModal extends Component<Sig> {
   }
 
   get besluitTopics(): BesluitTopic[] | undefined {
-    const topics = this.fetchedTopics;
+    const topics = this.topics.resolved;
     const uris = extractBesluitTopicUris(this.controller);
     if (!topics || !uris.length) {
       return;
@@ -150,7 +144,7 @@ export default class DocumentInformationModal extends Component<Sig> {
   }
 
   get besluitTargetGroups(): BesluitTargetGroup[] | undefined {
-    const targetGroups = this.fetchedTargetGroups;
+    const targetGroups = this.targetGroups.resolved;
     const uris = extractBesluitTargetGroupUris(this.controller);
     if (!targetGroups || !uris.length) {
       return;
@@ -164,11 +158,6 @@ export default class DocumentInformationModal extends Component<Sig> {
 
   get hasStagedTargetGroups() {
     return this.stagedTargetGroups !== undefined;
-  }
-
-  // default is true
-  get requireBesluitType() {
-    return this.args.requireBesluitType !== false && this.hasBesluit;
   }
 
   get saveDisabled() {
@@ -187,7 +176,8 @@ export default class DocumentInformationModal extends Component<Sig> {
     return this.hasStagedType && !isValidTypeChoice(selectedType);
   }
 
-  types = trackedFunction(this, async () => {
+  @cached
+  get typesPromise() {
     if (!this.args.besluitTypeOptions) {
       throw new Error(
         '`@besluitTypeOptions` argument of `DocumentInformationModal` component is not configured',
@@ -197,31 +187,43 @@ export default class DocumentInformationModal extends Component<Sig> {
       this.args.besluitTypeOptions.classificatieUri,
       this.args.besluitTypeOptions.endpoint,
     );
-  });
+  }
 
-  topics = trackedFunction(this, async () => {
+  get types() {
+    return getPromiseState(this.typesPromise);
+  }
+
+  @cached
+  get topicsPromise() {
     if (!this.args.besluitTopicOptions) {
       throw new Error(
         '`@besluitTopicOptions` argument of `DocumentInformationModal` component is not configured',
       );
     }
-    const result = await fetchBesluitTopics({
+    return fetchBesluitTopics({
       config: { endpoint: this.args.besluitTopicOptions.endpoint },
-    });
-    return result.topics;
-  });
+    }).then((res) => res.topics);
+  }
 
-  targetGroups = trackedFunction(this, async () => {
+  get topics() {
+    return getPromiseState(this.topicsPromise);
+  }
+
+  @cached
+  get targetGroupsPromise() {
     if (!this.args.besluitTargetGroupOptions) {
       throw new Error(
         '`@besluitTargetGroupOptions` argument of `DocumentInformationModal` component is not configured',
       );
     }
-    const result = await fetchBesluitTargetGroups({
+    return fetchBesluitTargetGroups({
       config: this.args.besluitTargetGroupOptions,
     });
-    return result;
-  });
+  }
+
+  get targetGroups() {
+    return getPromiseState(this.targetGroupsPromise);
+  }
 
   setType = (type: BesluitTypeInstance) => {
     this.stagedTypeInstance = type;
@@ -304,6 +306,7 @@ export default class DocumentInformationModal extends Component<Sig> {
   cancel = () => {
     this.stagedTypeInstance = undefined;
     this.stagedTopics = undefined;
+    this.stagedTargetGroups = undefined;
     this.args.onCancel?.();
   };
 
@@ -319,29 +322,29 @@ export default class DocumentInformationModal extends Component<Sig> {
           (hash
             BesluitType=(component
               BesluitTypeField
-              types=this.fetchedTypes
+              types=this.types.resolved
               selected=this.selectedTypeInstance
               onChange=this.setType
-              isError=this.types.isError
+              isError=(toBool this.types.error)
               required=this.requireBesluitType
               renderInPlace=false
               disabled=(not this.hasBesluit)
             )
             BesluitTopic=(component
               BesluitTopicField
-              topics=this.fetchedTopics
+              topics=this.topics.resolved
               selected=this.selectedTopics
               onChange=this.setBesluitTopics
-              isError=this.topics.isError
+              isError=(toBool this.topics.error)
               renderInPlace=false
               disabled=(not this.hasBesluit)
             )
             BesluitTargetGroup=(component
               BesluitTargetGroupField
-              targetGroups=this.fetchedTargetGroups
+              targetGroups=this.targetGroups.resolved
               selected=this.selectedTargetGroups
               onChange=this.setTargetGroups
-              isError=this.targetGroups.isError
+              isError=(toBool this.targetGroups.error)
               renderInPlace=false
               disabled=(not this.hasBesluit)
             )
