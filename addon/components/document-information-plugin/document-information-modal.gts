@@ -107,7 +107,7 @@ export default class DocumentInformationModal extends Component<Sig> {
     return this.args.requireBesluitType !== false && this.hasBesluit;
   }
 
-  get besluitTypeInstance(): BesluitTypeInstance | undefined {
+  get currentTypeInstance(): BesluitTypeInstance | undefined {
     const types = this.types.resolved;
     if (!types) {
       return;
@@ -119,14 +119,14 @@ export default class DocumentInformationModal extends Component<Sig> {
   }
 
   get selectedTypeInstance(): BesluitTypeInstance | undefined {
-    return this.stagedTypeInstance ?? this.besluitTypeInstance;
+    return this.stagedTypeInstance ?? this.currentTypeInstance;
   }
 
-  get hasStagedType() {
+  get hasStagedTypeInstance() {
     return this.stagedTypeInstance !== undefined;
   }
 
-  get besluitTopics(): BesluitTopic[] | undefined {
+  get currentTopics(): BesluitTopic[] | undefined {
     const topics = this.topics.resolved;
     const uris = extractBesluitTopicUris(this.controller);
     if (!topics || !uris.length) {
@@ -136,14 +136,14 @@ export default class DocumentInformationModal extends Component<Sig> {
   }
 
   get selectedTopics(): BesluitTopic[] | undefined {
-    return this.stagedTopics ?? this.besluitTopics;
+    return this.stagedTopics ?? this.currentTopics;
   }
 
   get hasStagedTopics() {
     return this.stagedTopics !== undefined;
   }
 
-  get besluitTargetGroups(): BesluitTargetGroup[] | undefined {
+  get currentTargetGroups(): BesluitTargetGroup[] | undefined {
     const targetGroups = this.targetGroups.resolved;
     const uris = extractBesluitTargetGroupUris(this.controller);
     if (!targetGroups || !uris.length) {
@@ -153,7 +153,7 @@ export default class DocumentInformationModal extends Component<Sig> {
   }
 
   get selectedTargetGroups(): BesluitTargetGroup[] | undefined {
-    return this.stagedTargetGroups ?? this.besluitTargetGroups;
+    return this.stagedTargetGroups ?? this.currentTargetGroups;
   }
 
   get hasStagedTargetGroups() {
@@ -173,7 +173,7 @@ export default class DocumentInformationModal extends Component<Sig> {
     }
     // An existing type may predate the current type hierarchy, so only
     // validate the choice when the user has actually changed it.
-    return this.hasStagedType && !isValidTypeChoice(selectedType);
+    return this.hasStagedTypeInstance && !isValidTypeChoice(selectedType);
   }
 
   @cached
@@ -225,15 +225,15 @@ export default class DocumentInformationModal extends Component<Sig> {
     return getPromiseState(this.targetGroupsPromise);
   }
 
-  setType = (type: BesluitTypeInstance) => {
+  stageTypeInstance = (type: BesluitTypeInstance) => {
     this.stagedTypeInstance = type;
   };
 
-  setBesluitTopics = (selected: BesluitTopic[]) => {
+  stageBesluitTopics = (selected: BesluitTopic[]) => {
     this.stagedTopics = selected;
   };
 
-  setTargetGroups = (selected: BesluitTargetGroup[]) => {
+  stageTargetGroups = (selected: BesluitTargetGroup[]) => {
     this.stagedTargetGroups = selected;
   };
 
@@ -288,25 +288,19 @@ export default class DocumentInformationModal extends Component<Sig> {
   }
 
   saveChanges = task(async () => {
-    if (this.hasStagedType) {
+    if (this.hasStagedTypeInstance) {
       this.updateDocumentBesluitType();
-      this.stagedTypeInstance = undefined;
     }
     if (this.hasStagedTopics) {
       this.updateDocumentTopic();
-      this.stagedTopics = undefined;
     }
     if (this.hasStagedTargetGroups) {
       this.updateDocumentTargetGroups();
-      this.stagedTargetGroups = undefined;
     }
     await this.args.onSave?.();
   });
 
   cancel = () => {
-    this.stagedTypeInstance = undefined;
-    this.stagedTopics = undefined;
-    this.stagedTargetGroups = undefined;
     this.args.onCancel?.();
   };
 
@@ -324,7 +318,7 @@ export default class DocumentInformationModal extends Component<Sig> {
               BesluitTypeField
               types=this.types.resolved
               selected=this.selectedTypeInstance
-              onChange=this.setType
+              onChange=this.stageTypeInstance
               isError=(toBool this.types.error)
               required=this.requireBesluitType
               renderInPlace=false
@@ -334,7 +328,7 @@ export default class DocumentInformationModal extends Component<Sig> {
               BesluitTopicField
               topics=this.topics.resolved
               selected=this.selectedTopics
-              onChange=this.setBesluitTopics
+              onChange=this.stageBesluitTopics
               isError=(toBool this.topics.error)
               renderInPlace=false
               disabled=(not this.hasBesluit)
@@ -343,7 +337,7 @@ export default class DocumentInformationModal extends Component<Sig> {
               BesluitTargetGroupField
               targetGroups=this.targetGroups.resolved
               selected=this.selectedTargetGroups
-              onChange=this.setTargetGroups
+              onChange=this.stageTargetGroups
               isError=(toBool this.targetGroups.error)
               renderInPlace=false
               disabled=(not this.hasBesluit)
