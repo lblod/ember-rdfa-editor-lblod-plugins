@@ -41,10 +41,13 @@ import { setBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/p
 import { getPromiseState } from 'reactiveweb/get-promise-state';
 import { toBool } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/boolean';
 import BesluitTargetGroupField from '../besluit-target-group-plugin/besluit-target-group-field';
+import { service } from '@ember/service';
+import IntlService from 'ember-intl/services/intl';
 
 interface Sig {
   Args: {
     controller: SayController;
+    title?: string;
     besluitTypeOptions?: BesluitTypePluginOptions;
     besluitTopicOptions?: BesluitTopicPluginOptions;
     besluitTargetGroupOptions?: BesluitTargetGroupPluginOptions;
@@ -93,9 +96,17 @@ interface Sig {
 }
 
 export default class DocumentInformationModal extends Component<Sig> {
+  @service declare intl: IntlService;
+
   @tracked stagedTypeInstance?: BesluitTypeInstance;
   @tracked stagedTopics?: BesluitTopic[];
   @tracked stagedTargetGroups?: BesluitTargetGroup[];
+
+  get modalTitle() {
+    return (
+      this.args.title ?? this.intl.t('document-information-plugin.modal-title')
+    );
+  }
 
   get controller() {
     return this.args.controller;
@@ -309,7 +320,7 @@ export default class DocumentInformationModal extends Component<Sig> {
 
   <template>
     <AuModal
-      @title={{t 'document-information-plugin.modal-title'}}
+      @title={{this.modalTitle}}
       @modalOpen={{true}}
       @closeModal={{this.cancel}}
       as |Modal|
