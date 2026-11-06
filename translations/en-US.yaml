@@ -124,6 +124,16 @@ besluit-topic-plugin:
   error-rest-body: '. For more specific details about this problem, inspect the browser console.'
   close-modal: OK
 
+besluit-target-group-plugin:
+  label: Target group
+  error-title: 'Error'
+  error-short: 'Error fetching decision target groups'
+
+document-information-plugin:
+  modal-title: 'Edit document information'
+  save: 'Save'
+  cancel: 'Cancel'
+
 besluit-plugin:
   missing-title-warning: This decision is missing a title.
   missing-motivation-warning: This decision is missing a motivation block, a decision without this block will be harder to parse by our system.

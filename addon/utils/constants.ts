@@ -71,3 +71,5 @@ export const ONDERDEEL = namespace(
   'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#',
   'onderdeel',
 );
+
+export const SCHEMA = namespace('https://schema.org/', 'schema');
