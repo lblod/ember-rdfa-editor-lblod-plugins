@@ -326,41 +326,43 @@ export default class DocumentInformationModal extends Component<Sig> {
       as |Modal|
     >
       <Modal.Body>
-        {{yield
-          (hash
-            BesluitType=(component
-              BesluitTypeField
-              types=this.types.resolved
-              selected=this.selectedTypeInstance
-              onChange=this.stageTypeInstance
-              isError=(toBool this.types.error)
-              required=this.requireBesluitType
-              renderInPlace=false
-              disabled=(not this.hasBesluit)
+        <form class='au-c-form'>
+          {{yield
+            (hash
+              BesluitType=(component
+                BesluitTypeField
+                types=this.types.resolved
+                selected=this.selectedTypeInstance
+                onChange=this.stageTypeInstance
+                isError=(toBool this.types.error)
+                required=this.requireBesluitType
+                renderInPlace=false
+                disabled=(not this.hasBesluit)
+              )
+              BesluitTopic=(component
+                BesluitTopicField
+                topics=this.topics.resolved
+                selected=this.selectedTopics
+                onChange=this.stageBesluitTopics
+                isError=(toBool this.topics.error)
+                renderInPlace=false
+                disabled=(not this.hasBesluit)
+              )
+              BesluitTargetGroup=(component
+                BesluitTargetGroupField
+                targetGroups=this.targetGroups.resolved
+                selected=this.selectedTargetGroups
+                onChange=this.stageTargetGroups
+                isError=(toBool this.targetGroups.error)
+                renderInPlace=false
+                disabled=(not this.hasBesluit)
+              )
+              selectedTypeInstance=this.selectedTypeInstance
+              selectedTopics=this.selectedTopics
+              selectedTargetGroups=this.selectedTargetGroups
             )
-            BesluitTopic=(component
-              BesluitTopicField
-              topics=this.topics.resolved
-              selected=this.selectedTopics
-              onChange=this.stageBesluitTopics
-              isError=(toBool this.topics.error)
-              renderInPlace=false
-              disabled=(not this.hasBesluit)
-            )
-            BesluitTargetGroup=(component
-              BesluitTargetGroupField
-              targetGroups=this.targetGroups.resolved
-              selected=this.selectedTargetGroups
-              onChange=this.stageTargetGroups
-              isError=(toBool this.targetGroups.error)
-              renderInPlace=false
-              disabled=(not this.hasBesluit)
-            )
-            selectedTypeInstance=this.selectedTypeInstance
-            selectedTopics=this.selectedTopics
-            selectedTargetGroups=this.selectedTargetGroups
-          )
-        }}
+          }}
+        </form>
       </Modal.Body>
       <Modal.Footer>
         <AuButton
