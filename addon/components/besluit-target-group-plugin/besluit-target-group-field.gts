@@ -4,7 +4,7 @@ import AuAlert from '@appuniversum/ember-appuniversum/components/au-alert';
 import AuLabel from '@appuniversum/ember-appuniversum/components/au-label';
 import AuLoader from '@appuniversum/ember-appuniversum/components/au-loader';
 import PowerSelectMultiple from 'ember-power-select/components/power-select-multiple';
-import { BesluitTargetGroup } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/types';
+import { BesluitTargetGroup } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/types';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 

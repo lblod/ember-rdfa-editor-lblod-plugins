@@ -34,13 +34,13 @@ import { not } from 'ember-truth-helpers';
 import {
   BesluitTargetGroup,
   BesluitTargetGroupPluginOptions,
-} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/types';
-import { fetchBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/queries';
-import BesluitTargetGroupField from './_private/besluit-target-group-field';
-import { extractBesluitTargetGroupUris } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/extract-besluit-target-group-uris';
-import { setBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/set-besluit-target-groups';
+} from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/types';
+import { fetchBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/queries';
+import { extractBesluitTargetGroupUris } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/extract-besluit-target-group-uris';
+import { setBesluitTargetGroups } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/set-besluit-target-groups';
 import { getPromiseState } from 'reactiveweb/get-promise-state';
 import { toBool } from '@lblod/ember-rdfa-editor-lblod-plugins/utils/_private/boolean';
+import BesluitTargetGroupField from '../besluit-target-group-plugin/besluit-target-group-field';
 
 interface Sig {
   Args: {

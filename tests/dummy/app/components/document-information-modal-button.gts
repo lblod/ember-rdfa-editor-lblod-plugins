@@ -5,7 +5,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { SayController } from '@lblod/ember-rdfa-editor';
 import DocumentInformationModal from '@lblod/ember-rdfa-editor-lblod-plugins/components/document-information-plugin/document-information-modal';
-import { BesluitTargetGroupPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/_private/types';
+import { BesluitTargetGroupPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-target-group-plugin/types';
 import { BesluitTopicPluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-topic-plugin';
 import { BesluitTypePluginOptions } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/besluit-type-plugin';
 
