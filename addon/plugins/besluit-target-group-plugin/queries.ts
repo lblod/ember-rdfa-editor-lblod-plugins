@@ -51,6 +51,7 @@ export async function fetchBesluitTargetGroups({
 }: {
   config: BesluitTargetGroupQueryConfig;
 }): Promise<BesluitTargetGroup[]> {
+  // TODO: remove the hardcoded codelist once the codelist is available on centrale vindplaats
   return HARDCODED_TARGET_GROUPS;
   const targetGroups = await executeQuery<BindingObject<BesluitTargetGroup>>({
     query: QUERY,
