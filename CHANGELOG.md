@@ -1,5 +1,13 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 39.3.0
+
+### Minor Changes
+
+- [#689](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/689) [`1a3a255`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/1a3a255089cfdc4b689d73de87065e7a803fa9ac) Thanks [@elpoelma](https://github.com/elpoelma)! - Introduce customizable `document-information-modal` component which contains decision-type and decision-topic selector. This component can be customized to contain additional form fields.
+
+- [#689](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/pull/689) [`3eeddf4`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/3eeddf439cec260402c88364649673e0141e69ee) Thanks [@elpoelma](https://github.com/elpoelma)! - Add besluit-target-group plugin which can be used through the `document-information` plugin
+
 ## 39.2.0
 
 ### Minor Changes
