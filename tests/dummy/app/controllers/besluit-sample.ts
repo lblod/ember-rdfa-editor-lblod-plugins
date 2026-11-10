@@ -389,6 +389,9 @@ export default class BesluitSampleController extends Controller {
         // uncomment to test external triple mode
         // decisionUri: 'http://example.org/1',
       },
+      besluitTargetGroup: {
+        endpoint: 'https://centrale-vindplaats.lblod.info/sparql',
+      },
       templateVariable: {
         endpoint: 'https://dev.roadsigns.lblod.info/sparql',
         zonalLocationCodelistUri:
