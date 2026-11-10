@@ -1,7 +1,9 @@
-FROM node:22-slim AS builder
+FROM node:24-slim AS builder
 
 LABEL maintainer="info@redpencil.io"
 
+RUN npm config set ignore-scripts true
+RUN npm i -g corepack@0.36
 RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
