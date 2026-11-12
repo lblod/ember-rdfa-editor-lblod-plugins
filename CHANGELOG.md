@@ -1,5 +1,11 @@
 # @lblod/ember-rdfa-editor-lblod-plugins
 
+## 39.4.0
+
+### Minor Changes
+
+- [`0c483d2`](https://github.com/lblod/ember-rdfa-editor-lblod-plugins/commit/0c483d2f22ba84f8228ab8afe62b94248a1799e9) Thanks [@kobemertens](https://github.com/kobemertens)! - Add `@placeholder` argument to tag-selector
+
 ## 39.3.0
 
 ### Minor Changes
