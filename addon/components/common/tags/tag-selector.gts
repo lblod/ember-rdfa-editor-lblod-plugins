@@ -5,12 +5,14 @@ import { Tag } from '@lblod/ember-rdfa-editor-lblod-plugins/plugins/common/tags/
 import { service } from '@ember/service';
 import IntlService from 'ember-intl/services/intl';
 import { tracked } from '@glimmer/tracking';
+import { or } from 'ember-truth-helpers';
 
 type Signature<T extends Tag> = {
   Args: {
     tags: T[];
     selectedTags?: T[];
     onChange: (tags: T[]) => void;
+    placeholder?: string;
   } & (
     | {
         allowTagCreation?: false;
@@ -103,7 +105,10 @@ export default class TagSelector<T extends Tag> extends Component<
       @searchEnabled={{true}}
       @selected={{@selectedTags}}
       @searchField='value'
-      @placeholder={{t 'common.tags.tag-selector.placeholder'}}
+      @placeholder={{or
+        @placeholder
+        (t 'common.tags.tag-selector.placeholder')
+      }}
       @noMatchesMessage={{t 'common.tags.tag-selector.no-results-message'}}
       class='say-tag-selector'
       ...attributes
