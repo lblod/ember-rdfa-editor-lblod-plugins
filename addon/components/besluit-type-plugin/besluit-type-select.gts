@@ -17,6 +17,7 @@ interface Sig {
     onchange: (selected: BesluitType) => void;
     required?: boolean;
     renderInPlace?: boolean;
+    disabled?: boolean;
   };
   Element: HTMLDivElement;
 }
@@ -58,6 +59,7 @@ export default class BesluitTypePluginBesluitTypeSelectComponent extends Compone
           @options={{this.besluitTypes}}
           @selected={{@selected}}
           @onChange={{@onchange}}
+          @disabled={{@disabled}}
           as |besluitType|
         >
           {{besluitType.label}}

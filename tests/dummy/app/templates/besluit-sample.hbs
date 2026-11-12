@@ -55,14 +55,6 @@
                 <Plugins::Formatting::FormattingToggle
                   @controller={{container.controller}}
                 />
-                <BesluitTypePlugin::ToolbarDropdown
-                  @controller={{container.controller}}
-                  @options={{this.config.besluitType}}
-                />
-                <BesluitTopicPlugin::BesluitTopicToolbarDropdown
-                  @controller={{container.controller}}
-                  @options={{this.config.besluitTopic}}
-                />
                 <div class='say-rdfa-toggle'>
                   <AuToggleSwitch
                     @checked={{this.editableNodes}}
@@ -74,6 +66,14 @@
               </Tb.Group>
               <Plugins::HtmlEditor::Menu @controller={{container.controller}} />
             </:main>
+            <:side>
+              <DocumentInformationModalButton
+                @controller={{container.controller}}
+                @besluitTypeOptions={{this.config.besluitType}}
+                @besluitTopicOptions={{this.config.besluitTopic}}
+                @besluitTargetGroupOptions={{this.config.besluitTargetGroup}}
+              />
+            </:side>
           </ResponsiveToolbar>
         </:toolbar>
         <:default>
