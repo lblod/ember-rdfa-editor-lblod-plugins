@@ -134,7 +134,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
     if (isBlank(this.inputNumber)) {
       return '';
     }
-    const number = Number(this.inputNumber);
+    const number = Number(this.inputNumber.replaceAll(',', '.'));
     if (Number.isNaN(number)) {
       return this.intl.t('variable.number.error-not-number');
     }
@@ -166,6 +166,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
       this.args.updateAttribute('content', this.inputNumber);
     }
   }
+
   get class() {
     return getClassnamesFromNode(this.node);
   }
