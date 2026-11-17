@@ -57,7 +57,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get formattedNumber() {
-    const value = this.number;
+    const value = this.number?.replaceAll(',', '.');
     if (!isNumber(value)) {
       return value;
     }
