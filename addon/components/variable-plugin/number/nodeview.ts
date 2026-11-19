@@ -27,6 +27,13 @@ type Args = {
   selectNode: () => void;
 };
 
+/**
+ * Removes all whitespace and replaces commas with dots
+ */
+function normalizeNumberString(string: string) {
+  return string.replaceAll(',', '.').replaceAll(' ', '');
+}
+
 export default class NumberNodeviewComponent extends Component<Args> {
   Velcro = Velcro;
 
@@ -57,7 +64,8 @@ export default class NumberNodeviewComponent extends Component<Args> {
   }
 
   get formattedNumber() {
-    const value = this.number;
+    if (!this.number) return null;
+    const value = normalizeNumberString(this.number);
     if (!isNumber(value)) {
       return value;
     }
@@ -134,7 +142,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
     if (isBlank(this.inputNumber)) {
       return '';
     }
-    const number = Number(this.inputNumber);
+    const number = Number(normalizeNumberString(this.inputNumber));
     if (Number.isNaN(number)) {
       return this.intl.t('variable.number.error-not-number');
     }
@@ -166,6 +174,7 @@ export default class NumberNodeviewComponent extends Component<Args> {
       this.args.updateAttribute('content', this.inputNumber);
     }
   }
+
   get class() {
     return getClassnamesFromNode(this.node);
   }
